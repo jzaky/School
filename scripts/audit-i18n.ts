@@ -34,7 +34,7 @@ const ALLOW = /^([\d\s.,:%+\-/()#|·]*|[A-Z]{2,6}(-\d)?|English|Google|Microsoft
 const placeholders = (s: string) => [...s.matchAll(/\{(\w+)[,}]/g)].map((m) => m[1]).sort().join(",");
 for (const [k, v] of A) {
   if (!v.trim()) problems.push(`empty ar: ${k}`);
-  else if (!/[؀-ۿ]/.test(v) && !ALLOW.test(v.trim()) && !/\{\w+\}/.test(v)) problems.push(`no Arabic text in ar: ${k} = ${v}`);
+  else if (!/PlaceholderEn$/.test(k) && !/[؀-ۿ]/.test(v) && !ALLOW.test(v.trim()) && !/\{\w+\}/.test(v)) problems.push(`no Arabic text in ar: ${k} = ${v}`);
   const e = E.get(k);
   if (e !== undefined && placeholders(e) !== placeholders(v)) problems.push(`placeholder mismatch: ${k} (en: ${placeholders(e)} / ar: ${placeholders(v)})`);
 }
