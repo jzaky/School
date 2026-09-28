@@ -34,6 +34,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           { key: "requests", href: "/requests", icon: "inbox" },
           { key: "approvals", href: "/approvals", icon: "stamp", badge: counts.approvals },
           { key: "meetings", href: "/meetings", icon: "calendar-clock" },
+          { key: "calendar", href: "/calendar", icon: "calendar" },
           { key: "documents", href: "/documents", icon: "file-text" },
         ],
       },

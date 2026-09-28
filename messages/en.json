@@ -988,5 +988,36 @@
     "subjectsSkills": "Subjects and skills",
     "whereToStudy": "Where you could study",
     "rank": "world rank {n}"
+  },
+  "calendar": {
+    "title": "Calendar",
+    "subtitle": "Meetings, tasks, school events, deadlines and follow-ups in one place.",
+    "previous": "Previous",
+    "next": "Next",
+    "today": "Today",
+    "view": {
+      "day": "Day",
+      "week": "Week",
+      "month": "Month",
+      "agenda": "Agenda"
+    },
+    "kind": {
+      "appointment": "Meetings",
+      "task": "Tasks",
+      "event": "Events",
+      "deadline": "Deadlines",
+      "followup": "Follow-ups"
+    },
+    "showWeekend": "Show weekend",
+    "hideWeekend": "School days only",
+    "allDay": "All day",
+    "more": "+{n} more",
+    "empty": "Nothing scheduled in this period",
+    "scope": {
+      "me": "My calendar",
+      "staff": "A colleague",
+      "dept": "A department",
+      "student": "A student"
+    }
   }
 }

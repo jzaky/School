@@ -7,7 +7,7 @@ const p = await ctx.newPage();
 const errors = [];
 p.on("pageerror", (e) => errors.push(`pageerror ${String(e).slice(0, 200)}`));
 p.on("console", (m) => m.type() === "error" && !m.text().includes("caret-color") && errors.push(`console ${m.text().slice(0, 6000)}`));
-p.on("response", (r) => r.status() >= 500 && errors.push(`http ${r.status()} ${r.url()}`));
+p.on("response", (r) => r.status() >= 400 && errors.push(`http ${r.status()} ${r.url()}`));
 await p.goto(base + "/demo");
 await p.click(`[data-testid=enter-${persona}]`);
 await p.waitForURL(/\/(en|ar)\/home/, { timeout: 120000 });
