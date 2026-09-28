@@ -6,7 +6,7 @@ import type { Prisma, PrismaClient } from "@prisma/client";
 import { SYSTEM_ROLES, STAFF_ROLE_KEYS } from "@/server/identity/permissions";
 import type { FormSchema } from "@/server/forms/schema";
 import { execCtx } from "@/server/db";
-import { at, dateOnly, emailFor, id, isSchoolDay, rng, schoolDay, wipeTenant } from "./lib";
+import { at, dateOnly, emailFor, id, isSchoolDay, rng, schoolDay, stableId, wipeTenant } from "./lib";
 import { FAMILIES, STAFF, type Bi } from "./data/people";
 import { ANNOUNCEMENTS, CALENDAR_EVENTS } from "./data/content";
 import { SERVICES, SERVICE_CATEGORIES } from "./data/services";
@@ -343,7 +343,7 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   const membershipRows: Prisma.MembershipCreateManyInput[] = [];
   const membershipRoleRows: Prisma.MembershipRoleCreateManyInput[] = [];
   const addMembership = (email: string, roles: string[], title?: Bi) => {
-    const mid = id();
+    const mid = stableId("membership", orgId, email);
     membershipRows.push({ id: mid, orgId, userId: userIdByEmail.get(email)!, status: "ACTIVE", titleEn: title?.en ?? null, titleAr: title?.ar ?? null, createdAt: at(-400, 8, 0, now) });
     for (const rk of roles) membershipRoleRows.push({ id: id(), orgId, membershipId: mid, roleId: roleIds.get(rk)! });
     return mid;

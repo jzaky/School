@@ -1,8 +1,11 @@
 // Shared helpers for the demo seed: deterministic randomness, Dubai-relative dates, ids and tenant wipe.
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import type { PrismaClient } from "@prisma/client";
 
 export const id = () => randomUUID().replace(/-/g, "").slice(0, 25);
+
+/** Deterministic id, so rows such as memberships keep the same id across demo resets (sessions stay valid). */
+export const stableId = (...parts: string[]) => "d" + createHash("sha1").update(parts.join("|")).digest("hex").slice(0, 24);
 
 /** Deterministic PRNG so every reset produces the same story. */
 export function rng(seed: number) {

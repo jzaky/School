@@ -168,7 +168,9 @@
     "notProvisioned": "This account has not been set up by your school yet.",
     "noMembership": "Your account is not linked to an active school.",
     "tryDemo": "Just exploring? Enter the live demo school",
-    "backToSite": "Back to site"
+    "backToSite": "Back to site",
+    "quote": "Every request, approval and conversation about a student, in one calm place.",
+    "quoteBy": "Built for schools in the UAE"
   },
   "roles": {
     "school_admin": "School Administrator",
@@ -185,5 +187,20 @@
     "it_support": "IT Support",
     "student": "Student",
     "parent": "Parent"
+  },
+  "demo": {
+    "title": "Choose who you want to be",
+    "subtitle": "Step inside {school} as any member of the school community. Everything is live, and you can reset the story at any time.",
+    "liveBadge": "Live demo school",
+    "enterAs": "Enter",
+    "morePeople": "More people you can be",
+    "unavailable": "The demo school is being prepared. Please try again in a minute.",
+    "fictional": "Every person and record in the demo school is fictional."
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all as read",
+    "empty": "You are all caught up.",
+    "viewAll": "See all notifications"
   }
 }
