@@ -554,6 +554,8 @@ model SchoolClass {
   section             String?
   isHomeroom          Boolean  @default(false)
   room                String?
+  capacity            Int?
+  optionBlock         String?
   createdAt           DateTime @default(now())
 
   academicYear AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Cascade)
@@ -607,9 +609,9 @@ model StaffProfile {
 }
 
 model Student {
-  id              String       @id @default(cuid())
+  id              String           @id @default(cuid())
   orgId           String
-  membershipId    String?      @unique
+  membershipId    String?          @unique
   campusId        String?
   studentNo       String
   firstNameEn     String
@@ -627,17 +629,18 @@ model Student {
   emiratesIdLast4 String?
   passportEnc     String?
   passportLast4   String?
-  status          PersonStatus @default(ACTIVE)
+  status          PersonStatus     @default(ACTIVE)
   enrolledOn      DateTime?
   houseEn         String?
   houseAr         String?
+  curriculum      SchoolCurriculum @default(BRITISH)
   photoUrl        String?
-  hasSen          Boolean      @default(false)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  hasSen          Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 
-  membership  Membership?          @relation(fields: [membershipId], references: [id], onDelete: SetNull)
-  campus      Campus?              @relation(fields: [campusId], references: [id], onDelete: SetNull)
+  membership  Membership?            @relation(fields: [membershipId], references: [id], onDelete: SetNull)
+  campus      Campus?                @relation(fields: [campusId], references: [id], onDelete: SetNull)
   guardians   GuardianLink[]
   enrollments Enrollment[]
   medical     StudentMedical?
@@ -708,11 +711,11 @@ model StudentMedical {
 }
 
 model AttendanceRecord {
-  id        String           @id @default(cuid())
-  orgId     String
-  studentId String
-  date      DateTime         @db.Date
-  status    AttendanceStatus
+  id          String           @id @default(cuid())
+  orgId       String
+  studentId   String
+  date        DateTime         @db.Date
+  status      AttendanceStatus
   minutesLate Int?
 
   student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
@@ -846,28 +849,28 @@ model Submission {
 }
 
 model Request {
-  id              String        @id @default(cuid())
-  orgId           String
-  number          String
-  serviceId       String
-  requesterId     String
-  studentId       String?
-  submissionId    String?       @unique
-  caseId          String?
-  status          RequestStatus @default(SUBMITTED)
-  priority        Priority      @default(MEDIUM)
-  sensitivity     Sensitivity   @default(STANDARD)
-  titleEn         String
-  titleAr         String
-  currentStepEn   String?
-  currentStepAr   String?
-  progress        Int           @default(0)
-  assigneeId      String?
-  slaDueAt        DateTime?
-  submittedAt     DateTime      @default(now())
-  completedAt     DateTime?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  id            String        @id @default(cuid())
+  orgId         String
+  number        String
+  serviceId     String
+  requesterId   String
+  studentId     String?
+  submissionId  String?       @unique
+  caseId        String?
+  status        RequestStatus @default(SUBMITTED)
+  priority      Priority      @default(MEDIUM)
+  sensitivity   Sensitivity   @default(STANDARD)
+  titleEn       String
+  titleAr       String
+  currentStepEn String?
+  currentStepAr String?
+  progress      Int           @default(0)
+  assigneeId    String?
+  slaDueAt      DateTime?
+  submittedAt   DateTime      @default(now())
+  completedAt   DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
   service    ServiceDefinition @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   student    Student?          @relation(fields: [studentId], references: [id], onDelete: SetNull)
@@ -967,9 +970,9 @@ model WorkflowRun {
   completedAt       DateTime?
   error             String?
 
-  version  WorkflowVersion   @relation(fields: [workflowVersionId], references: [id], onDelete: Cascade)
-  request  Request?          @relation(fields: [requestId], references: [id], onDelete: Cascade)
-  steps    WorkflowStepRun[]
+  version WorkflowVersion   @relation(fields: [workflowVersionId], references: [id], onDelete: Cascade)
+  request Request?          @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  steps   WorkflowStepRun[]
 
   @@index([orgId, status])
 }
@@ -1042,30 +1045,30 @@ model ApprovalAssignee {
 // ---------------------------------------------------------------------------
 
 model Case {
-  id           String        @id @default(cuid())
-  orgId        String
-  number       String
-  type         CaseType
-  sensitivity  Sensitivity   @default(STANDARD)
-  studentId    String
-  titleEn      String
-  titleAr      String
-  summaryEn    String?
-  summaryAr    String?
-  assigneeId   String?
-  referrerId   String?
-  departmentId String?
-  priority     Priority      @default(MEDIUM)
-  status       CaseStatus    @default(NEW)
-  concernLevel ConcernLevel?
-  slaDueAt     DateTime?
+  id             String        @id @default(cuid())
+  orgId          String
+  number         String
+  type           CaseType
+  sensitivity    Sensitivity   @default(STANDARD)
+  studentId      String
+  titleEn        String
+  titleAr        String
+  summaryEn      String?
+  summaryAr      String?
+  assigneeId     String?
+  referrerId     String?
+  departmentId   String?
+  priority       Priority      @default(MEDIUM)
+  status         CaseStatus    @default(NEW)
+  concernLevel   ConcernLevel?
+  slaDueAt       DateTime?
   nextFollowUpAt DateTime?
-  openedAt     DateTime      @default(now())
-  resolvedAt   DateTime?
-  closedAt     DateTime?
+  openedAt       DateTime      @default(now())
+  resolvedAt     DateTime?
+  closedAt       DateTime?
   retentionUntil DateTime?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 
   student       Student                      @relation(fields: [studentId], references: [id], onDelete: Cascade)
   department    Department?                  @relation(fields: [departmentId], references: [id], onDelete: SetNull)
@@ -1167,14 +1170,14 @@ model ExternalReferral {
 }
 
 model ParentNotificationDecision {
-  id                  String               @id @default(cuid())
-  orgId               String
-  caseId              String
-  decision            ParentNotifyDecision
-  reason              String
-  guardianIds         String[]
-  decidedById         String
-  createdAt           DateTime             @default(now())
+  id          String               @id @default(cuid())
+  orgId       String
+  caseId      String
+  decision    ParentNotifyDecision
+  reason      String
+  guardianIds String[]
+  decidedById String
+  createdAt   DateTime             @default(now())
 
   case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
 
@@ -1196,18 +1199,18 @@ model BreakGlassAccess {
 }
 
 model ActionPlan {
-  id           String         @id @default(cuid())
+  id           String        @id @default(cuid())
   orgId        String
   caseId       String?
   studentId    String
   titleEn      String
   titleAr      String
-  status       AiDraftStatus  @default(DRAFT)
-  fromAi       Boolean        @default(false)
+  status       AiDraftStatus @default(DRAFT)
+  fromAi       Boolean       @default(false)
   createdById  String
   approvedById String?
   approvedAt   DateTime?
-  createdAt    DateTime       @default(now())
+  createdAt    DateTime      @default(now())
 
   case  Case?            @relation(fields: [caseId], references: [id], onDelete: Cascade)
   items ActionPlanItem[]
@@ -1232,14 +1235,14 @@ model ActionPlanItem {
 }
 
 model Task {
-  id          String     @id @default(cuid())
+  id          String      @id @default(cuid())
   orgId       String
   titleEn     String
   titleAr     String
   descEn      String?
   descAr      String?
-  status      TaskStatus @default(TODO)
-  priority    Priority   @default(MEDIUM)
+  status      TaskStatus  @default(TODO)
+  priority    Priority    @default(MEDIUM)
   dueAt       DateTime?
   assigneeId  String?
   createdById String?
@@ -1249,8 +1252,8 @@ model Task {
   href        String?
   sensitivity Sensitivity @default(STANDARD)
   completedAt DateTime?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
   @@index([orgId, assigneeId, status])
   @@index([orgId, caseId])
@@ -1343,27 +1346,27 @@ model AvailabilityOverride {
 }
 
 model Appointment {
-  id            String            @id @default(cuid())
-  orgId         String
-  typeId        String
-  hostId        String
-  bookedById    String
-  studentId     String?
-  guardianId    String?
-  caseId        String?
-  requestId     String?
-  startsAt      DateTime
-  endsAt        DateTime
-  status        AppointmentStatus @default(CONFIRMED)
-  locationEn    String?
-  locationAr    String?
-  meetingUrl    String?
-  intakeData    Json?
-  notesEn       String?
-  cancelReason  String?
+  id                String            @id @default(cuid())
+  orgId             String
+  typeId            String
+  hostId            String
+  bookedById        String
+  studentId         String?
+  guardianId        String?
+  caseId            String?
+  requestId         String?
+  startsAt          DateTime
+  endsAt            DateTime
+  status            AppointmentStatus @default(CONFIRMED)
+  locationEn        String?
+  locationAr        String?
+  meetingUrl        String?
+  intakeData        Json?
+  notesEn           String?
+  cancelReason      String?
   rescheduledFromId String?
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
 
   type      AppointmentType       @relation(fields: [typeId], references: [id], onDelete: Cascade)
   attendees AppointmentAttendee[]
@@ -1400,6 +1403,10 @@ model CalendarEvent {
   departmentId String?
   classId      String?
   ownerId      String?
+  locationEn   String?
+  locationAr   String?
+  gradeLevels  Int[]
+  published    Boolean           @default(true)
   createdAt    DateTime          @default(now())
 
   @@index([orgId, startsAt])
@@ -1448,7 +1455,7 @@ model Document {
 }
 
 model DocumentVersion {
-  id          String   @id @default(cuid())
+  id          String          @id @default(cuid())
   orgId       String
   documentId  String
   version     Int
@@ -1460,7 +1467,7 @@ model DocumentVersion {
   renderData  Json?
   output      DocumentOutput?
   createdById String
-  createdAt   DateTime @default(now())
+  createdAt   DateTime        @default(now())
 
   document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
 
@@ -1539,27 +1546,27 @@ model AptitudeAssessment {
 }
 
 model Career {
-  id             String   @id @default(cuid())
-  orgId          String
-  key            String
-  titleEn        String
-  titleAr        String
-  clusterEn      String
-  clusterAr      String
-  summaryEn      String
-  summaryAr      String
-  dayInLifeEn    String?
-  dayInLifeAr    String?
-  weights        Json
-  subjects       String[]
-  skillsEn       String[]
-  skillsAr       String[]
-  educationEn    String
-  educationAr    String
-  salaryMinAed   Int?
-  salaryMaxAed   Int?
-  outlook        String   @default("growing")
-  uaeDemand      Int      @default(3)
+  id           String   @id @default(cuid())
+  orgId        String
+  key          String
+  titleEn      String
+  titleAr      String
+  clusterEn    String
+  clusterAr    String
+  summaryEn    String
+  summaryAr    String
+  dayInLifeEn  String?
+  dayInLifeAr  String?
+  weights      Json
+  subjects     String[]
+  skillsEn     String[]
+  skillsAr     String[]
+  educationEn  String
+  educationAr  String
+  salaryMinAed Int?
+  salaryMaxAed Int?
+  outlook      String   @default("growing")
+  uaeDemand    Int      @default(3)
 
   recs CareerRecommendation[]
 
@@ -1604,6 +1611,9 @@ model University {
   programsEn     String[]
   website        String?
   deadlineMonth  Int?
+  system         String?
+  applyVia       String?
+  scorecardId    String?
 
   entries ShortlistEntry[]
 
@@ -1648,18 +1658,18 @@ model ShortlistRequirement {
 // ---------------------------------------------------------------------------
 
 model Message {
-  id          String         @id @default(cuid())
-  orgId       String
-  caseId      String?
-  requestId   String?
-  channel     MessageChannel @default(INTERNAL)
-  fromId      String
-  toLabel     String?
+  id           String         @id @default(cuid())
+  orgId        String
+  caseId       String?
+  requestId    String?
+  channel      MessageChannel @default(INTERNAL)
+  fromId       String
+  toLabel      String?
   toGuardianId String?
-  subject     String?
-  body        String
-  status      DeliveryStatus @default(SENT)
-  createdAt   DateTime       @default(now())
+  subject      String?
+  body         String
+  status       DeliveryStatus @default(SENT)
+  createdAt    DateTime       @default(now())
 
   @@index([orgId, caseId])
   @@index([orgId, requestId])
@@ -1782,16 +1792,16 @@ model AuditEvent {
 }
 
 model ProcessingPurpose {
-  id           String  @id @default(cuid())
-  orgId        String
-  key          String
-  nameEn       String
-  nameAr       String
-  descEn       String
-  descAr       String
-  lawfulBasis  String
-  dataCategories String[]
-  requiresConsent Boolean @default(false)
+  id              String   @id @default(cuid())
+  orgId           String
+  key             String
+  nameEn          String
+  nameAr          String
+  descEn          String
+  descAr          String
+  lawfulBasis     String
+  dataCategories  String[]
+  requiresConsent Boolean  @default(false)
 
   consents ConsentRecord[]
 
@@ -1816,20 +1826,20 @@ model ConsentRecord {
 }
 
 model DataSubjectRequest {
-  id           String    @id @default(cuid())
-  orgId        String
-  number       String
-  type         DsrType
-  status       DsrStatus @default(RECEIVED)
-  subjectName  String
+  id            String    @id @default(cuid())
+  orgId         String
+  number        String
+  type          DsrType
+  status        DsrStatus @default(RECEIVED)
+  subjectName   String
   requesterName String
-  studentId    String?
-  detailsEn    String?
-  receivedAt   DateTime  @default(now())
-  dueAt        DateTime
-  completedAt  DateTime?
-  handledById  String?
-  resolution   String?
+  studentId     String?
+  detailsEn     String?
+  receivedAt    DateTime  @default(now())
+  dueAt         DateTime
+  completedAt   DateTime?
+  handledById   String?
+  resolution    String?
 
   @@unique([orgId, number])
 }
@@ -1868,16 +1878,16 @@ model RetentionPolicy {
 }
 
 model CrossBorderTransfer {
-  id          String   @id @default(cuid())
-  orgId       String
+  id           String    @id @default(cuid())
+  orgId        String
   providerName String
-  countryCode String
-  purposeEn   String
-  purposeAr   String
-  safeguardEn String
-  safeguardAr String
-  approved    Boolean  @default(false)
-  approvedAt  DateTime?
+  countryCode  String
+  purposeEn    String
+  purposeAr    String
+  safeguardEn  String
+  safeguardAr  String
+  approved     Boolean   @default(false)
+  approvedAt   DateTime?
 
   @@index([orgId])
 }
@@ -1930,4 +1940,437 @@ model CsvImport {
   createdAt   DateTime     @default(now())
 
   @@index([orgId])
+}
+
+// ---------------------------------------------------------------------------
+// Subject registration and automatic class allocation
+// ---------------------------------------------------------------------------
+
+enum OfferingKind {
+  CORE
+  OPTION
+}
+
+enum RegistrationStatus {
+  REQUESTED
+  ALLOCATED
+  WAITLISTED
+  DROPPED
+}
+
+enum RegistrationSource {
+  STUDENT
+  PARENT
+  STAFF
+  IMPORT
+  SUBJECT_CHANGE
+}
+
+/// A subject offered to a grade in a year: core (everyone) or an option in a block.
+model SubjectOffering {
+  id             String       @id @default(cuid())
+  orgId          String
+  academicYearId String
+  subjectId      String
+  gradeLevel     Int
+  kind           OfferingKind @default(CORE)
+  optionBlock    String?
+  prerequisites  String[]
+  periodsPerWeek Int          @default(4)
+  notesEn        String?
+  notesAr        String?
+  createdAt      DateTime     @default(now())
+
+  @@unique([orgId, academicYearId, subjectId, gradeLevel])
+  @@index([orgId])
+}
+
+/// A student's registration for a subject; allocation places them in a class section.
+model SubjectRegistration {
+  id             String             @id @default(cuid())
+  orgId          String
+  academicYearId String
+  studentId      String
+  subjectId      String
+  status         RegistrationStatus @default(REQUESTED)
+  source         RegistrationSource @default(STAFF)
+  classId        String?
+  preference     Int                @default(1)
+  createdById    String?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  @@unique([academicYearId, studentId, subjectId])
+  @@index([orgId, studentId])
+}
+
+// ---------------------------------------------------------------------------
+// Grades
+// ---------------------------------------------------------------------------
+
+enum AssessmentKind {
+  HOMEWORK
+  QUIZ
+  TEST
+  EXAM
+  PROJECT
+  COURSEWORK
+  PARTICIPATION
+}
+
+model Assessment {
+  id          String         @id @default(cuid())
+  orgId       String
+  classId     String
+  termId      String?
+  titleEn     String
+  titleAr     String
+  kind        AssessmentKind @default(TEST)
+  maxScore    Float          @default(100)
+  weight      Float          @default(1)
+  dueAt       DateTime?
+  publishedAt DateTime?
+  createdById String
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  grades Grade[]
+
+  @@index([orgId, classId])
+}
+
+model Grade {
+  id           String   @id @default(cuid())
+  orgId        String
+  assessmentId String
+  studentId    String
+  score        Float?
+  excused      Boolean  @default(false)
+  commentEn    String?
+  commentAr    String?
+  updatedById  String?
+  updatedAt    DateTime @updatedAt
+
+  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  @@unique([assessmentId, studentId])
+  @@index([orgId, studentId])
+}
+
+/// Percentage bands that turn a score into a school grade (for example A* 90).
+model GradeBand {
+  id         String @id @default(cuid())
+  orgId      String
+  label      String
+  minPercent Float
+  sortOrder  Int    @default(0)
+
+  @@unique([orgId, label])
+}
+
+// ---------------------------------------------------------------------------
+// Trips and consent letters
+// ---------------------------------------------------------------------------
+
+enum TripStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+  COMPLETED
+}
+
+enum TripConsent {
+  PENDING
+  GRANTED
+  DECLINED
+}
+
+model Trip {
+  id              String     @id @default(cuid())
+  orgId           String
+  titleEn         String
+  titleAr         String
+  descEn          String?
+  descAr          String?
+  destinationEn   String
+  destinationAr   String
+  startsAt        DateTime
+  endsAt          DateTime
+  costAed         Int?
+  consentDeadline DateTime?
+  status          TripStatus @default(DRAFT)
+  gradeLevels     Int[]
+  classIds        String[]
+  organizerId     String
+  templateKey     String?
+  calendarEventId String?
+  publishedAt     DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  participants TripParticipant[]
+
+  @@index([orgId, startsAt])
+}
+
+model TripParticipant {
+  id           String      @id @default(cuid())
+  orgId        String
+  tripId       String
+  studentId    String
+  consent      TripConsent @default(PENDING)
+  decidedById  String?
+  decidedAt    DateTime?
+  noteEn       String?
+  documentId   String?
+  letterSentAt DateTime?
+  createdAt    DateTime    @default(now())
+
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@unique([tripId, studentId])
+  @@index([orgId, studentId])
+}
+
+// ---------------------------------------------------------------------------
+// University pathways
+// ---------------------------------------------------------------------------
+
+enum SchoolCurriculum {
+  BRITISH
+  IB
+  AMERICAN
+  UAE_MOE
+  JORDAN_TAWJIHI
+  OTHER
+}
+
+/// A degree programme with entry requirements per school curriculum. Requirements are indicative
+/// and carry their source and the date they were last checked.
+model UniversityProgram {
+  id                  String    @id @default(cuid())
+  orgId               String
+  universityId        String
+  key                 String
+  nameEn              String
+  nameAr              String
+  field               String
+  degree              String
+  durationYears       Float     @default(3)
+  requiredSubjects    String[]
+  recommendedSubjects String[]
+  requirements        Json
+  englishReq          Json?
+  notesEn             String?
+  notesAr             String?
+  sourceUrl           String?
+  lastVerifiedAt      DateTime?
+  indicative          Boolean   @default(true)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@unique([orgId, key])
+  @@index([orgId, universityId])
+}
+
+/// A student's predicted or achieved result in a subject, used by the requirements checker.
+model StudentSubjectResult {
+  id          String           @id @default(cuid())
+  orgId       String
+  studentId   String
+  subjectCode String
+  curriculum  SchoolCurriculum @default(BRITISH)
+  level       String?
+  predicted   String?
+  achieved    String?
+  updatedById String?
+  updatedAt   DateTime         @updatedAt
+
+  @@unique([studentId, subjectCode, level])
+  @@index([orgId, studentId])
+}
+
+model StudentTestScore {
+  id        String    @id @default(cuid())
+  orgId     String
+  studentId String
+  kind      String
+  score     Float
+  takenAt   DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([orgId, studentId])
+}
+
+// ---------------------------------------------------------------------------
+// Curriculum, lesson planning and coverage
+// ---------------------------------------------------------------------------
+
+enum LessonPlanStatus {
+  DRAFT
+  SUBMITTED
+  CHANGES_REQUESTED
+  APPROVED
+}
+
+model CurriculumFramework {
+  id          String   @id @default(cuid())
+  orgId       String
+  key         String
+  nameEn      String
+  nameAr      String
+  sourceEn    String?
+  subjectId   String?
+  gradeLevel  Int?
+  createdById String?
+  createdAt   DateTime @default(now())
+
+  standards CurriculumStandard[]
+
+  @@unique([orgId, key])
+}
+
+model CurriculumStandard {
+  id          String @id @default(cuid())
+  orgId       String
+  frameworkId String
+  code        String
+  strandEn    String
+  strandAr    String
+  descEn      String
+  descAr      String
+  sortOrder   Int    @default(0)
+
+  framework CurriculumFramework  @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+  lessons   LessonPlanStandard[]
+
+  @@unique([frameworkId, code])
+  @@index([orgId])
+}
+
+model LessonPlan {
+  id              String           @id @default(cuid())
+  orgId           String
+  subjectId       String
+  gradeLevel      Int
+  classId         String?
+  termId          String?
+  weekNo          Int?
+  plannedFor      DateTime?
+  titleEn         String
+  titleAr         String
+  objectivesEn    String?
+  objectivesAr    String?
+  activities      Json?
+  materials       Json?
+  assessmentEn    String?
+  assessmentAr    String?
+  differentiation String?
+  durationMin     Int              @default(50)
+  status          LessonPlanStatus @default(DRAFT)
+  authorId        String
+  reviewerId      String?
+  reviewComment   String?
+  reviewedAt      DateTime?
+  aiDrafted       Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  standards LessonPlanStandard[]
+
+  @@index([orgId, subjectId, gradeLevel])
+}
+
+model LessonPlanStandard {
+  id           String @id @default(cuid())
+  orgId        String
+  lessonPlanId String
+  standardId   String
+
+  lessonPlan LessonPlan         @relation(fields: [lessonPlanId], references: [id], onDelete: Cascade)
+  standard   CurriculumStandard @relation(fields: [standardId], references: [id], onDelete: Cascade)
+
+  @@unique([lessonPlanId, standardId])
+  @@index([orgId])
+}
+
+// ---------------------------------------------------------------------------
+// Teacher assignment, timetable and exams
+// ---------------------------------------------------------------------------
+
+/// Which subjects and grades a teacher can teach, and how many periods a week they can take.
+model TeacherSubject {
+  id                String   @id @default(cuid())
+  orgId             String
+  membershipId      String
+  subjectId         String
+  gradeLevels       Int[]
+  maxPeriodsPerWeek Int      @default(24)
+  createdAt         DateTime @default(now())
+
+  @@unique([membershipId, subjectId])
+  @@index([orgId])
+}
+
+enum PeriodKind {
+  LESSON
+  BREAK
+  ASSEMBLY
+}
+
+/// The bell schedule: which periods exist on which school day.
+model BellPeriod {
+  id             String     @id @default(cuid())
+  orgId          String
+  academicYearId String
+  dayOfWeek      Int
+  periodNo       Int
+  startTime      String
+  endTime        String
+  kind           PeriodKind @default(LESSON)
+
+  @@unique([academicYearId, dayOfWeek, periodNo])
+  @@index([orgId])
+}
+
+/// One lesson in the weekly timetable. A teacher and a class can only be in one place per period.
+model TimetableSlot {
+  id                  String   @id @default(cuid())
+  orgId               String
+  academicYearId      String
+  classId             String
+  teacherMembershipId String?
+  dayOfWeek           Int
+  periodNo            Int
+  room                String?
+  locked              Boolean  @default(false)
+  createdAt           DateTime @default(now())
+
+  @@unique([classId, dayOfWeek, periodNo])
+  @@index([orgId, academicYearId])
+  @@index([teacherMembershipId, dayOfWeek, periodNo])
+}
+
+enum ExamStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model ExamSitting {
+  id              String     @id @default(cuid())
+  orgId           String
+  termId          String?
+  subjectId       String
+  gradeLevel      Int
+  titleEn         String
+  titleAr         String
+  startsAt        DateTime
+  endsAt          DateTime
+  room            String?
+  invigilatorIds  String[]
+  status          ExamStatus @default(DRAFT)
+  calendarEventId String?
+  createdAt       DateTime   @default(now())
+
+  @@index([orgId, startsAt])
 }

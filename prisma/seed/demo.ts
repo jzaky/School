@@ -22,6 +22,13 @@ import { UNIVERSITIES } from "./data/universities";
 import { seedHistory } from "./history";
 import { seedCompliance } from "./compliance";
 import { seedCareer } from "./career";
+import { seedRegistration } from "./academics/registration";
+import { seedTimetable } from "./academics/timetable";
+import { seedGrades } from "./academics/grades";
+import { seedTrips } from "./academics/trips";
+import { seedCalendar } from "./academics/calendar";
+import { seedPathways } from "./academics/pathways";
+import { seedCurriculum } from "./academics/curriculum";
 
 export const DEMO_SLUG = "horizon";
 export const DEMO_PASSWORD = "Horizon2026!";
@@ -925,6 +932,14 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   await seedHistory(world, execCtx(db as unknown as Prisma.TransactionClient, orgId, { now, quiet: true }));
   await seedCareer(world);
   await seedCompliance(world);
+  // Academic modules, in dependency order.
+  await seedRegistration(world);
+  await seedTimetable(world);
+  await seedGrades(world);
+  await seedTrips(world);
+  await seedCalendar(world);
+  await seedPathways(world);
+  await seedCurriculum(world);
 
   log(`demo seed finished in ${Date.now() - started}ms`);
   return { orgId, ms: Date.now() - started };
