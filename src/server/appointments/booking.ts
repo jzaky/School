@@ -67,6 +67,15 @@ export async function bookAppointment(
       ...(student?.membershipId && student.membershipId !== input.bookedById ? [{ orgId, appointmentId: appt.id, membershipId: student.membershipId, studentId: student.id }] : []),
     ],
   });
+  // A staff member may invite the family explicitly (never automatic for sensitive cases).
+  let invitedGuardianMember: string | null = null;
+  if (input.guardianId) {
+    const g = await tx.guardian.findUnique({ where: { id: input.guardianId } });
+    if (g?.membershipId && g.membershipId !== input.bookedById) {
+      invitedGuardianMember = g.membershipId;
+      await tx.appointmentAttendee.create({ data: { orgId, appointmentId: appt.id, membershipId: g.membershipId, guardianId: g.id } });
+    }
+  }
   if (input.rescheduleOf) {
     await tx.appointment.update({ where: { id: input.rescheduleOf }, data: { status: "CANCELLED", cancelReason: "Rescheduled" } });
   }
@@ -112,6 +121,16 @@ export async function bookAppointment(
     channels: ["IN_APP", "EMAIL"],
     idempotencyBase: `appt:${appt.id}:booker`,
   });
+  if (invitedGuardianMember) {
+    await notify(ec, {
+      recipients: [invitedGuardianMember],
+      templateKey: "appointment_confirmed",
+      vars: { title, when, host: hostName, location },
+      href: `/meetings/${appt.id}`,
+      channels: ["IN_APP", "EMAIL", "SMS"],
+      idempotencyBase: `appt:${appt.id}:guardian`,
+    });
+  }
   if (!ec.quiet) {
     for (const [label, hours] of [["24h", 24], ["1h", 1]] as const) {
       const delay = slot.start.getTime() - hours * 3600_000 - ec.now.getTime();

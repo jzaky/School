@@ -219,3 +219,30 @@ export async function renderSamplePdf(title: { en: string; ar: string }, subtitl
   doc.end();
   return done;
 }
+
+/** Case chronology export: every action, decision and contact with timestamps. */
+export async function renderChronologyPdf(input: { title: string; subtitle: string; rows: Array<{ when: string; who: string; kind: string; text: string }>; footer: string }): Promise<Buffer> {
+  const doc = new PDFDocument({ size: "A4", margin: 48, info: { Title: input.title } });
+  const chunks: Buffer[] = [];
+  doc.on("data", (c: Buffer) => chunks.push(c));
+  const done = new Promise<Buffer>((resolve) => doc.on("end", () => resolve(Buffer.concat(chunks))));
+  const W = doc.page.width - 96;
+  doc.font(FONTS.bold).fontSize(15).fillColor(NAVY).text(input.title, 48, 48, { width: W });
+  doc.font(FONTS.regular).fontSize(9).fillColor(MUTED).text(input.subtitle, { width: W });
+  doc.moveDown(0.8);
+  for (const r of input.rows) {
+    if (doc.y > doc.page.height - 110) doc.addPage();
+    doc.font(FONTS.semibold).fontSize(9).fillColor(NAVY).text(`${r.when}  ·  ${r.kind}  ·  ${r.who}`, { width: W });
+    const isRtl = ARABIC_LETTER_RE.test(r.text);
+    if (isRtl) {
+      const y = drawRtl(doc, r.text, 48, doc.y, W, { size: 9 });
+      doc.y = y;
+    } else {
+      doc.font(FONTS.regular).fontSize(9).fillColor("#1F2937").text(r.text, { width: W });
+    }
+    doc.moveDown(0.6);
+  }
+  doc.font(FONTS.regular).fontSize(7).fillColor(MUTED).text(input.footer, 48, doc.page.height - 40, { width: W });
+  doc.end();
+  return done;
+}

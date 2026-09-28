@@ -21,12 +21,16 @@ export async function getSlotsAction(input: { typeId: string; hostId: string | n
   return [...slots.entries()].map(([key, list]) => ({ key, slots: list.map((s: { start: Date; hostIds: string[] }) => ({ start: s.start.toISOString(), hostIds: s.hostIds })) }));
 }
 
-export async function bookAppointmentAction(input: { typeId: string; hostId: string | null; start: string; studentId: string | null; caseId?: string | null; notes?: string | null; rescheduleOf?: string | null }) {
+export async function bookAppointmentAction(input: { typeId: string; hostId: string | null; start: string; studentId: string | null; caseId?: string | null; notes?: string | null; rescheduleOf?: string | null; inviteGuardianId?: string | null }) {
   const ctx = await getCtx();
   if (!ctx.can("appointments.book")) return { ok: false as const, error: "FORBIDDEN" };
   let studentId = input.studentId;
   if (ctx.isStudent) studentId = ctx.membership.student?.id ?? null;
   if (studentId && !(await canSeeStudent(ctx, studentId))) return { ok: false as const, error: "FORBIDDEN" };
+  if (input.inviteGuardianId && studentId) {
+    const link = await ctx.db.guardianLink.findFirst({ where: { guardianId: input.inviteGuardianId, studentId } });
+    if (!link) return { ok: false as const, error: "FORBIDDEN" };
+  }
   if (input.rescheduleOf) {
     const prev = await ctx.db.appointment.findUnique({ where: { id: input.rescheduleOf }, include: { attendees: true } });
     if (!prev || !(prev.hostId === ctx.membershipId || prev.bookedById === ctx.membershipId || prev.attendees.some((a) => a.membershipId === ctx.membershipId))) {
@@ -47,6 +51,7 @@ export async function bookAppointmentAction(input: { typeId: string; hostId: str
           caseId: input.caseId ?? null,
           notes: input.notes ?? null,
           rescheduleOf: input.rescheduleOf ?? null,
+          guardianId: ctx.isStaff ? (input.inviteGuardianId ?? null) : undefined,
         }),
       { timeout: 30000 },
     );

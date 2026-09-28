@@ -291,7 +291,7 @@ function Field({
       control = (
         <Select value={str || undefined} onValueChange={onChange} disabled={locked}>
           <SelectTrigger id={id} className="w-full" aria-invalid={invalid}>
-            <SelectValue placeholder={placeholder || t("choose")} />
+            <SelectValue placeholder={placeholder || t("choose")}>{opts.find((o) => o.value === str) ? tx(locale, opts.find((o) => o.value === str)!.label) : undefined}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             {opts.map((o) => (

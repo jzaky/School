@@ -4,6 +4,7 @@
 import bcrypt from "bcryptjs";
 import type { Prisma, PrismaClient } from "@prisma/client";
 import { SYSTEM_ROLES, STAFF_ROLE_KEYS } from "@/server/identity/permissions";
+import { encryptField } from "@/lib/crypto";
 import type { FormSchema } from "@/server/forms/schema";
 import { execCtx } from "@/server/db";
 import { at, dateOnly, emailFor, id, isSchoolDay, rng, schoolDay, stableId, wipeTenant } from "./lib";
@@ -548,8 +549,11 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
     gender: s.gender,
     nationalityEn: s.nationality.en,
     nationalityAr: s.nationality.ar,
-    emiratesIdLast4: String(1000 + ((i * 7919) % 9000)),
-    passportLast4: String(2000 + ((i * 104729) % 7000)),
+    ...(() => {
+      const eid = `784-${startYear - s.grade - 5}-${String(1000000 + ((i * 7919) % 8999999)).slice(0, 7)}-${i % 10}`;
+      const passport = `${["N", "P", "A", "K"][i % 4]}${String(10000000 + ((i * 104729) % 89999999)).slice(0, 8)}`;
+      return { emiratesIdEnc: encryptField(eid), emiratesIdLast4: eid.slice(-9, -2).slice(-4), passportEnc: encryptField(passport), passportLast4: passport.slice(-4) };
+    })(),
     status: "ACTIVE",
     enrolledOn: enrolledOnFor(s),
     houseEn: ["Falcon", "Oryx", "Dhow", "Ghaf"][i % 4],

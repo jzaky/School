@@ -9,6 +9,7 @@ const TONE = {
   danger: "bg-danger-soft text-danger ring-danger/20",
   info: "bg-info-soft text-info ring-info/20",
   violet: "bg-violet-50 text-violet-700 ring-violet-200",
+  gold: "bg-gold-soft text-[oklch(0.5_0.1_80)] ring-gold/30",
 } as const;
 export type Tone = keyof typeof TONE;
 
