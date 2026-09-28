@@ -1,0 +1,838 @@
+{
+  "adminPeople": {
+    "title": [
+      "People",
+      "الأشخاص"
+    ],
+    "subtitle": [
+      "Staff accounts and roles, student records, families and bulk imports.",
+      "حسابات الموظفين وأدوارهم، وسجلات الطلاب، والأسر، والاستيراد الجماعي."
+    ],
+    "loading": [
+      "Loading",
+      "جارٍ التحميل"
+    ],
+    "statStaff": [
+      "Staff members",
+      "الموظفون"
+    ],
+    "statStudents": [
+      "Active students",
+      "الطلاب النشطون"
+    ],
+    "statFamilies": [
+      "Guardians",
+      "أولياء الأمور"
+    ],
+    "statSuspended": [
+      "Suspended accounts",
+      "الحسابات الموقوفة"
+    ],
+    "tabStaff": [
+      "Staff",
+      "الموظفون"
+    ],
+    "tabStudents": [
+      "Students",
+      "الطلاب"
+    ],
+    "tabFamilies": [
+      "Families",
+      "الأسر"
+    ],
+    "tabImports": [
+      "Imports",
+      "الاستيراد"
+    ],
+    "search": {
+      "staff": [
+        "Search name, email or title",
+        "ابحث بالاسم أو البريد أو المسمى"
+      ],
+      "students": [
+        "Search name or student number",
+        "ابحث بالاسم أو الرقم المدرسي"
+      ],
+      "families": [
+        "Search guardian, child, email or phone",
+        "ابحث بولي الأمر أو الطفل أو البريد أو الهاتف"
+      ]
+    },
+    "filterAllRoles": [
+      "All roles",
+      "جميع الأدوار"
+    ],
+    "filterAllDepartments": [
+      "All departments",
+      "جميع الأقسام"
+    ],
+    "filterAllGrades": [
+      "All grades",
+      "جميع الصفوف"
+    ],
+    "filterAllStatuses": [
+      "All statuses",
+      "جميع الحالات"
+    ],
+    "clearFilters": [
+      "Clear filters",
+      "مسح عوامل التصفية"
+    ],
+    "gradeN": [
+      "Grade {grade}",
+      "الصف {grade}"
+    ],
+    "gradeSection": [
+      "Grade {grade}{section}",
+      "الصف {grade}{section}"
+    ],
+    "memberStatus": {
+      "ACTIVE": [
+        "Active",
+        "نشط"
+      ],
+      "INVITED": [
+        "Invited",
+        "مدعو"
+      ],
+      "SUSPENDED": [
+        "Suspended",
+        "موقوف"
+      ]
+    },
+    "studentStatus": {
+      "ACTIVE": [
+        "Active",
+        "نشط"
+      ],
+      "INACTIVE": [
+        "Inactive",
+        "غير نشط"
+      ],
+      "GRADUATED": [
+        "Graduated",
+        "متخرج"
+      ],
+      "WITHDRAWN": [
+        "Withdrawn",
+        "منسحب"
+      ]
+    },
+    "portal": {
+      "ACTIVE": [
+        "Portal active",
+        "البوابة مفعّلة"
+      ],
+      "INVITED": [
+        "Portal invited",
+        "دعوة للبوابة"
+      ],
+      "SUSPENDED": [
+        "Portal suspended",
+        "البوابة موقوفة"
+      ],
+      "NONE": [
+        "No portal account",
+        "لا يوجد حساب في البوابة"
+      ]
+    },
+    "importStatus": {
+      "PENDING": [
+        "Pending",
+        "قيد الانتظار"
+      ],
+      "COMPLETED": [
+        "Completed",
+        "مكتمل"
+      ],
+      "FAILED": [
+        "Failed",
+        "فشل"
+      ]
+    },
+    "colName": [
+      "Name",
+      "الاسم"
+    ],
+    "colTitleDept": [
+      "Title and department",
+      "المسمى والقسم"
+    ],
+    "colRoles": [
+      "Roles",
+      "الأدوار"
+    ],
+    "colStatus": [
+      "Status",
+      "الحالة"
+    ],
+    "colActions": [
+      "Actions",
+      "الإجراءات"
+    ],
+    "colStudentNo": [
+      "Student no.",
+      "الرقم المدرسي"
+    ],
+    "colGrade": [
+      "Grade",
+      "الصف"
+    ],
+    "colGuardians": [
+      "Guardians",
+      "أولياء الأمور"
+    ],
+    "colGuardian": [
+      "Guardian",
+      "ولي الأمر"
+    ],
+    "colContact": [
+      "Contact",
+      "التواصل"
+    ],
+    "colChildren": [
+      "Linked children",
+      "الأبناء المرتبطون"
+    ],
+    "colFile": [
+      "File",
+      "الملف"
+    ],
+    "colBy": [
+      "Imported by",
+      "بواسطة"
+    ],
+    "colTotal": [
+      "Rows",
+      "الصفوف"
+    ],
+    "colSucceeded": [
+      "Imported",
+      "تم استيرادها"
+    ],
+    "colFailed": [
+      "Failed",
+      "فشلت"
+    ],
+    "colRow": [
+      "Row",
+      "الصف"
+    ],
+    "colCheck": [
+      "Check",
+      "التحقق"
+    ],
+    "showing": [
+      "Showing {shown} of {total}. Use search or filters to narrow the list.",
+      "يُعرض {shown} من {total}. استخدم البحث أو عوامل التصفية لتضييق القائمة."
+    ],
+    "you": [
+      "You",
+      "أنت"
+    ],
+    "noTitle": [
+      "No title",
+      "بدون مسمى"
+    ],
+    "noDepartment": [
+      "No department",
+      "بدون قسم"
+    ],
+    "noGuardians": [
+      "No guardian",
+      "بلا ولي أمر"
+    ],
+    "guardianCount": [
+      "{count, plural, one {# guardian} other {# guardians}}",
+      "{count, plural, zero {لا يوجد أولياء أمور} one {ولي أمر واحد} two {وليا أمر} few {# أولياء أمور} many {# وليًا للأمر} other {# ولي أمر}}"
+    ],
+    "noContact": [
+      "No contact details",
+      "لا توجد بيانات تواصل"
+    ],
+    "noChildren": [
+      "No linked children",
+      "لا يوجد أبناء مرتبطون"
+    ],
+    "flagPrimary": [
+      "Primary",
+      "أساسي"
+    ],
+    "flagApprove": [
+      "Can approve",
+      "يمكنه الاعتماد"
+    ],
+    "flagNoApprove": [
+      "Cannot approve",
+      "لا يمكنه الاعتماد"
+    ],
+    "flagNoUpdates": [
+      "No updates",
+      "لا يتلقى التحديثات"
+    ],
+    "emptyStaff": [
+      "No staff match",
+      "لا يوجد موظفون مطابقون"
+    ],
+    "emptyStudents": [
+      "No students match",
+      "لا يوجد طلاب مطابقون"
+    ],
+    "emptyFamilies": [
+      "No guardians match",
+      "لا يوجد أولياء أمور مطابقون"
+    ],
+    "emptyFiltered": [
+      "Try another search or clear the filters.",
+      "جرّب بحثًا آخر أو امسح عوامل التصفية."
+    ],
+    "emptyImports": [
+      "No imports yet",
+      "لا توجد عمليات استيراد بعد"
+    ],
+    "emptyImportsBody": [
+      "Imports you run appear here with their results.",
+      "ستظهر هنا عمليات الاستيراد التي تجريها مع نتائجها."
+    ],
+    "importHistory": [
+      "Import history",
+      "سجل الاستيراد"
+    ],
+    "cancel": [
+      "Cancel",
+      "إلغاء"
+    ],
+    "save": [
+      "Save",
+      "حفظ"
+    ],
+    "edit": [
+      "Edit",
+      "تعديل"
+    ],
+    "optional": [
+      "Optional",
+      "اختياري"
+    ],
+    "addStaff": [
+      "Add staff member",
+      "إضافة موظف"
+    ],
+    "addStaffTitle": [
+      "Add a staff member",
+      "إضافة موظف جديد"
+    ],
+    "addStaffBody": [
+      "Creates their school account with the roles you choose. If the email already has an account, it is added to this school.",
+      "ينشئ حساب الموظف في المدرسة بالأدوار التي تختارها. إذا كان للبريد حساب قائم فستتم إضافته إلى هذه المدرسة."
+    ],
+    "editStaffTitle": [
+      "Edit {name}",
+      "تعديل بيانات {name}"
+    ],
+    "editStaffBody": [
+      "Roles decide what this person can see and do. Changes apply the next time they open a page.",
+      "تحدد الأدوار ما يمكن لهذا الشخص رؤيته وفعله. تسري التغييرات عند فتحه أي صفحة تالية."
+    ],
+    "fieldEmail": [
+      "Email",
+      "البريد الإلكتروني"
+    ],
+    "fieldNameEn": [
+      "Full name (English)",
+      "الاسم الكامل (بالإنجليزية)"
+    ],
+    "fieldNameAr": [
+      "Full name (Arabic)",
+      "الاسم الكامل (بالعربية)"
+    ],
+    "fieldTitleEn": [
+      "Job title (English)",
+      "المسمى الوظيفي (بالإنجليزية)"
+    ],
+    "fieldTitleAr": [
+      "Job title (Arabic)",
+      "المسمى الوظيفي (بالعربية)"
+    ],
+    "fieldDepartment": [
+      "Department",
+      "القسم"
+    ],
+    "fieldRoles": [
+      "Roles",
+      "الأدوار"
+    ],
+    "fieldAccess": [
+      "Account status",
+      "حالة الحساب"
+    ],
+    "accessOption": {
+      "ACTIVE": [
+        "Active now",
+        "نشط الآن"
+      ],
+      "INVITED": [
+        "Invited",
+        "مدعو"
+      ]
+    },
+    "accessHint": {
+      "ACTIVE": [
+        "Can sign in straight away.",
+        "يمكنه تسجيل الدخول فورًا."
+      ],
+      "INVITED": [
+        "Account is prepared. Sign-in stays off until you activate it.",
+        "الحساب جاهز، ويبقى تسجيل الدخول معطّلًا حتى تفعّله."
+      ]
+    },
+    "signInNote": [
+      "No email is sent from here. Staff sign in through the school's Microsoft or Google single sign-on, or with a password set up by your IT team.",
+      "لا تُرسل أي رسالة بريد من هنا. يسجّل الموظفون الدخول عبر الدخول الموحد للمدرسة من Microsoft أو Google، أو بكلمة مرور يعدّها فريق تقنية المعلومات."
+    ],
+    "rolesRequired": [
+      "Choose at least one role.",
+      "اختر دورًا واحدًا على الأقل."
+    ],
+    "lockSelf": [
+      "You cannot remove your own administrator role.",
+      "لا يمكنك إزالة دور المسؤول الخاص بك."
+    ],
+    "lockLast": [
+      "This is the only active school administrator. Add another administrator first.",
+      "هذا هو مسؤول المدرسة النشط الوحيد. أضف مسؤولًا آخر أولًا."
+    ],
+    "lockPermission": [
+      "Only a school administrator can change administrator access.",
+      "لا يغيّر صلاحيات المسؤول إلا مسؤول المدرسة."
+    ],
+    "lockSelfStatus": [
+      "You cannot suspend your own account.",
+      "لا يمكنك إيقاف حسابك."
+    ],
+    "lockLastStatus": [
+      "The only active school administrator cannot be suspended.",
+      "لا يمكن إيقاف مسؤول المدرسة النشط الوحيد."
+    ],
+    "suspend": [
+      "Suspend",
+      "إيقاف"
+    ],
+    "reactivate": [
+      "Reactivate",
+      "إعادة التفعيل"
+    ],
+    "activate": [
+      "Activate",
+      "تفعيل"
+    ],
+    "suspendTitle": [
+      "Suspend {name}?",
+      "إيقاف حساب {name}؟"
+    ],
+    "suspendBody": [
+      "They will be signed out and cannot sign in to this school until reactivated. Their records and history stay in place.",
+      "سيُسجَّل خروجه ولن يتمكن من الدخول إلى هذه المدرسة حتى تُعاد تفعيله. تبقى سجلاته وتاريخه كما هي."
+    ],
+    "activateTitle": [
+      "Activate {name}?",
+      "تفعيل حساب {name}؟"
+    ],
+    "activateBody": [
+      "They will be able to sign in to this school with their current roles.",
+      "سيتمكن من تسجيل الدخول إلى هذه المدرسة بأدواره الحالية."
+    ],
+    "suspended": [
+      "{name} is suspended",
+      "تم إيقاف {name}"
+    ],
+    "activated": [
+      "{name} is active",
+      "أصبح {name} نشطًا"
+    ],
+    "staffAdded": [
+      "{name} was added",
+      "تمت إضافة {name}"
+    ],
+    "staffUpdated": [
+      "Staff member updated",
+      "تم تحديث بيانات الموظف"
+    ],
+    "addStudent": [
+      "Add student",
+      "إضافة طالب"
+    ],
+    "addStudentTitle": [
+      "Add a student",
+      "إضافة طالب جديد"
+    ],
+    "addStudentBody": [
+      "Creates the student record. You can link an existing guardian or add a new one.",
+      "ينشئ سجل الطالب، ويمكنك ربطه بولي أمر مسجل أو إضافة ولي أمر جديد."
+    ],
+    "fieldStudentNo": [
+      "Student number",
+      "الرقم المدرسي"
+    ],
+    "fieldGrade": [
+      "Grade",
+      "الصف"
+    ],
+    "chooseGrade": [
+      "Choose grade",
+      "اختر الصف"
+    ],
+    "fieldSection": [
+      "Section",
+      "الشعبة"
+    ],
+    "fieldFirstNameEn": [
+      "First name (English)",
+      "الاسم الأول (بالإنجليزية)"
+    ],
+    "fieldLastNameEn": [
+      "Last name (English)",
+      "اسم العائلة (بالإنجليزية)"
+    ],
+    "fieldFirstNameAr": [
+      "First name (Arabic)",
+      "الاسم الأول (بالعربية)"
+    ],
+    "fieldLastNameAr": [
+      "Last name (Arabic)",
+      "اسم العائلة (بالعربية)"
+    ],
+    "fieldDob": [
+      "Date of birth",
+      "تاريخ الميلاد"
+    ],
+    "fieldEmiratesId": [
+      "Emirates ID",
+      "رقم الهوية الإماراتية"
+    ],
+    "fieldPassport": [
+      "Passport number",
+      "رقم جواز السفر"
+    ],
+    "idsEncrypted": [
+      "Emirates ID and passport numbers are encrypted. Only the last four digits are shown to staff.",
+      "رقما الهوية الإماراتية وجواز السفر مشفّران، ولا يظهر للموظفين إلا آخر أربعة أرقام."
+    ],
+    "guardianSection": [
+      "Guardian",
+      "ولي الأمر"
+    ],
+    "guardianMode": {
+      "none": [
+        "Not now",
+        "ليس الآن"
+      ],
+      "existing": [
+        "Existing guardian",
+        "ولي أمر مسجل"
+      ],
+      "new": [
+        "New guardian",
+        "ولي أمر جديد"
+      ]
+    },
+    "fieldGuardian": [
+      "Guardian",
+      "ولي الأمر"
+    ],
+    "chooseGuardian": [
+      "Search guardians",
+      "ابحث عن ولي الأمر"
+    ],
+    "fieldRelationship": [
+      "Relationship",
+      "صلة القرابة"
+    ],
+    "fieldPhone": [
+      "Phone",
+      "الهاتف"
+    ],
+    "relationship": {
+      "mother": [
+        "Mother",
+        "الأم"
+      ],
+      "father": [
+        "Father",
+        "الأب"
+      ],
+      "guardian": [
+        "Guardian",
+        "ولي الأمر"
+      ],
+      "grandmother": [
+        "Grandmother",
+        "الجدة"
+      ],
+      "grandfather": [
+        "Grandfather",
+        "الجد"
+      ],
+      "aunt": [
+        "Aunt",
+        "العمة"
+      ],
+      "uncle": [
+        "Uncle",
+        "العم"
+      ],
+      "other": [
+        "Other",
+        "أخرى"
+      ]
+    },
+    "studentAdded": [
+      "{name} was added",
+      "تمت إضافة {name}"
+    ],
+    "editLink": [
+      "Edit guardian permissions",
+      "تعديل صلاحيات ولي الأمر"
+    ],
+    "editLinkTitle": [
+      "Guardian permissions",
+      "صلاحيات ولي الأمر"
+    ],
+    "editLinkBody": [
+      "{guardian} for {student}",
+      "{guardian} بالنسبة إلى {student}"
+    ],
+    "flagPrimaryLabel": [
+      "Primary guardian",
+      "ولي الأمر الأساسي"
+    ],
+    "flagPrimaryHint": [
+      "First contact for the school. Only one per student.",
+      "جهة الاتصال الأولى للمدرسة، وواحد فقط لكل طالب."
+    ],
+    "flagApproveLabel": [
+      "Can approve requests",
+      "يمكنه اعتماد الطلبات"
+    ],
+    "flagApproveHint": [
+      "Consent forms, trips and other requests that need a parent.",
+      "نماذج الموافقة والرحلات والطلبات الأخرى التي تحتاج إلى ولي الأمر."
+    ],
+    "flagUpdatesLabel": [
+      "Receives updates",
+      "يتلقى التحديثات"
+    ],
+    "flagUpdatesHint": [
+      "School announcements and request updates about this child.",
+      "إعلانات المدرسة وتحديثات الطلبات الخاصة بهذا الطفل."
+    ],
+    "linkUpdated": [
+      "Guardian permissions updated",
+      "تم تحديث صلاحيات ولي الأمر"
+    ],
+    "importTitle": [
+      "Import students and guardians",
+      "استيراد الطلاب وأولياء الأمور"
+    ],
+    "importBody": [
+      "Upload a CSV based on the template. Rows are checked before anything is saved. Existing students are updated by student number and guardians are matched by email, so importing the same file twice creates no duplicates. Up to {max} rows per file.",
+      "ارفع ملف CSV وفق القالب. يتم التحقق من الصفوف قبل حفظ أي شيء. يُحدَّث الطلاب الحاليون حسب الرقم المدرسي، ويُطابَق أولياء الأمور حسب البريد الإلكتروني، لذا لا يؤدي استيراد الملف نفسه مرتين إلى أي تكرار. الحد الأقصى {max} صف لكل ملف."
+    ],
+    "downloadTemplate": [
+      "Download template",
+      "تنزيل القالب"
+    ],
+    "chooseCsv": [
+      "Choose CSV file",
+      "اختر ملف CSV"
+    ],
+    "chooseAnother": [
+      "Choose another file",
+      "اختر ملفًا آخر"
+    ],
+    "fileNotCsv": [
+      "Choose a file that ends in .csv.",
+      "اختر ملفًا بامتداد csv."
+    ],
+    "fileMissingHeaders": [
+      "The file is missing required columns: {headers}",
+      "ينقص الملف أعمدة مطلوبة: {headers}"
+    ],
+    "fileEmpty": [
+      "The file has no data rows.",
+      "لا يحتوي الملف على صفوف بيانات."
+    ],
+    "fileTooLarge": [
+      "The file has more than {max} rows. Split it into smaller files.",
+      "يحتوي الملف على أكثر من {max} صف. قسّمه إلى ملفات أصغر."
+    ],
+    "fileUnreadable": [
+      "The file could not be read. Save it as CSV (UTF-8) and try again.",
+      "تعذرت قراءة الملف. احفظه بصيغة CSV (UTF-8) وحاول مرة أخرى."
+    ],
+    "previewSummary": [
+      "{total, plural, one {# row} other {# rows}}: {valid} ready, {invalid} with errors",
+      "{total, plural, one {صف واحد} two {صفان} few {# صفوف} many {# صفًا} other {# صف}}: {valid} جاهز، و{invalid} بها أخطاء"
+    ],
+    "showOnlyErrors": [
+      "Show only rows with errors",
+      "عرض الصفوف التي بها أخطاء فقط"
+    ],
+    "showAllRows": [
+      "Show all rows",
+      "عرض جميع الصفوف"
+    ],
+    "previewTruncated": [
+      "Showing the first {shown} of {total} rows. All rows are imported.",
+      "يُعرض أول {shown} من {total} صف، وسيتم استيراد جميع الصفوف."
+    ],
+    "rowReady": [
+      "Ready",
+      "جاهز"
+    ],
+    "rowN": [
+      "Row {row}",
+      "الصف {row}"
+    ],
+    "importAll": [
+      "{count, plural, one {Import 1 row} other {Import # rows}}",
+      "{count, plural, one {استيراد صف واحد} two {استيراد صفين} few {استيراد # صفوف} many {استيراد # صفًا} other {استيراد # صف}}"
+    ],
+    "importValidOnly": [
+      "{count, plural, one {Import 1 valid row} other {Import # valid rows}}",
+      "{count, plural, one {استيراد صف صالح واحد} two {استيراد صفين صالحين} few {استيراد # صفوف صالحة} many {استيراد # صفًا صالحًا} other {استيراد # صف صالح}}"
+    ],
+    "importing": [
+      "Importing. Keep this page open.",
+      "جارٍ الاستيراد. أبقِ هذه الصفحة مفتوحة."
+    ],
+    "importDone": [
+      "Imported {succeeded} of {total} rows",
+      "تم استيراد {succeeded} من {total} صف"
+    ],
+    "importResult": [
+      "Imported {succeeded} of {total} rows ({created} new, {updated} updated). {failed, plural, =0 {No rows were skipped.} one {1 row was skipped.} other {# rows were skipped.}}",
+      "تم استيراد {succeeded} من {total} ({created} جديد، و{updated} محدَّث). {failed, plural, =0 {لم يتم تخطي أي صف.} one {تم تخطي صف واحد.} two {تم تخطي صفين.} few {تم تخطي # صفوف.} many {تم تخطي # صفًا.} other {تم تخطي # صف.}}"
+    ],
+    "importAnother": [
+      "Import another file",
+      "استيراد ملف آخر"
+    ],
+    "showErrors": [
+      "{count, plural, one {Show # error} other {Show # errors}}",
+      "{count, plural, one {عرض خطأ واحد} two {عرض خطأين} few {عرض # أخطاء} many {عرض # خطأً} other {عرض # خطأ}}"
+    ],
+    "rowError": {
+      "required": [
+        "{field} is required",
+        "الحقل {field} مطلوب"
+      ],
+      "grade": [
+        "{field} must be a whole number from 1 to 13",
+        "يجب أن يكون {field} رقمًا صحيحًا من 1 إلى 13"
+      ],
+      "date": [
+        "{field} must be a past date as YYYY-MM-DD or DD/MM/YYYY",
+        "يجب أن يكون {field} تاريخًا سابقًا بصيغة YYYY-MM-DD أو DD/MM/YYYY"
+      ],
+      "email": [
+        "{field} is not a valid email address",
+        "الحقل {field} ليس بريدًا إلكترونيًا صالحًا"
+      ],
+      "duplicate": [
+        "{field} appears more than once in this file",
+        "الحقل {field} مكرر في هذا الملف"
+      ],
+      "emiratesId": [
+        "{field} must be 15 digits starting with 784",
+        "يجب أن يتكون {field} من 15 رقمًا تبدأ بـ 784"
+      ],
+      "passport": [
+        "{field} must be 5 to 12 letters or digits",
+        "يجب أن يتكون {field} من 5 إلى 12 حرفًا أو رقمًا"
+      ],
+      "relationship": [
+        "{field} must be mother, father, guardian, grandmother, grandfather, aunt, uncle or other",
+        "يجب أن تكون قيمة {field} إحدى القيم: mother أو father أو guardian أو grandmother أو grandfather أو aunt أو uncle أو other"
+      ],
+      "section": [
+        "{field} must be up to 3 letters or digits",
+        "يجب ألا يتجاوز {field} ثلاثة أحرف أو أرقام"
+      ],
+      "tooLong": [
+        "{field} is too long",
+        "الحقل {field} طويل جدًا"
+      ],
+      "failed": [
+        "This row could not be saved",
+        "تعذر حفظ هذا الصف"
+      ]
+    },
+    "error": {
+      "generic": [
+        "Something went wrong. Please try again.",
+        "حدث خطأ ما. يرجى المحاولة مرة أخرى."
+      ],
+      "FORBIDDEN": [
+        "You do not have permission to do this.",
+        "ليست لديك صلاحية للقيام بذلك."
+      ],
+      "INVALID": [
+        "Some details are missing or not valid.",
+        "بعض البيانات ناقصة أو غير صالحة."
+      ],
+      "EMAIL": [
+        "Enter a valid email address.",
+        "أدخل بريدًا إلكترونيًا صالحًا."
+      ],
+      "ALREADY_MEMBER": [
+        "This email already belongs to someone at this school.",
+        "هذا البريد يخص شخصًا مسجلًا في هذه المدرسة بالفعل."
+      ],
+      "ADMIN_ROLE_ONLY": [
+        "Only a school administrator can change administrator access.",
+        "لا يغيّر صلاحيات المسؤول إلا مسؤول المدرسة."
+      ],
+      "SELF_ADMIN": [
+        "You cannot remove your own administrator role.",
+        "لا يمكنك إزالة دور المسؤول الخاص بك."
+      ],
+      "LAST_ADMIN": [
+        "The school must keep at least one active administrator.",
+        "يجب أن يبقى للمدرسة مسؤول نشط واحد على الأقل."
+      ],
+      "SELF_STATUS": [
+        "You cannot change the status of your own account.",
+        "لا يمكنك تغيير حالة حسابك."
+      ],
+      "NOT_FOUND": [
+        "This record no longer exists. Refresh the page.",
+        "لم يعد هذا السجل موجودًا. حدّث الصفحة."
+      ],
+      "DATE": [
+        "Enter a valid date of birth in the past.",
+        "أدخل تاريخ ميلاد صالحًا في الماضي."
+      ],
+      "EMIRATES_ID": [
+        "An Emirates ID has 15 digits and starts with 784.",
+        "يتكون رقم الهوية الإماراتية من 15 رقمًا ويبدأ بـ 784."
+      ],
+      "PASSPORT": [
+        "A passport number has 5 to 12 letters or digits.",
+        "يتكون رقم جواز السفر من 5 إلى 12 حرفًا أو رقمًا."
+      ],
+      "DUPLICATE_STUDENT_NO": [
+        "Another student already has this student number.",
+        "هذا الرقم المدرسي مستخدم لطالب آخر."
+      ],
+      "EMPTY": [
+        "The file has no rows to import.",
+        "لا يحتوي الملف على صفوف للاستيراد."
+      ],
+      "TOO_MANY_ROWS": [
+        "Files are limited to 2,000 rows.",
+        "الحد الأقصى للملف 2,000 صف."
+      ]
+    }
+  }
+}
