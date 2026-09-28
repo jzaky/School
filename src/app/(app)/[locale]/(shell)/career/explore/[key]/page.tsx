@@ -65,7 +65,7 @@ export default async function CareerDetail({ params }: { params: Promise<{ key: 
           )}
         </div>
       </Panel>
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2 [&>*]:min-w-0">
         <Panel>
           <PanelHeader title={t("dayInLife")} icon={<Briefcase className="size-4" />} />
           <p className="text-sm leading-relaxed">{pick(locale, c.dayInLifeEn, c.dayInLifeAr)}</p>

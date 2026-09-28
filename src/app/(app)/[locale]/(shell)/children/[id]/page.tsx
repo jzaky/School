@@ -72,7 +72,7 @@ export default async function ChildPage({ params }: { params: Promise<{ id: stri
           </Button>
         </div>
       </Panel>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <div className="space-y-6 lg:col-span-2">
           <Panel>
             <PanelHeader title={t("attendanceTitle")} description={t("attendanceHint")} />

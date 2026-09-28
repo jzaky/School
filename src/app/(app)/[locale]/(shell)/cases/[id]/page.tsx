@@ -212,7 +212,7 @@ export default async function CasePage({ params, searchParams }: { params: Promi
     const total = attendance.reduce((s, a) => s + a._count._all, 0);
     const present = attendance.filter((a) => a.status === "PRESENT" || a.status === "LATE").reduce((s, a) => s + a._count._all, 0);
     return (
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <div className="space-y-6 lg:col-span-2">
           <Panel>
             <PanelHeader title={t("summary")} />
@@ -587,7 +587,7 @@ export default async function CasePage({ params, searchParams }: { params: Promi
     ]);
     const now = new Date();
     return (
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2 [&>*]:min-w-0">
         <Panel>
           <PanelHeader title={t("team")} />
           <ul className="space-y-2">

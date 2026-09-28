@@ -155,7 +155,7 @@ export function AppShell({ nav, user, org, demo, unread, children }: ShellProps)
           <div className="flex items-center gap-2 border-b border-gold/30 bg-gold-soft px-4 py-1.5 text-xs text-[oklch(0.42_0.08_80)] sm:px-6">
             <Sparkles className="size-3.5 shrink-0" />
             <span className="hidden truncate sm:inline">{t("demoBanner")}</span>
-            <div className="ms-auto flex items-center gap-1">
+            <div className="ms-auto flex shrink-0 items-center gap-1">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
@@ -201,7 +201,7 @@ export function AppShell({ nav, user, org, demo, unread, children }: ShellProps)
           </Button>
           <button
             onClick={() => setPaletteOpen(true)}
-            className="flex h-9 w-full max-w-md items-center gap-2 rounded-lg border bg-card px-3 text-sm text-muted-foreground shadow-xs transition hover:border-ring/40"
+            className="flex h-9 w-full min-w-0 max-w-md items-center gap-2 rounded-lg border bg-card px-3 text-sm text-muted-foreground shadow-xs transition hover:border-ring/40"
             data-testid="open-palette"
           >
             <Search className="size-4" />
@@ -213,7 +213,7 @@ export function AppShell({ nav, user, org, demo, unread, children }: ShellProps)
           <div className="ms-auto flex items-center gap-1">
             <Button variant="ghost" size="sm" onClick={switchLanguage} disabled={pending} aria-label={t("switchLanguage")} data-testid="language-toggle" className="gap-1.5">
               <Languages className="size-4" />
-              <span className={other === "ar" ? "font-arabic" : ""}>{other === "ar" ? "العربية" : "English"}</span>
+              <span className={other === "ar" ? "hidden font-arabic sm:inline" : "hidden sm:inline"}>{other === "ar" ? "العربية" : "English"}</span>
             </Button>
             <NotificationsBell unread={unread} />
             <DropdownMenu>

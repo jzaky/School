@@ -52,7 +52,7 @@ export default async function SchoolSetupPage() {
           }}
         />
       </Panel>
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2 [&>*]:min-w-0">
         <Panel padded={false}>
           <div className="p-5 pb-0">
             <PanelHeader title={t("departments")} description={t("departmentsHint", { subjects: subjects })} icon={<Layers className="size-4" />} action={<DepartmentDialog staff={staffOptions} />} />

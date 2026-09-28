@@ -82,7 +82,7 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
         <StatCard label={t("kpiOpen")} value={n(k.requests.open)} icon={<Inbox className="size-5" />} tone="warning" href="/requests?tab=all&status=open" />
         <StatCard label={t("kpiCases")} value={n(k.openCases)} hint={t("excludesSensitive")} icon={<HeartHandshake className="size-5" />} tone="gold" />
       </div>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <Panel className="lg:col-span-2">
           <PanelHeader title={t("trendTitle")} description={t("trendHint")} />
           <TrendChart data={k.weeks} dir={locale === "ar" ? "rtl" : "ltr"} unit={locale === "ar" ? " س" : "h"} height={240} />
@@ -101,7 +101,7 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
           </div>
         </Panel>
       </div>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <Panel>
           <PanelHeader title={t("byService")} description={t("inPeriod", { n: days })} />
           <BarList rows={k.byService} format={n} empty={t("none")} />
@@ -115,7 +115,7 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
           <BarList rows={k.slowest.map((s) => ({ label: s.label, value: s.value }))} format={hrs} empty={t("none")} />
         </Panel>
       </div>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <Panel>
           <PanelHeader title={t("meetings")} description={t("meetingsHint", { held: n(held), noShow: n(noShows) })} icon={<CalendarCheck2 className="size-4" />} />
           <BarList rows={meetingsByType} format={n} empty={t("none")} />

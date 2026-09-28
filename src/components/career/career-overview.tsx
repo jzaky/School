@@ -91,7 +91,7 @@ export async function CareerOverview({ ctx, prefs, studentId, mode }: { ctx: Ctx
       {mode === "advisor" && (
         <ReviewRecommendations studentId={studentId} recs={recs.map((r) => ({ id: r.id, title: pick(locale, r.career.titleEn, r.career.titleAr), score: r.matchScore, status: r.status }))} />
       )}
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <Panel>
           <PanelHeader title={t("strengths")} description={t("assessedOn", { date: fmtDate(prefs, assessment.completedAt) })} />
           <BarList

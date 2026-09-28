@@ -82,7 +82,7 @@ export default async function CompliancePage() {
         </ul>
       </Panel>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2 [&>*]:min-w-0">
         <Panel>
           <PanelHeader title={t("aiTitle")} description={t("aiHint")} icon={<Bot className="size-4" />} />
           <AiSettings aiEnabled={org.aiEnabled} aiSensitive={org.aiSensitiveDataEnabled} />
@@ -160,7 +160,7 @@ export default async function CompliancePage() {
         </ul>
       </Panel>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2 [&>*]:min-w-0">
         <Panel padded={false}>
           <div className="p-5 pb-0">
             <PanelHeader title={t("dsrTitle")} description={t("dsrHint")} icon={<UserCheck className="size-4" />} />

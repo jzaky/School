@@ -85,7 +85,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
         </div>
       </Panel>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <div className="space-y-6 lg:col-span-2">
           <Panel>
             <PanelHeader title={t("cases")} icon={<FolderKanban className="size-4" />} description={t("casesHint")} />
@@ -130,7 +130,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
               ))}
             </div>
           </Panel>
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-2 [&>*]:min-w-0">
             <Panel>
               <PanelHeader title={t("requests")} icon={<Inbox className="size-4" />} />
               {requests.length ? (

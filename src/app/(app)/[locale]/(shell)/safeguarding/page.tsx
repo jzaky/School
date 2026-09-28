@@ -43,7 +43,7 @@ export default async function SafeguardingPage() {
           </Button>
         }
       />
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2 [&>*]:min-w-0">
         {dsl.map((d) => (
           <Panel key={d.id} className="flex items-center gap-4">
             <span className="grid size-11 place-items-center rounded-full bg-danger-soft text-danger">

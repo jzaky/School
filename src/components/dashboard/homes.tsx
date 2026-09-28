@@ -54,7 +54,7 @@ export async function StudentHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs
   return (
     <PageBody>
       <Greeting ctx={ctx} prefs={prefs} subtitle={t("studentSubtitle", { grade: `${student.gradeLevel}${student.section ?? ""}` })} />
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <div className="space-y-6 lg:col-span-2">
           <RequestsPanel ctx={ctx} prefs={prefs} limit={4} />
           <QuickServices ctx={ctx} keys={["career_guidance", "counselor_meeting", "subject_change", "document_request", "talk_to_someone", "it_support"]} />
@@ -130,7 +130,7 @@ export async function ParentHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs 
           <span className="text-sm font-medium text-brand">{t("review")}</span>
         </Link>
       )}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2 [&>*]:min-w-0">
         {kids.map((k) => {
           const rows = attendance.filter((a) => a.studentId === k.id);
           const total = rows.reduce((s, r) => s + r._count._all, 0);
@@ -160,7 +160,7 @@ export async function ParentHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs 
           );
         })}
       </div>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <div className="space-y-6 lg:col-span-2">
           <RequestsPanel ctx={ctx} prefs={prefs} limit={5} title={t("familyRequests")} />
         </div>
@@ -218,7 +218,7 @@ export async function TeacherHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs
         <StatCard label={t("statStudents")} value={students} icon={<Users className="size-5" />} href="/students" />
         <StatCard label={t("statReferrals")} value={referrals.filter((r) => !["COMPLETED", "REJECTED", "CANCELLED"].includes(r.status)).length} hint={t("open")} icon={<Inbox className="size-5" />} href="/requests" />
       </div>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <div className="space-y-6 lg:col-span-2">
           <Panel>
             <PanelHeader title={t("myClasses")} icon={<BookOpen className="size-4" />} />
@@ -312,10 +312,10 @@ export async function CounselorHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPre
         <StatCard label={t("statNewReferrals")} value={newRefs.length} hint={t("last72h")} icon={<Inbox className="size-5" />} tone="info" />
         <StatCard label={t("statOverdue")} value={overdueFollowups.length + overdueTasks} icon={<Clock className="size-5" />} tone={overdueFollowups.length + overdueTasks ? "warning" : "success"} href="/tasks?view=overdue" />
       </div>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <div className="space-y-6 lg:col-span-2">
           <MeetingsPanel ctx={ctx} prefs={prefs} limit={5} title={t("todaysMeetings")} onlyToday />
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-2 [&>*]:min-w-0">
             <Panel>
               <PanelHeader title={t("newReferrals")} icon={<Sparkles className="size-4" />} />
               {newRefs.length ? <ul className="divide-y">{newRefs.map((c) => <CaseRow key={c.id} c={c} meta={fmtRelative(prefs, c.openedAt)} />)}</ul> : <p className="py-4 text-center text-sm text-muted-foreground">{t("none")}</p>}
@@ -365,7 +365,7 @@ export async function CareerAdvisorHome({ ctx, prefs }: { ctx: Ctx; prefs: Forma
         <StatCard label={t("statSessions")} value={sessions} hint={t("thisFortnight")} icon={<CalendarClock className="size-5" />} />
         <StatCard label={t("statDeadlines")} value={deadlines.length} hint={t("next45days")} icon={<Timer className="size-5" />} tone="info" />
       </div>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <div className="space-y-6 lg:col-span-2">
           <MeetingsPanel ctx={ctx} prefs={prefs} limit={5} />
           <Panel>
@@ -450,7 +450,7 @@ export async function DslHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs }) 
         <StatCard label={ts("level.HIGH")} value={byLevel("HIGH")} icon={<AlertTriangle className="size-5" />} tone="warning" />
         <StatCard label={t("statReviewsDue")} value={reviews.length} icon={<Clock className="size-5" />} tone="info" />
       </div>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <div className="space-y-6 lg:col-span-2">
           <Panel>
             <PanelHeader title={t("activeConcerns")} icon={<ShieldAlert className="size-4" />} description={t("restrictedNote")} />
@@ -524,7 +524,7 @@ export async function AdminHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs }
         <StatCard label={t("kpiOpenRequests")} value={fmtNumber(prefs, k.requests.open)} icon={<Inbox className="size-5" />} tone="warning" href="/requests?tab=all&status=open" />
         <StatCard label={t("kpiOpenCases")} value={fmtNumber(prefs, k.openCases)} hint={t("excludesSensitive")} icon={<HeartHandshake className="size-5" />} tone="gold" href="/cases" />
       </div>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <Panel className="lg:col-span-2">
           <PanelHeader title={t("chartResolution")} description={t("chartResolutionHint")} />
           <TrendChart data={k.weeks} dir={dir} unit={ctx.locale === "ar" ? " س" : "h"} />
@@ -543,7 +543,7 @@ export async function AdminHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs }
           </div>
         </Panel>
       </div>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <Panel>
           <PanelHeader title={t("chartByService")} description={t("last30")} />
           <BarList rows={k.byService} format={(n) => fmtNumber(prefs, n)} empty={t("none")} />
@@ -557,7 +557,7 @@ export async function AdminHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs }
           <BarList rows={k.slowest.map((s) => ({ label: s.label, value: s.value }))} format={hrs} empty={t("none")} />
         </Panel>
       </div>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <div className="lg:col-span-2">
           <RequestsPanel ctx={ctx} prefs={prefs} limit={4} title={t("recentRequests")} />
         </div>
@@ -579,7 +579,7 @@ export async function StaffHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs }
       <div className="grid gap-4 sm:grid-cols-3">
         <StatCard label={t("statApprovals")} value={approvals} icon={<Stamp className="size-5" />} tone={approvals ? "warning" : "success"} href="/approvals" testId="stat-approvals" />
       </div>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <div className="space-y-6 lg:col-span-2">
           <RequestsPanel ctx={ctx} prefs={prefs} limit={6} title={t("workQueue")} />
         </div>
