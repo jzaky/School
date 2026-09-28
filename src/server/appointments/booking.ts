@@ -6,7 +6,7 @@ import { dubaiDateKey, pickRoundRobinHost } from "./slots";
 
 export class BookingError extends Error {}
 
-function fmtWhen(d: Date) {
+export function fmtWhen(d: Date) {
   const f = (loc: string) =>
     new Intl.DateTimeFormat(loc === "ar" ? "ar-AE-u-nu-latn" : "en-GB", { timeZone: "Asia/Dubai", weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" }).format(d);
   return { en: f("en"), ar: f("ar") };

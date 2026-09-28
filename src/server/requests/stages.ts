@@ -75,7 +75,7 @@ export async function requestStages(ctx: Ctx, request: { id: string; status: str
   };
 
   const stages: Stage[] = [submitted];
-  let rejectedSeen = request.status === "REJECTED";
+  const rejectedSeen = request.status === "REJECTED";
   let blocked = false;
   for (const node of path) {
     const step = stepByNode.get(node.id);

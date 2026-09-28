@@ -12,3 +12,12 @@ Ambiguities resolved during the build. Newest last.
 
 ## Routing and locale
 - Product routes live under `src/app/(app)/[locale]/...` (`/en/...`, `/ar/...`). The marketing site lives under `src/app/(marketing)` at `/` and `/demo`, with the locale read from a cookie and a toggle that sets it. Two root layouts, one per route group.
+
+## Worker and retention
+- The worker imports `src/server/queue-core.ts` and `src/server/demo/run-reset.ts`, which carry no `server-only` or Next.js request imports. `src/server/queue.ts` re-exports the queue core for the app. `runDemoReset` in the `"use server"` module is no longer exported, because every export of such a module is callable from the browser without the checks in `resetDemoAction`.
+- `DeliveryStatus` has no in-flight state, so the worker claims an outbound row by moving it from `QUEUED` to `SENT` before calling the provider, then fills `sentAt` and `providerId`. Delivery is at most once: a crash between the claim and the provider call loses that message rather than sending it twice.
+- One-off jobs (reminders, retention, `test.idempotent`) claim a `JobRun` row with `INSERT ... ON CONFLICT DO NOTHING` inside the same tenant transaction as their work, so a rollback frees the key for a retry.
+- The sweeper's catch-up email for a lost `deliver` job has the subject and link but not the body, because the body is only carried in the job payload.
+- Demo addresses use the reserved `.example` domain. The worker never sends to reserved domains and records them as `suppressed:reserved-domain`.
+- Retention is conservative. DELETE is applied only to in-app notifications and AI drafts. Audit events are append-only for `app_user` (prisma/rls.sql), so the audit policy is counted and reported as `requires_owner`. REVIEW and ANONYMIZE policies never change records: eligible rows (closed requests and cases, and inactive students past the period) are counted into `lastRunCount` for a human to act on. Each run writes one `retention.sweep` AuditEvent with counts only.
+- Automatic reminders for meetings linked to wellbeing or safeguarding cases go to the host only.

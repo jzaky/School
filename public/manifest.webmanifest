@@ -1,0 +1,14 @@
+{
+  "name": "Horizon School Operations",
+  "short_name": "Horizon",
+  "description": "One portal for every school procedure.",
+  "start_url": "/en/home",
+  "display": "standalone",
+  "background_color": "#F7F8FA",
+  "theme_color": "#123A63",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
