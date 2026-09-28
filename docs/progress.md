@@ -19,18 +19,21 @@
 - AI provider (Anthropic SDK, claude-opus-5, sensitive data guard, built-in deterministic drafter when no key): case brief, action plan draft and approval into tasks, referral draft, admin questions.
 - Integration tests: workflow engine, approvals, idempotency, wait nodes, safeguarding access, rule 7. 51 tests passing.
 - Workflow builder at /admin/workflows (workflows.manage): list with linked services, live version, steps, runs in 30 days and in progress; React Flow canvas with auto layout, palette, inspector for every node type, live validation that blocks publishing, dry-run simulation with approve/reject and yes/no choices, Draft with AI (workflow_draft, built-in keyword drafter fallback), save draft, revert, publish to a new immutable WorkflowVersion, version history. Safeguarding workflows keep DSL routing (validated client and server side).
+- Calendar (day, week, month, agenda; scopes; RTL), career guidance (assessment, scoring, matches, explorer, shortlist, advisor review), documents (upload, versions, family sharing, expiry), notifications inbox, settings (language, numerals, Hijri, email preferences), analytics with AI questions over aggregates.
+- Admin: school setup, people with CSV import (idempotent), service catalog, form builder (dnd-kit, conditions, preview, versioned publish, AI draft), workflow builder (React Flow, validation, simulation, versioned publish, AI draft, safeguarding routing guard), document templates with live PDF preview, compliance (AI safeguards, ID policies, transfers, retention, purposes and consent, data subject requests, incidents), audit log with CSV export.
+- Worker (BullMQ): outbound delivery (Resend or log), reminders, workflow waits, sweeper, retention, nightly demo reset, idempotent jobs; tests.
+- Landing page, PWA manifest and icons, per-persona demo guide, i18n audit (`npm run audit:i18n`), mobile pass at 390px (no horizontal overflow in en or ar).
+- Deploy config: Dockerfile, railway.json, railway.worker.json, docs/deploy.md. ESLint flat config (0 errors).
+- Docs: docs/demo-script.md, docs/compliance.md.
+- Tests: 90 unit and integration tests passing.
 
 ## In progress
-- Phase 4 remainder: calendar, career guidance module, documents page, document templates admin.
+- Playwright E2E for the five hero flows in en and ar, with fixes for anything they find.
 
 ## Broken
-- Deployment blocked: this environment's network policy denies backboard.railway.com. Railway must deploy from GitHub (see docs/deploy.md once written) or the host must be allowed.
+- Deployment blocked: this environment's network policy denies backboard.railway.com. Deploy by connecting Railway to the GitHub repo (docs/deploy.md), or allow the host and provide a Railway token.
 
 ## Next
-1. Calendar (day, week, month, agenda; RTL).
-2. Career guidance: assessment, scoring, recommendations (DRAFT until approved), explorer, shortlist, advisor view.
-3. Documents page with upload.
-4. Admin: school setup CRUD, people, CSV import, services and forms admin, form builder (dnd-kit), workflow builder (React Flow), templates, compliance page, audit log, analytics page with AI questions, notifications page and preferences, settings.
-5. Worker process (BullMQ): deliver outbound, reminders, workflow resume, retention sweeps, nightly demo reset.
-6. Landing page, walkthrough overlay, PWA, Arabic audit script, docs/demo-script.md, docs/compliance.md.
-7. Deploy config (Dockerfile, railway.json), Playwright E2E for 5 hero flows in en and ar.
+1. Merge E2E suite and fixes; run the demo reset and time it (target under 30s on Railway).
+2. Deploy and smoke test the hero flows on the deployed URL in en and ar.
+3. Phase 7 QA pass.
