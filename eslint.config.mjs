@@ -9,6 +9,7 @@ const compat = new FlatCompat({ baseDirectory: __dirname });
 const config = [
   {
     ignores: [
+      ".claude/**",
       "node_modules/**",
       ".next/**",
       "out/**",

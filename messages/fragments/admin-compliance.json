@@ -1,0 +1,580 @@
+{
+ "adminCompliance": {
+  "title": [
+   "Compliance",
+   "الامتثال"
+  ],
+  "subtitle": [
+   "UAE data protection in practice: AI safeguards, identity documents, retention, consent, data subject requests and incidents.",
+   "حماية البيانات في دولة الإمارات عمليًا: ضوابط الذكاء الاصطناعي ووثائق الهوية والاحتفاظ بالبيانات والموافقات وطلبات أصحاب البيانات والحوادث."
+  ],
+  "regulator": [
+   "{regulator}, {emirate}",
+   "{regulator}، {emirate}"
+  ],
+  "region": [
+   "Data region {region}",
+   "منطقة البيانات {region}"
+  ],
+  "statDsr": [
+   "Open data requests",
+   "طلبات البيانات المفتوحة"
+  ],
+  "overdueCount": [
+   "{n} overdue",
+   "{n} متأخرة"
+  ],
+  "noneOverdue": [
+   "None overdue",
+   "لا توجد طلبات متأخرة"
+  ],
+  "statBreaches": [
+   "Open incidents",
+   "الحوادث المفتوحة"
+  ],
+  "breachesTotal": [
+   "{n} logged in total",
+   "{n} مسجلة إجمالًا"
+  ],
+  "statAi": [
+   "AI drafts in 30 days",
+   "مسودات الذكاء الاصطناعي خلال 30 يومًا"
+  ],
+  "aiBlocked": [
+   "{n} blocked by the sensitive data rule",
+   "{n} حُجبت بموجب قاعدة البيانات الحساسة"
+  ],
+  "statPolicies": [
+   "Retention policies",
+   "سياسات الاحتفاظ"
+  ],
+  "policiesHint": [
+   "Applied nightly by the worker",
+   "تُطبَّق ليلًا تلقائيًا"
+  ],
+  "controls": [
+   "Controls in place",
+   "الضوابط المطبقة"
+  ],
+  "controlsHint": [
+   "How the platform protects student data by design.",
+   "كيف تحمي المنصة بيانات الطلاب من حيث التصميم."
+  ],
+  "control": {
+   "rls": {
+    "title": [
+     "Tenant isolation",
+     "عزل بيانات كل مدرسة"
+    ],
+    "ok": [
+     "Row-level security in the database keeps each school's data separate.",
+     "يضمن أمان مستوى الصفوف في قاعدة البيانات فصل بيانات كل مدرسة."
+    ],
+    "warn": [
+     "Check tenant isolation.",
+     "تحقق من عزل البيانات."
+    ]
+   },
+   "encryption": {
+    "title": [
+     "Encrypted identifiers",
+     "تشفير أرقام الهوية"
+    ],
+    "ok": [
+     "Emirates ID and passport numbers are encrypted; every reveal is audited.",
+     "أرقام الهوية الإماراتية وجوازات السفر مشفرة، ويُسجَّل كل كشف لها."
+    ],
+    "warn": [
+     "Encryption key missing.",
+     "مفتاح التشفير غير متوفر."
+    ]
+   },
+   "auditImmutable": {
+    "title": [
+     "Tamper-proof audit log",
+     "سجل تدقيق غير قابل للتلاعب"
+    ],
+    "ok": [
+     "The app cannot edit or delete audit entries.",
+     "لا يستطيع التطبيق تعديل سجلات التدقيق أو حذفها."
+    ],
+    "warn": [
+     "Audit log is editable.",
+     "سجل التدقيق قابل للتعديل."
+    ]
+   },
+   "sensitiveAi": {
+    "title": [
+     "Sensitive data kept from AI",
+     "حجب البيانات الحساسة عن الذكاء الاصطناعي"
+    ],
+    "ok": [
+     "Wellbeing, safeguarding and medical details are never sent to AI.",
+     "لا تُرسل تفاصيل الرفاه وحماية الطفل والصحة إلى الذكاء الاصطناعي."
+    ],
+    "warn": [
+     "Sensitive AI processing is switched on. Review the reason in the audit log.",
+     "معالجة البيانات الحساسة بالذكاء الاصطناعي مفعلة. راجع السبب في سجل التدقيق."
+    ]
+   },
+   "parentDecision": {
+    "title": [
+     "Recorded family decisions",
+     "قرارات موثقة لإبلاغ الأسرة"
+    ],
+    "ok": [
+     "Families are never told automatically about wellbeing or safeguarding cases.",
+     "لا تُبلَّغ الأسر تلقائيًا بحالات الرفاه أو حماية الطفل."
+    ],
+    "warn": [
+     "Review notification rules.",
+     "راجع قواعد الإشعارات."
+    ]
+   },
+   "residency": {
+    "title": [
+     "Data stays in the UAE",
+     "بقاء البيانات داخل الدولة"
+    ],
+    "ok": [
+     "Primary data is hosted in a UAE region.",
+     "تُستضاف البيانات الأساسية في منطقة داخل الدولة."
+    ],
+    "warn": [
+     "Primary data is hosted outside the UAE.",
+     "تُستضاف البيانات الأساسية خارج الدولة."
+    ]
+   }
+  },
+  "aiTitle": [
+   "AI safeguards",
+   "ضوابط الذكاء الاصطناعي"
+  ],
+  "aiHint": [
+   "AI output is always a draft that a person reviews.",
+   "مخرجات الذكاء الاصطناعي مسودة دائمًا يراجعها شخص مختص."
+  ],
+  "aiEnabled": [
+   "AI drafting",
+   "الصياغة بالذكاء الاصطناعي"
+  ],
+  "aiEnabledHint": [
+   "Case briefs, plans, referral drafts and analytics questions.",
+   "ملخصات الحالات والخطط ومسودات الإحالات وأسئلة التحليلات."
+  ],
+  "aiSensitive": [
+   "Allow sensitive data in AI",
+   "السماح بالبيانات الحساسة في الذكاء الاصطناعي"
+  ],
+  "aiSensitiveHint": [
+   "Off by default. Needs a documented reason.",
+   "غير مفعّل افتراضيًا ويتطلب سببًا موثقًا."
+  ],
+  "confirmTitle": [
+   "Allow sensitive data in AI drafts?",
+   "هل تسمح بالبيانات الحساسة في مسودات الذكاء الاصطناعي؟"
+  ],
+  "confirmBody": [
+   "Wellbeing, safeguarding and medical details will be sent to the AI provider when staff ask for drafts on those cases. This is recorded in the audit log with your reason.",
+   "سيتم إرسال تفاصيل الرفاه وحماية الطفل والصحة إلى مزود الذكاء الاصطناعي عند طلب الموظفين مسودات لتلك الحالات. يُسجَّل ذلك في سجل التدقيق مع السبب."
+  ],
+  "reasonLabel": [
+   "Reason",
+   "السبب"
+  ],
+  "reasonPlaceholder": [
+   "For example: approved by the governing board on 12 May for counselor case summaries",
+   "مثال: اعتمده مجلس الأمناء في 12 مايو لملخصات حالات الإرشاد"
+  ],
+  "confirmEnable": [
+   "Allow",
+   "سماح"
+  ],
+  "identityTitle": [
+   "Identity documents and transfers",
+   "وثائق الهوية ونقل البيانات"
+  ],
+  "identityHint": [
+   "What the school collects and where it may go.",
+   "ما تجمعه المدرسة وإلى أين يمكن أن ينتقل."
+  ],
+  "emiratesId": [
+   "Emirates ID",
+   "الهوية الإماراتية"
+  ],
+  "emiratesIdHint": [
+   "Collected on enrollment forms.",
+   "تُجمع في نماذج التسجيل."
+  ],
+  "passport": [
+   "Passport number",
+   "رقم جواز السفر"
+  ],
+  "passportHint": [
+   "Collected on enrollment forms.",
+   "يُجمع في نماذج التسجيل."
+  ],
+  "crossBorder": [
+   "Allow transfers outside the UAE",
+   "السماح بنقل البيانات خارج الدولة"
+  ],
+  "crossBorderHint": [
+   "Only to the approved providers listed below.",
+   "فقط إلى المزودين المعتمدين أدناه."
+  ],
+  "policy": {
+   "OFF": [
+    "Not collected",
+    "لا يُجمع"
+   ],
+   "OPTIONAL": [
+    "Optional",
+    "اختياري"
+   ],
+   "REQUIRED": [
+    "Required",
+    "إلزامي"
+   ]
+  },
+  "transfersTitle": [
+   "Service providers",
+   "مزودو الخدمات"
+  ],
+  "transfersHint": [
+   "Providers that may process data, with safeguards.",
+   "المزودون الذين قد يعالجون البيانات مع الضمانات المطبقة."
+  ],
+  "country": [
+   "Country {code}",
+   "الدولة {code}"
+  ],
+  "approved": [
+   "Approved",
+   "معتمد"
+  ],
+  "notApproved": [
+   "Not approved",
+   "غير معتمد"
+  ],
+  "retentionTitle": [
+   "Retention",
+   "الاحتفاظ بالبيانات"
+  ],
+  "retentionHint": [
+   "How long each kind of record is kept and what happens after.",
+   "مدة الاحتفاظ بكل نوع من السجلات وما يحدث بعدها."
+  ],
+  "lastRun": [
+   "Last run {date}, {n} records",
+   "آخر تنفيذ {date}، {n} سجلًا"
+  ],
+  "neverRun": [
+   "Not run yet",
+   "لم يُنفَّذ بعد"
+  ],
+  "years": [
+   "Years",
+   "السنوات"
+  ],
+  "yearsUnit": [
+   "years",
+   "سنوات"
+  ],
+  "retention": {
+   "REVIEW": [
+    "Review",
+    "مراجعة"
+   ],
+   "ANONYMIZE": [
+    "Anonymize",
+    "إخفاء الهوية"
+   ],
+   "DELETE": [
+    "Delete",
+    "حذف"
+   ]
+  },
+  "safeguardingLocked": [
+   "Safeguarding records are only ever reviewed, never removed automatically.",
+   "تُراجَع ملفات حماية الطفل فقط ولا تُحذف تلقائيًا."
+  ],
+  "purposesTitle": [
+   "Why we process data",
+   "أغراض معالجة البيانات"
+  ],
+  "purposesHint": [
+   "Each purpose, its lawful basis and consent status.",
+   "كل غرض وأساسه القانوني وحالة الموافقة."
+  ],
+  "consentCounts": [
+   "{granted} granted, {refused} refused, {pending} pending",
+   "{granted} موافقة، {refused} رفض، {pending} قيد الانتظار"
+  ],
+  "noConsentNeeded": [
+   "No consent needed",
+   "لا يتطلب موافقة"
+  ],
+  "basis": {
+   "consent": [
+    "Consent",
+    "الموافقة"
+   ],
+   "contract_with_the_family": [
+    "Contract with the family",
+    "العقد مع الأسرة"
+   ],
+   "legal_obligation": [
+    "Legal obligation",
+    "التزام قانوني"
+   ],
+   "legitimate_interest_with_opt_out": [
+    "Legitimate interest with opt-out",
+    "مصلحة مشروعة مع حق الانسحاب"
+   ],
+   "vital_interests_and_legal_obligation": [
+    "Vital interests and legal obligation",
+    "المصالح الحيوية والتزام قانوني"
+   ],
+   "vital_interests": [
+    "Vital interests",
+    "المصالح الحيوية"
+   ]
+  },
+  "category": {
+   "academic": [
+    "Academic",
+    "أكاديمية"
+   ],
+   "attendance": [
+    "Attendance",
+    "الحضور"
+   ],
+   "identity": [
+    "Identity",
+    "الهوية"
+   ],
+   "images": [
+    "Images",
+    "الصور"
+   ],
+   "medical": [
+    "Medical",
+    "طبية"
+   ],
+   "safeguarding": [
+    "Safeguarding",
+    "حماية الطفل"
+   ],
+   "special_category": [
+    "Special category",
+    "فئة خاصة"
+   ],
+   "wellbeing": [
+    "Wellbeing",
+    "الرفاه"
+   ]
+  },
+  "dsrTitle": [
+   "Data subject requests",
+   "طلبات أصحاب البيانات"
+  ],
+  "dsrHint": [
+   "Access, correction and deletion requests from families.",
+   "طلبات الاطلاع والتصحيح والحذف المقدمة من الأسر."
+  ],
+  "dsrType": {
+   "ACCESS": [
+    "Access",
+    "اطلاع"
+   ],
+   "CORRECTION": [
+    "Correction",
+    "تصحيح"
+   ],
+   "DELETION": [
+    "Deletion",
+    "حذف"
+   ]
+  },
+  "dsrStatus": {
+   "RECEIVED": [
+    "Received",
+    "مستلم"
+   ],
+   "VERIFYING": [
+    "Verifying identity",
+    "التحقق من الهوية"
+   ],
+   "IN_PROGRESS": [
+    "In progress",
+    "قيد التنفيذ"
+   ],
+   "COMPLETED": [
+    "Completed",
+    "مكتمل"
+   ],
+   "REJECTED": [
+    "Declined",
+    "مرفوض"
+   ]
+  },
+  "due": [
+   "Due {date}",
+   "الموعد {date}"
+  ],
+  "overdue": [
+   "Overdue",
+   "متأخر"
+  ],
+  "resolutionHint": [
+   "Record what was done. This is kept with the request.",
+   "سجّل ما تم إنجازه. يُحفظ ذلك مع الطلب."
+  ],
+  "resolutionPlaceholder": [
+   "For example: record export shared through the parent portal",
+   "مثال: تمت مشاركة نسخة من السجل عبر بوابة ولي الأمر"
+  ],
+  "breachTitle": [
+   "Incident log",
+   "سجل الحوادث"
+  ],
+  "breachHint": [
+   "Personal data incidents and how they were handled.",
+   "حوادث البيانات الشخصية وكيفية التعامل معها."
+  ],
+  "noBreaches": [
+   "No incidents logged.",
+   "لا توجد حوادث مسجلة."
+  ],
+  "severity": {
+   "LOW": [
+    "Low",
+    "منخفضة"
+   ],
+   "MEDIUM": [
+    "Medium",
+    "متوسطة"
+   ],
+   "HIGH": [
+    "High",
+    "عالية"
+   ],
+   "CRITICAL": [
+    "Critical",
+    "حرجة"
+   ]
+  },
+  "breachStatus": {
+   "OPEN": [
+    "Open",
+    "مفتوحة"
+   ],
+   "CONTAINED": [
+    "Contained",
+    "تمت السيطرة عليها"
+   ],
+   "REPORTED": [
+    "Reported",
+    "تم الإبلاغ"
+   ],
+   "CLOSED": [
+    "Closed",
+    "مغلقة"
+   ]
+  },
+  "breachDates": [
+   "Occurred {occurred}, {affected} people affected",
+   "وقعت في {occurred}، وتأثر بها {affected} شخصًا"
+  ],
+  "saved": [
+   "Saved",
+   "تم الحفظ"
+  ],
+  "save": [
+   "Save",
+   "حفظ"
+  ],
+  "cancel": [
+   "Cancel",
+   "إلغاء"
+  ],
+  "error": {
+   "generic": [
+    "Could not save. Try again.",
+    "تعذر الحفظ. حاول مرة أخرى."
+   ],
+   "FORBIDDEN": [
+    "You do not have permission to change this.",
+    "ليست لديك صلاحية لتغيير هذا الإعداد."
+   ],
+   "REASON": [
+    "Give a reason of at least 10 characters.",
+    "اكتب سببًا من 10 أحرف على الأقل."
+   ],
+   "DAYS": [
+    "Choose between one month and 100 years.",
+    "اختر مدة بين شهر واحد و100 سنة."
+   ],
+   "SAFEGUARDING": [
+    "Safeguarding records can only be set to review.",
+    "يمكن ضبط ملفات حماية الطفل على المراجعة فقط."
+   ],
+   "RESOLUTION": [
+    "Add a resolution before closing.",
+    "أضف ما تم إنجازه قبل الإغلاق."
+   ]
+  },
+  "regulators": {
+   "khda": [
+    "KHDA",
+    "هيئة المعرفة والتنمية البشرية"
+   ],
+   "adek": [
+    "ADEK",
+    "دائرة التعليم والمعرفة"
+   ],
+   "spea": [
+    "SPEA",
+    "هيئة الشارقة للتعليم الخاص"
+   ],
+   "moe": [
+    "Ministry of Education",
+    "وزارة التربية والتعليم"
+   ],
+   "other": [
+    "Regulator",
+    "الجهة التنظيمية"
+   ]
+  },
+  "emirates": {
+   "dubai": [
+    "Dubai",
+    "دبي"
+   ],
+   "abu_dhabi": [
+    "Abu Dhabi",
+    "أبوظبي"
+   ],
+   "sharjah": [
+    "Sharjah",
+    "الشارقة"
+   ],
+   "ajman": [
+    "Ajman",
+    "عجمان"
+   ],
+   "umm_al_quwain": [
+    "Umm Al Quwain",
+    "أم القيوين"
+   ],
+   "ras_al_khaimah": [
+    "Ras Al Khaimah",
+    "رأس الخيمة"
+   ],
+   "fujairah": [
+    "Fujairah",
+    "الفجيرة"
+   ]
+  }
+ }
+}

@@ -16,3 +16,4 @@ smoke.tmp.mjs
 .uploads
 *.tmp.mjs
 dump.rdb
+.claude/worktrees/

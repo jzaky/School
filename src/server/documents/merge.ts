@@ -56,3 +56,21 @@ export async function buildMergeData(
 export function applyMerge(body: string, values: Record<string, string>) {
   return body.replace(/\{\{([\w.]+)\}\}/g, (_, k: string) => values[k] ?? "");
 }
+
+/** Merge fields available to every letter template. */
+export const MERGE_FIELD_KEYS = [
+  "student.fullName",
+  "student.fullNameAr",
+  "student.studentNo",
+  "student.grade",
+  "student.dateOfBirth",
+  "student.nationality",
+  "student.enrolledOn",
+  "school.name",
+  "school.nameAr",
+  "academicYear.name",
+  "request.number",
+  "request.addressedTo",
+  "request.purpose",
+  "today",
+] as const;
