@@ -15,7 +15,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "documents", href: "/documents" },
   ],
   teacher: [
-    { key: "refer", href: "/services/academic_support" },
+    { key: "refer", href: "/services/academic_concern" },
     { key: "approvals", href: "/approvals" },
     { key: "meetings", href: "/meetings" },
     { key: "safeguardingRefer", href: "/safeguarding" },

@@ -29,7 +29,7 @@ Tip: the **Guide** button (bottom corner) lists what to try for the current pers
 
 ## 3. Teacher referral (3 minutes) - Daniel, then Sarah
 
-1. Enter as **Daniel Carter** (Teacher). **Services** > **Ask for academic support** for Adam. Submit.
+1. Enter as **Daniel Carter** (Teacher). **Services** > **Refer a student: academic concern** for Adam. Submit.
 2. Switch to **Sarah Ahmed** (Counselor). The referral is in her caseload. Open the case: notes are versioned and can never be silently edited.
 3. **Book a meeting** with Rania invited. Show the calendar week view in Arabic if time allows.
 4. Draft an action plan and set a follow-up date. It appears on Sarah's calendar.

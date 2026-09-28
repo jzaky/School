@@ -80,7 +80,7 @@ export default async function ServicePage({ params, searchParams }: { params: Pr
           <p>{service.sensitivity === "SAFEGUARDING" ? t("safeguardingNote") : t("confidentialNote")}</p>
         </div>
       )}
-      <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px] [&>*]:min-w-0">
         <Panel className="p-6">
           {ctx.isParent && children.length > 1 && (
             <div className="mb-6">
