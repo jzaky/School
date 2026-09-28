@@ -214,7 +214,9 @@ const LOWER_CORE = ["MATH", "ENG", "ARAB", "ISL", "SOC", "BIO", "PE", "ART"];
 const UPPER_CORE = ["MATH", "ENG", "ARAB", "ISL", "PE"];
 const UPPER_ELECTIVES = ["PHYS", "CHEM", "BIO", "CS", "ECON", "BUS", "ART", "PSY", "GEO", "FR"];
 
-export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => void; now?: Date } = {}) {
+export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => void; now?: Date; slug?: string } = {}) {
+  const slug = opts.slug ?? DEMO_SLUG;
+  const isDemoTenant = slug === DEMO_SLUG;
   const log = opts.log ?? (() => undefined);
   const now = opts.now ?? new Date();
   const started = Date.now();
@@ -222,9 +224,9 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
 
   // --- Organization (stable id) -------------------------------------------------
   const org = await db.organization.upsert({
-    where: { slug: DEMO_SLUG },
+    where: { slug },
     create: {
-      slug: DEMO_SLUG,
+      slug,
       nameEn: "Horizon International School Dubai",
       nameAr: "مدرسة هورايزن الدولية - دبي",
       shortNameEn: "Horizon",
@@ -240,7 +242,7 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
       nameAr: "مدرسة هورايزن الدولية في دبي",
       shortNameEn: "Horizon",
       shortNameAr: "هورايزن",
-      isDemo: true,
+      isDemo: isDemoTenant,
       defaultLocale: "en",
       timezone: "Asia/Dubai",
       currency: "AED",
@@ -339,7 +341,7 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   const users = await db.user.findMany({ where: { email: { in: pendingUsers.map((u) => u.email) } }, select: { id: true, email: true } });
   const userIdByEmail = new Map(users.map((u) => [u.email, u.id]));
   // Reset names and passwords in case they drifted during a demo.
-  await db.user.updateMany({ where: { email: { in: pendingUsers.map((u) => u.email) } }, data: { passwordHash, lastActiveOrgId: orgId, locale: null } });
+  if (isDemoTenant) await db.user.updateMany({ where: { email: { in: pendingUsers.map((u) => u.email) } }, data: { passwordHash, lastActiveOrgId: orgId, locale: null } });
 
   const membershipRows: Prisma.MembershipCreateManyInput[] = [];
   const membershipRoleRows: Prisma.MembershipRoleCreateManyInput[] = [];

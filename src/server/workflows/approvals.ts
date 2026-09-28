@@ -50,8 +50,8 @@ export async function decideApproval(
     if (input.decision === "REJECTED") status = "REJECTED";
     else if (all.every((a) => a.status === "APPROVED")) status = "APPROVED";
   } else {
-    if (input.decision === "APPROVED") status = "APPROVED";
-    else if (all.every((a) => a.status === "REJECTED")) status = "REJECTED";
+    // PARALLEL_ANY: any one of the approvers may decide, and the first decision stands.
+    status = input.decision;
   }
 
   if (status !== "PENDING") {
