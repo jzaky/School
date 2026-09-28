@@ -20,8 +20,11 @@ esac
 node -e '
 for (const k of ["MIGRATION_DATABASE_URL", "DATABASE_URL", "REDIS_URL"]) {
   const v = process.env[k] || "";
-  let shown = v.replace(/:\/\/([^:@\/]*):([^@]*)@/, "://$1:****@");
-  console.log("[start] " + k + " looks like: " + (shown || "(empty)"));
+  let shown;
+  if (!v) shown = "(empty)";
+  else if (!/^[a-z]+:\/\//i.test(v)) shown = "(not an address: it should start with postgresql:// or redis://)";
+  else shown = v.replace(/:\/\/([^:@\/]*):([^@]*)@/, "://$1:****@");
+  console.log("[start] " + k + " looks like: " + shown);
 }'
 
 echo "[start] applying migrations and RLS"
