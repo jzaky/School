@@ -6,6 +6,8 @@ import { buildNav } from "@/server/shell/nav";
 import { AppShell } from "@/components/shell/app-shell";
 import { initials, pick, userName } from "@/lib/i18n-data";
 import { demoModeEnabled } from "@/auth";
+import { DemoGuide } from "@/components/demo/demo-guide";
+import { GUIDE_STEPS } from "@/server/demo/guide";
 
 export default async function ShellLayout({ children }: { children: React.ReactNode }) {
   const ctx = await getCtx();
@@ -25,6 +27,8 @@ export default async function ShellLayout({ children }: { children: React.ReactN
   const name = userName(ctx.user, locale);
   const primaryRole = ctx.roles[0];
   const nav = buildNav(ctx, { approvals, tasks, notifications: unread });
+  const tGuide = await getTranslations("guide");
+  const guideSteps = personas.length && ctx.persona ? (GUIDE_STEPS[ctx.persona] ?? []) : [];
   return (
     <AppShell
       nav={nav}
@@ -47,6 +51,13 @@ export default async function ShellLayout({ children }: { children: React.ReactN
       }}
     >
       {children}
+      {guideSteps.length > 0 && (
+        <DemoGuide
+          persona={ctx.persona!}
+          intro={tGuide.has(`intro.${ctx.persona}`) ? tGuide(`intro.${ctx.persona}`) : tGuide("introDefault")}
+          steps={guideSteps.map((s) => ({ ...s, title: tGuide(`steps.${s.key}.title`), body: tGuide(`steps.${s.key}.body`) }))}
+        />
+      )}
     </AppShell>
   );
 }

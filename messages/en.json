@@ -1939,5 +1939,140 @@
       "EMPTY": "The file has no rows to import.",
       "TOO_MANY_ROWS": "Files are limited to 2,000 rows."
     }
+  },
+  "guide": {
+    "title": "Try this next",
+    "button": "Guide",
+    "close": "Close guide",
+    "progress": "{done} of {total} explored",
+    "restart": "Start over",
+    "introDefault": "A short tour of what this role can do.",
+    "intro": {
+      "student": "You are Adam, in Grade 9, curious about technology.",
+      "parent": "You are Rania, parent of Adam and Yara.",
+      "teacher": "You are Daniel, a Computing teacher.",
+      "counselor": "You are Sarah, the school counselor.",
+      "career_advisor": "You are Layla, the career advisor.",
+      "dsl": "You are Khalid, the Designated Safeguarding Lead.",
+      "deputy_dsl": "You support the safeguarding lead.",
+      "principal": "You are Omar, the principal.",
+      "admin": "You are Aisha, who runs the school's systems.",
+      "registrar": "You issue letters and keep records.",
+      "hod_computing": "You lead the Computing department."
+    },
+    "steps": {
+      "assessment": {
+        "title": "Take the career assessment",
+        "body": "Nine short pages about what you enjoy."
+      },
+      "matches": {
+        "title": "Explore your career matches",
+        "body": "Choose a career and see what it takes."
+      },
+      "bookAdvisor": {
+        "title": "Book the career advisor",
+        "body": "Pick a real free slot with Layla."
+      },
+      "myRequests": {
+        "title": "Follow your requests",
+        "body": "See every step and who is working on it."
+      },
+      "tasks": {
+        "title": "Check your tasks",
+        "body": "Actions from your plans land here."
+      },
+      "children": {
+        "title": "See both children",
+        "body": "Requests, meetings and documents per child."
+      },
+      "letter": {
+        "title": "Request an enrollment letter",
+        "body": "The registrar approves and a bilingual PDF is issued."
+      },
+      "subjectChange": {
+        "title": "Ask for a subject change",
+        "body": "Physics to Computer Science, approved in three steps."
+      },
+      "parentMeeting": {
+        "title": "Book a teacher meeting",
+        "body": "Pick a child, a teacher and a free slot."
+      },
+      "documents": {
+        "title": "Open your documents",
+        "body": "Letters and reports shared by the school."
+      },
+      "refer": {
+        "title": "Refer a student",
+        "body": "Raise an academic concern about Adam in two minutes."
+      },
+      "approvals": {
+        "title": "Clear your approvals",
+        "body": "Approve or decline with a comment and signature."
+      },
+      "meetings": {
+        "title": "See your meetings",
+        "body": "Upcoming meetings with families and students."
+      },
+      "safeguardingRefer": {
+        "title": "Know how to raise a concern",
+        "body": "Concerns go straight to the safeguarding team."
+      },
+      "caseload": {
+        "title": "Work your caseload",
+        "body": "Open a case for the AI brief and action plan."
+      },
+      "calendar": {
+        "title": "Plan your week",
+        "body": "Meetings, follow-ups and deadlines together."
+      },
+      "students": {
+        "title": "Look up a student",
+        "body": "Profile, requests, cases and meetings."
+      },
+      "careerDesk": {
+        "title": "Review career matches",
+        "body": "See who needs your review this week."
+      },
+      "sgQueue": {
+        "title": "Open the safeguarding queue",
+        "body": "Restricted concerns with a full chronology."
+      },
+      "audit": {
+        "title": "Check the audit log",
+        "body": "Every view of a sensitive record is recorded."
+      },
+      "kpis": {
+        "title": "Read the school at a glance",
+        "body": "Volume, speed and service levels."
+      },
+      "analytics": {
+        "title": "Ask the analytics",
+        "body": "For example: which service is slowest?"
+      },
+      "servicesAdmin": {
+        "title": "Manage the service catalog",
+        "body": "Switch services on, set targets and owners."
+      },
+      "formBuilder": {
+        "title": "Build a form",
+        "body": "Drag fields, add conditions, preview, publish."
+      },
+      "workflowBuilder": {
+        "title": "Design an approval workflow",
+        "body": "Visual steps, validation and simulation."
+      },
+      "templates": {
+        "title": "Edit a letter template",
+        "body": "Bilingual letters with merge fields and live preview."
+      },
+      "compliance": {
+        "title": "Review compliance",
+        "body": "AI safeguards, retention, consent and data requests."
+      },
+      "requestsAll": {
+        "title": "See department requests",
+        "body": "Subject changes waiting on Computing."
+      }
+    }
   }
 }

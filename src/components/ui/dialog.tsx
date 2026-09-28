@@ -8,6 +8,11 @@ function CloseLabel() {
   const t = useTranslations("common")
   return <span className="sr-only">{t("close")}</span>
 }
+
+function CloseText() {
+  const t = useTranslations("common")
+  return <>{t("close")}</>
+}
 import { XIcon } from "lucide-react"
 import { Dialog as DialogPrimitive } from "radix-ui"
 
@@ -117,7 +122,7 @@ function DialogFooter({
       {children}
       {showCloseButton && (
         <DialogPrimitive.Close asChild>
-          <Button variant="outline">Close</Button>
+          <Button variant="outline"><CloseText /></Button>
         </DialogPrimitive.Close>
       )}
     </div>
