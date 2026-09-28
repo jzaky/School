@@ -25,15 +25,16 @@
 - Landing page, PWA manifest and icons, per-persona demo guide, i18n audit (`npm run audit:i18n`), mobile pass at 390px (no horizontal overflow in en or ar).
 - Deploy config: Dockerfile, railway.json, railway.worker.json, docs/deploy.md. ESLint flat config (0 errors).
 - Docs: docs/demo-script.md, docs/compliance.md.
-- Tests: 90 unit and integration tests passing.
+- Tests: 92 unit and integration tests passing. Playwright E2E for the five hero flows in en and ar (10 specs) passing locally; one intermittent failure seen once in 4 full runs (subject change, ar), passed on rerun.
+- Demo reset measured at 15s locally.
 
 ## In progress
-- Playwright E2E for the five hero flows in en and ar, with fixes for anything they find.
+- Nothing locally. Waiting on deployment access.
 
 ## Broken
 - Deployment blocked: this environment's network policy denies backboard.railway.com. Deploy by connecting Railway to the GitHub repo (docs/deploy.md), or allow the host and provide a Railway token.
 
 ## Next
-1. Merge E2E suite and fixes; run the demo reset and time it (target under 30s on Railway).
-2. Deploy and smoke test the hero flows on the deployed URL in en and ar.
-3. Phase 7 QA pass.
+1. Deploy and smoke test the hero flows on the deployed URL in en and ar.
+2. Run the E2E suite against production (E2E_BASE_URL) and fix anything environment-specific.
+3. Phase 7 QA pass on production.
