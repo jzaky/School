@@ -3,6 +3,7 @@
 import { getCtx } from "@/server/context";
 import { personName, pick } from "@/lib/i18n-data";
 import { visibleStudentIds } from "@/server/access/student-access";
+import { listableCaseWhere } from "@/server/access/case-access";
 
 export type SearchHit = { kind: "student" | "request" | "case" | "service"; id: string; title: string; subtitle: string; href: string };
 
@@ -44,12 +45,7 @@ export async function searchAction(q: string): Promise<SearchHit[]> {
 
   if (ctx.isStaff && ctx.can("cases.view")) {
     const cases = await db.case.findMany({
-      where: {
-        orgId,
-        sensitivity: { in: ["STANDARD", "CONFIDENTIAL"] },
-        OR: [{ number: contains }, { titleEn: contains }, { titleAr: contains }],
-        ...(ctx.can("cases.view_all") ? {} : { OR: [{ assigneeId: ctx.membershipId }, { referrerId: ctx.membershipId }] }),
-      },
+      where: { AND: [listableCaseWhere(ctx, "search"), { OR: [{ number: contains }, { titleEn: contains }, { titleAr: contains }] }] },
       take: 5,
       include: { student: true },
     });

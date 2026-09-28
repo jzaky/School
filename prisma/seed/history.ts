@@ -495,15 +495,16 @@ export async function seedHistory(w: SeedWorld, base: ExecCtx) {
   // ------------------------------------------------------------------
   // Calendars: today and this week for the personas
   // ------------------------------------------------------------------
-  const today = schoolDay(0, now);
   // "Today" meetings start after the current time so dashboards always show what is coming up.
-  const dubaiHour = (now.getUTCHours() + 4) % 24 + now.getUTCMinutes() / 60;
-  const startH = today === 0 ? Math.max(8, Math.ceil(dubaiHour + 0.75)) : 9;
+  // Late in the day (or on a weekend) they move to the next school day.
+  const dubaiHour = ((now.getUTCHours() + 4) % 24) + now.getUTCMinutes() / 60;
+  const today = schoolDay(0, now) === 0 && dubaiHour < 13 ? 0 : schoolDay(schoolDay(0, now) === 0 ? 1 : 0, now);
+  const startH = today === 0 ? Math.max(8, Math.ceil(dubaiHour + 0.75)) : 8.5;
   const slotAt = (i: number): [number, number, number] => {
     const t = startH + i * 1.5;
     return [today, Math.floor(t), (t % 1) * 60];
   };
-  const sarahCases = await db.case.findMany({ where: { orgId, assigneeId: sarah, status: { in: ["OPEN", "IN_PROGRESS", "WAITING"] }, sensitivity: { not: "SAFEGUARDING" } }, take: 6, orderBy: { openedAt: "desc" } });
+  const sarahCases = await db.case.findMany({ where: { orgId, assigneeId: sarah, status: { in: ["OPEN", "IN_PROGRESS", "WAITING"] }, sensitivity: { not: "SAFEGUARDING" }, studentId: { notIn: [w.adam.id, w.yara.id] } }, take: 6, orderBy: { openedAt: "desc" } });
   const sarahSlots: Array<[number, number, number]> = [
     slotAt(0),
     slotAt(1),

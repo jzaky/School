@@ -13,3 +13,4 @@ tsconfig.tsbuildinfo
 next-env.d.ts
 .DS_Store
 smoke.tmp.mjs
+.uploads
