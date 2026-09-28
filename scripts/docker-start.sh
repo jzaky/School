@@ -16,6 +16,14 @@ case "${DATABASE_URL:-}" in
   *) echo "[start] DATABASE_URL does not start with postgresql://" ;;
 esac
 
+# Show the shape of the database and Redis addresses with passwords hidden.
+node -e '
+for (const k of ["MIGRATION_DATABASE_URL", "DATABASE_URL", "REDIS_URL"]) {
+  const v = process.env[k] || "";
+  let shown = v.replace(/:\/\/([^:@\/]*):([^@]*)@/, "://$1:****@");
+  console.log("[start] " + k + " looks like: " + (shown || "(empty)"));
+}'
+
 echo "[start] applying migrations and RLS"
 node --import tsx scripts/db-migrate.ts
 
