@@ -18,6 +18,7 @@
 - case-access.ts module; safeguarding hub; tasks views; students list and profile (encrypted IDs with audited reveal); parent children pages; meetings pages.
 - AI provider (Anthropic SDK, claude-opus-5, sensitive data guard, built-in deterministic drafter when no key): case brief, action plan draft and approval into tasks, referral draft, admin questions.
 - Integration tests: workflow engine, approvals, idempotency, wait nodes, safeguarding access, rule 7. 51 tests passing.
+- Playwright E2E for the five hero flows in en and ar (tests/e2e, `E2E_BASE_URL=... npx playwright test`), with fixes from the run (parent consent on submit, case meetings on the parent calendar, parent meeting scope, booking closes the case task, booking form duplicates).
 
 ## In progress
 - Phase 4 remainder: calendar, career guidance module, documents page, document templates admin.

@@ -112,7 +112,7 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
               <span>·</span>
               <span>{pick(locale, request.service.nameEn, request.service.nameAr)}</span>
             </div>
-            <h1 className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl" data-testid="request-title">
+            <h1 className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl" data-testid="request-title" data-status={request.status}>
               {title}
             </h1>
             <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -245,7 +245,7 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
                     </div>
                   )}
                   <Button asChild variant="outline" size="sm" className="mt-3 w-full">
-                    <Link href={`/meetings/${a.id}`}>{t("viewMeeting")}</Link>
+                    <Link href={`/meetings/${a.id}`} data-testid="view-meeting">{t("viewMeeting")}</Link>
                   </Button>
                 </Panel>
               );
@@ -273,7 +273,7 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
             )}
             {theCase && caseVisible && (
               <Panel>
-                <Link href={`/cases/${theCase.id}`} className="flex items-center gap-3 text-sm hover:text-brand">
+                <Link href={`/cases/${theCase.id}`} className="flex items-center gap-3 text-sm hover:text-brand" data-testid="linked-case">
                   <FolderOpen className="size-5 text-brand" />
                   <span className="flex-1">
                     <span className="block font-medium">{t("linkedCase")}</span>

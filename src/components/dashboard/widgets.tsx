@@ -11,6 +11,7 @@ import { RequestStatusBadge, PriorityBadge } from "@/components/app/badges";
 import { Icon } from "@/components/icon";
 import { TaskCheck } from "./task-check";
 import { requestWhere, isRestrictedForViewer } from "@/server/access/request-access";
+import { appointmentWhere } from "@/server/appointments/queries";
 
 export async function Greeting({ ctx, prefs, subtitle }: { ctx: Ctx; prefs: FormatPrefs; subtitle?: React.ReactNode }) {
   const t = await getTranslations("home");
@@ -40,11 +41,10 @@ export async function MeetingsPanel({ ctx, prefs, limit = 5, title, onlyToday = 
   const endOfToday = new Date(now.getTime() + 24 * 3600_000);
   const appts = await ctx.db.appointment.findMany({
     where: {
-      orgId: ctx.orgId,
-      status: { in: ["CONFIRMED", "SCHEDULED"] },
-      endsAt: { gt: now },
-      ...(onlyToday ? { startsAt: { lt: endOfToday } } : {}),
-      OR: [{ hostId: ctx.membershipId }, { attendees: { some: { membershipId: ctx.membershipId } } }, ...(ctx.isParent ? [{ studentId: { in: ctx.membership.guardian?.links.map((l) => l.studentId) ?? [] } }] : [])],
+      AND: [
+        await appointmentWhere(ctx),
+        { status: { in: ["CONFIRMED", "SCHEDULED"] }, endsAt: { gt: now }, ...(onlyToday ? { startsAt: { lt: endOfToday } } : {}) },
+      ],
     },
     include: { type: true },
     orderBy: { startsAt: "asc" },

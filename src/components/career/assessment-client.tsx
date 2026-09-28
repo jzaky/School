@@ -51,7 +51,7 @@ export function AssessmentClient({ questions, initial }: { questions: Q[]; initi
       <AnimatePresence mode="wait">
         <motion.ol key={page} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }} className="space-y-4">
           {slice.map((q, i) => (
-            <li key={q.id} className="rounded-xl border bg-card p-5 shadow-xs" data-testid="question" data-dimension={q.dimension}>
+            <li key={q.id} className="rounded-xl border bg-card p-5 shadow-xs" data-testid="question" data-dimension={q.dimension} data-index={page * PER_PAGE + i}>
               <p className="mb-4 font-medium">
                 <span className="me-2 text-muted-foreground tabular-nums">{page * PER_PAGE + i + 1}.</span>
                 {q.text}

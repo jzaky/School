@@ -10,7 +10,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
   const ctx = await getOptionalCtx();
   if (!ctx) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   const { id } = await params;
-  const a = await ctx.db.appointment.findFirst({ where: { AND: [{ id }, appointmentWhere(ctx)] }, include: { type: true } });
+  const a = await ctx.db.appointment.findFirst({ where: { AND: [{ id }, await appointmentWhere(ctx)] }, include: { type: true } });
   if (!a) return NextResponse.json({ error: "not_found" }, { status: 404 });
   const title = ctx.locale === "ar" ? a.type.nameAr : a.type.nameEn;
   const location = (ctx.locale === "ar" ? a.locationAr : a.locationEn) ?? "";

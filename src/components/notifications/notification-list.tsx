@@ -40,6 +40,7 @@ export function NotificationList({ items }: { items: NotificationItem[] }) {
               })
             }
             data-testid="notification-row"
+            data-href={n.href ?? undefined}
           >
             <span className={cn("mt-1.5 size-2 shrink-0 rounded-full", n.urgent ? "bg-danger" : n.read ? "bg-border" : "bg-brand")} />
             <span className="min-w-0 flex-1">

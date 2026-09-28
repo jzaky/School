@@ -21,9 +21,10 @@ export default async function MeetingsPage() {
   const t = await getTranslations("meetings");
   const prefs = await formatPrefs(ctx);
   const now = new Date();
+  const scope = await appointmentWhere(ctx);
   const [upcoming, past] = await Promise.all([
-    ctx.db.appointment.findMany({ where: { AND: [appointmentWhere(ctx), { endsAt: { gte: now }, status: { in: ["CONFIRMED", "SCHEDULED"] } }] }, include: { type: true }, orderBy: { startsAt: "asc" }, take: 30 }),
-    ctx.db.appointment.findMany({ where: { AND: [appointmentWhere(ctx), { OR: [{ endsAt: { lt: now } }, { status: { in: ["CANCELLED", "COMPLETED", "NO_SHOW"] } }] }] }, include: { type: true }, orderBy: { startsAt: "desc" }, take: 15 }),
+    ctx.db.appointment.findMany({ where: { AND: [scope, { endsAt: { gte: now }, status: { in: ["CONFIRMED", "SCHEDULED"] } }] }, include: { type: true }, orderBy: { startsAt: "asc" }, take: 30 }),
+    ctx.db.appointment.findMany({ where: { AND: [scope, { OR: [{ endsAt: { lt: now } }, { status: { in: ["CANCELLED", "COMPLETED", "NO_SHOW"] } }] }] }, include: { type: true }, orderBy: { startsAt: "desc" }, take: 15 }),
   ]);
   const ids = [...upcoming, ...past];
   const [members, students] = await Promise.all([

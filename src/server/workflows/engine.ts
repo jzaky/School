@@ -282,6 +282,18 @@ async function runApproval(ec: ExecCtx, run: LoadedRun, node: WorkflowNode, ctx:
     }, { staffOnly: true });
     return { state: "done", handle: "approved", output: { skipped: true } };
   }
+  // A parent or guardian who submits the request has given their consent by submitting it.
+  // Record that consent on their row instead of asking them to approve their own request.
+  const selfConsent = (row: (typeof rows)[number]) => Boolean(row.guardianId) && row.membershipId === ctx.request.requesterId;
+  const consented = rows.filter(selfConsent);
+  const remaining = rows.filter((row) => !selfConsent(row));
+  const approvedNow = consented.length > 0 && (mode === "PARALLEL_ANY" || remaining.length === 0);
+  const firstRemaining = remaining[0];
+  const rowStatus = (row: (typeof rows)[number]) => {
+    if (selfConsent(row)) return "APPROVED" as const;
+    if (approvedNow) return "CANCELLED" as const;
+    return mode === "SEQUENTIAL" && row !== firstRemaining ? ("WAITING" as const) : ("PENDING" as const);
+  };
   const r = run.request;
   const approval = await ec.tx.approvalRequest.create({
     data: {
@@ -290,7 +302,8 @@ async function runApproval(ec: ExecCtx, run: LoadedRun, node: WorkflowNode, ctx:
       nodeId: node.id,
       requestId: run.requestId,
       mode,
-      status: "PENDING",
+      status: approvedNow ? "APPROVED" : "PENDING",
+      decidedAt: approvedNow ? ec.now : null,
       titleEn: `${cfg.label.en}: ${r?.titleEn ?? ""}`,
       titleAr: `${cfg.label.ar}: ${r?.titleAr ?? ""}`,
       dueAt: cfg.dueInHours ? hoursFrom(ec.now, cfg.dueInHours) : null,
@@ -306,17 +319,39 @@ async function runApproval(ec: ExecCtx, run: LoadedRun, node: WorkflowNode, ctx:
       labelEn: row.label.en,
       labelAr: row.label.ar,
       order: i,
-      status: mode === "SEQUENTIAL" && i > 0 ? ("WAITING" as const) : ("PENDING" as const),
+      status: rowStatus(row),
       requireSignature: row.requireSignature,
+      decidedAt: selfConsent(row) ? ec.now : null,
+      decidedById: selfConsent(row) ? row.membershipId : null,
     })),
   });
+  if (consented.length) {
+    const who = await memberName(ec, ctx.request.requesterId);
+    const label = consented[0].label;
+    await addTimeline(ec, run, ctx, "approved", {
+      en: `Approved by ${who.en} (${label.en}) when submitting the request`,
+      ar: `وافق ${who.ar} (${label.ar}) عند تقديم الطلب`,
+    }, { data: { approvalId: approval.id, nodeId: node.id } });
+    await ec.tx.auditEvent.create({
+      data: {
+        orgId: ec.orgId,
+        actorId: ctx.request.requesterId,
+        action: "approval.approved",
+        entityType: "ApprovalRequest",
+        entityId: approval.id,
+        meta: { onSubmit: true } as never,
+        createdAt: ec.now,
+      },
+    });
+  }
+  if (approvedNow) return { state: "done", handle: "approved", output: { approvalId: approval.id } };
   if (run.requestId) {
     await ec.tx.request.update({
       where: { id: run.requestId },
       data: { status: "PENDING_APPROVAL", currentStepEn: cfg.label.en, currentStepAr: cfg.label.ar },
     });
   }
-  const firstWave = mode === "SEQUENTIAL" ? rows.slice(0, 1) : rows;
+  const firstWave = mode === "SEQUENTIAL" ? remaining.slice(0, 1) : remaining;
   await notify(ec, {
     recipients: firstWave.map((x) => x.membershipId!).filter(Boolean),
     templateKey: "approval_needed",
@@ -324,7 +359,7 @@ async function runApproval(ec: ExecCtx, run: LoadedRun, node: WorkflowNode, ctx:
     href: `/approvals`,
     idempotencyBase: `${run.id}:${node.id}:wave0`,
   });
-  const who = mode === "SEQUENTIAL" ? rows[0].label : cfg.label;
+  const who = mode === "SEQUENTIAL" ? firstRemaining.label : cfg.label;
   await addTimeline(ec, run, ctx, "approval_requested", { en: `Waiting for ${who.en}`, ar: `بانتظار ${who.ar}` }, {
     data: { approvalId: approval.id, nodeId: node.id },
   });

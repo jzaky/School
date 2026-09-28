@@ -297,7 +297,7 @@ export default async function CasePage({ params, searchParams }: { params: Promi
               <CaseControls caseId={c!.id} status={c!.status} priority={c!.priority} assigneeId={c!.assigneeId} followUp={c!.nextFollowUpAt ? c!.nextFollowUpAt.toISOString().slice(0, 10) : null} staff={staffOptions} />
               <div className="mt-4 flex flex-wrap gap-2 border-t pt-4">
                 <Button asChild size="sm" variant="outline">
-                  <Link href={`/book?case=${c!.id}&student=${c!.studentId}&type=counselor_meeting`}>
+                  <Link href={`/book?case=${c!.id}&student=${c!.studentId}&type=counselor_meeting`} data-testid="case-book-meeting">
                     <CalendarPlus className="size-4" />
                     {t("bookMeeting")}
                   </Link>
@@ -342,7 +342,7 @@ export default async function CasePage({ params, searchParams }: { params: Promi
               {c!.nextFollowUpAt && (
                 <div className="flex justify-between gap-3">
                   <dt className="text-muted-foreground">{t("followUp")}</dt>
-                  <dd className={c!.nextFollowUpAt < new Date() ? "font-medium text-danger" : ""}>{fmtDate(prefs, c!.nextFollowUpAt)}</dd>
+                  <dd className={c!.nextFollowUpAt < new Date() ? "font-medium text-danger" : ""} data-testid="case-followup-date">{fmtDate(prefs, c!.nextFollowUpAt)}</dd>
                 </div>
               )}
             </dl>
