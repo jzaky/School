@@ -57,11 +57,14 @@ export const PERMISSIONS = [
   "pathways.view",
   "pathways.manage",
   "timetable.manage",
+  "absence.report",
+  "cover.manage",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
 
 const STAFF_BASE: Permission[] = [
+  "absence.report",
   "services.use",
   "people.view",
   "safeguarding.refer",
@@ -91,6 +94,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
     descEn: "Runs school setup, services, forms, workflows and compliance.",
     descAr: "يدير إعدادات المدرسة والخدمات والنماذج ومسارات العمل والامتثال.",
     permissions: [
+      "cover.manage",
       "timetable.manage",
       "grades.view_all",
       "registration.manage",
@@ -133,6 +137,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
     descAr:
       "قيادة المدرسة مع الإشراف على جميع العمليات. الوصول إلى ملفات الحماية يخضع للتدقيق.",
     permissions: [
+      "cover.manage",
       "timetable.manage",
       "grades.view_all",
       "registration.manage",
@@ -164,6 +169,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
     descEn: "Handles enrollment, records and official documents.",
     descAr: "يتولى التسجيل والسجلات والوثائق الرسمية.",
     permissions: [
+      "cover.manage",
       "timetable.manage",
       "grades.view_all",
       "registration.manage",
@@ -186,6 +192,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
     descEn: "Leads a department and approves subject and curriculum requests.",
     descAr: "يقود القسم ويعتمد طلبات المواد والمناهج.",
     permissions: [
+      "cover.manage",
       "grades.enter",
       "grades.view_all",
       "trips.manage",

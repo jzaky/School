@@ -2374,3 +2374,66 @@ model ExamSitting {
 
   @@index([orgId, startsAt])
 }
+
+// ---------------------------------------------------------------------------
+// Staff absence and cover
+// ---------------------------------------------------------------------------
+
+enum AbsenceStatus {
+  REPORTED
+  COVERED
+  PARTLY_COVERED
+  CANCELLED
+}
+
+enum CoverStatus {
+  ASSIGNED
+  UNCOVERED
+  DECLINED
+  DONE
+}
+
+/// A teacher marked absent for a date range; cover is arranged for each affected lesson.
+model StaffAbsence {
+  id           String        @id @default(cuid())
+  orgId        String
+  membershipId String
+  startsOn     DateTime      @db.Date
+  endsOn       DateTime      @db.Date
+  allDay       Boolean       @default(true)
+  fromPeriod   Int?
+  toPeriod     Int?
+  reasonEn     String?
+  status       AbsenceStatus @default(REPORTED)
+  reportedById String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  covers CoverAssignment[]
+
+  @@index([orgId, startsOn])
+}
+
+/// One lesson that needs cover: which substitute takes it, and whether they were told.
+model CoverAssignment {
+  id                String      @id @default(cuid())
+  orgId             String
+  absenceId         String
+  slotId            String
+  date              DateTime    @db.Date
+  periodNo          Int
+  classId           String
+  originalTeacherId String
+  substituteId      String?
+  status            CoverStatus @default(ASSIGNED)
+  reasonEn          String?
+  notifiedAt        DateTime?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  absence StaffAbsence @relation(fields: [absenceId], references: [id], onDelete: Cascade)
+
+  @@unique([absenceId, slotId, date])
+  @@index([orgId, date])
+  @@index([substituteId, date])
+}
