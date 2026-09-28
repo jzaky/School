@@ -62,7 +62,7 @@ export default async function ApprovalsPage() {
               const requester = requesters.find((m) => m.id === r?.requesterId);
               return (
                 <Panel key={p.id} padded={false} className="overflow-hidden" >
-                  <div className="grid lg:grid-cols-[minmax(0,1fr)_340px]" data-testid="approval-card">
+                  <div className="grid lg:grid-cols-[minmax(0,1fr)_340px]" data-testid="approval-card" data-request-id={r?.id}>
                     <div className="space-y-4 p-5">
                       <div className="flex items-start gap-3">
                         <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-brand-soft text-brand">

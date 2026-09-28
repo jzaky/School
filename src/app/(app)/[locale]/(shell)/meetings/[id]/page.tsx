@@ -20,7 +20,7 @@ export default async function MeetingPage({ params }: { params: Promise<{ id: st
   const ctx = await getCtx();
   const t = await getTranslations("meetings");
   const prefs = await formatPrefs(ctx);
-  const a = await ctx.db.appointment.findFirst({ where: { AND: [{ id }, appointmentWhere(ctx)] }, include: { type: true, attendees: true } });
+  const a = await ctx.db.appointment.findFirst({ where: { AND: [{ id }, await appointmentWhere(ctx)] }, include: { type: true, attendees: true } });
   if (!a) notFound();
   const memberIds = [...new Set([a.hostId, ...a.attendees.map((x) => x.membershipId).filter(Boolean)])] as string[];
   const [members, student, theCase] = await Promise.all([
@@ -53,7 +53,7 @@ export default async function MeetingPage({ params }: { params: Promise<{ id: st
               {student && <p className="text-sm text-muted-foreground">{t("about", { name: personName(student, ctx.locale) })}</p>}
             </div>
             <Button asChild variant="outline" size="sm">
-              <a href={`/api/meetings/${a.id}/ics`}>
+              <a href={`/api/meetings/${a.id}/ics`} data-testid="download-ics">
                 <Download className="size-4" />
                 {t("addToCalendar")}
               </a>

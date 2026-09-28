@@ -142,12 +142,12 @@ export function CaseControls({ caseId, status, priority, assigneeId, followUp, s
       <div className="space-y-1.5">
         <Label className="text-xs text-muted-foreground">{t("status")}</Label>
         <Select value={status} onValueChange={(v) => run(() => updateCaseAction({ caseId, status: v as never }), t("updated"))} disabled={pending}>
-          <SelectTrigger className="w-full" data-testid="case-status">
+          <SelectTrigger className="w-full" data-testid="case-status" data-value={status}>
             <SelectValue>{ts(`case.${status}`)}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             {["NEW", "OPEN", "IN_PROGRESS", "WAITING", "RESOLVED", "CLOSED"].map((s) => (
-              <SelectItem key={s} value={s}>
+              <SelectItem key={s} value={s} data-testid={`case-status-${s}`}>
                 {ts(`case.${s}`)}
               </SelectItem>
             ))}
@@ -175,7 +175,7 @@ export function CaseControls({ caseId, status, priority, assigneeId, followUp, s
       </div>
       <div className="space-y-1.5">
         <Label className="text-xs text-muted-foreground">{t("followUp")}</Label>
-        <Input type="date" defaultValue={followUp ?? ""} disabled={pending} onBlur={(e) => e.target.value !== (followUp ?? "") && run(() => updateCaseAction({ caseId, nextFollowUpAt: e.target.value ? `${e.target.value}T09:00:00+04:00` : null }), t("updated"))} />
+        <Input type="date" defaultValue={followUp ?? ""} disabled={pending} data-testid="case-followup" onBlur={(e) => e.target.value !== (followUp ?? "") && run(() => updateCaseAction({ caseId, nextFollowUpAt: e.target.value ? `${e.target.value}T09:00:00+04:00` : null }), t("updated"))} />
       </div>
     </div>
   );

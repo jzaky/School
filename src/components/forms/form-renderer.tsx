@@ -178,7 +178,7 @@ export function FormRenderer({ schema, initialValues, initialStep = 0, options, 
         </div>
         <div className="flex gap-2 sm:ms-auto">
           {step > 0 && (
-            <Button type="button" variant="outline" onClick={() => setStep((s) => s - 1)} disabled={submitting}>
+            <Button type="button" variant="outline" onClick={() => setStep((s) => s - 1)} disabled={submitting} data-testid="form-back">
               <ChevronLeft className="size-4 rtl:rotate-180" />
               {t("back")}
             </Button>
@@ -290,12 +290,12 @@ function Field({
     case "select":
       control = (
         <Select value={str || undefined} onValueChange={onChange} disabled={locked}>
-          <SelectTrigger id={id} className="w-full" aria-invalid={invalid}>
+          <SelectTrigger id={id} className="w-full" aria-invalid={invalid} data-testid={`select-${f.id}`}>
             <SelectValue placeholder={placeholder || t("choose")}>{opts.find((o) => o.value === str) ? tx(locale, opts.find((o) => o.value === str)!.label) : undefined}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             {opts.map((o) => (
-              <SelectItem key={o.value} value={o.value}>
+              <SelectItem key={o.value} value={o.value} data-testid={`opt-${f.id}-${o.value}`}>
                 {tx(locale, o.label)}
               </SelectItem>
             ))}
@@ -355,6 +355,7 @@ function Field({
                 type="button"
                 aria-pressed={on}
                 disabled={locked}
+                data-testid={`opt-${f.id}-${o.value}`}
                 onClick={() => onChange(on ? arr.filter((x) => x !== o.value) : [...arr, o.value])}
                 className={cn(
                   "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition",
@@ -379,6 +380,7 @@ function Field({
               type="button"
               disabled={locked}
               aria-pressed={value === b}
+              data-testid={`opt-${f.id}-${b ? "yes" : "no"}`}
               onClick={() => onChange(b)}
               className={cn("min-w-20 rounded-lg border px-4 py-2 text-sm font-medium transition", value === b ? "border-brand bg-brand text-brand-foreground" : "hover:bg-muted/40")}
             >
@@ -412,6 +414,7 @@ function Field({
               key={i}
               type="button"
               disabled={locked}
+              data-testid={`opt-${f.id}-${i}`}
               onClick={() => onChange(i)}
               className={cn("size-9 rounded-md border text-sm tabular-nums transition", Number(value) === i ? "border-brand bg-brand text-brand-foreground" : "hover:bg-muted/50")}
             >

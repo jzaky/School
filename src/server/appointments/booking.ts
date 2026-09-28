@@ -79,6 +79,13 @@ export async function bookAppointment(
   if (input.rescheduleOf) {
     await tx.appointment.update({ where: { id: input.rescheduleOf }, data: { status: "CANCELLED", cancelReason: "Rescheduled" } });
   }
+  // Booking from a case closes the workflow's open "book a meeting" task for that case.
+  if (input.caseId) {
+    await tx.task.updateMany({
+      where: { orgId, caseId: input.caseId, status: { in: ["TODO", "IN_PROGRESS"] }, href: { startsWith: `/book?type=${type.key}` } },
+      data: { status: "DONE", completedAt: ec.now },
+    });
+  }
 
   const when = fmtWhen(slot.start);
   const [host, booker] = await Promise.all([

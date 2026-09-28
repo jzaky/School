@@ -7,6 +7,7 @@ import { submitRequest } from "@/server/services/submit";
 import { decideApproval, ApprovalError } from "@/server/workflows/approvals";
 import { advanceRun, resumeRunsForTask } from "@/server/workflows/engine";
 import { caseAccess, listableCaseWhere } from "@/server/access/case-access";
+import { appointmentWhere } from "@/server/appointments/queries";
 import { can, permissionsOf, roleKeysOf } from "@/server/identity/can";
 import type { Ctx } from "@/server/context";
 import { seedDemo } from "../../prisma/seed/demo";
@@ -123,6 +124,34 @@ describe("workflow engine and approvals", () => {
     expect(run.status).toBe("COMPLETED");
     const events = await owner.timelineEvent.count({ where: { requestId: req.id, kind: "approved" } });
     expect(events).toBe(4);
+  });
+
+  it("a parent who submits a subject change has consented: the teacher is asked first", async () => {
+    const parentMid = await member("parent");
+    const adam = await owner.student.findFirstOrThrow({ where: { orgId, membershipId: await member("student") } });
+    const svc = await service("subject_change");
+    const req = await tenantTx(orgId, (tx) =>
+      submitRequest(execCtx(tx, orgId, { quiet: true }), {
+        serviceId: svc.id,
+        requesterId: parentMid,
+        studentId: adam.id,
+        data: data(svc, { fromSubject: "PHYS", toSubject: "CS", reason: "career", parentAware: true, studentName: "Adam Nasser", grade: "9" }),
+      }),
+    );
+    expect(req.status).toBe("PENDING_APPROVAL");
+    // Nothing is waiting on the parent; her consent is recorded as given with the request.
+    expect(await owner.approvalAssignee.count({ where: { membershipId: parentMid, status: "PENDING", approval: { requestId: req.id } } })).toBe(0);
+    const consent = await owner.approvalAssignee.findFirstOrThrow({ where: { membershipId: parentMid, approval: { requestId: req.id } } });
+    expect(consent.status).toBe("APPROVED");
+    expect(consent.decidedById).toBe(parentMid);
+    expect((await pendingRow(req.id))?.membershipId).toBe(await member("teacher"));
+    await decide(req.id, "APPROVED");
+    expect((await pendingRow(req.id))?.membershipId).toBe(await member("hod_computing"));
+    await decide(req.id, "APPROVED");
+    expect((await pendingRow(req.id))?.membershipId).toBe(await member("registrar"));
+    await decide(req.id, "APPROVED");
+    expect((await owner.request.findUniqueOrThrow({ where: { id: req.id } })).status).toBe("COMPLETED");
+    expect(await owner.notification.count({ where: { orgId, recipientId: parentMid, href: { contains: req.id } } })).toBeGreaterThan(0);
   });
 
   it("is idempotent: advancing a finished or waiting run again changes nothing", async () => {
@@ -273,5 +302,22 @@ describe("safeguarding and wellbeing access", () => {
     await tenantTx(orgId, (tx) => submitRequest(execCtx(tx, orgId, { quiet: true }), { serviceId: svc.id, requesterId: student.membershipId!, studentId: student.id, data: data(svc, { who: "counselor", howUrgent: "today" }) }));
     const after = await owner.notification.count({ where: { orgId, recipientId: { in: student.guardians.map((g) => g.guardian.membershipId!).filter(Boolean) } } });
     expect(after).toBe(before);
+  });
+
+  it("parents do not see their child's meetings on wellbeing cases unless invited", async () => {
+    const cases = await owner.case.findMany({ where: { orgId, sensitivity: { in: ["WELLBEING", "SAFEGUARDING"] } }, select: { id: true } });
+    const sensitive = await owner.appointment.findFirstOrThrow({ where: { orgId, caseId: { in: cases.map((c) => c.id) }, studentId: { not: null } }, include: { attendees: true } });
+    const link = await owner.guardianLink.findFirstOrThrow({ where: { orgId, studentId: sensitive.studentId!, guardian: { membershipId: { not: null } } }, include: { guardian: true } });
+    const parentMid = link.guardian.membershipId!;
+    expect(sensitive.attendees.some((a) => a.membershipId === parentMid)).toBe(false);
+    const parentCtx = await ctxFor(parentMid);
+    const scope = await appointmentWhere(parentCtx);
+    expect(await tenantDb(orgId).appointment.count({ where: { AND: [scope, { id: sensitive.id }] } })).toBe(0);
+    // Invited explicitly by staff: now it shows.
+    await owner.appointmentAttendee.create({ data: { orgId, appointmentId: sensitive.id, membershipId: parentMid, guardianId: link.guardianId } });
+    expect(await tenantDb(orgId).appointment.count({ where: { AND: [scope, { id: sensitive.id }] } })).toBe(1);
+    // Ordinary meetings about the child still show.
+    const ordinary = await owner.appointment.findFirst({ where: { orgId, studentId: sensitive.studentId, OR: [{ caseId: null }, { caseId: { notIn: cases.map((c) => c.id) } }] } });
+    if (ordinary) expect(await tenantDb(orgId).appointment.count({ where: { AND: [scope, { id: ordinary.id }] } })).toBe(1);
   });
 });

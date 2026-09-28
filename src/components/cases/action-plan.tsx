@@ -34,7 +34,7 @@ export async function ActionPlanPanel({ caseId, studentId, canManage }: { caseId
             return (
               <div key={p.id} className="space-y-3" data-testid={`plan-${p.status.toLowerCase()}`}>
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-medium">{pick(ctx.locale, p.titleEn, p.titleAr)}</span>
+                  <span className="font-medium" data-testid="plan-title">{pick(ctx.locale, p.titleEn, p.titleAr)}</span>
                   {p.status === "DRAFT" ? <Pill tone="warning">{p.fromAi ? t("aiDraft") : t("draft")}</Pill> : <Pill tone="success">{t("approved")}</Pill>}
                   {approver && p.approvedAt && (
                     <span className="text-xs text-muted-foreground">
@@ -46,12 +46,12 @@ export async function ActionPlanPanel({ caseId, studentId, canManage }: { caseId
                   {p.items.map((it) => {
                     const task = tasks.find((x) => x.id === it.taskId);
                     return (
-                      <li key={it.id} className="flex items-start gap-3 rounded-lg border p-3 text-sm">
+                      <li key={it.id} className="flex items-start gap-3 rounded-lg border p-3 text-sm" data-testid="plan-item" data-owner={it.ownerRole}>
                         <Pill tone={it.ownerRole === "student" ? "brand" : it.ownerRole === "parent" ? "violet" : "neutral"} className="mt-0.5 shrink-0">
                           {t(`owner.${it.ownerRole}`)}
                         </Pill>
                         <div className="min-w-0 flex-1">
-                          {p.status === "DRAFT" && canManage ? <PlanItemEditor itemId={it.id} text={pick(ctx.locale, it.textEn, it.textAr)} /> : <span className={task?.status === "DONE" ? "text-muted-foreground line-through" : ""}>{pick(ctx.locale, it.textEn, it.textAr)}</span>}
+                          {p.status === "DRAFT" && canManage ? <PlanItemEditor itemId={it.id} text={pick(ctx.locale, it.textEn, it.textAr)} /> : <span className={task?.status === "DONE" ? "text-muted-foreground line-through" : ""} data-testid="plan-item-text">{pick(ctx.locale, it.textEn, it.textAr)}</span>}
                           {it.dueAt && <div className="mt-0.5 text-xs text-muted-foreground">{t("due", { date: fmtDate(prefs, it.dueAt) })}</div>}
                         </div>
                       </li>

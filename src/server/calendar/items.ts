@@ -1,6 +1,6 @@
 import type { Ctx } from "@/server/context";
 import { pick, personName } from "@/lib/i18n-data";
-import { listableCaseWhere } from "@/server/access/case-access";
+import { listableCaseWhere, SENSITIVE } from "@/server/access/case-access";
 import { visibleStudentIds } from "@/server/access/student-access";
 
 export type CalKind = "appointment" | "task" | "event" | "deadline" | "followup";
@@ -37,14 +37,16 @@ export async function calendarItems(ctx: Ctx, from: Date, to: Date, scope: CalSc
           ...(studentIds.length ? [{ studentId: { in: studentIds } }] : []),
         ],
       },
-      include: { type: true },
+      include: { type: true, attendees: { select: { membershipId: true } } },
     });
-    // Meetings on sensitive cases only show for people who can see the case.
-    const sensitiveCaseIds = appts.map((a) => a.caseId).filter(Boolean) as string[];
-    const visibleCases = sensitiveCaseIds.length ? await db.case.findMany({ where: { AND: [listableCaseWhere(ctx, "dashboard"), { id: { in: sensitiveCaseIds } }] }, select: { id: true } }) : [];
+    // Meetings on sensitive cases only show for people who can see the case, or who were invited to the meeting.
+    const caseIds = [...new Set(appts.map((a) => a.caseId).filter(Boolean))] as string[];
+    const sensitiveCases = caseIds.length ? await db.case.findMany({ where: { id: { in: caseIds }, sensitivity: { in: SENSITIVE } }, select: { id: true } }) : [];
+    const visibleCases = sensitiveCases.length ? await db.case.findMany({ where: { AND: [listableCaseWhere(ctx, "dashboard"), { id: { in: sensitiveCases.map((c) => c.id) } }] }, select: { id: true } }) : [];
     const students = await db.student.findMany({ where: { id: { in: appts.map((a) => a.studentId).filter(Boolean) as string[] } } });
     for (const a of appts) {
-      if (a.caseId && !visibleCases.some((c) => c.id === a.caseId) && a.hostId !== ctx.membershipId) continue;
+      const invited = a.hostId === ctx.membershipId || a.attendees.some((x) => x.membershipId === ctx.membershipId);
+      if (a.caseId && sensitiveCases.some((c) => c.id === a.caseId) && !visibleCases.some((c) => c.id === a.caseId) && !invited) continue;
       const s = students.find((x) => x.id === a.studentId);
       items.push({ id: `a-${a.id}`, kind: "appointment", title: pick(locale, a.type.nameEn, a.type.nameAr), subtitle: s ? personName(s, locale) : undefined, start: a.startsAt.toISOString(), end: a.endsAt.toISOString(), allDay: false, href: `/meetings/${a.id}`, color: a.type.color });
     }

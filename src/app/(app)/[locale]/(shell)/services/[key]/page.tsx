@@ -16,6 +16,15 @@ import { canSeeStudent } from "@/server/access/student-access";
 import { loadBookingSetup } from "@/server/appointments/booking-setup";
 
 const BOOK_FIRST = ["career_guidance_session", "counselor_meeting", "parent_teacher_meeting"];
+// When the family books a real slot first, the form's "who" and "preferred time" questions are already answered.
+const ANSWERED_BY_BOOKING = ["withWhom", "preferredDate", "preferredTime"];
+
+function withoutBookingFields(schema: FormSchema): FormSchema {
+  return {
+    ...schema,
+    steps: schema.steps.map((st) => ({ ...st, sections: st.sections.map((sec) => ({ ...sec, fields: sec.fields.filter((f) => !ANSWERED_BY_BOOKING.includes(f.id)) })) })),
+  };
+}
 
 export default async function ServicePage({ params, searchParams }: { params: Promise<{ key: string }>; searchParams: Promise<{ student?: string }> }) {
   const { key } = await params;
@@ -95,7 +104,7 @@ export default async function ServicePage({ params, searchParams }: { params: Pr
             key={studentId ?? "none"}
             serviceId={service.id}
             formVersionId={version?.id ?? null}
-            schema={schema}
+            schema={booking && schema ? withoutBookingFields(schema) : schema}
             initialValues={initialValues}
             initialStep={draft?.step ?? 0}
             options={{ students: options.students, staff: options.staff, subjects: options.subjects }}

@@ -27,8 +27,16 @@ export function TemplateEditor({ initial, fields }: { initial: TemplateInput; fi
     const el = refs[active].current;
     const token = `{{${key}}}`;
     const cur = v[active];
-    const pos = el ? el.selectionStart : cur.length;
-    const next = cur.slice(0, pos) + token + cur.slice(el ? el.selectionEnd : pos);
+    let pos = el ? el.selectionStart : cur.length;
+    let end = el ? el.selectionEnd : pos;
+    // Never drop a field inside an existing {{...}}: move the cursor past it.
+    const open = cur.lastIndexOf("{{", pos);
+    const close = cur.lastIndexOf("}}", pos - 1);
+    if (open !== -1 && open > close) {
+      const after = cur.indexOf("}}", pos);
+      if (after !== -1) pos = end = after + 2;
+    }
+    const next = cur.slice(0, pos) + token + cur.slice(end);
     set(active, next);
     requestAnimationFrame(() => {
       el?.focus();

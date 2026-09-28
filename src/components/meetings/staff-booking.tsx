@@ -64,7 +64,7 @@ export function StaffBooking({ setup, studentId, students, caseId, guardians, de
           )}
           {guardians.map((g) => (
             <label key={g.id} className="flex items-center gap-2 text-sm">
-              <Checkbox checked={invite === g.id} onCheckedChange={(c) => setInvite(c ? g.id : null)} />
+              <Checkbox checked={invite === g.id} onCheckedChange={(c) => setInvite(c ? g.id : null)} data-testid="invite-guardian" />
               {g.name}
             </label>
           ))}
