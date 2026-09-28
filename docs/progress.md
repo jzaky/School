@@ -18,6 +18,7 @@
 - case-access.ts module; safeguarding hub; tasks views; students list and profile (encrypted IDs with audited reveal); parent children pages; meetings pages.
 - AI provider (Anthropic SDK, claude-opus-5, sensitive data guard, built-in deterministic drafter when no key): case brief, action plan draft and approval into tasks, referral draft, admin questions.
 - Integration tests: workflow engine, approvals, idempotency, wait nodes, safeguarding access, rule 7. 51 tests passing.
+- Workflow builder at /admin/workflows (workflows.manage): list with linked services, live version, steps, runs in 30 days and in progress; React Flow canvas with auto layout, palette, inspector for every node type, live validation that blocks publishing, dry-run simulation with approve/reject and yes/no choices, Draft with AI (workflow_draft, built-in keyword drafter fallback), save draft, revert, publish to a new immutable WorkflowVersion, version history. Safeguarding workflows keep DSL routing (validated client and server side).
 
 ## In progress
 - Phase 4 remainder: calendar, career guidance module, documents page, document templates admin.
