@@ -1576,5 +1576,141 @@
       "DAYS": "Choose at least one school day.",
       "HEAD": "Choose a staff member."
     }
+  },
+  "landing": {
+    "metaTitle": "Horizon: one portal for every school procedure",
+    "home": "Home",
+    "navJourneys": "Journeys",
+    "navPortals": "Portals",
+    "navTrust": "Trust",
+    "signIn": "Sign in",
+    "tryDemo": "Live demo",
+    "eyebrow": "Built for schools in the UAE",
+    "heroTitle": "One portal for every school procedure",
+    "heroBody": "Requests, approvals, meetings, letters, counseling, career guidance and safeguarding in one place, in Arabic and English, for students, families and staff.",
+    "ctaDemo": "Explore the live demo",
+    "ctaSignIn": "Sign in to your school",
+    "trust": {
+      "t1": "Arabic and English, right to left",
+      "t2": "Safeguarding by design",
+      "t3": "UAE data protection ready"
+    },
+    "mock": {
+      "url": "horizon.school/home",
+      "greeting": "Good morning, Rania",
+      "title": "Adam and Yara",
+      "approvals": "1 approval waiting",
+      "request": "Subject change: Physics to Computer Science",
+      "step1": "Submitted",
+      "step2": "Teacher",
+      "step3": "Head of department",
+      "step4": "Registrar",
+      "meeting": "Next meeting",
+      "meetingWhen": "Tue 10:30, Ms Sarah",
+      "letter": "Enrollment letter",
+      "letterReady": "Ready to download",
+      "ai": "Draft action plan prepared for review. Nothing is shared with the family until a counselor approves it."
+    },
+    "journeysEyebrow": "End to end",
+    "journeysTitle": "Five everyday journeys, fully connected",
+    "journeysBody": "Each one starts with a simple form and runs through approvals, meetings, documents and follow-up without email chains or paper.",
+    "flows": {
+      "career": {
+        "title": "Career guidance",
+        "body": "From interests to a shared action plan.",
+        "s1": "Student takes the aptitude assessment",
+        "s2": "Explores matched careers and chooses one",
+        "s3": "Books the career advisor",
+        "s4": "Advisor approves a plan the family can see"
+      },
+      "referral": {
+        "title": "Teacher referral",
+        "body": "A concern becomes coordinated support.",
+        "s1": "Teacher refers a student in two minutes",
+        "s2": "Counselor accepts and opens a case",
+        "s3": "Parent meeting booked with the family invited",
+        "s4": "Action plan and follow-up on the calendar"
+      },
+      "letter": {
+        "title": "Official letters",
+        "body": "Bilingual letters issued in minutes.",
+        "s1": "Parent requests an enrollment letter",
+        "s2": "Registrar approves",
+        "s3": "Arabic and English PDF is generated",
+        "s4": "Family is notified and downloads it"
+      },
+      "subject": {
+        "title": "Subject change",
+        "body": "Multi-step approvals with a clear trail.",
+        "s1": "Parent asks to switch Physics to Computer Science",
+        "s2": "Subject teacher gives a view",
+        "s3": "Head of department approves",
+        "s4": "Registrar updates the timetable"
+      },
+      "meeting": {
+        "title": "Parent-teacher meetings",
+        "body": "Real availability, no back and forth.",
+        "s1": "Parent picks a child and a teacher",
+        "s2": "Chooses an open slot",
+        "s3": "Calendar invite and reminders go out",
+        "s4": "Notes and next steps are recorded"
+      }
+    },
+    "buildTitle": "Build your own",
+    "buildBody": "Forms, approval workflows and letter templates are configured by the school, not coded by a vendor.",
+    "buildCta": "See the builders",
+    "portalsEyebrow": "Role aware",
+    "portalsTitle": "A portal for everyone in the school community",
+    "portalsBody": "Everyone sees what they need, and only what they are allowed to see.",
+    "roles": {
+      "students": {
+        "title": "Students",
+        "body": "Requests, meetings, tasks, career assessment and plans in one place."
+      },
+      "parents": {
+        "title": "Parents",
+        "body": "Every child in one account: approvals, letters, meetings and updates."
+      },
+      "teachers": {
+        "title": "Teachers",
+        "body": "Refer a concern, approve requests and book parents in a few taps."
+      },
+      "counselors": {
+        "title": "Counselors and advisors",
+        "body": "Caseloads, confidential notes, AI-drafted briefs and action plans."
+      },
+      "dsl": {
+        "title": "Safeguarding leads",
+        "body": "A restricted queue, immediate danger alerts and a full chronology."
+      },
+      "leaders": {
+        "title": "Leaders and administrators",
+        "body": "Service levels, bottlenecks, compliance and an audit trail you can trust."
+      }
+    },
+    "trustEyebrow": "Trust by design",
+    "trustTitle": "Built around children's privacy and safety",
+    "trustBody": "The rules that matter are enforced by the system, not left to good intentions.",
+    "pillars": {
+      "safeguarding": {
+        "title": "Safeguarding first",
+        "body": "Concerns go only to the safeguarding team. Referrers see status, not content. Families are never told automatically."
+      },
+      "privacy": {
+        "title": "Private by default",
+        "body": "Each school's data is isolated in the database. IDs are encrypted and every sensitive view is audited."
+      },
+      "ai": {
+        "title": "AI with guardrails",
+        "body": "AI drafts, people decide. Wellbeing, safeguarding and medical details are never sent unless the school allows it."
+      },
+      "arabic": {
+        "title": "Truly bilingual",
+        "body": "Every screen, email and letter works in Arabic and English, with Hijri dates and Arabic numerals as options."
+      }
+    },
+    "ctaTitle": "See it through the eyes of your community",
+    "ctaBody": "Step into the demo school as a student, parent, teacher, counselor, safeguarding lead or principal. No sign-up needed.",
+    "footer": "Demo school with fictional people and data."
   }
 }

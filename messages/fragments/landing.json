@@ -1,0 +1,52 @@
+{"landing":{
+"metaTitle":["Horizon: one portal for every school procedure","هورايزن: بوابة واحدة لكل إجراءات المدرسة"],
+"home":["Home","الرئيسية"],
+"navJourneys":["Journeys","المسارات"],
+"navPortals":["Portals","البوابات"],
+"navTrust":["Trust","الثقة والأمان"],
+"signIn":["Sign in","تسجيل الدخول"],
+"tryDemo":["Live demo","العرض المباشر"],
+"eyebrow":["Built for schools in the UAE","مصممة لمدارس دولة الإمارات"],
+"heroTitle":["One portal for every school procedure","بوابة واحدة لكل إجراءات المدرسة"],
+"heroBody":["Requests, approvals, meetings, letters, counseling, career guidance and safeguarding in one place, in Arabic and English, for students, families and staff.","الطلبات والموافقات والاجتماعات والخطابات والإرشاد والتوجيه المهني وحماية الطفل في مكان واحد، بالعربية والإنجليزية، للطلاب والأسر والموظفين."],
+"ctaDemo":["Explore the live demo","استكشف العرض المباشر"],
+"ctaSignIn":["Sign in to your school","الدخول إلى مدرستك"],
+"trust":{"t1":["Arabic and English, right to left","العربية والإنجليزية مع دعم الكتابة من اليمين"],"t2":["Safeguarding by design","حماية الطفل من حيث التصميم"],"t3":["UAE data protection ready","جاهزة لمتطلبات حماية البيانات في الدولة"]},
+"mock":{"url":["horizon.school/home","horizon.school/home"],"greeting":["Good morning, Rania","صباح الخير يا رانيا"],"title":["Adam and Yara","آدم ويارا"],"approvals":["1 approval waiting","موافقة واحدة بانتظارك"],"request":["Subject change: Physics to Computer Science","تغيير مادة: من الفيزياء إلى علوم الحاسوب"],"step1":["Submitted","تقديم"],"step2":["Teacher","المعلم"],"step3":["Head of department","رئيس القسم"],"step4":["Registrar","المسجل"],"meeting":["Next meeting","الاجتماع القادم"],"meetingWhen":["Tue 10:30, Ms Sarah","الثلاثاء 10:30، أ. سارة"],"letter":["Enrollment letter","خطاب قيد"],"letterReady":["Ready to download","جاهز للتنزيل"],"ai":["Draft action plan prepared for review. Nothing is shared with the family until a counselor approves it.","تم إعداد مسودة خطة عمل للمراجعة. لا يُشارك شيء مع الأسرة قبل موافقة المرشد."]},
+"journeysEyebrow":["End to end","من البداية إلى النهاية"],
+"journeysTitle":["Five everyday journeys, fully connected","خمس رحلات يومية مترابطة بالكامل"],
+"journeysBody":["Each one starts with a simple form and runs through approvals, meetings, documents and follow-up without email chains or paper.","تبدأ كل رحلة بنموذج بسيط وتمر بالموافقات والاجتماعات والمستندات والمتابعة دون سلاسل بريد أو أوراق."],
+"flows":{
+"career":{"title":["Career guidance","التوجيه المهني"],"body":["From interests to a shared action plan.","من الاهتمامات إلى خطة عمل مشتركة."],"s1":["Student takes the aptitude assessment","يؤدي الطالب اختبار الميول"],"s2":["Explores matched careers and chooses one","يستكشف المهن المناسبة ويختار إحداها"],"s3":["Books the career advisor","يحجز موعدًا مع المرشد المهني"],"s4":["Advisor approves a plan the family can see","يعتمد المرشد خطة تطلع عليها الأسرة"]},
+"referral":{"title":["Teacher referral","إحالة من المعلم"],"body":["A concern becomes coordinated support.","يتحول القلق إلى دعم منسق."],"s1":["Teacher refers a student in two minutes","يحيل المعلم الطالب خلال دقيقتين"],"s2":["Counselor accepts and opens a case","يقبل المرشد الإحالة ويفتح حالة"],"s3":["Parent meeting booked with the family invited","حجز اجتماع مع دعوة الأسرة"],"s4":["Action plan and follow-up on the calendar","خطة عمل ومتابعة على التقويم"]},
+"letter":{"title":["Official letters","الخطابات الرسمية"],"body":["Bilingual letters issued in minutes.","خطابات ثنائية اللغة تصدر خلال دقائق."],"s1":["Parent requests an enrollment letter","يطلب ولي الأمر خطاب قيد"],"s2":["Registrar approves","يوافق المسجل"],"s3":["Arabic and English PDF is generated","يُنشأ ملف PDF بالعربية والإنجليزية"],"s4":["Family is notified and downloads it","تُبلَّغ الأسرة وتنزّله"]},
+"subject":{"title":["Subject change","تغيير مادة"],"body":["Multi-step approvals with a clear trail.","موافقات متعددة المراحل بسجل واضح."],"s1":["Parent asks to switch Physics to Computer Science","يطلب ولي الأمر تغيير الفيزياء إلى علوم الحاسوب"],"s2":["Subject teacher gives a view","يبدي معلم المادة رأيه"],"s3":["Head of department approves","يوافق رئيس القسم"],"s4":["Registrar updates the timetable","يحدّث المسجل الجدول الدراسي"]},
+"meeting":{"title":["Parent-teacher meetings","اجتماعات أولياء الأمور"],"body":["Real availability, no back and forth.","مواعيد متاحة فعليًا دون مراسلات متكررة."],"s1":["Parent picks a child and a teacher","يختار ولي الأمر الابن والمعلم"],"s2":["Chooses an open slot","يختار موعدًا متاحًا"],"s3":["Calendar invite and reminders go out","تُرسل دعوة التقويم والتذكيرات"],"s4":["Notes and next steps are recorded","تُسجَّل الملاحظات والخطوات التالية"]}
+},
+"buildTitle":["Build your own","صمم إجراءاتك"],
+"buildBody":["Forms, approval workflows and letter templates are configured by the school, not coded by a vendor.","تُعد المدرسة النماذج ومسارات الموافقة وقوالب الخطابات بنفسها دون الحاجة إلى برمجة."],
+"buildCta":["See the builders","اطلع على أدوات التصميم"],
+"portalsEyebrow":["Role aware","حسب الدور"],
+"portalsTitle":["A portal for everyone in the school community","بوابة لكل فرد في مجتمع المدرسة"],
+"portalsBody":["Everyone sees what they need, and only what they are allowed to see.","يرى كل شخص ما يحتاجه فقط، وضمن ما يُسمح له بالاطلاع عليه."],
+"roles":{
+"students":{"title":["Students","الطلاب"],"body":["Requests, meetings, tasks, career assessment and plans in one place.","الطلبات والاجتماعات والمهام واختبار الميول المهنية والخطط في مكان واحد."]},
+"parents":{"title":["Parents","أولياء الأمور"],"body":["Every child in one account: approvals, letters, meetings and updates.","جميع الأبناء في حساب واحد: الموافقات والخطابات والاجتماعات والتحديثات."]},
+"teachers":{"title":["Teachers","المعلمون"],"body":["Refer a concern, approve requests and book parents in a few taps.","إحالة الملاحظات والموافقة على الطلبات وحجز مواعيد أولياء الأمور بلمسات قليلة."]},
+"counselors":{"title":["Counselors and advisors","المرشدون والمستشارون"],"body":["Caseloads, confidential notes, AI-drafted briefs and action plans.","الحالات والملاحظات السرية والملخصات وخطط العمل بمساعدة الذكاء الاصطناعي."]},
+"dsl":{"title":["Safeguarding leads","مسؤولو حماية الطفل"],"body":["A restricted queue, immediate danger alerts and a full chronology.","قائمة مقيدة وتنبيهات للخطر الفوري وتسلسل زمني كامل."]},
+"leaders":{"title":["Leaders and administrators","القيادات والإدارة"],"body":["Service levels, bottlenecks, compliance and an audit trail you can trust.","مستويات الخدمة ونقاط التعطل والامتثال وسجل تدقيق موثوق."]}
+},
+"trustEyebrow":["Trust by design","الثقة من حيث التصميم"],
+"trustTitle":["Built around children's privacy and safety","مبنية حول خصوصية الأطفال وسلامتهم"],
+"trustBody":["The rules that matter are enforced by the system, not left to good intentions.","يفرض النظام القواعد المهمة بدل الاعتماد على حسن النوايا."],
+"pillars":{
+"safeguarding":{"title":["Safeguarding first","حماية الطفل أولًا"],"body":["Concerns go only to the safeguarding team. Referrers see status, not content. Families are never told automatically.","تصل البلاغات إلى فريق حماية الطفل فقط، ويرى المُبلِّغ الحالة دون المحتوى، ولا تُبلَّغ الأسر تلقائيًا."]},
+"privacy":{"title":["Private by default","الخصوصية افتراضيًا"],"body":["Each school's data is isolated in the database. IDs are encrypted and every sensitive view is audited.","بيانات كل مدرسة معزولة في قاعدة البيانات، وأرقام الهوية مشفرة، وكل اطلاع حساس يُسجَّل."]},
+"ai":{"title":["AI with guardrails","ذكاء اصطناعي بضوابط"],"body":["AI drafts, people decide. Wellbeing, safeguarding and medical details are never sent unless the school allows it.","الذكاء الاصطناعي يقترح والإنسان يقرر، ولا تُرسل تفاصيل الرفاه وحماية الطفل والصحة إلا بإذن المدرسة."]},
+"arabic":{"title":["Truly bilingual","ثنائية اللغة فعلًا"],"body":["Every screen, email and letter works in Arabic and English, with Hijri dates and Arabic numerals as options.","كل شاشة ورسالة وخطاب يعمل بالعربية والإنجليزية، مع خيار التاريخ الهجري والأرقام العربية."]}
+},
+"ctaTitle":["See it through the eyes of your community","شاهدها بعيون مجتمعك المدرسي"],
+"ctaBody":["Step into the demo school as a student, parent, teacher, counselor, safeguarding lead or principal. No sign-up needed.","ادخل المدرسة التجريبية بصفة طالب أو ولي أمر أو معلم أو مرشد أو مسؤول حماية أو مدير، دون الحاجة إلى تسجيل."],
+"footer":["Demo school with fictional people and data.","مدرسة تجريبية بأشخاص وبيانات افتراضية."]
+}}
