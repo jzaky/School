@@ -1,0 +1,1929 @@
+// School Operations OS - data model
+// Every tenant table carries orgId and is protected by Row-Level Security (prisma/rls.sql).
+// Global tables (no orgId): User, Account, VerificationToken. Organization is protected by id.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("MIGRATION_DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum Locale {
+  en
+  ar
+}
+
+enum Sensitivity {
+  STANDARD
+  CONFIDENTIAL
+  MEDICAL
+  WELLBEING
+  SAFEGUARDING
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum MembershipStatus {
+  ACTIVE
+  INVITED
+  SUSPENDED
+}
+
+enum PersonStatus {
+  ACTIVE
+  INACTIVE
+  GRADUATED
+  WITHDRAWN
+}
+
+enum RequestStatus {
+  DRAFT
+  SUBMITTED
+  IN_REVIEW
+  PENDING_APPROVAL
+  APPROVED
+  IN_PROGRESS
+  COMPLETED
+  REJECTED
+  CANCELLED
+}
+
+enum CaseType {
+  ACADEMIC
+  BEHAVIOR
+  WELLBEING
+  SAFEGUARDING
+  CAREER
+  LEARNING_SUPPORT
+  ATTENDANCE
+  PARENT_CONCERN
+  OTHER
+}
+
+enum CaseStatus {
+  NEW
+  OPEN
+  IN_PROGRESS
+  WAITING
+  RESOLVED
+  CLOSED
+}
+
+enum ConcernLevel {
+  LOW
+  MEDIUM
+  HIGH
+  IMMEDIATE_DANGER
+}
+
+enum CaseNoteKind {
+  NOTE
+  DECISION
+  CONTACT
+  ACTION
+  SYSTEM
+}
+
+enum ParticipantRole {
+  ASSIGNEE
+  REFERRER
+  TEAM
+  GUARDIAN
+  OBSERVER
+}
+
+enum ParentNotifyDecision {
+  NOTIFY
+  DO_NOT_NOTIFY
+  DEFER
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+  CANCELLED
+}
+
+enum WorkflowStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum WorkflowRunStatus {
+  RUNNING
+  WAITING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum StepRunStatus {
+  PENDING
+  RUNNING
+  WAITING
+  COMPLETED
+  FAILED
+  SKIPPED
+}
+
+enum ApprovalMode {
+  SEQUENTIAL
+  PARALLEL_ALL
+  PARALLEL_ANY
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+  WAITING
+}
+
+enum HostMode {
+  SPECIFIC
+  ROUND_ROBIN
+}
+
+enum LocationType {
+  IN_PERSON
+  ONLINE
+  PHONE
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum CalendarEventKind {
+  EVENT
+  DEADLINE
+  HOLIDAY
+  EXAM
+  FOLLOW_UP
+}
+
+enum DocumentSource {
+  UPLOAD
+  GENERATED
+}
+
+enum DocumentOutput {
+  EN
+  AR
+  BILINGUAL
+}
+
+enum RecommendationStatus {
+  DRAFT
+  APPROVED
+  REJECTED
+}
+
+enum ShortlistCategory {
+  REACH
+  TARGET
+  SAFETY
+}
+
+enum ApplicationStatus {
+  RESEARCHING
+  PREPARING
+  SUBMITTED
+  OFFER
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+enum MessageChannel {
+  INTERNAL
+  EMAIL
+  SMS
+  WHATSAPP
+}
+
+enum NotificationChannel {
+  IN_APP
+  EMAIL
+  SMS
+  WHATSAPP
+}
+
+enum DeliveryStatus {
+  QUEUED
+  SENT
+  DELIVERED
+  FAILED
+}
+
+enum AiDraftStatus {
+  DRAFT
+  ACCEPTED
+  DISCARDED
+  BLOCKED
+}
+
+enum ConsentStatus {
+  GRANTED
+  WITHDRAWN
+  PENDING
+  REFUSED
+}
+
+enum DsrType {
+  ACCESS
+  CORRECTION
+  DELETION
+}
+
+enum DsrStatus {
+  RECEIVED
+  VERIFYING
+  IN_PROGRESS
+  COMPLETED
+  REJECTED
+}
+
+enum BreachSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum BreachStatus {
+  OPEN
+  CONTAINED
+  REPORTED
+  CLOSED
+}
+
+enum RetentionAction {
+  REVIEW
+  ANONYMIZE
+  DELETE
+}
+
+enum Regulator {
+  KHDA
+  ADEK
+  SPEA
+  MOE
+  OTHER
+}
+
+enum IdPolicy {
+  OFF
+  OPTIONAL
+  REQUIRED
+}
+
+enum Numerals {
+  WESTERN
+  ARABIC_INDIC
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  EXCUSED
+}
+
+enum JobStatus {
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum ImportStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+// ---------------------------------------------------------------------------
+// Global identity (no orgId)
+// ---------------------------------------------------------------------------
+
+model User {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  emailVerified   DateTime?
+  passwordHash    String?
+  nameEn          String
+  nameAr          String?
+  image           String?
+  locale          Locale?
+  lastActiveOrgId String?
+  isPlatformAdmin Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  accounts    Account[]
+  memberships Membership[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ---------------------------------------------------------------------------
+// Organization and membership
+// ---------------------------------------------------------------------------
+
+model Organization {
+  id                     String    @id @default(cuid())
+  slug                   String    @unique
+  nameEn                 String
+  nameAr                 String
+  shortNameEn            String?
+  shortNameAr            String?
+  isDemo                 Boolean   @default(false)
+  defaultLocale          Locale    @default(en)
+  timezone               String    @default("Asia/Dubai")
+  currency               String    @default("AED")
+  weekDays               Int[]     @default([1, 2, 3, 4, 5])
+  regulator              Regulator @default(KHDA)
+  emirate                String    @default("Dubai")
+  dataRegion             String    @default("me-central-1")
+  hijriEnabled           Boolean   @default(false)
+  numerals               Numerals  @default(WESTERN)
+  aiEnabled              Boolean   @default(true)
+  aiSensitiveDataEnabled Boolean   @default(false)
+  aiProviderRegion       String    @default("global")
+  emiratesIdPolicy       IdPolicy  @default(OPTIONAL)
+  passportPolicy         IdPolicy  @default(OPTIONAL)
+  crossBorderAllowed     Boolean   @default(false)
+  primaryColor           String    @default("#0F4C81")
+  accentColor            String    @default("#C8A24A")
+  logoUrl                String?
+  lastResetAt            DateTime?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  memberships Membership[]
+}
+
+model Membership {
+  id         String           @id @default(cuid())
+  orgId      String
+  userId     String
+  status     MembershipStatus @default(ACTIVE)
+  titleEn    String?
+  titleAr    String?
+  locale     Locale?
+  lastSeenAt DateTime?
+  createdAt  DateTime         @default(now())
+
+  org          Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roles        MembershipRole[]
+  staffProfile StaffProfile?
+  student      Student?
+  guardian     Guardian?
+
+  @@unique([orgId, userId])
+  @@index([userId])
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  orgId       String
+  key         String
+  nameEn      String
+  nameAr      String
+  descEn      String?
+  descAr      String?
+  permissions String[]
+  isSystem    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  members MembershipRole[]
+
+  @@unique([orgId, key])
+}
+
+model MembershipRole {
+  id           String @id @default(cuid())
+  orgId        String
+  membershipId String
+  roleId       String
+
+  membership Membership @relation(fields: [membershipId], references: [id], onDelete: Cascade)
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([membershipId, roleId])
+  @@index([orgId])
+}
+
+// ---------------------------------------------------------------------------
+// School structure
+// ---------------------------------------------------------------------------
+
+model Campus {
+  id        String   @id @default(cuid())
+  orgId     String
+  nameEn    String
+  nameAr    String
+  addressEn String?
+  addressAr String?
+  isMain    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  classes  SchoolClass[]
+  students Student[]
+
+  @@index([orgId])
+}
+
+model AcademicYear {
+  id        String   @id @default(cuid())
+  orgId     String
+  nameEn    String
+  nameAr    String
+  startsOn  DateTime
+  endsOn    DateTime
+  isCurrent Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  terms   Term[]
+  classes SchoolClass[]
+
+  @@index([orgId])
+}
+
+model Term {
+  id             String   @id @default(cuid())
+  orgId          String
+  academicYearId String
+  nameEn         String
+  nameAr         String
+  startsOn       DateTime
+  endsOn         DateTime
+
+  academicYear AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+}
+
+model Department {
+  id               String   @id @default(cuid())
+  orgId            String
+  key              String
+  nameEn           String
+  nameAr           String
+  headMembershipId String?
+  createdAt        DateTime @default(now())
+
+  subjects Subject[]
+  staff    StaffProfile[]
+  cases    Case[]
+
+  @@unique([orgId, key])
+}
+
+model Subject {
+  id           String   @id @default(cuid())
+  orgId        String
+  departmentId String?
+  code         String
+  nameEn       String
+  nameAr       String
+  createdAt    DateTime @default(now())
+
+  department Department?   @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  classes    SchoolClass[]
+
+  @@unique([orgId, code])
+}
+
+model SchoolClass {
+  id                  String   @id @default(cuid())
+  orgId               String
+  academicYearId      String
+  campusId            String?
+  subjectId           String?
+  teacherMembershipId String?
+  nameEn              String
+  nameAr              String
+  gradeLevel          Int
+  section             String?
+  isHomeroom          Boolean  @default(false)
+  room                String?
+  createdAt           DateTime @default(now())
+
+  academicYear AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Cascade)
+  campus       Campus?      @relation(fields: [campusId], references: [id], onDelete: SetNull)
+  subject      Subject?     @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  enrollments  Enrollment[]
+
+  @@index([orgId])
+  @@index([teacherMembershipId])
+}
+
+model Enrollment {
+  id        String       @id @default(cuid())
+  orgId     String
+  studentId String
+  classId   String
+  status    PersonStatus @default(ACTIVE)
+  createdAt DateTime     @default(now())
+
+  student Student     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  class   SchoolClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, classId])
+  @@index([orgId])
+}
+
+// ---------------------------------------------------------------------------
+// People
+// ---------------------------------------------------------------------------
+
+model StaffProfile {
+  id           String   @id @default(cuid())
+  orgId        String
+  membershipId String   @unique
+  departmentId String?
+  employeeNo   String?
+  jobTitleEn   String?
+  jobTitleAr   String?
+  phone        String?
+  officeEn     String?
+  officeAr     String?
+  bioEn        String?
+  bioAr        String?
+  createdAt    DateTime @default(now())
+
+  membership Membership  @relation(fields: [membershipId], references: [id], onDelete: Cascade)
+  department Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+
+  @@index([orgId])
+}
+
+model Student {
+  id              String       @id @default(cuid())
+  orgId           String
+  membershipId    String?      @unique
+  campusId        String?
+  studentNo       String
+  firstNameEn     String
+  lastNameEn      String
+  firstNameAr     String
+  lastNameAr      String
+  preferredName   String?
+  gradeLevel      Int
+  section         String?
+  dateOfBirth     DateTime?
+  gender          String?
+  nationalityEn   String?
+  nationalityAr   String?
+  emiratesIdEnc   String?
+  emiratesIdLast4 String?
+  passportEnc     String?
+  passportLast4   String?
+  status          PersonStatus @default(ACTIVE)
+  enrolledOn      DateTime?
+  houseEn         String?
+  houseAr         String?
+  photoUrl        String?
+  hasSen          Boolean      @default(false)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  membership  Membership?          @relation(fields: [membershipId], references: [id], onDelete: SetNull)
+  campus      Campus?              @relation(fields: [campusId], references: [id], onDelete: SetNull)
+  guardians   GuardianLink[]
+  enrollments Enrollment[]
+  medical     StudentMedical?
+  attendance  AttendanceRecord[]
+  cases       Case[]
+  requests    Request[]
+  careerProf  CareerProfile?
+  assessments AptitudeAssessment[]
+  recs        CareerRecommendation[]
+  shortlist   ShortlistEntry[]
+
+  @@unique([orgId, studentNo])
+  @@index([orgId, gradeLevel])
+}
+
+model Guardian {
+  id           String   @id @default(cuid())
+  orgId        String
+  membershipId String?  @unique
+  firstNameEn  String
+  lastNameEn   String
+  firstNameAr  String
+  lastNameAr   String
+  email        String?
+  phone        String?
+  preferredLoc Locale   @default(en)
+  occupation   String?
+  createdAt    DateTime @default(now())
+
+  membership Membership?    @relation(fields: [membershipId], references: [id], onDelete: SetNull)
+  links      GuardianLink[]
+
+  @@index([orgId])
+}
+
+model GuardianLink {
+  id              String  @id @default(cuid())
+  orgId           String
+  guardianId      String
+  studentId       String
+  relationshipEn  String  @default("Parent")
+  relationshipAr  String  @default("ولي الأمر")
+  isPrimary       Boolean @default(false)
+  canApprove      Boolean @default(true)
+  receivesUpdates Boolean @default(true)
+  livesWith       Boolean @default(true)
+
+  guardian Guardian @relation(fields: [guardianId], references: [id], onDelete: Cascade)
+  student  Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([guardianId, studentId])
+  @@index([orgId])
+}
+
+model StudentMedical {
+  id             String   @id @default(cuid())
+  orgId          String
+  studentId      String   @unique
+  allergiesEnc   String?
+  conditionsEnc  String?
+  medicationsEnc String?
+  hasAlert       Boolean  @default(false)
+  updatedAt      DateTime @updatedAt
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+}
+
+model AttendanceRecord {
+  id        String           @id @default(cuid())
+  orgId     String
+  studentId String
+  date      DateTime         @db.Date
+  status    AttendanceStatus
+  minutesLate Int?
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, date])
+  @@index([orgId, date])
+}
+
+// ---------------------------------------------------------------------------
+// Services, forms, requests
+// ---------------------------------------------------------------------------
+
+model ServiceCategory {
+  id        String @id @default(cuid())
+  orgId     String
+  key       String
+  nameEn    String
+  nameAr    String
+  icon      String @default("layers")
+  sortOrder Int    @default(0)
+
+  services ServiceDefinition[]
+
+  @@unique([orgId, key])
+}
+
+model ServiceDefinition {
+  id                String      @id @default(cuid())
+  orgId             String
+  key               String
+  categoryId        String
+  nameEn            String
+  nameAr            String
+  descEn            String
+  descAr            String
+  icon              String      @default("file-text")
+  audience          String[]
+  formId            String?
+  workflowId        String?
+  appointmentTypeId String?
+  slaHours          Int         @default(72)
+  sensitivity       Sensitivity @default(STANDARD)
+  requestPrefix     String      @default("REQ")
+  requiresStudent   Boolean     @default(true)
+  createsCase       Boolean     @default(false)
+  caseType          CaseType?
+  isActive          Boolean     @default(true)
+  isFeatured        Boolean     @default(false)
+  sortOrder         Int         @default(0)
+  createdAt         DateTime    @default(now())
+
+  category ServiceCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  form     Form?           @relation(fields: [formId], references: [id], onDelete: SetNull)
+  workflow Workflow?       @relation(fields: [workflowId], references: [id], onDelete: SetNull)
+  requests Request[]
+
+  @@unique([orgId, key])
+}
+
+model Form {
+  id                 String         @id @default(cuid())
+  orgId              String
+  key                String
+  nameEn             String
+  nameAr             String
+  descEn             String?
+  descAr             String?
+  categoryEn         String?
+  categoryAr         String?
+  isTemplate         Boolean        @default(false)
+  status             WorkflowStatus @default(DRAFT)
+  draftSchema        Json?
+  publishedVersionId String?
+  createdById        String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  versions FormVersion[]
+  services ServiceDefinition[]
+
+  @@unique([orgId, key])
+}
+
+model FormVersion {
+  id            String   @id @default(cuid())
+  orgId         String
+  formId        String
+  version       Int
+  schema        Json
+  publishedAt   DateTime @default(now())
+  publishedById String?
+
+  form        Form         @relation(fields: [formId], references: [id], onDelete: Cascade)
+  drafts      FormDraft[]
+  submissions Submission[]
+
+  @@unique([formId, version])
+  @@index([orgId])
+}
+
+model FormDraft {
+  id            String   @id @default(cuid())
+  orgId         String
+  formVersionId String
+  membershipId  String
+  serviceId     String?
+  studentId     String?
+  data          Json
+  step          Int      @default(0)
+  updatedAt     DateTime @updatedAt
+
+  formVersion FormVersion @relation(fields: [formVersionId], references: [id], onDelete: Cascade)
+
+  @@unique([formVersionId, membershipId, serviceId])
+  @@index([orgId])
+}
+
+model Submission {
+  id            String   @id @default(cuid())
+  orgId         String
+  formVersionId String
+  submittedById String
+  studentId     String?
+  data          Json
+  createdAt     DateTime @default(now())
+
+  formVersion FormVersion @relation(fields: [formVersionId], references: [id], onDelete: Cascade)
+  request     Request?
+
+  @@index([orgId])
+}
+
+model Request {
+  id              String        @id @default(cuid())
+  orgId           String
+  number          String
+  serviceId       String
+  requesterId     String
+  studentId       String?
+  submissionId    String?       @unique
+  caseId          String?
+  status          RequestStatus @default(SUBMITTED)
+  priority        Priority      @default(MEDIUM)
+  sensitivity     Sensitivity   @default(STANDARD)
+  titleEn         String
+  titleAr         String
+  currentStepEn   String?
+  currentStepAr   String?
+  progress        Int           @default(0)
+  assigneeId      String?
+  slaDueAt        DateTime?
+  submittedAt     DateTime      @default(now())
+  completedAt     DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  service    ServiceDefinition @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  student    Student?          @relation(fields: [studentId], references: [id], onDelete: SetNull)
+  submission Submission?       @relation(fields: [submissionId], references: [id], onDelete: SetNull)
+  case       Case?             @relation(fields: [caseId], references: [id], onDelete: SetNull)
+  runs       WorkflowRun[]
+  approvals  ApprovalRequest[]
+
+  @@unique([orgId, number])
+  @@index([orgId, status])
+  @@index([requesterId])
+}
+
+model TimelineEvent {
+  id          String      @id @default(cuid())
+  orgId       String
+  requestId   String?
+  caseId      String?
+  studentId   String?
+  actorId     String?
+  kind        String
+  titleEn     String
+  titleAr     String
+  bodyEn      String?
+  bodyAr      String?
+  sensitivity Sensitivity @default(STANDARD)
+  staffOnly   Boolean     @default(false)
+  data        Json?
+  createdAt   DateTime    @default(now())
+
+  @@index([orgId, requestId])
+  @@index([orgId, caseId])
+  @@index([orgId, studentId])
+}
+
+model Sequence {
+  id    String @id @default(cuid())
+  orgId String
+  key   String
+  value Int    @default(0)
+
+  @@unique([orgId, key])
+}
+
+// ---------------------------------------------------------------------------
+// Workflows and approvals
+// ---------------------------------------------------------------------------
+
+model Workflow {
+  id                 String         @id @default(cuid())
+  orgId              String
+  key                String
+  nameEn             String
+  nameAr             String
+  descEn             String?
+  descAr             String?
+  isTemplate         Boolean        @default(false)
+  status             WorkflowStatus @default(DRAFT)
+  draftGraph         Json?
+  publishedVersionId String?
+  createdById        String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  versions WorkflowVersion[]
+  services ServiceDefinition[]
+
+  @@unique([orgId, key])
+}
+
+model WorkflowVersion {
+  id            String   @id @default(cuid())
+  orgId         String
+  workflowId    String
+  version       Int
+  graph         Json
+  publishedAt   DateTime @default(now())
+  publishedById String?
+
+  workflow Workflow      @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  runs     WorkflowRun[]
+
+  @@unique([workflowId, version])
+  @@index([orgId])
+}
+
+model WorkflowRun {
+  id                String            @id @default(cuid())
+  orgId             String
+  workflowVersionId String
+  requestId         String?
+  caseId            String?
+  status            WorkflowRunStatus @default(RUNNING)
+  context           Json
+  activeNodeIds     String[]
+  startedAt         DateTime          @default(now())
+  completedAt       DateTime?
+  error             String?
+
+  version  WorkflowVersion   @relation(fields: [workflowVersionId], references: [id], onDelete: Cascade)
+  request  Request?          @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  steps    WorkflowStepRun[]
+
+  @@index([orgId, status])
+}
+
+model WorkflowStepRun {
+  id             String        @id @default(cuid())
+  orgId          String
+  runId          String
+  nodeId         String
+  nodeType       String
+  status         StepRunStatus @default(PENDING)
+  attempt        Int           @default(1)
+  idempotencyKey String
+  input          Json?
+  output         Json?
+  error          String?
+  scheduledFor   DateTime?
+  startedAt      DateTime      @default(now())
+  completedAt    DateTime?
+
+  run WorkflowRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@unique([orgId, idempotencyKey])
+  @@index([runId])
+}
+
+model ApprovalRequest {
+  id        String         @id @default(cuid())
+  orgId     String
+  runId     String?
+  nodeId    String?
+  requestId String?
+  mode      ApprovalMode   @default(SEQUENTIAL)
+  status    ApprovalStatus @default(PENDING)
+  titleEn   String
+  titleAr   String
+  dueAt     DateTime?
+  decidedAt DateTime?
+  createdAt DateTime       @default(now())
+
+  request   Request?           @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  assignees ApprovalAssignee[]
+
+  @@index([orgId, status])
+}
+
+model ApprovalAssignee {
+  id                String         @id @default(cuid())
+  orgId             String
+  approvalRequestId String
+  membershipId      String?
+  guardianId        String?
+  labelEn           String
+  labelAr           String
+  order             Int            @default(0)
+  status            ApprovalStatus @default(PENDING)
+  requireSignature  Boolean        @default(false)
+  signatureName     String?
+  comment           String?
+  decidedAt         DateTime?
+  decidedById       String?
+
+  approval ApprovalRequest @relation(fields: [approvalRequestId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, membershipId, status])
+}
+
+// ---------------------------------------------------------------------------
+// Cases, notes, safeguarding, tasks
+// ---------------------------------------------------------------------------
+
+model Case {
+  id           String        @id @default(cuid())
+  orgId        String
+  number       String
+  type         CaseType
+  sensitivity  Sensitivity   @default(STANDARD)
+  studentId    String
+  titleEn      String
+  titleAr      String
+  summaryEn    String?
+  summaryAr    String?
+  assigneeId   String?
+  referrerId   String?
+  departmentId String?
+  priority     Priority      @default(MEDIUM)
+  status       CaseStatus    @default(NEW)
+  concernLevel ConcernLevel?
+  slaDueAt     DateTime?
+  nextFollowUpAt DateTime?
+  openedAt     DateTime      @default(now())
+  resolvedAt   DateTime?
+  closedAt     DateTime?
+  retentionUntil DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  student       Student                      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  department    Department?                  @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  notes         CaseNote[]
+  participants  CaseParticipant[]
+  grants        CaseAccessGrant[]
+  referrals     ExternalReferral[]
+  parentNotices ParentNotificationDecision[]
+  breakGlass    BreakGlassAccess[]
+  requests      Request[]
+  actionPlans   ActionPlan[]
+
+  @@unique([orgId, number])
+  @@index([orgId, status])
+  @@index([orgId, sensitivity])
+}
+
+model CaseNote {
+  id             String       @id @default(cuid())
+  orgId          String
+  caseId         String
+  authorId       String
+  kind           CaseNoteKind @default(NOTE)
+  currentVersion Int          @default(1)
+  occurredAt     DateTime     @default(now())
+  createdAt      DateTime     @default(now())
+
+  case     Case              @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  versions CaseNoteVersion[]
+
+  @@index([orgId, caseId])
+}
+
+model CaseNoteVersion {
+  id         String   @id @default(cuid())
+  orgId      String
+  noteId     String
+  version    Int
+  body       String
+  editedById String
+  reason     String?
+  createdAt  DateTime @default(now())
+
+  note CaseNote @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  @@unique([noteId, version])
+  @@index([orgId])
+}
+
+model CaseParticipant {
+  id           String          @id @default(cuid())
+  orgId        String
+  caseId       String
+  membershipId String?
+  guardianId   String?
+  role         ParticipantRole
+  createdAt    DateTime        @default(now())
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, caseId])
+  @@index([membershipId])
+}
+
+model CaseAccessGrant {
+  id           String    @id @default(cuid())
+  orgId        String
+  caseId       String
+  membershipId String
+  grantedById  String
+  reason       String
+  expiresAt    DateTime?
+  revokedAt    DateTime?
+  createdAt    DateTime  @default(now())
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, membershipId])
+}
+
+model ExternalReferral {
+  id           String   @id @default(cuid())
+  orgId        String
+  caseId       String
+  agencyEn     String
+  agencyAr     String?
+  referredAt   DateTime
+  referenceNo  String?
+  contactName  String?
+  contactPhone String?
+  contactEmail String?
+  notes        String?
+  createdById  String
+  createdAt    DateTime @default(now())
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+}
+
+model ParentNotificationDecision {
+  id                  String               @id @default(cuid())
+  orgId               String
+  caseId              String
+  decision            ParentNotifyDecision
+  reason              String
+  guardianIds         String[]
+  decidedById         String
+  createdAt           DateTime             @default(now())
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+}
+
+model BreakGlassAccess {
+  id           String   @id @default(cuid())
+  orgId        String
+  caseId       String
+  membershipId String
+  reason       String
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, membershipId])
+}
+
+model ActionPlan {
+  id           String         @id @default(cuid())
+  orgId        String
+  caseId       String?
+  studentId    String
+  titleEn      String
+  titleAr      String
+  status       AiDraftStatus  @default(DRAFT)
+  fromAi       Boolean        @default(false)
+  createdById  String
+  approvedById String?
+  approvedAt   DateTime?
+  createdAt    DateTime       @default(now())
+
+  case  Case?            @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  items ActionPlanItem[]
+
+  @@index([orgId, studentId])
+}
+
+model ActionPlanItem {
+  id        String    @id @default(cuid())
+  orgId     String
+  planId    String
+  textEn    String
+  textAr    String
+  ownerRole String
+  dueAt     DateTime?
+  taskId    String?
+  order     Int       @default(0)
+
+  plan ActionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+}
+
+model Task {
+  id          String     @id @default(cuid())
+  orgId       String
+  titleEn     String
+  titleAr     String
+  descEn      String?
+  descAr      String?
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
+  dueAt       DateTime?
+  assigneeId  String?
+  createdById String?
+  caseId      String?
+  requestId   String?
+  studentId   String?
+  sensitivity Sensitivity @default(STANDARD)
+  completedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([orgId, assigneeId, status])
+  @@index([orgId, caseId])
+}
+
+model SavedView {
+  id           String   @id @default(cuid())
+  orgId        String
+  membershipId String?
+  entity       String
+  nameEn       String
+  nameAr       String
+  filters      Json
+  isShared     Boolean  @default(false)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  @@index([orgId, entity])
+}
+
+// ---------------------------------------------------------------------------
+// Scheduling
+// ---------------------------------------------------------------------------
+
+model AppointmentType {
+  id              String       @id @default(cuid())
+  orgId           String
+  key             String
+  nameEn          String
+  nameAr          String
+  descEn          String?
+  descAr          String?
+  durationMin     Int          @default(30)
+  bufferBeforeMin Int          @default(0)
+  bufferAfterMin  Int          @default(10)
+  minNoticeMin    Int          @default(240)
+  dailyMax        Int?
+  horizonDays     Int          @default(30)
+  locationType    LocationType @default(IN_PERSON)
+  locationEn      String?
+  locationAr      String?
+  intakeFormId    String?
+  hostMode        HostMode     @default(SPECIFIC)
+  audience        String[]
+  color           String       @default("#0F4C81")
+  isActive        Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+
+  hosts        AppointmentTypeHost[]
+  appointments Appointment[]
+
+  @@unique([orgId, key])
+}
+
+model AppointmentTypeHost {
+  id           String @id @default(cuid())
+  orgId        String
+  typeId       String
+  membershipId String
+
+  type AppointmentType @relation(fields: [typeId], references: [id], onDelete: Cascade)
+
+  @@unique([typeId, membershipId])
+  @@index([orgId])
+}
+
+model AvailabilityRule {
+  id           String @id @default(cuid())
+  orgId        String
+  membershipId String
+  weekday      Int
+  startMinute  Int
+  endMinute    Int
+
+  @@index([orgId, membershipId])
+}
+
+model AvailabilityOverride {
+  id            String   @id @default(cuid())
+  orgId         String
+  membershipId  String
+  date          DateTime @db.Date
+  isUnavailable Boolean  @default(true)
+  startMinute   Int?
+  endMinute     Int?
+  reasonEn      String?
+  reasonAr      String?
+
+  @@index([orgId, membershipId, date])
+}
+
+model Appointment {
+  id            String            @id @default(cuid())
+  orgId         String
+  typeId        String
+  hostId        String
+  bookedById    String
+  studentId     String?
+  guardianId    String?
+  caseId        String?
+  requestId     String?
+  startsAt      DateTime
+  endsAt        DateTime
+  status        AppointmentStatus @default(CONFIRMED)
+  locationEn    String?
+  locationAr    String?
+  meetingUrl    String?
+  intakeData    Json?
+  notesEn       String?
+  cancelReason  String?
+  rescheduledFromId String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  type      AppointmentType       @relation(fields: [typeId], references: [id], onDelete: Cascade)
+  attendees AppointmentAttendee[]
+
+  @@index([orgId, hostId, startsAt])
+  @@index([orgId, studentId])
+}
+
+model AppointmentAttendee {
+  id            String  @id @default(cuid())
+  orgId         String
+  appointmentId String
+  membershipId  String?
+  guardianId    String?
+  studentId     String?
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, membershipId])
+}
+
+model CalendarEvent {
+  id           String            @id @default(cuid())
+  orgId        String
+  kind         CalendarEventKind @default(EVENT)
+  titleEn      String
+  titleAr      String
+  descEn       String?
+  descAr       String?
+  startsAt     DateTime
+  endsAt       DateTime
+  allDay       Boolean           @default(false)
+  audience     String[]
+  departmentId String?
+  classId      String?
+  ownerId      String?
+  createdAt    DateTime          @default(now())
+
+  @@index([orgId, startsAt])
+}
+
+// ---------------------------------------------------------------------------
+// Documents
+// ---------------------------------------------------------------------------
+
+model DocumentCategory {
+  id          String      @id @default(cuid())
+  orgId       String
+  key         String
+  nameEn      String
+  nameAr      String
+  sensitivity Sensitivity @default(STANDARD)
+
+  documents Document[]
+
+  @@unique([orgId, key])
+}
+
+model Document {
+  id               String         @id @default(cuid())
+  orgId            String
+  categoryId       String?
+  titleEn          String
+  titleAr          String
+  studentId        String?
+  caseId           String?
+  requestId        String?
+  sensitivity      Sensitivity    @default(STANDARD)
+  source           DocumentSource @default(UPLOAD)
+  templateId       String?
+  currentVersionId String?
+  expiresAt        DateTime?
+  uploadedById     String
+  visibleToFamily  Boolean        @default(false)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  category DocumentCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  versions DocumentVersion[]
+
+  @@index([orgId, studentId])
+}
+
+model DocumentVersion {
+  id          String   @id @default(cuid())
+  orgId       String
+  documentId  String
+  version     Int
+  storageKey  String
+  fileName    String
+  mimeType    String
+  sizeBytes   Int
+  checksum    String?
+  createdById String
+  createdAt   DateTime @default(now())
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, version])
+  @@index([orgId])
+}
+
+model DocumentTemplate {
+  id          String         @id @default(cuid())
+  orgId       String
+  key         String
+  nameEn      String
+  nameAr      String
+  descEn      String?
+  descAr      String?
+  bodyEn      String
+  bodyAr      String
+  output      DocumentOutput @default(BILINGUAL)
+  mergeFields String[]
+  signatoryEn String?
+  signatoryAr String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@unique([orgId, key])
+}
+
+// ---------------------------------------------------------------------------
+// Career guidance
+// ---------------------------------------------------------------------------
+
+model CareerProfile {
+  id                 String   @id @default(cuid())
+  orgId              String
+  studentId          String   @unique
+  interestsEn        String[]
+  interestsAr        String[]
+  favoriteSubjects   String[]
+  preferredCountries String[]
+  goalEn             String?
+  goalAr             String?
+  chosenCareerId     String?
+  advisorId          String?
+  updatedAt          DateTime @updatedAt
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+}
+
+model AptitudeQuestion {
+  id        String  @id @default(cuid())
+  orgId     String
+  dimension String
+  textEn    String
+  textAr    String
+  order     Int
+  reverse   Boolean @default(false)
+
+  @@index([orgId])
+}
+
+model AptitudeAssessment {
+  id          String    @id @default(cuid())
+  orgId       String
+  studentId   String
+  answers     Json
+  scores      Json?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  student Student                @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  recs    CareerRecommendation[]
+
+  @@index([orgId, studentId])
+}
+
+model Career {
+  id             String   @id @default(cuid())
+  orgId          String
+  key            String
+  titleEn        String
+  titleAr        String
+  clusterEn      String
+  clusterAr      String
+  summaryEn      String
+  summaryAr      String
+  dayInLifeEn    String?
+  dayInLifeAr    String?
+  weights        Json
+  subjects       String[]
+  skillsEn       String[]
+  skillsAr       String[]
+  educationEn    String
+  educationAr    String
+  salaryMinAed   Int?
+  salaryMaxAed   Int?
+  outlook        String   @default("growing")
+  uaeDemand      Int      @default(3)
+
+  recs CareerRecommendation[]
+
+  @@unique([orgId, key])
+}
+
+model CareerRecommendation {
+  id           String               @id @default(cuid())
+  orgId        String
+  studentId    String
+  assessmentId String?
+  careerId     String
+  rank         Int
+  matchScore   Int
+  reasoningEn  String
+  reasoningAr  String
+  status       RecommendationStatus @default(DRAFT)
+  approvedById String?
+  approvedAt   DateTime?
+  chosen       Boolean              @default(false)
+  createdAt    DateTime             @default(now())
+
+  student    Student             @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  assessment AptitudeAssessment? @relation(fields: [assessmentId], references: [id], onDelete: SetNull)
+  career     Career              @relation(fields: [careerId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, studentId])
+}
+
+model University {
+  id             String   @id @default(cuid())
+  orgId          String
+  key            String
+  nameEn         String
+  nameAr         String
+  countryCode    String
+  cityEn         String
+  cityAr         String
+  worldRank      Int?
+  acceptanceRate Int?
+  minAverage     Int?
+  programsEn     String[]
+  website        String?
+  deadlineMonth  Int?
+
+  entries ShortlistEntry[]
+
+  @@unique([orgId, key])
+}
+
+model ShortlistEntry {
+  id           String            @id @default(cuid())
+  orgId        String
+  studentId    String
+  universityId String
+  programEn    String
+  programAr    String?
+  category     ShortlistCategory
+  status       ApplicationStatus @default(RESEARCHING)
+  deadline     DateTime?
+  createdAt    DateTime          @default(now())
+
+  student      Student                @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  university   University             @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  requirements ShortlistRequirement[]
+
+  @@index([orgId, studentId])
+}
+
+model ShortlistRequirement {
+  id      String    @id @default(cuid())
+  orgId   String
+  entryId String
+  labelEn String
+  labelAr String
+  done    Boolean   @default(false)
+  dueAt   DateTime?
+
+  entry ShortlistEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+}
+
+// ---------------------------------------------------------------------------
+// Communications and notifications
+// ---------------------------------------------------------------------------
+
+model Message {
+  id          String         @id @default(cuid())
+  orgId       String
+  caseId      String?
+  requestId   String?
+  channel     MessageChannel @default(INTERNAL)
+  fromId      String
+  toLabel     String?
+  toGuardianId String?
+  subject     String?
+  body        String
+  status      DeliveryStatus @default(SENT)
+  createdAt   DateTime       @default(now())
+
+  @@index([orgId, caseId])
+  @@index([orgId, requestId])
+}
+
+model Notification {
+  id          String      @id @default(cuid())
+  orgId       String
+  recipientId String
+  kind        String
+  titleEn     String
+  titleAr     String
+  bodyEn      String?
+  bodyAr      String?
+  href        String?
+  sensitivity Sensitivity @default(STANDARD)
+  urgent      Boolean     @default(false)
+  readAt      DateTime?
+  createdAt   DateTime    @default(now())
+
+  @@index([orgId, recipientId, readAt])
+}
+
+model NotificationPreference {
+  id           String                @id @default(cuid())
+  orgId        String
+  membershipId String
+  kind         String
+  channels     NotificationChannel[]
+
+  @@unique([membershipId, kind])
+  @@index([orgId])
+}
+
+model MessageTemplate {
+  id        String              @id @default(cuid())
+  orgId     String
+  key       String
+  channel   NotificationChannel
+  subjectEn String?
+  subjectAr String?
+  bodyEn    String
+  bodyAr    String
+  updatedAt DateTime            @updatedAt
+
+  @@unique([orgId, key, channel])
+}
+
+model OutboundMessage {
+  id             String              @id @default(cuid())
+  orgId          String
+  channel        NotificationChannel
+  to             String
+  templateKey    String?
+  subject        String?
+  idempotencyKey String
+  status         DeliveryStatus      @default(QUEUED)
+  providerId     String?
+  error          String?
+  createdAt      DateTime            @default(now())
+  sentAt         DateTime?
+
+  @@unique([orgId, idempotencyKey])
+}
+
+model Announcement {
+  id          String   @id @default(cuid())
+  orgId       String
+  titleEn     String
+  titleAr     String
+  bodyEn      String
+  bodyAr      String
+  audience    String[]
+  publishedAt DateTime @default(now())
+  authorId    String?
+
+  @@index([orgId, publishedAt])
+}
+
+// ---------------------------------------------------------------------------
+// AI, audit, compliance
+// ---------------------------------------------------------------------------
+
+model AiInteraction {
+  id           String        @id @default(cuid())
+  orgId        String
+  membershipId String
+  feature      String
+  locale       Locale
+  sensitive    Boolean       @default(false)
+  status       AiDraftStatus @default(DRAFT)
+  provider     String
+  model        String?
+  subjectType  String?
+  subjectId    String?
+  output       Json?
+  reviewedById String?
+  reviewedAt   DateTime?
+  createdAt    DateTime      @default(now())
+
+  @@index([orgId, membershipId])
+}
+
+model AuditEvent {
+  id          String      @id @default(cuid())
+  orgId       String
+  actorId     String?
+  actorUserId String?
+  action      String
+  entityType  String
+  entityId    String?
+  sensitivity Sensitivity @default(STANDARD)
+  reason      String?
+  meta        Json?
+  ip          String?
+  createdAt   DateTime    @default(now())
+
+  @@index([orgId, entityType, entityId])
+  @@index([orgId, createdAt])
+}
+
+model ProcessingPurpose {
+  id           String  @id @default(cuid())
+  orgId        String
+  key          String
+  nameEn       String
+  nameAr       String
+  descEn       String
+  descAr       String
+  lawfulBasis  String
+  dataCategories String[]
+  requiresConsent Boolean @default(false)
+
+  consents ConsentRecord[]
+
+  @@unique([orgId, key])
+}
+
+model ConsentRecord {
+  id           String        @id @default(cuid())
+  orgId        String
+  purposeId    String
+  studentId    String?
+  guardianId   String?
+  status       ConsentStatus
+  method       String        @default("portal")
+  recordedById String?
+  decidedAt    DateTime      @default(now())
+  withdrawnAt  DateTime?
+
+  purpose ProcessingPurpose @relation(fields: [purposeId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, studentId])
+}
+
+model DataSubjectRequest {
+  id           String    @id @default(cuid())
+  orgId        String
+  number       String
+  type         DsrType
+  status       DsrStatus @default(RECEIVED)
+  subjectName  String
+  requesterName String
+  studentId    String?
+  detailsEn    String?
+  receivedAt   DateTime  @default(now())
+  dueAt        DateTime
+  completedAt  DateTime?
+  handledById  String?
+  resolution   String?
+
+  @@unique([orgId, number])
+}
+
+model BreachLog {
+  id                    String         @id @default(cuid())
+  orgId                 String
+  titleEn               String
+  titleAr               String
+  descriptionEn         String
+  descriptionAr         String?
+  severity              BreachSeverity
+  status                BreachStatus   @default(OPEN)
+  affectedCount         Int            @default(0)
+  occurredAt            DateTime
+  detectedAt            DateTime
+  reportedToRegulatorAt DateTime?
+  reportedToSubjectsAt  DateTime?
+  createdById           String?
+
+  @@index([orgId])
+}
+
+model RetentionPolicy {
+  id            String          @id @default(cuid())
+  orgId         String
+  recordType    String
+  nameEn        String
+  nameAr        String
+  retentionDays Int
+  action        RetentionAction @default(REVIEW)
+  lastRunAt     DateTime?
+  lastRunCount  Int?
+
+  @@unique([orgId, recordType])
+}
+
+model CrossBorderTransfer {
+  id          String   @id @default(cuid())
+  orgId       String
+  providerName String
+  countryCode String
+  purposeEn   String
+  purposeAr   String
+  safeguardEn String
+  safeguardAr String
+  approved    Boolean  @default(false)
+  approvedAt  DateTime?
+
+  @@index([orgId])
+}
+
+// ---------------------------------------------------------------------------
+// Demo, jobs, imports
+// ---------------------------------------------------------------------------
+
+model DemoPersona {
+  id           String @id @default(cuid())
+  orgId        String
+  key          String
+  membershipId String
+  roleLabelEn  String
+  roleLabelAr  String
+  blurbEn      String
+  blurbAr      String
+  homePath     String
+  order        Int
+
+  @@unique([orgId, key])
+}
+
+model JobRun {
+  id             String    @id @default(cuid())
+  orgId          String
+  queue          String
+  name           String
+  idempotencyKey String
+  status         JobStatus @default(RUNNING)
+  result         Json?
+  attempts       Int       @default(1)
+  createdAt      DateTime  @default(now())
+  finishedAt     DateTime?
+
+  @@unique([orgId, idempotencyKey])
+}
+
+model CsvImport {
+  id          String       @id @default(cuid())
+  orgId       String
+  entity      String
+  fileName    String
+  status      ImportStatus @default(PENDING)
+  total       Int          @default(0)
+  succeeded   Int          @default(0)
+  failed      Int          @default(0)
+  errors      Json?
+  createdById String
+  createdAt   DateTime     @default(now())
+
+  @@index([orgId])
+}
