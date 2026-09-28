@@ -4,12 +4,11 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { inter, plexArabic } from "@/lib/fonts";
 import { Providers } from "@/components/providers";
-import { dirOf, isLocale, locales } from "@/i18n/routing";
+import { dirOf, isLocale } from "@/i18n/routing";
 import "../../globals.css";
 
-export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
-}
+// Every product page depends on the signed-in user, so nothing under [locale] is prerendered.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;

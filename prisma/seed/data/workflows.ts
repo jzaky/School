@@ -107,6 +107,7 @@ export const WORKFLOW_TEMPLATES: WorkflowTemplate[] = [
             assignee: { kind: "case_assignee" },
             title: { en: "Draft and share the action plan", ar: "إعداد خطة العمل ومشاركتها" },
             dueInHours: 120,
+            blocking: true,
           },
         ],
         [
@@ -270,6 +271,7 @@ export const WORKFLOW_TEMPLATES: WorkflowTemplate[] = [
             assignee: { kind: "case_assignee" },
             title: { en: "Share the career action plan with the student", ar: "مشاركة خطة العمل المهنية مع الطالب" },
             dueInHours: 96,
+            blocking: true,
           },
         ],
         endOk("end", "Guidance delivered", "تم تقديم التوجيه"),

@@ -274,6 +274,13 @@ export async function approvePlanAction(input: { planId: string; notifyParents: 
       await tx.actionPlanItem.update({ where: { id: it.id }, data: { taskId: task.id } });
     }
     await tx.actionPlan.update({ where: { id: plan.id }, data: { status: "ACCEPTED", approvedById: ctx.membershipId, approvedAt: new Date() } });
+    // Sharing the plan completes the workflow's "share the plan" step, which lets the request move on.
+    const { resumeRunsForTask } = await import("@/server/workflows/engine");
+    const planSteps = await tx.task.findMany({ where: { caseId: plan.caseId, requestId: { not: null }, status: { in: ["TODO", "IN_PROGRESS"] }, titleEn: { in: ["Share the career action plan with the student", "Draft and share the action plan"] } } });
+    for (const step of planSteps) {
+      await tx.task.update({ where: { id: step.id }, data: { status: "DONE", completedAt: new Date() } });
+      await resumeRunsForTask(execCtx(tx, ctx.orgId, { effects, actorId: ctx.membershipId }), step.id);
+    }
     await tx.timelineEvent.create({ data: { orgId: ctx.orgId, caseId: plan.caseId, studentId: plan.studentId, actorId: ctx.membershipId, kind: "status", titleEn: "Action plan approved and shared as tasks", titleAr: "تم اعتماد خطة العمل ومشاركتها كمهام", staffOnly: true, sensitivity: plan.case!.sensitivity } });
     const ec = execCtx(tx, ctx.orgId, { effects });
     if (student?.membershipId) {

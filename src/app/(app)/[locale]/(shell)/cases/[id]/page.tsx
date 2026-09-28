@@ -86,7 +86,10 @@ export default async function CasePage({ params, searchParams }: { params: Promi
 
   const staff = await db.membership.findMany({ where: { orgId: ctx.orgId, status: "ACTIVE", staffProfile: { isNot: null } }, include: { user: true } });
   const staffOptions = staff.map((m) => ({ value: m.id, label: userName(m.user, locale), keywords: `${m.user.nameEn} ${m.user.nameAr ?? ""}` })).sort((a, b) => a.label.localeCompare(b.label));
-  const nameOf = (mid: string | null | undefined) => (mid ? userName(staff.find((m) => m.id === mid)?.user, locale) : "");
+  // Students and parents can author notes or refer too (for example a student's own request), so look them up as well.
+  const authorIds = (await db.caseNote.findMany({ where: { caseId: c.id }, select: { authorId: true } })).map((n) => n.authorId);
+  const others = await db.membership.findMany({ where: { id: { in: [...new Set([c.referrerId, c.assigneeId, ...authorIds].filter((x): x is string => Boolean(x) && !staff.some((m) => m.id === x)))] } }, include: { user: true } });
+  const nameOf = (mid: string | null | undefined) => (mid ? userName((staff.find((m) => m.id === mid) ?? others.find((m) => m.id === mid))?.user, locale) : "");
   const guardians = await db.guardianLink.findMany({ where: { studentId: c.studentId }, include: { guardian: true }, orderBy: { isPrimary: "desc" } });
   const guardianOpts = guardians.map((g) => ({ id: g.guardianId, name: `${personName(g.guardian, locale)} (${pick(locale, g.relationshipEn, g.relationshipAr)})` }));
 

@@ -187,7 +187,12 @@ describe("workflow engine and approvals", () => {
     );
     const run = await owner.workflowRun.findFirstOrThrow({ where: { requestId: req.id } });
     expect(run.status).toBe("WAITING");
-    expect(run.activeNodeIds).toEqual(["wait_followup"]);
+    // The run first waits for the action plan to be shared.
+    expect(run.activeNodeIds).toEqual(["plan_task"]);
+    const planTask = await owner.task.findFirstOrThrow({ where: { requestId: req.id, titleEn: "Draft and share the action plan" } });
+    await owner.task.update({ where: { id: planTask.id }, data: { status: "DONE" } });
+    await tenantTx(orgId, (tx) => resumeRunsForTask(execCtx(tx, orgId, { quiet: true }), planTask.id));
+    expect((await owner.workflowRun.findUniqueOrThrow({ where: { id: run.id } })).activeNodeIds).toEqual(["wait_followup"]);
     // Nothing happens before the two weeks are up.
     await tenantTx(orgId, (tx) => advanceRun(execCtx(tx, orgId, { quiet: true, now: new Date(Date.now() + 3 * 86400_000) }), run.id));
     expect((await owner.workflowRun.findUniqueOrThrow({ where: { id: run.id } })).status).toBe("WAITING");

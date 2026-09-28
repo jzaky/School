@@ -70,7 +70,8 @@ async function addTimeline(
       requestId: opts.onCase ? null : run.requestId,
       caseId: opts.onCase ? ctx.caseId ?? null : null,
       studentId: ctx.student?.id ?? null,
-      actorId: ec.actorId ?? null,
+      // Automated steps have no human actor.
+      actorId: null,
       kind,
       titleEn: title.en,
       titleAr: title.ar,
@@ -183,6 +184,7 @@ async function runCreateCase(ec: ExecCtx, run: LoadedRun, node: WorkflowNode, ct
     },
   });
   await ec.tx.request.update({ where: { id: r.id }, data: { caseId: created.id, assigneeId } });
+  if (ctx.appointmentId) await ec.tx.appointment.update({ where: { id: ctx.appointmentId }, data: { caseId: created.id } });
   ctx.caseId = created.id;
   ctx.caseAssigneeId = assigneeId;
   const assignee = await memberName(ec, assigneeId);

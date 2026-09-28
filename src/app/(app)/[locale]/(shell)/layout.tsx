@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getTranslations } from "next-intl/server";
 import { getCtx } from "@/server/context";
 import { buildNav } from "@/server/shell/nav";

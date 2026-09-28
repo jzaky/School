@@ -21,6 +21,7 @@ import { APTITUDE_QUESTIONS } from "./data/aptitude";
 import { UNIVERSITIES } from "./data/universities";
 import { seedHistory } from "./history";
 import { seedCompliance } from "./compliance";
+import { seedCareer } from "./career";
 
 export const DEMO_SLUG = "horizon";
 export const DEMO_PASSWORD = "Horizon2026!";
@@ -922,6 +923,7 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   await db.membership.updateMany({ where: { id: { in: [world.personas.principal, world.personas.dsl] } }, data: { locale: null } });
 
   await seedHistory(world, execCtx(db as unknown as Prisma.TransactionClient, orgId, { now, quiet: true }));
+  await seedCareer(world);
   await seedCompliance(world);
 
   log(`demo seed finished in ${Date.now() - started}ms`);
