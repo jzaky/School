@@ -30,6 +30,8 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "meetings", href: "/meetings" },
     { key: "safeguardingRefer", href: "/safeguarding" },
     { key: "teachingWeek", href: "/timetable" },
+    { key: "lessonPlans", href: "/curriculum/plans" },
+    { key: "curriculumGaps", href: "/curriculum" },
   ],
   counselor: [
     { key: "caseload", href: "/cases" },
@@ -56,6 +58,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "gradesOverview", href: "/grades?view=overview" },
     { key: "approvals", href: "/approvals" },
     { key: "coverBoard", href: "/admin/cover" },
+    { key: "curriculumGaps", href: "/curriculum" },
   ],
   admin: [
     { key: "servicesAdmin", href: "/admin/services" },
@@ -79,5 +82,6 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "approvals", href: "/approvals" },
     { key: "requestsAll", href: "/requests?tab=all" },
     { key: "coverBoard", href: "/admin/cover" },
+    { key: "planReview", href: "/curriculum/review" },
   ],
 };

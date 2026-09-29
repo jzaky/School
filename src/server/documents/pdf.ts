@@ -6,7 +6,7 @@ import path from "node:path";
 import { applyMerge } from "./merge";
 
 const FONT_DIR = path.join(process.cwd(), "assets", "fonts");
-const FONTS = {
+export const FONTS = {
   regular: path.join(FONT_DIR, "IBMPlexSansArabic-Regular.ttf"),
   semibold: path.join(FONT_DIR, "IBMPlexSansArabic-SemiBold.ttf"),
   bold: path.join(FONT_DIR, "IBMPlexSansArabic-Bold.ttf"),
@@ -19,7 +19,7 @@ const MUTED = "#5B6778";
 
 type Doc = PDFKit.PDFDocument;
 
-const ARABIC_LETTER_RE = /[\u0621-\u064A\u066E-\u06D3\u06D5\u06FA-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFC\u064B-\u065F\u0670]/;
+export const ARABIC_LETTER_RE = /[\u0621-\u064A\u066E-\u06D3\u06D5\u06FA-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFC\u064B-\u065F\u0670]/;
 const LTR_CHAR_RE = /[A-Za-z0-9\u00C0-\u024F\u0660-\u0669\u06F0-\u06F9]/;
 
 /**
@@ -71,7 +71,7 @@ function wrap(doc: Doc, text: string, width: number): string[] {
 }
 
 /** Draw one right-to-left paragraph block. Returns the y after the block. */
-function drawRtl(doc: Doc, text: string, x: number, y: number, width: number, opts: { size: number; font?: string; color?: string; lineGap?: number; align?: "right" | "center" }) {
+export function drawRtl(doc: Doc, text: string, x: number, y: number, width: number, opts: { size: number; font?: string; color?: string; lineGap?: number; align?: "right" | "center" }) {
   doc.font(opts.font ?? FONTS.regular).fontSize(opts.size).fillColor(opts.color ?? "#1F2937");
   const lineHeight = opts.size * 1.75 + (opts.lineGap ?? 0);
   for (const line of wrap(doc, text, width)) {
@@ -93,7 +93,7 @@ function drawRtl(doc: Doc, text: string, x: number, y: number, width: number, op
   return y;
 }
 
-function drawLtr(doc: Doc, text: string, x: number, y: number, width: number, opts: { size: number; font?: string; color?: string; align?: "left" | "center" | "right" }) {
+export function drawLtr(doc: Doc, text: string, x: number, y: number, width: number, opts: { size: number; font?: string; color?: string; align?: "left" | "center" | "right" }) {
   doc.font(opts.font ?? FONTS.regular).fontSize(opts.size).fillColor(opts.color ?? "#1F2937");
   doc.text(text, x, y, { width, align: opts.align ?? "left", lineGap: opts.size * 0.45 });
   return doc.y;
