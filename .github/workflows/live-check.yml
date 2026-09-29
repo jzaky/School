@@ -1,0 +1,41 @@
+name: Live site check
+
+# Signs in as every demo persona on the production site and checks every page in English and
+# Arabic, on desktop and phone, plus the hero flows. Runs every morning and on demand.
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Site to check"
+        required: false
+        default: "https://myhorizon.up.railway.app"
+  schedule:
+    - cron: "45 2 * * *" # 06:45 Dubai time
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      E2E_BASE_URL: ${{ github.event.inputs.base_url || vars.LIVE_BASE_URL || 'https://myhorizon.up.railway.app' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npx playwright install --with-deps chromium
+      - name: Every page, every persona
+        run: npx playwright test tests/e2e/site-check.spec.ts --reporter=list
+      - name: Hero flows
+        if: always()
+        run: npx playwright test --grep-invert "site check" --reporter=list
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7

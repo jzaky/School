@@ -105,7 +105,7 @@ export function Shortlist({ studentId, entries, universities, canApply = false }
       {entries.length === 0 ? (
         <p className="text-sm text-muted-foreground">{t("shortlistEmpty")}</p>
       ) : (
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid gap-3 md:grid-cols-2 [&>*]:min-w-0">
           {entries.map((e) => {
             const done = e.requirements.filter((r) => r.done).length;
             return (
@@ -119,9 +119,9 @@ export function Shortlist({ studentId, entries, universities, canApply = false }
                   </div>
                   <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold", e.category === "REACH" ? "bg-danger-soft text-danger" : e.category === "TARGET" ? "bg-info-soft text-info" : "bg-success-soft text-success")}>{t(`cat.${e.category}`)}</span>
                 </div>
-                <div className="mt-3 flex items-center gap-2">
+                <div className="mt-3 flex flex-wrap items-center gap-2">
                   <Select value={e.status} onValueChange={(v) => run(() => updateShortlistAction({ entryId: e.id, status: v as never }))}>
-                    <SelectTrigger size="sm" className="h-8 flex-1">
+                    <SelectTrigger size="sm" className="h-8 min-w-0 flex-1">
                       <SelectValue>{t(`app.${e.status}`)}</SelectValue>
                     </SelectTrigger>
                     <SelectContent>
