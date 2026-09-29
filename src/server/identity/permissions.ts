@@ -228,6 +228,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "Supports students academically and personally. Manages wellbeing cases.",
     descAr: "يدعم الطلاب أكاديميًا وشخصيًا ويدير حالات الرفاه.",
     permissions: [
+      "pathways.manage",
       "grades.view_all",
       "pathways.view",
       ...STAFF_BASE,

@@ -29,6 +29,7 @@
 - Demo reset measured at 15s locally.
 
 - Subject registration and automatic class allocation: /admin/registration (offerings per grade with core and option blocks, prerequisites, registration window, rosters with section moves, CSV sheet import with preview), /subjects for students and parents (child switcher; staff register on behalf), /classes and /classes/[id] rosters, allocation engine with unit tests, subject change hook in the workflow engine, seed for grades 6 to 12.
+- University pathways: programme catalogue (UK, US, UAE, Jordan, Canada, Australia, Europe; all indicative until checked), requirements checker across British, IB, American, UAE MoE and Tawjihi, grades and scores with counselor confirmation, shortlist integration, AI pathway advice draft, counselor admin and College Scorecard importer (snapshot pending an API key).
 
 ## In progress
 - Nothing locally. Waiting on deployment access.

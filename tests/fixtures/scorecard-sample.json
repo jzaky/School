@@ -1,0 +1,51 @@
+{
+  "_note": "Hand-built fixture in the documented College Scorecard API response shape (flat dotted keys when fields= is used). The API was not reachable from the build environment, so this is not a recording. Institution names are fictional and the numbers are test values, not real statistics.",
+  "metadata": { "page": 0, "total": 3, "per_page": 100 },
+  "results": [
+    {
+      "id": 900001,
+      "school.name": "Example State University",
+      "school.city": "Springfield",
+      "school.state": "IL",
+      "school.school_url": "https://www.example-state.edu/",
+      "latest.admissions.admission_rate.overall": 0.4321,
+      "latest.admissions.sat_scores.25th_percentile.critical_reading": 560,
+      "latest.admissions.sat_scores.75th_percentile.critical_reading": 660,
+      "latest.admissions.sat_scores.25th_percentile.math": 570,
+      "latest.admissions.sat_scores.75th_percentile.math": 690,
+      "latest.admissions.act_scores.25th_percentile.cumulative": 23,
+      "latest.admissions.act_scores.75th_percentile.cumulative": 29,
+      "latest.student.size": 18000
+    },
+    {
+      "id": 900002,
+      "school.name": "Sample Community College",
+      "school.city": "Riverside",
+      "school.state": "CA",
+      "school.school_url": "sample-cc.edu",
+      "latest.admissions.admission_rate.overall": null,
+      "latest.admissions.sat_scores.25th_percentile.critical_reading": null,
+      "latest.admissions.sat_scores.75th_percentile.critical_reading": null,
+      "latest.admissions.sat_scores.25th_percentile.math": null,
+      "latest.admissions.sat_scores.75th_percentile.math": null,
+      "latest.admissions.act_scores.25th_percentile.cumulative": null,
+      "latest.admissions.act_scores.75th_percentile.cumulative": null,
+      "latest.student.size": 9000
+    },
+    {
+      "id": 900003,
+      "school.name": "The Test Institute of Technology",
+      "school.city": "Cambridge",
+      "school.state": "MA",
+      "school.school_url": null,
+      "latest.admissions.admission_rate.overall": 0.05,
+      "latest.admissions.sat_scores.25th_percentile.critical_reading": 730,
+      "latest.admissions.sat_scores.75th_percentile.critical_reading": 780,
+      "latest.admissions.sat_scores.25th_percentile.math": 780,
+      "latest.admissions.sat_scores.75th_percentile.math": 800,
+      "latest.admissions.act_scores.25th_percentile.cumulative": 34,
+      "latest.admissions.act_scores.75th_percentile.cumulative": 36,
+      "latest.student.size": 4500
+    }
+  ]
+}

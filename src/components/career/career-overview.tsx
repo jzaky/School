@@ -12,6 +12,9 @@ import { Button } from "@/components/ui/button";
 import { BarList } from "@/components/charts/bar-list";
 import { DIMENSIONS, DIMENSION_LABELS, type Dimension } from "@/server/career/dimensions";
 import { ChooseCareerButton, ReviewRecommendations, Shortlist } from "./career-client";
+import { gapText } from "@/components/pathways/pathway-ui";
+import { checkProgram, loadStudentPathway } from "@/server/pathways/profile";
+import { programsForEntries } from "@/server/pathways/shortlist";
 
 const COUNTRY: Record<string, { en: string; ar: string }> = {
   AE: { en: "UAE", ar: "الإمارات" },
@@ -36,9 +39,26 @@ export async function CareerOverview({ ctx, prefs, studentId, mode }: { ctx: Ctx
     db.careerRecommendation.findMany({ where: { studentId, status: { not: "REJECTED" } }, include: { career: true }, orderBy: { rank: "asc" } }),
     db.careerProfile.findUnique({ where: { studentId } }),
     db.shortlistEntry.findMany({ where: { studentId }, include: { university: true, requirements: { orderBy: { dueAt: "asc" } } }, orderBy: { createdAt: "asc" } }),
-    db.university.findMany({ where: { orgId }, orderBy: [{ countryCode: "asc" }, { worldRank: "asc" }] }),
+    // Curated catalogue only: the full US list (thousands) is browsed on /career/universities.
+    db.university.findMany({ where: { orgId, programsEn: { isEmpty: false } }, orderBy: [{ countryCode: "asc" }, { worldRank: "asc" }] }),
     db.case.findFirst({ where: { studentId, type: "CAREER", status: { notIn: ["CLOSED"] } }, orderBy: { openedAt: "desc" } }),
   ]);
+  const tp = await getTranslations("pathways");
+  const pathway = entries.length ? await loadStudentPathway(db, orgId, studentId) : null;
+  const entryPrograms = await programsForEntries(db, entries);
+  const entryCheck = (e: (typeof entries)[number]) => {
+    const p = entryPrograms.get(`${e.universityId}|${e.programEn}`);
+    if (!p || !pathway) return null;
+    const c = checkProgram(p, pathway);
+    const n = (x: number) => fmtNumber(prefs, x);
+    return {
+      href: `/career/universities/programs/${p.id}`,
+      met: c.summary.met,
+      notMet: c.summary.notMet,
+      unknown: c.summary.unknown,
+      gaps: c.items.filter((i) => i.status === "not_met" && !i.optional).map((i) => gapText(tp, i, n)).filter((x): x is string => !!x),
+    };
+  };
   const scores = (assessment?.scores ?? null) as Record<Dimension, number> | null;
   const chosenId = profile?.chosenCareerId ?? null;
   const chosen = recs.find((r) => r.careerId === chosenId)?.career ?? (chosenId ? await db.career.findUnique({ where: { id: chosenId } }) : null);
@@ -149,7 +169,8 @@ export async function CareerOverview({ ctx, prefs, studentId, mode }: { ctx: Ctx
             id: e.id,
             university: pick(locale, e.university.nameEn, e.university.nameAr),
             country: countryName(e.university.countryCode, locale),
-            program: e.programEn,
+            program: pick(locale, e.programEn, e.programAr),
+            check: entryCheck(e),
             category: e.category,
             status: e.status,
             deadline: e.deadline ? fmtDate(prefs, e.deadline, "short") : null,

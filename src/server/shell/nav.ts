@@ -20,6 +20,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           { key: "career", href: "/career", icon: "compass" },
           ...(c("registration.submit") ? [{ key: "subjects", href: "/subjects", icon: "book-open" }] : []),
           ...(c("grades.view_own") ? [{ key: "grades", href: "/grades", icon: "clipboard-check" }] : []),
+          ...(c("pathways.view") ? [{ key: "universities", href: "/career/universities", icon: "landmark" }] : []),
           { key: "calendar", href: "/calendar", icon: "calendar" },
           { key: "documents", href: "/documents", icon: "file-text" },
         ],
@@ -35,6 +36,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           { key: "children", href: "/children", icon: "users" },
           ...(c("registration.submit") ? [{ key: "subjects", href: "/subjects", icon: "book-open" }] : []),
           ...(c("grades.view_own") ? [{ key: "grades", href: "/grades", icon: "clipboard-check" }] : []),
+          ...(c("pathways.view") ? [{ key: "universities", href: "/career/universities", icon: "landmark" }] : []),
           { key: "services", href: "/services", icon: "layout-grid" },
           { key: "requests", href: "/requests", icon: "inbox" },
           { key: "approvals", href: "/approvals", icon: "stamp", badge: counts.approvals },
@@ -61,6 +63,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("grades.enter") || c("registration.manage")) school.push({ key: "classes", href: "/classes", icon: "school" });
   if (c("grades.enter") || c("grades.view_all")) school.push({ key: "grades", href: "/grades", icon: "clipboard-check" });
   if (c("career.advise")) school.push({ key: "career", href: "/career", icon: "compass" });
+  if (c("pathways.view")) school.push({ key: "universities", href: "/career/universities", icon: "landmark" });
   if (c("safeguarding.view") || c("safeguarding.refer")) school.push({ key: "safeguarding", href: "/safeguarding", icon: "shield" });
   school.push({ key: "documents", href: "/documents", icon: "file-text" });
   if (c("analytics.view")) school.push({ key: "analytics", href: "/analytics", icon: "bar-chart-3" });
