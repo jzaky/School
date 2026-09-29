@@ -19,6 +19,8 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "approvals", href: "/approvals" },
     { key: "meetings", href: "/meetings" },
     { key: "safeguardingRefer", href: "/safeguarding" },
+    { key: "lessonPlans", href: "/curriculum/plans" },
+    { key: "curriculumGaps", href: "/curriculum" },
   ],
   counselor: [
     { key: "caseload", href: "/cases" },
@@ -41,6 +43,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "kpis", href: "/home" },
     { key: "analytics", href: "/analytics" },
     { key: "approvals", href: "/approvals" },
+    { key: "curriculumGaps", href: "/curriculum" },
   ],
   admin: [
     { key: "servicesAdmin", href: "/admin/services" },
@@ -57,5 +60,6 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
   hod_computing: [
     { key: "approvals", href: "/approvals" },
     { key: "requestsAll", href: "/requests?tab=all" },
+    { key: "planReview", href: "/curriculum/review" },
   ],
 };

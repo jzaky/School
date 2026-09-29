@@ -54,6 +54,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("career.advise")) school.push({ key: "career", href: "/career", icon: "compass" });
   if (c("safeguarding.view") || c("safeguarding.refer")) school.push({ key: "safeguarding", href: "/safeguarding", icon: "shield" });
   school.push({ key: "documents", href: "/documents", icon: "file-text" });
+  if (c("curriculum.plan") || c("curriculum.review") || c("curriculum.manage")) school.push({ key: "curriculum", href: "/curriculum", icon: "book-open" });
   if (c("analytics.view")) school.push({ key: "analytics", href: "/analytics", icon: "bar-chart-3" });
   const admin: NavItem[] = [];
   if (c("school.manage")) admin.push({ key: "schoolSetup", href: "/admin/school", icon: "building-2" });
