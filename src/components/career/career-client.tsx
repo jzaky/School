@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Check, Loader2, Plus, Search, Trash2 } from "lucide-react";
 import { Link, useRouter } from "@/i18n/navigation";
+import { StartApplicationButton } from "@/components/applications/app-client";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -87,9 +88,9 @@ export function ReviewRecommendations({ studentId, recs }: { studentId: string; 
 
 type Uni = { id: string; name: string; city: string; country: string; programs: string[]; acceptance: number | null; rank: number | null };
 type EntryCheck = { href: string; met: number; notMet: number; unknown: number; gaps: string[] } | null;
-type Entry = { id: string; university: string; country: string; program: string; category: string; status: string; deadline: string | null; check: EntryCheck; requirements: Array<{ id: string; label: string; done: boolean; due: string | null }> };
+type Entry = { applicationId?: string | null; id: string; university: string; country: string; program: string; category: string; status: string; deadline: string | null; check: EntryCheck; requirements: Array<{ id: string; label: string; done: boolean; due: string | null }> };
 
-export function Shortlist({ studentId, entries, universities }: { studentId: string | null; entries: Entry[]; universities: Uni[] }) {
+export function Shortlist({ studentId, entries, universities, canApply = false }: { studentId: string | null; entries: Entry[]; universities: Uni[]; canApply?: boolean }) {
   const t = useTranslations("career");
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -136,6 +137,11 @@ export function Shortlist({ studentId, entries, universities }: { studentId: str
                     <Trash2 className="size-3.5" />
                   </Button>
                 </div>
+                {(canApply || e.applicationId) && (
+                  <div className="mt-3">
+                    <StartApplicationButton shortlistEntryId={e.id} studentId={studentId} applicationId={e.applicationId} />
+                  </div>
+                )}
                 {e.check && (
                   <div className="mt-3 rounded-lg bg-muted/40 p-2.5 text-xs" data-testid="entry-check">
                     <div className="mb-1 flex flex-wrap items-center justify-between gap-2">

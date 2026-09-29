@@ -79,6 +79,8 @@ async function main() {
         case "demo-reset":
           if (!demoMode) return "skipped";
           return runDemoResetCore();
+        case "applications.reminders":
+          return forEachOrg("applications.reminders", async (orgId) => (await import("@/server/applications/reminders")).runApplicationReminders(orgId));
         case "test.idempotent":
           return handlers.testIdempotent(job.data as TestIdempotentJob);
         default:
@@ -104,6 +106,8 @@ async function main() {
     await maintenance.upsertJobScheduler("sweep", { every: 60_000 }, { name: "sweep", opts: { attempts: 1, removeOnComplete: 100, removeOnFail: 100 } });
     // 23:30 UTC is 03:30 in Dubai, after the nightly demo reset.
     await maintenance.upsertJobScheduler("retention", { pattern: "30 23 * * *", tz: "UTC" }, { name: "retention", opts: { attempts: 3 } });
+    // 03:45 UTC is 07:45 in Dubai: application reminders arrive before school starts.
+    await maintenance.upsertJobScheduler("applications.reminders", { pattern: "45 3 * * *", tz: "UTC" }, { name: "applications.reminders", opts: { attempts: 3 } });
     if (demoMode) {
       // 22:00 UTC is 02:00 in Dubai.
       await maintenance.upsertJobScheduler("demo-reset", { pattern: "0 22 * * *", tz: "UTC" }, { name: "demo-reset", opts: { attempts: 2 } });

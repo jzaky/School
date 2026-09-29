@@ -33,6 +33,7 @@
 
 - Academic modules (merged and verified together): subject registration with automatic class allocation and Excel import; teacher assignment, clash-free timetable generation and staff absence with automatic substitute cover; grades with publishing and bilingual report cards; academic calendar with UAE holidays, exam schedules and trips with consent letters; university pathways (UK, US, UAE, Jordan, Canada, Australia, Europe) with a requirements checker per curriculum including Tawjihi and a College Scorecard importer; curriculum frameworks, lesson plans, coverage gaps, AI-drafted units and head of department review.
 - Checks after merging: 208 unit and integration tests, lint 0 errors, i18n audit, every nav link for all 11 personas in en and ar, mobile overflow check, and the 10 hero-flow E2E specs all pass. Demo reset with all modules: 22s locally.
+- University application tracker (worktree branch, not yet merged): /career/applications (student and parent), /career/applications/[id], /career/applications/manage (pipeline board with drag and stage menu, filters, bulk task planning), /career/applications/letters (teacher letter requests). Deadline engine with source labels, late-start compression and dependency alignment; idempotent task generation and reconcile; daily reminders job; calendar deadlines; seed prisma/seed/academics/applications.ts. Tests: tests/unit/applications.test.ts, tests/integration/applications.test.ts.
 
 ## In progress
 - Nothing locally. Waiting on deployment access.
