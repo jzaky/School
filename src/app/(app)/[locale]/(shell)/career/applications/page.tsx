@@ -5,6 +5,7 @@ import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { personName } from "@/lib/i18n-data";
 import { Link } from "@/i18n/navigation";
+import { LIVE_MODULES } from "@/lib/modules";
 import { PageBody, PageHeader } from "@/components/app/page-header";
 import { EmptyState } from "@/components/app/empty-state";
 import { Button } from "@/components/ui/button";
@@ -52,9 +53,11 @@ export default async function ApplicationsPage() {
                 action={
                   !parent ? (
                     <div className="flex flex-wrap justify-center gap-2">
-                      <Button asChild size="sm" data-testid="open-plan">
-                        <Link href="/career/pathways">{t("openPlan")}</Link>
-                      </Button>
+                      {LIVE_MODULES.pathways ? (
+                        <Button asChild size="sm" data-testid="open-plan">
+                          <Link href="/career/pathways">{t("openPlan")}</Link>
+                        </Button>
+                      ) : null}
                       <Button asChild size="sm" variant="outline">
                         <Link href="/career/universities">
                           <Landmark className="size-4" />
