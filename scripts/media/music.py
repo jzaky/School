@@ -76,4 +76,6 @@ stereo = stereo / (np.max(np.abs(stereo)) or 1) * 0.5
 wav = args.out[:-4] + ".wav"
 sf.write(wav, stereo.astype(np.float32), sr)
 subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", wav, "-b:a", "192k", args.out], check=True)
+import os
+os.remove(wav)
 print("music", args.seconds, "s")
