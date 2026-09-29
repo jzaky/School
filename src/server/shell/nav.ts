@@ -81,6 +81,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("curriculum.plan") || c("curriculum.review") || c("curriculum.manage")) school.push({ key: "curriculum", href: "/curriculum", icon: "book-open" });
   if (c("analytics.view")) school.push({ key: "analytics", href: "/analytics", icon: "bar-chart-3" });
   const admin: NavItem[] = [];
+  if (c("school.manage") || ctx.roles.includes("principal")) admin.push({ key: "setup", href: "/setup", icon: "list-checks" });
   if (c("school.manage")) admin.push({ key: "schoolSetup", href: "/admin/school", icon: "building-2" });
   if (c("people.manage")) admin.push({ key: "people", href: "/admin/people", icon: "contact" });
   if (c("roles.manage")) admin.push({ key: "roles", href: "/admin/roles", icon: "lock" });

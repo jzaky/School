@@ -1,6 +1,9 @@
 import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
-import { Bell, Palette, UserRound } from "lucide-react";
+import { Bell, ListChecks, Palette, UserRound } from "lucide-react";
+import { Link } from "@/i18n/navigation";
+import { Button } from "@/components/ui/button";
+import { canSetup } from "@/server/onboarding/access";
 import { getCtx } from "@/server/context";
 import { pick } from "@/lib/i18n-data";
 import { PageBody, PageHeader } from "@/components/app/page-header";
@@ -29,6 +32,7 @@ export default async function SettingsPage() {
   });
   const locked = ctx.isStaff && (ctx.can("safeguarding.view") || ctx.can("safeguarding.refer")) ? LOCKED_KINDS.map((kind) => ({ kind, label: t(`kinds.${kind}`) })) : [];
   const roleLabels = ctx.roles.map((r) => (tr.has(r) ? tr(r) : r));
+  const tSetup = await getTranslations("onboarding.settingsLink");
   return (
     <PageBody className="max-w-4xl">
       <PageHeader title={t("title")} description={t("subtitle")} />
@@ -60,6 +64,22 @@ export default async function SettingsPage() {
         </dl>
         <p className="mt-4 text-xs text-muted-foreground">{t("profileHint")}</p>
       </Panel>
+      {canSetup(ctx) && (
+        <Panel>
+          <PanelHeader
+            title={tSetup("title")}
+            description={tSetup("body")}
+            icon={<ListChecks className="size-4" />}
+            action={
+              <Button asChild size="sm" variant="outline">
+                <Link href="/setup" data-testid="settings-open-setup">
+                  {tSetup("open")}
+                </Link>
+              </Button>
+            }
+          />
+        </Panel>
+      )}
       <Panel>
         <PanelHeader title={t("display")} description={t("displayHint")} icon={<Palette className="size-4" />} />
         <DisplaySettings hijri={hijri} hijriAvailable={ctx.org.hijriEnabled} numerals={numerals} />

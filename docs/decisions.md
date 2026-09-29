@@ -160,3 +160,12 @@ Ambiguities resolved during the build. Newest last.
 - Emails to people who are not members yet go through src/server/notify/direct.ts (OutboundMessage with an idempotency key, delivered by the worker). Each email carries English and Arabic. If a delivery job is lost, the sweeper resends with the subject only.
 - First-run tip cards show for 14 days after joining until dismissed (cookie per membership).
 - The QR encoder is a small in-house byte-mode encoder (versions 1 to 10, level M), verified module for module against the segno library.
+## Self-serve onboarding (Sept 2026)
+- Sign-up never says an email is registered. An existing account is reused only with its own password; any credential mismatch shows one generic message that also covers "you may already have an account". Rate limits make probing slow.
+- A school counts as verified when the user who created it (Organization.createdById) has confirmed their email. Schools created by the platform (demo, older schools) have no creator and are always verified. Unverified schools can use the wizard; invitations and family access stay locked.
+- Organization creation, the starter template and the first membership run on the owner client inside src/server/platform/signup.ts (the documented platform exception). Everything after sign-in uses tenantDb.
+- The demo seed calls installStarterTemplate and adds its people and history on top, so a new school and the demo share one configuration source.
+- Brand colors equal to the built-in theme (#0F4C81 or #123A63 with #C8A24A) keep the hand-tuned theme; any other color is applied as CSS variables (brand, primary, ring, sidebar derived with color-mix).
+- enabledModules stores the core modules with the chosen optional ones, so an admin switching everything off never ends up with the empty list that means "all defaults". Pathways needs career.
+- Grade bands: British schools start with A* to U letter bands, other curricula with A to F percentage bands.
+- The wizard lives inside the app shell so admins keep their navigation; each step saves on its own and can be skipped.

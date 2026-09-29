@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { LIVE_MODULES } from "@/lib/modules";
+import { moduleEnabled } from "@/lib/modules";
 import { getTranslations } from "next-intl/server";
 import { ArrowLeft, CalendarDays, ClipboardList, Users } from "lucide-react";
 import { getCtx } from "@/server/context";
@@ -53,7 +53,7 @@ export default async function ClassRosterPage({ params }: { params: Promise<{ id
         description={[cls.isHomeroom ? t("homeroom") : cls.subject ? pick(locale, cls.subject.nameEn, cls.subject.nameAr) : "", t("gradeN", { grade: cls.gradeLevel }), cls.room ? t("roomN", { room: cls.room }) : ""].filter(Boolean).join(" · ")}
         actions={
           <>
-            {LIVE_MODULES.grades && !cls.isHomeroom && (
+            {moduleEnabled(ctx.org, "grades") && !cls.isHomeroom && (
               <Button asChild variant="outline">
                 <Link href={`/grades?class=${cls.id}`}>
                   <ClipboardList className="size-4" />
@@ -61,7 +61,7 @@ export default async function ClassRosterPage({ params }: { params: Promise<{ id
                 </Link>
               </Button>
             )}
-            {LIVE_MODULES.timetable && (
+            {moduleEnabled(ctx.org, "timetable") && (
               <Button asChild variant="outline">
                 <Link href="/timetable">
                   <CalendarDays className="size-4" />

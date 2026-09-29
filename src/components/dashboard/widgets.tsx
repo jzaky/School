@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { moduleEnabled } from "@/lib/modules";
 import { ArrowRight, CalendarClock, CheckSquare, Inbox, MapPin, Megaphone, Video } from "lucide-react";
 import type { Ctx } from "@/server/context";
 import type { FormatPrefs } from "@/lib/format";
@@ -36,6 +37,7 @@ export async function Greeting({ ctx, prefs, subtitle }: { ctx: Ctx; prefs: Form
 }
 
 export async function MeetingsPanel({ ctx, prefs, limit = 5, title, onlyToday = false }: { ctx: Ctx; prefs: FormatPrefs; limit?: number; title?: string; onlyToday?: boolean }) {
+  if (!moduleEnabled(ctx.org, "meetings")) return null;
   const t = await getTranslations("home");
   const now = new Date();
   const endOfToday = new Date(now.getTime() + 24 * 3600_000);

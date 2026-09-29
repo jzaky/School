@@ -55,10 +55,28 @@
 ## Broken
 - Nothing known. Production: https://myhorizon.up.railway.app (press Reset demo after each deploy to load new seed data).
 
+## Self-serve schools: sign-up, setup wizard and per-school customization (onboarding)
+- Starter template (prisma/seed/starter): `installStarterTemplate(db, orgId, { curricula, locale, now })` installs roles, departments, subjects, main campus, current year with terms, UAE holidays and term breaks (stable ids, Islamic dates marked estimated), a UAE bell schedule, grade bands per curriculum family, the service catalog with forms, workflows and appointment types, document categories and letters, all message templates (including module ones and email_verification), career catalogs, compliance defaults (purposes, retention, processors listed unapproved) and the course catalog for the chosen curricula. Idempotent; replaces the demo school's name in texts for new schools. The demo seed now builds on it (demo reset about 20 s).
+- /signup (en/ar): school names, emirate, curricula, admin, email, password with strength meter, "I am the principal", Google/Microsoft when configured. Honeypot, rate limits per IP (8/h) and per email (4/h) on Redis with memory fallback, generic credential error. Creates the school on the owner client (src/server/platform/signup.ts), signs in and opens /setup. Email verification link (48 h, hash stored) through the notify pipeline; until confirmed, admins see a banner with Resend and the wizard locks invitations and the join code (`schoolVerified`, `requireVerifiedSchool` in src/server/onboarding/verification.ts for the access module). SIGNUP_ENABLED switch. "Start free pilot" on the landing page and a link from /login.
+- /setup wizard (school_admin or principal; nav item, Settings and School setup link to it): profile and brand (logo, colors with live preview, applied as CSS variables across the shell), academic year and terms (editable), holidays (remove, add missing UAE ones), bell schedule, curricula and course catalog, modules, people (student CSV import, add staff, add student), invite and join (links to /admin/invitations, /admin/join-requests, /admin/roles behind ACCESS_PAGES_LIVE), done checklist. Steps can be skipped and resumed (Organization.onboardingSteps). Home shows "Finish setting up" until finished.
+- Modules: `moduleEnabled(org, key)` in src/lib/modules.ts replaces LIVE_MODULES; nav, demo guide and home widgets hide switched-off modules and their routes answer 404 (module layouts). Core modules cannot be switched off.
+- Everything-editable fixes: subjects editable on /admin/school, notification message texts editable on /admin/templates, academic year and term dates editable in the wizard, brand colors, logo and time zone editable.
+- Tests: tests/unit/onboarding.test.ts, tests/integration/onboarding.test.ts.
+
 ## Next
 1. Deploy and smoke test the hero flows on the deployed URL in en and ar.
 2. Run the E2E suite against production (E2E_BASE_URL) and fix anything environment-specific.
 3. Phase 7 QA pass on production.
+4. Everything-editable gaps still open (onboarding audit):
+   - Sidebar shows a hard-coded "H" badge instead of the school logo (src/components/shell/app-shell.tsx), and the marketing Logo and app title say Horizon OS.
+   - School logo is not yet printed on generated letters and PDFs.
+   - Service categories cannot be renamed or added from the UI.
+   - Appointment types (meeting kinds, durations, buffers, hosts) and staff availability have no admin page.
+   - Data processing purposes (compliance) cannot be added or edited; retention and processors can.
+   - Rooms are free text on classes and exams; there is no room list to manage.
+   - Career catalog and aptitude questions are platform content with no school editor.
+   - Staff CSV import (only students with guardians import by CSV today).
+   - Verification emails queued while Redis is down lose their link when the sweeper sends them later (body and href travel in the job, not the row).
 
 ## Requirement data pipeline (catalog review)
 - Built: source registry, polite fetcher with normalization and hashing, evidence-validated extraction (rule-based offline, AI on demand), versioned publishing with structured diffs and severity, change monitor with staff notifications, Scorecard import into the global catalog, worker jobs `catalog.refresh` (weekly) and `catalog.scorecard`, review screens under Career > Catalog review, demo seed `prisma/seed/catalog/pipeline-demo.ts`.

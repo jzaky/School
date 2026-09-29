@@ -147,7 +147,8 @@
     "pathwayDashboard": "Counselor dashboard",
     "roles": "Roles and access",
     "invitations": "Invitations",
-    "joinRequests": "Join requests"
+    "joinRequests": "Join requests",
+    "setup": "School setup"
   },
   "shell": {
     "openMenu": "Open menu",
@@ -2280,6 +2281,10 @@
       "joinRequests": {
         "title": "Approve new families",
         "body": "Parents who joined with the school code wait here. Match hints show which student records fit."
+      },
+      "schoolSetupWizard": {
+        "title": "Set up a school in minutes",
+        "body": "New schools sign up and follow this checklist: profile and brand, year and holidays, curricula, modules, people and invitations. Every step stays editable."
       }
     }
   },
@@ -6895,5 +6900,423 @@
     },
     "notifications": "Turn on notifications so you never miss an update",
     "dismiss": "Hide these tips"
+  },
+  "onboarding": {
+    "landing": {
+      "startPilot": "Start free pilot",
+      "newSchool": "New school?"
+    },
+    "signup": {
+      "metaTitle": "Start a free pilot",
+      "title": "Start your school's free pilot",
+      "subtitle": "Set up your school in a few minutes. You get a working service catalog, letters, calendar and roles straight away, and you can change everything later.",
+      "closedTitle": "Sign-up is closed right now",
+      "closedBody": "New schools cannot sign up at the moment. You can still explore the live demo school.",
+      "closedDemo": "Enter the demo school",
+      "haveAccount": "Already using the platform?",
+      "signIn": "Sign in",
+      "asideTitle": "Everything a UAE school needs to run student services, ready on day one.",
+      "aside": {
+        "a1": "29 ready-made services with forms and approval workflows",
+        "a2": "Bilingual letters, notifications and a full Arabic interface",
+        "a3": "This year's terms and UAE public holidays already on the calendar",
+        "a4": "Safeguarding, consent and data protection defaults built in"
+      },
+      "seeDemo": "See a school already using it",
+      "honeypot": "Leave this field empty",
+      "schoolSection": "Your school",
+      "schoolNameEn": "School name in English",
+      "schoolNameEnPh": "For example, Al Noor International School",
+      "schoolNameAr": "School name in Arabic",
+      "schoolNameArPh": "مدرسة النور الدولية",
+      "emirate": "Emirate",
+      "curricula": "Curricula you teach",
+      "curriculaHint": "Pick all that apply. We add a starter course catalog for each.",
+      "adminSection": "You",
+      "adminName": "Your full name",
+      "email": "Work email",
+      "emailHint": "We send a link to confirm it. Staff invitations and family access open once it is confirmed.",
+      "password": "Password",
+      "passwordHint": "At least 10 characters with letters and numbers.",
+      "strength": {
+        "s0": "Too weak.",
+        "s1": "Weak.",
+        "s2": "Good.",
+        "s3": "Strong."
+      },
+      "issues": {
+        "short": "Use at least 10 characters.",
+        "letter": "Add a letter.",
+        "digit": "Add a number.",
+        "common": "Avoid common words like password.",
+        "email": "Do not use your email address."
+      },
+      "isPrincipal": "I am the principal",
+      "isPrincipalHint": "You also get the principal's dashboard. You can add other people later.",
+      "creating": "Setting up your school...",
+      "submit": "Create my school",
+      "terms": "Free during the pilot. No payment details needed.",
+      "orOAuth": "or sign up with",
+      "oauthHint": "Fill in your school details above first. Your email comes from your account.",
+      "google": "Google",
+      "microsoft": "Microsoft",
+      "errors": {
+        "rate": "Too many attempts. Please wait a while and try again.",
+        "credentials": "We could not create a school with this email and password. If you already use the platform, enter your existing password or sign in first.",
+        "failed": "Something went wrong while setting up your school. Please try again.",
+        "invalid": "Please check the form and try again.",
+        "oauth": "Your sign-in did not finish. Please fill in the form again.",
+        "field": {
+          "schoolNameEn": "Enter the school's name in English (at least 3 characters).",
+          "schoolNameAr": "Enter the school's name in Arabic (at least 3 characters).",
+          "emirate": "Choose your emirate.",
+          "curricula": "Choose at least one curriculum.",
+          "adminName": "Enter your full name.",
+          "email": "Enter a valid work email.",
+          "password": "Choose a stronger password: at least 10 characters with letters and numbers."
+        }
+      }
+    },
+    "curricula": {
+      "BRITISH": "British",
+      "AMERICAN": "American",
+      "IB": "IB",
+      "UAE_MOE": "UAE MOE",
+      "CBSE": "Indian (CBSE)",
+      "ISC": "Indian (ISC)",
+      "SABIS": "SABIS",
+      "JORDAN_TAWJIHI": "Jordanian Tawjihi",
+      "OTHER": "Other"
+    },
+    "emirates": {
+      "AbuDhabi": "Abu Dhabi",
+      "Dubai": "Dubai",
+      "Sharjah": "Sharjah",
+      "Ajman": "Ajman",
+      "UmmAlQuwain": "Umm Al Quwain",
+      "RasAlKhaimah": "Ras Al Khaimah",
+      "Fujairah": "Fujairah"
+    },
+    "verify": {
+      "metaTitle": "Confirm your email",
+      "okTitle": "Email confirmed",
+      "okBody": "Thank you. Staff invitations and family access are now open for your school.",
+      "failedTitle": "This link does not work",
+      "failedBody": "It may have expired or already been used. Sign in and use Resend on the banner to get a new link.",
+      "continueSetup": "Continue setting up",
+      "goHome": "Go to your school",
+      "signIn": "Sign in",
+      "bannerOwner": "Confirm your email ({email}) to unlock staff invitations and family access. Check your inbox for our link.",
+      "bannerOther": "Staff invitations and family access open once the school's founding administrator confirms their email.",
+      "resend": "Resend link",
+      "resent": "We sent a new link. It is valid for 48 hours.",
+      "resentShort": "Link sent",
+      "resendRate": "You asked for several links already. Please wait an hour.",
+      "alreadyVerified": "Your email is already confirmed.",
+      "resendFailed": "We could not send the link. Please try again."
+    },
+    "setup": {
+      "metaTitle": "School setup",
+      "eyebrow": "Setup",
+      "title": "Set up {school}",
+      "subtitle": "Seven short steps. Skip anything and come back later: every choice stays editable from the admin pages.",
+      "progress": "{done} of {total} steps done",
+      "resumeHint": "Your progress is saved",
+      "stepsLabel": "Setup steps",
+      "back": "Back",
+      "skip": "Skip for now",
+      "saveContinue": "Save and continue",
+      "continue": "Continue",
+      "steps": {
+        "profile": {
+          "nav": "School profile",
+          "title": "School profile and brand",
+          "body": "Names, logo and colors, the default language and your school week."
+        },
+        "year": {
+          "nav": "Academic year",
+          "title": "Academic year, holidays and bell times",
+          "body": "We filled in this year's terms, UAE public holidays and a standard school day. Check the dates and change what differs."
+        },
+        "curricula": {
+          "nav": "Curricula",
+          "title": "Curricula and course catalog",
+          "body": "Choose the tracks you teach. Each one adds its standard courses so pathway planning works from the start."
+        },
+        "modules": {
+          "nav": "Modules",
+          "title": "Choose your modules",
+          "body": "Switch off what you do not use yet. Switched-off modules disappear for everyone until you switch them on again."
+        },
+        "people": {
+          "nav": "People",
+          "title": "Add staff, students and families",
+          "body": "Import students with their guardians from a spreadsheet, or add a few people by hand to start."
+        },
+        "invite": {
+          "nav": "Invite and join",
+          "title": "Invite staff and open family access",
+          "body": "Send staff invitations, share the family join code and decide who approves new members."
+        },
+        "done": {
+          "nav": "Done",
+          "title": "You are ready",
+          "body": "Here is what is set up. Anything skipped can be finished at any time."
+        }
+      },
+      "errors": {
+        "generic": "Something went wrong. Please try again.",
+        "FORBIDDEN": "Only school administrators and principals can change the setup.",
+        "INVALID": "Please check the values and try again.",
+        "NAMEEN": "Enter the school's name in English (at least 3 characters).",
+        "NAMEAR": "Enter the school's name in Arabic (at least 3 characters).",
+        "SHORTNAMEEN": "Keep the short name under 40 characters.",
+        "SHORTNAMEAR": "Keep the short name under 40 characters.",
+        "PRIMARYCOLOR": "Enter the main color as a hex value like #0F4C81.",
+        "ACCENTCOLOR": "Enter the accent color as a hex value like #C8A24A.",
+        "WEEKDAYS": "Pick at least one school day.",
+        "EMIRATE": "Choose your emirate.",
+        "TYPE": "Use a PNG, JPG or WebP image.",
+        "TOO_LARGE": "The image is too large. Use one under 2 MB.",
+        "YEAR_DATES": "The year must end after it starts.",
+        "TERM_DATES": "Each term must end after it starts and sit inside the year.",
+        "TERM_OVERLAP": "Terms cannot overlap.",
+        "TERM_IN_USE": "A term you removed already has assessments or exams. Change its dates instead.",
+        "NOT_FOUND": "This item no longer exists. Refresh the page.",
+        "NO_YEAR": "There is no current academic year yet.",
+        "CURRICULA": "Choose at least one curriculum."
+      },
+      "profile": {
+        "saved": "School profile saved",
+        "nameEn": "Name in English",
+        "nameAr": "Name in Arabic",
+        "shortNameEn": "Short name in English",
+        "shortNameAr": "Short name in Arabic",
+        "shortHint": "Shown in the sidebar and in messages.",
+        "primaryColor": "Main color",
+        "accentColor": "Accent color",
+        "preview": "Preview",
+        "previewSchool": "Your school",
+        "previewButton": "Submit request",
+        "previewBadge": "New",
+        "previewHint": "Colors apply across the app after you save.",
+        "defaultLocale": "Default language",
+        "english": "English",
+        "arabic": "Arabic",
+        "timezone": "Time zone",
+        "numerals": "Numerals",
+        "western": "Western (123)",
+        "arabicIndic": "Arabic-Indic (١٢٣)",
+        "emirate": "Emirate",
+        "regulator": "Regulator",
+        "regulators": {
+          "KHDA": "KHDA (Dubai)",
+          "ADEK": "ADEK (Abu Dhabi)",
+          "SPEA": "SPEA (Sharjah)",
+          "MOE": "Ministry of Education",
+          "OTHER": "Other"
+        },
+        "hijri": "Show Hijri dates",
+        "hijriHint": "People can switch it on in their settings.",
+        "weekDays": "School days",
+        "logo": "Logo",
+        "logoAlt": "School logo",
+        "logoUpload": "Upload logo",
+        "logoReplace": "Replace logo",
+        "logoRemove": "Remove",
+        "logoHint": "PNG, JPG or WebP, square works best, up to 2 MB.",
+        "logoSaved": "Logo saved"
+      },
+      "year": {
+        "saved": "Academic year saved",
+        "nameEn": "Year name in English",
+        "nameAr": "Year name in Arabic",
+        "startsOn": "Starts",
+        "endsOn": "Ends",
+        "terms": "Terms",
+        "termNameEn": "Term name in English",
+        "termNameAr": "Term name in Arabic",
+        "removeTerm": "Remove term",
+        "addTerm": "Add term",
+        "holidaysAdded": "{n, plural, =0 {Nothing to add, the calendar already has them} one {Added # holiday} other {Added # holidays}}",
+        "addHolidays": "Add missing UAE holidays",
+        "noYear": "There is no current academic year. Create one in the school calendar.",
+        "holidays": "Holidays and breaks",
+        "holidaysHint": "Islamic holiday dates are estimates and move every year. Edit them when the official dates are announced.",
+        "noHolidays": "No holidays on the calendar for this year yet.",
+        "estimated": "Estimated",
+        "editCalendar": "Edit holidays and events in the school calendar",
+        "bell": "Bell schedule",
+        "bellOff": "The timetable module is off, so there is no bell schedule to set."
+      },
+      "curricula": {
+        "saved": "{n, plural, =0 {Curricula saved} one {Curricula saved, # course added} other {Curricula saved, # courses added}}",
+        "pickOne": "Choose at least one curriculum.",
+        "catalogTitle": "Course catalog",
+        "catalogBody": "Courses your school offers, used by pathway planning and transcripts. Switch off any you do not teach.",
+        "noCourses": "No courses yet. Choose a curriculum and save.",
+        "count": "{name}: {n}",
+        "editCatalog": "Review the course catalog"
+      },
+      "modules": {
+        "saved": "Modules saved",
+        "coreTitle": "Always on",
+        "coreBody": "The core of the platform cannot be switched off."
+      },
+      "people": {
+        "staff": "Staff",
+        "students": "Students",
+        "guardians": "Guardians",
+        "openPeople": "Open people admin",
+        "importTitle": "Import students and guardians",
+        "importBody": "Download the template, fill it in from your student information system and upload it. We check every row before anything is saved.",
+        "noPermission": "Adding people needs the school administrator role."
+      },
+      "invite": {
+        "locked": "Confirm your email to unlock staff invitations and family access. Use the link we sent, or Resend on the banner above.",
+        "lockedShort": "Locked until email is confirmed",
+        "joinCode": "Family join code",
+        "joinCodeHint": "Parents enter this code when they sign up to join your school.",
+        "joinCodeLocked": "Shown once your email is confirmed.",
+        "cards": {
+          "staffInvites": {
+            "title": "Invite staff",
+            "body": "Send invitations by email, allow your staff email domain and choose how people sign in.",
+            "cta": "Open invitations"
+          },
+          "familyCode": {
+            "title": "Family join code and poster",
+            "body": "Share the code or print the poster so parents can join and claim their children.",
+            "cta": "Share with families"
+          },
+          "joinRequests": {
+            "title": "Approve join requests",
+            "body": "See who asked to join and approve or decline them.",
+            "cta": "Open join requests"
+          },
+          "roles": {
+            "title": "Roles and permissions",
+            "body": "Adjust what each role can do or create your own roles.",
+            "cta": "Open roles"
+          }
+        }
+      },
+      "done": {
+        "state": {
+          "done": "Done",
+          "skipped": "Skipped for now",
+          "todo": "Not started"
+        },
+        "review": "Review",
+        "finish": "Finish",
+        "editLater": "Admin page",
+        "completed": "Setup finished on {date}.",
+        "ready": "Your school has a working setup. Finish the rest whenever you like.",
+        "goToSchool": "Go to your school"
+      }
+    },
+    "modules": {
+      "meetings": {
+        "name": "Meetings",
+        "desc": "Families and students book meetings with staff from shared availability."
+      },
+      "timetable": {
+        "name": "Timetable and cover",
+        "desc": "Bell times, a generated timetable, staff absences and cover."
+      },
+      "grades": {
+        "name": "Grades",
+        "desc": "Gradebooks for teachers and published results for families."
+      },
+      "registration": {
+        "name": "Subject registration",
+        "desc": "Students choose subjects each year and the school allocates classes."
+      },
+      "exams": {
+        "name": "Exams",
+        "desc": "Exam timetables with rooms and invigilators."
+      },
+      "trips": {
+        "name": "Trips",
+        "desc": "Trip letters, parent consent and participant lists."
+      },
+      "career": {
+        "name": "Career guidance",
+        "desc": "Aptitude assessment, career matches and advisor follow-up."
+      },
+      "pathways": {
+        "name": "University pathways",
+        "desc": "University search, course planning and applications. Needs career guidance."
+      },
+      "curriculum": {
+        "name": "Curriculum planning",
+        "desc": "Frameworks, lesson plans and review by heads of department."
+      },
+      "analytics": {
+        "name": "Analytics",
+        "desc": "School-wide dashboards for leaders."
+      },
+      "core": {
+        "requests": "Requests and approvals",
+        "services": "Services",
+        "cases": "Student cases",
+        "safeguarding": "Safeguarding",
+        "documents": "Documents and letters",
+        "calendar": "Calendar"
+      }
+    },
+    "card": {
+      "title": "Finish setting up your school",
+      "almost": "All steps are done or skipped. Review and finish.",
+      "next": "Next: {step}",
+      "progress": "{done} of {total}",
+      "start": "Start setup",
+      "continue": "Continue setup"
+    },
+    "settingsLink": {
+      "title": "School setup",
+      "body": "Profile, brand, academic year, curricula, modules and people, step by step.",
+      "open": "Open setup",
+      "brandLink": "Brand, logo and time zone"
+    },
+    "config": {
+      "saved": "Saved",
+      "cancel": "Cancel",
+      "save": "Save",
+      "subjectsTitle": "Subjects",
+      "subjectsBody": "The subjects your school teaches, used by classes, grades, timetables and exams.",
+      "addSubject": "Add subject",
+      "editSubject": "Edit subject",
+      "code": "Code",
+      "department": "Department",
+      "noDepartment": "No department",
+      "nameEn": "Name in English",
+      "nameAr": "Name in Arabic",
+      "messagesTitle": "Notification messages",
+      "messagesBody": "The wording of every email and text the platform sends for your school, in both languages.",
+      "noMessages": "No notification messages yet.",
+      "editMessage": "Edit message",
+      "messageHint": "Keep the placeholders in double braces, such as '{{title}}'. They are filled in when the message is sent.",
+      "subjectEn": "Subject in English",
+      "subjectAr": "Subject in Arabic",
+      "bodyEn": "Message in English",
+      "bodyAr": "Message in Arabic",
+      "channels": {
+        "EMAIL": "Email",
+        "SMS": "SMS",
+        "WHATSAPP": "WhatsApp",
+        "IN_APP": "In app"
+      },
+      "errors": {
+        "generic": "Something went wrong. Please try again.",
+        "FORBIDDEN": "You do not have permission to change this.",
+        "CODE": "Use 2 to 12 capital letters, digits or underscores for the code.",
+        "CODE_TAKEN": "Another subject already uses this code.",
+        "NAME": "Enter both names.",
+        "PLACEHOLDER": "Only use the placeholders the message already had.",
+        "NOT_FOUND": "This item no longer exists. Refresh the page.",
+        "INVALID": "Please check the values and try again."
+      }
+    }
   }
 }

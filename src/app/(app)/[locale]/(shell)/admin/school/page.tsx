@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { Building2, CalendarRange, Layers, MapPin } from "lucide-react";
+import { BookOpen, Building2, CalendarRange, Layers, MapPin } from "lucide-react";
+import { SubjectDialog } from "@/components/onboarding/config-dialogs";
 import { requirePermission } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { fmtDate } from "@/lib/format";
@@ -7,6 +8,8 @@ import { pick } from "@/lib/i18n-data";
 import { PageBody, PageHeader } from "@/components/app/page-header";
 import { Panel, PanelHeader } from "@/components/app/panel";
 import { Pill } from "@/components/app/badges";
+import { Link } from "@/i18n/navigation";
+import { Button } from "@/components/ui/button";
 import { CampusDialog, DepartmentDialog, SchoolProfileForm, SetCurrentYear } from "@/components/admin/school-forms";
 
 export async function generateMetadata() {
@@ -17,6 +20,7 @@ export async function generateMetadata() {
 export default async function SchoolSetupPage() {
   const ctx = await requirePermission("school.manage");
   const t = await getTranslations("adminSchool");
+  const tSetup = await getTranslations("onboarding.settingsLink");
   const prefs = await formatPrefs(ctx);
   const { db, org, locale } = ctx;
   const [campuses, years, departments, staff, subjects] = await Promise.all([
@@ -24,8 +28,10 @@ export default async function SchoolSetupPage() {
     db.academicYear.findMany({ orderBy: { startsOn: "desc" }, include: { terms: { orderBy: { startsOn: "asc" } } } }),
     db.department.findMany({ orderBy: { nameEn: "asc" }, include: { _count: { select: { staff: true, subjects: true } } } }),
     db.staffProfile.findMany({ include: { membership: { include: { user: true } } } }),
-    db.subject.count(),
+    db.subject.findMany({ orderBy: { nameEn: "asc" } }),
   ]);
+  const tc = await getTranslations("onboarding.config");
+  const deptOptions = departments.map((d) => ({ id: d.id, label: pick(locale, d.nameEn, d.nameAr) }));
   const staffOptions = staff
     .filter((s) => s.membership.status === "ACTIVE")
     .map((s) => ({ value: s.membershipId, label: pick(locale, s.membership.user.nameEn, s.membership.user.nameAr), hint: pick(locale, s.membership.titleEn, s.membership.titleAr), keywords: `${s.membership.user.nameEn} ${s.membership.user.nameAr ?? ""}` }))
@@ -34,7 +40,15 @@ export default async function SchoolSetupPage() {
 
   return (
     <PageBody>
-      <PageHeader title={t("title")} description={t("subtitle")} />
+      <PageHeader
+        title={t("title")}
+        description={t("subtitle")}
+        actions={
+          <Button asChild variant="outline">
+            <Link href="/setup?step=profile">{tSetup("brandLink")}</Link>
+          </Button>
+        }
+      />
       <Panel>
         <PanelHeader title={t("profile")} description={t("profileHint")} icon={<Building2 className="size-4" />} />
         <SchoolProfileForm
@@ -52,10 +66,29 @@ export default async function SchoolSetupPage() {
           }}
         />
       </Panel>
+      <Panel padded={false}>
+        <div className="p-5 pb-0">
+          <PanelHeader title={tc("subjectsTitle")} description={tc("subjectsBody")} icon={<BookOpen className="size-4" />} action={<SubjectDialog departments={deptOptions} />} />
+        </div>
+        <ul className="grid divide-y sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-3" data-testid="subjects">
+          {subjects.map((s) => (
+            <li key={s.id} className="flex items-center justify-between gap-3 border-t px-5 py-2.5">
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium">{pick(locale, s.nameEn, s.nameAr)}</p>
+                <p className="truncate text-xs text-muted-foreground" dir="ltr">
+                  {s.code}
+                  {s.departmentId ? ` · ${deptOptions.find((d) => d.id === s.departmentId)?.label ?? ""}` : ""}
+                </p>
+              </div>
+              <SubjectDialog subject={{ id: s.id, code: s.code, nameEn: s.nameEn, nameAr: s.nameAr, departmentId: s.departmentId }} departments={deptOptions} />
+            </li>
+          ))}
+        </ul>
+      </Panel>
       <div className="grid gap-6 lg:grid-cols-2 [&>*]:min-w-0">
         <Panel padded={false}>
           <div className="p-5 pb-0">
-            <PanelHeader title={t("departments")} description={t("departmentsHint", { subjects: subjects })} icon={<Layers className="size-4" />} action={<DepartmentDialog staff={staffOptions} />} />
+            <PanelHeader title={t("departments")} description={t("departmentsHint", { subjects: subjects.length })} icon={<Layers className="size-4" />} action={<DepartmentDialog staff={staffOptions} />} />
           </div>
           <ul className="divide-y">
             {departments.map((d) => (

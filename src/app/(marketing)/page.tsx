@@ -24,6 +24,7 @@ import {
 import { Logo } from "@/components/marketing/logo";
 import { MarketingLocaleToggle } from "@/components/marketing/locale-toggle";
 import { Button } from "@/components/ui/button";
+import { signupEnabled } from "@/lib/signup";
 
 export const dynamic = "force-dynamic";
 
@@ -53,6 +54,8 @@ export default async function Landing() {
   const t = await getTranslations("landing");
   const locale = await getLocale();
   const Arrow = locale === "ar" ? ArrowLeft : ArrowRight;
+  const pilot = signupEnabled();
+  const tPilot = await getTranslations("onboarding.landing");
   const steps = (key: string) => [1, 2, 3, 4].map((i) => t(`flows.${key}.s${i}`));
 
   return (
@@ -78,6 +81,13 @@ export default async function Landing() {
             <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
               <Link href="/login">{t("signIn")}</Link>
             </Button>
+            {pilot && (
+              <Button variant="outline" size="sm" asChild className="hidden md:inline-flex">
+                <Link href="/signup" data-testid="cta-pilot-header">
+                  {tPilot("startPilot")}
+                </Link>
+              </Button>
+            )}
             <Button size="sm" asChild>
               <Link href="/demo" data-testid="cta-demo-header">
                 {t("tryDemo")}
@@ -106,7 +116,14 @@ export default async function Landing() {
                     <Arrow className="size-4" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" asChild>
+                {pilot && (
+                  <Button size="lg" variant="outline" asChild>
+                    <Link href="/signup" data-testid="cta-pilot">
+                      {tPilot("startPilot")}
+                    </Link>
+                  </Button>
+                )}
+                <Button size="lg" variant="ghost" asChild>
                   <Link href="/login">{t("ctaSignIn")}</Link>
                 </Button>
               </div>

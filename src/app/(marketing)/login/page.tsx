@@ -5,12 +5,14 @@ import { enabledOAuthProviders } from "@/auth";
 import { LoginForm } from "@/components/marketing/login-form";
 import { MarketingLocaleToggle } from "@/components/marketing/locale-toggle";
 import { Logo } from "@/components/marketing/logo";
+import { signupEnabled } from "@/lib/signup";
 
 export const dynamic = "force-dynamic";
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams;
   const t = await getTranslations("auth");
+  const tPilot = await getTranslations("onboarding.landing");
   return (
     <div className="grid min-h-dvh lg:grid-cols-2">
       <div className="flex flex-col px-6 py-6 sm:px-10">
@@ -24,6 +26,14 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           <h1 className="text-2xl font-semibold tracking-tight">{t("signInTitle")}</h1>
           <p className="mt-1 mb-8 text-sm text-muted-foreground">{t("signInSubtitle")}</p>
           <LoginForm providers={enabledOAuthProviders()} error={error ?? null} />
+          {signupEnabled() && (
+            <p className="mt-6 text-sm text-muted-foreground">
+              {tPilot("newSchool")}{" "}
+              <Link href="/signup" className="font-medium text-brand hover:underline" data-testid="login-signup">
+                {tPilot("startPilot")}
+              </Link>
+            </p>
+          )}
           <Link href="/demo" className="mt-8 flex items-center gap-1.5 text-sm font-medium text-brand hover:underline">
             {t("tryDemo")}
             <ArrowRight className="size-4 rtl:rotate-180" />

@@ -59,6 +59,8 @@ Put shared values in Project > Settings > Shared Variables and reference them fr
 
 | Variable | Services | What it is |
 | --- | --- | --- |
+| `SIGNUP_ENABLED` | web | Default `true`. Set to `false` to close self-serve school sign-up: /signup shows a closed notice and the "Start free pilot" links disappear. Sign-up creates schools with the owner connection (`PLATFORM_DATABASE_URL`, falling back to `MIGRATION_DATABASE_URL`), so one of those must be set on the web service. |
+| `PLATFORM_DATABASE_URL` | web | Optional owner connection for platform writes (school sign-up, global catalog). Falls back to `MIGRATION_DATABASE_URL`. |
 | `SEED_ON_START` | web | Default `true`. Set to `false` to skip the "seed demo if missing" step at start. Seeding only ever runs when `DEMO_MODE=true` and the `horizon` organization does not exist. |
 | `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET` | web | Google sign-in. The button appears only when both are set. Redirect URI: `AUTH_URL/api/auth/callback/google`. |
 | `AUTH_MICROSOFT_ENTRA_ID_ID`, `AUTH_MICROSOFT_ENTRA_ID_SECRET` | web | Microsoft Entra ID sign-in. The button appears only when both are set. Redirect URI: `AUTH_URL/api/auth/callback/microsoft-entra-id`. |

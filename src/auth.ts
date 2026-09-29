@@ -7,6 +7,7 @@ import { z } from "zod";
 import { identityDb, publicOrgBySlug, tenantDb } from "@/lib/tenant-db";
 import { resolveActiveMembership } from "@/server/identity/session-org";
 import { passwordSignInAllowed, oauthSignInDecision } from "@/server/access/sign-in";
+import { pendingSignup } from "@/server/onboarding/oauth-signup";
 
 declare module "next-auth" {
   interface Session {
@@ -117,9 +118,14 @@ export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
       // OAuth: only people the school has provisioned may sign in, or someone finishing a join link.
       const email = user.email?.toLowerCase();
       if (!email) return false;
-      const decision = await oauthSignInDecision(email, user.name ?? null, account.provider);
-      if (decision !== true) return decision;
-      const existing = await identityDb.user.findUnique({ where: { email } });
+      // A school sign-up in progress (see /signup) may create the account; /signup/complete then creates the school.
+      const signingUp = Boolean(await pendingSignup());
+      if (!signingUp) {
+        const decision = await oauthSignInDecision(email, user.name ?? null, account.provider);
+        if (decision !== true) return decision;
+      }
+      let existing = await identityDb.user.findUnique({ where: { email } });
+      if (!existing && signingUp) existing = await identityDb.user.create({ data: { email, nameEn: (await pendingSignup())?.adminName ?? user.name ?? email, emailVerified: new Date() } });
       if (!existing) return "/login?error=NotProvisioned";
       await identityDb.account.upsert({
         where: { provider_providerAccountId: { provider: account.provider, providerAccountId: account.providerAccountId } },
@@ -145,6 +151,14 @@ export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
             token.name = existing.nameEn;
             token.persona = null;
           }
+        }
+      }
+      // Signed in before their school existed (OAuth sign-up): pick up the new membership once it is there.
+      if (token.uid && !token.activeOrgId) {
+        const m = await resolveActiveMembership(token.uid, null);
+        if (m) {
+          token.activeOrgId = m.orgId;
+          token.membershipId = m.id;
         }
       }
       if (trigger === "update" && session && typeof session === "object" && token.uid) {
