@@ -3,12 +3,14 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
   student: [
     { key: "assessment", href: "/career/assessment" },
     { key: "matches", href: "/career" },
+    { key: "chooseSubjects", href: "/subjects" },
     { key: "bookAdvisor", href: "/services/career_guidance" },
     { key: "myRequests", href: "/requests" },
     { key: "tasks", href: "/tasks" },
   ],
   parent: [
     { key: "children", href: "/children" },
+    { key: "childSubjects", href: "/subjects" },
     { key: "letter", href: "/services/document_request" },
     { key: "subjectChange", href: "/services/subject_change" },
     { key: "parentMeeting", href: "/services/parent_meeting" },
@@ -16,6 +18,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
   ],
   teacher: [
     { key: "refer", href: "/services/academic_concern" },
+    { key: "myClasses", href: "/classes" },
     { key: "approvals", href: "/approvals" },
     { key: "meetings", href: "/meetings" },
     { key: "safeguardingRefer", href: "/safeguarding" },
@@ -48,9 +51,11 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "workflowBuilder", href: "/admin/workflows" },
     { key: "templates", href: "/admin/templates" },
     { key: "compliance", href: "/admin/compliance" },
+    { key: "registration", href: "/admin/registration" },
   ],
   registrar: [
     { key: "approvals", href: "/approvals" },
+    { key: "registration", href: "/admin/registration?tab=rosters" },
     { key: "documents", href: "/documents" },
     { key: "templates", href: "/admin/templates" },
   ],

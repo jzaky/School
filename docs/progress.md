@@ -28,6 +28,8 @@
 - Tests: 92 unit and integration tests passing. Playwright E2E for the five hero flows in en and ar (10 specs) passing locally; one intermittent failure seen once in 4 full runs (subject change, ar), passed on rerun.
 - Demo reset measured at 15s locally.
 
+- Subject registration and automatic class allocation: /admin/registration (offerings per grade with core and option blocks, prerequisites, registration window, rosters with section moves, CSV sheet import with preview), /subjects for students and parents (child switcher; staff register on behalf), /classes and /classes/[id] rosters, allocation engine with unit tests, subject change hook in the workflow engine, seed for grades 6 to 12.
+
 ## In progress
 - Nothing locally. Waiting on deployment access.
 

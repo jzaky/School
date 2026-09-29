@@ -124,6 +124,17 @@ describe("workflow engine and approvals", () => {
     expect(run.status).toBe("COMPLETED");
     const events = await owner.timelineEvent.count({ where: { requestId: req.id, kind: "approved" } });
     expect(events).toBe(4);
+
+    // The completed change moves Adam from Physics to a Computer Science section.
+    const subjects = await owner.subject.findMany({ where: { orgId, code: { in: ["PHYS", "CS"] } } });
+    const phys = subjects.find((s) => s.code === "PHYS")!.id;
+    const cs = subjects.find((s) => s.code === "CS")!.id;
+    const regs = await owner.subjectRegistration.findMany({ where: { orgId, studentId: adam.id, subjectId: { in: [phys, cs] } } });
+    expect(regs.find((r) => r.subjectId === phys)?.status).toBe("DROPPED");
+    expect(regs.find((r) => r.subjectId === cs)?.status).toBe("ALLOCATED");
+    const enrolled = await owner.enrollment.findMany({ where: { orgId, studentId: adam.id }, include: { class: true } });
+    expect(enrolled.some((e) => e.class.subjectId === phys)).toBe(false);
+    expect(enrolled.some((e) => e.class.subjectId === cs && e.class.gradeLevel === 9)).toBe(true);
   });
 
   it("a parent who submits a subject change has consented: the teacher is asked first", async () => {

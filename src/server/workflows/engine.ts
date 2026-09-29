@@ -9,6 +9,7 @@ import { buildMergeData } from "@/server/documents/merge";
 import { evaluateCondition } from "./conditions";
 import type { Assignee, NodeConfig, WorkflowGraph, WorkflowNode } from "./graph";
 import { resolveAssignee, resolveSingle, type RunContext } from "./resolve";
+import { applySubjectChange } from "@/server/registration/service";
 
 type NodeResult = { state: "done"; handle?: string | null; output?: Record<string, unknown> } | { state: "waiting"; output?: Record<string, unknown> };
 
@@ -259,6 +260,10 @@ async function runUpdateStatus(ec: ExecCtx, run: LoadedRun, node: WorkflowNode, 
     });
   }
   await addTimeline(ec, run, ctx, "status", cfg.label);
+  // A completed subject change moves the student from the old class to a section of the new subject.
+  if (cfg.status === "COMPLETED" && run.request?.service?.key === "subject_change" && ctx.student) {
+    await applySubjectChange(ec.tx, ec.orgId, { studentId: ctx.student.id, fromSubject: ctx.form.fromSubject, toSubject: ctx.form.toSubject, actorId: ec.actorId ?? null });
+  }
   return { state: "done" };
 }
 
