@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, Search } from "lucide-react";
 import type { CoursePlanStatus } from "@prisma/client";
 import type { Ctx } from "@/server/context";
 import { personName } from "@/lib/i18n-data";
@@ -15,6 +15,7 @@ const PLAN_TONE: Record<CoursePlanStatus, "success" | "warning" | "neutral"> = {
 /** Staff entry point: Grade 9 to 12 students with their plan status, plans waiting for approval first. */
 export async function StaffStudentList({ ctx, q, tab }: { ctx: Ctx; q: string; tab: string }) {
   const t = await getTranslations("engine");
+  const td = await getTranslations("discovery");
   const { db, orgId, locale } = ctx;
   const needle = q.trim();
   const students = await db.student.findMany({
@@ -38,7 +39,19 @@ export async function StaffStudentList({ ctx, q, tab }: { ctx: Ctx; q: string; t
 
   return (
     <PageBody>
-      <PageHeader title={t("title")} description={t("staff.desc")} actions={<StaffPathwayLinks ctx={ctx} />} />
+      <PageHeader
+        title={t("title")}
+        description={t("staff.desc")}
+        actions={
+          <div className="flex flex-wrap gap-2">
+            <Link href="/career/pathways/search" className="inline-flex h-8 items-center gap-1.5 rounded-md border bg-card px-3 text-sm font-medium shadow-xs hover:bg-muted" data-testid="open-search">
+              <Search className="size-4" />
+              {td("findProgrammes")}
+            </Link>
+            <StaffPathwayLinks ctx={ctx} />
+          </div>
+        }
+      />
       <FilterBar
         tabs={[
           { value: "all", label: t("staff.all"), count: students.length },

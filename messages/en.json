@@ -169,7 +169,9 @@
     "resetting": "Resetting the demo school...",
     "resetDone": "Demo school restored",
     "notifications": "Notifications",
-    "keyboardHint": "Press {key} anytime"
+    "keyboardHint": "Press {key} anytime",
+    "groupUniversities": "Universities",
+    "groupPrograms": "Programmes"
   },
   "auth": {
     "signInTitle": "Sign in to Horizon OS",
@@ -2254,6 +2256,10 @@
       "transcriptReview": {
         "title": "Review a transfer transcript",
         "body": "Match a CBSE marksheet to catalog courses and commit it to the record."
+      },
+      "pathwaySearch": {
+        "title": "Search and compare programmes",
+        "body": "Filter programmes worldwide by country, subject and cost, see your match status on each, and compare up to four side by side."
       }
     }
   },
@@ -5793,6 +5799,140 @@
       "deadlinesDesc": "Next submission deadline for applications not yet submitted, within 90 days.",
       "deadlinesEmpty": "No deadlines in the next 90 days.",
       "allApplications": "All applications"
+    }
+  },
+  "discovery": {
+    "title": "Find programmes",
+    "subtitle": "Search {n} university programmes worldwide by subject, country, cost and entry requirements.",
+    "findProgrammes": "Find programmes",
+    "clearStudent": "Search without a student",
+    "filtersLabel": "Search filters",
+    "searchPlaceholder": "Programme, university, subject or city",
+    "sort": {
+      "label": "Sort by",
+      "match": "Best match",
+      "name": "Name",
+      "tuition": "Tuition, lowest first",
+      "rank": "World rank"
+    },
+    "filter": {
+      "country": "Countries",
+      "allCountries": "All countries",
+      "field": "Field of study",
+      "allFields": "All fields",
+      "degree": "Degree type",
+      "allDegrees": "All degree types",
+      "level": "Level",
+      "allLevels": "All levels",
+      "language": "Teaching language",
+      "allLanguages": "Any language",
+      "tuition": "Tuition per year",
+      "anyTuition": "Any tuition",
+      "intake": "Intake",
+      "anyIntake": "Any intake",
+      "curriculum": "Curriculum listed",
+      "anyCurriculum": "Any curriculum",
+      "status": "Match status",
+      "anyStatus": "Any status"
+    },
+    "degreeType": {
+      "BACHELOR": "Bachelor's degree",
+      "INTEGRATED_MASTERS": "Integrated master's",
+      "PROFESSIONAL": "Professional degree",
+      "ASSOCIATE": "Associate degree",
+      "FOUNDATION": "Foundation year"
+    },
+    "level": {
+      "UNDERGRADUATE": "Undergraduate",
+      "POSTGRADUATE": "Postgraduate"
+    },
+    "tuitionBand": {
+      "low": "Under 20,000 US dollars",
+      "mid": "20,000 to 45,000 US dollars",
+      "high": "Over 45,000 US dollars"
+    },
+    "pickStudentHint": "Choose a student to see their match status on every programme and to add programmes to their shortlist.",
+    "noStudentHint": "Match status appears once a student profile is linked to your account.",
+    "resultCount": "Programmes found: {n}",
+    "clearFilters": "Clear all filters",
+    "emptyTitle": "No programmes match",
+    "emptyBody": "Try fewer filters or a shorter search, for example a subject such as computer science.",
+    "years": "{n} years",
+    "usdApprox": "about {amount} US dollars",
+    "tuitionShort": "{amount} {currency} a year",
+    "rank": "World rank {n}",
+    "pagination": "Result pages",
+    "pageOf": "Page {page} of {pages}",
+    "prev": "Previous page",
+    "next": "Next page",
+    "listSep": ", ",
+    "countriesN": "{n} countries",
+    "clearCountries": "Clear countries",
+    "compare": "Compare",
+    "compareFull": "You can compare up to 4 programmes. Remove one first.",
+    "compareWith": "Compare {name}",
+    "trayTitle": "Comparing {n} of {max}",
+    "removeFromCompare": "Remove {name} from the comparison",
+    "clear": "Clear",
+    "compareN": "Compare {n}",
+    "pickTwo": "Pick at least 2 programmes to compare.",
+    "programme": "Programme",
+    "compareTitle": "Compare programmes",
+    "compareSubtitle": "Side by side, with entry requirements for {curriculum} lined up by subject.",
+    "compareSubtitleStudent": "Side by side, with entry requirements for {curriculum} lined up by subject and checked against the record and plan.",
+    "compareEmptyTitle": "Choose 2 to 4 programmes",
+    "compareEmptyBody": "Tick Compare on programmes in the search, then open the comparison.",
+    "openSearch": "Open the programme search",
+    "someMissing": "{n} of the chosen programmes could not be found and were left out.",
+    "notListed": "Not listed",
+    "noDeadlines": "No deadline listed",
+    "testCell": "{policy}, minimum {min}",
+    "row": {
+      "language": "English language test",
+      "stream": "Stream",
+      "gpa": "Minimum GPA",
+      "percent": "Minimum average",
+      "points": "IB points",
+      "gradeProfile": "Grades"
+    },
+    "type": {
+      "REQUIRED": "Required",
+      "RECOMMENDED": "Recommended",
+      "PREFERRED": "Preferred",
+      "OPTIONAL": "Optional",
+      "ONE_OF": "Any one of these",
+      "TWO_OF": "Any two of these"
+    },
+    "fact": {
+      "university": "University",
+      "country": "City and country",
+      "degree": "Degree",
+      "duration": "Duration",
+      "tuition": "Tuition per year",
+      "language": "Teaching language",
+      "intake": "Intakes",
+      "route": "How to apply",
+      "deadlines": "Deadlines for {year} entry",
+      "status": "Match status",
+      "source": "Confidence and source"
+    },
+    "manage": {
+      "searchProgrammes": "Search programmes",
+      "searchUniversities": "Search universities",
+      "scope": "Which programmes",
+      "scope_all": "All",
+      "scope_own": "This school",
+      "scope_global": "Global catalog",
+      "apply": "Search",
+      "noProgrammes": "No programmes match this search.",
+      "noUniversities": "No universities match this search."
+    },
+    "section": {
+      "overall": "Overall results",
+      "subject": "Subjects",
+      "language": "English language",
+      "test": "Admission tests",
+      "additional": "Application steps"
     }
   }
 }
