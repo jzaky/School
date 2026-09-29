@@ -11,6 +11,7 @@ import {
   disallowedPermissions,
   isKnownPermission,
   isSensitivePermission,
+  opensSensitiveRecords,
   permissionAllowedFor,
 } from "./permission-catalog";
 import { checkAccessChange, withMemberRoles, withRolePermissions, withoutRole, type AccessSnapshot } from "./guardrails";
@@ -281,7 +282,7 @@ export async function setMemberRoles(actor: Actor, input: { membershipId: string
     if (roles.some((r) => audienceOfRole(r.key) !== "staff")) throw new AccessError("FAMILY_ROLE");
     const current = m.roles.map((r) => r.roleId);
     const added = roles.filter((r) => !current.includes(r.id));
-    if (added.some((r) => r.permissions.some(isSensitivePermission) && !m.roles.some((x) => x.role.permissions.some(isSensitivePermission))) && !input.confirmSensitive) {
+    if (added.some((r) => opensSensitiveRecords(r.permissions)) && !input.confirmSensitive) {
       throw new AccessError("CONFIRM_REQUIRED");
     }
     const before = await snapshot(tx, [actor.membershipId, m.id], wanted);

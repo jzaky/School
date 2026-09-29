@@ -5,7 +5,7 @@ import { getCtx } from "@/server/context";
 import { pick, userName } from "@/lib/i18n-data";
 import { Link } from "@/i18n/navigation";
 import { SYSTEM_ROLES } from "@/server/identity/permissions";
-import { PERMISSION_GROUPS, audienceOfRole, isSensitivePermission, permissionAllowedFor } from "@/server/access/permission-catalog";
+import { PERMISSION_GROUPS, audienceOfRole, isSensitivePermission, opensSensitiveRecords, permissionAllowedFor } from "@/server/access/permission-catalog";
 import { STAFF_MEMBERSHIP_WHERE } from "@/server/access/roles";
 import { rolesManagers } from "@/server/access/guardrails";
 import { PageBody } from "@/components/app/page-header";
@@ -35,7 +35,7 @@ export default async function RolePage({ params }: { params: Promise<{ id: strin
   const audience = audienceOfRole(role.key);
   const isStaffRole = audience === "staff";
   const name = pick(locale, role.nameEn, role.nameAr);
-  const sensitive = role.permissions.some(isSensitivePermission);
+  const sensitive = opensSensitiveRecords(role.permissions);
   const def = SYSTEM_ROLES.find((r) => r.key === role.key);
 
   const [members, memberCount, allRoles] = await Promise.all([

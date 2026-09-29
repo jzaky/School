@@ -113,7 +113,7 @@ export function SignInSettings({ initial, providers, canEdit }: { initial: SignI
         </div>
       </section>
       {canEdit && (
-        <div className="flex justify-end">
+        <div className="flex">
           <Button onClick={save} disabled={pending} data-testid="settings-save">
             {pending ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
             {t("saveSettings")}

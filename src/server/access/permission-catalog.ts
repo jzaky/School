@@ -48,6 +48,14 @@ export function isSensitivePermission(p: string): boolean {
   return (SENSITIVE_PERMISSIONS as string[]).includes(p) || p.startsWith("safeguarding.");
 }
 
+/**
+ * Whether holding a role opens sensitive records. Raising a safeguarding concern is sensitive to grant
+ * (it needs confirmation) but reveals nothing, and every staff role has it, so it does not count here.
+ */
+export function opensSensitiveRecords(permissions: string[]): boolean {
+  return permissions.some((p) => p !== "safeguarding.refer" && isSensitivePermission(p));
+}
+
 const PARENT_PERMISSIONS: Permission[] = [
   "grades.view_own",
   "registration.submit",

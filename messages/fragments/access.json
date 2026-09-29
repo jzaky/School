@@ -1618,6 +1618,10 @@
       "Invite all families",
       "دعوة جميع الأسر"
     ],
+    "allFamiliesOnApp": [
+      "Every parent with an email in your student records already has an account or an invitation.",
+      "لدى كل ولي أمر له بريد إلكتروني في سجلات الطلاب حساب أو دعوة بالفعل."
+    ],
     "inviteFamiliesTitle": [
       "Invite every family not yet on the app?",
       "دعوة كل الأسر غير المسجلة في التطبيق؟"

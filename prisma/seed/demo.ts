@@ -33,6 +33,7 @@ import { seedPipelineDemo } from "./catalog/pipeline-demo";
 import { seedPathwayEngine } from "./academics/pathway-engine";
 import { seedTranscripts } from "./academics/transcripts";
 import { seedGlobalCatalog } from "./catalog";
+import { seedAccess } from "./access";
 
 export const DEMO_SLUG = "horizon";
 export const DEMO_PASSWORD = "Horizon2026!";
@@ -944,6 +945,7 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   await seedPathwayEngine(world);
   await seedTranscripts(world);
   await seedCurriculum(world);
+  await seedAccess(world);
   // Requirement pipeline examples (after the global catalog seed; programs are looked up at runtime).
   if (isDemoTenant) await seedPipelineDemo(db, { now, orgId, log });
 

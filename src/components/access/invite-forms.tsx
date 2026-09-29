@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { PickerCombobox, type PickerOption } from "@/components/forms/picker-combobox";
 import { encodeQr, qrSvgPath } from "@/server/access/qr";
 import {
@@ -379,10 +380,24 @@ export function InviteFamiliesButton({ waiting }: { waiting: number }) {
     });
   return (
     <>
-      <Button variant="outline" onClick={() => setOpen(true)} disabled={waiting === 0} data-testid="invite-families">
-        <Users className="size-4" />
-        {t("inviteFamilies")}
-      </Button>
+      {waiting === 0 ? (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span tabIndex={0}>
+              <Button variant="outline" disabled data-testid="invite-families">
+                <Users className="size-4" />
+                {t("inviteFamilies")}
+              </Button>
+            </span>
+          </TooltipTrigger>
+          <TooltipContent>{t("allFamiliesOnApp")}</TooltipContent>
+        </Tooltip>
+      ) : (
+        <Button variant="outline" onClick={() => setOpen(true)} data-testid="invite-families">
+          <Users className="size-4" />
+          {t("inviteFamilies")}
+        </Button>
+      )}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>

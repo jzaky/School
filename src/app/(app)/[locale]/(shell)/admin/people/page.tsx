@@ -18,7 +18,7 @@ import { AddStudentDialog } from "@/components/admin/people/student-forms";
 import { GuardianLinkDialog } from "@/components/admin/people/guardian-forms";
 import { CsvImporter, ImportErrors } from "@/components/admin/people/csv-import";
 import { MemberRolesDialog } from "@/components/access/role-forms";
-import { audienceOfRole, isSensitivePermission } from "@/server/access/permission-catalog";
+import { audienceOfRole, opensSensitiveRecords } from "@/server/access/permission-catalog";
 
 export async function generateMetadata() {
   const t = await getTranslations("adminPeople");
@@ -67,7 +67,7 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
   const canManageRoles = ctx.can("roles.manage");
   const memberRoleOptions = roles
     .filter((r) => audienceOfRole(r.key) === "staff")
-    .map((r) => ({ id: r.id, label: pick(locale, r.nameEn, r.nameAr), description: pick(locale, r.descEn, r.descAr), sensitive: r.permissions.some(isSensitivePermission) }));
+    .map((r) => ({ id: r.id, label: pick(locale, r.nameEn, r.nameAr), description: pick(locale, r.descEn, r.descAr), sensitive: opensSensitiveRecords(r.permissions) }));
 
   const statusFilter = tab === "staff" ? (MEMBER_STATUSES.includes(sp.status as MembershipStatus) ? (sp.status as MembershipStatus) : null) : STUDENT_STATUSES.includes(sp.status as PersonStatus) ? (sp.status as PersonStatus) : null;
 

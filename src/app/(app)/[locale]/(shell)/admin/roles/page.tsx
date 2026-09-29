@@ -5,7 +5,7 @@ import { getCtx } from "@/server/context";
 import { pick, userName } from "@/lib/i18n-data";
 import { Link } from "@/i18n/navigation";
 import { SYSTEM_ROLES } from "@/server/identity/permissions";
-import { PERMISSION_GROUPS, audienceOfRole, isSensitivePermission } from "@/server/access/permission-catalog";
+import { PERMISSION_GROUPS, audienceOfRole, opensSensitiveRecords } from "@/server/access/permission-catalog";
 import { explainAccess } from "@/server/access/roles";
 import { PageBody, PageHeader } from "@/components/app/page-header";
 import { Panel } from "@/components/app/panel";
@@ -76,7 +76,7 @@ export default async function RolesPage({ searchParams }: { searchParams: Promis
         </div>
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           {list.map((r) => {
-            const sensitive = r.permissions.some(isSensitivePermission);
+            const sensitive = opensSensitiveRecords(r.permissions);
             return (
               <Link key={r.id} href={`/admin/roles/${r.id}`} className="group rounded-xl border bg-card p-4 shadow-xs transition hover:border-brand/40 hover:shadow-sm" data-testid={`role-card-${r.key}`}>
                 <div className="flex items-start justify-between gap-2">

@@ -6571,7 +6571,8 @@
     "parentApprovalBody": "Off: families whose details match are linked straight away. Anything that does not match always waits for approval.",
     "studentSelfJoin": "Students can join with the school code",
     "studentSelfJoinBody": "Off by default. Students verify with their student number and date of birth.",
-    "saveSettings": "Save settings"
+    "saveSettings": "Save settings",
+    "allFamiliesOnApp": "Every parent with an email in your student records already has an account or an invitation."
   },
   "joinRequests": {
     "title": "Join requests",
