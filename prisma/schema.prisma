@@ -2781,28 +2781,30 @@ model RequirementExtraction {
 /// One version of a program's entry requirements for an intake year and (optionally) one curriculum.
 /// Versions are never overwritten: a change creates a new row and closes the old one.
 model ProgramRequirement {
-  id             String            @id @default(cuid())
-  orgId          String?
-  programId      String
-  intakeYear     Int
-  curriculum     SchoolCurriculum?
-  version        Int               @default(1)
-  isCurrent      Boolean           @default(true)
-  effectiveFrom  DateTime?
-  effectiveTo    DateTime?
-  confidence     DataConfidence    @default(UNKNOWN)
-  sourceId       String?
-  extractionId   String?
-  verifiedAt     DateTime?
-  verifiedById   String?
-  minimumGPA     Float?
-  minimumPercent Float?
-  minimumPoints  Int?
-  gradeProfile   String?
-  stream         String?
-  notesEn        String?
-  notesAr        String?
-  createdAt      DateTime          @default(now())
+  id              String            @id @default(cuid())
+  orgId           String?
+  programId       String
+  intakeYear      Int
+  curriculum      SchoolCurriculum?
+  version         Int               @default(1)
+  isCurrent       Boolean           @default(true)
+  effectiveFrom   DateTime?
+  effectiveTo     DateTime?
+  confidence      DataConfidence    @default(UNKNOWN)
+  sourceId        String?
+  extractionId    String?
+  verifiedAt      DateTime?
+  verifiedById    String?
+  minimumGPA      Float?
+  minimumPercent  Float?
+  minimumPoints   Int?
+  gradeProfile    String?
+  stream          String?
+  notesEn         String?
+  notesAr         String?
+  /// Where on the source page the requirements were found (heading or section).
+  evidenceLocator String?
+  createdAt       DateTime          @default(now())
 
   subjects   SubjectRequirement[]
   languages  LanguageRequirement[]
@@ -2825,6 +2827,8 @@ model SubjectRequirement {
   noteEn               String?
   noteAr               String?
 
+  /// Verbatim quote from the source page that supports this line.
+  evidenceQuote      String?
   programRequirement ProgramRequirement @relation(fields: [programRequirementId], references: [id], onDelete: Cascade)
 
   @@index([programRequirementId])
@@ -2839,6 +2843,8 @@ model LanguageRequirement {
   minComponent         Float?
   waiverNoteEn         String?
 
+  /// Verbatim quote from the source page that supports this line.
+  evidenceQuote      String?
   programRequirement ProgramRequirement @relation(fields: [programRequirementId], references: [id], onDelete: Cascade)
 
   @@index([programRequirementId])
@@ -2853,6 +2859,8 @@ model TestRequirement {
   minScore             Float?
   noteEn               String?
 
+  /// Verbatim quote from the source page that supports this line.
+  evidenceQuote      String?
   programRequirement ProgramRequirement @relation(fields: [programRequirementId], references: [id], onDelete: Cascade)
 
   @@index([programRequirementId])
@@ -2867,6 +2875,8 @@ model AdditionalRequirement {
   noteEn               String?
   noteAr               String?
 
+  /// Verbatim quote from the source page that supports this line.
+  evidenceQuote      String?
   programRequirement ProgramRequirement @relation(fields: [programRequirementId], references: [id], onDelete: Cascade)
 
   @@index([programRequirementId])
