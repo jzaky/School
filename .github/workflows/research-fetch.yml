@@ -1,0 +1,82 @@
+name: Research page fetch
+
+# Fetches official university pages listed in the repo for the entry requirements research.
+# Page text is encrypted before it leaves the job (the repository is public); see
+# scripts/research/fetch-pages.mjs. The encrypted chunks are committed under research/cache/<label>.
+on:
+  workflow_dispatch:
+    inputs:
+      list:
+        description: "Page list (repo path)"
+        required: true
+        default: "research/fetch-list.json"
+      label:
+        description: "Output folder under research/cache"
+        required: true
+      chunks:
+        description: "Parallel jobs (1 to 16)"
+        required: false
+        default: "12"
+
+permissions:
+  contents: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.m.outputs.matrix }}
+    steps:
+      - id: m
+        run: echo "matrix=$(python3 -c "import json;print(json.dumps(list(range(max(1,min(16,int('${{ inputs.chunks }}')))))))")" >> "$GITHUB_OUTPUT"
+
+  fetch:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        chunk: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install a browser
+        run: |
+          mkdir -p /tmp/pw && cd /tmp/pw && npm init -y >/dev/null && npm i playwright@1.56.1 >/dev/null
+          npx playwright install --with-deps chromium
+      - name: Fetch pages
+        run: |
+          cp scripts/research/fetch-pages.mjs /tmp/pw/
+          node /tmp/pw/fetch-pages.mjs --list "${{ inputs.list }}" --chunk ${{ matrix.chunk }} --of ${{ strategy.job-total }} --out "out/chunk-${{ matrix.chunk }}.json" --key research/fetch-key.pub
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chunk-${{ matrix.chunk }}
+          path: out/
+          retention-days: 1
+
+  commit:
+    needs: fetch
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/download-artifact@v4
+        with:
+          path: dl
+      - name: Commit encrypted snapshots
+        run: |
+          mkdir -p "research/cache/${{ inputs.label }}"
+          find dl -name '*.json' -exec cp {} "research/cache/${{ inputs.label }}/" \;
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/cache
+          git commit -m "Research fetch ${{ inputs.label }}: encrypted page snapshots" || exit 0
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin "${{ github.ref_name }}" && git push origin "HEAD:${{ github.ref_name }}" && break
+            sleep $((i * 5))
+          done
