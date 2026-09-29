@@ -1,0 +1,114 @@
+# Onboarding a school: the playbook
+
+How to take a school from "yes, let's pilot" to families using Horizon, with as little of your time as possible.
+Two ways to do it: the school does it itself (self-serve), or you run a 90-minute setup call with them (guided).
+Both use the same screens, so you can mix them.
+
+## 0. One-time setup on your side (Railway)
+
+Do these once, before the first real school:
+
+| Variable (web service unless noted) | Why |
+|---|---|
+| `RESEND_API_KEY`, `EMAIL_FROM` (web and worker) | Real emails: invitations, email confirmation, notifications. Without them emails only go to the server log. |
+| `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET` | "Continue with Google" (steps in section 7). |
+| `AUTH_MICROSOFT_ENTRA_ID_ID`, `_SECRET`, `_ISSUER` | "Continue with Microsoft" for schools on Microsoft 365. |
+| `ANTHROPIC_API_KEY` (web and worker) | Real AI drafts (briefs, plans, requirement extraction). Without it the offline fallback is used. |
+| `COLLEGE_SCORECARD_API_KEY` (web and worker) | US university data import. |
+| `PLATFORM_ADMIN_EMAILS` | Your own email: lets you publish reviewed requirement data to the shared university catalog. |
+| `SIGNUP_ENABLED` | `true` (default) shows "Start free pilot". Set `false` to invite-only. |
+
+Also: turn on Postgres backups in Railway, and add a custom domain when you have one (then update `AUTH_URL`, `APP_URL` and the Google/Microsoft redirect URLs).
+
+## 1. Before the setup call: send the school a data request
+
+Send this list about a week before. Every template is downloadable from **School admin > Import center** (English and Arabic headers, two example rows each).
+
+1. **School details**: official name in English and Arabic, short name, emirate, regulator (KHDA, ADEK, SPEA or MoE), curricula taught, school days, time zone.
+2. **Logo**: PNG or SVG, transparent background, at least 512 pixels wide. **Brand colors**: two hex codes (main and accent).
+3. **Staff list** (staff template): name in English (Arabic optional), work email, role (teacher, counselor, registrar, principal, and so on), department, job title, subjects taught.
+4. **Students and guardians** (student template): student number, names in English and Arabic, grade, section, date of birth, and for each guardian: name, email, phone, relationship.
+5. **Classes and enrollments** (classes template): class code, name, subject, grade, section, teacher email, room, capacity; and which students are in each class (class code plus student number).
+6. **Calendar**: first and last day of each term, holidays, exam weeks. (UAE public holidays are pre-filled; Islamic dates are estimates to confirm.)
+7. **Bell schedule**: period start and end times (a standard UAE schedule is pre-filled).
+8. **Letters**: wording and signatory for the official letters they issue (enrollment, good conduct, fee, transfer). The defaults can be used as they are.
+9. **Safeguarding**: who is the Designated Safeguarding Lead and deputy.
+10. **Launch services**: the five procedures to go live with first (suggested: school documents, absence requests, parent meetings, teacher referrals, safeguarding concerns).
+
+Most schools export items 3 to 5 from their current system (iSAMS, SIMS, Phoenix, PowerSchool, Engage) as CSV or Excel. Horizon reads either.
+
+## 2. Path A: the school sets itself up (self-serve)
+
+1. The school's administrator goes to **/signup** ("Start free pilot" on the home page) and enters the school name in English and Arabic, emirate, curricula, their name, work email and a password (or continues with Google or Microsoft).
+2. Horizon creates a complete, working school straight away: all roles, the service catalog with its forms and approval routes, bilingual letter templates, message templates, grade bands, the bell schedule, the current academic year with terms and UAE holidays, departments, subjects and the course catalog for their curricula. Nothing is empty.
+3. They confirm their email (a link is sent). Until then, invitations and the family join code stay locked, so nobody can invite people into a school that has not proven its email.
+4. The **setup wizard** (/setup) opens. It has seven steps, each can be skipped and finished later:
+   - **Profile**: names, logo upload, brand colors (the whole app changes color live), language, school days, time zone, regulator, Hijri dates.
+   - **Year**: term dates, holidays, bell schedule.
+   - **Curricula**: which tracks the school teaches; the course catalog is filled from the global catalog.
+   - **Modules**: switch modules on or off (core ones such as requests, safeguarding and documents always stay on).
+   - **People**: the Import center, in order: staff, then students with guardians, then classes and enrollments.
+   - **Invite**: invite staff, print the family join poster, choose how people sign in.
+   - **Done**: a summary checklist.
+5. Until setup is finished, the administrator's home page shows a "Finish setting up" card with progress.
+
+## 3. Path B: you run a guided setup call (90 minutes)
+
+Best for the pilot school. Share your screen, but let the school's administrator drive where possible so they learn it.
+
+| Time | What | Where |
+|---|---|---|
+| 0 to 10 | The school's administrator signs up with their own work email (so they own the school and receive the confirmation), confirms the email. Add yourself as an administrator from **Roles and access** if you want to help later, and remove yourself at the end of the pilot. | /signup |
+| 10 to 25 | Profile: logo, colors, names, days. Year: terms and holidays. | /setup |
+| 25 to 50 | Import center: staff file, then students and guardians, then classes. Fix the rows the preview flags (unknown teacher emails, missing student numbers) and re-import; imports never create duplicates. | School admin > Import center |
+| 50 to 65 | With the principal: **Roles and access**. Walk through each role in plain words, assign the DSL and deputy, the registrar, heads of department. Use **Access check** on one teacher to show what they can see. | School admin > Roles and access |
+| 65 to 80 | Services: open the five launch services, adjust forms and approval routes, preview the letters with the school's logo. | School admin > Services, Forms, Workflows, Document templates |
+| 80 to 90 | Invitations: send staff invitations (by email, or a join link for the staff room), turn on Google or Microsoft sign-in if they use it, print the family join poster with the QR code. | School admin > Invitations |
+
+After the call: the school sends the staff invitations and the family letter or poster when they are ready to go live.
+
+## 4. How people get in
+
+- **Staff**: an email invitation (single, or bulk from the staff file), or a staff join link (with a role, a maximum number of uses and an expiry), or automatically by email domain (for example everyone @school.ae joins as a teacher, pending approval or auto-approved).
+- **Parents**: either an email invitation linked to their children, or the **family join code** (for example HRZ-2026) on a printed poster or letter with a QR code. The parent enters the code, creates an account, then adds each child with the student number and date of birth. If the details match, the child is linked; if the school requires approval (the default), the request waits in **Join requests**. Wrong details never reveal anything, and repeated wrong attempts are locked out.
+- **Students**: invited by email (student self-join is off by default).
+- **Sign-in**: email and password always; Google and Microsoft when the school turns them on and the keys are set.
+
+## 5. What makes it light to run
+
+- New schools get a complete working configuration automatically; you do not build anything per school.
+- The school's own administrators change everything: names, logo, colors, services, forms, approval routes, letters, notification texts, subjects, departments, roles, modules, calendar.
+- Imports are idempotent: re-running a file updates rather than duplicates.
+- The university requirements catalog is shared by all schools and refreshes itself weekly from official pages; changes wait in a review queue.
+- A GitHub job checks the live site every morning at 06:45 Dubai time for every role, in both languages, on desktop and phone.
+- Deploys only happen when app code changes.
+
+## 6. Go-live checklist
+
+- [ ] Email confirmed, logo and colors set, year and holidays checked.
+- [ ] Staff imported and invited; DSL and deputy assigned; registrar and heads of department assigned.
+- [ ] Students and guardians imported; classes and enrollments imported.
+- [ ] Five launch services reviewed; letter templates previewed with the logo.
+- [ ] Sign-in method chosen (password, Google or Microsoft).
+- [ ] Family join code poster printed or letter sent; join approval setting chosen.
+- [ ] Success measures agreed (for example days to issue a letter, share of requests closed on time).
+
+## 7. Connecting Google sign-in
+
+1. Go to https://console.cloud.google.com and create a project (for example "Horizon").
+2. Open **Google Auth Platform** (older screens: APIs and Services > OAuth consent screen) and press **Get started**: app name "Horizon School OS", your support email, audience **External**, your contact email. Create.
+3. Under **Audience**, press **Publish app**. Horizon only asks for name and email, so Google does not need to review it.
+4. Under **Clients**, **Create client**: type **Web application**, name "Horizon web".
+   - Authorized JavaScript origins: `https://myhorizon.up.railway.app`
+   - Authorized redirect URIs: `https://myhorizon.up.railway.app/api/auth/callback/google`
+5. Copy the Client ID and Client secret into Railway (web service) as `AUTH_GOOGLE_ID` and `AUTH_GOOGLE_SECRET`. Check `AUTH_URL` is `https://myhorizon.up.railway.app`. Railway redeploys.
+6. The login, sign-up and join pages now show **Continue with Google**. A Google account only gets into a school if that email was invited or imported, or if it is signing up or joining with a link or code.
+
+**Microsoft** (schools on Microsoft 365): in https://entra.microsoft.com go to App registrations > New registration, name "Horizon", supported accounts "Accounts in any organizational directory and personal Microsoft accounts", redirect URI (Web) `https://myhorizon.up.railway.app/api/auth/callback/microsoft-entra-id`. Then Certificates and secrets > New client secret. Set `AUTH_MICROSOFT_ENTRA_ID_ID` (Application (client) ID), `AUTH_MICROSOFT_ENTRA_ID_SECRET` (the secret value) and `AUTH_MICROSOFT_ENTRA_ID_ISSUER` (`https://login.microsoftonline.com/common/v2.0`).
+
+## 8. Common questions
+
+- **A parent says their child's details do not match.** Check the student number and date of birth in the student record; approve the request manually in Join requests.
+- **Someone cannot see a page.** Use Roles and access > Access check on that person; it shows every permission and which role grants it.
+- **An email never arrived.** Check `RESEND_API_KEY` and `EMAIL_FROM`; the invitation can be resent or its link copied from Invitations.
+- **The school wants a feature switched off.** School admin > School setup > Modules.
