@@ -2,24 +2,15 @@ import "server-only";
 import { randomUUID } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { r2Configured, s3 } from "./r2";
+
+export { putR2Object } from "./r2";
 
 // Documents live in Cloudflare R2 (S3 API) when R2_* env vars are set. Access is only ever through
 // short-lived signed URLs. Without R2 (local development) files go to a local folder.
-const r2Configured = () => Boolean(process.env.R2_ACCOUNT_ID && process.env.R2_ACCESS_KEY_ID && process.env.R2_SECRET_ACCESS_KEY && process.env.R2_BUCKET);
-
-let client: S3Client | null = null;
-function s3() {
-  if (!client) {
-    client = new S3Client({
-      region: "auto",
-      endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
-      credentials: { accessKeyId: process.env.R2_ACCESS_KEY_ID!, secretAccessKey: process.env.R2_SECRET_ACCESS_KEY! },
-    });
-  }
-  return client;
-}
+// The R2 client lives in ./r2 so the worker can share it.
 
 const LOCAL_DIR = process.env.LOCAL_UPLOAD_DIR ?? path.join(process.cwd(), ".uploads");
 

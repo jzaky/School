@@ -39,6 +39,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
   counselor: [
     { key: "caseload", href: "/cases" },
     { key: "pathwaysConfirm", href: "/career/universities/results" },
+    { key: "catalogReview", href: "/career/catalog" },
     { key: "meetings", href: "/meetings" },
     { key: "calendar", href: "/calendar" },
     { key: "students", href: "/students" },
@@ -46,6 +47,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
   career_advisor: [
     { key: "careerDesk", href: "/career" },
     { key: "pathwaysManage", href: "/career/universities/manage" },
+    { key: "catalogReview", href: "/career/catalog" },
     { key: "caseload", href: "/cases" },
     { key: "calendar", href: "/calendar" },
   ],

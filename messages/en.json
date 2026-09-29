@@ -140,7 +140,8 @@
     "calendarAdmin": "School calendar",
     "examsAdmin": "Exam schedules",
     "exams": "Exams",
-    "trips": "Trips"
+    "trips": "Trips",
+    "catalogReview": "Catalog review"
   },
   "shell": {
     "openMenu": "Open menu",
@@ -2197,6 +2198,10 @@
       "examsAdmin": {
         "title": "Build the exam timetable",
         "body": "Auto-suggest a schedule, check clashes and publish to families."
+      },
+      "catalogReview": {
+        "title": "Review requirement updates",
+        "body": "Check drafts extracted from official university pages, publish them with evidence and confirm changes before students see them."
       }
     }
   },
@@ -3871,7 +3876,8 @@
         "rate_limited": "Rate limited by the API. Try later or add an API key.",
         "unauthorized": "Access refused (key rejected or network blocked).",
         "unreachable": "The Scorecard service could not be reached.",
-        "bad_response": "The Scorecard service returned an unexpected response."
+        "bad_response": "The Scorecard service returned an unexpected response.",
+        "schema_drift": "The Scorecard data format changed (expected fields are missing). The import stopped without changes."
       },
       "programmes": "Programmes",
       "programmesDesc": "Unchecked programmes are listed first. Mark a programme as checked only after comparing it with the official page.",
@@ -4541,6 +4547,300 @@
       "CANNOT_APPROVE": "Another guardian makes decisions for this child.",
       "NOT_FINISHED": "The trip has not finished yet.",
       "INVALID": "Some details are not valid."
+    }
+  },
+  "catalog": {
+    "title": "Catalog review",
+    "subtitle": "Keep university entry requirements accurate: review extracted drafts, watch official sources and confirm changes.",
+    "tabs": {
+      "queue": "Review queue",
+      "sources": "Sources",
+      "changes": "Change monitor",
+      "scorecard": "US data"
+    },
+    "exampleData": "Example data, confirm on the official page",
+    "exampleShort": "Example data",
+    "readOnly": "Read-only mode",
+    "percent": "{value}%",
+    "error": {
+      "forbidden": "You do not have permission to review catalog data.",
+      "not_platform_reviewer": "Only platform catalog reviewers can publish shared requirements. Ask the platform team to add your email.",
+      "no_owner_url": "Publishing needs the platform database connection (PLATFORM_DATABASE_URL), which is not configured here.",
+      "no_redis": "Background jobs are not running here, so pages cannot be checked now.",
+      "no_api_key": "Set COLLEGE_SCORECARD_API_KEY to run the import.",
+      "not_found": "This item no longer exists.",
+      "not_pending": "Someone already decided on this draft.",
+      "no_program": "Link this source to a programme before publishing.",
+      "mirror_cannot_override": "A mirror site cannot replace data from an official page.",
+      "invalid_edit": "Some edited lines are not valid. Check the values and try again.",
+      "empty": "There are no lines to publish.",
+      "note_required": "Add a note explaining the decision.",
+      "invalid": "Check the details and try again.",
+      "invalid_url": "Enter a full web address starting with http or https.",
+      "already_reviewed": "This change was already reviewed.",
+      "import_failed": "The import failed. See the recent runs below."
+    },
+    "queue": {
+      "pendingTitle": "Waiting for review",
+      "pendingDesc": "Drafts extracted from official pages. Nothing is shown to students until a person approves it.",
+      "emptyTitle": "Nothing to review",
+      "emptyBody": "New drafts appear here when a source page changes.",
+      "decidedTitle": "Recent decisions",
+      "review": "Review",
+      "lines": "{n, plural, one {# line} other {# lines}}",
+      "rejectedLines": "{n, plural, one {# line rejected} other {# lines rejected}}",
+      "confidence": "Confidence {value}%",
+      "extractedOn": "Extracted {date}",
+      "decidedOn": "Decided {date}",
+      "status": {
+        "PENDING_REVIEW": "Waiting for review",
+        "APPROVED": "Published",
+        "REJECTED": "Rejected"
+      }
+    },
+    "review": {
+      "back": "Review queue",
+      "officialPage": "Open the source page",
+      "extractor": "Extractor: {model}",
+      "evidence": "Quote from the page",
+      "proposed": "Proposed",
+      "current": "Current version",
+      "noCurrent": "Not in the current version",
+      "noCurrentVersion": "No published version yet",
+      "general": "All applicants",
+      "groupTitle": "{curriculum}",
+      "currentVersion": "Version {n}, {confidence}",
+      "rejectedTitle": "Lines the validator rejected",
+      "rejectedDesc": "These lines are not proposed because an automatic check failed.",
+      "approve": "Approve and publish",
+      "editApprove": "Edit and approve",
+      "reject": "Reject",
+      "rerunAi": "Extract again with AI",
+      "rerunAiDisabled": "Set ANTHROPIC_API_KEY to use the AI extractor. The built-in extractor already ran.",
+      "approved": "Published as a new version",
+      "rejectedToast": "Draft rejected",
+      "rerunDone": "A new draft was extracted",
+      "rerunCached": "Nothing new: this page was already extracted with this model.",
+      "approveTitle": "Publish these requirements?",
+      "approveBody": "A new version is created for each group and the previous version is closed. Every school using the shared catalog sees the new version.",
+      "note": "Note (optional)",
+      "rejectTitle": "Reject this draft",
+      "rejectBody": "Explain why, so the next reviewer knows what to look for.",
+      "rejectNote": "Reason",
+      "editTitle": "Edit before publishing",
+      "editBody": "Change values or remove lines. Quotes stay exactly as they appear on the page.",
+      "keep": "Keep",
+      "reviewerNote": "Reviewer note: {note}",
+      "decided": "This draft is {status}.",
+      "reason": {
+        "missing_evidence": "No quote from the page",
+        "evidence_too_long": "Quote too long",
+        "evidence_not_in_text": "Quote not found on the page",
+        "value_not_in_evidence": "Value does not appear in its quote",
+        "unknown_subject_code": "Subject not in the catalog vocabulary",
+        "unknown_test_code": "Unknown test",
+        "invalid_type": "Invalid requirement type",
+        "invalid_level": "Invalid subject level",
+        "invalid_policy": "Invalid test policy",
+        "invalid_curriculum": "Unknown curriculum",
+        "unknown_kind": "Unknown requirement kind",
+        "out_of_range": "Number outside the allowed range",
+        "malformed": "Incomplete line",
+        "duplicate": "Duplicate line"
+      }
+    },
+    "field": {
+      "grade": "Minimum grade",
+      "type": "Type",
+      "overall": "Overall",
+      "component": "Each component",
+      "policy": "Policy",
+      "minScore": "Minimum score",
+      "required": "Required",
+      "value": "Value"
+    },
+    "line": {
+      "gradeProfile": "Grade profile {value}",
+      "minimumPoints": "At least {value} IB points",
+      "minimumGPA": "Minimum GPA {value}",
+      "minimumPercent": "Minimum average {value}%",
+      "subject": "{type}: {subjects}",
+      "subjectGrade": "{type}: {subjects}, grade {grade} or above",
+      "language": "{test} {overall} overall",
+      "languageComponent": "{test} {overall} overall, {component} in each component",
+      "test": "{test}: {policy}",
+      "testMin": "{test}: {policy}, minimum {score}",
+      "additional": "{kind}: {required}",
+      "or": " or ",
+      "requiredYes": "required",
+      "requiredNo": "optional"
+    },
+    "type": {
+      "REQUIRED": "Required",
+      "RECOMMENDED": "Recommended",
+      "PREFERRED": "Preferred",
+      "OPTIONAL": "Optional",
+      "ONE_OF": "One of",
+      "TWO_OF": "Two of"
+    },
+    "policy": {
+      "REQUIRED": "Required",
+      "RECOMMENDED": "Recommended",
+      "OPTIONAL": "Test optional",
+      "NOT_CONSIDERED": "Not considered"
+    },
+    "kind": {
+      "INTERVIEW": "Interview",
+      "PERSONAL_STATEMENT": "Personal statement",
+      "PORTFOLIO": "Portfolio",
+      "REFERENCE": "Reference",
+      "ESSAY": "Essay",
+      "OTHER": "Other requirement"
+    },
+    "section": {
+      "overall": "Overall",
+      "subject": "Subjects",
+      "language": "English language",
+      "test": "Tests",
+      "additional": "Other requirements",
+      "group": "Group",
+      "source": "Source"
+    },
+    "sources": {
+      "title": "Requirement sources",
+      "desc": "Official pages the checker watches. It identifies itself, respects robots.txt and ignores cosmetic page changes.",
+      "emptyTitle": "No sources yet",
+      "emptyBody": "Add the official admissions page of a programme to start watching it.",
+      "add": "Add source",
+      "addTitle": "Add a source page",
+      "addBody": "Use the university's official page where possible. Mirrors never override official data.",
+      "program": "Programme",
+      "chooseProgram": "Choose a programme",
+      "url": "Page address",
+      "type": "Source type",
+      "label": "Label (optional)",
+      "added": "Source added",
+      "exists": "This source was already registered",
+      "checkNow": "Check now",
+      "queued": "Check queued. The result appears here when the worker finishes.",
+      "lastChecked": "Checked {date}",
+      "never": "Not checked yet",
+      "hash": "Content hash {hash}",
+      "lastError": "Last error: {error}",
+      "universityLevel": "University website",
+      "count": "{n, plural, one {# source} other {# sources}}",
+      "status": {
+        "PENDING": "Waiting",
+        "FETCHED": "First fetch",
+        "UNCHANGED": "Unchanged",
+        "CHANGED": "Changed",
+        "FAILED": "Failed"
+      },
+      "sourceType": {
+        "OFFICIAL_UNIVERSITY": "Official university page",
+        "OFFICIAL_BODY": "Official body",
+        "MIRROR": "Mirror",
+        "MANUAL": "Entered by hand"
+      },
+      "search": "Search by address or label",
+      "pageOf": "Page {page} of {pages}, {total} sources"
+    },
+    "changes": {
+      "title": "Requirement changes",
+      "desc": "Differences between published versions. After review, advising staff with affected students get an in-app notice; students and parents are never notified automatically.",
+      "emptyTitle": "No changes here",
+      "emptyBody": "Changes appear when a new version of a programme's requirements is published.",
+      "needsReview": "Needs review",
+      "reviewedTab": "Reviewed",
+      "all": "All",
+      "allSeverities": "All levels",
+      "severity": {
+        "WATCH": "Watch",
+        "NOTABLE": "Notable",
+        "MAJOR": "Major"
+      },
+      "detected": "Detected {date}",
+      "markReviewed": "Mark reviewed",
+      "dismiss": "Dismiss",
+      "reviewTitle": "Confirm this change",
+      "reviewBody": "Advising staff whose students have this programme on a shortlist, plan or application get an in-app notice. Students and parents are not notified.",
+      "dismissTitle": "Dismiss this change",
+      "dismissBody": "Use this when the difference is extraction noise. Nobody is notified.",
+      "reviewedDone": "Marked reviewed. {n, plural, =0 {No staff needed a notice.} one {# staff member notified.} other {# staff members notified.}}",
+      "dismissedDone": "Change dismissed",
+      "outcome": {
+        "REVIEWED": "Reviewed",
+        "DISMISSED": "Dismissed"
+      },
+      "reviewedOn": "{outcome} on {date}",
+      "history": "Version history",
+      "details": "What changed",
+      "fromTo": "{from} to {to}",
+      "firstVersion": "First published version",
+      "type": {
+        "ADDED": "Added",
+        "REMOVED": "Removed",
+        "THRESHOLD_RAISED": "Raised",
+        "THRESHOLD_LOWERED": "Lowered",
+        "STRENGTH_CHANGED": "Changed",
+        "SOURCE_CHANGED": "Source changed",
+        "SOURCE_REMOVED": "Source removed"
+      }
+    },
+    "history": {
+      "title": "Requirement history",
+      "desc": "Every published version with its source, check date and confidence. Versions are never overwritten.",
+      "empty": "No published requirements yet.",
+      "version": "Version {n}",
+      "current": "Current",
+      "period": "{from} to {to}",
+      "since": "Since {date}",
+      "intake": "Entry {year}",
+      "verify": "Mark verified",
+      "verifyTitle": "Mark as verified",
+      "verifyBody": "Confirm you checked these requirements on the official page today.",
+      "verified": "Marked as verified",
+      "back": "Change monitor",
+      "noLines": "No lines in this version"
+    },
+    "confidence": {
+      "VERIFIED": "Verified",
+      "REVIEWED": "Reviewed",
+      "EXTRACTED": "Machine extracted, not reviewed",
+      "EXAMPLE": "Example data",
+      "UNKNOWN": "Unknown"
+    },
+    "freshness": {
+      "checked": "Checked {date}",
+      "notChecked": "Not checked yet",
+      "source": "Source"
+    },
+    "scorecard": {
+      "title": "College Scorecard import",
+      "desc": "US Department of Education data for US universities in the shared catalog: admission rate, SAT and ACT ranges, cost, net price, completion, retention and earnings.",
+      "lastImport": "Last import",
+      "never": "Never",
+      "usUniversities": "US universities in the catalog",
+      "withStats": "With Scorecard details",
+      "run": "Run import",
+      "queued": "Import queued. It runs in the background.",
+      "done": "Import finished",
+      "runs": "Recent runs",
+      "noRuns": "No imports from this school yet.",
+      "runDone": "{created} added, {updated} updated, {linked} linked",
+      "runFailed": "Failed: {error}",
+      "running": "Running",
+      "keyHelp": "The API key is read from the COLLEGE_SCORECARD_API_KEY environment variable and is never shown or stored.",
+      "retryHelp": "Rate limits and server errors are retried with increasing waits. If the data format changes, the import stops before writing anything.",
+      "errorCode": {
+        "rate_limited": "rate limited",
+        "unauthorized": "key rejected",
+        "unreachable": "service unreachable",
+        "bad_response": "unexpected response",
+        "schema_drift": "data format changed",
+        "no_owner_url": "no platform database",
+        "no_api_key": "no API key"
+      }
     }
   }
 }
