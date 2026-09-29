@@ -16,6 +16,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           { key: "myRequests", href: "/requests", icon: "inbox" },
           { key: "meetings", href: "/meetings", icon: "calendar-clock" },
           { key: "tasks", href: "/tasks", icon: "check-square", badge: counts.tasks },
+          { key: "timetable", href: "/timetable", icon: "calendar-days" },
           { key: "career", href: "/career", icon: "compass" },
           { key: "calendar", href: "/calendar", icon: "calendar" },
           { key: "documents", href: "/documents", icon: "file-text" },
@@ -34,6 +35,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           { key: "requests", href: "/requests", icon: "inbox" },
           { key: "approvals", href: "/approvals", icon: "stamp", badge: counts.approvals },
           { key: "meetings", href: "/meetings", icon: "calendar-clock" },
+          { key: "timetable", href: "/timetable", icon: "calendar-days" },
           { key: "calendar", href: "/calendar", icon: "calendar" },
           { key: "documents", href: "/documents", icon: "file-text" },
         ],
@@ -47,6 +49,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
     { key: "approvals", href: "/approvals", icon: "stamp", badge: counts.approvals },
     { key: "tasks", href: "/tasks", icon: "check-square", badge: counts.tasks },
     { key: "calendar", href: "/calendar", icon: "calendar" },
+    { key: "timetable", href: "/timetable", icon: "calendar-days" },
   ];
   if (c("cases.view")) work.splice(3, 0, { key: "cases", href: "/cases", icon: "folder-kanban" });
   const school: NavItem[] = [];
@@ -58,6 +61,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   const admin: NavItem[] = [];
   if (c("school.manage")) admin.push({ key: "schoolSetup", href: "/admin/school", icon: "building-2" });
   if (c("people.manage")) admin.push({ key: "people", href: "/admin/people", icon: "contact" });
+  if (c("timetable.manage")) admin.push({ key: "timetableAdmin", href: "/admin/timetable", icon: "clock" });
+  if (c("cover.manage")) admin.push({ key: "cover", href: "/admin/cover", icon: "calendar-x" });
   if (c("services.manage")) admin.push({ key: "servicesAdmin", href: "/admin/services", icon: "blocks" });
   if (c("forms.manage")) admin.push({ key: "forms", href: "/admin/forms", icon: "list-checks" });
   if (c("workflows.manage")) admin.push({ key: "workflows", href: "/admin/workflows", icon: "workflow" });

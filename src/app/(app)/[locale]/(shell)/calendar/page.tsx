@@ -14,7 +14,9 @@ import { addDaysKey, dubaiDateKey, dubaiInstant, weekdayOfKey } from "@/server/a
 
 const VIEWS = ["day", "week", "month", "agenda"] as const;
 type View = (typeof VIEWS)[number];
-const KINDS: CalKind[] = ["appointment", "task", "event", "deadline", "followup"];
+const KINDS: CalKind[] = ["appointment", "task", "event", "deadline", "followup", "cover", "lesson"];
+// Timetable lessons are many; they are off until switched on.
+const DEFAULT_KINDS = KINDS.filter((k) => k !== "lesson");
 const START_H = 7;
 const END_H = 18;
 const HOUR_PX = 52;
@@ -25,6 +27,8 @@ const KIND_STYLE: Record<CalKind, string> = {
   event: "border-success/30 bg-success-soft text-success",
   deadline: "border-danger/30 bg-danger-soft text-danger",
   followup: "border-violet-200 bg-violet-50 text-violet-700",
+  cover: "border-gold/50 bg-gold-soft text-[oklch(0.5_0.1_80)]",
+  lesson: "border-border bg-muted/60 text-foreground",
 };
 
 function mondayOf(key: string) {
@@ -47,8 +51,8 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
   const today = dubaiDateKey(new Date());
   const anchor = sp.d && /^\d{4}-\d{2}-\d{2}$/.test(sp.d) ? sp.d : today;
   const weekend = sp.weekend === "1";
-  const kinds = (sp.kinds?.split(",").filter((k) => KINDS.includes(k as CalKind)) as CalKind[]) ?? KINDS;
-  const activeKinds = kinds.length ? kinds : KINDS;
+  const kinds = (sp.kinds?.split(",").filter((k) => KINDS.includes(k as CalKind)) as CalKind[]) ?? DEFAULT_KINDS;
+  const activeKinds = kinds.length ? kinds : DEFAULT_KINDS;
 
   let scope: CalScope = { kind: "me" };
   if (sp.staff && ctx.isStaff) scope = { kind: "staff", membershipId: sp.staff };
@@ -163,7 +167,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
           const on = activeKinds.includes(k);
           const nextKinds = on ? activeKinds.filter((x) => x !== k) : [...activeKinds, k];
           return (
-            <Link key={k} href={qs({ kinds: nextKinds.length === KINDS.length ? null : nextKinds.join(",") || KINDS.join(",") })} className={cn("rounded-full border px-2.5 py-1 text-xs font-medium transition", on ? KIND_STYLE[k] : "bg-card text-muted-foreground line-through")}>
+            <Link key={k} href={qs({ kinds: nextKinds.length === DEFAULT_KINDS.length && DEFAULT_KINDS.every((x) => nextKinds.includes(x)) ? null : nextKinds.join(",") || DEFAULT_KINDS.join(",") })} className={cn("rounded-full border px-2.5 py-1 text-xs font-medium transition", on ? KIND_STYLE[k] : "bg-card text-muted-foreground line-through")}>
               {t(`kind.${k}`)}
             </Link>
           );
@@ -311,7 +315,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
                       <li key={i.id}>
                         <Link href={i.href ?? "#"} className="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-muted/30" data-testid="cal-item">
                           <span className="w-16 shrink-0 text-xs tabular-nums text-muted-foreground">{i.allDay ? t("allDay") : fmtTime(prefs, i.start)}</span>
-                          <span className={cn("size-2 shrink-0 rounded-full", i.kind === "appointment" ? "bg-brand" : i.kind === "task" ? "bg-warning" : i.kind === "deadline" ? "bg-danger" : i.kind === "followup" ? "bg-violet-500" : "bg-success")} />
+                          <span className={cn("size-2 shrink-0 rounded-full", i.kind === "appointment" ? "bg-brand" : i.kind === "task" ? "bg-warning" : i.kind === "deadline" ? "bg-danger" : i.kind === "followup" ? "bg-violet-500" : i.kind === "cover" ? "bg-gold" : i.kind === "lesson" ? "bg-muted-foreground" : "bg-success")} />
                           <span className="min-w-0 flex-1">
                             <span className="block truncate font-medium">{i.title}</span>
                             {i.subtitle && <span className="block truncate text-xs text-muted-foreground">{i.subtitle}</span>}

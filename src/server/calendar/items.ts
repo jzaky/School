@@ -2,8 +2,9 @@ import type { Ctx } from "@/server/context";
 import { pick, personName } from "@/lib/i18n-data";
 import { listableCaseWhere, SENSITIVE } from "@/server/access/case-access";
 import { visibleStudentIds } from "@/server/access/student-access";
+import { timetableCalendarItems } from "@/server/timetable/calendar";
 
-export type CalKind = "appointment" | "task" | "event" | "deadline" | "followup";
+export type CalKind = "appointment" | "task" | "event" | "deadline" | "followup" | "cover" | "lesson";
 export type CalItem = { id: string; kind: CalKind; title: string; subtitle?: string; start: string; end: string; allDay: boolean; href?: string; color?: string };
 export type CalScope = { kind: "me" } | { kind: "staff"; membershipId: string } | { kind: "department"; departmentId: string } | { kind: "student"; studentId: string };
 
@@ -72,6 +73,10 @@ export async function calendarItems(ctx: Ctx, from: Date, to: Date, scope: CalSc
   if (kinds.includes("followup") && ctx.isStaff && memberIds.length) {
     const cases = await db.case.findMany({ where: { AND: [listableCaseWhere(ctx, "dashboard"), { assigneeId: { in: memberIds }, nextFollowUpAt: { gte: from, lt: to } }] }, include: { student: true } });
     for (const c of cases) items.push({ id: `f-${c.id}`, kind: "followup", title: pick(locale, c.titleEn, c.titleAr), subtitle: personName(c.student, locale), start: c.nextFollowUpAt!.toISOString(), end: c.nextFollowUpAt!.toISOString(), allDay: true, href: `/cases/${c.id}` });
+  }
+  if (kinds.includes("cover") || kinds.includes("lesson")) {
+    const own = ctx.isStudent && ctx.membership.student ? [ctx.membership.student.id] : studentIds;
+    items.push(...(await timetableCalendarItems(ctx, from, to, { memberIds: ctx.isStaff ? memberIds : [], studentIds: own, cover: kinds.includes("cover"), lessons: kinds.includes("lesson") })));
   }
   return items.sort((a, b) => a.start.localeCompare(b.start));
 }

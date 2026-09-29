@@ -6,6 +6,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "bookAdvisor", href: "/services/career_guidance" },
     { key: "myRequests", href: "/requests" },
     { key: "tasks", href: "/tasks" },
+    { key: "myTimetable", href: "/timetable" },
   ],
   parent: [
     { key: "children", href: "/children" },
@@ -13,12 +14,14 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "subjectChange", href: "/services/subject_change" },
     { key: "parentMeeting", href: "/services/parent_meeting" },
     { key: "documents", href: "/documents" },
+    { key: "childTimetable", href: "/timetable" },
   ],
   teacher: [
     { key: "refer", href: "/services/academic_concern" },
     { key: "approvals", href: "/approvals" },
     { key: "meetings", href: "/meetings" },
     { key: "safeguardingRefer", href: "/safeguarding" },
+    { key: "teachingWeek", href: "/timetable" },
   ],
   counselor: [
     { key: "caseload", href: "/cases" },
@@ -41,6 +44,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "kpis", href: "/home" },
     { key: "analytics", href: "/analytics" },
     { key: "approvals", href: "/approvals" },
+    { key: "coverBoard", href: "/admin/cover" },
   ],
   admin: [
     { key: "servicesAdmin", href: "/admin/services" },
@@ -48,14 +52,17 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "workflowBuilder", href: "/admin/workflows" },
     { key: "templates", href: "/admin/templates" },
     { key: "compliance", href: "/admin/compliance" },
+    { key: "timetableSetup", href: "/admin/timetable" },
   ],
   registrar: [
     { key: "approvals", href: "/approvals" },
     { key: "documents", href: "/documents" },
     { key: "templates", href: "/admin/templates" },
+    { key: "timetableSetup", href: "/admin/timetable" },
   ],
   hod_computing: [
     { key: "approvals", href: "/approvals" },
     { key: "requestsAll", href: "/requests?tab=all" },
+    { key: "coverBoard", href: "/admin/cover" },
   ],
 };
