@@ -13,7 +13,7 @@ let teacher: string;
 let hod: string;
 let otherHead: string;
 let planId: string;
-let effects: Effect[] = [];
+const effects: Effect[] = [];
 
 async function member(name: string) {
   const user = await owner.user.create({ data: { email: `${uid(name)}@curriculum.test`, nameEn: name, nameAr: `${name} ع` } });

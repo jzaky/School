@@ -22,7 +22,7 @@ export function SessionPlan({ activities, durationMin, locale }: { activities: A
       {total !== durationMin && <p className="rounded-md bg-warning-soft px-3 py-1.5 text-xs">{t("plan.timingMismatch", { total, duration: durationMin })}</p>}
       <ol className="relative space-y-0">
         {rows.map((r, i) => (
-          <li key={i} className="grid grid-cols-[76px_minmax(0,1fr)] gap-3 border-b py-3 last:border-b-0">
+          <li key={i} className="grid grid-cols-[92px_minmax(0,1fr)] gap-3 border-b py-3 last:border-b-0">
             <div className="text-xs tabular-nums text-muted-foreground">
               <div className="font-semibold text-foreground">{t("plan.range", { start: r.start, end: r.end })}</div>
               <div>{t("plan.minutesN", { count: r.end - r.start })}</div>

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import path from "node:path";
 import PDFDocument from "pdfkit";
 import { extractPdfText } from "@/server/curriculum/pdf-text";
+import { renderLessonPlanPdf } from "@/server/curriculum/pdf";
 
 function makePdf(draw: (doc: PDFKit.PDFDocument) => void, opts: { compress?: boolean } = {}): Promise<Buffer> {
   const doc = new PDFDocument({ size: "A4", compress: opts.compress ?? true });
@@ -40,5 +41,25 @@ describe("extractPdfText", () => {
 
   it("returns an empty string for something that is not a PDF", () => {
     expect(extractPdfText(Buffer.from("hello"))).toBe("");
+  });
+
+  it("renders a lesson plan PDF whose session plan can be read back", async () => {
+    const rows = Array.from({ length: 30 }, (_, i) => ({ time: `Min ${i} to ${i + 1}`, phase: "Main", title: `Activity ${i + 1}`, detail: "Pairs complete scaffolded questions." }));
+    const pdf = await renderLessonPlanPdf({
+      rtl: false,
+      school: "Horizon International School",
+      title: "Loops and iteration",
+      subtitle: "Computer Science · Grade 9",
+      meta: [["Class", "Computer Science 9"], ["Teacher", "Daniel Carter"]],
+      sections: [{ heading: "Learning objectives", lines: ["Students can write count controlled loops."] }],
+      session: { heading: "Session plan", rows },
+      footer: "Lesson plan footer",
+    });
+    const text = extractPdfText(pdf);
+    expect(text).toContain("Loops and iteration");
+    expect(text).toContain("Activity 30");
+    expect(text).toContain("Students can write count controlled loops.");
+    const ar = await renderLessonPlanPdf({ rtl: true, school: "مدرسة", title: "الحلقات", subtitle: "الصف 9", meta: [["الشعبة", "علوم الحاسوب 9"]], sections: [], session: { heading: "خطة الحصة", rows: rows.slice(0, 3) }, footer: "تذييل" });
+    expect(ar.subarray(0, 5).toString()).toBe("%PDF-");
   });
 });

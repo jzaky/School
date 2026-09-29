@@ -181,7 +181,8 @@ export async function previewImportAction(input: { frameworkId: string; mode: "p
     validate: isStandardList,
   });
   if (ai.status === "blocked") return fail(ai.reason === "disabled" ? "AI_DISABLED" : "AI_BLOCKED");
-  const rows = ai.output.standards.map(cleanStandard).filter((s): s is DraftStandard => s !== null);
+  // Keep empty Arabic fields empty so the reviewer sees what still needs translating.
+  const rows = ai.output.standards.map((s) => ({ code: clip(s.code, 40), strandEn: clip(s.strandEn, 120), strandAr: clip(s.strandAr, 120), descEn: clip(s.descEn, 600), descAr: clip(s.descAr, 600) })).filter((s) => s.code && (s.descEn || s.descAr));
   if (!rows.length) return fail("NOTHING_FOUND");
   return { ok: true as const, rows, csvErrors: [], interactionId: ai.interactionId, provider: ai.provider };
 }

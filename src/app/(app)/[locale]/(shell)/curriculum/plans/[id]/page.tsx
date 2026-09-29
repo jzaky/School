@@ -110,7 +110,7 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
       )}
       {canReview && <ReviewPanel planId={plan.id} />}
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Meta icon={<Users className="size-4" />} label={t("plan.class")} value={cls ? pick(locale, cls.nameEn, cls.nameAr) : t("plan.noClass")} />
         <Meta icon={<CalendarDays className="size-4" />} label={t("plan.when")} value={[term ? pick(locale, term.nameEn, term.nameAr) : null, plan.weekNo ? t("plan.weekN", { week: plan.weekNo }) : null].filter(Boolean).join(" · ") || t("plan.notScheduled")} />
         <Meta icon={<CalendarDays className="size-4" />} label={t("plan.date")} value={plan.plannedFor ? fmtDate(prefs, plan.plannedFor) : t("plan.notScheduled")} />

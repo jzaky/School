@@ -153,7 +153,7 @@ export default async function CoveragePage({ searchParams }: { searchParams: Pro
         />
       ) : (
         <>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
             <StatCard label={t("coverage.statCovered")} value={`${fmtNumber(prefs, report.summary.percent)}%`} hint={t("coverage.statCoveredHint", { covered: report.summary.total - report.summary.missing, total: report.summary.total })} icon={<CheckCircle2 className="size-4" />} tone="success" testId="stat-covered" />
             <StatCard label={t("coverage.statMissing")} value={fmtNumber(prefs, report.summary.missing)} icon={<CircleAlert className="size-4" />} tone={report.summary.missing ? "danger" : "success"} testId="stat-missing" />
             <StatCard label={t("coverage.statOnce")} value={fmtNumber(prefs, report.summary.once)} hint={t("coverage.statOnceHint")} icon={<CircleDashed className="size-4" />} tone="warning" />
@@ -161,7 +161,7 @@ export default async function CoveragePage({ searchParams }: { searchParams: Pro
           </div>
 
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-            <Panel>
+            <Panel className="min-w-0">
               <PanelHeader
                 title={t("coverage.missingTitle")}
                 description={t("coverage.missingBody")}
@@ -186,7 +186,7 @@ export default async function CoveragePage({ searchParams }: { searchParams: Pro
               )}
             </Panel>
 
-            <Panel>
+            <Panel className="min-w-0">
               <PanelHeader title={t("coverage.heatmapTitle")} description={t("coverage.heatmapBody")} />
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[420px] border-separate border-spacing-1 text-xs" data-testid="coverage-heatmap">

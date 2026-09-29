@@ -244,7 +244,7 @@ export function PlanEditor({ initial, options }: { initial: PlanInput; options: 
         )}
       </Panel>
 
-      <div className="sticky bottom-0 z-10 -mx-4 flex justify-end gap-2 border-t bg-background/95 px-4 py-3 backdrop-blur sm:mx-0 sm:rounded-xl sm:border">
+      <div className="sticky bottom-0 z-10 -mx-4 flex justify-end gap-2 border-t bg-background/95 py-3 ps-4 pe-36 backdrop-blur sm:mx-0 sm:rounded-xl sm:border">
         <Button variant="outline" onClick={() => router.back()} disabled={pending}>
           {t("cancel")}
         </Button>
