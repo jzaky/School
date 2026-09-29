@@ -17,6 +17,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           { key: "meetings", href: "/meetings", icon: "calendar-clock" },
           { key: "tasks", href: "/tasks", icon: "check-square", badge: counts.tasks },
           { key: "career", href: "/career", icon: "compass" },
+          ...(c("grades.view_own") ? [{ key: "grades", href: "/grades", icon: "book-open" }] : []),
           { key: "calendar", href: "/calendar", icon: "calendar" },
           { key: "documents", href: "/documents", icon: "file-text" },
         ],
@@ -30,6 +31,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
         items: [
           { key: "home", href: "/home", icon: "home" },
           { key: "children", href: "/children", icon: "users" },
+          ...(c("grades.view_own") ? [{ key: "grades", href: "/grades", icon: "book-open" }] : []),
           { key: "services", href: "/services", icon: "layout-grid" },
           { key: "requests", href: "/requests", icon: "inbox" },
           { key: "approvals", href: "/approvals", icon: "stamp", badge: counts.approvals },
@@ -51,6 +53,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("cases.view")) work.splice(3, 0, { key: "cases", href: "/cases", icon: "folder-kanban" });
   const school: NavItem[] = [];
   if (c("people.view")) school.push({ key: "students", href: "/students", icon: "graduation-cap" });
+  if (c("grades.enter") || c("grades.view_all")) school.push({ key: "grades", href: "/grades", icon: "book-open" });
   if (c("career.advise")) school.push({ key: "career", href: "/career", icon: "compass" });
   if (c("safeguarding.view") || c("safeguarding.refer")) school.push({ key: "safeguarding", href: "/safeguarding", icon: "shield" });
   school.push({ key: "documents", href: "/documents", icon: "file-text" });

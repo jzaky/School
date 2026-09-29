@@ -1,0 +1,696 @@
+{
+  "nav": {
+    "grades": [
+      "Grades",
+      "الدرجات"
+    ]
+  },
+  "guide": {
+    "steps": {
+      "myGrades": {
+        "title": [
+          "See your grades",
+          "اطّلع على درجاتك"
+        ],
+        "body": [
+          "Published grades by subject with your average, band and trend. Download your term report card.",
+          "الدرجات المنشورة حسب المادة مع معدلك وتقديرك ومسار تقدمك. نزّل بطاقة التقرير الفصلي."
+        ]
+      },
+      "childGrades": {
+        "title": [
+          "Follow your children's grades",
+          "تابع درجات أبنائك"
+        ],
+        "body": [
+          "Switch between Adam and Yara to see published grades, averages and the term report card.",
+          "بدّل بين آدم ويارا للاطلاع على الدرجات المنشورة والمعدلات وبطاقة التقرير الفصلي."
+        ]
+      },
+      "gradebook": {
+        "title": [
+          "Enter grades like a spreadsheet",
+          "أدخل الدرجات كجدول بيانات"
+        ],
+        "body": [
+          "Open Physics 9, type scores with Enter and the arrow keys, paste a column from Excel, then publish to notify students and parents.",
+          "افتح الفيزياء للصف 9، واكتب الدرجات باستخدام Enter والأسهم، والصق عمودًا من Excel، ثم انشر لإشعار الطلاب وأولياء الأمور."
+        ]
+      },
+      "gradesOverview": {
+        "title": [
+          "Class averages and academic support",
+          "معدلات الصفوف والدعم الأكاديمي"
+        ],
+        "body": [
+          "Averages by subject and class, and students below a threshold who may need academic support.",
+          "المعدلات حسب المادة والصف، والطلاب دون الحد المطلوب ممن قد يحتاجون إلى دعم أكاديمي."
+        ]
+      },
+      "gradeBands": {
+        "title": [
+          "Set the grade bands",
+          "اضبط سلم التقديرات"
+        ],
+        "body": [
+          "Choose the school's bands and thresholds. Averages and report cards use them everywhere.",
+          "حدّد تقديرات المدرسة وحدودها الدنيا، وتُستخدم في كل المعدلات وبطاقات التقارير."
+        ]
+      }
+    }
+  },
+  "grades": {
+    "title": [
+      "Grades",
+      "الدرجات"
+    ],
+    "subtitleStaff": [
+      "Enter and publish grades for your classes. Students and parents only see published work.",
+      "أدخل الدرجات وانشرها لصفوفك. لا يرى الطلاب وأولياء الأمور إلا الأعمال المنشورة."
+    ],
+    "subtitleStudent": [
+      "Your published grades by subject, with averages and bands.",
+      "درجاتك المنشورة حسب المادة مع المعدلات والتقديرات."
+    ],
+    "subtitleParent": [
+      "Published grades for {name}.",
+      "الدرجات المنشورة لـ {name}."
+    ],
+    "viewGradebook": [
+      "Gradebook",
+      "سجل الدرجات"
+    ],
+    "viewOverview": [
+      "Overview",
+      "نظرة عامة"
+    ],
+    "viewBands": [
+      "Grade bands",
+      "سلم التقديرات"
+    ],
+    "pickClass": [
+      "Choose a class",
+      "اختر صفًا"
+    ],
+    "myClasses": [
+      "My classes",
+      "صفوفي"
+    ],
+    "otherClasses": [
+      "Other classes",
+      "صفوف أخرى"
+    ],
+    "allClasses": [
+      "All classes",
+      "جميع الصفوف"
+    ],
+    "allTerms": [
+      "All terms",
+      "جميع الفصول"
+    ],
+    "noClasses": [
+      "No classes to show",
+      "لا توجد صفوف لعرضها"
+    ],
+    "noClassesBody": [
+      "Classes you teach or oversee this year will appear here.",
+      "ستظهر هنا الصفوف التي تدرّسها أو تشرف عليها هذا العام."
+    ],
+    "noAccess": [
+      "This class is not available to you",
+      "هذا الصف غير متاح لك"
+    ],
+    "noAccessBody": [
+      "You can open the classes you teach or oversee.",
+      "يمكنك فتح الصفوف التي تدرّسها أو تشرف عليها."
+    ],
+    "noStudents": [
+      "No students enrolled",
+      "لا يوجد طلاب مسجلون"
+    ],
+    "noStudentsBody": [
+      "Students appear here once they are enrolled in this class.",
+      "يظهر الطلاب هنا بعد تسجيلهم في هذا الصف."
+    ],
+    "noAssessments": [
+      "No assessments in this term yet",
+      "لا توجد تقييمات في هذا الفصل بعد"
+    ],
+    "noAssessmentsBody": [
+      "Create a quiz, test or homework to start entering grades.",
+      "أنشئ اختبارًا قصيرًا أو اختبارًا أو واجبًا لبدء إدخال الدرجات."
+    ],
+    "noAssessmentsView": [
+      "The class teacher has not created assessments for this term.",
+      "لم ينشئ معلم الصف تقييمات لهذا الفصل بعد."
+    ],
+    "studentsCount": [
+      "{count, plural, one {# student} other {# students}}",
+      "{count, plural, one {طالب واحد} two {طالبان} few {# طلاب} many {# طالبًا} other {# طالب}}"
+    ],
+    "assessmentsCount": [
+      "{count, plural, one {# assessment} other {# assessments}}",
+      "{count, plural, one {تقييم واحد} two {تقييمان} few {# تقييمات} many {# تقييمًا} other {# تقييم}}"
+    ],
+    "draftsCount": [
+      "{count, plural, one {# draft} other {# drafts}}",
+      "{count, plural, one {مسودة واحدة} two {مسودتان} few {# مسودات} many {# مسودة} other {# مسودة}}"
+    ],
+    "viewOnly": [
+      "View only",
+      "للعرض فقط"
+    ],
+    "viewOnlyBody": [
+      "You can view this gradebook. Only the class teacher or the head of department can enter and publish grades.",
+      "يمكنك عرض سجل الدرجات هذا. لا يُدخل الدرجات وينشرها إلا معلم الصف أو رئيس القسم."
+    ],
+    "newAssessment": [
+      "New assessment",
+      "تقييم جديد"
+    ],
+    "editAssessment": [
+      "Edit assessment",
+      "تعديل التقييم"
+    ],
+    "assessmentBody": [
+      "Scores count toward the weighted average. Students and parents see it only after you publish.",
+      "تُحتسب الدرجات في المعدل الموزون، ولا يراها الطلاب وأولياء الأمور إلا بعد النشر."
+    ],
+    "titleEn": [
+      "Title (English)",
+      "العنوان (بالإنجليزية)"
+    ],
+    "titleAr": [
+      "Title (Arabic)",
+      "العنوان (بالعربية)"
+    ],
+    "kindLabel": [
+      "Type",
+      "النوع"
+    ],
+    "maxScoreLabel": [
+      "Max score",
+      "الدرجة القصوى"
+    ],
+    "weightLabel": [
+      "Weight",
+      "الوزن"
+    ],
+    "dueLabel": [
+      "Date",
+      "التاريخ"
+    ],
+    "termLabel": [
+      "Term",
+      "الفصل الدراسي"
+    ],
+    "chooseTerm": [
+      "Choose a term",
+      "اختر الفصل"
+    ],
+    "noTerms": [
+      "No terms are set up for this year.",
+      "لم تُحدَّد فصول دراسية لهذا العام."
+    ],
+    "weightHint": [
+      "Weight sets how much this counts: an exam with weight 3 counts three times as much as homework with weight 1.",
+      "يحدد الوزن مقدار احتساب التقييم: الامتحان بوزن 3 يُحتسب ثلاثة أضعاف الواجب بوزن 1."
+    ],
+    "create": [
+      "Create",
+      "إنشاء"
+    ],
+    "saveChanges": [
+      "Save changes",
+      "حفظ التغييرات"
+    ],
+    "cancel": [
+      "Cancel",
+      "إلغاء"
+    ],
+    "assessmentCreated": [
+      "Assessment created",
+      "تم إنشاء التقييم"
+    ],
+    "assessmentUpdated": [
+      "Assessment updated",
+      "تم تحديث التقييم"
+    ],
+    "kind": {
+      "HOMEWORK": [
+        "Homework",
+        "واجب منزلي"
+      ],
+      "QUIZ": [
+        "Quiz",
+        "اختبار قصير"
+      ],
+      "TEST": [
+        "Test",
+        "اختبار"
+      ],
+      "EXAM": [
+        "Exam",
+        "امتحان"
+      ],
+      "PROJECT": [
+        "Project",
+        "مشروع"
+      ],
+      "COURSEWORK": [
+        "Coursework",
+        "عمل مقرر"
+      ],
+      "PARTICIPATION": [
+        "Participation",
+        "مشاركة"
+      ]
+    },
+    "outOf": [
+      "out of {max}",
+      "من {max}"
+    ],
+    "weightShort": [
+      "weight {weight}",
+      "الوزن {weight}"
+    ],
+    "published": [
+      "Published",
+      "منشور"
+    ],
+    "draft": [
+      "Draft",
+      "مسودة"
+    ],
+    "publish": [
+      "Publish",
+      "نشر"
+    ],
+    "unpublish": [
+      "Unpublish",
+      "إلغاء النشر"
+    ],
+    "edit": [
+      "Edit",
+      "تعديل"
+    ],
+    "delete": [
+      "Delete",
+      "حذف"
+    ],
+    "assessmentMenu": [
+      "Assessment actions",
+      "إجراءات التقييم"
+    ],
+    "publishTitle": [
+      "Publish this assessment?",
+      "هل تريد نشر هذا التقييم؟"
+    ],
+    "publishBody": [
+      "Grades become visible to {count, plural, one {# student} other {# students}} and their parents, and each is notified once.",
+      "ستصبح الدرجات مرئية لـ {count, plural, one {طالب واحد} two {طالبين} few {# طلاب} many {# طالبًا} other {# طالب}} وأولياء أمورهم، ويتلقى كلٌّ منهم إشعارًا واحدًا."
+    ],
+    "unpublishTitle": [
+      "Hide this assessment again?",
+      "هل تريد إخفاء هذا التقييم مجددًا؟"
+    ],
+    "unpublishBody": [
+      "Students and parents will no longer see these grades. Publishing again will not send a second notification.",
+      "لن يرى الطلاب وأولياء الأمور هذه الدرجات بعد الآن، ولن يُرسل إشعار ثانٍ عند إعادة النشر."
+    ],
+    "publishedToast": [
+      "Published. {count, plural, one {# notification} other {# notifications}} sent.",
+      "تم النشر. أُرسل {count, plural, one {إشعار واحد} two {إشعاران} few {# إشعارات} many {# إشعارًا} other {# إشعار}}."
+    ],
+    "unpublishedToast": [
+      "Assessment hidden from students and parents",
+      "أُخفي التقييم عن الطلاب وأولياء الأمور"
+    ],
+    "deleteTitle": [
+      "Delete this draft assessment?",
+      "هل تريد حذف مسودة التقييم هذه؟"
+    ],
+    "deleteBody": [
+      "The assessment and any grades entered for it are removed.",
+      "سيُحذف التقييم وكل الدرجات المُدخلة له."
+    ],
+    "deleted": [
+      "Assessment deleted",
+      "تم حذف التقييم"
+    ],
+    "student": [
+      "Student",
+      "الطالب"
+    ],
+    "average": [
+      "Average",
+      "المعدل"
+    ],
+    "band": [
+      "Band",
+      "التقدير"
+    ],
+    "classAverage": [
+      "Class average",
+      "معدل الصف"
+    ],
+    "saving": [
+      "Saving...",
+      "جارٍ الحفظ..."
+    ],
+    "saved": [
+      "All changes saved",
+      "تم حفظ كل التغييرات"
+    ],
+    "unsaved": [
+      "Unsaved changes",
+      "تغييرات غير محفوظة"
+    ],
+    "saveError": [
+      "Some changes could not be saved",
+      "تعذّر حفظ بعض التغييرات"
+    ],
+    "retry": [
+      "Retry",
+      "إعادة المحاولة"
+    ],
+    "autosaveHint": [
+      "Changes save automatically.",
+      "تُحفظ التغييرات تلقائيًا."
+    ],
+    "keyboardHint": [
+      "Enter or arrows to move, paste a column from Excel, type x for excused, Esc to undo a cell.",
+      "استخدم Enter أو الأسهم للتنقل، والصق عمودًا من Excel، واكتب x للإعفاء، وEsc للتراجع عن خلية."
+    ],
+    "pasted": [
+      "{count, plural, one {# cell} other {# cells}} pasted",
+      "تم لصق {count, plural, one {خلية واحدة} two {خليتين} few {# خلايا} many {# خلية} other {# خلية}}"
+    ],
+    "pasteRejected": [
+      "{count, plural, one {# value was} other {# values were}} not valid and not saved",
+      "{count, plural, one {قيمة واحدة غير صالحة} two {قيمتان غير صالحتين} few {# قيم غير صالحة} many {# قيمة غير صالحة} other {# قيمة غير صالحة}} ولم تُحفظ"
+    ],
+    "cellLabel": [
+      "{student}, {assessment}",
+      "{student}، {assessment}"
+    ],
+    "excused": [
+      "Excused",
+      "معفى"
+    ],
+    "excusedShort": [
+      "EX",
+      "معفى"
+    ],
+    "excusedHint": [
+      "Excused work does not count toward the average.",
+      "لا يُحتسب العمل المعفى في المعدل."
+    ],
+    "comment": [
+      "Comment for this grade",
+      "ملاحظة على هذه الدرجة"
+    ],
+    "commentPlaceholder": [
+      "Optional feedback the student and parents see once published",
+      "ملاحظة اختيارية يراها الطالب وولي الأمر بعد النشر"
+    ],
+    "commentHint": [
+      "Saved in the language you are using now.",
+      "تُحفظ باللغة التي تستخدمها حاليًا."
+    ],
+    "selectCellHint": [
+      "Select a cell to mark it excused or add a comment.",
+      "اختر خلية لتعيينها معفاة أو لإضافة ملاحظة."
+    ],
+    "reportCard": [
+      "Term report card",
+      "بطاقة التقرير الفصلي"
+    ],
+    "reportCardFor": [
+      "Term report card for {name}",
+      "بطاقة التقرير الفصلي لـ {name}"
+    ],
+    "reportCardTip": [
+      "Term report card ({term})",
+      "بطاقة التقرير الفصلي ({term})"
+    ],
+    "reportCardUnavailable": [
+      "Available once grades for {term} are published",
+      "تتوفر بعد نشر درجات {term}"
+    ],
+    "reportReady": [
+      "Report card ready. It is also saved in Documents.",
+      "بطاقة التقرير جاهزة، وهي محفوظة أيضًا في المستندات."
+    ],
+    "childSwitcher": [
+      "Choose a child",
+      "اختر أحد الأبناء"
+    ],
+    "gradeLevel": [
+      "Grade {grade}",
+      "الصف {grade}"
+    ],
+    "overallAverage": [
+      "Overall average",
+      "المعدل العام"
+    ],
+    "bandIs": [
+      "Band {band}",
+      "التقدير {band}"
+    ],
+    "noGradesYet": [
+      "No published grades yet",
+      "لا توجد درجات منشورة بعد"
+    ],
+    "publishedAssessments": [
+      "Published assessments",
+      "التقييمات المنشورة"
+    ],
+    "termTrend": [
+      "Term trend",
+      "مسار الفصول"
+    ],
+    "notYet": [
+      "Not yet",
+      "لم يبدأ بعد"
+    ],
+    "familyEmpty": [
+      "No published grades yet",
+      "لا توجد درجات منشورة بعد"
+    ],
+    "familyEmptyBody": [
+      "Grades appear here once teachers publish them for this term.",
+      "تظهر الدرجات هنا بعد أن ينشرها المعلمون لهذا الفصل."
+    ],
+    "noChildren": [
+      "No linked student record was found.",
+      "لم يُعثر على سجل طالب مرتبط."
+    ],
+    "weightedAverage": [
+      "Weighted average",
+      "المعدل الموزون"
+    ],
+    "trendLabel": [
+      "Average trend this term",
+      "مسار المعدل خلال الفصل"
+    ],
+    "noneThisTerm": [
+      "No published assessments this term.",
+      "لا توجد تقييمات منشورة في هذا الفصل."
+    ],
+    "notSubmitted": [
+      "No score",
+      "لا توجد درجة"
+    ],
+    "bandKey": [
+      "Grade bands",
+      "سلم التقديرات"
+    ],
+    "bandKeyBody": [
+      "Averages are weighted by assessment. Bands follow the school's thresholds.",
+      "المعدلات موزونة حسب التقييم، والتقديرات وفق الحدود التي تعتمدها المدرسة."
+    ],
+    "bandsTitle": [
+      "Grade bands",
+      "سلم التقديرات"
+    ],
+    "bandsBody": [
+      "The minimum average for each band. Used in the gradebook, family view and report cards.",
+      "الحد الأدنى للمعدل لكل تقدير، ويُستخدم في سجل الدرجات وصفحة الأسرة وبطاقات التقارير."
+    ],
+    "bandsCustom": [
+      "These are the school's own bands.",
+      "هذه هي تقديرات المدرسة الخاصة."
+    ],
+    "bandsDefault": [
+      "The school uses the default bands. Save to adopt your own.",
+      "تستخدم المدرسة التقديرات الافتراضية. احفظ لاعتماد تقديراتك."
+    ],
+    "bandsReadOnly": [
+      "Only a school administrator can change the bands.",
+      "لا يغيّر التقديرات إلا مسؤول المدرسة."
+    ],
+    "bandLabel": [
+      "Band",
+      "التقدير"
+    ],
+    "bandMin": [
+      "Minimum average",
+      "الحد الأدنى للمعدل"
+    ],
+    "addBand": [
+      "Add band",
+      "إضافة تقدير"
+    ],
+    "removeBand": [
+      "Remove band",
+      "حذف التقدير"
+    ],
+    "saveBands": [
+      "Save bands",
+      "حفظ التقديرات"
+    ],
+    "resetBands": [
+      "Reset to defaults",
+      "استعادة الافتراضي"
+    ],
+    "bandsSaved": [
+      "Grade bands saved",
+      "تم حفظ سلم التقديرات"
+    ],
+    "bandsReset": [
+      "Default bands restored",
+      "تمت استعادة التقديرات الافتراضية"
+    ],
+    "schoolAverage": [
+      "Average across classes",
+      "المعدل عبر الصفوف"
+    ],
+    "classesTracked": [
+      "Classes with grades",
+      "صفوف لديها درجات"
+    ],
+    "ofClasses": [
+      "of {count} classes",
+      "من أصل {count} صف"
+    ],
+    "belowThreshold": [
+      "Students below {threshold}%",
+      "طلاب دون {threshold}%"
+    ],
+    "belowHint": [
+      "In at least one subject",
+      "في مادة واحدة على الأقل"
+    ],
+    "belowShort": [
+      "{count} below",
+      "{count} دون الحد"
+    ],
+    "belowChip": [
+      "Below {threshold}%",
+      "دون {threshold}%"
+    ],
+    "bySubject": [
+      "Class averages by subject",
+      "معدلات الصفوف حسب المادة"
+    ],
+    "bySubjectBody": [
+      "All entered grades, including drafts. Open a class to see its gradebook.",
+      "جميع الدرجات المُدخلة بما فيها المسودات. افتح أي صف لعرض سجل درجاته."
+    ],
+    "supportTitle": [
+      "Academic support",
+      "الدعم الأكاديمي"
+    ],
+    "supportBody": [
+      "Students whose subject average is below the threshold. Academic data only.",
+      "الطلاب الذين يقل معدلهم في مادة عن الحد المحدد. بيانات أكاديمية فقط."
+    ],
+    "noneBelow": [
+      "No students below the threshold",
+      "لا يوجد طلاب دون الحد"
+    ],
+    "noneBelowBody": [
+      "No subject average is below {threshold}%.",
+      "لا يوجد معدل مادة دون {threshold}%."
+    ],
+    "moreBelow": [
+      "{count} more not shown",
+      "{count} آخرون غير معروضين"
+    ],
+    "error": {
+      "generic": [
+        "Something went wrong. Please try again.",
+        "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
+      ],
+      "range": [
+        "Enter a number from 0 to {max}",
+        "أدخل رقمًا من 0 إلى {max}"
+      ],
+      "title": [
+        "Enter a title of up to 120 characters.",
+        "أدخل عنوانًا لا يزيد على 120 حرفًا."
+      ],
+      "kind": [
+        "Choose a type.",
+        "اختر النوع."
+      ],
+      "maxScore": [
+        "Max score must be between 1 and 1000.",
+        "يجب أن تكون الدرجة القصوى بين 1 و1000."
+      ],
+      "weight": [
+        "Weight must be more than 0 and at most 100.",
+        "يجب أن يكون الوزن أكبر من 0 ولا يتجاوز 100."
+      ],
+      "dueAt": [
+        "Enter a valid date.",
+        "أدخل تاريخًا صحيحًا."
+      ],
+      "term": [
+        "Choose a term from this academic year.",
+        "اختر فصلًا من هذا العام الدراسي."
+      ],
+      "maxBelowScores": [
+        "Some scores are higher than the new max score.",
+        "بعض الدرجات أعلى من الدرجة القصوى الجديدة."
+      ],
+      "forbidden": [
+        "You cannot change grades for this class.",
+        "لا يمكنك تعديل درجات هذا الصف."
+      ],
+      "publishedDelete": [
+        "Unpublish the assessment before deleting it.",
+        "ألغِ نشر التقييم قبل حذفه."
+      ],
+      "bandCount": [
+        "Use between 2 and 15 bands.",
+        "استخدم من 2 إلى 15 تقديرًا."
+      ],
+      "bandLabel": [
+        "Each band needs a short label (up to 8 characters).",
+        "يحتاج كل تقدير إلى رمز قصير (حتى 8 أحرف)."
+      ],
+      "bandDuplicate": [
+        "Labels and minimums must be unique.",
+        "يجب ألا تتكرر الرموز أو الحدود الدنيا."
+      ],
+      "bandRange": [
+        "Minimums must be between 0 and 100.",
+        "يجب أن تكون الحدود الدنيا بين 0 و100."
+      ],
+      "bandZero": [
+        "One band must start at 0%.",
+        "يجب أن يبدأ أحد التقديرات من 0%."
+      ],
+      "notFound": [
+        "Not found.",
+        "غير موجود."
+      ]
+    },
+    "invalidCells": [
+      "{count, plural, one {# value needs fixing and is not saved} other {# values need fixing and are not saved}}",
+      "{count, plural, one {قيمة واحدة تحتاج إلى تصحيح ولم تُحفظ} two {قيمتان تحتاجان إلى تصحيح ولم تُحفظا} few {# قيم تحتاج إلى تصحيح ولم تُحفظ} many {# قيمة تحتاج إلى تصحيح ولم تُحفظ} other {# قيمة تحتاج إلى تصحيح ولم تُحفظ}}"
+    ]
+  }
+}
