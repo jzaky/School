@@ -72,6 +72,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("grades.enter") || c("grades.view_all")) school.push({ key: "grades", href: "/grades", icon: "clipboard-check" });
   if (c("career.advise")) school.push({ key: "career", href: "/career", icon: "compass" });
   if (c("pathways.view") && c("people.view")) school.push({ key: "pathwayPlanning", href: "/career/pathways", icon: "map" });
+  if (c("pathways.view") && c("people.view") && (c("planner.approve") || c("pathways.manage"))) school.push({ key: "pathwayDashboard", href: "/career/pathways/dashboard", icon: "list-checks" });
   if (c("pathways.view")) school.push({ key: "universities", href: "/career/universities", icon: "landmark" });
   if (c("applications.manage")) school.push({ key: "applications", href: "/career/applications/manage", icon: "send" });
   if (c("catalog.review")) school.push({ key: "catalogReview", href: "/career/catalog", icon: "clipboard-check" });

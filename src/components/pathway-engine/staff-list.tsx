@@ -8,6 +8,7 @@ import { PageBody, PageHeader } from "@/components/app/page-header";
 import { EmptyState } from "@/components/app/empty-state";
 import { FilterBar } from "@/components/app/filter-bar";
 import { Pill } from "@/components/app/badges";
+import { StaffPathwayLinks } from "@/components/transcripts/views";
 
 const PLAN_TONE: Record<CoursePlanStatus, "success" | "warning" | "neutral"> = { APPROVED: "success", PROPOSED: "warning", DRAFT: "neutral", ARCHIVED: "neutral" };
 
@@ -37,7 +38,7 @@ export async function StaffStudentList({ ctx, q, tab }: { ctx: Ctx; q: string; t
 
   return (
     <PageBody>
-      <PageHeader title={t("title")} description={t("staff.desc")} />
+      <PageHeader title={t("title")} description={t("staff.desc")} actions={<StaffPathwayLinks ctx={ctx} />} />
       <FilterBar
         tabs={[
           { value: "all", label: t("staff.all"), count: students.length },

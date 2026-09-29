@@ -6,12 +6,12 @@
 //   three lines match automatically, two need a person (English and Information Technology).
 // - Cached match results for every student with a plan or course record, so the dashboard has data.
 // Everything goes through the module's own service functions, so the data is exactly what the app makes.
-import type { PrismaClient } from "@prisma/client";
+import type { Prisma, PrismaClient } from "@prisma/client";
 import { tenantDb } from "@/lib/tenant-db";
 import type { EngineActor } from "@/server/pathway-engine/access";
 import { commitImport, createImport } from "@/server/transcripts/service";
 import { recomputeCaseload } from "@/server/transcripts/dashboard";
-import type { ParsedRow } from "@/server/transcripts/types";
+import type { ImportPayload, ParsedRow } from "@/server/transcripts/types";
 import type { SeedWorld } from "../demo";
 
 const DAY = 86_400_000;
@@ -63,7 +63,10 @@ export async function seedTranscriptsFor(db: PrismaClient, orgId: string, now = 
     const imp = await createImport(actor, { studentId: med.id, fileName: IGCSE_FILE, kind: "CSV", curriculum: "BRITISH", defaultGradeLevel: 10, rows, problems: [] });
     await commitImport(actor, imp.id);
     const when = new Date(now.getTime() - 21 * DAY);
-    await db.transcriptImport.update({ where: { id: imp.id }, data: { createdAt: when } });
+    const saved = await db.transcriptImport.findUniqueOrThrow({ where: { id: imp.id } });
+    const payload = saved.rows as unknown as ImportPayload;
+    if (payload.lastCommit) payload.lastCommit.at = new Date(when.getTime() + 2 * 3600_000).toISOString();
+    await db.transcriptImport.update({ where: { id: imp.id }, data: { createdAt: when, rows: payload as unknown as Prisma.InputJsonValue } });
     await db.studentCourse.updateMany({ where: { orgId, importId: imp.id }, data: { createdAt: when } });
     imports++;
   }
@@ -98,7 +101,17 @@ export async function seedTranscriptsFor(db: PrismaClient, orgId: string, now = 
     }
   }
 
-  // 3. Cached results for the dashboard.
+  // 3. A few catalog notes, so the catalog admin shows how schools use them (only when not set yet).
+  const notes: Array<[string, string, string]> = [
+    ["AL_FURTHER_MATH", "Needs an A* in IGCSE Mathematics and a Maths teacher's recommendation.", "تتطلب درجة A* في رياضيات IGCSE وتوصية من معلم الرياضيات."],
+    ["AP_CALC_BC", "Runs when at least eight students choose it.", "تُفتح المادة عند تسجيل ثمانية طلاب على الأقل."],
+  ];
+  for (const [code, en, ar] of notes) {
+    const c = await db.curriculumCourse.findFirst({ where: { orgId: null, code }, select: { id: true } });
+    if (c) await db.schoolCourse.updateMany({ where: { orgId, courseId: c.id, notesEn: null }, data: { notesEn: en, notesAr: ar } });
+  }
+
+  // 4. Cached results for the dashboard.
   const { evaluated } = await recomputeCaseload(actor, {});
   log(`transcripts: ${imports} imports, ${evaluated} students evaluated`);
 }

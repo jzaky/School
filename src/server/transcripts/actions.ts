@@ -8,7 +8,7 @@ import { CURRICULA, type Curriculum } from "@/server/pathway-engine/types";
 import { extractPdfText } from "@/server/curriculum/pdf-text";
 import { parseCsv, parseTranscriptText, rowsFromTable } from "./parse";
 import { readXlsx } from "./xlsx";
-import { addCourseRow, commitImport, createImport, deleteCourseRow, searchCourses, setCourseMapping, setRowDecision, updateCourseRow, useCurrentAverage, type RowAction } from "./service";
+import { addCourseRow, commitImport, createImport, deleteCourseRow, searchCourses, setCourseMapping, setRowDecision, updateCourseRow, applyCurrentAverage, type RowAction } from "./service";
 import { addSchoolCourse, updateSchoolCourse } from "./catalog";
 import { recomputeCaseload } from "./dashboard";
 import { MAX_IMPORT_ROWS, type CommitSummary, type ImportKind, type ParseResult, type ParsedRow } from "./types";
@@ -175,10 +175,10 @@ export async function deleteCourseRowAction(id: string): Promise<Ok> {
   return res;
 }
 
-export async function useCurrentAverageAction(id: string): Promise<Ok> {
+export async function applyCurrentAverageAction(id: string): Promise<Ok> {
   const actor = await actorFromCtx(await getCtx());
   const res = await run(async () => {
-    await useCurrentAverage(actor, id);
+    await applyCurrentAverage(actor, id);
     return {};
   });
   done();

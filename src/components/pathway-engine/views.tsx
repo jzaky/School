@@ -1,6 +1,6 @@
 // Server views for the University planning module. Pages under /career/pathways are thin wrappers.
 import { getTranslations } from "next-intl/server";
-import { ArrowRight, BookOpenCheck, DoorOpen, FlaskConical, GraduationCap, Info, Route, Target } from "lucide-react";
+import { ArrowRight, BookOpenCheck, DoorOpen, FlaskConical, GraduationCap, Info, ListChecks, Route, Target } from "lucide-react";
 import type { Ctx } from "@/server/context";
 import { pick } from "@/lib/i18n-data";
 import { fmtDate, fmtNumber } from "@/lib/format";
@@ -18,12 +18,13 @@ import { computeCourseImpact, computeMatches, getCurrentPlan, getGoal, loadSchoo
 import { pathwayHref, subjectNames, type EngineFocus } from "@/server/pathway-engine/page-data";
 import { STATUS_RANK } from "@/server/pathway-engine/types";
 import { gradeOptions } from "@/server/pathway-engine/grade-scales";
+import { canViewRecord } from "@/server/transcripts/access";
 import { STATUS_ORDER } from "./labels";
 import { StatusChip } from "./ui";
 import { AiSummary, GoalForm, PlanBuilder, WhatIfPanel } from "./client";
 
 export const GOAL_COUNTRIES = ["GB", "US", "CA", "AE", "AU", "IE", "NL", "DE", "SG", "HK", "JO", "CH"];
-type Tab = "overview" | "plan" | "whatIf";
+type Tab = "overview" | "plan" | "whatIf" | "courses";
 
 export async function EngineHeader({ ctx, focus, tab }: { ctx: Ctx; focus: EngineFocus; tab: Tab }) {
   const t = await getTranslations("engine");
@@ -32,6 +33,8 @@ export async function EngineHeader({ ctx, focus, tab }: { ctx: Ctx; focus: Engin
     { key: "overview", href: pathwayHref(ctx, s.id), icon: <Target className="size-4" /> },
     { key: "plan", href: pathwayHref(ctx, s.id, "/plan"), icon: <Route className="size-4" /> },
     { key: "whatIf", href: pathwayHref(ctx, s.id, "/what-if"), icon: <FlaskConical className="size-4" /> },
+    // Course record (transcripts module): the student and advising staff, not parents.
+    ...(canViewRecord(focus.actor, s.id) ? [{ key: "courses" as const, href: pathwayHref(ctx, s.id, "/courses"), icon: <ListChecks className="size-4" /> }] : []),
   ];
   return (
     <>

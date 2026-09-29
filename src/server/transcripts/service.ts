@@ -509,7 +509,7 @@ export async function deleteCourseRow(actor: EngineActor, id: string) {
 }
 
 /** "Use current average": copies the Grades module suggestion into the predicted grade. Never automatic. */
-export async function useCurrentAverage(actor: EngineActor, id: string) {
+export async function applyCurrentAverage(actor: EngineActor, id: string) {
   const row = await recordRow(actor, id);
   if (!row.courseId || row.status !== "IN_PROGRESS") fail("invalid");
   const { byCourse } = await subjectAverages(actor.db, actor.orgId, row.studentId);
