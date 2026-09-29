@@ -15,6 +15,7 @@ import { ChooseCareerButton, ReviewRecommendations, Shortlist } from "./career-c
 import { gapText } from "@/components/pathways/pathway-ui";
 import { checkProgram, loadStudentPathway } from "@/server/pathways/profile";
 import { programsForEntries } from "@/server/pathways/shortlist";
+import { catalogScope } from "@/server/pathways/scope";
 
 const COUNTRY: Record<string, { en: string; ar: string }> = {
   AE: { en: "UAE", ar: "الإمارات" },
@@ -40,7 +41,7 @@ export async function CareerOverview({ ctx, prefs, studentId, mode }: { ctx: Ctx
     db.careerProfile.findUnique({ where: { studentId } }),
     db.shortlistEntry.findMany({ where: { studentId }, include: { university: true, requirements: { orderBy: { dueAt: "asc" } } }, orderBy: { createdAt: "asc" } }),
     // Curated catalogue only: the full US list (thousands) is browsed on /career/universities.
-    db.university.findMany({ where: { orgId, programsEn: { isEmpty: false } }, orderBy: [{ countryCode: "asc" }, { worldRank: "asc" }] }),
+    db.university.findMany({ where: { ...catalogScope(orgId), programsEn: { isEmpty: false } }, orderBy: [{ countryCode: "asc" }, { worldRank: "asc" }] }),
     db.case.findFirst({ where: { studentId, type: "CAREER", status: { notIn: ["CLOSED"] } }, orderBy: { openedAt: "desc" } }),
   ]);
   const tp = await getTranslations("pathways");

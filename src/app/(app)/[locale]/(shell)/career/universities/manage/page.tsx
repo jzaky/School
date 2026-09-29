@@ -1,3 +1,4 @@
+import { catalogScope } from "@/server/pathways/scope";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { ChevronLeft, Database, Landmark, ListChecks, ShieldCheck, TriangleAlert } from "lucide-react";
@@ -43,12 +44,12 @@ export default async function ManagePathwaysPage() {
   const fmt = (n: number) => fmtNumber(prefs, n);
   const { db, orgId, locale } = ctx;
   const [uniCount, usCount, programs, runs] = await Promise.all([
-    db.university.count({ where: { orgId } }),
-    db.university.count({ where: { orgId, scorecardId: { not: null } } }),
-    db.universityProgram.findMany({ where: { orgId }, orderBy: [{ lastVerifiedAt: { sort: "asc", nulls: "first" } }, { nameEn: "asc" }] }),
+    db.university.count({ where: catalogScope(orgId) }),
+    db.university.count({ where: { ...catalogScope(orgId), scorecardId: { not: null } } }),
+    db.universityProgram.findMany({ where: catalogScope(orgId), orderBy: [{ lastVerifiedAt: { sort: "asc", nulls: "first" } }, { nameEn: "asc" }] }),
     db.jobRun.findMany({ where: { orgId, queue: "pathways", name: "scorecard_import" }, orderBy: { createdAt: "desc" }, take: 5 }),
   ]);
-  const unis = await db.university.findMany({ where: { orgId, OR: [{ id: { in: [...new Set(programs.map((p) => p.universityId))] } }, { key: { startsWith: "custom-" } }, { scorecardId: null }] }, orderBy: [{ countryCode: "asc" }, { nameEn: "asc" }] });
+  const unis = await db.university.findMany({ where: { AND: [catalogScope(orgId)], OR: [{ id: { in: [...new Set(programs.map((p) => p.universityId))] } }, { key: { startsWith: "custom-" } }, { scorecardId: null }] }, orderBy: [{ countryCode: "asc" }, { nameEn: "asc" }] });
   const uniById = new Map(unis.map((u) => [u.id, u]));
   const checked = programs.filter((p) => p.lastVerifiedAt && !p.indicative).length;
   const snapshot = loadSnapshot();
@@ -132,6 +133,9 @@ export default async function ManagePathwaysPage() {
                   <span className="block truncate text-xs text-muted-foreground">{u ? `${pick(locale, u.nameEn, u.nameAr)} · ${countryLabel(u.countryCode, locale)}` : ""}</span>
                 </div>
                 <Pill tone={isChecked ? "success" : "warning"}>{isChecked ? t("checkedOn", { date: fmtDate(prefs, p.lastVerifiedAt) }) : t("indicative")}</Pill>
+                {p.orgId === null ? (
+                  <Pill tone="info">{ta("globalCatalog")}</Pill>
+                ) : (
                 <div className="flex items-center gap-1">
                   <MarkCheckedButton programId={p.id} hasSource={!!p.sourceUrl} />
                   <ProgramDialog
@@ -158,6 +162,7 @@ export default async function ManagePathwaysPage() {
                     example={EXAMPLE}
                   />
                 </div>
+                )}
               </li>
             );
           })}
@@ -177,11 +182,15 @@ export default async function ManagePathwaysPage() {
                   {pick(locale, u.cityEn, u.cityAr)}, {countryLabel(u.countryCode, locale)}
                 </span>
               </div>
+              {u.orgId === null ? (
+                <Pill tone="info">{ta("globalCatalog")}</Pill>
+              ) : (
               <UniversityDialog
                 initial={{ id: u.id, nameEn: u.nameEn, nameAr: u.nameAr, countryCode: u.countryCode, cityEn: u.cityEn, cityAr: u.cityAr, website: u.website ?? "", applyVia: u.applyVia ?? "none", deadlineMonth: u.deadlineMonth ? String(u.deadlineMonth) : "none" }}
                 routes={routes}
                 months={months}
               />
+              )}
             </li>
           ))}
         </ul>

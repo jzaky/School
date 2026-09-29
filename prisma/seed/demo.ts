@@ -18,7 +18,6 @@ import { DOCUMENT_CATEGORIES, DOCUMENT_TEMPLATES } from "./data/documents";
 import { MESSAGE_TEMPLATES } from "./data/notifications";
 import { CAREERS } from "./data/careers";
 import { APTITUDE_QUESTIONS } from "./data/aptitude";
-import { UNIVERSITIES } from "./data/universities";
 import { seedHistory } from "./history";
 import { seedCompliance } from "./compliance";
 import { seedCareer } from "./career";
@@ -29,6 +28,8 @@ import { seedTrips } from "./academics/trips";
 import { seedCalendar } from "./academics/calendar";
 import { seedPathways } from "./academics/pathways";
 import { seedCurriculum } from "./academics/curriculum";
+import { seedPathwayEngine } from "./academics/pathway-engine";
+import { seedGlobalCatalog } from "./catalog";
 
 export const DEMO_SLUG = "horizon";
 export const DEMO_PASSWORD = "Horizon2026!";
@@ -229,6 +230,9 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   const now = opts.now ?? new Date();
   const started = Date.now();
   const r = rng(20260928);
+
+  // Global reference catalog first (universities, programmes, requirements). Fast when unchanged.
+  await seedGlobalCatalog(db, { now, log });
 
   // --- Organization (stable id) -------------------------------------------------
   const org = await db.organization.upsert({
@@ -840,14 +844,8 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
       };
     }),
   });
-  const universities = new Map<string, string>();
-  await db.university.createMany({
-    data: UNIVERSITIES.map((u) => {
-      const uid = id();
-      universities.set(u.key, uid);
-      return { id: uid, orgId, key: u.key, nameEn: u.name.en, nameAr: u.name.ar, countryCode: u.countryCode, cityEn: u.city.en, cityAr: u.city.ar, worldRank: u.worldRank ?? null, acceptanceRate: u.acceptanceRate ?? null, minAverage: u.minAverage ?? null, programsEn: u.programs, website: u.website, deadlineMonth: u.deadlineMonth };
-    }),
-  });
+  // Universities live in the global catalog (orgId null, seeded by seedGlobalCatalog). Schools no longer get copies.
+  const universities = new Map((await db.university.findMany({ where: { orgId: null }, select: { id: true, key: true } })).map((u) => [u.key, u.id]));
 
   // Announcements and calendar
   await db.announcement.createMany({
@@ -939,6 +937,7 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   await seedTrips(world);
   await seedCalendar(world);
   await seedPathways(world);
+  await seedPathwayEngine(world);
   await seedCurriculum(world);
 
   log(`demo seed finished in ${Date.now() - started}ms`);

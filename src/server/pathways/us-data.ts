@@ -51,8 +51,8 @@ type UniDb = {
   };
 };
 
-/** ImportStore backed by the University table of one organization. */
-export function universityStore(db: UniDb, orgId: string): ImportStore {
+/** ImportStore backed by the University table of one organization, or the global catalog when orgId is null (owner role only). */
+export function universityStore(db: UniDb, orgId: string | null): ImportStore {
   return {
     existing: () => db.university.findMany({ where: { orgId, countryCode: "US" }, select: { id: true, key: true, nameEn: true, countryCode: true, scorecardId: true } }),
     async createMany(rows) {

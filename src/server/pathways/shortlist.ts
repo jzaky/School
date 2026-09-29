@@ -5,6 +5,7 @@ import type { TenantDb } from "@/lib/tenant-db";
 
 type Db = TenantDb;
 import { audit } from "@/server/audit/audit";
+import { catalogScope } from "./scope";
 import { suggestCategory } from "@/server/career/scoring";
 import { checkProgram, loadStudentPathway, programDeadline } from "./profile";
 import type { CheckResult, ProgramRequirements } from "./types";
@@ -28,9 +29,9 @@ export function categoryFor(check: CheckResult, acceptanceRate: number | null): 
 export type AddResult = { ok: true; entryId: string; created: boolean } | { ok: false; error: "not_found" };
 
 export async function addProgramToShortlist(db: Db, orgId: string, input: { studentId: string; programId: string; actorId: string | null; category?: ShortlistCategory; now?: Date }): Promise<AddResult> {
-  const program = await db.universityProgram.findFirst({ where: { id: input.programId, orgId } });
+  const program = await db.universityProgram.findFirst({ where: { id: input.programId, ...catalogScope(orgId) } });
   if (!program) return { ok: false, error: "not_found" };
-  const [uni, data] = await Promise.all([db.university.findFirst({ where: { id: program.universityId, orgId } }), loadStudentPathway(db, orgId, input.studentId)]);
+  const [uni, data] = await Promise.all([db.university.findFirst({ where: { id: program.universityId, ...catalogScope(orgId) } }), loadStudentPathway(db, orgId, input.studentId)]);
   if (!uni || !data) return { ok: false, error: "not_found" };
   const existing = await db.shortlistEntry.findFirst({ where: { studentId: input.studentId, universityId: uni.id, programEn: program.nameEn } });
   if (existing) return { ok: true, entryId: existing.id, created: false };

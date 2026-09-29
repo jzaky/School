@@ -10,7 +10,7 @@ export type ReqCurriculum = (typeof REQ_CURRICULA)[number];
 export const APPLY_ROUTES = ["UCAS", "COMMON_APP", "UC_APP", "MIT_APP", "OUAC", "STUDIELINK", "CAO", "UNI_ASSIST", "JORDAN_UNIFIED", "DIRECT"] as const;
 export type ApplyRoute = (typeof APPLY_ROUTES)[number];
 
-export const FIELDS = ["computer_science", "engineering", "medicine", "business", "economics", "law", "psychology", "architecture", "science"] as const;
+export const FIELDS = ["computer_science", "engineering", "medicine", "health", "business", "economics", "law", "international_relations", "psychology", "education", "architecture", "design", "media", "science"] as const;
 export type Field = (typeof FIELDS)[number];
 
 export const DEGREES = ["BSc", "BEng", "MEng", "BA", "LLB", "MBChB", "BMBCh", "MD", "BArch", "BBA"] as const;

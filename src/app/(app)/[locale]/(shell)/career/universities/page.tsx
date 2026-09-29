@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { PathwayFilters, StudentPicker } from "@/components/pathways/pathway-client";
 import { CheckSummary, countryLabel, requirementLines } from "@/components/pathways/pathway-ui";
 import { pathwayFocus, withStudent } from "@/server/pathways/page-data";
+import { catalogScope } from "@/server/pathways/scope";
 import { checkProgram } from "@/server/pathways/profile";
 import { programsForEntries } from "@/server/pathways/shortlist";
 import { CURRICULA, DEGREES, FIELDS, REQ_CURRICULA, type Curriculum, type ProgramRequirements } from "@/server/pathways/types";
@@ -44,14 +45,14 @@ export default async function UniversitiesPage({ searchParams }: { searchParams:
   const curriculum = (CURRICULA as readonly string[]).includes(sp.curriculum ?? "") ? (sp.curriculum as Curriculum) : (focus.data?.curriculum ?? "BRITISH");
 
   const [countryRows, programs] = await Promise.all([
-    db.university.groupBy({ by: ["countryCode"], where: { orgId }, _count: { _all: true } }),
-    db.universityProgram.findMany({ where: { orgId }, orderBy: { nameEn: "asc" } }),
+    db.university.groupBy({ by: ["countryCode"], where: catalogScope(orgId), _count: { _all: true } }),
+    db.universityProgram.findMany({ where: catalogScope(orgId), orderBy: { nameEn: "asc" } }),
   ]);
   const uniIds = [...new Set(programs.map((p) => p.universityId))];
   const programUnis = await db.university.findMany({ where: { id: { in: uniIds } } });
   const uniById = new Map(programUnis.map((u) => [u.id, u]));
   const cityRows = sp.country
-    ? await db.university.groupBy({ by: ["cityEn", "cityAr"], where: { orgId, countryCode: sp.country }, orderBy: { cityEn: "asc" }, take: 400 })
+    ? await db.university.groupBy({ by: ["cityEn", "cityAr"], where: { ...catalogScope(orgId), countryCode: sp.country }, orderBy: { cityEn: "asc" }, take: 400 })
     : programUnis.map((u) => ({ cityEn: u.cityEn, cityAr: u.cityAr }));
   const cities = [...new Map(cityRows.map((c) => [c.cityEn, { value: c.cityEn, label: pick(locale, c.cityEn, c.cityAr) }])).values()].sort((a, b) => a.label.localeCompare(b.label));
   const countries = countryRows.map((c) => ({ value: c.countryCode, label: countryLabel(c.countryCode, locale) })).sort((a, b) => a.label.localeCompare(b.label));
@@ -80,7 +81,7 @@ export default async function UniversitiesPage({ searchParams }: { searchParams:
   // Universities tab: every institution, including the full US list when it has been imported.
   const page = Math.max(1, Number(sp.page) || 1);
   const uniWhere: Prisma.UniversityWhereInput = {
-    orgId,
+    AND: [catalogScope(orgId)],
     ...(sp.country ? { countryCode: sp.country } : {}),
     ...(sp.city ? { cityEn: sp.city } : {}),
     ...(q ? { OR: [{ nameEn: { contains: q, mode: "insensitive" } }, { nameAr: { contains: q } }, { cityEn: { contains: q, mode: "insensitive" } }] } : {}),

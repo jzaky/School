@@ -30,6 +30,9 @@ for (const k of ["MIGRATION_DATABASE_URL", "DATABASE_URL", "REDIS_URL"]) {
 echo "[start] applying migrations and RLS"
 node --import tsx scripts/db-migrate.ts
 
+echo "[start] seeding the global university catalog"
+node --import tsx scripts/seed-catalog.ts
+
 if [ "${SEED_ON_START:-true}" = "true" ]; then
   node --import tsx scripts/seed-if-missing.ts
 fi
