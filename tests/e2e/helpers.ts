@@ -25,7 +25,7 @@ export async function loginAs(browser: Browser, persona: Persona, locale: Locale
   await context.addCookies([{ name: "NEXT_LOCALE", value: locale, url: baseURL }]);
   const page = await context.newPage();
   const errors: string[] = [];
-  page.on("pageerror", (e) => errors.push(`pageerror: ${String(e).slice(0, 300)}`));
+  page.on("pageerror", (e) => errors.push(`pageerror on ${new URL(page.url()).pathname}: ${String(e).slice(0, 300)}`));
   page.on("response", (r) => {
     if (r.status() >= 500) errors.push(`http ${r.status()} ${r.url()}`);
   });
