@@ -1,0 +1,72 @@
+// Curriculum-neutral canonical subjects (global). Keys are stable; requirement lines and course
+// mappings refer to them. parentKey groups specialisms under a broad subject.
+export type CanonicalSubjectSeed = { key: string; en: string; ar: string; category: string; parent?: string };
+
+export const CANONICAL_SUBJECTS: CanonicalSubjectSeed[] = [
+  // Mathematics
+  { key: "mathematics", en: "Mathematics", ar: "الرياضيات", category: "MATHEMATICS" },
+  { key: "algebra", en: "Algebra", ar: "الجبر", category: "MATHEMATICS", parent: "mathematics" },
+  { key: "geometry", en: "Geometry", ar: "الهندسة الرياضية", category: "MATHEMATICS", parent: "mathematics" },
+  { key: "precalculus", en: "Precalculus", ar: "مبادئ التفاضل والتكامل", category: "MATHEMATICS", parent: "mathematics" },
+  { key: "calculus", en: "Calculus", ar: "التفاضل والتكامل", category: "MATHEMATICS", parent: "mathematics" },
+  { key: "statistics", en: "Statistics", ar: "الإحصاء", category: "MATHEMATICS", parent: "mathematics" },
+  { key: "further_mathematics", en: "Further Mathematics", ar: "الرياضيات الإضافية", category: "MATHEMATICS", parent: "mathematics" },
+  { key: "applied_mathematics", en: "Applied Mathematics", ar: "الرياضيات التطبيقية", category: "MATHEMATICS", parent: "mathematics" },
+  { key: "discrete_mathematics", en: "Discrete Mathematics", ar: "الرياضيات المتقطعة", category: "MATHEMATICS", parent: "mathematics" },
+  // Sciences
+  { key: "science", en: "Science", ar: "العلوم", category: "SCIENCE" },
+  { key: "physics", en: "Physics", ar: "الفيزياء", category: "SCIENCE", parent: "science" },
+  { key: "chemistry", en: "Chemistry", ar: "الكيمياء", category: "SCIENCE", parent: "science" },
+  { key: "biology", en: "Biology", ar: "الأحياء", category: "SCIENCE", parent: "science" },
+  { key: "combined_science", en: "Combined Science", ar: "العلوم المتكاملة", category: "SCIENCE", parent: "science" },
+  { key: "environmental_science", en: "Environmental Science", ar: "علوم البيئة", category: "SCIENCE", parent: "science" },
+  { key: "earth_science", en: "Earth and Space Science", ar: "علوم الأرض والفضاء", category: "SCIENCE", parent: "science" },
+  { key: "health_science", en: "Health Science", ar: "العلوم الصحية", category: "SCIENCE", parent: "science" },
+  { key: "anatomy_physiology", en: "Anatomy and Physiology", ar: "التشريح ووظائف الأعضاء", category: "SCIENCE", parent: "biology" },
+  // Computing and technology
+  { key: "computer_science", en: "Computer Science", ar: "علوم الحاسوب", category: "COMPUTING" },
+  { key: "information_technology", en: "Information Technology", ar: "تقنية المعلومات", category: "COMPUTING", parent: "computer_science" },
+  { key: "robotics", en: "Robotics", ar: "الروبوتات", category: "COMPUTING", parent: "computer_science" },
+  { key: "engineering_science", en: "Engineering Science", ar: "علوم الهندسة", category: "COMPUTING" },
+  { key: "design_technology", en: "Design and Technology", ar: "التصميم والتكنولوجيا", category: "ARTS" },
+  // English and languages
+  { key: "english_language", en: "English Language", ar: "اللغة الإنجليزية", category: "LANGUAGE" },
+  { key: "english_literature", en: "English Literature", ar: "الأدب الإنجليزي", category: "LANGUAGE", parent: "english_language" },
+  { key: "arabic", en: "Arabic", ar: "اللغة العربية", category: "LANGUAGE" },
+  { key: "second_language", en: "Second Language", ar: "لغة ثانية", category: "LANGUAGE" },
+  { key: "french", en: "French", ar: "اللغة الفرنسية", category: "LANGUAGE", parent: "second_language" },
+  { key: "spanish", en: "Spanish", ar: "اللغة الإسبانية", category: "LANGUAGE", parent: "second_language" },
+  { key: "german", en: "German", ar: "اللغة الألمانية", category: "LANGUAGE", parent: "second_language" },
+  { key: "chinese", en: "Chinese (Mandarin)", ar: "اللغة الصينية", category: "LANGUAGE", parent: "second_language" },
+  { key: "hindi", en: "Hindi", ar: "اللغة الهندية", category: "LANGUAGE", parent: "second_language" },
+  // UAE and religious studies
+  { key: "islamic_studies", en: "Islamic Studies", ar: "التربية الإسلامية", category: "CIVICS" },
+  { key: "moral_education", en: "Moral Education", ar: "التربية الأخلاقية", category: "CIVICS" },
+  { key: "uae_social_studies", en: "UAE Social Studies", ar: "الدراسات الاجتماعية الإماراتية", category: "CIVICS" },
+  // Humanities and social sciences
+  { key: "social_studies", en: "Social Studies", ar: "الدراسات الاجتماعية", category: "HUMANITIES" },
+  { key: "history", en: "History", ar: "التاريخ", category: "HUMANITIES", parent: "social_studies" },
+  { key: "geography", en: "Geography", ar: "الجغرافيا", category: "HUMANITIES", parent: "social_studies" },
+  { key: "economics", en: "Economics", ar: "الاقتصاد", category: "HUMANITIES" },
+  { key: "business", en: "Business Studies", ar: "إدارة الأعمال", category: "HUMANITIES" },
+  { key: "accounting", en: "Accounting", ar: "المحاسبة", category: "HUMANITIES", parent: "business" },
+  { key: "psychology", en: "Psychology", ar: "علم النفس", category: "HUMANITIES" },
+  { key: "sociology", en: "Sociology", ar: "علم الاجتماع", category: "HUMANITIES" },
+  { key: "global_politics", en: "Politics and Global Affairs", ar: "السياسة والشؤون الدولية", category: "HUMANITIES" },
+  { key: "philosophy", en: "Philosophy", ar: "الفلسفة", category: "HUMANITIES" },
+  { key: "law", en: "Law", ar: "القانون", category: "HUMANITIES" },
+  { key: "theory_of_knowledge", en: "Theory of Knowledge", ar: "نظرية المعرفة", category: "HUMANITIES" },
+  // Arts, media and physical education
+  { key: "art", en: "Art and Design", ar: "الفنون والتصميم", category: "ARTS" },
+  { key: "music", en: "Music", ar: "الموسيقى", category: "ARTS" },
+  { key: "drama", en: "Drama", ar: "المسرح", category: "ARTS" },
+  { key: "media_studies", en: "Media Studies", ar: "دراسات الإعلام", category: "ARTS" },
+  { key: "film_studies", en: "Film Studies", ar: "دراسات السينما", category: "ARTS", parent: "media_studies" },
+  { key: "physical_education", en: "Physical Education", ar: "التربية الرياضية", category: "PE" },
+  { key: "sports_science", en: "Sports Science", ar: "علوم الرياضة", category: "PE", parent: "physical_education" },
+  { key: "entrepreneurship", en: "Entrepreneurship", ar: "ريادة الأعمال", category: "HUMANITIES", parent: "business" },
+  { key: "marketing", en: "Marketing", ar: "التسويق", category: "HUMANITIES", parent: "business" },
+  { key: "biotechnology", en: "Biotechnology", ar: "التقنية الحيوية", category: "SCIENCE", parent: "biology" },
+  { key: "data_science", en: "Data Science", ar: "علم البيانات", category: "COMPUTING", parent: "computer_science" },
+  { key: "electronics", en: "Electronics", ar: "الإلكترونيات", category: "COMPUTING", parent: "engineering_science" },
+];

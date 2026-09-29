@@ -1,3 +1,4 @@
+import { catalogScope } from "@/server/pathways/scope";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { BookOpen, Briefcase, ChevronLeft, GraduationCap, Sparkles, TrendingUp, Wallet } from "lucide-react";
@@ -30,7 +31,7 @@ export default async function CareerDetail({ params }: { params: Promise<{ key: 
   const c = await db.career.findUnique({ where: { orgId_key: { orgId, key } } });
   if (!c) notFound();
   const words = KEYWORDS[key] ?? [c.titleEn.split(" ")[0]];
-  const unis = (await db.university.findMany({ where: { orgId } })).filter((u) => u.programsEn.some((p) => words.some((w) => p.toLowerCase().includes(w.toLowerCase())))).slice(0, 8);
+  const unis = (await db.university.findMany({ where: { ...catalogScope(orgId), programsEn: { isEmpty: false } } })).filter((u) => u.programsEn.some((p) => words.some((w) => p.toLowerCase().includes(w.toLowerCase())))).slice(0, 8);
   const w = c.weights as CareerWeights;
   const profile = ctx.isStudent && ctx.membership.student ? await db.careerProfile.findUnique({ where: { studentId: ctx.membership.student.id } }) : null;
   return (

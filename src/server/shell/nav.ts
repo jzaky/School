@@ -20,7 +20,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           { key: "career", href: "/career", icon: "compass" },
           ...(c("registration.submit") ? [{ key: "subjects", href: "/subjects", icon: "book-open" }] : []),
           ...(c("grades.view_own") ? [{ key: "grades", href: "/grades", icon: "clipboard-check" }] : []),
-          ...(c("pathways.view") ? [{ key: "universities", href: "/career/universities", icon: "landmark" }] : []),
+          ...(c("pathways.view") ? [{ key: "pathwayPlanning", href: "/career/pathways", icon: "map" }, { key: "universities", href: "/career/universities", icon: "landmark" }] : []),
           ...(c("pathways.view") ? [{ key: "applications", href: "/career/applications", icon: "send" }] : []),
           { key: "calendar", href: "/calendar", icon: "calendar" },
           { key: "exams", href: "/exams", icon: "graduation-cap" },
@@ -39,7 +39,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           { key: "children", href: "/children", icon: "users" },
           ...(c("registration.submit") ? [{ key: "subjects", href: "/subjects", icon: "book-open" }] : []),
           ...(c("grades.view_own") ? [{ key: "grades", href: "/grades", icon: "clipboard-check" }] : []),
-          ...(c("pathways.view") ? [{ key: "universities", href: "/career/universities", icon: "landmark" }] : []),
+          ...(c("pathways.view") ? [{ key: "pathwayPlanning", href: "/career/pathways", icon: "map" }, { key: "universities", href: "/career/universities", icon: "landmark" }] : []),
           ...(c("pathways.view") ? [{ key: "applications", href: "/career/applications", icon: "send" }] : []),
           { key: "services", href: "/services", icon: "layout-grid" },
           { key: "requests", href: "/requests", icon: "inbox" },
@@ -71,6 +71,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("grades.enter") || c("registration.manage")) school.push({ key: "classes", href: "/classes", icon: "school" });
   if (c("grades.enter") || c("grades.view_all")) school.push({ key: "grades", href: "/grades", icon: "clipboard-check" });
   if (c("career.advise")) school.push({ key: "career", href: "/career", icon: "compass" });
+  if (c("pathways.view") && c("people.view")) school.push({ key: "pathwayPlanning", href: "/career/pathways", icon: "map" });
   if (c("pathways.view")) school.push({ key: "universities", href: "/career/universities", icon: "landmark" });
   if (c("applications.manage")) school.push({ key: "applications", href: "/career/applications/manage", icon: "send" });
   if (c("catalog.review")) school.push({ key: "catalogReview", href: "/career/catalog", icon: "clipboard-check" });

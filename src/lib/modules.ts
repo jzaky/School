@@ -1,2 +1,2 @@
 // Modules that are live. Links to a module stay hidden until it ships, so no link leads nowhere.
-export const LIVE_MODULES = { grades: true, timetable: true, pathways: false } as const;
+export const LIVE_MODULES = { grades: true, timetable: true, pathways: true } as const;

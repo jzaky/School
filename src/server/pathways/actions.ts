@@ -215,6 +215,10 @@ export async function saveUniversityAction(raw: z.infer<typeof uniInput>): Promi
   if (!parsed.success) return { ok: false, error: "invalid" };
   const { id, ...d } = parsed.data;
   const data = { ...d, website: d.website ? d.website.replace(/^https?:\/\//i, "").replace(/\/+$/, "") : null };
+  if (id) {
+    const own = await ctx.db.university.findUnique({ where: { id }, select: { orgId: true } });
+    if (!own || own.orgId !== ctx.orgId) return { ok: false, error: "forbidden" };
+  }
   const row = id
     ? await ctx.db.university.update({ where: { id }, data })
     : await ctx.db.university.create({ data: { ...data, orgId: ctx.orgId, key: `custom-${d.nameEn.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40)}-${Date.now().toString(36)}`, programsEn: [] } });
@@ -278,6 +282,10 @@ export async function saveProgramAction(raw: z.infer<typeof programInput>): Prom
   if (enJson === undefined || (en && !en.success)) return { ok: false, error: "englishJson" };
   const uni = await ctx.db.university.findUnique({ where: { id: p.universityId } });
   if (!uni) return { ok: false, error: "not_found" };
+  if (p.id) {
+    const own = await ctx.db.universityProgram.findUnique({ where: { id: p.id }, select: { orgId: true } });
+    if (!own || own.orgId !== ctx.orgId) return { ok: false, error: "forbidden" };
+  }
   const now = new Date();
   const data = {
     universityId: uni.id,
@@ -311,6 +319,8 @@ export async function markProgramCheckedAction(programId: string): Promise<Ok> {
   if (!ctx.can("pathways.manage")) return { ok: false, error: "forbidden" };
   const row = await ctx.db.universityProgram.findUnique({ where: { id: programId } });
   if (!row) return { ok: false, error: "not_found" };
+  // Global catalog programmes are checked through catalog review, not by one school.
+  if (row.orgId !== ctx.orgId) return { ok: false, error: "forbidden" };
   if (!row.sourceUrl) return { ok: false, error: "no_source" };
   await ctx.db.universityProgram.update({ where: { id: row.id }, data: { lastVerifiedAt: new Date(), indicative: false } });
   await audit(ctx.db, ctx.orgId, { actorId: ctx.membershipId, action: "pathways.program.verify", entityType: "UniversityProgram", entityId: row.id, meta: { sourceUrl: row.sourceUrl } });

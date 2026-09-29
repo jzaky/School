@@ -21,7 +21,8 @@ export async function seedCareer(w: SeedWorld) {
   const layla = w.staff.get("layla_hassan")!.membershipId;
   const questions = await db.aptitudeQuestion.findMany({ where: { orgId } });
   const careers = await db.career.findMany({ where: { orgId } });
-  const unis = await db.university.findMany({ where: { orgId } });
+  // Global catalog universities with curated programme lists (not the full US import).
+  const unis = await db.university.findMany({ where: { orgId: null, programsEn: { isEmpty: false } }, orderBy: { key: "asc" } });
   const pool = w.students.filter((s) => s.grade >= 10 && s !== w.adam && s !== w.yara);
   const chosenStudents = r.shuffle(pool).slice(0, 14);
   for (const [i, s] of chosenStudents.entries()) {

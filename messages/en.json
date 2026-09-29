@@ -142,7 +142,8 @@
     "exams": "Exams",
     "trips": "Trips",
     "applications": "Applications",
-    "catalogReview": "Catalog review"
+    "catalogReview": "Catalog review",
+    "pathwayPlanning": "University planning"
   },
   "shell": {
     "openMenu": "Open menu",
@@ -1013,7 +1014,12 @@
     "reqNotMet": "{n} not met",
     "reqUnknown": "{n} unknown",
     "seeChecker": "Open the requirements checker",
-    "browseAllUniversities": "Browse every university and programme"
+    "browseAllUniversities": "Browse every university and programme",
+    "pathwayCta": {
+      "title": "University planning",
+      "body": "See which degrees fit your goal, what you already meet and which classes open the most doors.",
+      "button": "Open university planning"
+    }
   },
   "calendar": {
     "title": "Calendar",
@@ -2219,6 +2225,26 @@
       "catalogReview": {
         "title": "Review requirement updates",
         "body": "Check drafts extracted from official university pages, publish them with evidence and confirm changes before students see them."
+      },
+      "pathwayPlan": {
+        "title": "Plan Grades 9 to 12",
+        "body": "See your matches and the classes that open the most doors."
+      },
+      "pathwayWhatIf": {
+        "title": "Try a what-if",
+        "body": "Add AP Calculus BC and watch programmes change."
+      },
+      "pathwayChild": {
+        "title": "Follow Adam's university plan",
+        "body": "Read his course plan and where it leads."
+      },
+      "pathwayApprove": {
+        "title": "Approve a course plan",
+        "body": "Plans waiting for you are at the top of the list."
+      },
+      "pathwayPlanner": {
+        "title": "Plan with a student",
+        "body": "Set a goal, generate a plan and check the requirements."
       }
     }
   },
@@ -3618,7 +3644,12 @@
       "law": "Law",
       "psychology": "Psychology",
       "architecture": "Architecture",
-      "science": "Science"
+      "science": "Science",
+      "health": "Health sciences",
+      "international_relations": "International relations",
+      "education": "Education",
+      "design": "Design",
+      "media": "Media and communication"
     },
     "subject": {
       "MATH": "Mathematics",
@@ -3937,8 +3968,10 @@
       "saved": "Saved",
       "invalid": "Please check the fields and try again.",
       "badRequirements": "The requirements JSON is not valid.",
-      "badEnglish": "The English requirement JSON is not valid."
-    }
+      "badEnglish": "The English requirement JSON is not valid.",
+      "globalCatalog": "Global catalog"
+    },
+    "plannerLink": "Plan the classes for your goal"
   },
   "curriculum": {
     "save": "Save",
@@ -5064,6 +5097,376 @@
         "no_owner_url": "no platform database",
         "no_api_key": "no API key"
       }
+    }
+  },
+  "engine": {
+    "title": "University planning",
+    "subtitle": "Programmes that fit your goal, what you already meet and which classes to take.",
+    "subtitleStaff": "Target programmes, requirement checks and the Grade 9 to 12 course plan.",
+    "studentLine": "{name} · Grade {grade} · {curriculum}",
+    "tabs": {
+      "overview": "Overview",
+      "plan": "Course plan",
+      "whatIf": "What if"
+    },
+    "exampleBanner": "Entry requirements here are example data that nobody has checked against the official pages yet. Always confirm on the university's page and with your counselor.",
+    "noStudent": "No student to show",
+    "noGoalTitle": "Choose a goal first",
+    "noGoalBody": "Pick a career and the countries you are thinking about. We will find matching programmes and suggest classes.",
+    "noGoalBodyView": "No goal has been set yet.",
+    "curriculum": {
+      "BRITISH": "British (IGCSE and A-Level)",
+      "IB": "IB Diploma",
+      "AMERICAN": "American (Honors and AP)",
+      "UAE_MOE": "UAE Ministry of Education",
+      "JORDAN_TAWJIHI": "Jordanian Tawjihi",
+      "CBSE": "Indian CBSE",
+      "ISC": "Indian ISC",
+      "SABIS": "SABIS",
+      "OTHER": "Other curriculum"
+    },
+    "status": {
+      "ELIGIBLE": "Eligible",
+      "ON_TRACK": "On track",
+      "POSSIBLY_ELIGIBLE": "Possibly eligible",
+      "MISSING_REQUIREMENTS": "Missing requirements",
+      "NEEDS_MANUAL_REVIEW": "Needs review",
+      "UNKNOWN_DATA": "No data yet"
+    },
+    "statusHint": {
+      "ELIGIBLE": "Every required line is met by final results.",
+      "ON_TRACK": "Every required line is met if predictions, planned classes and tests go as planned.",
+      "POSSIBLY_ELIGIBLE": "Nothing fails, but some lines cannot be decided yet.",
+      "MISSING_REQUIREMENTS": "At least one required line is not met, even with the plan.",
+      "NEEDS_MANUAL_REVIEW": "A person needs to read something here, or this curriculum is not listed.",
+      "UNKNOWN_DATA": "There are no requirement details for this programme yet."
+    },
+    "confidence": {
+      "VERIFIED": "Verified on the official page",
+      "REVIEWED": "Reviewed by a person",
+      "EXTRACTED": "Not reviewed yet",
+      "EXAMPLE": "Example data, confirm on the official page",
+      "UNKNOWN": "Source unknown"
+    },
+    "lineStatus": {
+      "met": "Met",
+      "not_met": "Not met",
+      "unknown": "Not known yet",
+      "absent": "Not listed"
+    },
+    "planStatus": {
+      "DRAFT": "Draft",
+      "PROPOSED": "Waiting for approval",
+      "APPROVED": "Approved",
+      "ARCHIVED": "Archived"
+    },
+    "goal": {
+      "title": "Goal",
+      "fromPlan": "From the course plan.",
+      "fromCareer": "From the career chosen in the career module.",
+      "none": "No goal yet.",
+      "noCareer": "No career chosen",
+      "career": "Career",
+      "chooseCareer": "Choose a career",
+      "countries": "Countries",
+      "generate": "Generate a plan",
+      "regenerate": "Update the plan for this goal",
+      "generateHint": "Suggests Grade 9 to 12 classes from the school's catalog.",
+      "regenerateHint": "Locked classes stay where they are.",
+      "generated": "Plan ready with {n} classes"
+    },
+    "summary": {
+      "title": "Match summary",
+      "withPlan": "Counting your planned classes",
+      "recordOnly": "Based on your record so far"
+    },
+    "programs": {
+      "title": "Top programmes",
+      "desc": "{n} programmes match the goal.",
+      "empty": "No programmes match this goal yet. Try more countries.",
+      "missingN": "{n} missing"
+    },
+    "unlock": {
+      "title": "Classes that open the most doors",
+      "desc": "What happens if you add each class the school offers. The score is shown in full.",
+      "empty": "No single class changes your target programmes right now.",
+      "fromGrade": "Offered from Grade {grade}",
+      "score": "{score} points",
+      "part": {
+        "unlock": "Opens {n} (+{points})",
+        "improve": "Improves {n} (+{points})",
+        "requiredBy": "Required by {n} (+{points})",
+        "recommendedBy": "Recommended by {n} (+{points})"
+      },
+      "tryWhatIf": "Try it in What if"
+    },
+    "plan": {
+      "title": "Grade 9 to 12 course plan",
+      "updated": "Last changed {date}",
+      "none": "No course plan yet.",
+      "noneView": "The student has not made a plan yet.",
+      "needGoal": "Choose a goal on the overview first.",
+      "create": "Create a plan",
+      "grade": "Grade {grade}",
+      "coursesN": "{n} classes",
+      "counselorNote": "Counselor note",
+      "open": "Open the plan",
+      "start": "Start a plan",
+      "approvedBy": "Approved by {name} on {date}",
+      "proposedBy": "Sent for approval by {name}",
+      "dirty": "Unsaved changes",
+      "statusHint": {
+        "DRAFT": "Edit freely, then send it to your counselor.",
+        "PROPOSED": "Waiting for a counselor to approve it.",
+        "APPROVED": "Approved by a counselor.",
+        "ARCHIVED": "An older plan."
+      },
+      "regenerate": "Suggest again",
+      "save": "Save changes",
+      "submit": "Send for approval",
+      "readOnly": "You can view this plan. The student and counselors can change it.",
+      "waiting": "Your counselor is reviewing the plan. You can edit it again after they respond.",
+      "record": {
+        "COMPLETED": "Completed",
+        "IN_PROGRESS": "In progress",
+        "PLANNED": "Planned"
+      },
+      "lock": "Keep this class when suggesting again",
+      "unlock": "Allow changes to this class",
+      "locked": "Locked",
+      "remove": "Remove from the plan",
+      "pastEmpty": "Nothing recorded for this year.",
+      "gradeEmpty": "No classes planned yet.",
+      "add": "Add a class",
+      "addedByHand": "Added to the plan by hand.",
+      "generated": "Plan updated",
+      "saved": "Plan saved",
+      "submitted": "Sent to your counselor",
+      "approved": "Plan approved",
+      "changesRequested": "Sent back with your note",
+      "review": {
+        "title": "Counselor review",
+        "desc": "Approve the plan, or send it back with a note.",
+        "descDraft": "This plan is still a draft. You can approve it directly.",
+        "note": "Note for the student",
+        "notePlaceholder": "For example: add AP Physics 1 in Grade 11 and book the SAT for next spring.",
+        "approve": "Approve",
+        "requestChanges": "Request changes",
+        "noteRequired": "Write a note first",
+        "saveFirst": "Save your edits before approving."
+      }
+    },
+    "whatIf": {
+      "title": "What if",
+      "desc": "Try changes without saving anything and see which programmes move.",
+      "mode": {
+        "add_course": "Add a class",
+        "drop_course": "Drop a class",
+        "set_grade": "Change a grade",
+        "set_test": "Add a test score"
+      },
+      "course": "Class",
+      "chooseCourse": "Choose a class",
+      "gradeN": "Grade {grade}",
+      "gradeLevel": "Year",
+      "predicted": "Expected grade",
+      "noGrade": "Not sure yet",
+      "newGrade": "New predicted grade",
+      "currentGrade": "Now {grade}",
+      "chooseGrade": "Choose a grade",
+      "test": "Test",
+      "chooseTest": "Choose a test",
+      "score": "Score",
+      "addChange": "Add this change",
+      "changes": "Your changes",
+      "clear": "Clear all",
+      "noChanges": "No changes yet. The list shows where you stand today.",
+      "removeChange": "Remove this change",
+      "results": "Target programmes",
+      "resultsDesc": "{n} programmes change.",
+      "resultsIdle": "Current status of each programme.",
+      "loading": "Checking programmes...",
+      "noPrograms": "Set a goal first to see programmes here.",
+      "lineChange": "{what}: {before} to {after}",
+      "label": {
+        "add": "Add {course} in Grade {grade}",
+        "drop": "Drop {course}",
+        "grade": "{course}: grade {grade}",
+        "test": "{test}: {score}"
+      }
+    },
+    "kind": {
+      "subject": "Subject",
+      "gpa": "GPA",
+      "percent": "Overall average",
+      "points": "IB points",
+      "gradeProfile": "Grade profile",
+      "stream": "Stream",
+      "language": "English test",
+      "test": "Admissions test",
+      "additional": "Application step"
+    },
+    "aiSummary": {
+      "title": "Plan summary",
+      "desc": "A short draft in plain words. The courses and statuses above are calculated, not written by AI.",
+      "button": "Draft a summary",
+      "again": "Draft again",
+      "draft": "Draft, check before sharing",
+      "summary": "Your plan has {courses} classes across Grades {grades}. With it, {open} of {total} target programmes look on track and {missing} still miss at least one requirement. The requirements shown are example data to confirm with each university and your counselor.",
+      "stepStart": "Start with your Grade {grade} classes: {courses}.",
+      "stepTalk": "Talk your plan through with your counselor.",
+      "stepMissing": "Open the programmes that still miss a requirement and check the details.",
+      "stepEnglish": "Book an English test at the right time."
+    },
+    "errors": {
+      "forbidden": "You cannot do that for this student.",
+      "invalid": "Something in the form is not valid.",
+      "conflict": "The plan changed in the meantime. Refresh and try again.",
+      "not_found": "Not found.",
+      "disabled": "AI drafts are turned off for this school.",
+      "sensitive": "This draft needs data the school does not share with AI.",
+      "generic": "That did not work. Please try again."
+    },
+    "staff": {
+      "desc": "Students in Grades 9 to 12 and their course plans. Plans waiting for approval come first.",
+      "all": "All students",
+      "awaiting": "Waiting for approval",
+      "withPlan": "With a plan",
+      "search": "Search students",
+      "empty": "No students found",
+      "gradeLine": "Grade {grade} · {curriculum}",
+      "noPlan": "No plan yet"
+    },
+    "program": {
+      "title": "Programme requirements",
+      "general": "Everyone",
+      "meta": "{degree} · {years} years · taught in {language}",
+      "browser": "Open in the university browser",
+      "tuition": "Tuition per year (international)",
+      "tuitionValue": "About {amount} {currency}",
+      "tuitionUnknown": "Not listed",
+      "intakes": "Intakes",
+      "intake": "{year} entry",
+      "noIntakes": "No intake listed",
+      "source": "Source",
+      "checked": "Checked {date}",
+      "notChecked": "Not checked against the official page yet",
+      "openSource": "Official admissions page",
+      "exampleNote": "These requirements are example data, set up for the demo. They follow typical published offers but nobody has checked them against the official page. Confirm on the official page before deciding.",
+      "noRows": "No requirement details yet for this programme.",
+      "forYou": "Your requirement check",
+      "forStudent": "Requirement check for {name}",
+      "forCurriculum": "Using the rows for everyone and for {curriculum}, with planned classes.",
+      "notCovered": "This programme does not list requirements for this curriculum. A counselor should check it with the university.",
+      "version": "Version {version} · {year} entry",
+      "evidence": "Where on the page: {where}. No quote captured yet.",
+      "evidenceNone": "No evidence captured yet.",
+      "classesToTake": "Classes to take",
+      "classLine": "{subjects} at {level} level",
+      "scoreGaps": "Scores to raise",
+      "gapLine": "{kind}: {have}, needs {required}",
+      "disclaimer": "This check compares your record and plan with the listed requirements. It does not decide admission.",
+      "requirements": "Entry requirements",
+      "pickStudent": "Open this page from a student's plan to see their check.",
+      "otherCurricula": "Other curricula",
+      "otherDesc": "Requirements for students on other curricula.",
+      "step": "Application step",
+      "advice": "Advice",
+      "satisfiedBy": "Met by {courses}",
+      "have": "You have {have}",
+      "missing": "Not on your record or plan yet"
+    },
+    "language": {
+      "en": "English",
+      "ar": "Arabic",
+      "de": "German",
+      "fr": "French"
+    },
+    "basis": {
+      "final": "Final result",
+      "predicted": "Predicted",
+      "planned": "Planned"
+    },
+    "reason": {
+      "grade_pending": "The grade is not available yet.",
+      "grade_missing": "The final grade is not recorded.",
+      "mapping_review": "How this class counts still needs a counselor's review.",
+      "scale_mismatch": "The grade is on a different scale, and we never convert grades.",
+      "unverified": "This requirement has not been reviewed yet, so it is not shown as fact.",
+      "not_taken": "Not taken yet.",
+      "no_overall": "No overall result recorded yet.",
+      "no_stream": "The stream is not recorded.",
+      "manual": "A person needs to read this note."
+    },
+    "level": {
+      "FOUNDATION": "foundation",
+      "STANDARD": "standard",
+      "ADVANCED": "advanced",
+      "HIGHER": "higher"
+    },
+    "line": {
+      "or": " or ",
+      "and": ", ",
+      "sep": ", ",
+      "minGrade": "grade {grade} or above",
+      "withDetail": "{subject} ({detail})",
+      "twoOf": "Two of: {subjects}",
+      "oneOf": "One of: {subjects}",
+      "recommended": "Recommended: {text}",
+      "gpa": "GPA of at least {min}",
+      "percent": "Overall average of at least {min}%",
+      "points": "IB Diploma of at least {min} points",
+      "profile": "Best grades of {profile}",
+      "stream": "Stream: {streams}",
+      "language": "English: {tests}",
+      "test": "{tests} ({policy})",
+      "testMin": "{tests}: {min} or above ({policy})"
+    },
+    "testPolicy": {
+      "REQUIRED": "required",
+      "OPTIONAL": "optional",
+      "RECOMMENDED": "recommended"
+    },
+    "test": {
+      "IELTS": "IELTS",
+      "TOEFL": "TOEFL",
+      "DUOLINGO": "Duolingo English Test",
+      "EMSAT_ENGLISH": "EmSAT English",
+      "EMSAT_MATH": "EmSAT Mathematics",
+      "SAT": "SAT",
+      "ACT": "ACT",
+      "UCAT": "UCAT",
+      "ISAT": "ISAT",
+      "TMUA": "TMUA",
+      "ESAT": "ESAT",
+      "STEP": "STEP",
+      "MAT": "MAT",
+      "PAT": "PAT",
+      "TARA": "TARA",
+      "LNAT": "LNAT",
+      "TESTDAF": "TestDaF (German)",
+      "DELF_B2": "DELF B2 (French)",
+      "GPA": "GPA",
+      "PERCENT": "Overall average",
+      "POINTS": "IB points"
+    },
+    "stream": {
+      "ADVANCED": "Advanced",
+      "ELITE": "Elite",
+      "GENERAL": "General",
+      "SCIENTIFIC": "Scientific",
+      "IT": "Information technology",
+      "HEALTH": "Health"
+    },
+    "additional": {
+      "PERSONAL_STATEMENT": "Personal statement",
+      "ESSAYS": "Application essays",
+      "INTERVIEW": "Interview",
+      "REFERENCE": "References",
+      "PORTFOLIO": "Portfolio",
+      "AUDITION": "Audition",
+      "SUPPLEMENTAL": "Supplemental questions",
+      "NOTE": "Note to check with the university"
     }
   }
 }

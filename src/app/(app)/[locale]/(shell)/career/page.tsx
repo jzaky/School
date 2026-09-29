@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { Compass } from "lucide-react";
+import { Compass, Map as MapIcon } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { fmtRelative } from "@/lib/format";
@@ -29,11 +29,27 @@ export default async function CareerPage({ searchParams }: { searchParams: Promi
           title={t("title")}
           description={sp.done ? t("doneSubtitle") : t("subtitle")}
           actions={
-            <Button asChild variant="outline">
-              <Link href="/career/explore">{t("explorer")}</Link>
-            </Button>
+            <>
+              <Button asChild variant="outline">
+                <Link href="/career/explore">{t("explorer")}</Link>
+              </Button>
+              {ctx.can("pathways.view") && (
+                <Button asChild data-testid="open-pathway-planning">
+                  <Link href="/career/pathways">{t("pathwayCta.button")}</Link>
+                </Button>
+              )}
+            </>
           }
         />
+        {ctx.can("pathways.view") && (
+          <Link href="/career/pathways" className="flex items-center gap-4 rounded-xl border bg-card p-4 shadow-xs transition hover:border-brand/40" data-testid="pathway-cta">
+            <MapIcon className="size-6 shrink-0 text-brand" />
+            <span className="min-w-0">
+              <span className="block text-sm font-semibold">{t("pathwayCta.title")}</span>
+              <span className="block text-sm text-muted-foreground">{t("pathwayCta.body")}</span>
+            </span>
+          </Link>
+        )}
         <CareerOverview ctx={ctx} prefs={prefs} studentId={ctx.membership.student.id} mode="student" />
       </PageBody>
     );
@@ -51,9 +67,16 @@ export default async function CareerPage({ searchParams }: { searchParams: Promi
         title={t("advisorTitle")}
         description={t("advisorSubtitle")}
         actions={
-          <Button asChild variant="outline">
-            <Link href="/career/explore">{t("explorer")}</Link>
-          </Button>
+          <>
+            <Button asChild variant="outline">
+              <Link href="/career/explore">{t("explorer")}</Link>
+            </Button>
+            {ctx.can("pathways.view") && ctx.can("people.view") && (
+              <Button asChild>
+                <Link href="/career/pathways">{t("pathwayCta.button")}</Link>
+              </Button>
+            )}
+          </>
         }
       />
       {rows.length === 0 ? (
