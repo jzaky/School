@@ -60,6 +60,20 @@ Tip: the **Guide** button (bottom corner) lists what to try for the current pers
 1. **Omar Al Mansoori** (Principal): Home KPIs, then **Analytics**. Ask "Which service is slowest?". Point out that wellbeing and safeguarding records are excluded.
 2. **Aisha Rahman** (Admin): **Forms** (drag-and-drop builder with preview), **Workflows** (visual builder, validate, simulate), **Document templates** (live PDF preview), **Compliance** (AI safeguards, retention, consent, data requests), **Audit log**.
 
+## 9. University planning (5 minutes) - Adam, Sarah, Rania, Layla
+
+The story: "I want to become an AI Engineer and maybe study in the UK, the US or Canada." Every requirement is labeled Example data with a link to the official admissions page; say so once. Eligibility is decided by rules, never by AI. This flow is covered end to end by `tests/e2e/pathways-hero.spec.ts`.
+
+1. Enter as **Adam Nasser**. **University planning**. In **Goal**, choose **AI Engineer** and tick **United Kingdom**, **United States**, **Canada** and **United Arab Emirates**. Press **Generate a plan** (or **Update the plan for this goal**). The Grade 9 to 12 plan opens as a Draft; point out the reason under each course.
+2. Back to **Overview**: the status counts (Eligible, On track, Possibly eligible...) and the top matches, one per chosen country first. Point out **Classes that open the most doors**.
+3. Open a programme, for example Imperial **Computing BEng**. Line by line: each requirement for the American curriculum with met, not met or unknown, which course meets it, the confidence label, when it was checked and the official page link.
+4. **What if** tab: **Add a class**, **AP Calculus BC**, predicted **5**, then **Add this change** (if the plan already has it, use **Change a grade** and set 5). The list shows which programmes move up or down and why.
+5. From **Overview**, **Find programmes** (next to Top programmes): filter **Countries** to UK and US and **Field of study** to Computer Science, sort by **Best match**. Each result has Adam's match status. Tick **Compare** on two or three, then **Compare** in the bar at the bottom: side by side tuition, intakes, deadlines (typical dates are labeled), and requirements lined up by subject with Adam's status per line. Optional: press **Ctrl K** and type "Imperial" to show universities and programmes in the global search.
+6. **Course plan** tab: **Send for approval**. The status becomes "Waiting for approval".
+7. Switch to **Sarah Ahmed** (Counselor). **University planning** > **Waiting for approval** tab > Adam > **Course plan**. Write a short note, for example "Approved, keep AP Physics in Grade 11", and press **Approve**.
+8. Switch to **Rania Nasser** (Parent), ideally in Arabic. **University planning** > **Course plan**: the plan shows as approved (معتمدة) with Sarah's note. Parents can view but not edit.
+9. Switch to **Layla Hassan** (Career Advisor), or stay as Sarah. **Catalog review** > **Changes**: "IELTS raised from 6.5 to 7.0" with the before and after and the affected students. Then **Applications**: the board of Grade 12 applications by stage, with the next deadline on each card.
+
 ## Close
 
 - Everything shown works in Arabic. Switch language on any page.

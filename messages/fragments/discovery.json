@@ -1,0 +1,148 @@
+{
+  "discovery": {
+    "title": ["Find programmes", "البحث عن البرامج"],
+    "subtitle": ["Search {n} university programmes worldwide by subject, country, cost and entry requirements.", "ابحث في {n} برنامجًا جامعيًا حول العالم حسب التخصص والدولة والتكلفة وشروط القبول."],
+    "findProgrammes": ["Find programmes", "البحث عن البرامج"],
+    "clearStudent": ["Search without a student", "البحث دون اختيار طالب"],
+    "filtersLabel": ["Search filters", "عوامل تصفية البحث"],
+    "searchPlaceholder": ["Programme, university, subject or city", "البرنامج أو الجامعة أو التخصص أو المدينة"],
+    "sort": {
+      "label": ["Sort by", "الترتيب حسب"],
+      "match": ["Best match", "الأنسب"],
+      "name": ["Name", "الاسم"],
+      "tuition": ["Tuition, lowest first", "الرسوم، الأقل أولًا"],
+      "rank": ["World rank", "التصنيف العالمي"]
+    },
+    "filter": {
+      "country": ["Countries", "الدول"],
+      "allCountries": ["All countries", "جميع الدول"],
+      "field": ["Field of study", "مجال الدراسة"],
+      "allFields": ["All fields", "جميع المجالات"],
+      "degree": ["Degree type", "نوع الدرجة"],
+      "allDegrees": ["All degree types", "جميع أنواع الدرجات"],
+      "level": ["Level", "المستوى"],
+      "allLevels": ["All levels", "جميع المستويات"],
+      "language": ["Teaching language", "لغة التدريس"],
+      "allLanguages": ["Any language", "أي لغة"],
+      "tuition": ["Tuition per year", "الرسوم السنوية"],
+      "anyTuition": ["Any tuition", "أي رسوم"],
+      "intake": ["Intake", "موعد الالتحاق"],
+      "anyIntake": ["Any intake", "أي موعد"],
+      "curriculum": ["Curriculum listed", "المنهج المذكور"],
+      "anyCurriculum": ["Any curriculum", "أي منهج"],
+      "status": ["Match status", "حالة التوافق"],
+      "anyStatus": ["Any status", "أي حالة"]
+    },
+    "degreeType": {
+      "BACHELOR": ["Bachelor's degree", "درجة البكالوريوس"],
+      "INTEGRATED_MASTERS": ["Integrated master's", "ماجستير متكامل"],
+      "PROFESSIONAL": ["Professional degree", "درجة مهنية"],
+      "ASSOCIATE": ["Associate degree", "درجة الدبلوم المشارك"],
+      "FOUNDATION": ["Foundation year", "السنة التأسيسية"]
+    },
+    "level": {
+      "UNDERGRADUATE": ["Undergraduate", "المرحلة الجامعية الأولى"],
+      "POSTGRADUATE": ["Postgraduate", "الدراسات العليا"]
+    },
+    "tuitionBand": {
+      "low": ["Under 20,000 US dollars", "أقل من 20,000 دولار أمريكي"],
+      "mid": ["20,000 to 45,000 US dollars", "من 20,000 إلى 45,000 دولار أمريكي"],
+      "high": ["Over 45,000 US dollars", "أكثر من 45,000 دولار أمريكي"]
+    },
+    "pickStudentHint": ["Choose a student to see their match status on every programme and to add programmes to their shortlist.", "اختر طالبًا لعرض حالة توافقه مع كل برنامج وإضافة البرامج إلى قائمته المختصرة."],
+    "noStudentHint": ["Match status appears once a student profile is linked to your account.", "تظهر حالة التوافق بعد ربط ملف الطالب بحسابك."],
+    "resultCount": ["Programmes found: {n}", "البرامج التي تم العثور عليها: {n}"],
+    "clearFilters": ["Clear all filters", "مسح جميع عوامل التصفية"],
+    "emptyTitle": ["No programmes match", "لا توجد برامج مطابقة"],
+    "emptyBody": ["Try fewer filters or a shorter search, for example a subject such as computer science.", "جرّب عددًا أقل من عوامل التصفية أو بحثًا أقصر، مثل تخصص علوم الحاسوب."],
+    "years": ["{n} years", "{n} سنوات"],
+    "usdApprox": ["about {amount} US dollars", "نحو {amount} دولار أمريكي"],
+    "tuitionShort": ["{amount} {currency} a year", "{amount} {currency} سنويًا"],
+    "rank": ["World rank {n}", "التصنيف العالمي {n}"],
+    "pagination": ["Result pages", "صفحات النتائج"],
+    "pageOf": ["Page {page} of {pages}", "الصفحة {page} من {pages}"],
+    "prev": ["Previous page", "الصفحة السابقة"],
+    "next": ["Next page", "الصفحة التالية"],
+    "listSep": [", ", "، "],
+    "countriesN": ["{n} countries", "{n} دول"],
+    "clearCountries": ["Clear countries", "مسح الدول"],
+    "compare": ["Compare", "مقارنة"],
+    "compareFull": ["You can compare up to 4 programmes. Remove one first.", "يمكنك مقارنة 4 برامج كحد أقصى. أزل برنامجًا أولًا."],
+    "compareWith": ["Compare {name}", "مقارنة {name}"],
+    "trayTitle": ["Comparing {n} of {max}", "المقارنة: {n} من {max}"],
+    "removeFromCompare": ["Remove {name} from the comparison", "إزالة {name} من المقارنة"],
+    "clear": ["Clear", "مسح"],
+    "compareN": ["Compare {n}", "قارن {n}"],
+    "pickTwo": ["Pick at least 2 programmes to compare.", "اختر برنامجين على الأقل للمقارنة."],
+    "programme": ["Programme", "البرنامج"],
+    "compareTitle": ["Compare programmes", "مقارنة البرامج"],
+    "compareSubtitle": ["Side by side, with entry requirements for {curriculum} lined up by subject.", "جنبًا إلى جنب، مع شروط القبول لمنهج {curriculum} مرتبة حسب المادة."],
+    "compareSubtitleStudent": ["Side by side, with entry requirements for {curriculum} lined up by subject and checked against the record and plan.", "جنبًا إلى جنب، مع شروط القبول لمنهج {curriculum} مرتبة حسب المادة ومقارنة بالسجل والخطة."],
+    "compareEmptyTitle": ["Choose 2 to 4 programmes", "اختر من 2 إلى 4 برامج"],
+    "compareEmptyBody": ["Tick Compare on programmes in the search, then open the comparison.", "حدد خيار المقارنة على البرامج في صفحة البحث، ثم افتح المقارنة."],
+    "openSearch": ["Open the programme search", "فتح البحث عن البرامج"],
+    "someMissing": ["{n} of the chosen programmes could not be found and were left out.", "تعذر العثور على {n} من البرامج المختارة فتم استبعادها."],
+    "notListed": ["Not listed", "غير مذكور"],
+    "noDeadlines": ["No deadline listed", "لا يوجد موعد نهائي مذكور"],
+    "testCell": ["{policy}, minimum {min}", "{policy}، الحد الأدنى {min}"],
+    "row": {
+      "language": ["English language test", "اختبار اللغة الإنجليزية"],
+      "stream": ["Stream", "المسار"],
+      "gpa": ["Minimum GPA", "الحد الأدنى للمعدل التراكمي"],
+      "percent": ["Minimum average", "الحد الأدنى للمعدل"],
+      "points": ["IB points", "نقاط البكالوريا الدولية"],
+      "gradeProfile": ["Grades", "الدرجات المطلوبة"]
+    },
+    "type": {
+      "REQUIRED": ["Required", "مطلوب"],
+      "RECOMMENDED": ["Recommended", "موصى به"],
+      "PREFERRED": ["Preferred", "مفضل"],
+      "OPTIONAL": ["Optional", "اختياري"],
+      "ONE_OF": ["Any one of these", "أي واحدة منها"],
+      "TWO_OF": ["Any two of these", "أي اثنتين منها"]
+    },
+    "fact": {
+      "university": ["University", "الجامعة"],
+      "country": ["City and country", "المدينة والدولة"],
+      "degree": ["Degree", "الدرجة"],
+      "duration": ["Duration", "المدة"],
+      "tuition": ["Tuition per year", "الرسوم السنوية"],
+      "language": ["Teaching language", "لغة التدريس"],
+      "intake": ["Intakes", "مواعيد الالتحاق"],
+      "route": ["How to apply", "طريقة التقديم"],
+      "deadlines": ["Deadlines for {year} entry", "المواعيد النهائية للالتحاق في {year}"],
+      "status": ["Match status", "حالة التوافق"],
+      "source": ["Confidence and source", "درجة الموثوقية والمصدر"]
+    },
+    "manage": {
+      "searchProgrammes": ["Search programmes", "ابحث في البرامج"],
+      "searchUniversities": ["Search universities", "ابحث في الجامعات"],
+      "scope": ["Which programmes", "البرامج المعروضة"],
+      "scope_all": ["All", "الكل"],
+      "scope_own": ["This school", "هذه المدرسة"],
+      "scope_global": ["Global catalog", "الدليل العالمي"],
+      "apply": ["Search", "بحث"],
+      "noProgrammes": ["No programmes match this search.", "لا توجد برامج تطابق هذا البحث."],
+      "noUniversities": ["No universities match this search.", "لا توجد جامعات تطابق هذا البحث."]
+    },
+    "section": {
+      "overall": ["Overall results", "النتائج العامة"],
+      "subject": ["Subjects", "المواد"],
+      "language": ["English language", "اللغة الإنجليزية"],
+      "test": ["Admission tests", "اختبارات القبول"],
+      "additional": ["Application steps", "خطوات التقديم"]
+    }
+  },
+  "shell": {
+    "groupUniversities": ["Universities", "الجامعات"],
+    "groupPrograms": ["Programmes", "البرامج"]
+  },
+  "guide": {
+    "steps": {
+      "pathwaySearch": {
+        "title": ["Search and compare programmes", "ابحث عن البرامج وقارن بينها"],
+        "body": ["Filter programmes worldwide by country, subject and cost, see your match status on each, and compare up to four side by side.", "صفِّ البرامج حول العالم حسب الدولة والتخصص والتكلفة، واطلع على حالة توافقك مع كل برنامج، وقارن حتى أربعة برامج جنبًا إلى جنب."]
+      }
+    }
+  }
+}

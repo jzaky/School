@@ -1,7 +1,11 @@
 import { catalogScope } from "@/server/pathways/scope";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { ChevronLeft, Database, Landmark, ListChecks, ShieldCheck, TriangleAlert } from "lucide-react";
+import type { Prisma } from "@prisma/client";
+import { ChevronLeft, ChevronRight, Database, Landmark, ListChecks, ShieldCheck, TriangleAlert } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { fmtDate, fmtDateTime, fmtNumber } from "@/lib/format";
@@ -35,28 +39,62 @@ const EXAMPLE = JSON.stringify(
   2,
 );
 
-export default async function ManagePathwaysPage() {
+const PAGE = 25;
+type SP = { q?: string; scope?: string; page?: string; uq?: string; upage?: string };
+
+export default async function ManagePathwaysPage({ searchParams }: { searchParams: Promise<SP> }) {
+  const sp = await searchParams;
   const ctx = await getCtx();
   if (!ctx.can("pathways.manage")) notFound();
   const t = await getTranslations("pathways");
   const ta = await getTranslations("pathways.admin");
+  const td = await getTranslations("discovery");
   const prefs = await formatPrefs(ctx);
   const fmt = (n: number) => fmtNumber(prefs, n);
   const { db, orgId, locale } = ctx;
-  const [uniCount, usCount, programs, runs] = await Promise.all([
+  // Programmes and universities are filtered and paged in the database: the shared global catalog is large.
+  const scope = sp.scope === "own" || sp.scope === "global" ? sp.scope : "all";
+  const q = sp.q?.trim().slice(0, 100) ?? "";
+  const uq = sp.uq?.trim().slice(0, 100) ?? "";
+  const page = Math.max(1, Number(sp.page) || 1);
+  const upage = Math.max(1, Number(sp.upage) || 1);
+  const scopeWhere = scope === "own" ? { orgId } : scope === "global" ? { orgId: null } : catalogScope(orgId);
+  const programWhere: Prisma.UniversityProgramWhereInput = { AND: [scopeWhere, ...(q ? [{ OR: [{ nameEn: { contains: q, mode: "insensitive" as const } }, { nameAr: { contains: q } }, { searchText: { contains: q, mode: "insensitive" as const } }] }] : [])] };
+  const uniWhere: Prisma.UniversityWhereInput = {
+    AND: [
+      catalogScope(orgId),
+      { OR: [{ programsEn: { isEmpty: false } }, { key: { startsWith: "custom-" } }, { scorecardId: null }] },
+      ...(uq ? [{ OR: [{ nameEn: { contains: uq, mode: "insensitive" as const } }, { nameAr: { contains: uq } }, { cityEn: { contains: uq, mode: "insensitive" as const } }] }] : []),
+    ],
+  };
+  const [uniCount, usCount, programTotal, checked, programCount, programs, uniTotal, unis, uniOptionRows, runs] = await Promise.all([
     db.university.count({ where: catalogScope(orgId) }),
     db.university.count({ where: { ...catalogScope(orgId), scorecardId: { not: null } } }),
-    db.universityProgram.findMany({ where: catalogScope(orgId), orderBy: [{ lastVerifiedAt: { sort: "asc", nulls: "first" } }, { nameEn: "asc" }] }),
+    db.universityProgram.count({ where: catalogScope(orgId) }),
+    db.universityProgram.count({ where: { ...catalogScope(orgId), lastVerifiedAt: { not: null }, indicative: false } }),
+    db.universityProgram.count({ where: programWhere }),
+    db.universityProgram.findMany({ where: programWhere, orderBy: [{ lastVerifiedAt: { sort: "asc", nulls: "first" } }, { nameEn: "asc" }, { id: "asc" }], skip: (page - 1) * PAGE, take: PAGE }),
+    db.university.count({ where: uniWhere }),
+    db.university.findMany({ where: uniWhere, orderBy: [{ countryCode: "asc" }, { nameEn: "asc" }, { id: "asc" }], skip: (upage - 1) * PAGE, take: PAGE }),
+    db.university.findMany({ where: { AND: [catalogScope(orgId)], OR: [{ programsEn: { isEmpty: false } }, { key: { startsWith: "custom-" } }, { orgId }] }, orderBy: [{ countryCode: "asc" }, { nameEn: "asc" }], select: { id: true, nameEn: true, nameAr: true, countryCode: true } }),
     db.jobRun.findMany({ where: { orgId, queue: "pathways", name: "scorecard_import" }, orderBy: { createdAt: "desc" }, take: 5 }),
   ]);
-  const unis = await db.university.findMany({ where: { AND: [catalogScope(orgId)], OR: [{ id: { in: [...new Set(programs.map((p) => p.universityId))] } }, { key: { startsWith: "custom-" } }, { scorecardId: null }] }, orderBy: [{ countryCode: "asc" }, { nameEn: "asc" }] });
-  const uniById = new Map(unis.map((u) => [u.id, u]));
-  const checked = programs.filter((p) => p.lastVerifiedAt && !p.indicative).length;
+  const programUnis = programs.length ? await db.university.findMany({ where: { id: { in: [...new Set(programs.map((p) => p.universityId))] } }, select: { id: true, nameEn: true, nameAr: true, countryCode: true } }) : [];
+  const uniById = new Map(programUnis.map((u) => [u.id, u]));
+  const href = (patch: Record<string, string | null>) => {
+    const p = new URLSearchParams(Object.entries(sp).filter(([, v]) => typeof v === "string" && v) as Array<[string, string]>);
+    for (const [k, v] of Object.entries(patch)) {
+      if (v) p.set(k, v);
+      else p.delete(k);
+    }
+    const str = p.toString();
+    return `/career/universities/manage${str ? `?${str}` : ""}`;
+  };
   const snapshot = loadSnapshot();
   const keySet = !!process.env.COLLEGE_SCORECARD_API_KEY;
   const routes = APPLY_ROUTES.map((r) => ({ value: r, label: t(`route.${r}`) }));
   const months = Array.from({ length: 12 }, (_, i) => ({ value: String(i + 1), label: new Intl.DateTimeFormat(locale === "ar" ? "ar-AE" : "en-GB", { month: "long", timeZone: "UTC" }).format(new Date(Date.UTC(2001, i, 15))) }));
-  const uniOpts = unis.map((u) => ({ value: u.id, label: `${pick(locale, u.nameEn, u.nameAr)} (${u.countryCode})` }));
+  const uniOpts = uniOptionRows.map((u) => ({ value: u.id, label: `${pick(locale, u.nameEn, u.nameAr)} (${u.countryCode})` }));
   const subjects = PATHWAY_SUBJECTS.map((c) => ({ value: c, label: subjectLabel(t, c) }));
   const fields = FIELDS.map((f) => ({ value: f, label: t(`field.${f}`) }));
   const degrees = DEGREES.map((d) => ({ value: d, label: d }));
@@ -81,7 +119,7 @@ export default async function ManagePathwaysPage() {
         <StatCard label={ta("statUniversities")} value={fmt(uniCount)} icon={<Landmark className="size-4" />} />
         <StatCard label={ta("statUs")} value={fmt(usCount)} icon={<Database className="size-4" />} tone="info" />
         <StatCard label={ta("statChecked")} value={fmt(checked)} icon={<ShieldCheck className="size-4" />} tone="success" />
-        <StatCard label={ta("statUnchecked")} value={fmt(programs.length - checked)} icon={<TriangleAlert className="size-4" />} tone="warning" />
+        <StatCard label={ta("statUnchecked")} value={fmt(programTotal - checked)} icon={<TriangleAlert className="size-4" />} tone="warning" />
       </div>
 
       <Panel>
@@ -120,7 +158,23 @@ export default async function ManagePathwaysPage() {
 
       <Panel>
         <PanelHeader title={ta("programmes")} icon={<ListChecks className="size-4" />} description={ta("programmesDesc")} />
-        <ul className="divide-y rounded-lg border" data-testid="manage-programs">
+        <form action={`/${locale}/career/universities/manage`} className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center" data-testid="manage-program-filters">
+          {uq && <input type="hidden" name="uq" value={uq} />}
+          <Input name="q" defaultValue={q} placeholder={td("manage.searchProgrammes")} aria-label={td("manage.searchProgrammes")} className="sm:max-w-xs" />
+          <div className="flex gap-1 overflow-x-auto rounded-lg bg-muted p-1" role="group" aria-label={td("manage.scope")}>
+            {(["all", "own", "global"] as const).map((v) => (
+              <Link key={v} href={href({ scope: v === "all" ? null : v, page: null })} className={cn("shrink-0 rounded-md px-3 py-1 text-sm", scope === v ? "bg-card font-medium shadow-xs" : "text-muted-foreground hover:text-foreground")} data-testid={`scope-${v}`}>
+                {td(`manage.scope_${v}`)}
+              </Link>
+            ))}
+          </div>
+          {scope !== "all" && <input type="hidden" name="scope" value={scope} />}
+          <Button type="submit" size="sm" variant="outline">
+            {td("manage.apply")}
+          </Button>
+        </form>
+        {programs.length === 0 && <p className="text-sm text-muted-foreground">{td("manage.noProgrammes")}</p>}
+        <ul className="divide-y rounded-lg border empty:hidden" data-testid="manage-programs">
           {programs.map((p) => {
             const u = uniById.get(p.universityId);
             const isChecked = !!p.lastVerifiedAt && !p.indicative;
@@ -167,11 +221,21 @@ export default async function ManagePathwaysPage() {
             );
           })}
         </ul>
+        <ManagePager total={programCount} current={page} param="page" />
       </Panel>
 
       <Panel>
         <PanelHeader title={ta("universities")} icon={<Landmark className="size-4" />} description={ta("universitiesDesc")} />
-        <ul className="divide-y rounded-lg border" data-testid="manage-universities">
+        <form action={`/${locale}/career/universities/manage`} className="mb-3 flex gap-2" data-testid="manage-university-filters">
+          {q && <input type="hidden" name="q" value={q} />}
+          {scope !== "all" && <input type="hidden" name="scope" value={scope} />}
+          <Input name="uq" defaultValue={uq} placeholder={td("manage.searchUniversities")} aria-label={td("manage.searchUniversities")} className="sm:max-w-xs" />
+          <Button type="submit" size="sm" variant="outline">
+            {td("manage.apply")}
+          </Button>
+        </form>
+        {unis.length === 0 && <p className="text-sm text-muted-foreground">{td("manage.noUniversities")}</p>}
+        <ul className="divide-y rounded-lg border empty:hidden" data-testid="manage-universities">
           {unis.map((u) => (
             <li key={u.id} className="flex items-center gap-2 px-3 py-2">
               <div className="min-w-0 flex-1">
@@ -194,7 +258,33 @@ export default async function ManagePathwaysPage() {
             </li>
           ))}
         </ul>
+        <ManagePager total={uniTotal} current={upage} param="upage" />
       </Panel>
     </PageBody>
   );
+
+  function ManagePager({ total, current, param }: { total: number; current: number; param: "page" | "upage" }) {
+    if (total <= PAGE) return null;
+    return (
+      <div className="mt-3 flex items-center justify-between text-sm text-muted-foreground">
+        <span>{t("pageOf", { from: fmt(Math.min(total, (current - 1) * PAGE + 1)), to: fmt(Math.min(current * PAGE, total)), total: fmt(total) })}</span>
+        <div className="flex gap-2">
+          {current > 1 && (
+            <Button asChild variant="outline" size="sm">
+              <Link href={href({ [param]: String(current - 1) })} aria-label={t("prev")}>
+                <ChevronLeft className="size-4 rtl:rotate-180" />
+              </Link>
+            </Button>
+          )}
+          {current * PAGE < total && (
+            <Button asChild variant="outline" size="sm">
+              <Link href={href({ [param]: String(current + 1) })} aria-label={t("next")} data-testid={`next-${param}`}>
+                <ChevronRight className="size-4 rtl:rotate-180" />
+              </Link>
+            </Button>
+          )}
+        </div>
+      </div>
+    );
+  }
 }

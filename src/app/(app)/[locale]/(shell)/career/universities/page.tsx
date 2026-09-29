@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import type { Prisma } from "@prisma/client";
-import { ChevronLeft, ChevronRight, ClipboardList, GraduationCap, Landmark, Settings2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, ClipboardList, GraduationCap, Landmark, Search, Settings2 } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { fmtDate, fmtNumber } from "@/lib/format";
@@ -27,6 +27,7 @@ export async function generateMetadata() {
 }
 
 const PAGE = 40;
+const PROGRAM_PAGE = 24;
 type SP = { tab?: string; q?: string; country?: string; city?: string; field?: string; degree?: string; curriculum?: string; page?: string; student?: string };
 
 export default async function UniversitiesPage({ searchParams }: { searchParams: Promise<SP> }) {
@@ -34,6 +35,7 @@ export default async function UniversitiesPage({ searchParams }: { searchParams:
   const ctx = await getCtx();
   if (!ctx.can("pathways.view")) notFound();
   const t = await getTranslations("pathways");
+  const td = await getTranslations("discovery");
   const prefs = await formatPrefs(ctx);
   const fmt = (n: number) => fmtNumber(prefs, n);
   const { db, orgId, locale } = ctx;
@@ -44,16 +46,17 @@ export default async function UniversitiesPage({ searchParams }: { searchParams:
   const link = (href: string) => withStudent(href, focus.student?.id, self);
   const curriculum = (CURRICULA as readonly string[]).includes(sp.curriculum ?? "") ? (sp.curriculum as Curriculum) : (focus.data?.curriculum ?? "BRITISH");
 
-  const [countryRows, programs] = await Promise.all([
+  // Only counts, ids and the visible page are loaded: the global catalog is shared by every school and
+  // rendering every programme with its checker made this page slow.
+  const [countryRows, perUniversity, programTotal] = await Promise.all([
     db.university.groupBy({ by: ["countryCode"], where: catalogScope(orgId), _count: { _all: true } }),
-    db.universityProgram.findMany({ where: catalogScope(orgId), orderBy: { nameEn: "asc" } }),
+    db.universityProgram.groupBy({ by: ["universityId"], where: catalogScope(orgId), _count: { _all: true } }),
+    db.universityProgram.count({ where: catalogScope(orgId) }),
   ]);
-  const uniIds = [...new Set(programs.map((p) => p.universityId))];
-  const programUnis = await db.university.findMany({ where: { id: { in: uniIds } } });
-  const uniById = new Map(programUnis.map((u) => [u.id, u]));
+  const programCount = new Map(perUniversity.map((r) => [r.universityId, r._count._all]));
   const cityRows = sp.country
     ? await db.university.groupBy({ by: ["cityEn", "cityAr"], where: { ...catalogScope(orgId), countryCode: sp.country }, orderBy: { cityEn: "asc" }, take: 400 })
-    : programUnis.map((u) => ({ cityEn: u.cityEn, cityAr: u.cityAr }));
+    : await db.university.findMany({ where: { id: { in: [...programCount.keys()] } }, select: { cityEn: true, cityAr: true } });
   const cities = [...new Map(cityRows.map((c) => [c.cityEn, { value: c.cityEn, label: pick(locale, c.cityEn, c.cityAr) }])).values()].sort((a, b) => a.label.localeCompare(b.label));
   const countries = countryRows.map((c) => ({ value: c.countryCode, label: countryLabel(c.countryCode, locale) })).sort((a, b) => a.label.localeCompare(b.label));
 
@@ -65,21 +68,44 @@ export default async function UniversitiesPage({ searchParams }: { searchParams:
     { param: "curriculum", label: t("filter.curriculum"), all: t("filter.anyCurriculum"), options: REQ_CURRICULA.map((c) => ({ value: c, label: t(`curriculum.${c}`) })) },
   ];
 
-  const ql = q.toLowerCase();
-  const filteredPrograms = programs.filter((p) => {
-    const u = uniById.get(p.universityId);
-    if (!u) return false;
-    if (sp.country && u.countryCode !== sp.country) return false;
-    if (sp.city && u.cityEn !== sp.city) return false;
-    if (sp.field && p.field !== sp.field) return false;
-    if (sp.degree && p.degree !== sp.degree) return false;
-    if (sp.curriculum && !(p.requirements as ProgramRequirements)[sp.curriculum as keyof ProgramRequirements]) return false;
-    if (ql && !`${p.nameEn} ${p.nameAr} ${u.nameEn} ${u.nameAr} ${u.cityEn}`.toLowerCase().includes(ql)) return false;
-    return true;
-  });
+  const page = Math.max(1, Number(sp.page) || 1);
+
+  // Programmes tab: filters run in the database, then one page is loaded.
+  let programTotalFiltered = 0;
+  let pagePrograms: Array<Awaited<ReturnType<typeof loadProgramPage>>[number]> = [];
+  async function loadProgramPage(where: Prisma.UniversityProgramWhereInput) {
+    return db.universityProgram.findMany({
+      where,
+      orderBy: [{ nameEn: "asc" }, { id: "asc" }],
+      skip: (page - 1) * PROGRAM_PAGE,
+      take: PROGRAM_PAGE,
+      select: { id: true, universityId: true, nameEn: true, nameAr: true, field: true, degree: true, requirements: true, requiredSubjects: true, recommendedSubjects: true, englishReq: true, lastVerifiedAt: true, indicative: true },
+    });
+  }
+  if (tab === "programmes") {
+    const and: Prisma.UniversityProgramWhereInput[] = [catalogScope(orgId)];
+    if (sp.country || sp.city) {
+      const inPlace = await db.university.findMany({ where: { ...catalogScope(orgId), ...(sp.country ? { countryCode: sp.country } : {}), ...(sp.city ? { cityEn: sp.city } : {}) }, select: { id: true } });
+      and.push({ universityId: { in: inPlace.map((u) => u.id) } });
+    }
+    if (sp.field) and.push({ field: sp.field });
+    if (sp.degree) and.push({ degree: sp.degree });
+    if (q) {
+      const named = await db.university.findMany({ where: { ...catalogScope(orgId), OR: [{ nameEn: { contains: q, mode: "insensitive" } }, { nameAr: { contains: q } }, { cityEn: { contains: q, mode: "insensitive" } }] }, select: { id: true }, take: 1000 });
+      and.push({ OR: [{ nameEn: { contains: q, mode: "insensitive" } }, { nameAr: { contains: q } }, { universityId: { in: named.map((u) => u.id) } }] });
+    }
+    if (sp.curriculum) {
+      // The legacy requirements JSON lists one key per curriculum; only ids and that JSON are read here.
+      const rows = await db.universityProgram.findMany({ where: { AND: and }, select: { id: true, requirements: true } });
+      and.push({ id: { in: rows.filter((r) => !!(r.requirements as ProgramRequirements | null)?.[sp.curriculum as keyof ProgramRequirements]).map((r) => r.id) } });
+    }
+    const where = { AND: and };
+    [programTotalFiltered, pagePrograms] = await Promise.all([db.universityProgram.count({ where }), loadProgramPage(where)]);
+  }
+  const pageUnis = pagePrograms.length ? await db.university.findMany({ where: { id: { in: [...new Set(pagePrograms.map((p) => p.universityId))] } }, select: { id: true, nameEn: true, nameAr: true, cityEn: true, cityAr: true, countryCode: true } }) : [];
+  const uniById = new Map(pageUnis.map((u) => [u.id, u]));
 
   // Universities tab: every institution, including the full US list when it has been imported.
-  const page = Math.max(1, Number(sp.page) || 1);
   const uniWhere: Prisma.UniversityWhereInput = {
     AND: [catalogScope(orgId)],
     ...(sp.country ? { countryCode: sp.country } : {}),
@@ -90,8 +116,6 @@ export default async function UniversitiesPage({ searchParams }: { searchParams:
     tab === "universities"
       ? await Promise.all([db.university.count({ where: uniWhere }), db.university.findMany({ where: uniWhere, orderBy: [{ worldRank: { sort: "asc", nulls: "last" } }, { nameEn: "asc" }], skip: (page - 1) * PAGE, take: PAGE })])
       : [0, []];
-  const programCount = new Map<string, number>();
-  for (const p of programs) programCount.set(p.universityId, (programCount.get(p.universityId) ?? 0) + 1);
   const totalUnis = countryRows.reduce((s, c) => s + c._count._all, 0);
 
   // Shortlist summary for the student in focus.
@@ -102,6 +126,30 @@ export default async function UniversitiesPage({ searchParams }: { searchParams:
     p.set("page", String(n));
     return `/career/universities?${p.toString()}`;
   };
+
+  function Pager({ total, size }: { total: number; size: number }) {
+    return (
+      <div className="flex items-center justify-between text-sm text-muted-foreground">
+        <span>{t("pageOf", { from: fmt(Math.min(total, (page - 1) * size + 1)), to: fmt(Math.min(page * size, total)), total: fmt(total) })}</span>
+        <div className="flex gap-2">
+          {page > 1 && (
+            <Button asChild variant="outline" size="sm">
+              <Link href={pageHref(page - 1)} aria-label={t("prev")}>
+                <ChevronLeft className="size-4 rtl:rotate-180" />
+              </Link>
+            </Button>
+          )}
+          {page * size < total && (
+            <Button asChild variant="outline" size="sm">
+              <Link href={pageHref(page + 1)} aria-label={t("next")} data-testid="next-page">
+                <ChevronRight className="size-4 rtl:rotate-180" />
+              </Link>
+            </Button>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <PageBody>
@@ -119,6 +167,12 @@ export default async function UniversitiesPage({ searchParams }: { searchParams:
                 </Link>
               </Button>
             )}
+            <Button asChild size="sm">
+              <Link href={focus.student && !self ? `/career/pathways/search?student=${focus.student.id}` : "/career/pathways/search"} data-testid="open-search">
+                <Search className="size-4" />
+                {td("findProgrammes")}
+              </Link>
+            </Button>
             {ctx.can("pathways.manage") && (
               <Button asChild variant="outline" size="sm">
                 <Link href="/career/universities/manage" data-testid="manage-pathways">
@@ -171,7 +225,7 @@ export default async function UniversitiesPage({ searchParams }: { searchParams:
 
       <FilterBar
         tabs={[
-          { value: "programmes", label: t("tabProgrammes"), count: programs.length },
+          { value: "programmes", label: t("tabProgrammes"), count: programTotal },
           { value: "universities", label: t("tabUniversities"), count: totalUnis },
         ]}
         searchPlaceholder={t("search")}
@@ -179,11 +233,12 @@ export default async function UniversitiesPage({ searchParams }: { searchParams:
       <PathwayFilters filters={tab === "universities" ? filters.slice(0, 2) : filters} />
 
       {tab === "programmes" ? (
-        filteredPrograms.length === 0 ? (
+        pagePrograms.length === 0 ? (
           <EmptyState icon={<Landmark className="size-5" />} title={t("noResults")} body={t("noResultsBody")} />
         ) : (
+          <div className="space-y-3">
           <div className="grid gap-3 md:grid-cols-2" data-testid="program-list">
-            {filteredPrograms.map((p) => {
+            {pagePrograms.map((p) => {
               const u = uniById.get(p.universityId)!;
               const req = p.requirements as ProgramRequirements;
               const lines = requirementLines(t, curriculum, req, fmt);
@@ -226,6 +281,8 @@ export default async function UniversitiesPage({ searchParams }: { searchParams:
               );
             })}
           </div>
+          <Pager total={programTotalFiltered} size={PROGRAM_PAGE} />
+          </div>
         )
       ) : uniRows.length === 0 ? (
         <EmptyState icon={<Landmark className="size-5" />} title={t("noResults")} body={t("noResultsBody")} />
@@ -248,25 +305,7 @@ export default async function UniversitiesPage({ searchParams }: { searchParams:
               </li>
             ))}
           </ul>
-          <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <span>{t("pageOf", { from: fmt((page - 1) * PAGE + 1), to: fmt(Math.min(page * PAGE, uniTotal)), total: fmt(uniTotal) })}</span>
-            <div className="flex gap-2">
-              {page > 1 && (
-                <Button asChild variant="outline" size="sm">
-                  <Link href={pageHref(page - 1)} aria-label={t("prev")}>
-                    <ChevronLeft className="size-4 rtl:rotate-180" />
-                  </Link>
-                </Button>
-              )}
-              {page * PAGE < uniTotal && (
-                <Button asChild variant="outline" size="sm">
-                  <Link href={pageHref(page + 1)} aria-label={t("next")} data-testid="next-page">
-                    <ChevronRight className="size-4 rtl:rotate-180" />
-                  </Link>
-                </Button>
-              )}
-            </div>
-          </div>
+          <Pager total={uniTotal} size={PAGE} />
         </div>
       )}
     </PageBody>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
-import { FileText, FolderKanban, GraduationCap, LayoutGrid, Loader2 } from "lucide-react";
+import { BookOpen, FileText, FolderKanban, GraduationCap, Landmark, LayoutGrid, Loader2 } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import { Icon } from "@/components/icon";
 import {
@@ -17,7 +17,7 @@ import {
 import { searchAction, type SearchHit } from "@/server/search/actions";
 import type { NavSection } from "@/server/shell/nav";
 
-const KIND_ICON = { student: GraduationCap, request: FileText, case: FolderKanban, service: LayoutGrid } as const;
+const KIND_ICON = { student: GraduationCap, request: FileText, case: FolderKanban, service: LayoutGrid, university: Landmark, program: BookOpen } as const;
 
 export function CommandPalette({ open, onOpenChange, nav }: { open: boolean; onOpenChange: (o: boolean) => void; nav: NavSection[] }) {
   const t = useTranslations("shell");
@@ -60,6 +60,8 @@ export function CommandPalette({ open, onOpenChange, nav }: { open: boolean; onO
     { kind: "request", label: t("groupRequests") },
     { kind: "case", label: t("groupCases") },
     { kind: "service", label: t("groupServices") },
+    { kind: "university", label: t("groupUniversities") },
+    { kind: "program", label: t("groupPrograms") },
   ];
 
   return (
@@ -74,7 +76,7 @@ export function CommandPalette({ open, onOpenChange, nav }: { open: boolean; onO
           return (
             <CommandGroup key={g.kind} heading={g.label}>
               {items.map((h) => (
-                <CommandItem key={`${h.kind}-${h.id}`} value={`${h.kind}-${h.id}`} onSelect={() => go(h.href)}>
+                <CommandItem key={`${h.kind}-${h.id}`} value={`${h.kind}-${h.id}`} onSelect={() => go(h.href)} data-testid={`palette-${h.kind}`}>
                   <KindIcon className="size-4 text-muted-foreground" />
                   <span className="font-medium">{h.title}</span>
                   {h.subtitle && <span className="truncate text-muted-foreground">{h.subtitle}</span>}

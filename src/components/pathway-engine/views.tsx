@@ -1,6 +1,6 @@
 // Server views for the University planning module. Pages under /career/pathways are thin wrappers.
 import { getTranslations } from "next-intl/server";
-import { ArrowRight, BookOpenCheck, DoorOpen, FlaskConical, GraduationCap, Info, Route, Target } from "lucide-react";
+import { ArrowRight, BookOpenCheck, DoorOpen, FlaskConical, GraduationCap, Info, Route, Search, Target } from "lucide-react";
 import type { Ctx } from "@/server/context";
 import { pick } from "@/lib/i18n-data";
 import { fmtDate, fmtNumber } from "@/lib/format";
@@ -62,6 +62,7 @@ export async function EngineHeader({ ctx, focus, tab }: { ctx: Ctx; focus: Engin
 
 export async function HubView({ ctx, focus }: { ctx: Ctx; focus: EngineFocus }) {
   const t = await getTranslations("engine");
+  const td = await getTranslations("discovery");
   const prefs = await formatPrefs(ctx);
   const s = focus.student!;
   const { actor } = focus;
@@ -113,7 +114,19 @@ export async function HubView({ ctx, focus }: { ctx: Ctx; focus: EngineFocus }) 
 
           <div className="grid gap-4 lg:grid-cols-5 [&>*]:min-w-0">
             <Panel className="lg:col-span-3">
-              <PanelHeader title={t("programs.title")} icon={<GraduationCap className="size-4" />} description={t("programs.desc", { n: matches.length })} />
+              <PanelHeader
+                title={t("programs.title")}
+                icon={<GraduationCap className="size-4" />}
+                description={t("programs.desc", { n: matches.length })}
+                action={
+                  <Button asChild variant="outline" size="sm">
+                    <Link href={`/career/pathways/search${ctx.isStudent ? "" : `?student=${s.id}`}`} data-testid="open-search">
+                      <Search className="size-4" />
+                      {td("findProgrammes")}
+                    </Link>
+                  </Button>
+                }
+              />
               {top.length === 0 ? (
                 <p className="text-sm text-muted-foreground">{t("programs.empty")}</p>
               ) : (
