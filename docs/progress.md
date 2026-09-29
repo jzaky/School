@@ -35,13 +35,13 @@
 - Checks after merging: 208 unit and integration tests, lint 0 errors, i18n audit, every nav link for all 11 personas in en and ar, mobile overflow check, and the 10 hero-flow E2E specs all pass. Demo reset with all modules: 22s locally.
 
 ## In progress
-- Nothing locally. Waiting on deployment access.
+- Global University Requirements + Academic Pathway Engine (owner spec, Sept 2026). Done: reference analysis (docs/university-engine-reference-analysis.md), schema with a shared global catalog (nullable orgId, RLS read-global/write-own, tests/integration/global-catalog-isolation.test.ts), evidence fields, permissions (planner.approve, applications.manage, catalog.review). Building in parallel: engine (canonical subjects, curriculum mappings for 8 curricula, global catalog, deterministic match, unlock, what-if, goal-first planner, /career/pathways), pipeline (sources, fetch and hash, validated extraction, review queue, change monitor, Scorecard), applications (tracker, deadline engine, tasks, reminders). Next wave: transcript import and mapping review, counselor dashboard, parent view, compare and global search, demo hero flow, E2E, deploy.
 
 ## Grades module
 - /grades: spreadsheet-style gradebook with autosave, keyboard navigation, Excel paste, excused and comments, weighted averages and bands; publish with one notification per assessment and student; student and parent views of published grades with child switcher and term trend; staff overview (class averages, students below a threshold); grade band settings; bilingual term report card PDF stored as a GENERATED document. Seed: prisma/seed/academics/grades.ts. Tests: tests/unit/grades-calc.test.ts, tests/integration/grades.test.ts.
 
 ## Broken
-- Deployment blocked: this environment's network policy denies backboard.railway.com. Deploy by connecting Railway to the GitHub repo (docs/deploy.md), or allow the host and provide a Railway token.
+- Nothing known. Production: https://myhorizon.up.railway.app (press Reset demo after each deploy to load new seed data).
 
 ## Next
 1. Deploy and smoke test the hero flows on the deployed URL in en and ar.

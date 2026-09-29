@@ -85,3 +85,11 @@ Ambiguities resolved during the build. Newest last.
 - Curriculum: the "Grade 10 Science" demo framework is attached to Physics, since plans and frameworks are keyed by one subject. Standard statements are written generically in the style of the UK National Curriculum and UAE MoE outcomes, not copied from any document.
 - Curriculum: document import reads PDF text with a small built-in extractor (Flate streams, object streams, ToUnicode maps), because no PDF parsing library is installed. Scanned PDFs have no text and the person is asked to paste instead. The deterministic fallback for both "curriculum_import" and "lesson_plan" works without an API key; AI output is never saved until a person accepts it, and accepted unit plans are always DRAFT with aiDrafted set.
 - Curriculum: lesson plan bodies are bilingual. Activities and materials are JSON with en and ar fields; differentiation is stored as a JSON string {"en","ar"} in its text column. The editor edits one language at a time, and views fall back to the other language when a field is empty.
+
+## Pathway engine (Sept 2026)
+- One global university catalog shared by all schools: catalog tables have a nullable orgId. Null rows are global, readable by every school and written only by the owner role (seeds, worker, platform review). A school can add its own rows. This avoids copying thousands of programs into every tenant.
+- Eligibility is computed only by the deterministic engine. AI may draft extractions (always reviewed, evidence must be a verbatim quote of the source) and narrative summaries; it never decides eligibility or picks courses.
+- Requirement data that no person has checked against the official page is labeled Example (EXAMPLE confidence) in the UI. Nothing is presented as verified unless it is.
+- API Ninjas is not used: it adds no requirement data beyond College Scorecard. Only COLLEGE_SCORECARD_API_KEY is read, from the environment.
+- Search uses Postgres (ILIKE/trigram) instead of a separate search service for now.
+- The demo hero student is Adam Nasser (Grade 9, American track), per CLAUDE.md, instead of the spec's Sharjah example.
