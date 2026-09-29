@@ -48,7 +48,8 @@ describe("unlock ranking", () => {
     expect(res[0].course.code).toBe("AP_CALC_AB");
     expect(res[0].unlocks).toBe(1);
     expect(res[0].improves).toBe(1);
-    expect(res[0].requiredBy).toBe(3);
+    // usCs already has maths met, so only the two UK programmes still need the course.
+    expect(res[0].requiredBy).toBe(2);
     expect(res[0].breakdown.find((b) => b.part === "unlock")).toMatchObject({ count: 1, points: 100 });
     expect(res[0].gradeLevel).toBe(11);
   });
@@ -63,6 +64,13 @@ describe("unlock ranking", () => {
     expect(codes).not.toContain("US_ALG1_H");
     expect(codes).not.toContain("US_INTRO_CS");
   });
+  it("starts new courses the year after the current one and ignores lines already met", () => {
+    const res = rankUnlocks(adam(), [usCs], CATALOG);
+    expect(res.find((r) => r.course.code === "US_GEOM_H")?.gradeLevel ?? 10).toBe(10);
+    expect(res.every((r) => r.gradeLevel >= 10)).toBe(true);
+    expect(res.find((r) => r.course.code === "US_ALG2_H")).toBeUndefined();
+  });
+
   it("counts recommended lines separately", () => {
     const res = rankUnlocks(adam(), [usCs], CATALOG);
     const csa = res.find((r) => r.course.code === "AP_CSA")!;
@@ -121,6 +129,7 @@ describe("planner", () => {
     expect(calc.gradeLevel).toBe(12);
     expect(calc.source).toBe("requirement");
     expect(calc.reasonEn).toContain("UCL");
+    expect(calc.reasonEn).toMatch(/including UCL and Imperial|including Imperial and UCL/);
     expect(calc.reasonAr).toContain("مطلوبة");
     expect(byCode.get("US_PRECALC_H")!.gradeLevel).toBe(11);
     expect(byCode.get("US_ALG2_H")!.gradeLevel).toBe(10);

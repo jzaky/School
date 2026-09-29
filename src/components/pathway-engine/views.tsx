@@ -67,7 +67,9 @@ export async function HubView({ ctx, focus }: { ctx: Ctx; focus: EngineFocus }) 
   const { actor } = focus;
   const [goal, plan, careers] = await Promise.all([getGoal(actor, s.id), getCurrentPlan(actor, s.id), ctx.db.career.findMany({ where: { orgId: ctx.orgId }, orderBy: { titleEn: "asc" }, select: { key: true, titleEn: true, titleAr: true } })]);
   const hasGoal = !!goal.careerKey || goal.fieldKeys.length > 0;
-  const [{ matches, counts }, impact] = hasGoal ? await Promise.all([computeMatches(actor, s.id, { planId: plan?.id ?? null }), computeCourseImpact(actor, s.id, { planId: plan?.id ?? null, limit: 6 })]) : [{ matches: [], counts: null }, null];
+  const [{ matches, counts, profile }, impact] = hasGoal ? await Promise.all([computeMatches(actor, s.id, { planId: plan?.id ?? null }), computeCourseImpact(actor, s.id, { planId: null, limit: 6 })]) : [{ matches: [], counts: null, profile: null }, null];
+  // Courses per grade: the record plus the plan (the profile includes planned courses when a plan exists).
+  const perGrade = (g: number) => (profile ? profile.profile.courses.filter((c) => c.gradeLevel === g && !c.id.startsWith("legacy:")).length : (plan?.items.filter((i) => i.gradeLevel === g).length ?? 0));
   const career = careers.find((c) => c.key === goal.careerKey);
   const top = [...matches].sort((a, b) => STATUS_RANK[b.result.status] - STATUS_RANK[a.result.status] || (a.meta.university.worldRank ?? 9999) - (b.meta.university.worldRank ?? 9999)).slice(0, 10);
   const programHref = (id: string) => `/career/pathways/programs/${id}${ctx.isStudent ? "" : `?student=${s.id}`}`;
@@ -190,7 +192,7 @@ export async function HubView({ ctx, focus }: { ctx: Ctx; focus: EngineFocus }) 
             {[9, 10, 11, 12].map((g) => (
               <div key={g} className="rounded-lg border p-2.5 text-sm">
                 <div className="text-xs text-muted-foreground">{t("plan.grade", { grade: g })}</div>
-                <div className="font-medium">{t("plan.coursesN", { n: plan.items.filter((i) => i.gradeLevel === g).length })}</div>
+                <div className="font-medium">{t("plan.coursesN", { n: perGrade(g) })}</div>
               </div>
             ))}
           </div>
@@ -237,6 +239,7 @@ export async function PlanPageView({ ctx, focus }: { ctx: Ctx; focus: EngineFocu
     <PlanBuilder
       studentId={s.id}
       studentGrade={s.gradeLevel}
+      firstGrade={record.some((c) => c.status === "IN_PROGRESS" && c.gradeLevel === s.gradeLevel) ? s.gradeLevel + 1 : s.gradeLevel}
       plan={
         plan
           ? {

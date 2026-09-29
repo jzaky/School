@@ -64,11 +64,16 @@ export function findTargetPrograms(goal: Goal, careerFields: CareerFieldWeight[]
   if (goal.careerKey) for (const cf of careerFields) if (cf.careerKey === goal.careerKey) fieldWeight.set(cf.fieldKey, Math.max(fieldWeight.get(cf.fieldKey) ?? 0, cf.weight));
   for (const f of goal.fieldKeys ?? []) fieldWeight.set(f, 5);
   const countries = new Set(goal.countries ?? []);
-  return programs
+  const ranked = programs
     .map((p) => ({ p, weight: Math.max(0, ...p.fieldKeys.map((f) => fieldWeight.get(f) ?? 0)) }))
     .filter((x) => x.weight > 0 && (!countries.size || countries.has(x.p.countryCode)))
-    .sort((a, b) => b.weight - a.weight || (a.p.worldRank ?? 9999) - (b.p.worldRank ?? 9999) || (a.p.id < b.p.id ? -1 : 1))
-    .slice(0, max);
+    .sort((a, b) => b.weight - a.weight || (a.p.worldRank ?? 9999) - (b.p.worldRank ?? 9999) || (a.p.id < b.p.id ? -1 : 1));
+  // Take the best programmes country by country (in goal order), so every target country is represented.
+  const order = goal.countries?.length ? goal.countries : [...new Set(ranked.map((x) => x.p.countryCode))];
+  const queues = order.map((c) => ranked.filter((x) => x.p.countryCode === c));
+  const out: typeof ranked = [];
+  for (let i = 0; out.length < max && queues.some((q) => q.length > i); i++) for (const q of queues) if (q[i] && out.length < max) out.push(q[i]);
+  return out;
 }
 
 const maxLevel = (a: SubjectLevel | null, b: SubjectLevel | null) => (!a ? b : !b ? a : LEVEL_RANK[a] >= LEVEL_RANK[b] ? a : b);
@@ -131,14 +136,9 @@ export function planCourses(input: {
   const gradeOf = (code: string) => placed.filter((p) => p.code === code).map((p) => p.gradeLevel);
   const has = (course: CatalogCourse) => placed.some((p) => p.courseId === course.courseId);
 
+  /** Up to two different universities among the programmes, for reasons. */
   const names = (ids: string[], locale: "en" | "ar") =>
-    ids
-      .slice(0, 2)
-      .map((id) => {
-        const p = byId.get(id)!;
-        return locale === "en" ? `${p.nameEn} (${p.universityEn})` : `${p.nameAr} (${p.universityAr})`;
-      })
-      .join(locale === "en" ? ", " : "، ");
+    [...new Set(ids.map((id) => byId.get(id)!).map((p) => (locale === "en" ? p.universityEn : p.universityAr)))].slice(0, 2).join(locale === "en" ? " and " : " و");
 
   const place = (course: CatalogCourse, after: number, source: PlanSource, reason: { en: string; ar: string }, programIds: string[], locked = false, fixedGrade?: number): number | null => {
     const grades = fixedGrade !== undefined ? [fixedGrade] : [...course.gradeLevels].sort((a, b) => a - b).filter((g) => g >= startGrade && g > after && g <= LAST_GRADE);

@@ -26,13 +26,15 @@ export function earliestGrade(course: CatalogCourse, fromGrade: number): number 
   return g ?? null;
 }
 
-/** Which programmes list a subject line this course could fill (at the needed level). */
-function linesFilledBy(course: CatalogCourse, program: ProgramForEval, curriculum: string): { required: boolean; recommended: boolean } {
+/** Does the programme list a subject line, not met yet, that this course could fill (at the needed level)? */
+function linesFilledBy(course: CatalogCourse, program: ProgramForEval, curriculum: string, baseline: EvalResult): { required: boolean; recommended: boolean } {
   const { rows } = applicableRows(program, curriculum);
+  const met = new Set(baseline.lines.filter((l) => l.status === "met").map((l) => l.id));
   let required = false;
   let recommended = false;
   for (const row of rows) {
     for (const s of row.subjects) {
+      if (met.has(s.id)) continue;
       const keys = [...s.keys, ...(s.alternatives ?? [])];
       const fits = course.mappings.some((m) => keys.includes(m.subjectKey) && (!s.minimumLevel || LEVEL_RANK[m.level] >= LEVEL_RANK[s.minimumLevel]));
       if (!fits) continue;
@@ -51,10 +53,12 @@ export function rankUnlocks(
 ): UnlockResult[] {
   const taken = new Set(profile.courses.map((c) => c.courseId).filter(Boolean) as string[]);
   const baseline = opts.baseline ?? programs.map((p) => evaluate(profile, p));
+  // Once a school year has started (courses in progress), new courses start the year after.
+  const fromGrade = profile.courses.some((c) => c.status === "IN_PROGRESS" && c.gradeLevel === profile.gradeLevel) ? profile.gradeLevel + 1 : profile.gradeLevel;
   const out: UnlockResult[] = [];
   for (const course of catalog) {
     if (taken.has(course.courseId)) continue;
-    const gradeLevel = earliestGrade(course, profile.gradeLevel);
+    const gradeLevel = earliestGrade(course, fromGrade);
     if (gradeLevel === null) continue;
     const next = { ...profile, courses: [...profile.courses, plannedCourse(course, gradeLevel)] };
     const unlocked: string[] = [];
@@ -66,7 +70,7 @@ export function rankUnlocks(
       const after = evaluate(next, p);
       if (OPEN.includes(after.status) && !OPEN.includes(before.status)) unlocked.push(p.id);
       else if (after.counts.requiredMissing < before.counts.requiredMissing) improved.push(p.id);
-      const f = linesFilledBy(course, p, profile.curriculum);
+      const f = linesFilledBy(course, p, profile.curriculum, before);
       if (f.required) requiredBy.push(p.id);
       else if (f.recommended) recommendedBy++;
     });

@@ -275,7 +275,8 @@ async function seedUniversitiesAndPrograms(tx: Tx, counts: CatalogCounts, now: D
   const old = intakes.filter((i) => i.isCurrent && i.intakeYear < years[0]).map((i) => i.id);
   if (old.length) await tx.programIntake.updateMany({ where: { id: { in: old } }, data: { isCurrent: false } });
 
-  // Sources: one official page per programme.
+  // Sources: one official page per programme. (Earlier seeds used another sourceType name.)
+  await tx.requirementSource.updateMany({ where: { orgId: null, sourceType: "OFFICIAL_ADMISSIONS" }, data: { sourceType: "OFFICIAL_UNIVERSITY" } });
   const sources = await tx.requirementSource.findMany({ where: { orgId: null, programId: { in: ids } } });
   const sourceBy = new Map(sources.map((s) => [`${s.programId}|${s.url}`, s.id]));
   const createSources: Prisma.RequirementSourceCreateManyInput[] = [];
@@ -284,7 +285,7 @@ async function seedUniversitiesAndPrograms(tx: Tx, counts: CatalogCounts, now: D
     const k = `${pid}|${p.sourceUrl}`;
     if (!sourceBy.has(k)) {
       const sid = id();
-      createSources.push({ id: sid, orgId: null, universityId: unis.get(p.uni)!.id, programId: pid, url: p.sourceUrl, title: `${p.name.en}: entry requirements`, sourceType: "OFFICIAL_ADMISSIONS", status: "PENDING" });
+      createSources.push({ id: sid, orgId: null, universityId: unis.get(p.uni)!.id, programId: pid, url: p.sourceUrl, title: `${p.name.en}: entry requirements`, sourceType: "OFFICIAL_UNIVERSITY", status: "PENDING" });
       sourceBy.set(k, sid);
     }
   }

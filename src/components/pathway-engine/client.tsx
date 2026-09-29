@@ -110,6 +110,7 @@ type PlanData = { id: string; status: "DRAFT" | "PROPOSED" | "APPROVED" | "ARCHI
 export function PlanBuilder({
   studentId,
   studentGrade,
+  firstGrade,
   plan,
   goal,
   record,
@@ -120,6 +121,8 @@ export function PlanBuilder({
 }: {
   studentId: string;
   studentGrade: number;
+  /** First grade new classes can go in (the year after the current one once it has started). */
+  firstGrade: number;
   plan: PlanData | null;
   goal: { careerKey: string | null; fieldKeys: string[]; countries: string[] };
   record: Array<{ id: string; name: string; gradeLevel: number; status: string; grade: string | null }>;
@@ -310,7 +313,7 @@ export function PlanBuilder({
                 ))}
                 {rec.length + planned.length === 0 && <li className="text-xs text-muted-foreground">{g < studentGrade ? t("pastEmpty") : t("gradeEmpty")}</li>}
               </ul>
-              {editable && g >= studentGrade && options.length > 0 && (
+              {editable && g >= firstGrade && options.length > 0 && (
                 <Select
                   value=""
                   onValueChange={(v) => {

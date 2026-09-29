@@ -29,5 +29,6 @@ export function LineStatusIcon({ status, advisory, className }: { status: LineSt
   const label = t(`lineStatus.${status}`);
   if (status === "met") return <CheckCircle2 aria-label={label} className={cn("size-4 shrink-0 text-success", className)} />;
   if (status === "not_met") return advisory ? <CircleDashed aria-label={label} className={cn("size-4 shrink-0 text-muted-foreground", className)} /> : <XCircle aria-label={label} className={cn("size-4 shrink-0 text-danger", className)} />;
+  if (advisory) return <CircleDashed aria-label={label} className={cn("size-4 shrink-0 text-muted-foreground", className)} />;
   return <CircleHelp aria-label={label} className={cn("size-4 shrink-0 text-info", className)} />;
 }

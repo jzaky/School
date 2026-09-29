@@ -34,6 +34,10 @@
 - Academic modules (merged and verified together): subject registration with automatic class allocation and Excel import; teacher assignment, clash-free timetable generation and staff absence with automatic substitute cover; grades with publishing and bilingual report cards; academic calendar with UAE holidays, exam schedules and trips with consent letters; university pathways (UK, US, UAE, Jordan, Canada, Australia, Europe) with a requirements checker per curriculum including Tawjihi and a College Scorecard importer; curriculum frameworks, lesson plans, coverage gaps, AI-drafted units and head of department review.
 - Checks after merging: 208 unit and integration tests, lint 0 errors, i18n audit, every nav link for all 11 personas in en and ar, mobile overflow check, and the 10 hero-flow E2E specs all pass. Demo reset with all modules: 22s locally.
 
+### Pathway engine (engine module)
+- Global catalog seed (59 canonical subjects, 43 fields, 141 career links, 181 curriculum courses, 92 universities, 256 programmes, 512 intakes, 1,653 EXAMPLE requirement rows), scripts/seed-catalog.ts, run on deploy and before every demo seed.
+- Pure engine in src/server/pathway-engine (evaluate, grade scales, unlock ranking, what-if, planner), service and actions, University planning pages at /career/pathways (hub, plan builder with approval, what-if, programme requirements), nav and guide steps, demo plans for Adam and four other students. 63 unit tests and an integration test.
+
 ## In progress
 - Nothing locally. Waiting on deployment access.
 
