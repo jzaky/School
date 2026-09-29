@@ -27,7 +27,7 @@ type Tab = "staff" | "students" | "families" | "imports";
 const TABS: Tab[] = ["staff", "students", "families", "imports"];
 const MEMBER_STATUSES: MembershipStatus[] = ["ACTIVE", "INVITED", "SUSPENDED"];
 const STUDENT_STATUSES: PersonStatus[] = ["ACTIVE", "INACTIVE", "GRADUATED", "WITHDRAWN"];
-const MEMBER_TONE: Record<MembershipStatus, Tone> = { ACTIVE: "success", INVITED: "info", SUSPENDED: "danger" };
+const MEMBER_TONE: Record<MembershipStatus, Tone> = { ACTIVE: "success", INVITED: "info", SUSPENDED: "danger", PENDING_APPROVAL: "warning" };
 const STUDENT_TONE: Record<PersonStatus, Tone> = { ACTIVE: "success", INACTIVE: "neutral", GRADUATED: "brand", WITHDRAWN: "warning" };
 const LIMIT = 200;
 
@@ -189,7 +189,7 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
                 <MemberStatusButton
                   membershipId={m.id}
                   name={name}
-                  status={m.status}
+                  status={m.status === "PENDING_APPROVAL" ? "INVITED" : m.status}
                   blocked={m.id === ctx.membershipId ? "self" : isAdmin && !canAdminRole ? "permission" : m.id === lastAdminId ? "last" : null}
                 />
               </div>

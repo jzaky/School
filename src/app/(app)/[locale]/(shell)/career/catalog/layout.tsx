@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Lock } from "lucide-react";
 import { getCtx } from "@/server/context";
+import { moduleEnabled } from "@/lib/modules";
 import { catalogUiState } from "@/server/catalog-pipeline/access";
 import { PageBody, PageHeader } from "@/components/app/page-header";
 import { CatalogTabs } from "@/components/catalog/catalog-client";
@@ -13,7 +14,7 @@ export async function generateMetadata() {
 
 export default async function CatalogLayout({ children }: { children: React.ReactNode }) {
   const ctx = await getCtx();
-  if (!ctx.can("catalog.review")) notFound();
+  if (!ctx.can("catalog.review") || !moduleEnabled(ctx.org, "pathways")) notFound();
   const t = await getTranslations("catalog");
   const { writeDenial } = catalogUiState(ctx);
   return (

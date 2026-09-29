@@ -3,21 +3,15 @@
 // and rebuilds a bilingual school with months of history, all dates relative to now.
 import bcrypt from "bcryptjs";
 import type { Prisma, PrismaClient } from "@prisma/client";
-import { SYSTEM_ROLES, STAFF_ROLE_KEYS } from "@/server/identity/permissions";
 import { encryptField } from "@/lib/crypto";
 import type { FormSchema } from "@/server/forms/schema";
 import { execCtx } from "@/server/db";
 import { at, dateOnly, emailFor, id, isSchoolDay, rng, schoolDay, stableId, wipeTenant } from "./lib";
 import { FAMILIES, STAFF, type Bi } from "./data/people";
 import { ANNOUNCEMENTS, CALENDAR_EVENTS } from "./data/content";
-import { SERVICES, SERVICE_CATEGORIES } from "./data/services";
+import { SERVICES } from "./data/services";
 import { FORM_TEMPLATES } from "./data/forms";
-import { WORKFLOW_TEMPLATES } from "./data/workflows";
 import { APPOINTMENT_TYPES, DEFAULT_AVAILABILITY } from "./data/scheduling";
-import { DOCUMENT_CATEGORIES, DOCUMENT_TEMPLATES } from "./data/documents";
-import { MESSAGE_TEMPLATES } from "./data/notifications";
-import { CAREERS } from "./data/careers";
-import { APTITUDE_QUESTIONS } from "./data/aptitude";
 import { seedHistory } from "./history";
 import { seedCompliance } from "./compliance";
 import { seedCareer } from "./career";
@@ -33,6 +27,7 @@ import { seedPipelineDemo } from "./catalog/pipeline-demo";
 import { seedPathwayEngine } from "./academics/pathway-engine";
 import { seedTranscripts } from "./academics/transcripts";
 import { seedGlobalCatalog } from "./catalog";
+import { academicStartYear, installStarterTemplate } from "./starter";
 
 export const DEMO_SLUG = "horizon";
 export const DEMO_PASSWORD = "Horizon2026!";
@@ -208,19 +203,6 @@ const SUBJECTS: Array<{ code: string; dept: string; name: Bi }> = [
   { code: "PE", dept: "pe", name: bi("Physical Education", "التربية الرياضية") },
 ];
 
-const DEPARTMENTS: Array<{ key: string; name: Bi }> = [
-  { key: "science", name: bi("Science", "العلوم") },
-  { key: "mathematics", name: bi("Mathematics", "الرياضيات") },
-  { key: "computing", name: bi("Computing", "الحوسبة") },
-  { key: "english", name: bi("English", "اللغة الإنجليزية") },
-  { key: "arabic_islamic", name: bi("Arabic and Islamic Studies", "اللغة العربية والدراسات الإسلامية") },
-  { key: "humanities", name: bi("Humanities", "العلوم الإنسانية") },
-  { key: "arts", name: bi("Arts", "الفنون") },
-  { key: "pe", name: bi("Physical Education", "التربية الرياضية") },
-  { key: "student_services", name: bi("Student Services", "خدمات الطلاب") },
-  { key: "administration", name: bi("Administration", "الإدارة") },
-];
-
 /** Core subjects every student in a grade band takes. Seniors add electives. */
 const LOWER_CORE = ["MATH", "ENG", "ARAB", "ISL", "SOC", "BIO", "PE", "ART"];
 const UPPER_CORE = ["MATH", "ENG", "ARAB", "ISL", "PE"];
@@ -275,21 +257,20 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
       primaryColor: "#123A63",
       accentColor: "#C8A24A",
       lastResetAt: now,
+      curricula: ["BRITISH", "AMERICAN"],
+      enabledModules: [],
+      onboardingCompletedAt: now,
     },
   });
   const orgId = org.id;
   await wipeTenant(db, orgId);
   log(`wiped tenant in ${Date.now() - started}ms`);
 
-  // --- Roles -----------------------------------------------------------------
-  const roleIds = new Map<string, string>();
-  await db.role.createMany({
-    data: SYSTEM_ROLES.map((role) => {
-      const rid = id();
-      roleIds.set(role.key, rid);
-      return { id: rid, orgId, key: role.key, nameEn: role.nameEn, nameAr: role.nameAr, descEn: role.descEn, descAr: role.descAr, permissions: role.permissions, isSystem: true };
-    }),
-  });
+  // --- Starter template: roles, catalogs, templates, year, holidays, bell schedule, compliance defaults -------------
+  // The same configuration every new school gets at sign-up; the demo adds people and months of history on top.
+  await installStarterTemplate(db, orgId, { curricula: ["BRITISH", "AMERICAN"], locale: "en", now, installCourses: false, backdate: true });
+  log(`starter template in ${Date.now() - started}ms`);
+  const roleIds = new Map((await db.role.findMany({ where: { orgId }, select: { id: true, key: true } })).map((r) => [r.key, r.id]));
 
   // --- Users (global) and memberships ----------------------------------------------
   const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 8);
@@ -444,61 +425,23 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   yara.section = "A";
 
   // --- Structure ------------------------------------------------------------------
-  const campusId = id();
-  await db.campus.create({
-    data: {
-      id: campusId,
-      orgId,
-      nameEn: "Al Barsha Campus",
-      nameAr: "حرم البرشاء",
-      addressEn: "Al Barsha South, Dubai",
-      addressAr: "البرشاء جنوب، دبي",
-      isMain: true,
-    },
-  });
-  const nowY = now.getUTCFullYear();
-  const startYear = now.getUTCMonth() >= 7 ? nowY : nowY - 1;
-  const yearId = id();
-  await db.academicYear.create({
-    data: {
-      id: yearId,
-      orgId,
-      nameEn: `${startYear}-${startYear + 1}`,
-      nameAr: `${startYear}-${startYear + 1}`,
-      startsOn: new Date(Date.UTC(startYear, 7, 24)),
-      endsOn: new Date(Date.UTC(startYear + 1, 6, 2)),
-      isCurrent: true,
-    },
-  });
-  await db.term.createMany({
-    data: [
-      { orgId, academicYearId: yearId, nameEn: "Autumn term", nameAr: "الفصل الأول", startsOn: new Date(Date.UTC(startYear, 7, 24)), endsOn: new Date(Date.UTC(startYear, 11, 12)) },
-      { orgId, academicYearId: yearId, nameEn: "Spring term", nameAr: "الفصل الثاني", startsOn: new Date(Date.UTC(startYear + 1, 0, 5)), endsOn: new Date(Date.UTC(startYear + 1, 2, 27)) },
-      { orgId, academicYearId: yearId, nameEn: "Summer term", nameAr: "الفصل الثالث", startsOn: new Date(Date.UTC(startYear + 1, 3, 13)), endsOn: new Date(Date.UTC(startYear + 1, 6, 2)) },
-    ],
-  });
+  const mainCampus = await db.campus.findFirstOrThrow({ where: { orgId, isMain: true } });
+  const campusId = mainCampus.id;
+  await db.campus.update({ where: { id: campusId }, data: { nameEn: "Al Barsha Campus", nameAr: "حرم البرشاء", addressEn: "Al Barsha South, Dubai", addressAr: "البرشاء جنوب، دبي" } });
+  const startYear = academicStartYear(now);
+  const yearId = (await db.academicYear.findFirstOrThrow({ where: { orgId, isCurrent: true } })).id;
 
   const headFor = (dept: string) => {
     if (dept === "student_services") return staff.get("sarah_ahmed")!.membershipId;
     if (dept === "administration") return staff.get("omar_al_mansoori")!.membershipId;
     return staff.get(`hod_${dept}`)?.membershipId ?? null;
   };
-  const departments = new Map<string, string>();
-  await db.department.createMany({
-    data: DEPARTMENTS.map((d) => {
-      const did = id();
-      departments.set(d.key, did);
-      return { id: did, orgId, key: d.key, nameEn: d.name.en, nameAr: d.name.ar, headMembershipId: headFor(d.key) };
-    }),
-  });
-  const subjects = new Map<string, { id: string; departmentId: string | null }>();
-  await db.subject.createMany({
-    data: SUBJECTS.map((s) => {
-      const sid = id();
-      subjects.set(s.code, { id: sid, departmentId: departments.get(s.dept) ?? null });
-      return { id: sid, orgId, code: s.code, nameEn: s.name.en, nameAr: s.name.ar, departmentId: departments.get(s.dept) ?? null };
-    }),
-  });
+  const departments = new Map((await db.department.findMany({ where: { orgId }, select: { id: true, key: true } })).map((d) => [d.key, d.id]));
+  for (const [key, did] of departments) {
+    const head = headFor(key);
+    if (head) await db.department.update({ where: { id: did }, data: { headMembershipId: head } });
+  }
+  const subjects = new Map((await db.subject.findMany({ where: { orgId }, select: { id: true, code: true, departmentId: true } })).map((s) => [s.code, { id: s.id, departmentId: s.departmentId }]));
 
   // Staff profiles
   await db.staffProfile.createMany({
@@ -623,100 +566,40 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   await db.enrollment.createMany({ data: enrollRows });
   log("structure and enrollments ready");
 
-  // --- Catalogs: categories, forms, workflows, services ----------------------------------
-  const categoryIds = new Map<string, string>();
-  await db.serviceCategory.createMany({
-    data: SERVICE_CATEGORIES.map((c) => {
-      const cid = id();
-      categoryIds.set(c.key, cid);
-      return { id: cid, orgId, key: c.key, nameEn: c.name.en, nameAr: c.name.ar, icon: c.icon, sortOrder: c.sortOrder };
-    }),
-  });
-
-  const formVersionByKey = new Map<string, { formId: string; versionId: string; schema: FormSchema }>();
-  const formRows: Prisma.FormCreateManyInput[] = [];
-  const formVersionRows: Prisma.FormVersionCreateManyInput[] = [];
+  // --- Catalogs (installed by the starter template): read back what the demo story needs ----------------------------
   const author = staff.get("aisha_rahman")!.membershipId;
+  // The demo's admin authored the catalog. Two forms carry an earlier version to show version history.
+  await db.form.updateMany({ where: { orgId }, data: { createdById: author } });
+  await db.formVersion.updateMany({ where: { orgId }, data: { publishedById: author } });
+  await db.workflow.updateMany({ where: { orgId }, data: { createdById: author } });
+  await db.workflowVersion.updateMany({ where: { orgId }, data: { publishedById: author } });
+  const forms = await db.form.findMany({ where: { orgId }, select: { id: true, key: true, publishedVersionId: true } });
+  const formVersionByKey = new Map<string, { formId: string; versionId: string; schema: FormSchema }>();
   for (const f of FORM_TEMPLATES) {
-    const formId = id();
-    const versionId = id();
-    formRows.push({
-      id: formId,
-      orgId,
-      key: f.key,
-      nameEn: f.name.en,
-      nameAr: f.name.ar,
-      descEn: f.description.en,
-      descAr: f.description.ar,
-      categoryEn: f.category.en,
-      categoryAr: f.category.ar,
-      isTemplate: true,
-      status: "PUBLISHED",
-      draftSchema: f.schema as never,
-      publishedVersionId: versionId,
-      createdById: author,
-      createdAt: at(-200, 10, 0, now),
-    });
-    // Two forms carry an earlier version to show version history.
+    const row = forms.find((x) => x.key === f.key);
+    if (!row?.publishedVersionId) continue;
+    formVersionByKey.set(f.key, { formId: row.id, versionId: row.publishedVersionId, schema: f.schema });
     if (f.key === "subject_change" || f.key === "document_request") {
       const firstStep = f.schema.steps[0];
       const older: FormSchema = { ...f.schema, steps: [{ ...firstStep, sections: firstStep.sections.map((sec) => ({ ...sec, fields: sec.fields.filter((fld) => !fld.showIf) })) }] };
-      formVersionRows.push({ id: id(), orgId, formId, version: 1, schema: older as never, publishedAt: at(-190, 9, 0, now), publishedById: author });
-      formVersionRows.push({ id: versionId, orgId, formId, version: 2, schema: f.schema as never, publishedAt: at(-60, 9, 0, now), publishedById: author });
-    } else {
-      formVersionRows.push({ id: versionId, orgId, formId, version: 1, schema: f.schema as never, publishedAt: at(-190, 9, 0, now), publishedById: author });
+      await db.formVersion.update({ where: { id: row.publishedVersionId }, data: { version: 2, publishedAt: at(-60, 9, 0, now) } });
+      await db.formVersion.create({ data: { id: id(), orgId, formId: row.id, version: 1, schema: older as never, publishedAt: at(-190, 9, 0, now), publishedById: author } });
     }
-    formVersionByKey.set(f.key, { formId, versionId, schema: f.schema });
   }
-  await db.form.createMany({ data: formRows });
-  await db.formVersion.createMany({ data: formVersionRows });
+  const workflowVersionByKey = new Map((await db.workflow.findMany({ where: { orgId }, select: { id: true, key: true, publishedVersionId: true } })).map((w) => [w.key, { workflowId: w.id, versionId: w.publishedVersionId! }]));
 
-  const workflowVersionByKey = new Map<string, { workflowId: string; versionId: string }>();
-  const wfRows: Prisma.WorkflowCreateManyInput[] = [];
-  const wfvRows: Prisma.WorkflowVersionCreateManyInput[] = [];
-  for (const w of WORKFLOW_TEMPLATES) {
-    const workflowId = id();
-    const versionId = id();
-    wfRows.push({ id: workflowId, orgId, key: w.key, nameEn: w.name.en, nameAr: w.name.ar, descEn: w.description.en, descAr: w.description.ar, isTemplate: true, status: "PUBLISHED", draftGraph: w.graph as never, publishedVersionId: versionId, createdById: author, createdAt: at(-200, 11, 0, now) });
-    wfvRows.push({ id: versionId, orgId, workflowId, version: 1, graph: w.graph as never, publishedAt: at(-190, 11, 0, now), publishedById: author });
-    workflowVersionByKey.set(w.key, { workflowId, versionId });
-  }
-  await db.workflow.createMany({ data: wfRows });
-  await db.workflowVersion.createMany({ data: wfvRows });
-
-  // Appointment types with hosts and availability
+  // Appointment types: hosts and availability come from the demo staff.
   const appointmentTypes = new Map<string, { id: string; durationMin: number; locationEn: string; locationAr: string }>();
+  const typeRows = await db.appointmentType.findMany({ where: { orgId } });
   const hostRows: Prisma.AppointmentTypeHostCreateManyInput[] = [];
   const staffWithRole = (role: string) => [...staff.values()].filter((s) => s.roles.includes(role));
   for (const t of APPOINTMENT_TYPES) {
-    const tid = id();
-    appointmentTypes.set(t.key, { id: tid, durationMin: t.durationMin, locationEn: t.location.en, locationAr: t.location.ar });
-    await db.appointmentType.create({
-      data: {
-        id: tid,
-        orgId,
-        key: t.key,
-        nameEn: t.name.en,
-        nameAr: t.name.ar,
-        descEn: t.description.en,
-        descAr: t.description.ar,
-        durationMin: t.durationMin,
-        bufferBeforeMin: t.bufferBeforeMin,
-        bufferAfterMin: t.bufferAfterMin,
-        minNoticeMin: t.minNoticeMin,
-        dailyMax: t.dailyMax,
-        locationType: t.locationType,
-        locationEn: t.location.en,
-        locationAr: t.location.ar,
-        intakeFormId: t.intakeFormKey ? formVersionByKey.get(t.intakeFormKey)?.formId ?? null : null,
-        hostMode: t.hostMode,
-        audience: t.audience,
-        color: t.color,
-      },
-    });
+    const row = typeRows.find((x) => x.key === t.key);
+    if (!row) continue;
+    appointmentTypes.set(t.key, { id: row.id, durationMin: row.durationMin, locationEn: row.locationEn ?? "", locationAr: row.locationAr ?? "" });
     const hosts = new Set<string>();
     for (const role of t.hostRoles) for (const s of staffWithRole(role)) hosts.add(s.membershipId);
-    for (const h of hosts) hostRows.push({ orgId, typeId: tid, membershipId: h });
+    for (const h of hosts) hostRows.push({ orgId, typeId: row.id, membershipId: h });
   }
   await db.appointmentTypeHost.createMany({ data: hostRows });
   const availRows: Prisma.AvailabilityRuleCreateManyInput[] = [];
@@ -744,109 +627,19 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   });
 
   const services: SeedWorld["services"] = new Map();
-  const serviceRows: Prisma.ServiceDefinitionCreateManyInput[] = [];
+  const serviceRows = await db.serviceDefinition.findMany({ where: { orgId } });
   for (const s of SERVICES) {
-    const sid = id();
-    const audience = s.audience.flatMap((a) => (a === "staff" ? STAFF_ROLE_KEYS : [a]));
+    const row = serviceRows.find((x) => x.key === s.key);
+    if (!row) continue;
     const fv = s.formKey ? formVersionByKey.get(s.formKey) : undefined;
     const wv = s.workflowKey ? workflowVersionByKey.get(s.workflowKey) : undefined;
-    serviceRows.push({
-      id: sid,
-      orgId,
-      key: s.key,
-      categoryId: categoryIds.get(s.category)!,
-      nameEn: s.name.en,
-      nameAr: s.name.ar,
-      descEn: s.description.en,
-      descAr: s.description.ar,
-      icon: s.icon,
-      audience: [...new Set(audience)],
-      formId: fv?.formId ?? null,
-      workflowId: wv?.workflowId ?? null,
-      appointmentTypeId: s.appointmentTypeKey ? appointmentTypes.get(s.appointmentTypeKey)?.id ?? null : null,
-      slaHours: s.slaHours,
-      sensitivity: s.sensitivity,
-      requestPrefix: s.requestPrefix,
-      requiresStudent: s.requiresStudent,
-      createsCase: s.createsCase,
-      caseType: s.caseType,
-      isActive: true,
-      isFeatured: s.featured,
-      sortOrder: s.sortOrder,
-      createdAt: at(-200, 12, 0, now),
-    });
-    services.set(s.key, {
-      id: sid,
-      key: s.key,
-      formVersionId: fv?.versionId ?? null,
-      schema: fv?.schema ?? null,
-      nameEn: s.name.en,
-      nameAr: s.name.ar,
-      prefix: s.requestPrefix,
-      sensitivity: s.sensitivity,
-      workflowVersionId: wv?.versionId ?? null,
-    });
+    services.set(s.key, { id: row.id, key: s.key, formVersionId: fv?.versionId ?? null, schema: fv?.schema ?? null, nameEn: row.nameEn, nameAr: row.nameAr, prefix: row.requestPrefix, sensitivity: row.sensitivity, workflowVersionId: wv?.versionId ?? null });
   }
-  await db.serviceDefinition.createMany({ data: serviceRows });
 
-  // Documents catalog and templates
-  const categories = new Map<string, string>();
-  await db.documentCategory.createMany({
-    data: DOCUMENT_CATEGORIES.map((c) => {
-      const cid = id();
-      categories.set(c.key, cid);
-      return { id: cid, orgId, key: c.key, nameEn: c.name.en, nameAr: c.name.ar, sensitivity: c.sensitivity };
-    }),
-  });
-  const templates = new Map<string, string>();
-  await db.documentTemplate.createMany({
-    data: DOCUMENT_TEMPLATES.map((t) => {
-      const tid = id();
-      templates.set(t.key, tid);
-      return { id: tid, orgId, key: t.key, nameEn: t.name.en, nameAr: t.name.ar, descEn: t.description.en, descAr: t.description.ar, bodyEn: t.bodyEn, bodyAr: t.bodyAr, output: t.output, mergeFields: t.mergeFields, signatoryEn: t.signatory.en, signatoryAr: t.signatory.ar };
-    }),
-  });
-  await db.messageTemplate.createMany({
-    data: MESSAGE_TEMPLATES.flatMap((t) => [
-      { orgId, key: t.key, channel: "EMAIL" as const, subjectEn: t.subject.en, subjectAr: t.subject.ar, bodyEn: t.body.en, bodyAr: t.body.ar },
-      ...(t.sms ? [{ orgId, key: t.key, channel: "SMS" as const, subjectEn: null, subjectAr: null, bodyEn: t.sms.en, bodyAr: t.sms.ar }] : []),
-    ]),
-  });
+  const categories = new Map((await db.documentCategory.findMany({ where: { orgId }, select: { id: true, key: true } })).map((c) => [c.key, c.id]));
+  const templates = new Map((await db.documentTemplate.findMany({ where: { orgId }, select: { id: true, key: true } })).map((t) => [t.key, t.id]));
+  const careers = new Map((await db.career.findMany({ where: { orgId }, select: { id: true, key: true } })).map((c) => [c.key, c.id]));
 
-  // Career catalogs
-  await db.aptitudeQuestion.createMany({
-    data: APTITUDE_QUESTIONS.map((q, i) => ({ orgId, dimension: q.dimension, textEn: q.text.en, textAr: q.text.ar, order: i + 1, reverse: Boolean(q.reverse) })),
-  });
-  const careers = new Map<string, string>();
-  await db.career.createMany({
-    data: CAREERS.map((c) => {
-      const cid = id();
-      careers.set(c.key, cid);
-      return {
-        id: cid,
-        orgId,
-        key: c.key,
-        titleEn: c.title.en,
-        titleAr: c.title.ar,
-        clusterEn: c.cluster.en,
-        clusterAr: c.cluster.ar,
-        summaryEn: c.summary.en,
-        summaryAr: c.summary.ar,
-        dayInLifeEn: c.dayInLife.en,
-        dayInLifeAr: c.dayInLife.ar,
-        weights: c.weights as never,
-        subjects: c.subjects,
-        skillsEn: c.skills.en,
-        skillsAr: c.skills.ar,
-        educationEn: c.education.en,
-        educationAr: c.education.ar,
-        salaryMinAed: c.salaryMinAed,
-        salaryMaxAed: c.salaryMaxAed,
-        outlook: c.outlook,
-        uaeDemand: c.uaeDemand,
-      };
-    }),
-  });
   // Universities live in the global catalog (orgId null, seeded by seedGlobalCatalog). Schools no longer get copies.
   const universities = new Map((await db.university.findMany({ where: { orgId: null }, select: { id: true, key: true } })).map((u) => [u.key, u.id]));
 

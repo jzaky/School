@@ -8,6 +8,7 @@ import { initials, pick, userName } from "@/lib/i18n-data";
 import { demoModeEnabled } from "@/auth";
 import { DemoGuide } from "@/components/demo/demo-guide";
 import { GUIDE_STEPS } from "@/server/demo/guide";
+import { pathEnabled } from "@/lib/modules";
 
 export default async function ShellLayout({ children }: { children: React.ReactNode }) {
   const ctx = await getCtx();
@@ -26,9 +27,12 @@ export default async function ShellLayout({ children }: { children: React.ReactN
     : [];
   const name = userName(ctx.user, locale);
   const primaryRole = ctx.roles[0];
-  const nav = buildNav(ctx, { approvals, tasks, notifications: unread });
+  // Switched-off modules disappear from the navigation and the guide.
+  const nav = buildNav(ctx, { approvals, tasks, notifications: unread })
+    .map((s) => ({ ...s, items: s.items.filter((i) => pathEnabled(ctx.org, i.href)) }))
+    .filter((s) => s.items.length > 0);
   const tGuide = await getTranslations("guide");
-  const guideSteps = personas.length && ctx.persona ? (GUIDE_STEPS[ctx.persona] ?? []) : [];
+  const guideSteps = personas.length && ctx.persona ? (GUIDE_STEPS[ctx.persona] ?? []).filter((s) => pathEnabled(ctx.org, s.href)) : [];
   return (
     <AppShell
       nav={nav}

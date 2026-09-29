@@ -15,14 +15,12 @@ export async function seedCompliance(w: SeedWorld) {
     { key: "ai_assist", en: "AI-assisted drafting", ar: "الصياغة بمساعدة الذكاء الاصطناعي", descEn: "Staff use an AI assistant to draft summaries and plans. Sensitive data is excluded unless the school enables it.", descAr: "يستخدم الكادر مساعدًا ذكيًا لصياغة الملخصات والخطط، وتُستثنى البيانات الحساسة ما لم تفعّلها المدرسة.", basis: "Legitimate interest with opt-out", cats: ["academic"], consent: true },
     { key: "trips", en: "Trips and activities", ar: "الرحلات والأنشطة", descEn: "Registration, transport and supervision for trips and clubs.", descAr: "التسجيل والنقل والإشراف في الرحلات والأندية.", basis: "Consent", cats: ["identity", "medical"], consent: true },
   ];
-  const purposeIds = new Map<string, string>();
+  // The starter template installs the purposes; create any that are missing and read their ids back.
   await db.processingPurpose.createMany({
-    data: purposes.map((p) => {
-      const pid = id();
-      purposeIds.set(p.key, pid);
-      return { id: pid, orgId, key: p.key, nameEn: p.en, nameAr: p.ar, descEn: p.descEn, descAr: p.descAr, lawfulBasis: p.basis, dataCategories: p.cats, requiresConsent: p.consent };
-    }),
+    data: purposes.map((p) => ({ id: id(), orgId, key: p.key, nameEn: p.en, nameAr: p.ar, descEn: p.descEn, descAr: p.descAr, lawfulBasis: p.basis, dataCategories: p.cats, requiresConsent: p.consent })),
+    skipDuplicates: true,
   });
+  const purposeIds = new Map((await db.processingPurpose.findMany({ where: { orgId }, select: { id: true, key: true } })).map((p) => [p.key, p.id]));
 
   const consentRows = [];
   for (const [i, s] of w.students.entries()) {
@@ -97,10 +95,16 @@ export async function seedCompliance(w: SeedWorld) {
     { type: "notification", en: "In-app notifications", ar: "الإشعارات داخل المنصة", days: 180, action: "DELETE" as const },
     { type: "ai_interaction", en: "AI drafts", ar: "مسودات الذكاء الاصطناعي", days: 365, action: "DELETE" as const },
   ];
+  // Policies come from the starter template; the demo shows the nightly sweep has run.
   await db.retentionPolicy.createMany({
-    data: policies.map((p) => ({ orgId, recordType: p.type, nameEn: p.en, nameAr: p.ar, retentionDays: p.days, action: p.action, lastRunAt: at(-1, 3, 0, now), lastRunCount: p.type === "notification" ? 212 : 0 })),
+    data: policies.map((p) => ({ orgId, recordType: p.type, nameEn: p.en, nameAr: p.ar, retentionDays: p.days, action: p.action })),
+    skipDuplicates: true,
   });
+  for (const p of policies) {
+    await db.retentionPolicy.updateMany({ where: { orgId, recordType: p.type }, data: { lastRunAt: at(-1, 3, 0, now), lastRunCount: p.type === "notification" ? 212 : 0 } });
+  }
 
+  await db.crossBorderTransfer.deleteMany({ where: { orgId } });
   await db.crossBorderTransfer.createMany({
     data: [
       { orgId, providerName: "Resend (email delivery)", countryCode: "US", purposeEn: "Delivering notification emails", purposeAr: "إرسال رسائل البريد الإلكتروني للإشعارات", safeguardEn: "Contractual clauses. No sensitive case details in email bodies.", safeguardAr: "بنود تعاقدية، ولا تتضمن الرسائل أي تفاصيل حساسة عن الحالات.", approved: true, approvedAt: at(-180, 10, 0, now) },
