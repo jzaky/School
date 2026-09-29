@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { identityDb, publicOrgBySlug, tenantDb } from "@/lib/tenant-db";
 import { resolveActiveMembership } from "@/server/identity/session-org";
+import { passwordSignInAllowed, oauthSignInDecision } from "@/server/access/sign-in";
 
 declare module "next-auth" {
   interface Session {
@@ -47,11 +48,12 @@ const providers: NextAuthConfig["providers"] = [
     async authorize(raw) {
       const parsed = passwordSchema.safeParse(raw);
       if (!parsed.success) return null;
+      if (!(await passwordSignInAllowed(parsed.data.email))) return null;
       const user = await identityDb.user.findUnique({ where: { email: parsed.data.email.toLowerCase() } });
       if (!user?.passwordHash) return null;
       const ok = await bcrypt.compare(parsed.data.password, user.passwordHash);
       if (!ok) return null;
-      const membership = await resolveActiveMembership(user.id, user.lastActiveOrgId);
+      const membership = await resolveActiveMembership(user.id, user.lastActiveOrgId, { includePending: true });
       if (!membership) return null;
       return { id: user.id, email: user.email, name: user.nameEn, activeOrgId: membership.orgId, membershipId: membership.id };
     },
@@ -112,13 +114,13 @@ export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
   callbacks: {
     async signIn({ user, account }) {
       if (!account || account.type === "credentials") return true;
-      // OAuth: only people the school has already provisioned may sign in.
+      // OAuth: only people the school has provisioned may sign in, or someone finishing a join link.
       const email = user.email?.toLowerCase();
       if (!email) return false;
+      const decision = await oauthSignInDecision(email, user.name ?? null, account.provider);
+      if (decision !== true) return decision;
       const existing = await identityDb.user.findUnique({ where: { email } });
       if (!existing) return "/login?error=NotProvisioned";
-      const membership = await resolveActiveMembership(existing.id, existing.lastActiveOrgId);
-      if (!membership) return "/login?error=NoMembership";
       await identityDb.account.upsert({
         where: { provider_providerAccountId: { provider: account.provider, providerAccountId: account.providerAccountId } },
         create: { userId: existing.id, type: account.type, provider: account.provider, providerAccountId: account.providerAccountId },
@@ -136,7 +138,7 @@ export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
         } else {
           const existing = await identityDb.user.findUnique({ where: { email: user.email!.toLowerCase() } });
           if (existing) {
-            const m = await resolveActiveMembership(existing.id, existing.lastActiveOrgId);
+            const m = await resolveActiveMembership(existing.id, existing.lastActiveOrgId, { includePending: true });
             token.uid = existing.id;
             token.activeOrgId = m?.orgId;
             token.membershipId = m?.id;

@@ -1,0 +1,2756 @@
+{
+  "access": {
+    "groups": {
+      "requests": [
+        "Requests and services",
+        "الطلبات والخدمات"
+      ],
+      "cases": [
+        "Cases",
+        "الحالات"
+      ],
+      "safeguarding": [
+        "Safeguarding",
+        "الحماية"
+      ],
+      "people": [
+        "People",
+        "الأشخاص"
+      ],
+      "grades": [
+        "Grades and subjects",
+        "الدرجات والمواد"
+      ],
+      "timetable": [
+        "Timetable and calendar",
+        "الجدول والتقويم"
+      ],
+      "meetings": [
+        "Meetings",
+        "المواعيد"
+      ],
+      "documents": [
+        "Documents",
+        "المستندات"
+      ],
+      "university": [
+        "University planning",
+        "التخطيط الجامعي"
+      ],
+      "teaching": [
+        "Teaching and trips",
+        "التدريس والرحلات"
+      ],
+      "insights": [
+        "Insights and AI",
+        "المؤشرات والذكاء الاصطناعي"
+      ],
+      "admin": [
+        "Admin",
+        "الإدارة"
+      ],
+      "portals": [
+        "Portals",
+        "البوابات"
+      ]
+    },
+    "groupHelp": {
+      "requests": [
+        "Asking for things and getting them done.",
+        "تقديم الطلبات وإنجازها."
+      ],
+      "cases": [
+        "Student support cases.",
+        "حالات دعم الطلاب."
+      ],
+      "safeguarding": [
+        "Child protection. Grant with care.",
+        "حماية الطفل، تُمنح بعناية."
+      ],
+      "people": [
+        "The directory, invitations and personal data.",
+        "الدليل والدعوات والبيانات الشخصية."
+      ],
+      "grades": [
+        "Marks, reports and subject choices.",
+        "الدرجات والتقارير واختيار المواد."
+      ],
+      "timetable": [
+        "Days, times and cover.",
+        "الأيام والأوقات والحصص البديلة."
+      ],
+      "meetings": [
+        "Booking time with staff.",
+        "حجز المواعيد مع الكادر."
+      ],
+      "documents": [
+        "Letters, files and templates.",
+        "الخطابات والملفات والقوالب."
+      ],
+      "university": [
+        "Careers, universities and applications.",
+        "المهن والجامعات وطلبات الالتحاق."
+      ],
+      "teaching": [
+        "Lesson plans, curriculum, trips and messages.",
+        "خطط الدروس والمنهج والرحلات والرسائل."
+      ],
+      "insights": [
+        "Dashboards and AI help.",
+        "لوحات المؤشرات ومساعدة الذكاء الاصطناعي."
+      ],
+      "admin": [
+        "Running the school's setup.",
+        "إدارة إعدادات المدرسة."
+      ],
+      "portals": [
+        "Which home screen this person gets.",
+        "الصفحة الرئيسية التي تظهر لهذا الشخص."
+      ]
+    },
+    "perms": {
+      "services": {
+        "use": {
+          "label": [
+            "Use school services",
+            "استخدام خدمات المدرسة"
+          ],
+          "help": [
+            "Browse the service catalog and submit requests.",
+            "تصفح دليل الخدمات وتقديم الطلبات."
+          ]
+        },
+        "manage": {
+          "label": [
+            "Set up services",
+            "إعداد الخدمات"
+          ],
+          "help": [
+            "Create and change the services people can request.",
+            "إنشاء الخدمات التي يمكن طلبها وتعديلها."
+          ]
+        }
+      },
+      "requests": {
+        "view_all": {
+          "label": [
+            "See all requests",
+            "الاطلاع على جميع الطلبات"
+          ],
+          "help": [
+            "View every request in the school, not only their own.",
+            "عرض كل الطلبات في المدرسة وليس طلباته فقط."
+          ]
+        },
+        "process": {
+          "label": [
+            "Process requests",
+            "معالجة الطلبات"
+          ],
+          "help": [
+            "Work on requests assigned to their team and move them forward.",
+            "العمل على الطلبات المسندة إلى فريقه ومتابعة إنجازها."
+          ]
+        }
+      },
+      "approvals": {
+        "decide": {
+          "label": [
+            "Approve or decline",
+            "الموافقة أو الرفض"
+          ],
+          "help": [
+            "Make approval decisions when a workflow asks them to.",
+            "اتخاذ قرارات الموافقة عندما يطلب منه مسار العمل ذلك."
+          ]
+        }
+      },
+      "tasks": {
+        "use": {
+          "label": [
+            "Tasks",
+            "المهام"
+          ],
+          "help": [
+            "Receive and complete tasks.",
+            "استلام المهام وإنجازها."
+          ]
+        }
+      },
+      "forms": {
+        "manage": {
+          "label": [
+            "Build forms",
+            "تصميم النماذج"
+          ],
+          "help": [
+            "Create and edit request forms.",
+            "إنشاء نماذج الطلبات وتعديلها."
+          ]
+        }
+      },
+      "workflows": {
+        "manage": {
+          "label": [
+            "Build workflows",
+            "تصميم مسارات العمل"
+          ],
+          "help": [
+            "Design the steps and approvals behind each service.",
+            "تصميم الخطوات والموافقات لكل خدمة."
+          ]
+        }
+      },
+      "cases": {
+        "view": {
+          "label": [
+            "See cases they work on",
+            "الاطلاع على الحالات التي يعمل عليها"
+          ],
+          "help": [
+            "Open student support cases they own or are part of.",
+            "فتح حالات دعم الطلاب التي يتولاها أو يشارك فيها."
+          ]
+        },
+        "view_all": {
+          "label": [
+            "See all standard cases",
+            "الاطلاع على جميع الحالات العادية"
+          ],
+          "help": [
+            "View every academic and general case. Wellbeing and safeguarding stay protected.",
+            "عرض جميع الحالات الأكاديمية والعامة، وتبقى حالات الرفاه والحماية محمية."
+          ]
+        },
+        "manage": {
+          "label": [
+            "Manage cases",
+            "إدارة الحالات"
+          ],
+          "help": [
+            "Open, assign, update and close support cases.",
+            "فتح حالات الدعم وإسنادها وتحديثها وإغلاقها."
+          ]
+        },
+        "wellbeing": {
+          "label": [
+            "Wellbeing cases",
+            "حالات الرفاه"
+          ],
+          "help": [
+            "See and work on confidential wellbeing cases. Every view is recorded.",
+            "الاطلاع على حالات الرفاه السرية والعمل عليها، ويُسجَّل كل اطلاع."
+          ]
+        }
+      },
+      "safeguarding": {
+        "refer": {
+          "label": [
+            "Raise a safeguarding concern",
+            "الإبلاغ عن مخاوف تتعلق بالحماية"
+          ],
+          "help": [
+            "Report a concern to the safeguarding team. They do not see other concerns.",
+            "إبلاغ فريق الحماية عن مخاوف، دون الاطلاع على البلاغات الأخرى."
+          ]
+        },
+        "view": {
+          "label": [
+            "See safeguarding cases",
+            "الاطلاع على حالات الحماية"
+          ],
+          "help": [
+            "Read child protection records. Every view is recorded.",
+            "قراءة سجلات حماية الطفل، ويُسجَّل كل اطلاع."
+          ]
+        },
+        "manage": {
+          "label": [
+            "Manage safeguarding cases",
+            "إدارة حالات الحماية"
+          ],
+          "help": [
+            "Decide on referrals, plans and parent notification for child protection cases.",
+            "اتخاذ القرارات بشأن الإحالات والخطط وإبلاغ أولياء الأمور في حالات حماية الطفل."
+          ]
+        },
+        "export": {
+          "label": [
+            "Export safeguarding records",
+            "تصدير سجلات الحماية"
+          ],
+          "help": [
+            "Download a case chronology for the authorities.",
+            "تنزيل التسلسل الزمني للحالة لتقديمه إلى الجهات المختصة."
+          ]
+        },
+        "break_glass": {
+          "label": [
+            "Emergency access",
+            "الوصول الطارئ"
+          ],
+          "help": [
+            "Open a safeguarding case in an emergency with a stated reason. The safeguarding lead is alerted.",
+            "فتح حالة حماية في حالة طارئة مع ذكر السبب، ويُنبَّه مسؤول الحماية."
+          ]
+        }
+      },
+      "people": {
+        "view": {
+          "label": [
+            "Staff and student directory",
+            "دليل الكادر والطلاب"
+          ],
+          "help": [
+            "Look up students and colleagues.",
+            "البحث عن الطلاب والزملاء."
+          ]
+        },
+        "manage": {
+          "label": [
+            "Manage people",
+            "إدارة الأشخاص"
+          ],
+          "help": [
+            "Add and edit staff, students and families.",
+            "إضافة الكادر والطلاب والأسر وتعديل بياناتهم."
+          ]
+        },
+        "invite": {
+          "label": [
+            "Invite people",
+            "دعوة الأشخاص"
+          ],
+          "help": [
+            "Send invitations, share join links and the family code, and approve join requests.",
+            "إرسال الدعوات ومشاركة روابط الانضمام ورمز الأسر والموافقة على طلبات الانضمام."
+          ]
+        },
+        "reveal_ids": {
+          "label": [
+            "Reveal ID numbers",
+            "إظهار أرقام الهوية"
+          ],
+          "help": [
+            "See full Emirates ID and passport numbers. Each reveal is recorded.",
+            "عرض أرقام الهوية الإماراتية وجوازات السفر كاملة، ويُسجَّل كل عرض."
+          ]
+        },
+        "medical": {
+          "label": [
+            "Medical records",
+            "السجلات الطبية"
+          ],
+          "help": [
+            "See and update student medical information.",
+            "الاطلاع على المعلومات الطبية للطلاب وتحديثها."
+          ]
+        }
+      },
+      "grades": {
+        "view_own": {
+          "label": [
+            "See own grades",
+            "الاطلاع على الدرجات الخاصة"
+          ],
+          "help": [
+            "Students see their grades, parents see their children's.",
+            "يطلع الطالب على درجاته، ويطلع ولي الأمر على درجات أبنائه."
+          ]
+        },
+        "enter": {
+          "label": [
+            "Enter grades",
+            "رصد الدرجات"
+          ],
+          "help": [
+            "Record marks for the classes they teach.",
+            "رصد الدرجات للصفوف التي يدرّسها."
+          ]
+        },
+        "view_all": {
+          "label": [
+            "See all grades",
+            "الاطلاع على جميع الدرجات"
+          ],
+          "help": [
+            "View grades across the school.",
+            "عرض الدرجات على مستوى المدرسة."
+          ]
+        }
+      },
+      "registration": {
+        "submit": {
+          "label": [
+            "Choose subjects",
+            "اختيار المواد"
+          ],
+          "help": [
+            "Submit subject choices during registration.",
+            "تقديم اختيارات المواد خلال فترة التسجيل."
+          ]
+        },
+        "manage": {
+          "label": [
+            "Run subject registration",
+            "إدارة تسجيل المواد"
+          ],
+          "help": [
+            "Open registration, allocate places and publish class lists.",
+            "فتح التسجيل وتوزيع المقاعد ونشر قوائم الصفوف."
+          ]
+        }
+      },
+      "calendar": {
+        "view": {
+          "label": [
+            "School calendar",
+            "تقويم المدرسة"
+          ],
+          "help": [
+            "See term dates, events and exams.",
+            "الاطلاع على مواعيد الفصول والفعاليات والاختبارات."
+          ]
+        },
+        "manage": {
+          "label": [
+            "Manage the calendar",
+            "إدارة التقويم"
+          ],
+          "help": [
+            "Add events, holidays and exam sittings.",
+            "إضافة الفعاليات والعطل ومواعيد الاختبارات."
+          ]
+        }
+      },
+      "timetable": {
+        "manage": {
+          "label": [
+            "Build the timetable",
+            "إعداد الجدول الدراسي"
+          ],
+          "help": [
+            "Set bell times and schedule classes.",
+            "ضبط مواعيد الحصص وجدولة الصفوف."
+          ]
+        }
+      },
+      "absence": {
+        "report": {
+          "label": [
+            "Report own absence",
+            "الإبلاغ عن الغياب الشخصي"
+          ],
+          "help": [
+            "Tell the school they will be absent.",
+            "إبلاغ المدرسة بغيابه."
+          ]
+        }
+      },
+      "cover": {
+        "manage": {
+          "label": [
+            "Arrange cover",
+            "ترتيب الحصص البديلة"
+          ],
+          "help": [
+            "Assign cover teachers for absent colleagues.",
+            "إسناد معلمين بدلاء عن الزملاء الغائبين."
+          ]
+        }
+      },
+      "appointments": {
+        "book": {
+          "label": [
+            "Book meetings",
+            "حجز المواعيد"
+          ],
+          "help": [
+            "Book time with staff.",
+            "حجز موعد مع الكادر."
+          ]
+        },
+        "host": {
+          "label": [
+            "Host meetings",
+            "استضافة المواعيد"
+          ],
+          "help": [
+            "Publish availability and meet students and parents.",
+            "نشر أوقات التوفر ولقاء الطلاب وأولياء الأمور."
+          ]
+        },
+        "manage": {
+          "label": [
+            "Manage meeting types",
+            "إدارة أنواع المواعيد"
+          ],
+          "help": [
+            "Set up meeting types and booking rules.",
+            "إعداد أنواع المواعيد وقواعد الحجز."
+          ]
+        }
+      },
+      "documents": {
+        "view": {
+          "label": [
+            "See documents",
+            "الاطلاع على المستندات"
+          ],
+          "help": [
+            "Open documents shared with them.",
+            "فتح المستندات المشاركة معه."
+          ]
+        },
+        "manage": {
+          "label": [
+            "Manage documents",
+            "إدارة المستندات"
+          ],
+          "help": [
+            "Upload, issue and share school documents.",
+            "رفع مستندات المدرسة وإصدارها ومشاركتها."
+          ]
+        },
+        "sensitive": {
+          "label": [
+            "Sensitive documents",
+            "المستندات الحساسة"
+          ],
+          "help": [
+            "Open confidential and medical documents.",
+            "فتح المستندات السرية والطبية."
+          ]
+        },
+        "templates": {
+          "label": [
+            "Letter templates",
+            "قوالب الخطابات"
+          ],
+          "help": [
+            "Edit the templates used for official letters.",
+            "تعديل القوالب المستخدمة في الخطابات الرسمية."
+          ]
+        }
+      },
+      "career": {
+        "use": {
+          "label": [
+            "Career explorer",
+            "مستكشف المهن"
+          ],
+          "help": [
+            "Take the interest assessment and explore careers.",
+            "إجراء تقييم الميول واستكشاف المهن."
+          ]
+        },
+        "advise": {
+          "label": [
+            "Career advising",
+            "الإرشاد المهني"
+          ],
+          "help": [
+            "See students' career profiles and advise them.",
+            "الاطلاع على الملفات المهنية للطلاب وإرشادهم."
+          ]
+        }
+      },
+      "pathways": {
+        "view": {
+          "label": [
+            "University planning",
+            "التخطيط الجامعي"
+          ],
+          "help": [
+            "See university options and entry requirements.",
+            "الاطلاع على الخيارات الجامعية وشروط القبول."
+          ]
+        },
+        "manage": {
+          "label": [
+            "Manage university planning",
+            "إدارة التخطيط الجامعي"
+          ],
+          "help": [
+            "Maintain programmes, shortlists and advice for students.",
+            "إدارة البرامج والقوائم المختصرة والنصائح للطلاب."
+          ]
+        }
+      },
+      "planner": {
+        "approve": {
+          "label": [
+            "Approve study plans",
+            "اعتماد الخطط الدراسية"
+          ],
+          "help": [
+            "Confirm students' subject plans.",
+            "اعتماد خطط المواد للطلاب."
+          ]
+        }
+      },
+      "applications": {
+        "manage": {
+          "label": [
+            "University applications",
+            "طلبات الالتحاق بالجامعات"
+          ],
+          "help": [
+            "Track applications, deadlines and recommendation letters.",
+            "متابعة طلبات الالتحاق ومواعيدها وخطابات التوصية."
+          ]
+        }
+      },
+      "catalog": {
+        "review": {
+          "label": [
+            "Review requirement updates",
+            "مراجعة تحديثات الشروط"
+          ],
+          "help": [
+            "Check and publish changes to university entry requirements.",
+            "مراجعة تغييرات شروط القبول الجامعي ونشرها."
+          ]
+        }
+      },
+      "curriculum": {
+        "plan": {
+          "label": [
+            "Plan lessons",
+            "تخطيط الدروس"
+          ],
+          "help": [
+            "Write lesson and unit plans.",
+            "إعداد خطط الدروس والوحدات."
+          ]
+        },
+        "review": {
+          "label": [
+            "Review lesson plans",
+            "مراجعة خطط الدروس"
+          ],
+          "help": [
+            "Give feedback on colleagues' plans.",
+            "تقديم الملاحظات على خطط الزملاء."
+          ]
+        },
+        "manage": {
+          "label": [
+            "Manage the curriculum",
+            "إدارة المنهج"
+          ],
+          "help": [
+            "Maintain frameworks and standards.",
+            "إدارة الأطر والمعايير."
+          ]
+        }
+      },
+      "trips": {
+        "manage": {
+          "label": [
+            "Organise trips",
+            "تنظيم الرحلات"
+          ],
+          "help": [
+            "Plan trips and collect consent.",
+            "تخطيط الرحلات وجمع الموافقات."
+          ]
+        },
+        "consent": {
+          "label": [
+            "Give trip consent",
+            "الموافقة على الرحلات"
+          ],
+          "help": [
+            "Parents approve or decline trips for their children.",
+            "يوافق ولي الأمر على رحلات أبنائه أو يرفضها."
+          ]
+        }
+      },
+      "comms": {
+        "send": {
+          "label": [
+            "Send messages",
+            "إرسال الرسائل"
+          ],
+          "help": [
+            "Message students and families.",
+            "مراسلة الطلاب والأسر."
+          ]
+        }
+      },
+      "analytics": {
+        "view": {
+          "label": [
+            "School analytics",
+            "تحليلات المدرسة"
+          ],
+          "help": [
+            "See school-wide dashboards. Sensitive cases are counted, never listed.",
+            "الاطلاع على لوحات المؤشرات للمدرسة، وتُحتسب الحالات الحساسة دون عرض تفاصيلها."
+          ]
+        }
+      },
+      "ai": {
+        "use": {
+          "label": [
+            "AI assistant",
+            "المساعد الذكي"
+          ],
+          "help": [
+            "Use AI drafting help. Drafts always need a person to approve.",
+            "استخدام المساعد الذكي في الصياغة، وتحتاج المسودات دائمًا إلى اعتماد شخص."
+          ]
+        },
+        "admin_insights": {
+          "label": [
+            "AI insights",
+            "رؤى الذكاء الاصطناعي"
+          ],
+          "help": [
+            "Ask questions about school data in plain language.",
+            "طرح أسئلة عن بيانات المدرسة بلغة بسيطة."
+          ]
+        }
+      },
+      "admin": {
+        "access": {
+          "label": [
+            "Admin area",
+            "منطقة الإدارة"
+          ],
+          "help": [
+            "Open the administration pages.",
+            "فتح صفحات الإدارة."
+          ]
+        }
+      },
+      "school": {
+        "manage": {
+          "label": [
+            "School settings",
+            "إعدادات المدرسة"
+          ],
+          "help": [
+            "Change the school profile, departments and academic year.",
+            "تعديل ملف المدرسة والأقسام والعام الدراسي."
+          ]
+        }
+      },
+      "roles": {
+        "manage": {
+          "label": [
+            "Roles and access",
+            "الأدوار والصلاحيات"
+          ],
+          "help": [
+            "Change what each role can do and who has it.",
+            "تعديل صلاحيات كل دور ومن يحمله."
+          ]
+        }
+      },
+      "compliance": {
+        "manage": {
+          "label": [
+            "Compliance",
+            "الامتثال"
+          ],
+          "help": [
+            "Manage data protection records and retention.",
+            "إدارة سجلات حماية البيانات ومدد الاحتفاظ."
+          ]
+        }
+      },
+      "audit": {
+        "view": {
+          "label": [
+            "Audit log",
+            "سجل التدقيق"
+          ],
+          "help": [
+            "See who did what, including views of sensitive records.",
+            "معرفة من قام بماذا، بما في ذلك الاطلاع على السجلات الحساسة."
+          ]
+        }
+      },
+      "demo": {
+        "reset": {
+          "label": [
+            "Reset the demo",
+            "إعادة ضبط العرض التجريبي"
+          ],
+          "help": [
+            "Restore the demo school to its starting data.",
+            "إعادة المدرسة التجريبية إلى بياناتها الأولى."
+          ]
+        }
+      },
+      "family": {
+        "portal": {
+          "label": [
+            "Family portal",
+            "بوابة الأسرة"
+          ],
+          "help": [
+            "The parent home with their children.",
+            "الصفحة الرئيسية لولي الأمر مع أبنائه."
+          ]
+        }
+      },
+      "student": {
+        "portal": {
+          "label": [
+            "Student portal",
+            "بوابة الطالب"
+          ],
+          "help": [
+            "The student home and their own records.",
+            "الصفحة الرئيسية للطالب وسجلاته."
+          ]
+        }
+      }
+    }
+  },
+  "adminRoles": {
+    "title": [
+      "Roles and access",
+      "الأدوار والصلاحيات"
+    ],
+    "subtitle": [
+      "Decide what each role can do and who holds it. Changes apply on the person's next click.",
+      "حدّد ما يمكن لكل دور فعله ومن يحمله. تسري التغييرات من النقرة التالية للشخص."
+    ],
+    "tabRoles": [
+      "Roles",
+      "الأدوار"
+    ],
+    "tabCheck": [
+      "Access check",
+      "فحص الصلاحيات"
+    ],
+    "staffRoles": [
+      "Staff roles",
+      "أدوار الكادر"
+    ],
+    "staffRolesBody": [
+      "Built-in roles you can adjust, plus roles your school made.",
+      "أدوار جاهزة يمكنك تعديلها، إضافة إلى الأدوار التي أنشأتها مدرستك."
+    ],
+    "familyRoles": [
+      "Family roles",
+      "أدوار الأسر"
+    ],
+    "familyRolesBody": [
+      "Parents and students. They can only receive family permissions.",
+      "أولياء الأمور والطلاب، ولا يمكن منحهم إلا صلاحيات الأسر."
+    ],
+    "noDescription": [
+      "No description yet.",
+      "لا يوجد وصف بعد."
+    ],
+    "memberCount": [
+      "{count, plural, one {# member} other {# members}}",
+      "{count, plural, zero {لا أعضاء} one {عضو واحد} two {عضوان} few {# أعضاء} many {# عضوًا} other {# عضو}}"
+    ],
+    "permissionCount": [
+      "{count, plural, one {# permission} other {# permissions}}",
+      "{count, plural, zero {لا صلاحيات} one {صلاحية واحدة} two {صلاحيتان} few {# صلاحيات} many {# صلاحية} other {# صلاحية}}"
+    ],
+    "badgeCustom": [
+      "Made by your school",
+      "أنشأته مدرستك"
+    ],
+    "badgeCustomized": [
+      "Customized",
+      "معدَّل"
+    ],
+    "badgeBuiltIn": [
+      "Built-in",
+      "جاهز"
+    ],
+    "sensitiveBadge": [
+      "Sensitive access",
+      "صلاحيات حساسة"
+    ],
+    "sensitiveShort": [
+      "Sensitive",
+      "حساسة"
+    ],
+    "checkTitle": [
+      "Check someone's access",
+      "فحص صلاحيات شخص"
+    ],
+    "checkBody": [
+      "Pick a person to see exactly what they can do and which role gives it to them.",
+      "اختر شخصًا لترى بالضبط ما يمكنه فعله وأي دور يمنحه ذلك."
+    ],
+    "checkEmpty": [
+      "Choose a person",
+      "اختر شخصًا"
+    ],
+    "checkEmptyBody": [
+      "Their permissions appear here, grouped by area.",
+      "تظهر صلاحياته هنا مصنفة حسب المجال."
+    ],
+    "memberStatus": {
+      "ACTIVE": [
+        "Active",
+        "نشط"
+      ],
+      "INVITED": [
+        "Invited",
+        "مدعو"
+      ],
+      "SUSPENDED": [
+        "Suspended",
+        "موقوف"
+      ],
+      "PENDING_APPROVAL": [
+        "Waiting for approval",
+        "بانتظار الموافقة"
+      ]
+    },
+    "checkInactive": [
+      "This account is not active, so it cannot do anything right now.",
+      "هذا الحساب غير نشط، لذا لا يمكنه القيام بأي شيء حاليًا."
+    ],
+    "canCount": [
+      "{count} of {total}",
+      "{count} من {total}"
+    ],
+    "grantedBy": [
+      "From: {roles}",
+      "من خلال: {roles}"
+    ],
+    "yes": [
+      "Yes",
+      "نعم"
+    ],
+    "no": [
+      "No",
+      "لا"
+    ],
+    "backToRoles": [
+      "All roles",
+      "كل الأدوار"
+    ],
+    "audience": {
+      "staff": [
+        "For staff",
+        "للكادر"
+      ],
+      "parent": [
+        "For parents",
+        "لأولياء الأمور"
+      ],
+      "student": [
+        "For students",
+        "للطلاب"
+      ]
+    },
+    "customizedNote": [
+      "Your school has changed this built-in role, so updates we ship will not overwrite it. Use Restore default to go back.",
+      "عدّلت مدرستك هذا الدور الجاهز، لذا لن تستبدله التحديثات التي نصدرها. استخدم استعادة الإعدادات الأصلية للعودة."
+    ],
+    "builtInNote": [
+      "This is a built-in role. It stays up to date with new features until you change it.",
+      "هذا دور جاهز يبقى محدثًا مع الميزات الجديدة إلى أن تعدّله."
+    ],
+    "familyAudienceNote": [
+      "Only permissions that make sense for families are shown. Staff permissions cannot be given to this role.",
+      "تظهر فقط الصلاحيات المناسبة للأسر، ولا يمكن منح صلاحيات الكادر لهذا الدور."
+    ],
+    "members": [
+      "People with this role",
+      "الأشخاص الذين يحملون هذا الدور"
+    ],
+    "membersBody": [
+      "Add or remove staff. It takes effect on their next click.",
+      "أضف أعضاء الكادر أو أزلهم، ويسري ذلك من نقرتهم التالية."
+    ],
+    "familyMembersBody": [
+      "Families get this role when they join with an invitation or the school code.",
+      "تحصل الأسر على هذا الدور عند الانضمام بدعوة أو برمز المدرسة."
+    ],
+    "noMembers": [
+      "Nobody has this role yet",
+      "لا أحد يحمل هذا الدور بعد"
+    ],
+    "noMembersBody": [
+      "Search for a colleague above to add them.",
+      "ابحث عن زميل في الأعلى لإضافته."
+    ],
+    "you": [
+      "You",
+      "أنت"
+    ],
+    "goToInvitations": [
+      "Invite families",
+      "دعوة الأسر"
+    ],
+    "lockLastRole": [
+      "Everyone needs at least one role. Give them another role first.",
+      "يجب أن يحمل كل شخص دورًا واحدًا على الأقل. امنحه دورًا آخر أولًا."
+    ],
+    "error": {
+      "generic": [
+        "Something went wrong. Please try again.",
+        "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
+      ],
+      "FORBIDDEN": [
+        "You do not have permission to do this.",
+        "ليست لديك صلاحية للقيام بذلك."
+      ],
+      "NOT_FOUND": [
+        "We could not find that. It may have been removed.",
+        "لم نعثر على ذلك، فربما حُذف."
+      ],
+      "INVALID": [
+        "Please check the details and try again.",
+        "يُرجى التحقق من البيانات والمحاولة مرة أخرى."
+      ],
+      "AUDIENCE": [
+        "This permission is not available for this kind of role.",
+        "هذه الصلاحية غير متاحة لهذا النوع من الأدوار."
+      ],
+      "CONFIRM_REQUIRED": [
+        "Type the role name exactly to confirm.",
+        "اكتب اسم الدور كما هو للتأكيد."
+      ],
+      "LAST_ROLES_MANAGER": [
+        "At least one active person must be able to manage roles.",
+        "يجب أن يبقى شخص نشط واحد على الأقل قادرًا على إدارة الأدوار."
+      ],
+      "SELF_LOCKOUT": [
+        "You cannot remove your own ability to manage roles. Ask another administrator.",
+        "لا يمكنك إزالة قدرتك على إدارة الأدوار بنفسك. اطلب ذلك من مسؤول آخر."
+      ],
+      "BUILT_IN": [
+        "Built-in roles cannot be deleted. You can restore their defaults instead.",
+        "لا يمكن حذف الأدوار الجاهزة، ويمكنك استعادة إعداداتها الأصلية بدلًا من ذلك."
+      ],
+      "HAS_MEMBERS": [
+        "Move the people in this role to another role first.",
+        "انقل حاملي هذا الدور إلى دور آخر أولًا."
+      ],
+      "NOT_STAFF": [
+        "Roles for families are managed through invitations.",
+        "تُدار أدوار الأسر من خلال الدعوات."
+      ],
+      "FAMILY_ROLE": [
+        "Parent and student roles cannot be given to staff here.",
+        "لا يمكن منح دوري ولي الأمر والطالب للكادر من هنا."
+      ],
+      "NAME_TAKEN": [
+        "Another role already has this name.",
+        "يوجد دور آخر بهذا الاسم."
+      ]
+    },
+    "fieldNameEn": [
+      "Name in English",
+      "الاسم بالإنجليزية"
+    ],
+    "fieldNameAr": [
+      "Name in Arabic",
+      "الاسم بالعربية"
+    ],
+    "fieldDescEn": [
+      "What it is for (English)",
+      "الغرض منه (بالإنجليزية)"
+    ],
+    "fieldDescAr": [
+      "What it is for (Arabic)",
+      "الغرض منه (بالعربية)"
+    ],
+    "createRole": [
+      "New role",
+      "دور جديد"
+    ],
+    "createRoleBody": [
+      "Start from scratch or copy another role, then adjust its permissions.",
+      "ابدأ من الصفر أو انسخ دورًا آخر، ثم عدّل صلاحياته."
+    ],
+    "copyFrom": [
+      "Copy permissions from",
+      "نسخ الصلاحيات من"
+    ],
+    "copyFromNone": [
+      "Start with no permissions",
+      "البدء دون صلاحيات"
+    ],
+    "copyFromHint": [
+      "You can change everything after it is created.",
+      "يمكنك تعديل كل شيء بعد الإنشاء."
+    ],
+    "roleCreated": [
+      "Role created",
+      "تم إنشاء الدور"
+    ],
+    "cancel": [
+      "Cancel",
+      "إلغاء"
+    ],
+    "save": [
+      "Save",
+      "حفظ"
+    ],
+    "saved": [
+      "Saved",
+      "تم الحفظ"
+    ],
+    "rename": [
+      "Rename",
+      "إعادة التسمية"
+    ],
+    "renameTitle": [
+      "Name and description",
+      "الاسم والوصف"
+    ],
+    "renameBody": [
+      "This is how the role appears across the app.",
+      "هكذا يظهر الدور في جميع أنحاء التطبيق."
+    ],
+    "renameBuiltInBody": [
+      "Renaming a built-in role marks it as customized for your school.",
+      "إعادة تسمية دور جاهز تجعله معدَّلًا لمدرستك."
+    ],
+    "restoreDefault": [
+      "Restore default",
+      "استعادة الإعدادات الأصلية"
+    ],
+    "restoreTitle": [
+      "Restore the default role?",
+      "استعادة الدور الأصلي؟"
+    ],
+    "restoreBody": [
+      "The name, description and permissions go back to the original. People keep the role.",
+      "يعود الاسم والوصف والصلاحيات إلى الأصل، ويحتفظ الأشخاص بالدور."
+    ],
+    "restored": [
+      "Default restored",
+      "تمت استعادة الإعدادات الأصلية"
+    ],
+    "delete": [
+      "Delete",
+      "حذف"
+    ],
+    "deleteTitle": [
+      "Delete this role?",
+      "حذف هذا الدور؟"
+    ],
+    "deleteBody": [
+      "Nobody has this role. It will be removed.",
+      "لا أحد يحمل هذا الدور، وسيُحذف."
+    ],
+    "deleteMoveBody": [
+      "{count, plural, one {# person has} other {# people have}} this role. Choose where to move them.",
+      "{count, plural, zero {لا أحد يحمل} one {شخص واحد يحمل} two {شخصان يحملان} few {# أشخاص يحملون} many {# شخصًا يحملون} other {# شخص يحملون}} هذا الدور. اختر الدور الذي سينتقلون إليه."
+    ],
+    "moveMembersTo": [
+      "Move them to",
+      "نقلهم إلى"
+    ],
+    "chooseRole": [
+      "Choose a role",
+      "اختر دورًا"
+    ],
+    "deleted": [
+      "Role deleted",
+      "تم حذف الدور"
+    ],
+    "granted": [
+      "Granted: {permission}",
+      "تم المنح: {permission}"
+    ],
+    "removed": [
+      "Removed: {permission}",
+      "تمت الإزالة: {permission}"
+    ],
+    "sensitiveTitle": [
+      "Sensitive access",
+      "صلاحيات حساسة"
+    ],
+    "sensitiveBody": [
+      "{permission} opens confidential records about children. Everyone with the role {role} will get it, and every use is recorded.",
+      "صلاحية {permission} تتيح الوصول إلى سجلات سرية عن الأطفال. سيحصل عليها كل من يحمل دور {role}، ويُسجَّل كل استخدام لها."
+    ],
+    "typeToConfirm": [
+      "Type the role name to confirm: {role}",
+      "اكتب اسم الدور للتأكيد: {role}"
+    ],
+    "grantAccess": [
+      "Grant access",
+      "منح الصلاحية"
+    ],
+    "searchStaff": [
+      "Search staff by name or email",
+      "ابحث عن الكادر بالاسم أو البريد الإلكتروني"
+    ],
+    "addMember": [
+      "Add",
+      "إضافة"
+    ],
+    "memberAdded": [
+      "Added to the role",
+      "تمت الإضافة إلى الدور"
+    ],
+    "sensitiveMemberAck": [
+      "I understand this role includes sensitive access to children's records.",
+      "أدرك أن هذا الدور يتضمن صلاحيات حساسة للوصول إلى سجلات الأطفال."
+    ],
+    "memberRemoved": [
+      "{name} removed from the role",
+      "تمت إزالة {name} من الدور"
+    ],
+    "removeMember": [
+      "Remove {name}",
+      "إزالة {name}"
+    ],
+    "remove": [
+      "Remove",
+      "إزالة"
+    ],
+    "rolesButton": [
+      "Roles",
+      "الأدوار"
+    ],
+    "memberRolesTitle": [
+      "Roles for {name}",
+      "أدوار {name}"
+    ],
+    "memberRolesBody": [
+      "Pick every role this person should have. Changes apply on their next click.",
+      "اختر كل الأدوار التي يجب أن يحملها هذا الشخص، وتسري التغييرات من نقرته التالية."
+    ],
+    "atLeastOneRole": [
+      "Choose at least one role.",
+      "اختر دورًا واحدًا على الأقل."
+    ],
+    "rolesSaved": [
+      "Roles updated for {name}",
+      "تم تحديث أدوار {name}"
+    ],
+    "pickPerson": [
+      "Search for a person",
+      "ابحث عن شخص"
+    ]
+  },
+  "adminInvites": {
+    "title": [
+      "Invitations",
+      "الدعوات"
+    ],
+    "subtitle": [
+      "Invite staff, parents and students, share join links, and choose how people sign in.",
+      "ادعُ الكادر وأولياء الأمور والطلاب، وشارك روابط الانضمام، واختر طرق تسجيل الدخول."
+    ],
+    "tabInvites": [
+      "Invitations",
+      "الدعوات"
+    ],
+    "tabLinks": [
+      "Join links and code",
+      "روابط ورمز الانضمام"
+    ],
+    "tabSignIn": [
+      "How people sign in",
+      "طرق تسجيل الدخول"
+    ],
+    "gradeN": [
+      "Grade {grade}",
+      "الصف {grade}"
+    ],
+    "statPending": [
+      "Waiting to be accepted",
+      "بانتظار القبول"
+    ],
+    "statAccepted": [
+      "Accepted",
+      "مقبولة"
+    ],
+    "statExpired": [
+      "Expired",
+      "منتهية"
+    ],
+    "statLinks": [
+      "Active staff links",
+      "روابط الكادر الفعالة"
+    ],
+    "filterAll": [
+      "All",
+      "الكل"
+    ],
+    "state": {
+      "PENDING": [
+        "Pending",
+        "بانتظار القبول"
+      ],
+      "ACCEPTED": [
+        "Accepted",
+        "مقبولة"
+      ],
+      "EXPIRED": [
+        "Expired",
+        "منتهية"
+      ],
+      "REVOKED": [
+        "Revoked",
+        "ملغاة"
+      ],
+      "USED_UP": [
+        "Used up",
+        "مستنفدة"
+      ]
+    },
+    "emptyInvites": [
+      "No invitations here",
+      "لا توجد دعوات هنا"
+    ],
+    "emptyInvitesBody": [
+      "Invite a colleague or a family to get started.",
+      "ادعُ زميلًا أو أسرة للبدء."
+    ],
+    "colPerson": [
+      "Person",
+      "الشخص"
+    ],
+    "colAccess": [
+      "Joining as",
+      "ينضم بصفة"
+    ],
+    "colStatus": [
+      "Status",
+      "الحالة"
+    ],
+    "colSent": [
+      "Sent",
+      "الإرسال"
+    ],
+    "colActions": [
+      "Actions",
+      "الإجراءات"
+    ],
+    "kind": {
+      "STAFF": [
+        "Staff",
+        "كادر"
+      ],
+      "PARENT": [
+        "Parent",
+        "ولي أمر"
+      ],
+      "STUDENT": [
+        "Student",
+        "طالب"
+      ]
+    },
+    "childCount": [
+      "{count, plural, one {# child} other {# children}}",
+      "{count, plural, zero {لا أبناء} one {ابن واحد} two {ابنان} few {# أبناء} many {# ابنًا} other {# ابن}}"
+    ],
+    "sentBy": [
+      "By {name} on {date}",
+      "بواسطة {name} في {date}"
+    ],
+    "someone": [
+      "a colleague",
+      "أحد الزملاء"
+    ],
+    "expiresOn": [
+      "Expires {date}",
+      "تنتهي في {date}"
+    ],
+    "familyCodeTitle": [
+      "Family join code",
+      "رمز انضمام الأسر"
+    ],
+    "familyCodeBody": [
+      "Parents enter this code, create an account and add their children. Print the poster for the reception desk or send it home.",
+      "يُدخل أولياء الأمور هذا الرمز وينشئون حسابًا ويضيفون أبناءهم. اطبع الملصق لمكتب الاستقبال أو أرسله إلى المنازل."
+    ],
+    "familyCodeOff": [
+      "Parents cannot join with the code right now. Switch it on under How people sign in.",
+      "لا يمكن لأولياء الأمور الانضمام بالرمز حاليًا. فعّل ذلك من طرق تسجيل الدخول."
+    ],
+    "schoolCode": [
+      "School code",
+      "رمز المدرسة"
+    ],
+    "downloadPoster": [
+      "Download poster (PDF)",
+      "تنزيل الملصق (PDF)"
+    ],
+    "approvalOn": [
+      "An admin approves each family before they see anything.",
+      "يوافق أحد المسؤولين على كل أسرة قبل أن تطّلع على أي بيانات."
+    ],
+    "approvalOff": [
+      "Families whose child details match are linked straight away.",
+      "تُربط الأسر فورًا عند تطابق بيانات أبنائها."
+    ],
+    "changeJoinSettings": [
+      "Change join settings",
+      "تغيير إعدادات الانضمام"
+    ],
+    "staffLinksTitle": [
+      "Staff join links",
+      "روابط انضمام الكادر"
+    ],
+    "staffLinksBody": [
+      "One link for many colleagues, with a role, a limit on uses and an end date.",
+      "رابط واحد لعدة زملاء، مع دور وحد لعدد مرات الاستخدام وتاريخ انتهاء."
+    ],
+    "emptyLinks": [
+      "No staff links yet",
+      "لا توجد روابط للكادر بعد"
+    ],
+    "emptyLinksBody": [
+      "Create a link to share in a staff email or meeting.",
+      "أنشئ رابطًا لمشاركته في بريد أو اجتماع للكادر."
+    ],
+    "linkUses": [
+      "Used {uses} of {max}",
+      "استُخدم {uses} من {max}"
+    ],
+    "error": {
+      "generic": [
+        "Something went wrong. Please try again.",
+        "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
+      ],
+      "FORBIDDEN": [
+        "You do not have permission to do this.",
+        "ليست لديك صلاحية للقيام بذلك."
+      ],
+      "INVALID": [
+        "Please check the details and try again.",
+        "يُرجى التحقق من البيانات والمحاولة مرة أخرى."
+      ],
+      "EMAIL": [
+        "Enter a valid email address.",
+        "أدخل بريدًا إلكترونيًا صحيحًا."
+      ],
+      "NAME": [
+        "Enter the person's name.",
+        "أدخل اسم الشخص."
+      ],
+      "DUPLICATE": [
+        "This email appears more than once.",
+        "هذا البريد مكرر."
+      ],
+      "ROLE": [
+        "Unknown role. Use a role name or key from Roles and access.",
+        "دور غير معروف. استخدم اسم دور أو رمزه من صفحة الأدوار والصلاحيات."
+      ],
+      "DEPARTMENT": [
+        "Unknown department.",
+        "قسم غير معروف."
+      ],
+      "ALREADY_MEMBER": [
+        "This person is already a member of the school.",
+        "هذا الشخص عضو في المدرسة بالفعل."
+      ],
+      "TOO_MANY": [
+        "Up to 500 people at a time.",
+        "بحد أقصى 500 شخص في المرة الواحدة."
+      ],
+      "CHILDREN": [
+        "Choose at least one child.",
+        "اختر ابنًا واحدًا على الأقل."
+      ],
+      "NOT_FOUND": [
+        "We could not find that invitation.",
+        "لم نعثر على هذه الدعوة."
+      ],
+      "STUDENT_HAS_ACCOUNT": [
+        "This student already has an account.",
+        "لدى هذا الطالب حساب بالفعل."
+      ],
+      "ACCEPTED": [
+        "This invitation was already accepted.",
+        "قُبلت هذه الدعوة بالفعل."
+      ],
+      "REVOKED": [
+        "This invitation was revoked.",
+        "أُلغيت هذه الدعوة."
+      ],
+      "CODE": [
+        "We could not create a new code. Please try again.",
+        "تعذر إنشاء رمز جديد. يُرجى المحاولة مرة أخرى."
+      ],
+      "DOMAIN": [
+        "Check the email domains, for example school.ae.",
+        "تحقق من نطاقات البريد، مثل school.ae."
+      ],
+      "PUBLIC_DOMAIN": [
+        "Public email providers such as gmail.com cannot be staff domains.",
+        "لا يمكن استخدام مزودي البريد العام مثل gmail.com كنطاقات للكادر."
+      ]
+    },
+    "copyFailed": [
+      "Could not copy. Select the link and copy it.",
+      "تعذر النسخ. حدد الرابط وانسخه."
+    ],
+    "copy": [
+      "Copy",
+      "نسخ"
+    ],
+    "sentBody": [
+      "We emailed the invitation. You can also copy the link and send it yourself. It works for 14 days.",
+      "أرسلنا الدعوة بالبريد الإلكتروني، ويمكنك أيضًا نسخ الرابط وإرساله بنفسك. يعمل الرابط لمدة 14 يومًا."
+    ],
+    "done": [
+      "Done",
+      "تم"
+    ],
+    "invite": [
+      "Invite",
+      "دعوة"
+    ],
+    "sentTitle": [
+      "Invitation sent",
+      "تم إرسال الدعوة"
+    ],
+    "inviteTitle": [
+      "Invite someone",
+      "دعوة شخص"
+    ],
+    "inviteBody": [
+      "They get an email with a personal link to create their account.",
+      "سيصلهم بريد إلكتروني برابط شخصي لإنشاء حساباتهم."
+    ],
+    "fieldNameOptional": [
+      "Name (optional)",
+      "الاسم (اختياري)"
+    ],
+    "fieldName": [
+      "Full name",
+      "الاسم الكامل"
+    ],
+    "fieldEmail": [
+      "Email",
+      "البريد الإلكتروني"
+    ],
+    "fieldRoles": [
+      "Roles",
+      "الأدوار"
+    ],
+    "fieldDepartment": [
+      "Department",
+      "القسم"
+    ],
+    "noDepartment": [
+      "No department",
+      "دون قسم"
+    ],
+    "fieldChildren": [
+      "Their children",
+      "أبناؤه"
+    ],
+    "searchStudent": [
+      "Search by name or student number",
+      "ابحث بالاسم أو الرقم المدرسي"
+    ],
+    "addChild": [
+      "Add",
+      "إضافة"
+    ],
+    "removeChild": [
+      "Remove child",
+      "إزالة الابن"
+    ],
+    "fieldStudent": [
+      "Student",
+      "الطالب"
+    ],
+    "allStudentsHaveAccounts": [
+      "Every student already has an account.",
+      "لدى جميع الطلاب حسابات بالفعل."
+    ],
+    "cancel": [
+      "Cancel",
+      "إلغاء"
+    ],
+    "send": [
+      "Send invitation",
+      "إرسال الدعوة"
+    ],
+    "bulkStaff": [
+      "Invite staff from CSV",
+      "دعوة الكادر من ملف CSV"
+    ],
+    "bulkStaffTitle": [
+      "Invite staff from a spreadsheet",
+      "دعوة الكادر من جدول بيانات"
+    ],
+    "bulkStaffBody": [
+      "Columns: name, email, roles, department. Separate several roles with a semicolon.",
+      "الأعمدة: الاسم، البريد الإلكتروني، الأدوار، القسم. افصل بين الأدوار المتعددة بفاصلة منقوطة."
+    ],
+    "bulkDone": [
+      "{created} invited, {failed} need attention.",
+      "تمت دعوة {created}، و{failed} بحاجة إلى مراجعة."
+    ],
+    "rowProblem": [
+      "Row {row}: {problem}",
+      "الصف {row}: {problem}"
+    ],
+    "bulkPlaceholder": [
+      "name,email,roles,department\nMaya Haddad,maya.haddad@school.ae,teacher,Science",
+      "name,email,roles,department\nمايا حداد,maya.haddad@school.ae,teacher,العلوم"
+    ],
+    "bulkHint": [
+      "Upload a CSV file or paste rows. Roles can be names or keys such as teacher.",
+      "ارفع ملف CSV أو الصق الصفوف. يمكن كتابة الأدوار بأسمائها أو برموزها مثل teacher."
+    ],
+    "bulkRows": [
+      "{count, plural, one {# person ready} other {# people ready}}",
+      "{count, plural, zero {لا أحد جاهز} one {شخص واحد جاهز} two {شخصان جاهزان} few {# أشخاص جاهزون} many {# شخصًا جاهزًا} other {# شخص جاهز}}"
+    ],
+    "sendInvites": [
+      "{count, plural, one {Send # invitation} other {Send # invitations}}",
+      "{count, plural, zero {إرسال الدعوات} one {إرسال دعوة واحدة} two {إرسال دعوتين} few {إرسال # دعوات} many {إرسال # دعوة} other {إرسال # دعوة}}"
+    ],
+    "familiesInvited": [
+      "{count, plural, one {# family invited} other {# families invited}}",
+      "{count, plural, zero {لم تُدعَ أي أسرة} one {تمت دعوة أسرة واحدة} two {تمت دعوة أسرتين} few {تمت دعوة # أسر} many {تمت دعوة # أسرة} other {تمت دعوة # أسرة}}"
+    ],
+    "inviteFamilies": [
+      "Invite all families",
+      "دعوة جميع الأسر"
+    ],
+    "allFamiliesOnApp": [
+      "Every parent with an email in your student records already has an account or an invitation.",
+      "لدى كل ولي أمر له بريد إلكتروني في سجلات الطلاب حساب أو دعوة بالفعل."
+    ],
+    "inviteFamiliesTitle": [
+      "Invite every family not yet on the app?",
+      "دعوة كل الأسر غير المسجلة في التطبيق؟"
+    ],
+    "inviteFamiliesBody": [
+      "{count, plural, one {# parent} other {# parents}} from your student records have an email but no account. Each gets a personal link for their own children.",
+      "{count, plural, zero {لا يوجد أولياء أمور} one {ولي أمر واحد} two {وليا أمر} few {# أولياء أمور} many {# ولي أمر} other {# ولي أمر}} في سجلات الطلاب لديهم بريد إلكتروني دون حساب، وسيحصل كل منهم على رابط شخصي خاص بأبنائه."
+    ],
+    "revoked": [
+      "Invitation revoked",
+      "تم إلغاء الدعوة"
+    ],
+    "resend": [
+      "Resend",
+      "إعادة الإرسال"
+    ],
+    "revoke": [
+      "Revoke",
+      "إلغاء"
+    ],
+    "resentTitle": [
+      "Invitation sent again",
+      "أُعيد إرسال الدعوة"
+    ],
+    "resentBody": [
+      "The old link no longer works. This new link works for 14 days.",
+      "لم يعد الرابط القديم يعمل، ويعمل هذا الرابط الجديد لمدة 14 يومًا."
+    ],
+    "revokeTitle": [
+      "Revoke this invitation?",
+      "إلغاء هذه الدعوة؟"
+    ],
+    "revokeBody": [
+      "The link stops working straight away. People who already joined keep their access.",
+      "يتوقف الرابط عن العمل فورًا، ويحتفظ من انضموا بالفعل بصلاحياتهم."
+    ],
+    "createLink": [
+      "New staff link",
+      "رابط جديد للكادر"
+    ],
+    "linkReadyTitle": [
+      "Your link is ready",
+      "الرابط جاهز"
+    ],
+    "createLinkTitle": [
+      "Create a staff join link",
+      "إنشاء رابط انضمام للكادر"
+    ],
+    "linkReadyBody": [
+      "Share it with colleagues. It is only shown once, so copy it now.",
+      "شاركه مع الزملاء. لن يظهر إلا مرة واحدة، لذا انسخه الآن."
+    ],
+    "createLinkBody": [
+      "Anyone with the link joins as the role you choose, until it runs out or expires.",
+      "ينضم كل من يملك الرابط بالدور الذي تختاره، إلى أن تنفد مرات استخدامه أو تنتهي صلاحيته."
+    ],
+    "qrLabel": [
+      "QR code for the join link",
+      "رمز الاستجابة السريعة لرابط الانضمام"
+    ],
+    "fieldRole": [
+      "Role",
+      "الدور"
+    ],
+    "fieldMaxUses": [
+      "Maximum uses",
+      "الحد الأقصى للاستخدام"
+    ],
+    "fieldDays": [
+      "Days until it expires",
+      "عدد الأيام حتى الانتهاء"
+    ],
+    "codeRegenerated": [
+      "New code ready. The old code no longer works.",
+      "الرمز الجديد جاهز، ولم يعد الرمز القديم يعمل."
+    ],
+    "regenerate": [
+      "New code",
+      "رمز جديد"
+    ],
+    "regenerateTitle": [
+      "Create a new family code?",
+      "إنشاء رمز جديد للأسر؟"
+    ],
+    "regenerateBody": [
+      "The current code and printed posters stop working. Families already on the app are not affected.",
+      "سيتوقف الرمز الحالي والملصقات المطبوعة عن العمل، ولن تتأثر الأسر المسجلة في التطبيق."
+    ],
+    "settingsReadOnly": [
+      "Only people who manage roles can change this.",
+      "لا يمكن تغيير ذلك إلا لمن يدير الأدوار."
+    ],
+    "settingsSaved": [
+      "Sign-in settings saved",
+      "تم حفظ إعدادات تسجيل الدخول"
+    ],
+    "methodsTitle": [
+      "Sign-in methods",
+      "طرق تسجيل الدخول"
+    ],
+    "methodsBody": [
+      "How people prove who they are.",
+      "كيف يثبت الأشخاص هوياتهم."
+    ],
+    "methodPassword": [
+      "Email and password",
+      "البريد الإلكتروني وكلمة المرور"
+    ],
+    "methodPasswordBody": [
+      "Works for everyone, including families without a school account.",
+      "متاحة للجميع، بمن فيهم الأسر التي لا تملك حسابًا مدرسيًا."
+    ],
+    "methodPasswordLock": [
+      "Always on, so everyone has a way in.",
+      "مفعلة دائمًا ليتمكن الجميع من الدخول."
+    ],
+    "methodGoogle": [
+      "Google",
+      "حساب Google"
+    ],
+    "methodGoogleBody": [
+      "Staff and families sign in with their Google account.",
+      "يسجل الكادر والأسر الدخول بحساب Google."
+    ],
+    "providerMissing": [
+      "Not set up on this server yet. Ask your IT team to add the sign-in keys.",
+      "غير مُعد على هذا الخادم بعد. اطلب من فريق التقنية إضافة مفاتيح تسجيل الدخول."
+    ],
+    "methodMicrosoft": [
+      "Microsoft",
+      "حساب Microsoft"
+    ],
+    "methodMicrosoftBody": [
+      "Staff sign in with their Microsoft 365 school account.",
+      "يسجل الكادر الدخول بحساب Microsoft 365 المدرسي."
+    ],
+    "joinTitle": [
+      "Who can join by themselves",
+      "من يمكنه الانضمام بنفسه"
+    ],
+    "joinBody": [
+      "Everyone else joins with a personal invitation or a staff link.",
+      "ينضم الآخرون بدعوة شخصية أو برابط الكادر."
+    ],
+    "staffDomains": [
+      "Staff email domains",
+      "نطاقات بريد الكادر"
+    ],
+    "staffDomainsBody": [
+      "People with these email addresses can join as staff with the school code. Separate domains with commas.",
+      "يمكن لأصحاب هذه العناوين الانضمام كادرًا برمز المدرسة. افصل بين النطاقات بفواصل."
+    ],
+    "staffDomainsPlaceholder": [
+      "e.g. horizon.sch.ae",
+      "مثال: horizon.sch.ae"
+    ],
+    "staffAutoApprove": [
+      "Let staff in straight away",
+      "السماح للكادر بالدخول فورًا"
+    ],
+    "staffAutoApproveBody": [
+      "On: they start with the Teacher role. Off: an admin approves them and picks their roles.",
+      "عند التفعيل يبدأون بدور المعلم، وعند الإيقاف يوافق أحد المسؤولين عليهم ويختار أدوارهم."
+    ],
+    "parentSelfJoin": [
+      "Parents can join with the school code",
+      "يمكن لأولياء الأمور الانضمام برمز المدرسة"
+    ],
+    "parentSelfJoinBody": [
+      "They verify each child with the student number and date of birth.",
+      "يتحققون من كل ابن بالرقم المدرسي وتاريخ الميلاد."
+    ],
+    "parentApproval": [
+      "An admin must approve new families",
+      "يجب أن يوافق أحد المسؤولين على الأسر الجديدة"
+    ],
+    "parentApprovalBody": [
+      "Off: families whose details match are linked straight away. Anything that does not match always waits for approval.",
+      "عند الإيقاف تُربط الأسر فورًا عند تطابق البيانات، وتنتظر أي بيانات غير متطابقة الموافقة دائمًا."
+    ],
+    "studentSelfJoin": [
+      "Students can join with the school code",
+      "يمكن للطلاب الانضمام برمز المدرسة"
+    ],
+    "studentSelfJoinBody": [
+      "Off by default. Students verify with their student number and date of birth.",
+      "غير مفعل افتراضيًا، ويتحقق الطلاب بالرقم المدرسي وتاريخ الميلاد."
+    ],
+    "saveSettings": [
+      "Save settings",
+      "حفظ الإعدادات"
+    ]
+  },
+  "joinRequests": {
+    "title": [
+      "Join requests",
+      "طلبات الانضمام"
+    ],
+    "subtitle": [
+      "People who joined with the school code and are waiting for you. They see nothing until you approve.",
+      "أشخاص انضموا برمز المدرسة وينتظرونك، ولن يطّلعوا على أي شيء قبل موافقتك."
+    ],
+    "joinSettings": [
+      "Join settings",
+      "إعدادات الانضمام"
+    ],
+    "tabPending": [
+      "Waiting",
+      "بانتظار القرار"
+    ],
+    "tabDecided": [
+      "Decided",
+      "تم البت فيها"
+    ],
+    "emptyPending": [
+      "No one is waiting",
+      "لا أحد بالانتظار"
+    ],
+    "emptyPendingBody": [
+      "New requests from families and staff appear here.",
+      "تظهر هنا الطلبات الجديدة من الأسر والكادر."
+    ],
+    "emptyDecided": [
+      "No decisions yet",
+      "لا توجد قرارات بعد"
+    ],
+    "emptyDecidedBody": [
+      "Approved and rejected requests appear here.",
+      "تظهر هنا الطلبات المقبولة والمرفوضة."
+    ],
+    "unknownPerson": [
+      "Unknown person",
+      "شخص غير معروف"
+    ],
+    "kind": {
+      "STAFF": [
+        "Staff",
+        "كادر"
+      ],
+      "PARENT": [
+        "Parent",
+        "ولي أمر"
+      ],
+      "STUDENT": [
+        "Student",
+        "طالب"
+      ]
+    },
+    "decidedBy": [
+      "Decided by {name} on {date}",
+      "بت فيه {name} في {date}"
+    ],
+    "automatic": [
+      "an invitation",
+      "دعوة"
+    ],
+    "closedByInvite": [
+      "Closed because they accepted an invitation.",
+      "أُغلق لأنه قبل دعوة."
+    ],
+    "status": {
+      "PENDING": [
+        "Waiting",
+        "بالانتظار"
+      ],
+      "APPROVED": [
+        "Approved",
+        "مقبول"
+      ],
+      "REJECTED": [
+        "Rejected",
+        "مرفوض"
+      ]
+    },
+    "gradeSection": [
+      "Grade {grade}{section}",
+      "الصف {grade}{section}"
+    ],
+    "requested": [
+      "asked {date}",
+      "طلب في {date}"
+    ],
+    "theyEntered": [
+      "What they entered",
+      "ما أدخله"
+    ],
+    "claimByNumber": [
+      "Student number {number}, born {dob}",
+      "الرقم المدرسي {number}، تاريخ الميلاد {dob}"
+    ],
+    "claimByName": [
+      "{name}, Grade {grade}",
+      "{name}، الصف {grade}"
+    ],
+    "giveRoles": [
+      "Roles to give",
+      "الأدوار الممنوحة"
+    ],
+    "linkChildren": [
+      "Children to link",
+      "الأبناء المراد ربطهم"
+    ],
+    "noMatches": [
+      "No student records look like this. Search below or reject with a note.",
+      "لا توجد سجلات طلاب مشابهة. ابحث أدناه أو ارفض مع ملاحظة."
+    ],
+    "exactMatch": [
+      "Exact match",
+      "تطابق تام"
+    ],
+    "hasAccount": [
+      "Already has an account",
+      "لديه حساب بالفعل"
+    ],
+    "matchedOn": [
+      "Matches: {reasons}",
+      "يتطابق في: {reasons}"
+    ],
+    "reason": {
+      "STUDENT_NO": [
+        "student number",
+        "الرقم المدرسي"
+      ],
+      "DOB": [
+        "date of birth",
+        "تاريخ الميلاد"
+      ],
+      "NAME": [
+        "name",
+        "الاسم"
+      ],
+      "GRADE": [
+        "grade",
+        "الصف"
+      ]
+    },
+    "findAnother": [
+      "Find another student",
+      "البحث عن طالب آخر"
+    ],
+    "add": [
+      "Add",
+      "إضافة"
+    ],
+    "note": [
+      "Note to the person (optional)",
+      "ملاحظة للشخص (اختيارية)"
+    ],
+    "notePlaceholder": [
+      "For example: welcome to Horizon",
+      "مثال: مرحبًا بكم في هورايزن"
+    ],
+    "reject": [
+      "Reject",
+      "رفض"
+    ],
+    "approve": [
+      "Approve",
+      "موافقة"
+    ],
+    "rejectTitle": [
+      "Reject this request?",
+      "رفض هذا الطلب؟"
+    ],
+    "rejectBody": [
+      "They will see your note and will not get access. They can contact the school office.",
+      "سيطّلع على ملاحظتك ولن يحصل على صلاحية، ويمكنه التواصل مع مكتب المدرسة."
+    ],
+    "rejectPlaceholder": [
+      "For example: please visit reception with your Emirates ID",
+      "مثال: يُرجى زيارة الاستقبال مع الهوية الإماراتية"
+    ],
+    "cancel": [
+      "Cancel",
+      "إلغاء"
+    ],
+    "approved": [
+      "Approved. They have been told.",
+      "تمت الموافقة وأُبلغ الشخص."
+    ],
+    "rejected": [
+      "Rejected. They have been told.",
+      "تم الرفض وأُبلغ الشخص."
+    ],
+    "error": {
+      "generic": [
+        "Something went wrong. Please try again.",
+        "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
+      ],
+      "FORBIDDEN": [
+        "You do not have permission to do this.",
+        "ليست لديك صلاحية للقيام بذلك."
+      ],
+      "NOT_FOUND": [
+        "This request was already handled.",
+        "تمت معالجة هذا الطلب بالفعل."
+      ],
+      "ROLES_REQUIRED": [
+        "Choose at least one role.",
+        "اختر دورًا واحدًا على الأقل."
+      ],
+      "ROLE_AUDIENCE": [
+        "Staff roles only.",
+        "أدوار الكادر فقط."
+      ],
+      "CHILDREN_REQUIRED": [
+        "Choose the children to link.",
+        "اختر الأبناء المراد ربطهم."
+      ],
+      "NOTE_REQUIRED": [
+        "Add a short note so they know what to do next.",
+        "أضف ملاحظة قصيرة ليعرف ما يجب فعله بعد ذلك."
+      ],
+      "STUDENT_TAKEN": [
+        "That student already has an account.",
+        "لدى هذا الطالب حساب بالفعل."
+      ],
+      "OTHER_ACCESS": [
+        "This person already has a different kind of access at the school.",
+        "لدى هذا الشخص نوع آخر من الصلاحيات في المدرسة."
+      ]
+    }
+  },
+  "join": {
+    "inviteMetaTitle": [
+      "Join your school",
+      "انضم إلى مدرستك"
+    ],
+    "codeMetaTitle": [
+      "Join with a school code",
+      "الانضمام برمز المدرسة"
+    ],
+    "invalid": {
+      "INVALID": {
+        "title": [
+          "This link does not work",
+          "هذا الرابط لا يعمل"
+        ],
+        "body": [
+          "Check that you copied the whole link, or ask the school to send a new one.",
+          "تأكد من نسخ الرابط كاملًا، أو اطلب من المدرسة إرسال رابط جديد."
+        ]
+      },
+      "EXPIRED": {
+        "title": [
+          "This invitation has expired",
+          "انتهت صلاحية هذه الدعوة"
+        ],
+        "body": [
+          "Ask the school to send it again. New links work for 14 days.",
+          "اطلب من المدرسة إعادة إرسالها، وتعمل الروابط الجديدة لمدة 14 يومًا."
+        ]
+      },
+      "REVOKED": {
+        "title": [
+          "This invitation was cancelled",
+          "أُلغيت هذه الدعوة"
+        ],
+        "body": [
+          "Contact the school office if you think this is a mistake.",
+          "تواصل مع مكتب المدرسة إذا كنت تعتقد أن هذا خطأ."
+        ]
+      },
+      "ACCEPTED": {
+        "title": [
+          "This invitation was already used",
+          "استُخدمت هذه الدعوة بالفعل"
+        ],
+        "body": [
+          "If it was you, just sign in.",
+          "إذا كنت أنت من استخدمها، فسجّل الدخول فقط."
+        ]
+      },
+      "UNAVAILABLE": {
+        "title": [
+          "Joining is not available right now",
+          "الانضمام غير متاح حاليًا"
+        ],
+        "body": [
+          "Please try again later or contact the school office.",
+          "يُرجى المحاولة لاحقًا أو التواصل مع مكتب المدرسة."
+        ]
+      },
+      "RATE_LIMITED": {
+        "title": [
+          "Too many attempts",
+          "محاولات كثيرة جدًا"
+        ],
+        "body": [
+          "Please wait a few minutes and try again.",
+          "يُرجى الانتظار بضع دقائق ثم المحاولة مرة أخرى."
+        ]
+      }
+    },
+    "signIn": [
+      "Sign in",
+      "تسجيل الدخول"
+    ],
+    "haveCode": [
+      "I have a school code",
+      "لدي رمز المدرسة"
+    ],
+    "inviteHeadline": [
+      "Join {school}",
+      "انضم إلى {school}"
+    ],
+    "inviteAsParent": [
+      "You are invited as a parent. You will see {count, plural, one {your child} other {your # children}} as soon as you join.",
+      "أنت مدعو بصفتك ولي أمر، وستطّلع على {count, plural, zero {أبنائك} one {ابنك} two {ابنيك} few {أبنائك الـ #} many {أبنائك الـ #} other {أبنائك الـ #}} فور انضمامك."
+    ],
+    "inviteAsStudent": [
+      "You are invited to your student account.",
+      "أنت مدعو إلى حسابك الطلابي."
+    ],
+    "inviteAsStaffLink": [
+      "Staff join link. You will join as: {roles}.",
+      "رابط انضمام الكادر، وستنضم بصفة: {roles}."
+    ],
+    "inviteAsStaff": [
+      "You are invited as a member of staff: {roles}.",
+      "أنت مدعو بصفتك عضوًا في الكادر: {roles}."
+    ],
+    "privacyNote": [
+      "Your details are only shared with your school.",
+      "لا تُشارك بياناتك إلا مع مدرستك."
+    ],
+    "alreadyMember": [
+      "Already on the app?",
+      "مسجل في التطبيق بالفعل؟"
+    ],
+    "error": {
+      "generic": [
+        "Something went wrong. Please try again.",
+        "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
+      ],
+      "CREDENTIALS": [
+        "We could not use these details. Check your email and password. If you already have an account, choose I already have an account.",
+        "تعذر استخدام هذه البيانات. تحقق من البريد الإلكتروني وكلمة المرور، وإذا كان لديك حساب فاختر لدي حساب بالفعل."
+      ],
+      "NAME": [
+        "Enter your full name.",
+        "أدخل اسمك الكامل."
+      ],
+      "PASSWORD": [
+        "Use at least 8 characters for your password.",
+        "استخدم 8 أحرف على الأقل في كلمة المرور."
+      ],
+      "RATE_LIMITED": [
+        "Too many attempts. Please wait a few minutes.",
+        "محاولات كثيرة جدًا. يُرجى الانتظار بضع دقائق."
+      ],
+      "INVALID": [
+        "This link does not work.",
+        "هذا الرابط لا يعمل."
+      ],
+      "EXPIRED": [
+        "This invitation has expired. Ask the school to send it again.",
+        "انتهت صلاحية هذه الدعوة. اطلب من المدرسة إعادة إرسالها."
+      ],
+      "REVOKED": [
+        "This invitation was cancelled.",
+        "أُلغيت هذه الدعوة."
+      ],
+      "ACCEPTED": [
+        "This invitation was already used.",
+        "استُخدمت هذه الدعوة بالفعل."
+      ],
+      "WRONG_EMAIL": [
+        "This invitation was sent to a different email address.",
+        "أُرسلت هذه الدعوة إلى بريد إلكتروني آخر."
+      ],
+      "SUSPENDED": [
+        "Your access to this school is paused. Contact the school office.",
+        "صلاحيتك في هذه المدرسة موقوفة. تواصل مع مكتب المدرسة."
+      ],
+      "OTHER_ACCESS": [
+        "You already have a different kind of account at this school. Contact the school office.",
+        "لديك نوع آخر من الحسابات في هذه المدرسة. تواصل مع مكتب المدرسة."
+      ],
+      "ROLE_AUDIENCE": [
+        "This invitation cannot be used. Ask the school for a new one.",
+        "لا يمكن استخدام هذه الدعوة. اطلب دعوة جديدة من المدرسة."
+      ],
+      "STUDENT_TAKEN": [
+        "This student account is already set up. Try signing in.",
+        "حساب هذا الطالب مُعد بالفعل. جرّب تسجيل الدخول."
+      ],
+      "NOT_FOUND": [
+        "We could not find that.",
+        "لم نعثر على ذلك."
+      ],
+      "CODE": [
+        "We could not find a school with that code. Check the letters and numbers.",
+        "لم نعثر على مدرسة بهذا الرمز. تحقق من الحروف والأرقام."
+      ],
+      "CLOSED": [
+        "This school is not taking new sign-ups with the code. Ask the school for an invitation.",
+        "لا تستقبل هذه المدرسة تسجيلات جديدة بالرمز. اطلب دعوة من المدرسة."
+      ],
+      "CHILD_DETAILS": [
+        "Complete the details for each child.",
+        "أكمل بيانات كل ابن."
+      ],
+      "TOO_MANY_CHILDREN": [
+        "Add up to 8 children.",
+        "أضف 8 أبناء بحد أقصى."
+      ],
+      "STAFF_DOMAIN": [
+        "Use your school email address to join as staff.",
+        "استخدم بريدك الإلكتروني المدرسي للانضمام كادرًا."
+      ],
+      "LOCKED": [
+        "Too many details did not match. For your family's safety, please wait an hour or contact the school office.",
+        "لم تتطابق بيانات كثيرة. حفاظًا على سلامة أسرتك، يُرجى الانتظار ساعة أو التواصل مع مكتب المدرسة."
+      ],
+      "ALREADY_MEMBER": [
+        "You are already a member of this school. Sign in to continue.",
+        "أنت عضو في هذه المدرسة بالفعل. سجّل الدخول للمتابعة."
+      ],
+      "ALREADY_PENDING": [
+        "You have already asked to join. The school will be in touch.",
+        "لقد طلبت الانضمام بالفعل، وستتواصل معك المدرسة."
+      ],
+      "UNAVAILABLE": [
+        "Joining is not available right now. Please try again later.",
+        "الانضمام غير متاح حاليًا. يُرجى المحاولة لاحقًا."
+      ]
+    },
+    "createAccount": [
+      "Create account",
+      "إنشاء حساب"
+    ],
+    "haveAccount": [
+      "I already have an account",
+      "لدي حساب بالفعل"
+    ],
+    "fullName": [
+      "Your full name",
+      "اسمك الكامل"
+    ],
+    "email": [
+      "Email",
+      "البريد الإلكتروني"
+    ],
+    "password": [
+      "Password",
+      "كلمة المرور"
+    ],
+    "passwordHint": [
+      "At least 8 characters.",
+      "8 أحرف على الأقل."
+    ],
+    "orContinue": [
+      "or",
+      "أو"
+    ],
+    "google": [
+      "Continue with Google",
+      "المتابعة عبر Google"
+    ],
+    "microsoft": [
+      "Continue with Microsoft",
+      "المتابعة عبر Microsoft"
+    ],
+    "signedInAs": [
+      "Signed in as",
+      "مسجل الدخول باسم"
+    ],
+    "differentAccount": [
+      "Use another account",
+      "استخدام حساب آخر"
+    ],
+    "inviteForOtherEmail": [
+      "This invitation is for a different email. Create an account or sign in with the invited email below.",
+      "هذه الدعوة لبريد إلكتروني آخر. أنشئ حسابًا أو سجّل الدخول بالبريد المدعو أدناه."
+    ],
+    "acceptAndJoin": [
+      "Accept and join",
+      "القبول والانضمام"
+    ],
+    "yourDetails": [
+      "Your student details",
+      "بياناتك الطلابية"
+    ],
+    "childN": [
+      "Child {n}",
+      "الابن {n}"
+    ],
+    "removeChild": [
+      "Remove this child",
+      "إزالة هذا الابن"
+    ],
+    "byNumber": [
+      "Student number",
+      "الرقم المدرسي"
+    ],
+    "byName": [
+      "Grade and name",
+      "الصف والاسم"
+    ],
+    "studentNumber": [
+      "Student number",
+      "الرقم المدرسي"
+    ],
+    "dateOfBirth": [
+      "Date of birth",
+      "تاريخ الميلاد"
+    ],
+    "grade": [
+      "Grade",
+      "الصف"
+    ],
+    "choose": [
+      "Choose",
+      "اختر"
+    ],
+    "gradeN": [
+      "Grade {grade}",
+      "الصف {grade}"
+    ],
+    "childFullName": [
+      "Child's full name",
+      "اسم الابن الكامل"
+    ],
+    "codeTitle": [
+      "Join your school",
+      "انضم إلى مدرستك"
+    ],
+    "codeBody": [
+      "Enter the school code from the letter or poster your school shared.",
+      "أدخل رمز المدرسة الموجود في الخطاب أو الملصق الذي شاركته مدرستك."
+    ],
+    "schoolCode": [
+      "School code",
+      "رمز المدرسة"
+    ],
+    "continue": [
+      "Continue",
+      "متابعة"
+    ],
+    "whoTitle": [
+      "Who are you?",
+      "من أنت؟"
+    ],
+    "who": {
+      "PARENT": [
+        "I am a parent",
+        "أنا ولي أمر"
+      ],
+      "STUDENT": [
+        "I am a student",
+        "أنا طالب"
+      ],
+      "STAFF": [
+        "I work at the school",
+        "أعمل في المدرسة"
+      ]
+    },
+    "whoBody": {
+      "PARENT": [
+        "Follow your children, requests and meetings.",
+        "تابع أبناءك وطلباتك ومواعيدك."
+      ],
+      "STUDENT": [
+        "Your timetable, grades and requests.",
+        "جدولك ودرجاتك وطلباتك."
+      ]
+    },
+    "whoStaffBody": [
+      "With your school email ({domains}).",
+      "ببريدك المدرسي ({domains})."
+    ],
+    "detailsTitle": {
+      "PARENT": [
+        "Add your children",
+        "أضف أبناءك"
+      ],
+      "STUDENT": [
+        "Check it is you",
+        "تحقق من هويتك"
+      ],
+      "STAFF": [
+        "Anything the school should know?",
+        "هل هناك ما يجب أن تعرفه المدرسة؟"
+      ]
+    },
+    "detailsBody": {
+      "PARENT": [
+        "Use the student number and date of birth from the school report or ID card. You can also use grade and full name.",
+        "استخدم الرقم المدرسي وتاريخ الميلاد الموجودين في التقرير المدرسي أو البطاقة، أو الصف والاسم الكامل."
+      ],
+      "STUDENT": [
+        "Enter your student number and date of birth.",
+        "أدخل رقمك المدرسي وتاريخ ميلادك."
+      ]
+    },
+    "staffDetailsBody": [
+      "Join with your school email ({domains}). Tell the school your role so they can set up your access.",
+      "انضم ببريدك المدرسي ({domains})، وأخبر المدرسة بدورك لتُعد صلاحياتك."
+    ],
+    "staffNote": [
+      "Your role or department",
+      "دورك أو قسمك"
+    ],
+    "staffNotePlaceholder": [
+      "For example: Grade 5 class teacher",
+      "مثال: معلم صف للصف الخامس"
+    ],
+    "addAnotherChild": [
+      "Add another child",
+      "إضافة ابن آخر"
+    ],
+    "back": [
+      "Back",
+      "رجوع"
+    ],
+    "confirmTitle": [
+      "Ready to join",
+      "جاهز للانضمام"
+    ],
+    "accountTitle": [
+      "Create your account",
+      "أنشئ حسابك"
+    ],
+    "accountBodyStaff": [
+      "Use your school email address.",
+      "استخدم بريدك الإلكتروني المدرسي."
+    ],
+    "accountBodyApproval": [
+      "The school checks new families before they can see anything. You will hear back soon.",
+      "تتحقق المدرسة من الأسر الجديدة قبل أن تطّلع على أي بيانات، وسيصلك الرد قريبًا."
+    ],
+    "accountBodyInstant": [
+      "If your details match the school's records, you are in straight away.",
+      "إذا تطابقت بياناتك مع سجلات المدرسة، فستنضم فورًا."
+    ],
+    "joinSchool": [
+      "Join the school",
+      "الانضمام إلى المدرسة"
+    ],
+    "waitingTitle": [
+      "Waiting for the school",
+      "بانتظار المدرسة"
+    ],
+    "nothingPending": [
+      "You are not waiting for any school",
+      "لست بانتظار أي مدرسة"
+    ],
+    "nothingPendingBody": [
+      "Join with the code your school shared, or ask for an invitation.",
+      "انضم بالرمز الذي شاركته مدرستك، أو اطلب دعوة."
+    ],
+    "waitingHeadline": [
+      "Waiting for the school",
+      "بانتظار المدرسة"
+    ],
+    "rejectedHeadline": [
+      "The school could not confirm your request",
+      "لم تتمكن المدرسة من تأكيد طلبك"
+    ],
+    "waitingBodyStaff": [
+      "{school} will confirm your account and set up your access.",
+      "ستؤكد {school} حسابك وتُعد صلاحياتك."
+    ],
+    "waitingBody": [
+      "{school} is checking the details you gave. Nothing about your children is shown until they confirm.",
+      "تتحقق {school} من البيانات التي أدخلتها، ولن يظهر أي شيء عن أبنائك قبل التأكيد."
+    ],
+    "rejectedBody": [
+      "{school} left you a note:",
+      "تركت لك {school} ملاحظة:"
+    ],
+    "requestedOn": [
+      "Sent on {date}",
+      "أُرسل في {date}"
+    ],
+    "whatNextTitle": [
+      "What happens next",
+      "ماذا بعد"
+    ],
+    "whatNextBody": [
+      "We will email you when the school approves. Most schools reply within one working day. After that, turn on notifications in your settings so you never miss a request or meeting.",
+      "سنرسل إليك بريدًا إلكترونيًا عند موافقة المدرسة، وتردّ معظم المدارس خلال يوم عمل واحد. بعد ذلك، فعّل الإشعارات من الإعدادات حتى لا يفوتك أي طلب أو موعد."
+    ],
+    "goToSchool": [
+      "Go to my school",
+      "الذهاب إلى مدرستي"
+    ],
+    "checkAgain": [
+      "Check again",
+      "التحقق مجددًا"
+    ],
+    "signOut": [
+      "Sign out",
+      "تسجيل الخروج"
+    ]
+  },
+  "accessEmail": {
+    "inviteSubject": [
+      "You are invited to join {school}",
+      "دعوة للانضمام إلى {school}"
+    ],
+    "inviteBody_staff": [
+      "Hello,\n{inviter} has invited you to join {school} on the school app as a member of staff. Open the link below to create your account. The link works for {days} days.",
+      "مرحبًا،\nدعاك {inviter} للانضمام إلى {school} في تطبيق المدرسة بصفتك عضوًا في الكادر. افتح الرابط أدناه لإنشاء حسابك، ويعمل الرابط لمدة {days} يومًا."
+    ],
+    "inviteBody_parent": [
+      "Hello,\n{inviter} has invited you to follow your children at {school}: requests, meetings, grades and school news in one place. Open the link below to create your account. The link works for {days} days.",
+      "مرحبًا،\nدعاك {inviter} لمتابعة أبنائك في {school}: الطلبات والمواعيد والدرجات وأخبار المدرسة في مكان واحد. افتح الرابط أدناه لإنشاء حسابك، ويعمل الرابط لمدة {days} يومًا."
+    ],
+    "inviteBody_student": [
+      "Hello,\n{inviter} has invited you to your student account at {school}. Open the link below to set your password. The link works for {days} days.",
+      "مرحبًا،\nدعاك {inviter} إلى حسابك الطلابي في {school}. افتح الرابط أدناه لتعيين كلمة المرور، ويعمل الرابط لمدة {days} يومًا."
+    ],
+    "approvedSubject": [
+      "Welcome to {school}",
+      "مرحبًا بك في {school}"
+    ],
+    "approvedBody": [
+      "Good news: {school} has approved your account. Sign in to get started.",
+      "أخبار سارة: وافقت {school} على حسابك. سجّل الدخول للبدء."
+    ],
+    "rejectedSubject": [
+      "About your request to join {school}",
+      "بخصوص طلب انضمامك إلى {school}"
+    ],
+    "rejectedBody": [
+      "{school} could not confirm your request. Their note: {note}",
+      "لم تتمكن {school} من تأكيد طلبك، وملاحظتها: {note}"
+    ]
+  },
+  "accessPoster": {
+    "title": [
+      "Join our school app",
+      "انضموا إلى تطبيق مدرستنا"
+    ],
+    "subtitle": [
+      "Requests, meetings, grades and school news for your family, in English and Arabic.",
+      "الطلبات والمواعيد والدرجات وأخبار المدرسة لأسرتكم، باللغتين العربية والإنجليزية."
+    ],
+    "codeLabel": [
+      "Your school code",
+      "رمز مدرستكم"
+    ],
+    "step1": [
+      "Scan the QR code with your phone camera, or open {url}",
+      "امسحوا رمز الاستجابة السريعة بكاميرا الهاتف، أو افتحوا {url}"
+    ],
+    "step2": [
+      "Enter the school code above and create your account.",
+      "أدخلوا رمز المدرسة أعلاه وأنشئوا حسابكم."
+    ],
+    "step3": [
+      "Add each child with their student number and date of birth.",
+      "أضيفوا كل ابن برقمه المدرسي وتاريخ ميلاده."
+    ],
+    "footerApproval": [
+      "For your children's safety, the school confirms every new family before any details are shown.",
+      "حفاظًا على سلامة أبنائكم، تؤكد المدرسة كل أسرة جديدة قبل عرض أي بيانات."
+    ],
+    "footerInstant": [
+      "Your details are checked against the school's records before anything is shown.",
+      "تُطابَق بياناتكم مع سجلات المدرسة قبل عرض أي شيء."
+    ]
+  },
+  "firstRun": {
+    "title": [
+      "Welcome to {school}",
+      "مرحبًا بك في {school}"
+    ],
+    "parentBody": [
+      "Here is where to start. You can find everything later in the menu.",
+      "إليك من أين تبدأ، ويمكنك العثور على كل شيء لاحقًا في القائمة."
+    ],
+    "teacherBody": [
+      "Three things most teachers do first.",
+      "ثلاثة أمور يبدأ بها معظم المعلمين."
+    ],
+    "gradeN": [
+      "Grade {grade}",
+      "الصف {grade}"
+    ],
+    "tips": {
+      "requests": {
+        "title": [
+          "Make a request",
+          "تقديم طلب"
+        ],
+        "body": [
+          "Letters, absences, meetings and more.",
+          "الخطابات والغياب والمواعيد وغير ذلك."
+        ]
+      },
+      "meetings": {
+        "title": [
+          "Book a meeting",
+          "حجز موعد"
+        ],
+        "body": [
+          "Meet teachers and counselors.",
+          "قابل المعلمين والمرشدين."
+        ]
+      },
+      "grades": {
+        "title": [
+          "See grades",
+          "الاطلاع على الدرجات"
+        ],
+        "body": [
+          "Marks and reports as they are published.",
+          "الدرجات والتقارير فور نشرها."
+        ]
+      },
+      "gradebook": {
+        "title": [
+          "Your gradebook",
+          "سجل الدرجات"
+        ],
+        "body": [
+          "Enter marks for your classes.",
+          "رصد درجات صفوفك."
+        ]
+      },
+      "refer": {
+        "title": [
+          "Refer a student",
+          "إحالة طالب"
+        ],
+        "body": [
+          "Raise an academic or wellbeing concern.",
+          "الإبلاغ عن مخاوف أكاديمية أو تتعلق بالرفاه."
+        ]
+      },
+      "teacherMeetings": {
+        "title": [
+          "Your meetings",
+          "مواعيدك"
+        ],
+        "body": [
+          "Parents can book time with you.",
+          "يمكن لأولياء الأمور حجز مواعيد معك."
+        ]
+      }
+    },
+    "notifications": [
+      "Turn on notifications so you never miss an update",
+      "فعّل الإشعارات حتى لا يفوتك أي تحديث"
+    ],
+    "dismiss": [
+      "Hide these tips",
+      "إخفاء هذه النصائح"
+    ]
+  },
+  "nav": {
+    "roles": [
+      "Roles and access",
+      "الأدوار والصلاحيات"
+    ],
+    "invitations": [
+      "Invitations",
+      "الدعوات"
+    ],
+    "joinRequests": [
+      "Join requests",
+      "طلبات الانضمام"
+    ]
+  },
+  "shell": {
+    "switchSchool": [
+      "Switch school",
+      "تبديل المدرسة"
+    ]
+  },
+  "adminPeople": {
+    "memberStatus": {
+      "PENDING_APPROVAL": [
+        "Waiting for approval",
+        "بانتظار الموافقة"
+      ]
+    },
+    "portal": {
+      "PENDING_APPROVAL": [
+        "Waiting for approval",
+        "بانتظار الموافقة"
+      ]
+    },
+    "error": {
+      "LAST_ROLES_MANAGER": [
+        "At least one active person must be able to manage roles.",
+        "يجب أن يبقى شخص نشط واحد على الأقل قادرًا على إدارة الأدوار."
+      ],
+      "SELF_LOCKOUT": [
+        "You cannot remove your own ability to manage roles. Ask another administrator.",
+        "لا يمكنك إزالة قدرتك على إدارة الأدوار بنفسك. اطلب ذلك من مسؤول آخر."
+      ]
+    }
+  },
+  "guide": {
+    "steps": {
+      "rolesAccess": {
+        "title": [
+          "Unlock access by role",
+          "منح الصلاحيات حسب الدور"
+        ],
+        "body": [
+          "Open a role, switch permissions on or off in plain language, and use Access check to see exactly what someone can do.",
+          "افتح دورًا وفعّل الصلاحيات أو أوقفها بلغة واضحة، واستخدم فحص الصلاحيات لمعرفة ما يمكن لأي شخص فعله بالضبط."
+        ]
+      },
+      "invitePeople": {
+        "title": [
+          "Invite staff and families",
+          "دعوة الكادر والأسر"
+        ],
+        "body": [
+          "Invite a teacher by email, share a staff link, or print the family code poster with its QR code.",
+          "ادعُ معلمًا بالبريد الإلكتروني، أو شارك رابطًا للكادر، أو اطبع ملصق رمز الأسر مع رمز الاستجابة السريعة."
+        ]
+      },
+      "joinRequests": {
+        "title": [
+          "Approve new families",
+          "الموافقة على الأسر الجديدة"
+        ],
+        "body": [
+          "Parents who joined with the school code wait here. Match hints show which student records fit.",
+          "ينتظر هنا أولياء الأمور الذين انضموا برمز المدرسة، وتُظهر تلميحات المطابقة سجلات الطلاب المناسبة."
+        ]
+      }
+    }
+  }
+}

@@ -55,10 +55,21 @@ async function loadContext() {
 
 export type Ctx = NonNullable<Awaited<ReturnType<typeof loadContext>>>;
 
+/** Where to send a signed-in person whose membership cannot be used yet (waiting for approval). */
+async function waitingRedirect(): Promise<string | null> {
+  const session = await auth();
+  const { orgId, membershipId } = { orgId: session?.user?.activeOrgId, membershipId: session?.user?.membershipId };
+  if (!session?.user?.id || !orgId || !membershipId) return null;
+  const m = await tenantDb(orgId).membership.findUnique({ where: { id: membershipId }, select: { status: true, userId: true } });
+  if (!m || m.userId !== session.user.id || m.status !== "PENDING_APPROVAL") return null;
+  const locale = await getLocale();
+  return `/${isLocale(locale) ? locale : "en"}/join/waiting`;
+}
+
 /** Request context. Cached per request. Redirects to the sign-in page when there is no valid session. */
 export const getCtx = cache(async (): Promise<Ctx> => {
   const ctx = await loadContext();
-  if (!ctx) redirect("/login");
+  if (!ctx) redirect((await waitingRedirect()) ?? "/login");
   return ctx;
 });
 

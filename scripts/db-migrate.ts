@@ -2,7 +2,7 @@
 import { execSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import pg from "pg";
-import { SYSTEM_ROLES } from "../src/server/identity/permissions";
+import { syncSystemRoles } from "../src/server/identity/role-sync";
 
 const ownerUrl = process.env.MIGRATION_DATABASE_URL;
 const appPassword = process.env.APP_USER_PASSWORD;
@@ -29,11 +29,8 @@ async function main() {
     const sql = readFileSync(new URL("../prisma/rls.sql", import.meta.url), "utf8");
     await client.query(sql);
     // Keep built-in roles in step with the code, so new permissions reach existing schools on deploy.
-    let synced = 0;
-    for (const r of SYSTEM_ROLES) {
-      const res = await client.query(`UPDATE "Role" SET permissions = $1 WHERE key = $2 AND "isSystem" = true AND customized = false`, [r.permissions, r.key]);
-      synced += res.rowCount ?? 0;
-    }
+    // Roles a school has customized are left alone.
+    const synced = await syncSystemRoles((sql, params) => client.query(sql, params));
     console.log(`db:migrate complete: migrations applied, app_user ready, RLS applied, ${synced} system roles synced`);
   } finally {
     await client.end();

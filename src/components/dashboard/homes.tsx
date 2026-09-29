@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { FirstRunCard } from "@/components/access/first-run";
 import { SchoolDatesPanel } from "@/components/calendar-admin/family-home";
 import {
   AlertOctagon,
@@ -120,6 +121,7 @@ export async function ParentHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs 
   return (
     <PageBody>
       <Greeting ctx={ctx} prefs={prefs} subtitle={t("parentSubtitle", { count: kids.length })} />
+      <FirstRunCard ctx={ctx} audience="parent" />
       {approvals.length > 0 && (
         <Link href="/approvals" className="flex items-center gap-3 rounded-xl border border-warning/40 bg-warning-soft p-4 transition hover:shadow-sm" data-testid="parent-approvals-banner">
           <span className="grid size-10 place-items-center rounded-lg bg-warning text-white">
@@ -215,6 +217,7 @@ export async function TeacherHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs
           )}
         </div>
       </div>
+      <FirstRunCard ctx={ctx} audience="teacher" />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label={t("statApprovals")} value={approvals} icon={<Stamp className="size-5" />} tone={approvals ? "warning" : "success"} href="/approvals" testId="stat-approvals" />
         <StatCard label={t("statClasses")} value={classes.length} icon={<BookOpen className="size-5" />} />
