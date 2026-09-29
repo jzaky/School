@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { ChevronLeft, Columns3, ExternalLink, Info, X } from "lucide-react";
+import { ChevronLeft, Columns3, ExternalLink, X } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { fmtDate, fmtNumber } from "@/lib/format";
@@ -23,6 +23,7 @@ import { CURRICULA, type Curriculum, type LineResult } from "@/server/pathway-en
 import { loadComparison, staffStudentOptions, type CompareColumn } from "@/server/discovery/service";
 import { SECTION_ORDER, rowDiffers, type CompareRow, type CompareSection } from "@/server/discovery/compare";
 import { parseCompareIds, tuitionUsd } from "@/server/discovery/search";
+import { CatalogNotice } from "@/components/pathway-engine/catalog-notice";
 
 export async function generateMetadata() {
   const t = await getTranslations("discovery");
@@ -182,10 +183,7 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
   return (
     <PageBody>
       {header}
-      <div className="flex items-start gap-2 rounded-lg border border-warning/40 bg-warning-soft/40 px-4 py-3 text-sm" data-testid="example-banner">
-        <Info className="mt-0.5 size-4 shrink-0" />
-        <span>{te("exampleBanner")}</span>
-      </div>
+      <CatalogNotice ctx={ctx} />
       {data.missing.length > 0 && <p className="text-sm text-muted-foreground">{t("someMissing", { n: data.missing.length })}</p>}
 
       {/* Desktop: side by side */}

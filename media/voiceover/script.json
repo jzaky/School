@@ -1,0 +1,54 @@
+{
+ "voice": "af_heart",
+ "speed": 1.0,
+ "segments": [
+  {
+   "id": "s01-open",
+   "text": "Every school runs on hundreds of small procedures. A letter for an embassy. A meeting with a teacher. A referral to the counselor. A change of subject, a trip form, a university application. Today they live in inboxes, paper forms and spreadsheets, and nobody can see where anything is."
+  },
+  {
+   "id": "s02-meet",
+   "text": "This is Horizon. One platform for every school procedure, built for schools in the UAE, and fully bilingual in Arabic and English. Every student, parent and member of staff has their own portal, and every request has an owner, a deadline and a record. Let's spend a day at Horizon International School in Dubai."
+  },
+  {
+   "id": "s03-letter",
+   "text": "Rania needs an enrollment letter for her son, Adam. She opens Services, picks the letter, chooses English and Arabic, and submits. No email, no phone call. The registrar sees it in her approvals and signs it, and Horizon produces the official letter instantly, on the school's letterhead, with correct Arabic script. Rania is notified, and the letter is waiting in her documents."
+  },
+  {
+   "id": "s04-counseling",
+   "text": "Daniel, a teacher, is worried about Adam's grades. He refers him to the counselor in a few clicks. Sarah, the counselor, picks up the case with its full history. Her notes are versioned and can never be silently changed. She books a meeting with Rania straight from the case, and agrees an action plan that turns into tasks for everyone involved."
+  },
+  {
+   "id": "s05-safeguarding",
+   "text": "Some concerns are more serious. When a teacher raises a safeguarding concern, it goes straight to the designated safeguarding lead, and nobody else. The teacher only sees that it was received. Every view of the record is logged, and families are never notified automatically. Telling a family is always a recorded decision, with a reason."
+  },
+  {
+   "id": "s06-academics",
+   "text": "Horizon also runs the academic day. Students choose their subjects online and classes fill themselves, replacing the option block spreadsheet. The timetable knows every teacher. When a teacher reports an absence, Horizon finds a free teacher from the right department, assigns the lesson, and lets them know. Teachers enter grades in a gradebook that feels like a spreadsheet, families see them when they are published, and report cards are produced in both languages. Trips, exams and events appear on every family's calendar."
+  },
+  {
+   "id": "s07-university",
+   "text": "Now, the part families ask about most: university. Adam is in Grade 9, and he wants to become an AI engineer, maybe in the UK, the US, Canada, or here in the UAE. Horizon shows the programs that fit his goal, and checks each one against his record, requirement by requirement. The requirements come from each university's official pages, with the exact wording, and the date they were checked. Adam can see which classes open the most doors, and try what if. If he takes AP Calculus and does well, which programs move into reach? Horizon then builds a Grade 9 to 12 plan, using only the classes his school actually offers. He sends it to his counselor. Sarah approves it with a note, and his mother sees the approved plan, in Arabic."
+  },
+  {
+   "id": "s08-applications",
+   "text": "By Grade 12, every application is tracked from shortlist to offer. Deadlines become tasks and reminders, recommendation letters reach teachers as tasks, and the counselor sees every student's progress on one board."
+  },
+  {
+   "id": "s09-leaders",
+   "text": "School leaders see how the whole school is running: requests, turnaround times and service levels, in both languages. They can ask questions in plain words. AI helps draft briefs, plans and letters, but it never decides anything on its own, and the most sensitive records are never sent to it."
+  },
+  {
+   "id": "s10-setup",
+   "text": "Getting started takes days, not months. A school signs up and gets a working setup straight away: services, forms, letters, roles, bell times, and the UAE calendar. A setup wizard adds the logo, colors and school year, and imports staff, students and classes from the spreadsheets the school already has. The principal decides exactly who can see and do what, in plain words. Staff are invited by email, and parents join with a school code and their child's details."
+  },
+  {
+   "id": "s11-trust",
+   "text": "Every school's data is kept apart at the database level. Every sensitive action is audited. And Horizon was designed around UAE data protection and safeguarding practice, from the very first line of code."
+  },
+  {
+   "id": "s12-close",
+   "text": "One platform for every school procedure, in Arabic and English. That's Horizon. Try it yourself today, or start a ninety day pilot with your school."
+  }
+ ]
+}

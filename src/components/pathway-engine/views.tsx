@@ -1,6 +1,6 @@
 // Server views for the University planning module. Pages under /career/pathways are thin wrappers.
 import { getTranslations } from "next-intl/server";
-import { ArrowRight, BookOpenCheck, DoorOpen, FlaskConical, GraduationCap, Info, ListChecks, Route, Search, Target } from "lucide-react";
+import { ArrowRight, BookOpenCheck, DoorOpen, FlaskConical, GraduationCap, ListChecks, Route, Search, Target } from "lucide-react";
 import type { Ctx } from "@/server/context";
 import { pick } from "@/lib/i18n-data";
 import { fmtDate, fmtNumber } from "@/lib/format";
@@ -22,6 +22,7 @@ import { canViewRecord } from "@/server/transcripts/access";
 import { STATUS_ORDER } from "./labels";
 import { StatusChip } from "./ui";
 import { AiSummary, GoalForm, NextStepCard, PlanBuilder, WhatIfPanel, type NextStepState } from "./client";
+import { CatalogNotice } from "@/components/pathway-engine/catalog-notice";
 
 export const GOAL_COUNTRIES = ["GB", "US", "CA", "AE", "AU", "IE", "NL", "DE", "SG", "HK", "JO", "CH"];
 type Tab = "overview" | "plan" | "whatIf" | "courses";
@@ -52,10 +53,7 @@ export async function EngineHeader({ ctx, focus, tab }: { ctx: Ctx; focus: Engin
           </Link>
         ))}
       </nav>
-      <div className="flex items-start gap-2 rounded-lg border border-warning/40 bg-warning-soft/40 px-4 py-3 text-sm" data-testid="example-banner">
-        <Info className="mt-0.5 size-4 shrink-0" />
-        <span>{t("exampleBanner")}</span>
-      </div>
+      <CatalogNotice ctx={ctx} />
     </>
   );
 }

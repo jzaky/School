@@ -37,7 +37,9 @@ import {
 /** Tests that are accepted as alternatives to each other when listed in one row with the same policy. */
 export const TEST_ALTERNATIVES: string[][] = [["SAT", "ACT"]];
 /** Additional requirement kinds that are application steps, shown as a checklist and never evaluated. */
-export const APPLICATION_STEPS = new Set(["PERSONAL_STATEMENT", "ESSAYS", "INTERVIEW", "REFERENCE", "PORTFOLIO", "AUDITION", "SUPPLEMENTAL"]);
+export const APPLICATION_STEPS = new Set(["PERSONAL_STATEMENT", "ESSAYS", "INTERVIEW", "REFERENCE", "PORTFOLIO", "AUDITION", "SUPPLEMENTAL", "ADMISSIONS_TEST", "WORK_EXPERIENCE", "HEALTH_CHECK"]);
+/** The university does not accept this curriculum for direct entry (for example a foundation year is needed first). */
+export const BLOCKING_KINDS = new Set(["NOT_ACCEPTED", "FOUNDATION_REQUIRED"]);
 const COUNTED_SUBJECT_TYPES = new Set(["REQUIRED", "ONE_OF", "TWO_OF"]);
 const UNVERIFIED: Confidence[] = ["EXTRACTED", "UNKNOWN"];
 /** Mappings below this confidence are treated as needing review. */
@@ -154,6 +156,7 @@ function subjectLine(line: SubjectLine, row: RequirementRow, courses: StudentCou
     required: line.minimumGrade ?? null,
     confidence: row.confidence,
     evidenceQuote: line.evidenceQuote ?? null,
+    sourceUrl: line.sourceUrl ?? null,
     noteEn: line.noteEn ?? null,
     noteAr: line.noteAr ?? null,
     needed,
@@ -306,6 +309,7 @@ function testLine(group: TestLine[], row: RequirementRow, profile: StudentProfil
     alternatives: group.map((g) => g.test.toUpperCase()),
     confidence: row.confidence,
     evidenceQuote: group.map((g) => g.evidenceQuote).find(Boolean) ?? null,
+    sourceUrl: group.map((g) => g.sourceUrl).find(Boolean) ?? null,
     noteEn: group.map((g) => g.noteEn).find(Boolean) ?? null,
   };
   if (passing) return { ...base, status: "met", basis: "final" };
@@ -332,6 +336,7 @@ function languageLine(rows: RequirementRow[], profile: StudentProfile): LineResu
     alternatives: all.map((x) => x.l.test.toUpperCase()),
     confidence: pick.row.confidence,
     evidenceQuote: all.map((x) => x.l.evidenceQuote).find(Boolean) ?? null,
+    sourceUrl: all.map((x) => x.l.sourceUrl).find(Boolean) ?? null,
     noteEn: all.map((x) => x.l.waiverNoteEn).find(Boolean) ?? null,
   };
   if (passing) return { ...base, status: "met", basis: "final" };
@@ -376,6 +381,23 @@ export function evaluate(profile: StudentProfile, program: ProgramForEval): Eval
       if (t) rowLines.push(t);
     }
     for (const a of row.additional) {
+      if (BLOCKING_KINDS.has(a.kind.toUpperCase())) {
+        rowLines.push({
+          id: a.id,
+          rowId: row.id,
+          kind: "additional",
+          type: a.kind.toUpperCase(),
+          advisory: false,
+          status: "not_met",
+          reason: "not_accepted",
+          confidence: row.confidence,
+          evidenceQuote: a.evidenceQuote ?? null,
+          sourceUrl: a.sourceUrl ?? null,
+          noteEn: a.noteEn ?? null,
+          noteAr: a.noteAr ?? null,
+        });
+        continue;
+      }
       const step = APPLICATION_STEPS.has(a.kind.toUpperCase()) || !a.required;
       rowLines.push({
         id: a.id,
@@ -387,6 +409,7 @@ export function evaluate(profile: StudentProfile, program: ProgramForEval): Eval
         reason: step ? undefined : "manual",
         confidence: row.confidence,
         evidenceQuote: a.evidenceQuote ?? null,
+        sourceUrl: a.sourceUrl ?? null,
         noteEn: a.noteEn ?? null,
         noteAr: a.noteAr ?? null,
       });

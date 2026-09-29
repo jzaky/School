@@ -70,12 +70,14 @@ export type SubjectLine = {
   noteEn?: string | null;
   noteAr?: string | null;
   evidenceQuote?: string | null;
+  /** The official page this line was taken from, when it differs from the row's source. */
+  sourceUrl?: string | null;
 };
-export type LanguageLine = { id: string; test: string; minOverall: number; minComponent?: number | null; waiverNoteEn?: string | null; evidenceQuote?: string | null };
+export type LanguageLine = { id: string; test: string; minOverall: number; minComponent?: number | null; waiverNoteEn?: string | null; evidenceQuote?: string | null; sourceUrl?: string | null };
 /** policy: REQUIRED, OPTIONAL, RECOMMENDED or BLIND (not considered). */
-export type TestLine = { id: string; test: string; policy: string; minScore?: number | null; noteEn?: string | null; evidenceQuote?: string | null };
+export type TestLine = { id: string; test: string; policy: string; minScore?: number | null; noteEn?: string | null; evidenceQuote?: string | null; sourceUrl?: string | null };
 /** kind: PERSONAL_STATEMENT, ESSAYS, INTERVIEW, REFERENCE, PORTFOLIO are application steps; NOTE is free text that needs a person. */
-export type AdditionalLine = { id: string; kind: string; required: boolean; noteEn?: string | null; noteAr?: string | null; evidenceQuote?: string | null };
+export type AdditionalLine = { id: string; kind: string; required: boolean; noteEn?: string | null; noteAr?: string | null; evidenceQuote?: string | null; sourceUrl?: string | null };
 
 export type RequirementRow = {
   id: string;
@@ -118,7 +120,8 @@ export type UnknownReason =
   | "not_taken"
   | "no_overall"
   | "no_stream"
-  | "manual";
+  | "manual"
+  | "not_accepted";
 
 export type SatisfiedBy = { courseId: string; nameEn: string; nameAr: string; subjectKey: string; grade: string | null; basis: Basis };
 
@@ -146,6 +149,8 @@ export type LineResult = {
   alternatives?: string[];
   confidence: Confidence;
   evidenceQuote?: string | null;
+  /** The official page the line was taken from, when it differs from the row source. */
+  sourceUrl?: string | null;
   noteEn?: string | null;
   noteAr?: string | null;
 };

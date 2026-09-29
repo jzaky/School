@@ -234,9 +234,11 @@ export async function loadRequirements(db: TenantDb, orgId: string, programIds: 
     include: { subjects: true, languages: true, tests: true, additional: true },
     orderBy: [{ curriculum: "asc" }, { version: "desc" }],
   });
-  const sourceIds = [...new Set(rows.map((r) => r.sourceId).filter((x): x is string => !!x))];
+  const lineSourceIds = rows.flatMap((r) => [...r.subjects, ...r.languages, ...r.tests, ...r.additional].map((x) => x.sourceId));
+  const sourceIds = [...new Set([...rows.map((r) => r.sourceId), ...lineSourceIds].filter((x): x is string => !!x))];
   const sources = sourceIds.length ? await db.requirementSource.findMany({ where: { id: { in: sourceIds } }, select: { id: true, url: true, retrievedAt: true } }) : [];
   const src = new Map(sources.map((s) => [s.id, s]));
+  const lineUrl = (id: string | null) => (id ? (src.get(id)?.url ?? null) : null);
   // A school's own row for a programme and curriculum replaces the global one.
   const picked = new Map<string, (typeof rows)[number]>();
   for (const r of rows) {
@@ -263,10 +265,10 @@ export async function loadRequirements(db: TenantDb, orgId: string, programIds: 
       evidenceLocator: r.evidenceLocator,
       sourceUrl: s?.url ?? null,
       checkedAt: checked ? checked.toISOString() : null,
-      subjects: r.subjects.map((x) => ({ id: x.id, type: x.type, keys: x.canonicalSubjectKeys, minimumLevel: x.minimumLevel, minimumGrade: x.minimumGrade, alternatives: x.alternatives, noteEn: x.noteEn, noteAr: x.noteAr, evidenceQuote: x.evidenceQuote })),
-      languages: r.languages.map((x) => ({ id: x.id, test: x.test, minOverall: x.minOverall, minComponent: x.minComponent, waiverNoteEn: x.waiverNoteEn, evidenceQuote: x.evidenceQuote })),
-      tests: r.tests.map((x) => ({ id: x.id, test: x.test, policy: x.policy, minScore: x.minScore, noteEn: x.noteEn, evidenceQuote: x.evidenceQuote })),
-      additional: r.additional.map((x) => ({ id: x.id, kind: x.kind, required: x.required, noteEn: x.noteEn, noteAr: x.noteAr, evidenceQuote: x.evidenceQuote })),
+      subjects: r.subjects.map((x) => ({ id: x.id, type: x.type, keys: x.canonicalSubjectKeys, minimumLevel: x.minimumLevel, minimumGrade: x.minimumGrade, alternatives: x.alternatives, noteEn: x.noteEn, noteAr: x.noteAr, evidenceQuote: x.evidenceQuote, sourceUrl: lineUrl(x.sourceId) })),
+      languages: r.languages.map((x) => ({ id: x.id, test: x.test, minOverall: x.minOverall, minComponent: x.minComponent, waiverNoteEn: x.waiverNoteEn, evidenceQuote: x.evidenceQuote, sourceUrl: lineUrl(x.sourceId) })),
+      tests: r.tests.map((x) => ({ id: x.id, test: x.test, policy: x.policy, minScore: x.minScore, noteEn: x.noteEn, evidenceQuote: x.evidenceQuote, sourceUrl: lineUrl(x.sourceId) })),
+      additional: r.additional.map((x) => ({ id: x.id, kind: x.kind, required: x.required, noteEn: x.noteEn, noteAr: x.noteAr, evidenceQuote: x.evidenceQuote, sourceUrl: lineUrl(x.sourceId) })),
     });
   }
   return out;

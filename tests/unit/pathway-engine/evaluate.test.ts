@@ -252,3 +252,26 @@ describe("rows and counts", () => {
     expect(counts).toMatchObject({ ELIGIBLE: 2, ON_TRACK: 1, MISSING_REQUIREMENTS: 0 });
   });
 });
+
+describe("official page rules", () => {
+  it("a curriculum the university does not accept for direct entry is a missing requirement", () => {
+    const p = program(row({ curriculum: "UAE_MOE", confidence: "OFFICIAL", additional: [{ id: "na", kind: "NOT_ACCEPTED", required: true, noteEn: "A foundation year is required.", evidenceQuote: "not accepted for direct entry", sourceUrl: "https://example.ac.uk/uae" }] }));
+    const r = evaluate(profile({ curriculum: "UAE_MOE", courses: [maths("A")] }), p);
+    expect(r.status).toBe("MISSING_REQUIREMENTS");
+    const line = r.lines.find((l) => l.type === "NOT_ACCEPTED");
+    expect(line?.status).toBe("not_met");
+    expect(line?.reason).toBe("not_accepted");
+    expect(line?.sourceUrl).toBe("https://example.ac.uk/uae");
+  });
+
+  it("an admissions test is an application step, not a blocker", () => {
+    const p = program(row({ confidence: "OFFICIAL", subjects: [subj("REQUIRED", ["mathematics"])], additional: [{ id: "t", kind: "ADMISSIONS_TEST", required: true, noteEn: "TMUA" }] }));
+    expect(evaluate(profile({ courses: [maths("A")] }), p).status).toBe("ELIGIBLE");
+  });
+
+  it("OFFICIAL rows count as known facts, unlike EXTRACTED ones", () => {
+    const req = { subjects: [subj("REQUIRED", ["mathematics"])] };
+    expect(evaluate(profile({ courses: [maths("A")] }), program(row({ ...req, confidence: "OFFICIAL" }))).status).toBe("ELIGIBLE");
+    expect(evaluate(profile({ courses: [maths("A")] }), program(row({ ...req, confidence: "EXTRACTED" }))).status).toBe("POSSIBLY_ELIGIBLE");
+  });
+});

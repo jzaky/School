@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { ChevronLeft, ChevronRight, Info, SearchX, Trophy } from "lucide-react";
+import { ChevronLeft, ChevronRight, SearchX, Trophy } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { fmtNumber } from "@/lib/format";
@@ -19,6 +19,7 @@ import { engineFocus, pathwayHref } from "@/server/pathway-engine/page-data";
 import { CURRICULA } from "@/server/pathway-engine/types";
 import { searchCatalog, shortlistedIds, staffStudentOptions } from "@/server/discovery/service";
 import { DEGREE_TYPES, LANGUAGES, LEVELS, SORTS, TUITION_BANDS, parseDiscoveryQuery, queryParams, tuitionUsd } from "@/server/discovery/search";
+import { CatalogNotice } from "@/components/pathway-engine/catalog-notice";
 
 export async function generateMetadata() {
   const t = await getTranslations("discovery");
@@ -88,10 +89,7 @@ export default async function ProgramSearchPage({ searchParams }: { searchParams
         }
       />
 
-      <div className="flex items-start gap-2 rounded-lg border border-warning/40 bg-warning-soft/40 px-4 py-3 text-sm" data-testid="example-banner">
-        <Info className="mt-0.5 size-4 shrink-0" />
-        <span>{te("exampleBanner")}</span>
-      </div>
+      <CatalogNotice ctx={ctx} />
 
       <CompareProvider>
         <section className="space-y-3 rounded-xl border bg-card p-3 shadow-xs sm:p-4" aria-label={t("filtersLabel")}>

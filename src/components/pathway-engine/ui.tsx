@@ -16,7 +16,7 @@ export function StatusChip({ status, className }: { status: MatchStatus; classNa
 
 export function ConfidenceBadge({ confidence }: { confidence: Confidence }) {
   const t = useTranslations("engine");
-  const tone = confidence === "VERIFIED" || confidence === "REVIEWED" ? "success" : confidence === "EXAMPLE" ? "warning" : "neutral";
+  const tone = confidence === "VERIFIED" || confidence === "REVIEWED" ? "success" : confidence === "OFFICIAL" ? "info" : confidence === "EXAMPLE" ? "warning" : "neutral";
   return (
     <Pill tone={tone} className="whitespace-normal">
       <span data-testid="confidence-badge">{t(`confidence.${confidence}`)}</span>

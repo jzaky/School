@@ -3,7 +3,7 @@ import { ExternalLink, ShieldCheck } from "lucide-react";
 import { fmtDate, type FormatPrefs } from "@/lib/format";
 import { Pill, type Tone } from "@/components/app/badges";
 
-const TONE: Record<string, Tone> = { VERIFIED: "success", REVIEWED: "info", EXTRACTED: "warning", EXAMPLE: "warning", UNKNOWN: "neutral" };
+const TONE: Record<string, Tone> = { VERIFIED: "success", OFFICIAL: "info", REVIEWED: "info", EXTRACTED: "warning", EXAMPLE: "warning", UNKNOWN: "neutral" };
 
 /**
  * Data freshness badge: when the requirement data was checked, its confidence label and a link to the

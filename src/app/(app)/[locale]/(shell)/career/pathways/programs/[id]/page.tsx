@@ -78,11 +78,18 @@ export default async function ProgramPage({ params, searchParams }: { params: Pr
           <div className="text-xs text-danger">{l.have !== null && l.have !== undefined && l.have !== "" ? t("program.have", { have: String(l.have) }) : t("program.missing")}</div>
         )}
         {withStatus && l.status === "unknown" && l.reason && <div className="text-xs text-info">{t(`reason.${l.reason}`)}</div>}
+        {withStatus && l.status === "not_met" && l.reason === "not_accepted" && <div className="text-xs text-danger">{t("reason.not_accepted")}</div>}
         {(l.noteEn || l.noteAr) && <div className="text-xs text-muted-foreground">{pick(locale, l.noteEn ?? "", l.noteAr ?? l.noteEn ?? "")}</div>}
         {l.evidenceQuote && (
           <div className="flex items-start gap-1 text-xs text-muted-foreground" data-testid="evidence-quote">
             <Quote className="mt-0.5 size-3 shrink-0" />
             <q className="italic">{l.evidenceQuote}</q>
+            {l.sourceUrl && l.sourceUrl !== sourceUrl && (
+              <a href={l.sourceUrl} target="_blank" rel="noopener noreferrer" className="ms-1 inline-flex shrink-0 items-center gap-0.5 not-italic text-brand hover:underline" data-testid="line-source">
+                {t("program.lineSource")}
+                <ExternalLink className="size-3" />
+              </a>
+            )}
           </div>
         )}
       </div>
@@ -166,7 +173,21 @@ export default async function ProgramPage({ params, searchParams }: { params: Pr
               {(r.notesEn || r.notesAr) && <p className="mt-1 text-xs text-muted-foreground">{pick(locale, r.notesEn ?? "", r.notesAr ?? "")}</p>}
               <p className="mt-1 flex items-start gap-1 text-xs text-muted-foreground" data-testid="evidence">
                 <Quote className="mt-0.5 size-3 shrink-0" />
-                {r.evidenceLocator ? t("program.evidence", { where: r.evidenceLocator }) : t("program.evidenceNone")}
+                {r.evidenceLocator && r.confidence !== "EXAMPLE" ? (
+                  <span>
+                    <q className="italic">{r.evidenceLocator}</q>
+                    {r.sourceUrl && (
+                      <a href={r.sourceUrl} target="_blank" rel="noopener noreferrer" className="ms-1 inline-flex items-center gap-0.5 text-brand hover:underline">
+                        {t("program.lineSource")}
+                        <ExternalLink className="size-3" />
+                      </a>
+                    )}
+                  </span>
+                ) : r.evidenceLocator ? (
+                  t("program.evidence", { where: r.evidenceLocator })
+                ) : (
+                  t("program.evidenceNone")
+                )}
               </p>
               <ul className="divide-y">
                 {result!.lines

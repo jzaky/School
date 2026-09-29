@@ -5104,7 +5104,8 @@
       "REVIEWED": "Reviewed",
       "EXTRACTED": "Machine extracted, not reviewed",
       "EXAMPLE": "Example data",
-      "UNKNOWN": "Unknown"
+      "UNKNOWN": "Unknown",
+      "OFFICIAL": "From the official page"
     },
     "freshness": {
       "checked": "Checked {date}",
@@ -5187,7 +5188,8 @@
       "REVIEWED": "Reviewed by a person",
       "EXTRACTED": "Not reviewed yet",
       "EXAMPLE": "Example data, confirm on the official page",
-      "UNKNOWN": "Source unknown"
+      "UNKNOWN": "Source unknown",
+      "OFFICIAL": "From the official page"
     },
     "lineStatus": {
       "met": "Met",
@@ -5415,7 +5417,8 @@
       "advice": "Advice",
       "satisfiedBy": "Met by {courses}",
       "have": "You have {have}",
-      "missing": "Not on your record or plan yet"
+      "missing": "Not on your record or plan yet",
+      "lineSource": "Source"
     },
     "language": {
       "en": "English",
@@ -5437,7 +5440,8 @@
       "not_taken": "Not taken yet.",
       "no_overall": "No overall result recorded yet.",
       "no_stream": "The stream is not recorded.",
-      "manual": "A person needs to read this note."
+      "manual": "A person needs to read this note.",
+      "not_accepted": "The university does not accept this qualification for direct entry."
     },
     "level": {
       "FOUNDATION": "foundation",
@@ -5573,7 +5577,8 @@
           "other": "Use it for subject choices each year."
         }
       }
-    }
+    },
+    "officialBanner": "Entry requirements come from each university's official pages, with the exact wording and the date we checked. Universities change requirements, so always confirm on the official page before applying."
   },
   "transcripts": {
     "confidence": "{pct}% match",
