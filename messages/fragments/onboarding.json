@@ -1,0 +1,1382 @@
+{
+  "nav": {
+    "setup": [
+      "School setup",
+      "إعداد المدرسة"
+    ]
+  },
+  "onboarding": {
+    "landing": {
+      "startPilot": [
+        "Start free pilot",
+        "ابدأ تجربة مجانية"
+      ],
+      "newSchool": [
+        "New school?",
+        "مدرسة جديدة؟"
+      ]
+    },
+    "signup": {
+      "metaTitle": [
+        "Start a free pilot",
+        "ابدأ تجربة مجانية"
+      ],
+      "title": [
+        "Start your school's free pilot",
+        "ابدأ التجربة المجانية لمدرستك"
+      ],
+      "subtitle": [
+        "Set up your school in a few minutes. You get a working service catalog, letters, calendar and roles straight away, and you can change everything later.",
+        "جهّز مدرستك خلال دقائق. تحصل فورًا على دليل خدمات جاهز وخطابات وتقويم وأدوار، ويمكنك تعديل كل شيء لاحقًا."
+      ],
+      "closedTitle": [
+        "Sign-up is closed right now",
+        "التسجيل مغلق حاليًا"
+      ],
+      "closedBody": [
+        "New schools cannot sign up at the moment. You can still explore the live demo school.",
+        "لا يمكن تسجيل مدارس جديدة في الوقت الحالي. ما زال بإمكانك استكشاف المدرسة التجريبية."
+      ],
+      "closedDemo": [
+        "Enter the demo school",
+        "ادخل المدرسة التجريبية"
+      ],
+      "haveAccount": [
+        "Already using the platform?",
+        "تستخدم المنصة بالفعل؟"
+      ],
+      "signIn": [
+        "Sign in",
+        "تسجيل الدخول"
+      ],
+      "asideTitle": [
+        "Everything a UAE school needs to run student services, ready on day one.",
+        "كل ما تحتاجه مدرسة في الإمارات لإدارة خدمات الطلاب، جاهز من اليوم الأول."
+      ],
+      "aside": {
+        "a1": [
+          "29 ready-made services with forms and approval workflows",
+          "29 خدمة جاهزة مع النماذج ومسارات الموافقة"
+        ],
+        "a2": [
+          "Bilingual letters, notifications and a full Arabic interface",
+          "خطابات وإشعارات ثنائية اللغة وواجهة عربية كاملة"
+        ],
+        "a3": [
+          "This year's terms and UAE public holidays already on the calendar",
+          "فصول هذا العام والعطل الرسمية في الإمارات مضافة إلى التقويم"
+        ],
+        "a4": [
+          "Safeguarding, consent and data protection defaults built in",
+          "إعدادات افتراضية لحماية الطفل والموافقات وحماية البيانات"
+        ]
+      },
+      "seeDemo": [
+        "See a school already using it",
+        "شاهد مدرسة تستخدمها بالفعل"
+      ],
+      "honeypot": [
+        "Leave this field empty",
+        "اترك هذا الحقل فارغًا"
+      ],
+      "schoolSection": [
+        "Your school",
+        "مدرستك"
+      ],
+      "schoolNameEn": [
+        "School name in English",
+        "اسم المدرسة بالإنجليزية"
+      ],
+      "schoolNameEnPh": [
+        "For example, Al Noor International School",
+        "مثال: Al Noor International School"
+      ],
+      "schoolNameAr": [
+        "School name in Arabic",
+        "اسم المدرسة بالعربية"
+      ],
+      "schoolNameArPh": [
+        "مدرسة النور الدولية",
+        "مثال: مدرسة النور الدولية"
+      ],
+      "emirate": [
+        "Emirate",
+        "الإمارة"
+      ],
+      "curricula": [
+        "Curricula you teach",
+        "المناهج التي تدرّسها"
+      ],
+      "curriculaHint": [
+        "Pick all that apply. We add a starter course catalog for each.",
+        "اختر كل ما ينطبق، وسنضيف دليل مقررات مبدئيًا لكل منهج."
+      ],
+      "adminSection": [
+        "You",
+        "بياناتك"
+      ],
+      "adminName": [
+        "Your full name",
+        "اسمك الكامل"
+      ],
+      "email": [
+        "Work email",
+        "البريد الإلكتروني للعمل"
+      ],
+      "emailHint": [
+        "We send a link to confirm it. Staff invitations and family access open once it is confirmed.",
+        "سنرسل رابطًا لتأكيده. تُفعَّل دعوات الموظفين ووصول العائلات بعد التأكيد."
+      ],
+      "password": [
+        "Password",
+        "كلمة المرور"
+      ],
+      "passwordHint": [
+        "At least 10 characters with letters and numbers.",
+        "10 أحرف على الأقل تتضمن حروفًا وأرقامًا."
+      ],
+      "strength": {
+        "s0": [
+          "Too weak.",
+          "ضعيفة جدًا."
+        ],
+        "s1": [
+          "Weak.",
+          "ضعيفة."
+        ],
+        "s2": [
+          "Good.",
+          "جيدة."
+        ],
+        "s3": [
+          "Strong.",
+          "قوية."
+        ]
+      },
+      "issues": {
+        "short": [
+          "Use at least 10 characters.",
+          "استخدم 10 أحرف على الأقل."
+        ],
+        "letter": [
+          "Add a letter.",
+          "أضف حرفًا."
+        ],
+        "digit": [
+          "Add a number.",
+          "أضف رقمًا."
+        ],
+        "common": [
+          "Avoid common words like password.",
+          "تجنّب الكلمات الشائعة مثل password."
+        ],
+        "email": [
+          "Do not use your email address.",
+          "لا تستخدم بريدك الإلكتروني."
+        ]
+      },
+      "isPrincipal": [
+        "I am the principal",
+        "أنا مدير المدرسة"
+      ],
+      "isPrincipalHint": [
+        "You also get the principal's dashboard. You can add other people later.",
+        "ستحصل أيضًا على لوحة مدير المدرسة، ويمكنك إضافة الآخرين لاحقًا."
+      ],
+      "creating": [
+        "Setting up your school...",
+        "جارٍ إعداد مدرستك..."
+      ],
+      "submit": [
+        "Create my school",
+        "أنشئ مدرستي"
+      ],
+      "terms": [
+        "Free during the pilot. No payment details needed.",
+        "مجانية خلال فترة التجربة، ولا حاجة إلى بيانات دفع."
+      ],
+      "orOAuth": [
+        "or sign up with",
+        "أو سجّل باستخدام"
+      ],
+      "oauthHint": [
+        "Fill in your school details above first. Your email comes from your account.",
+        "املأ بيانات مدرستك أعلاه أولًا، وسيُؤخذ بريدك من حسابك."
+      ],
+      "google": [
+        "Google",
+        "Google"
+      ],
+      "microsoft": [
+        "Microsoft",
+        "Microsoft"
+      ],
+      "errors": {
+        "rate": [
+          "Too many attempts. Please wait a while and try again.",
+          "محاولات كثيرة جدًا. يُرجى الانتظار قليلًا ثم المحاولة مجددًا."
+        ],
+        "credentials": [
+          "We could not create a school with this email and password. If you already use the platform, enter your existing password or sign in first.",
+          "تعذّر إنشاء مدرسة بهذا البريد وكلمة المرور. إن كنت تستخدم المنصة بالفعل فأدخل كلمة مرورك الحالية أو سجّل الدخول أولًا."
+        ],
+        "failed": [
+          "Something went wrong while setting up your school. Please try again.",
+          "حدث خطأ أثناء إعداد مدرستك. يُرجى المحاولة مجددًا."
+        ],
+        "invalid": [
+          "Please check the form and try again.",
+          "يُرجى مراجعة النموذج والمحاولة مجددًا."
+        ],
+        "oauth": [
+          "Your sign-in did not finish. Please fill in the form again.",
+          "لم يكتمل تسجيل الدخول. يُرجى تعبئة النموذج مجددًا."
+        ],
+        "field": {
+          "schoolNameEn": [
+            "Enter the school's name in English (at least 3 characters).",
+            "أدخل اسم المدرسة بالإنجليزية (3 أحرف على الأقل)."
+          ],
+          "schoolNameAr": [
+            "Enter the school's name in Arabic (at least 3 characters).",
+            "أدخل اسم المدرسة بالعربية (3 أحرف على الأقل)."
+          ],
+          "emirate": [
+            "Choose your emirate.",
+            "اختر الإمارة."
+          ],
+          "curricula": [
+            "Choose at least one curriculum.",
+            "اختر منهجًا واحدًا على الأقل."
+          ],
+          "adminName": [
+            "Enter your full name.",
+            "أدخل اسمك الكامل."
+          ],
+          "email": [
+            "Enter a valid work email.",
+            "أدخل بريدًا إلكترونيًا صحيحًا."
+          ],
+          "password": [
+            "Choose a stronger password: at least 10 characters with letters and numbers.",
+            "اختر كلمة مرور أقوى: 10 أحرف على الأقل تتضمن حروفًا وأرقامًا."
+          ]
+        }
+      }
+    },
+    "curricula": {
+      "BRITISH": [
+        "British",
+        "البريطاني"
+      ],
+      "AMERICAN": [
+        "American",
+        "الأمريكي"
+      ],
+      "IB": [
+        "IB",
+        "البكالوريا الدولية"
+      ],
+      "UAE_MOE": [
+        "UAE MOE",
+        "وزارة التربية الإماراتية"
+      ],
+      "CBSE": [
+        "Indian (CBSE)",
+        "الهندي (CBSE)"
+      ],
+      "ISC": [
+        "Indian (ISC)",
+        "الهندي (ISC)"
+      ],
+      "SABIS": [
+        "SABIS",
+        "سابيس"
+      ],
+      "JORDAN_TAWJIHI": [
+        "Jordanian Tawjihi",
+        "التوجيهي الأردني"
+      ],
+      "OTHER": [
+        "Other",
+        "منهج آخر"
+      ]
+    },
+    "emirates": {
+      "AbuDhabi": [
+        "Abu Dhabi",
+        "أبوظبي"
+      ],
+      "Dubai": [
+        "Dubai",
+        "دبي"
+      ],
+      "Sharjah": [
+        "Sharjah",
+        "الشارقة"
+      ],
+      "Ajman": [
+        "Ajman",
+        "عجمان"
+      ],
+      "UmmAlQuwain": [
+        "Umm Al Quwain",
+        "أم القيوين"
+      ],
+      "RasAlKhaimah": [
+        "Ras Al Khaimah",
+        "رأس الخيمة"
+      ],
+      "Fujairah": [
+        "Fujairah",
+        "الفجيرة"
+      ]
+    },
+    "verify": {
+      "metaTitle": [
+        "Confirm your email",
+        "تأكيد البريد الإلكتروني"
+      ],
+      "okTitle": [
+        "Email confirmed",
+        "تم تأكيد البريد الإلكتروني"
+      ],
+      "okBody": [
+        "Thank you. Staff invitations and family access are now open for your school.",
+        "شكرًا لك. أصبحت دعوات الموظفين ووصول العائلات متاحة لمدرستك الآن."
+      ],
+      "failedTitle": [
+        "This link does not work",
+        "هذا الرابط لا يعمل"
+      ],
+      "failedBody": [
+        "It may have expired or already been used. Sign in and use Resend on the banner to get a new link.",
+        "ربما انتهت صلاحيته أو استُخدم من قبل. سجّل الدخول واضغط إعادة الإرسال في الشريط العلوي للحصول على رابط جديد."
+      ],
+      "continueSetup": [
+        "Continue setting up",
+        "متابعة الإعداد"
+      ],
+      "goHome": [
+        "Go to your school",
+        "الانتقال إلى مدرستك"
+      ],
+      "signIn": [
+        "Sign in",
+        "تسجيل الدخول"
+      ],
+      "bannerOwner": [
+        "Confirm your email ({email}) to unlock staff invitations and family access. Check your inbox for our link.",
+        "أكّد بريدك الإلكتروني ({email}) لتفعيل دعوات الموظفين ووصول العائلات. تحقّق من بريدك الوارد للعثور على الرابط."
+      ],
+      "bannerOther": [
+        "Staff invitations and family access open once the school's founding administrator confirms their email.",
+        "تُفعَّل دعوات الموظفين ووصول العائلات بعد أن يؤكد المسؤول المؤسس للمدرسة بريده الإلكتروني."
+      ],
+      "resend": [
+        "Resend link",
+        "إعادة إرسال الرابط"
+      ],
+      "resent": [
+        "We sent a new link. It is valid for 48 hours.",
+        "أرسلنا رابطًا جديدًا صالحًا لمدة 48 ساعة."
+      ],
+      "resentShort": [
+        "Link sent",
+        "تم الإرسال"
+      ],
+      "resendRate": [
+        "You asked for several links already. Please wait an hour.",
+        "طلبت عدة روابط بالفعل. يُرجى الانتظار ساعة."
+      ],
+      "alreadyVerified": [
+        "Your email is already confirmed.",
+        "بريدك الإلكتروني مؤكد بالفعل."
+      ],
+      "resendFailed": [
+        "We could not send the link. Please try again.",
+        "تعذّر إرسال الرابط. يُرجى المحاولة مجددًا."
+      ]
+    },
+    "setup": {
+      "metaTitle": [
+        "School setup",
+        "إعداد المدرسة"
+      ],
+      "eyebrow": [
+        "Setup",
+        "الإعداد"
+      ],
+      "title": [
+        "Set up {school}",
+        "إعداد {school}"
+      ],
+      "subtitle": [
+        "Seven short steps. Skip anything and come back later: every choice stays editable from the admin pages.",
+        "سبع خطوات قصيرة. تجاوز ما تشاء وعد لاحقًا، فكل خيار يبقى قابلًا للتعديل من صفحات الإدارة."
+      ],
+      "progress": [
+        "{done} of {total} steps done",
+        "أُنجزت {done} من {total} خطوات"
+      ],
+      "resumeHint": [
+        "Your progress is saved",
+        "يُحفظ تقدّمك تلقائيًا"
+      ],
+      "stepsLabel": [
+        "Setup steps",
+        "خطوات الإعداد"
+      ],
+      "back": [
+        "Back",
+        "السابق"
+      ],
+      "skip": [
+        "Skip for now",
+        "تخطَّ الآن"
+      ],
+      "saveContinue": [
+        "Save and continue",
+        "حفظ ومتابعة"
+      ],
+      "continue": [
+        "Continue",
+        "متابعة"
+      ],
+      "steps": {
+        "profile": {
+          "nav": [
+            "School profile",
+            "ملف المدرسة"
+          ],
+          "title": [
+            "School profile and brand",
+            "ملف المدرسة وهويتها"
+          ],
+          "body": [
+            "Names, logo and colors, the default language and your school week.",
+            "الأسماء والشعار والألوان واللغة الافتراضية وأيام الدراسة."
+          ]
+        },
+        "year": {
+          "nav": [
+            "Academic year",
+            "العام الدراسي"
+          ],
+          "title": [
+            "Academic year, holidays and bell times",
+            "العام الدراسي والعطل وأوقات الحصص"
+          ],
+          "body": [
+            "We filled in this year's terms, UAE public holidays and a standard school day. Check the dates and change what differs.",
+            "أضفنا فصول هذا العام والعطل الرسمية في الإمارات ويومًا دراسيًا معتادًا. راجع التواريخ وعدّل ما يختلف."
+          ]
+        },
+        "curricula": {
+          "nav": [
+            "Curricula",
+            "المناهج"
+          ],
+          "title": [
+            "Curricula and course catalog",
+            "المناهج ودليل المقررات"
+          ],
+          "body": [
+            "Choose the tracks you teach. Each one adds its standard courses so pathway planning works from the start.",
+            "اختر المسارات التي تدرّسها، ويضيف كل منها مقرراته المعتادة ليعمل تخطيط المسارات منذ البداية."
+          ]
+        },
+        "modules": {
+          "nav": [
+            "Modules",
+            "الوحدات"
+          ],
+          "title": [
+            "Choose your modules",
+            "اختر الوحدات"
+          ],
+          "body": [
+            "Switch off what you do not use yet. Switched-off modules disappear for everyone until you switch them on again.",
+            "أوقف ما لا تستخدمه بعد. تختفي الوحدات الموقفة عن الجميع حتى تعيد تشغيلها."
+          ]
+        },
+        "people": {
+          "nav": [
+            "People",
+            "الأشخاص"
+          ],
+          "title": [
+            "Add staff, students and families",
+            "إضافة الموظفين والطلاب والعائلات"
+          ],
+          "body": [
+            "Import students with their guardians from a spreadsheet, or add a few people by hand to start.",
+            "استورد الطلاب مع أولياء أمورهم من جدول بيانات، أو أضف بعض الأشخاص يدويًا للبدء."
+          ]
+        },
+        "invite": {
+          "nav": [
+            "Invite and join",
+            "الدعوات والانضمام"
+          ],
+          "title": [
+            "Invite staff and open family access",
+            "دعوة الموظفين وفتح وصول العائلات"
+          ],
+          "body": [
+            "Send staff invitations, share the family join code and decide who approves new members.",
+            "أرسل دعوات الموظفين وشارك رمز انضمام العائلات وحدّد من يعتمد الأعضاء الجدد."
+          ]
+        },
+        "done": {
+          "nav": [
+            "Done",
+            "تم"
+          ],
+          "title": [
+            "You are ready",
+            "أصبحت جاهزًا"
+          ],
+          "body": [
+            "Here is what is set up. Anything skipped can be finished at any time.",
+            "إليك ما تم إعداده، ويمكن إكمال أي خطوة متجاوزة في أي وقت."
+          ]
+        }
+      },
+      "errors": {
+        "generic": [
+          "Something went wrong. Please try again.",
+          "حدث خطأ. يُرجى المحاولة مجددًا."
+        ],
+        "FORBIDDEN": [
+          "Only school administrators and principals can change the setup.",
+          "يمكن لمسؤولي المدرسة ومديرها فقط تعديل الإعداد."
+        ],
+        "INVALID": [
+          "Please check the values and try again.",
+          "يُرجى مراجعة القيم والمحاولة مجددًا."
+        ],
+        "NAMEEN": [
+          "Enter the school's name in English (at least 3 characters).",
+          "أدخل اسم المدرسة بالإنجليزية (3 أحرف على الأقل)."
+        ],
+        "NAMEAR": [
+          "Enter the school's name in Arabic (at least 3 characters).",
+          "أدخل اسم المدرسة بالعربية (3 أحرف على الأقل)."
+        ],
+        "SHORTNAMEEN": [
+          "Keep the short name under 40 characters.",
+          "اجعل الاسم المختصر أقل من 40 حرفًا."
+        ],
+        "SHORTNAMEAR": [
+          "Keep the short name under 40 characters.",
+          "اجعل الاسم المختصر أقل من 40 حرفًا."
+        ],
+        "PRIMARYCOLOR": [
+          "Enter the main color as a hex value like #0F4C81.",
+          "أدخل اللون الرئيسي بصيغة سداسية مثل #0F4C81."
+        ],
+        "ACCENTCOLOR": [
+          "Enter the accent color as a hex value like #C8A24A.",
+          "أدخل لون التمييز بصيغة سداسية مثل #C8A24A."
+        ],
+        "WEEKDAYS": [
+          "Pick at least one school day.",
+          "اختر يومًا دراسيًا واحدًا على الأقل."
+        ],
+        "EMIRATE": [
+          "Choose your emirate.",
+          "اختر الإمارة."
+        ],
+        "TYPE": [
+          "Use a PNG, JPG or WebP image.",
+          "استخدم صورة بصيغة PNG أو JPG أو WebP."
+        ],
+        "TOO_LARGE": [
+          "The image is too large. Use one under 2 MB.",
+          "الصورة كبيرة جدًا. استخدم صورة أقل من 2 ميغابايت."
+        ],
+        "YEAR_DATES": [
+          "The year must end after it starts.",
+          "يجب أن ينتهي العام بعد بدايته."
+        ],
+        "TERM_DATES": [
+          "Each term must end after it starts and sit inside the year.",
+          "يجب أن ينتهي كل فصل بعد بدايته وأن يقع داخل العام."
+        ],
+        "TERM_OVERLAP": [
+          "Terms cannot overlap.",
+          "لا يمكن أن تتداخل الفصول."
+        ],
+        "TERM_IN_USE": [
+          "A term you removed already has assessments or exams. Change its dates instead.",
+          "أحد الفصول المحذوفة يحتوي على تقييمات أو امتحانات. عدّل تواريخه بدلًا من حذفه."
+        ],
+        "NOT_FOUND": [
+          "This item no longer exists. Refresh the page.",
+          "هذا العنصر لم يعد موجودًا. حدّث الصفحة."
+        ],
+        "NO_YEAR": [
+          "There is no current academic year yet.",
+          "لا يوجد عام دراسي حالي بعد."
+        ],
+        "CURRICULA": [
+          "Choose at least one curriculum.",
+          "اختر منهجًا واحدًا على الأقل."
+        ]
+      },
+      "profile": {
+        "saved": [
+          "School profile saved",
+          "تم حفظ ملف المدرسة"
+        ],
+        "nameEn": [
+          "Name in English",
+          "الاسم بالإنجليزية"
+        ],
+        "nameAr": [
+          "Name in Arabic",
+          "الاسم بالعربية"
+        ],
+        "shortNameEn": [
+          "Short name in English",
+          "الاسم المختصر بالإنجليزية"
+        ],
+        "shortNameAr": [
+          "Short name in Arabic",
+          "الاسم المختصر بالعربية"
+        ],
+        "shortHint": [
+          "Shown in the sidebar and in messages.",
+          "يظهر في الشريط الجانبي وفي الرسائل."
+        ],
+        "primaryColor": [
+          "Main color",
+          "اللون الرئيسي"
+        ],
+        "accentColor": [
+          "Accent color",
+          "لون التمييز"
+        ],
+        "preview": [
+          "Preview",
+          "معاينة"
+        ],
+        "previewSchool": [
+          "Your school",
+          "مدرستك"
+        ],
+        "previewButton": [
+          "Submit request",
+          "إرسال الطلب"
+        ],
+        "previewBadge": [
+          "New",
+          "جديد"
+        ],
+        "previewHint": [
+          "Colors apply across the app after you save.",
+          "تُطبَّق الألوان على المنصة كلها بعد الحفظ."
+        ],
+        "defaultLocale": [
+          "Default language",
+          "اللغة الافتراضية"
+        ],
+        "english": [
+          "English",
+          "الإنجليزية"
+        ],
+        "arabic": [
+          "Arabic",
+          "العربية"
+        ],
+        "timezone": [
+          "Time zone",
+          "المنطقة الزمنية"
+        ],
+        "numerals": [
+          "Numerals",
+          "الأرقام"
+        ],
+        "western": [
+          "Western (123)",
+          "غربية (123)"
+        ],
+        "arabicIndic": [
+          "Arabic-Indic (١٢٣)",
+          "عربية هندية (١٢٣)"
+        ],
+        "emirate": [
+          "Emirate",
+          "الإمارة"
+        ],
+        "regulator": [
+          "Regulator",
+          "الجهة التنظيمية"
+        ],
+        "regulators": {
+          "KHDA": [
+            "KHDA (Dubai)",
+            "هيئة المعرفة والتنمية البشرية (دبي)"
+          ],
+          "ADEK": [
+            "ADEK (Abu Dhabi)",
+            "دائرة التعليم والمعرفة (أبوظبي)"
+          ],
+          "SPEA": [
+            "SPEA (Sharjah)",
+            "هيئة الشارقة للتعليم الخاص"
+          ],
+          "MOE": [
+            "Ministry of Education",
+            "وزارة التربية والتعليم"
+          ],
+          "OTHER": [
+            "Other",
+            "أخرى"
+          ]
+        },
+        "hijri": [
+          "Show Hijri dates",
+          "عرض التاريخ الهجري"
+        ],
+        "hijriHint": [
+          "People can switch it on in their settings.",
+          "يمكن لكل شخص تفعيله من إعداداته."
+        ],
+        "weekDays": [
+          "School days",
+          "أيام الدراسة"
+        ],
+        "logo": [
+          "Logo",
+          "الشعار"
+        ],
+        "logoAlt": [
+          "School logo",
+          "شعار المدرسة"
+        ],
+        "logoUpload": [
+          "Upload logo",
+          "رفع الشعار"
+        ],
+        "logoReplace": [
+          "Replace logo",
+          "تغيير الشعار"
+        ],
+        "logoRemove": [
+          "Remove",
+          "إزالة"
+        ],
+        "logoHint": [
+          "PNG, JPG or WebP, square works best, up to 2 MB.",
+          "PNG أو JPG أو WebP، ويفضَّل أن يكون مربعًا، بحد أقصى 2 ميغابايت."
+        ],
+        "logoSaved": [
+          "Logo saved",
+          "تم حفظ الشعار"
+        ]
+      },
+      "year": {
+        "saved": [
+          "Academic year saved",
+          "تم حفظ العام الدراسي"
+        ],
+        "nameEn": [
+          "Year name in English",
+          "اسم العام بالإنجليزية"
+        ],
+        "nameAr": [
+          "Year name in Arabic",
+          "اسم العام بالعربية"
+        ],
+        "startsOn": [
+          "Starts",
+          "يبدأ"
+        ],
+        "endsOn": [
+          "Ends",
+          "ينتهي"
+        ],
+        "terms": [
+          "Terms",
+          "الفصول الدراسية"
+        ],
+        "termNameEn": [
+          "Term name in English",
+          "اسم الفصل بالإنجليزية"
+        ],
+        "termNameAr": [
+          "Term name in Arabic",
+          "اسم الفصل بالعربية"
+        ],
+        "removeTerm": [
+          "Remove term",
+          "حذف الفصل"
+        ],
+        "addTerm": [
+          "Add term",
+          "إضافة فصل"
+        ],
+        "holidaysAdded": [
+          "{n, plural, =0 {Nothing to add, the calendar already has them} one {Added # holiday} other {Added # holidays}}",
+          "{n, plural, =0 {لا شيء لإضافته، فهي موجودة في التقويم} one {أُضيفت عطلة واحدة} two {أُضيفت عطلتان} few {أُضيفت # عطل} many {أُضيفت # عطلة} other {أُضيفت # عطلة}}"
+        ],
+        "addHolidays": [
+          "Add missing UAE holidays",
+          "إضافة عطل الإمارات الناقصة"
+        ],
+        "noYear": [
+          "There is no current academic year. Create one in the school calendar.",
+          "لا يوجد عام دراسي حالي. أنشئ عامًا من تقويم المدرسة."
+        ],
+        "holidays": [
+          "Holidays and breaks",
+          "العطل والإجازات"
+        ],
+        "holidaysHint": [
+          "Islamic holiday dates are estimates and move every year. Edit them when the official dates are announced.",
+          "تواريخ العطل الإسلامية تقديرية وتتغير كل عام. عدّلها عند إعلان التواريخ الرسمية."
+        ],
+        "noHolidays": [
+          "No holidays on the calendar for this year yet.",
+          "لا توجد عطل في التقويم لهذا العام بعد."
+        ],
+        "estimated": [
+          "Estimated",
+          "تقديري"
+        ],
+        "editCalendar": [
+          "Edit holidays and events in the school calendar",
+          "تعديل العطل والفعاليات في تقويم المدرسة"
+        ],
+        "bell": [
+          "Bell schedule",
+          "جدول الحصص"
+        ],
+        "bellOff": [
+          "The timetable module is off, so there is no bell schedule to set.",
+          "وحدة الجدول الدراسي موقفة، لذا لا يوجد جدول حصص لضبطه."
+        ]
+      },
+      "curricula": {
+        "saved": [
+          "{n, plural, =0 {Curricula saved} one {Curricula saved, # course added} other {Curricula saved, # courses added}}",
+          "{n, plural, =0 {تم حفظ المناهج} one {تم حفظ المناهج وإضافة مقرر واحد} two {تم حفظ المناهج وإضافة مقررين} few {تم حفظ المناهج وإضافة # مقررات} many {تم حفظ المناهج وإضافة # مقررًا} other {تم حفظ المناهج وإضافة # مقرر}}"
+        ],
+        "pickOne": [
+          "Choose at least one curriculum.",
+          "اختر منهجًا واحدًا على الأقل."
+        ],
+        "catalogTitle": [
+          "Course catalog",
+          "دليل المقررات"
+        ],
+        "catalogBody": [
+          "Courses your school offers, used by pathway planning and transcripts. Switch off any you do not teach.",
+          "المقررات التي تقدمها مدرستك، ويستخدمها تخطيط المسارات وكشوف الدرجات. أوقف ما لا تدرّسه."
+        ],
+        "noCourses": [
+          "No courses yet. Choose a curriculum and save.",
+          "لا توجد مقررات بعد. اختر منهجًا واحفظ."
+        ],
+        "count": [
+          "{name}: {n}",
+          "{name}: {n}"
+        ],
+        "editCatalog": [
+          "Review the course catalog",
+          "مراجعة دليل المقررات"
+        ]
+      },
+      "modules": {
+        "saved": [
+          "Modules saved",
+          "تم حفظ الوحدات"
+        ],
+        "coreTitle": [
+          "Always on",
+          "مفعّلة دائمًا"
+        ],
+        "coreBody": [
+          "The core of the platform cannot be switched off.",
+          "لا يمكن إيقاف الأساسيات في المنصة."
+        ]
+      },
+      "people": {
+        "staff": [
+          "Staff",
+          "الموظفون"
+        ],
+        "students": [
+          "Students",
+          "الطلاب"
+        ],
+        "guardians": [
+          "Guardians",
+          "أولياء الأمور"
+        ],
+        "openPeople": [
+          "Open people admin",
+          "فتح إدارة الأشخاص"
+        ],
+        "importTitle": [
+          "Import students and guardians",
+          "استيراد الطلاب وأولياء الأمور"
+        ],
+        "importBody": [
+          "Download the template, fill it in from your student information system and upload it. We check every row before anything is saved.",
+          "نزّل القالب واملأه من نظام معلومات الطلاب لديك ثم ارفعه، وسنتحقق من كل صف قبل الحفظ."
+        ],
+        "noPermission": [
+          "Adding people needs the school administrator role.",
+          "تتطلب إضافة الأشخاص دور مسؤول المدرسة."
+        ]
+      },
+      "invite": {
+        "locked": [
+          "Confirm your email to unlock staff invitations and family access. Use the link we sent, or Resend on the banner above.",
+          "أكّد بريدك الإلكتروني لتفعيل دعوات الموظفين ووصول العائلات. استخدم الرابط المرسل أو زر إعادة الإرسال في الشريط أعلاه."
+        ],
+        "lockedShort": [
+          "Locked until email is confirmed",
+          "مقفل حتى تأكيد البريد"
+        ],
+        "joinCode": [
+          "Family join code",
+          "رمز انضمام العائلات"
+        ],
+        "joinCodeHint": [
+          "Parents enter this code when they sign up to join your school.",
+          "يُدخل أولياء الأمور هذا الرمز عند التسجيل للانضمام إلى مدرستك."
+        ],
+        "joinCodeLocked": [
+          "Shown once your email is confirmed.",
+          "يظهر بعد تأكيد بريدك الإلكتروني."
+        ],
+        "cards": {
+          "staffInvites": {
+            "title": [
+              "Invite staff",
+              "دعوة الموظفين"
+            ],
+            "body": [
+              "Send invitations by email, allow your staff email domain and choose how people sign in.",
+              "أرسل الدعوات بالبريد، واسمح بنطاق بريد موظفيك، واختر طرق تسجيل الدخول."
+            ],
+            "cta": [
+              "Open invitations",
+              "فتح الدعوات"
+            ]
+          },
+          "familyCode": {
+            "title": [
+              "Family join code and poster",
+              "رمز العائلات والملصق"
+            ],
+            "body": [
+              "Share the code or print the poster so parents can join and claim their children.",
+              "شارك الرمز أو اطبع الملصق ليتمكن أولياء الأمور من الانضمام وربط أبنائهم."
+            ],
+            "cta": [
+              "Share with families",
+              "مشاركة مع العائلات"
+            ]
+          },
+          "joinRequests": {
+            "title": [
+              "Approve join requests",
+              "اعتماد طلبات الانضمام"
+            ],
+            "body": [
+              "See who asked to join and approve or decline them.",
+              "اطّلع على من طلب الانضمام واعتمد الطلب أو ارفضه."
+            ],
+            "cta": [
+              "Open join requests",
+              "فتح طلبات الانضمام"
+            ]
+          },
+          "roles": {
+            "title": [
+              "Roles and permissions",
+              "الأدوار والصلاحيات"
+            ],
+            "body": [
+              "Adjust what each role can do or create your own roles.",
+              "عدّل صلاحيات كل دور أو أنشئ أدوارًا خاصة بك."
+            ],
+            "cta": [
+              "Open roles",
+              "فتح الأدوار"
+            ]
+          }
+        }
+      },
+      "done": {
+        "state": {
+          "done": [
+            "Done",
+            "تم"
+          ],
+          "skipped": [
+            "Skipped for now",
+            "تم تخطيها مؤقتًا"
+          ],
+          "todo": [
+            "Not started",
+            "لم تبدأ"
+          ]
+        },
+        "review": [
+          "Review",
+          "مراجعة"
+        ],
+        "finish": [
+          "Finish",
+          "إكمال"
+        ],
+        "editLater": [
+          "Admin page",
+          "صفحة الإدارة"
+        ],
+        "completed": [
+          "Setup finished on {date}.",
+          "اكتمل الإعداد في {date}."
+        ],
+        "ready": [
+          "Your school has a working setup. Finish the rest whenever you like.",
+          "أصبح لمدرستك إعداد جاهز للعمل. أكمل الباقي متى شئت."
+        ],
+        "goToSchool": [
+          "Go to your school",
+          "الانتقال إلى مدرستك"
+        ]
+      }
+    },
+    "modules": {
+      "meetings": {
+        "name": [
+          "Meetings",
+          "المواعيد"
+        ],
+        "desc": [
+          "Families and students book meetings with staff from shared availability.",
+          "تحجز العائلات والطلاب مواعيد مع الموظفين من الأوقات المتاحة."
+        ]
+      },
+      "timetable": {
+        "name": [
+          "Timetable and cover",
+          "الجدول الدراسي والتغطية"
+        ],
+        "desc": [
+          "Bell times, a generated timetable, staff absences and cover.",
+          "أوقات الحصص وجدول دراسي مولَّد وغياب الموظفين والتغطية."
+        ]
+      },
+      "grades": {
+        "name": [
+          "Grades",
+          "الدرجات"
+        ],
+        "desc": [
+          "Gradebooks for teachers and published results for families.",
+          "دفاتر درجات للمعلمين ونتائج منشورة للعائلات."
+        ]
+      },
+      "registration": {
+        "name": [
+          "Subject registration",
+          "تسجيل المواد"
+        ],
+        "desc": [
+          "Students choose subjects each year and the school allocates classes.",
+          "يختار الطلاب موادهم كل عام وتوزّع المدرسة الفصول."
+        ]
+      },
+      "exams": {
+        "name": [
+          "Exams",
+          "الامتحانات"
+        ],
+        "desc": [
+          "Exam timetables with rooms and invigilators.",
+          "جداول الامتحانات مع القاعات والمراقبين."
+        ]
+      },
+      "trips": {
+        "name": [
+          "Trips",
+          "الرحلات"
+        ],
+        "desc": [
+          "Trip letters, parent consent and participant lists.",
+          "خطابات الرحلات وموافقات أولياء الأمور وقوائم المشاركين."
+        ]
+      },
+      "career": {
+        "name": [
+          "Career guidance",
+          "التوجيه المهني"
+        ],
+        "desc": [
+          "Aptitude assessment, career matches and advisor follow-up.",
+          "تقييم الميول ومطابقة المهن ومتابعة المستشار."
+        ]
+      },
+      "pathways": {
+        "name": [
+          "University pathways",
+          "المسارات الجامعية"
+        ],
+        "desc": [
+          "University search, course planning and applications. Needs career guidance.",
+          "البحث عن الجامعات وتخطيط المقررات والطلبات. يتطلب التوجيه المهني."
+        ]
+      },
+      "curriculum": {
+        "name": [
+          "Curriculum planning",
+          "تخطيط المناهج"
+        ],
+        "desc": [
+          "Frameworks, lesson plans and review by heads of department.",
+          "الأطر وخطط الدروس ومراجعتها من رؤساء الأقسام."
+        ]
+      },
+      "analytics": {
+        "name": [
+          "Analytics",
+          "التحليلات"
+        ],
+        "desc": [
+          "School-wide dashboards for leaders.",
+          "لوحات معلومات للمدرسة كلها لفريق القيادة."
+        ]
+      },
+      "core": {
+        "requests": [
+          "Requests and approvals",
+          "الطلبات والموافقات"
+        ],
+        "services": [
+          "Services",
+          "الخدمات"
+        ],
+        "cases": [
+          "Student cases",
+          "حالات الطلاب"
+        ],
+        "safeguarding": [
+          "Safeguarding",
+          "حماية الطفل"
+        ],
+        "documents": [
+          "Documents and letters",
+          "المستندات والخطابات"
+        ],
+        "calendar": [
+          "Calendar",
+          "التقويم"
+        ]
+      }
+    },
+    "card": {
+      "title": [
+        "Finish setting up your school",
+        "أكمل إعداد مدرستك"
+      ],
+      "almost": [
+        "All steps are done or skipped. Review and finish.",
+        "اكتملت كل الخطوات أو تم تخطيها. راجعها وأنهِ الإعداد."
+      ],
+      "next": [
+        "Next: {step}",
+        "التالي: {step}"
+      ],
+      "progress": [
+        "{done} of {total}",
+        "{done} من {total}"
+      ],
+      "start": [
+        "Start setup",
+        "ابدأ الإعداد"
+      ],
+      "continue": [
+        "Continue setup",
+        "متابعة الإعداد"
+      ]
+    },
+    "settingsLink": {
+      "title": [
+        "School setup",
+        "إعداد المدرسة"
+      ],
+      "body": [
+        "Profile, brand, academic year, curricula, modules and people, step by step.",
+        "الملف والهوية والعام الدراسي والمناهج والوحدات والأشخاص خطوة بخطوة."
+      ],
+      "open": [
+        "Open setup",
+        "فتح الإعداد"
+      ],
+      "brandLink": [
+        "Brand, logo and time zone",
+        "الهوية والشعار والمنطقة الزمنية"
+      ]
+    },
+    "config": {
+      "saved": [
+        "Saved",
+        "تم الحفظ"
+      ],
+      "cancel": [
+        "Cancel",
+        "إلغاء"
+      ],
+      "save": [
+        "Save",
+        "حفظ"
+      ],
+      "subjectsTitle": [
+        "Subjects",
+        "المواد الدراسية"
+      ],
+      "subjectsBody": [
+        "The subjects your school teaches, used by classes, grades, timetables and exams.",
+        "المواد التي تدرّسها مدرستك، وتُستخدم في الفصول والدرجات والجداول والامتحانات."
+      ],
+      "addSubject": [
+        "Add subject",
+        "إضافة مادة"
+      ],
+      "editSubject": [
+        "Edit subject",
+        "تعديل المادة"
+      ],
+      "code": [
+        "Code",
+        "الرمز"
+      ],
+      "department": [
+        "Department",
+        "القسم"
+      ],
+      "noDepartment": [
+        "No department",
+        "بدون قسم"
+      ],
+      "nameEn": [
+        "Name in English",
+        "الاسم بالإنجليزية"
+      ],
+      "nameAr": [
+        "Name in Arabic",
+        "الاسم بالعربية"
+      ],
+      "messagesTitle": [
+        "Notification messages",
+        "رسائل الإشعارات"
+      ],
+      "messagesBody": [
+        "The wording of every email and text the platform sends for your school, in both languages.",
+        "صياغة كل بريد ورسالة نصية ترسلها المنصة باسم مدرستك، باللغتين."
+      ],
+      "noMessages": [
+        "No notification messages yet.",
+        "لا توجد رسائل إشعارات بعد."
+      ],
+      "editMessage": [
+        "Edit message",
+        "تعديل الرسالة"
+      ],
+      "messageHint": [
+        "Keep the placeholders in double braces, such as '{{title}}'. They are filled in when the message is sent.",
+        "أبقِ العناصر النائبة بين الأقواس المزدوجة مثل '{{title}}'، فهي تُملأ عند الإرسال."
+      ],
+      "subjectEn": [
+        "Subject in English",
+        "العنوان بالإنجليزية"
+      ],
+      "subjectAr": [
+        "Subject in Arabic",
+        "العنوان بالعربية"
+      ],
+      "bodyEn": [
+        "Message in English",
+        "الرسالة بالإنجليزية"
+      ],
+      "bodyAr": [
+        "Message in Arabic",
+        "الرسالة بالعربية"
+      ],
+      "channels": {
+        "EMAIL": [
+          "Email",
+          "بريد إلكتروني"
+        ],
+        "SMS": [
+          "SMS",
+          "رسالة نصية"
+        ],
+        "WHATSAPP": [
+          "WhatsApp",
+          "واتساب"
+        ],
+        "IN_APP": [
+          "In app",
+          "داخل المنصة"
+        ]
+      },
+      "errors": {
+        "generic": [
+          "Something went wrong. Please try again.",
+          "حدث خطأ. يُرجى المحاولة مجددًا."
+        ],
+        "FORBIDDEN": [
+          "You do not have permission to change this.",
+          "ليست لديك صلاحية لتعديل هذا."
+        ],
+        "CODE": [
+          "Use 2 to 12 capital letters, digits or underscores for the code.",
+          "استخدم من 2 إلى 12 حرفًا إنجليزيًا كبيرًا أو رقمًا أو شرطة سفلية للرمز."
+        ],
+        "CODE_TAKEN": [
+          "Another subject already uses this code.",
+          "هذا الرمز مستخدم لمادة أخرى."
+        ],
+        "NAME": [
+          "Enter both names.",
+          "أدخل الاسمين."
+        ],
+        "PLACEHOLDER": [
+          "Only use the placeholders the message already had.",
+          "استخدم فقط العناصر النائبة الموجودة في الرسالة أصلًا."
+        ],
+        "NOT_FOUND": [
+          "This item no longer exists. Refresh the page.",
+          "هذا العنصر لم يعد موجودًا. حدّث الصفحة."
+        ],
+        "INVALID": [
+          "Please check the values and try again.",
+          "يُرجى مراجعة القيم والمحاولة مجددًا."
+        ]
+      }
+    }
+  },
+  "guide": {
+    "steps": {
+      "schoolSetupWizard": {
+        "title": [
+          "Set up a school in minutes",
+          "إعداد مدرسة خلال دقائق"
+        ],
+        "body": [
+          "New schools sign up and follow this checklist: profile and brand, year and holidays, curricula, modules, people and invitations. Every step stays editable.",
+          "تسجّل المدارس الجديدة وتتبع هذه القائمة: الملف والهوية، العام والعطل، المناهج، الوحدات، الأشخاص والدعوات. وتبقى كل خطوة قابلة للتعديل."
+        ]
+      }
+    }
+  }
+}

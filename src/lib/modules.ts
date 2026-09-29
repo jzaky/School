@@ -71,3 +71,8 @@ export function enabledOptionalModules(org: OrgModules): OptionalModule[] {
 }
 
 export { isOptional as isOptionalModule };
+
+/** Navigation without links into switched-off modules; sections left empty are dropped. */
+export function filterNav<S extends { items: Array<{ href: string }> }>(org: OrgModules, sections: S[]): S[] {
+  return sections.map((s) => ({ ...s, items: s.items.filter((i) => pathEnabled(org, i.href)) })).filter((s) => s.items.length > 0);
+}

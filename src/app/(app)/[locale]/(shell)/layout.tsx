@@ -8,7 +8,11 @@ import { initials, pick, userName } from "@/lib/i18n-data";
 import { demoModeEnabled } from "@/auth";
 import { DemoGuide } from "@/components/demo/demo-guide";
 import { GUIDE_STEPS } from "@/server/demo/guide";
-import { pathEnabled } from "@/lib/modules";
+import { filterNav, pathEnabled } from "@/lib/modules";
+import { BrandStyle } from "@/components/onboarding/brand-style";
+import { VerifyBanner } from "@/components/onboarding/verify-banner";
+import { schoolVerified } from "@/server/onboarding/verification";
+import { canSetup } from "@/server/onboarding/access";
 
 export default async function ShellLayout({ children }: { children: React.ReactNode }) {
   const ctx = await getCtx();
@@ -28,12 +32,15 @@ export default async function ShellLayout({ children }: { children: React.ReactN
   const name = userName(ctx.user, locale);
   const primaryRole = ctx.roles[0];
   // Switched-off modules disappear from the navigation and the guide.
-  const nav = buildNav(ctx, { approvals, tasks, notifications: unread })
-    .map((s) => ({ ...s, items: s.items.filter((i) => pathEnabled(ctx.org, i.href)) }))
-    .filter((s) => s.items.length > 0);
+  const nav = filterNav(ctx.org, buildNav(ctx, { approvals, tasks, notifications: unread }));
   const tGuide = await getTranslations("guide");
   const guideSteps = personas.length && ctx.persona ? (GUIDE_STEPS[ctx.persona] ?? []).filter((s) => pathEnabled(ctx.org, s.href)) : [];
+  // New schools: administrators see a banner until the founding administrator confirms their email.
+  const showVerify = canSetup(ctx) && !(await schoolVerified(ctx.org, ctx.user));
+  const isFounder = ctx.org.createdById === ctx.user.id;
   return (
+    <>
+    <BrandStyle primaryColor={ctx.org.primaryColor} accentColor={ctx.org.accentColor} />
     <AppShell
       nav={nav}
       unread={unread}
@@ -54,6 +61,7 @@ export default async function ShellLayout({ children }: { children: React.ReactN
         }),
       }}
     >
+      {showVerify && <VerifyBanner email={isFounder ? ctx.user.email : null} canResend={isFounder} />}
       {children}
       {guideSteps.length > 0 && (
         <DemoGuide
@@ -63,5 +71,6 @@ export default async function ShellLayout({ children }: { children: React.ReactN
         />
       )}
     </AppShell>
+    </>
   );
 }

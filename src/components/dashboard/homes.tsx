@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { moduleEnabled } from "@/lib/modules";
 import { SchoolDatesPanel } from "@/components/calendar-admin/family-home";
 import {
   AlertOctagon,
@@ -63,6 +64,7 @@ export async function StudentHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs
         <div className="space-y-6">
           <SchoolDatesPanel ctx={ctx} prefs={prefs} />
           <MeetingsPanel ctx={ctx} prefs={prefs} limit={3} title={t("nextMeetings")} />
+          {moduleEnabled(ctx.org, "career") && (
           <Panel className="overflow-hidden bg-gradient-to-br from-violet-50 to-card">
             <PanelHeader title={t("careerTitle")} icon={<Compass className="size-4 text-violet-600" />} />
             {!assessment ? (
@@ -94,6 +96,7 @@ export async function StudentHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs
               </div>
             )}
           </Panel>
+          )}
           <TasksPanel ctx={ctx} prefs={prefs} limit={4} />
           <AnnouncementsPanel ctx={ctx} prefs={prefs} audience="student" />
         </div>
@@ -520,10 +523,10 @@ export async function AdminHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs }
           value={fmtNumber(prefs, k.requests.thisPeriod)}
           hint={t("vsPrevious", { delta: `${k.requests.delta >= 0 ? "+" : ""}${k.requests.delta}%` })}
           icon={<TrendingUp className="size-5" />}
-          href="/analytics"
+          href={moduleEnabled(ctx.org, "analytics") ? "/analytics" : undefined}
           testId="kpi-requests"
         />
-        <StatCard label={t("kpiResolution")} value={hrs(k.avgResolutionHours)} hint={t("last30")} icon={<Timer className="size-5" />} tone="info" href="/analytics" />
+        <StatCard label={t("kpiResolution")} value={hrs(k.avgResolutionHours)} hint={t("last30")} icon={<Timer className="size-5" />} tone="info" href={moduleEnabled(ctx.org, "analytics") ? "/analytics" : undefined} />
         <StatCard label={t("kpiOpenRequests")} value={fmtNumber(prefs, k.requests.open)} icon={<Inbox className="size-5" />} tone="warning" href="/requests?tab=all&status=open" />
         <StatCard label={t("kpiOpenCases")} value={fmtNumber(prefs, k.openCases)} hint={t("excludesSensitive")} icon={<HeartHandshake className="size-5" />} tone="gold" href="/cases" />
       </div>

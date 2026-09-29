@@ -6,6 +6,9 @@ import { fmtDate, fmtNumber } from "@/lib/format";
 import { pick } from "@/lib/i18n-data";
 import { Link } from "@/i18n/navigation";
 import { PageBody, PageHeader } from "@/components/app/page-header";
+import { Panel, PanelHeader } from "@/components/app/panel";
+import { MessageTemplateDialog } from "@/components/onboarding/config-dialogs";
+import { Mail } from "lucide-react";
 import { EmptyState } from "@/components/app/empty-state";
 import { Pill } from "@/components/app/badges";
 import { Button } from "@/components/ui/button";
@@ -23,6 +26,8 @@ export default async function TemplatesPage() {
     ctx.db.documentTemplate.findMany({ orderBy: { nameEn: "asc" } }),
     ctx.db.document.groupBy({ by: ["templateId"], where: { orgId: ctx.orgId, source: "GENERATED" }, _count: { _all: true } }),
   ]);
+  const messages = await ctx.db.messageTemplate.findMany({ orderBy: [{ key: "asc" }, { channel: "asc" }] });
+  const tm = await getTranslations("onboarding.config");
   return (
     <PageBody>
       <PageHeader
@@ -59,6 +64,32 @@ export default async function TemplatesPage() {
           ))}
         </div>
       )}
+      <Panel padded={false}>
+        <div className="p-5 pb-0">
+          <PanelHeader title={tm("messagesTitle")} description={tm("messagesBody")} icon={<Mail className="size-4" />} />
+        </div>
+        {messages.length === 0 ? (
+          <p className="px-5 pb-5 text-sm text-muted-foreground">{tm("noMessages")}</p>
+        ) : (
+          <ul className="divide-y" data-testid="message-templates">
+            {messages.map((m) => {
+              const label = pick(ctx.locale, m.subjectEn ?? m.bodyEn, m.subjectAr ?? m.bodyAr);
+              return (
+                <li key={m.id} className="flex items-center justify-between gap-3 px-5 py-3">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium">{label}</p>
+                    <p className="truncate text-xs text-muted-foreground">{pick(ctx.locale, m.bodyEn, m.bodyAr)}</p>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    <Pill>{tm(`channels.${m.channel}`)}</Pill>
+                    <MessageTemplateDialog template={{ id: m.id, key: m.key, channel: m.channel, subjectEn: m.subjectEn, subjectAr: m.subjectAr, bodyEn: m.bodyEn, bodyAr: m.bodyAr }} label={label} />
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </Panel>
     </PageBody>
   );
 }

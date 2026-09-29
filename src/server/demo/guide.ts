@@ -80,6 +80,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "curriculumGaps", href: "/curriculum" },
   ],
   admin: [
+    { key: "schoolSetupWizard", href: "/setup?step=done" },
     { key: "servicesAdmin", href: "/admin/services" },
     { key: "formBuilder", href: "/admin/forms" },
     { key: "workflowBuilder", href: "/admin/workflows" },
