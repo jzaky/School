@@ -98,9 +98,10 @@ export async function seedPathwaysFor(db: PrismaClient, orgId: string, now = new
     return true;
   };
 
+  let adamSeeded = false;
   if (adam) {
     // Early A-level forecasts from his subject teachers, and a first IELTS attempt.
-    await addResults(
+    adamSeeded = await addResults(
       adam.id,
       "BRITISH",
       [
@@ -192,5 +193,5 @@ export async function seedPathwaysFor(db: PrismaClient, orgId: string, now = new
     if (!s) break;
     if (await addResults(s.id, plan.curriculum, plan.results, plan.scores, counselor)) students++;
   }
-  log(`pathways: ${programs} programmes, ${students + (adam ? 1 : 0)} students with results`);
+  log(`pathways: ${programs} programmes, ${students + (adamSeeded ? 1 : 0)} students given results`);
 }

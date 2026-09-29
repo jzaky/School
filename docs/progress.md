@@ -28,6 +28,8 @@
 - Tests: 92 unit and integration tests passing. Playwright E2E for the five hero flows in en and ar (10 specs) passing locally; one intermittent failure seen once in 4 full runs (subject change, ar), passed on rerun.
 - Demo reset measured at 15s locally.
 
+- University pathways: programme catalogue (UK, US, UAE, Jordan, Canada, Australia, Europe; all indicative until checked), requirements checker across British, IB, American, UAE MoE and Tawjihi, grades and scores with counselor confirmation, shortlist integration, AI pathway advice draft, counselor admin and College Scorecard importer (snapshot pending an API key).
+
 ## In progress
 - Nothing locally. Waiting on deployment access.
 

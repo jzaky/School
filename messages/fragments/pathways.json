@@ -1,415 +1,1530 @@
 {
-  "nav": { "universities": ["Universities", "الجامعات"] },
+  "nav": {
+    "universities": [
+      "Universities",
+      "الجامعات"
+    ]
+  },
   "career": {
-    "entryRequirements": ["Entry requirements", "شروط القبول"],
-    "reqMet": ["{n} met", "{n} مستوفى"],
-    "reqNotMet": ["{n} not met", "{n} غير مستوفى"],
-    "reqUnknown": ["{n} unknown", "{n} غير معروف"],
-    "seeChecker": ["Open the requirements checker", "افتح أداة فحص الشروط"],
-    "browseAllUniversities": ["Browse every university and programme", "تصفح جميع الجامعات والبرامج"]
+    "entryRequirements": [
+      "Entry requirements",
+      "شروط القبول"
+    ],
+    "reqMet": [
+      "{n} met",
+      "{n} مستوفى"
+    ],
+    "reqNotMet": [
+      "{n} not met",
+      "{n} غير مستوفى"
+    ],
+    "reqUnknown": [
+      "{n} unknown",
+      "{n} غير معروف"
+    ],
+    "seeChecker": [
+      "Open the requirements checker",
+      "افتح أداة فحص الشروط"
+    ],
+    "browseAllUniversities": [
+      "Browse every university and programme",
+      "تصفح جميع الجامعات والبرامج"
+    ]
   },
   "guide": {
     "steps": {
-      "pathways": { "title": ["Check a university programme", "افحص برنامجًا جامعيًا"], "body": ["See which entry requirements you meet and which classes you still need.", "اعرف شروط القبول التي تستوفيها والمواد التي ما زلت تحتاجها."] },
-      "pathwaysParent": { "title": ["Add Adam's predicted grades", "أضيفي الدرجات المتوقعة لآدم"], "body": ["Record predicted grades and test scores for the counselor to confirm.", "سجّلي الدرجات المتوقعة ونتائج الاختبارات لتؤكدها المرشدة."] },
-      "pathwaysConfirm": { "title": ["Confirm grades and scores", "تأكيد الدرجات ونتائج الاختبارات"], "body": ["Confirm results that students and parents entered.", "أكّدي النتائج التي أدخلها الطلاب وأولياء الأمور."] },
-      "pathwaysManage": { "title": ["Keep programme requirements current", "حدّثي شروط البرامج"], "body": ["Edit requirements and mark them as checked against the official page.", "عدّلي الشروط وسجّلي أنها رُوجعت مع الصفحة الرسمية."] }
+      "pathways": {
+        "title": [
+          "Check a university programme",
+          "افحص برنامجًا جامعيًا"
+        ],
+        "body": [
+          "See which entry requirements you meet and which classes you still need.",
+          "اعرف شروط القبول التي تستوفيها والمواد التي ما زلت تحتاجها."
+        ]
+      },
+      "pathwaysParent": {
+        "title": [
+          "Add Adam's predicted grades",
+          "أضيفي الدرجات المتوقعة لآدم"
+        ],
+        "body": [
+          "Record predicted grades and test scores for the counselor to confirm.",
+          "سجّلي الدرجات المتوقعة ونتائج الاختبارات لتؤكدها المرشدة."
+        ]
+      },
+      "pathwaysConfirm": {
+        "title": [
+          "Confirm grades and scores",
+          "تأكيد الدرجات ونتائج الاختبارات"
+        ],
+        "body": [
+          "Confirm results that students and parents entered.",
+          "أكّدي النتائج التي أدخلها الطلاب وأولياء الأمور."
+        ]
+      },
+      "pathwaysManage": {
+        "title": [
+          "Keep programme requirements current",
+          "حدّثي شروط البرامج"
+        ],
+        "body": [
+          "Edit requirements and mark them as checked against the official page.",
+          "عدّلي الشروط وسجّلي أنها رُوجعت مع الصفحة الرسمية."
+        ]
+      }
     }
   },
   "pathways": {
-    "title": ["Universities and pathways", "الجامعات والمسارات"],
-    "subtitle": ["Programmes, entry requirements and application routes in the UK, USA, UAE, Jordan and beyond, checked against your own subjects and results.", "البرامج وشروط القبول وطرق التقديم في المملكة المتحدة والولايات المتحدة والإمارات والأردن وغيرها، مع مقارنتها بموادك ونتائجك."],
-    "accuracyBanner": ["Entry requirements change every year. Everything here is a guide: always confirm with the university's official page and your counselor before you apply.", "تتغير شروط القبول كل عام. كل ما هنا للاسترشاد فقط، فتأكد دائمًا من الصفحة الرسمية للجامعة ومن مرشدك قبل التقديم."],
-    "myResults": ["My grades and scores", "درجاتي ونتائج اختباراتي"],
-    "manage": ["Manage programmes", "إدارة البرامج"],
-    "chooseStudent": ["Choose a student", "اختر طالبًا"],
-    "yourShortlist": ["Your shortlist", "قائمتك المختصرة"],
-    "shortlistOf": ["Shortlist", "القائمة المختصرة"],
-    "shortlistDesc": ["Checked against the {curriculum} requirements.", "مقارنة بشروط منهج {curriculum}."],
-    "shortlistEmpty": ["Nothing on the shortlist yet. Open a programme and add it.", "لا يوجد شيء في القائمة المختصرة بعد. افتح برنامجًا وأضفه."],
-    "noProgramme": ["No programme details", "لا توجد تفاصيل للبرنامج"],
-    "deadlineOn": ["deadline {date}", "الموعد النهائي {date}"],
-    "tabProgrammes": ["Programmes", "البرامج"],
-    "tabUniversities": ["All universities", "كل الجامعات"],
-    "search": ["Search universities or programmes", "ابحث عن جامعة أو برنامج"],
-    "noResults": ["Nothing matches these filters", "لا توجد نتائج مطابقة لهذه الفلاتر"],
-    "noResultsBody": ["Try another country, field or curriculum.", "جرّب دولة أو تخصصًا أو منهجًا آخر."],
-    "forCurriculum": ["For {curriculum}", "لمنهج {curriculum}"],
-    "notListedForCurriculum": ["No requirements listed for this curriculum. Confirm with the university.", "لا توجد شروط مدرجة لهذا المنهج. تأكد من الجامعة."],
-    "notListed": ["Not listed", "غير مدرج"],
-    "indicative": ["Not yet checked", "لم تُراجع بعد"],
-    "checkedShort": ["Checked", "تمت المراجعة"],
-    "notChecked": ["Not yet checked; confirm with the university", "لم تُراجع بعد، تأكد من الجامعة"],
-    "checkedOn": ["Checked on {date}", "رُوجعت في {date}"],
-    "checkedOnBy": ["Checked on {date} by {name}", "راجعها {name} في {date}"],
-    "officialPage": ["Official page", "الصفحة الرسمية"],
-    "admitRate": ["{pct}% admitted", "نسبة القبول {pct}%"],
-    "programmesN": ["{n, plural, one {# programme} other {# programmes}}", "{n, plural, zero {لا برامج} one {برنامج واحد} two {برنامجان} few {# برامج} many {# برنامجًا} other {# برنامج}}"],
-    "pageOf": ["{from} to {to} of {total}", "{from} إلى {to} من {total}"],
-    "prev": ["Previous page", "الصفحة السابقة"],
-    "next": ["Next page", "الصفحة التالية"],
-    "programMeta": ["{degree} · {years} years · {field}", "{degree} · {years} سنوات · {field}"],
-    "inShortlist": ["On your shortlist", "في القائمة المختصرة"],
-    "addToShortlist": ["Add to shortlist", "أضف إلى القائمة المختصرة"],
-    "addedToShortlist": ["Added to the shortlist", "أُضيف إلى القائمة المختصرة"],
-    "requirementsByCurriculum": ["Requirements by curriculum", "الشروط حسب المنهج"],
-    "requirementsHint": ["Typical offers as listed by the university. Offers can be higher or include conditions.", "العروض المعتادة كما تنشرها الجامعة، وقد تكون أعلى أو تتضمن شروطًا إضافية."],
-    "yourCurriculum": ["Your curriculum", "منهجك"],
-    "requiredSubjects": ["Required subjects: {subjects}", "المواد المطلوبة: {subjects}"],
-    "recommendedSubjects": ["Recommended: {subjects}", "مواد مستحسنة: {subjects}"],
-    "noDeadline": ["No fixed deadline listed; check the university site.", "لا يوجد موعد نهائي محدد، راجع موقع الجامعة."],
-    "admissionsTests": ["Admissions tests: {tests}", "اختبارات القبول: {tests}"],
-    "deadlineHint": ["Dates are the usual annual deadlines and can move. Confirm the exact date for your year.", "هذه المواعيد السنوية المعتادة وقد تتغير، فتأكد من الموعد الدقيق لسنتك."],
-    "english": ["English language", "اللغة الإنجليزية"],
-    "englishNotListed": ["No English test minimum listed. Confirm with the university.", "لا يوجد حد أدنى مدرج لاختبار اللغة الإنجليزية، تأكد من الجامعة."],
-    "error": { "generic": ["Something went wrong. Please try again.", "حدث خطأ ما، يرجى المحاولة مرة أخرى."] },
+    "title": [
+      "Universities and pathways",
+      "الجامعات والمسارات"
+    ],
+    "subtitle": [
+      "Programmes, entry requirements and application routes in the UK, USA, UAE, Jordan and beyond, checked against your own subjects and results.",
+      "البرامج وشروط القبول وطرق التقديم في المملكة المتحدة والولايات المتحدة والإمارات والأردن وغيرها، مع مقارنتها بموادك ونتائجك."
+    ],
+    "accuracyBanner": [
+      "Entry requirements change every year. Everything here is a guide: always confirm with the university's official page and your counselor before you apply.",
+      "تتغير شروط القبول كل عام. كل ما هنا للاسترشاد فقط، فتأكد دائمًا من الصفحة الرسمية للجامعة ومن مرشدك قبل التقديم."
+    ],
+    "myResults": [
+      "My grades and scores",
+      "درجاتي ونتائج اختباراتي"
+    ],
+    "manage": [
+      "Manage programmes",
+      "إدارة البرامج"
+    ],
+    "chooseStudent": [
+      "Choose a student",
+      "اختر طالبًا"
+    ],
+    "yourShortlist": [
+      "Your shortlist",
+      "قائمتك المختصرة"
+    ],
+    "shortlistOf": [
+      "Shortlist",
+      "القائمة المختصرة"
+    ],
+    "shortlistDesc": [
+      "Checked against the {curriculum} requirements.",
+      "مقارنة بشروط منهج {curriculum}."
+    ],
+    "shortlistEmpty": [
+      "Nothing on the shortlist yet. Open a programme and add it.",
+      "لا يوجد شيء في القائمة المختصرة بعد. افتح برنامجًا وأضفه."
+    ],
+    "noProgramme": [
+      "No programme details",
+      "لا توجد تفاصيل للبرنامج"
+    ],
+    "deadlineOn": [
+      "deadline {date}",
+      "الموعد النهائي {date}"
+    ],
+    "tabProgrammes": [
+      "Programmes",
+      "البرامج"
+    ],
+    "tabUniversities": [
+      "All universities",
+      "كل الجامعات"
+    ],
+    "search": [
+      "Search universities or programmes",
+      "ابحث عن جامعة أو برنامج"
+    ],
+    "noResults": [
+      "Nothing matches these filters",
+      "لا توجد نتائج مطابقة لهذه الفلاتر"
+    ],
+    "noResultsBody": [
+      "Try another country, field or curriculum.",
+      "جرّب دولة أو تخصصًا أو منهجًا آخر."
+    ],
+    "forCurriculum": [
+      "For {curriculum}",
+      "لمنهج {curriculum}"
+    ],
+    "notListedForCurriculum": [
+      "No requirements listed for this curriculum. Confirm with the university.",
+      "لا توجد شروط مدرجة لهذا المنهج. تأكد من الجامعة."
+    ],
+    "notListed": [
+      "Not listed",
+      "غير مدرج"
+    ],
+    "indicative": [
+      "Not yet checked",
+      "لم تُراجع بعد"
+    ],
+    "checkedShort": [
+      "Checked",
+      "تمت المراجعة"
+    ],
+    "notChecked": [
+      "Not yet checked; confirm with the university",
+      "لم تُراجع بعد، تأكد من الجامعة"
+    ],
+    "checkedOn": [
+      "Checked on {date}",
+      "رُوجعت في {date}"
+    ],
+    "checkedOnBy": [
+      "Checked on {date} by {name}",
+      "راجعها {name} في {date}"
+    ],
+    "officialPage": [
+      "Official page",
+      "الصفحة الرسمية"
+    ],
+    "admitRate": [
+      "{pct}% admitted",
+      "نسبة القبول {pct}%"
+    ],
+    "programmesN": [
+      "{n, plural, one {# programme} other {# programmes}}",
+      "{n, plural, zero {لا برامج} one {برنامج واحد} two {برنامجان} few {# برامج} many {# برنامجًا} other {# برنامج}}"
+    ],
+    "pageOf": [
+      "{from} to {to} of {total}",
+      "{from} إلى {to} من {total}"
+    ],
+    "prev": [
+      "Previous page",
+      "الصفحة السابقة"
+    ],
+    "next": [
+      "Next page",
+      "الصفحة التالية"
+    ],
+    "programMeta": [
+      "{degree} · {years} years · {field}",
+      "{degree} · {years} سنوات · {field}"
+    ],
+    "inShortlist": [
+      "On your shortlist",
+      "في القائمة المختصرة"
+    ],
+    "addToShortlist": [
+      "Add to shortlist",
+      "أضف إلى القائمة المختصرة"
+    ],
+    "addedToShortlist": [
+      "Added to the shortlist",
+      "أُضيف إلى القائمة المختصرة"
+    ],
+    "requirementsByCurriculum": [
+      "Requirements by curriculum",
+      "الشروط حسب المنهج"
+    ],
+    "requirementsHint": [
+      "Typical offers as listed by the university. Offers can be higher or include conditions.",
+      "العروض المعتادة كما تنشرها الجامعة، وقد تكون أعلى أو تتضمن شروطًا إضافية."
+    ],
+    "yourCurriculum": [
+      "Your curriculum",
+      "منهجك"
+    ],
+    "requiredSubjects": [
+      "Required subjects: {subjects}",
+      "المواد المطلوبة: {subjects}"
+    ],
+    "recommendedSubjects": [
+      "Recommended: {subjects}",
+      "مواد مستحسنة: {subjects}"
+    ],
+    "noDeadline": [
+      "No fixed deadline listed; check the university site.",
+      "لا يوجد موعد نهائي محدد، راجع موقع الجامعة."
+    ],
+    "admissionsTests": [
+      "Admissions tests: {tests}",
+      "اختبارات القبول: {tests}"
+    ],
+    "deadlineHint": [
+      "Dates are the usual annual deadlines and can move. Confirm the exact date for your year.",
+      "هذه المواعيد السنوية المعتادة وقد تتغير، فتأكد من الموعد الدقيق لسنتك."
+    ],
+    "english": [
+      "English language",
+      "اللغة الإنجليزية"
+    ],
+    "englishNotListed": [
+      "No English test minimum listed. Confirm with the university.",
+      "لا يوجد حد أدنى مدرج لاختبار اللغة الإنجليزية، تأكد من الجامعة."
+    ],
+    "error": {
+      "generic": [
+        "Something went wrong. Please try again.",
+        "حدث خطأ ما، يرجى المحاولة مرة أخرى."
+      ]
+    },
     "filter": {
-      "country": ["Country", "الدولة"],
-      "city": ["City", "المدينة"],
-      "field": ["Field", "التخصص"],
-      "degree": ["Degree", "الدرجة"],
-      "curriculum": ["Curriculum", "المنهج"],
-      "allCountries": ["All countries", "كل الدول"],
-      "allCities": ["All cities", "كل المدن"],
-      "allFields": ["All fields", "كل التخصصات"],
-      "allDegrees": ["All degrees", "كل الدرجات"],
-      "anyCurriculum": ["Any curriculum", "أي منهج"]
+      "country": [
+        "Country",
+        "الدولة"
+      ],
+      "city": [
+        "City",
+        "المدينة"
+      ],
+      "field": [
+        "Field",
+        "التخصص"
+      ],
+      "degree": [
+        "Degree",
+        "الدرجة"
+      ],
+      "curriculum": [
+        "Curriculum",
+        "المنهج"
+      ],
+      "allCountries": [
+        "All countries",
+        "كل الدول"
+      ],
+      "allCities": [
+        "All cities",
+        "كل المدن"
+      ],
+      "allFields": [
+        "All fields",
+        "كل التخصصات"
+      ],
+      "allDegrees": [
+        "All degrees",
+        "كل الدرجات"
+      ],
+      "anyCurriculum": [
+        "Any curriculum",
+        "أي منهج"
+      ]
     },
     "curriculum": {
-      "BRITISH": ["British (A-levels)", "البريطاني (A-level)"],
-      "IB": ["IB Diploma", "البكالوريا الدولية"],
-      "AMERICAN": ["American", "الأمريكي"],
-      "UAE_MOE": ["UAE Ministry of Education", "منهج وزارة التربية الإماراتية"],
-      "JORDAN_TAWJIHI": ["Jordanian Tawjihi", "التوجيهي الأردني"],
-      "OTHER": ["Other curriculum", "منهج آخر"]
+      "BRITISH": [
+        "British (A-levels)",
+        "البريطاني (A-level)"
+      ],
+      "IB": [
+        "IB Diploma",
+        "البكالوريا الدولية"
+      ],
+      "AMERICAN": [
+        "American",
+        "الأمريكي"
+      ],
+      "UAE_MOE": [
+        "UAE Ministry of Education",
+        "منهج وزارة التربية الإماراتية"
+      ],
+      "JORDAN_TAWJIHI": [
+        "Jordanian Tawjihi",
+        "التوجيهي الأردني"
+      ],
+      "OTHER": [
+        "Other curriculum",
+        "منهج آخر"
+      ]
     },
     "field": {
-      "computer_science": ["Computer Science", "علوم الحاسوب"],
-      "engineering": ["Engineering", "الهندسة"],
-      "medicine": ["Medicine", "الطب"],
-      "business": ["Business", "إدارة الأعمال"],
-      "economics": ["Economics", "الاقتصاد"],
-      "law": ["Law", "القانون"],
-      "psychology": ["Psychology", "علم النفس"],
-      "architecture": ["Architecture", "العمارة"],
-      "science": ["Science", "العلوم"]
+      "computer_science": [
+        "Computer Science",
+        "علوم الحاسوب"
+      ],
+      "engineering": [
+        "Engineering",
+        "الهندسة"
+      ],
+      "medicine": [
+        "Medicine",
+        "الطب"
+      ],
+      "business": [
+        "Business",
+        "إدارة الأعمال"
+      ],
+      "economics": [
+        "Economics",
+        "الاقتصاد"
+      ],
+      "law": [
+        "Law",
+        "القانون"
+      ],
+      "psychology": [
+        "Psychology",
+        "علم النفس"
+      ],
+      "architecture": [
+        "Architecture",
+        "العمارة"
+      ],
+      "science": [
+        "Science",
+        "العلوم"
+      ]
     },
     "subject": {
-      "MATH": ["Mathematics", "الرياضيات"],
-      "FURTHER_MATH": ["Further Mathematics", "الرياضيات الإضافية"],
-      "PHYS": ["Physics", "الفيزياء"],
-      "CHEM": ["Chemistry", "الكيمياء"],
-      "BIO": ["Biology", "الأحياء"],
-      "CS": ["Computer Science", "علوم الحاسوب"],
-      "ENG": ["English", "اللغة الإنجليزية"],
-      "ENG_LIT": ["English Literature", "الأدب الإنجليزي"],
-      "ECON": ["Economics", "الاقتصاد"],
-      "BUS": ["Business Studies", "إدارة الأعمال"],
-      "GEO": ["Geography", "الجغرافيا"],
-      "HIST": ["History", "التاريخ"],
-      "PSY": ["Psychology", "علم النفس"],
-      "ART": ["Art and Design", "الفنون والتصميم"],
-      "DT": ["Design and Technology", "التصميم والتكنولوجيا"],
-      "FR": ["French", "اللغة الفرنسية"],
-      "ARAB": ["Arabic", "اللغة العربية"]
+      "MATH": [
+        "Mathematics",
+        "الرياضيات"
+      ],
+      "FURTHER_MATH": [
+        "Further Mathematics",
+        "الرياضيات الإضافية"
+      ],
+      "PHYS": [
+        "Physics",
+        "الفيزياء"
+      ],
+      "CHEM": [
+        "Chemistry",
+        "الكيمياء"
+      ],
+      "BIO": [
+        "Biology",
+        "الأحياء"
+      ],
+      "CS": [
+        "Computer Science",
+        "علوم الحاسوب"
+      ],
+      "ENG": [
+        "English",
+        "اللغة الإنجليزية"
+      ],
+      "ENG_LIT": [
+        "English Literature",
+        "الأدب الإنجليزي"
+      ],
+      "ECON": [
+        "Economics",
+        "الاقتصاد"
+      ],
+      "BUS": [
+        "Business Studies",
+        "إدارة الأعمال"
+      ],
+      "GEO": [
+        "Geography",
+        "الجغرافيا"
+      ],
+      "HIST": [
+        "History",
+        "التاريخ"
+      ],
+      "PSY": [
+        "Psychology",
+        "علم النفس"
+      ],
+      "ART": [
+        "Art and Design",
+        "الفنون والتصميم"
+      ],
+      "DT": [
+        "Design and Technology",
+        "التصميم والتكنولوجيا"
+      ],
+      "FR": [
+        "French",
+        "اللغة الفرنسية"
+      ],
+      "ARAB": [
+        "Arabic",
+        "اللغة العربية"
+      ]
     },
     "test": {
-      "IELTS": ["IELTS", "IELTS"],
-      "TOEFL": ["TOEFL", "TOEFL"],
-      "SAT": ["SAT", "SAT"],
-      "ACT": ["ACT", "ACT"],
-      "EMSAT_ENGLISH": ["EmSAT English", "EmSAT اللغة الإنجليزية"],
-      "EMSAT_MATH": ["EmSAT Mathematics", "EmSAT الرياضيات"],
-      "EMSAT_PHYSICS": ["EmSAT Physics", "EmSAT الفيزياء"],
-      "EMSAT_CHEMISTRY": ["EmSAT Chemistry", "EmSAT الكيمياء"],
-      "UCAT": ["UCAT", "UCAT"],
-      "TMUA": ["TMUA", "TMUA"],
-      "LNAT": ["LNAT", "LNAT"]
+      "IELTS": [
+        "IELTS",
+        "IELTS"
+      ],
+      "TOEFL": [
+        "TOEFL",
+        "TOEFL"
+      ],
+      "SAT": [
+        "SAT",
+        "SAT"
+      ],
+      "ACT": [
+        "ACT",
+        "ACT"
+      ],
+      "EMSAT_ENGLISH": [
+        "EmSAT English",
+        "EmSAT اللغة الإنجليزية"
+      ],
+      "EMSAT_MATH": [
+        "EmSAT Mathematics",
+        "EmSAT الرياضيات"
+      ],
+      "EMSAT_PHYSICS": [
+        "EmSAT Physics",
+        "EmSAT الفيزياء"
+      ],
+      "EMSAT_CHEMISTRY": [
+        "EmSAT Chemistry",
+        "EmSAT الكيمياء"
+      ],
+      "UCAT": [
+        "UCAT",
+        "UCAT"
+      ],
+      "TMUA": [
+        "TMUA",
+        "TMUA"
+      ],
+      "LNAT": [
+        "LNAT",
+        "LNAT"
+      ]
     },
     "level": {
-      "A_LEVEL": ["A-level", "مستوى A-level"],
-      "AS_LEVEL": ["AS-level", "مستوى AS"],
-      "GCSE": ["GCSE", "GCSE"],
-      "HL": ["Higher Level", "المستوى العالي"],
-      "SL": ["Standard Level", "المستوى العادي"],
-      "AP": ["Advanced Placement", "المستوى المتقدم AP"],
-      "HONORS": ["Honors", "مستوى الشرف"],
-      "GPA": ["GPA", "GPA"]
+      "A_LEVEL": [
+        "A-level",
+        "مستوى A-level"
+      ],
+      "AS_LEVEL": [
+        "AS-level",
+        "مستوى AS"
+      ],
+      "GCSE": [
+        "GCSE",
+        "GCSE"
+      ],
+      "HL": [
+        "Higher Level",
+        "المستوى العالي"
+      ],
+      "SL": [
+        "Standard Level",
+        "المستوى العادي"
+      ],
+      "AP": [
+        "Advanced Placement",
+        "المستوى المتقدم AP"
+      ],
+      "HONORS": [
+        "Honors",
+        "مستوى الشرف"
+      ],
+      "GPA": [
+        "GPA",
+        "GPA"
+      ]
     },
     "stream": {
-      "ADVANCED": ["Advanced stream", "المسار المتقدم"],
-      "ELITE": ["Elite stream", "مسار النخبة"],
-      "GENERAL": ["General stream", "المسار العام"],
-      "SCIENTIFIC": ["Scientific stream", "الفرع العلمي"],
-      "LITERARY": ["Literary stream", "الفرع الأدبي"],
-      "INDUSTRIAL": ["Industrial stream", "الفرع الصناعي"],
-      "HEALTH": ["Health field", "الحقل الصحي"],
-      "IT": ["IT stream", "فرع تكنولوجيا المعلومات"],
-      "AGRICULTURAL": ["Agricultural stream", "الفرع الزراعي"]
+      "ADVANCED": [
+        "Advanced stream",
+        "المسار المتقدم"
+      ],
+      "ELITE": [
+        "Elite stream",
+        "مسار النخبة"
+      ],
+      "GENERAL": [
+        "General stream",
+        "المسار العام"
+      ],
+      "SCIENTIFIC": [
+        "Scientific stream",
+        "الفرع العلمي"
+      ],
+      "LITERARY": [
+        "Literary stream",
+        "الفرع الأدبي"
+      ],
+      "INDUSTRIAL": [
+        "Industrial stream",
+        "الفرع الصناعي"
+      ],
+      "HEALTH": [
+        "Health field",
+        "الحقل الصحي"
+      ],
+      "IT": [
+        "IT stream",
+        "فرع تكنولوجيا المعلومات"
+      ],
+      "AGRICULTURAL": [
+        "Agricultural stream",
+        "الفرع الزراعي"
+      ]
     },
     "route": {
-      "title": ["How to apply", "طريقة التقديم"],
-      "portal": ["Application portal", "بوابة التقديم"],
-      "UCAS": ["UCAS", "UCAS"],
-      "COMMON_APP": ["Common App", "التطبيق المشترك Common App"],
-      "UC_APP": ["University of California application", "طلب جامعة كاليفورنيا"],
-      "MIT_APP": ["MIT application", "طلب معهد MIT"],
-      "OUAC": ["OUAC (Ontario)", "OUAC (أونتاريو)"],
-      "STUDIELINK": ["Studielink", "منصة Studielink"],
-      "CAO": ["CAO", "CAO"],
-      "UNI_ASSIST": ["uni-assist", "منصة uni-assist"],
-      "JORDAN_UNIFIED": ["Jordan unified admission", "القبول الموحد في الأردن"],
-      "DIRECT": ["Apply directly to the university", "التقديم مباشرة إلى الجامعة"]
+      "title": [
+        "How to apply",
+        "طريقة التقديم"
+      ],
+      "portal": [
+        "Application portal",
+        "بوابة التقديم"
+      ],
+      "UCAS": [
+        "UCAS",
+        "UCAS"
+      ],
+      "COMMON_APP": [
+        "Common App",
+        "التطبيق المشترك Common App"
+      ],
+      "UC_APP": [
+        "University of California application",
+        "طلب جامعة كاليفورنيا"
+      ],
+      "MIT_APP": [
+        "MIT application",
+        "طلب معهد MIT"
+      ],
+      "OUAC": [
+        "OUAC (Ontario)",
+        "OUAC (أونتاريو)"
+      ],
+      "STUDIELINK": [
+        "Studielink",
+        "منصة Studielink"
+      ],
+      "CAO": [
+        "CAO",
+        "CAO"
+      ],
+      "UNI_ASSIST": [
+        "uni-assist",
+        "منصة uni-assist"
+      ],
+      "JORDAN_UNIFIED": [
+        "Jordan unified admission",
+        "القبول الموحد في الأردن"
+      ],
+      "DIRECT": [
+        "Apply directly to the university",
+        "التقديم مباشرة إلى الجامعة"
+      ]
     },
     "deadline": {
-      "early": ["Early round", "الجولة المبكرة"],
-      "regular": ["Regular deadline", "الموعد النهائي العادي"],
-      "equal": ["Main deadline", "الموعد النهائي الرئيسي"],
-      "oxbridge": ["Early UCAS deadline", "موعد UCAS المبكر"],
-      "international": ["International deadline", "موعد الطلاب الدوليين"],
-      "unified": ["Unified admission window", "فترة القبول الموحد"]
+      "early": [
+        "Early round",
+        "الجولة المبكرة"
+      ],
+      "regular": [
+        "Regular deadline",
+        "الموعد النهائي العادي"
+      ],
+      "equal": [
+        "Main deadline",
+        "الموعد النهائي الرئيسي"
+      ],
+      "oxbridge": [
+        "Early UCAS deadline",
+        "موعد UCAS المبكر"
+      ],
+      "international": [
+        "International deadline",
+        "موعد الطلاب الدوليين"
+      ],
+      "unified": [
+        "Unified admission window",
+        "فترة القبول الموحد"
+      ]
     },
     "req": {
-      "sep": [", ", "، "],
-      "or": [" or ", " أو "],
-      "subjectMin": ["{subject} ({min})", "{subject} ({min})"],
-      "aLevels": ["A-levels: {grades}", "درجات A-level: {grades}"],
-      "including": ["Including {subjects}", "تشمل {subjects}"],
-      "ibPoints": ["{points} points", "{points} نقطة"],
-      "hl": ["Higher Level: {subjects}", "المستوى العالي: {subjects}"],
-      "sl": ["Standard Level: {subjects}", "المستوى العادي: {subjects}"],
-      "gpa": ["GPA {gpa} or higher", "معدل تراكمي {gpa} أو أعلى"],
-      "sat": ["SAT {score} or higher", "SAT بدرجة {score} أو أعلى"],
-      "act": ["ACT {score} or higher", "ACT بدرجة {score} أو أعلى"],
-      "ap": ["AP: {subjects}", "مواد AP: {subjects}"],
-      "streams": ["Stream: {streams}", "المسار: {streams}"],
-      "average": ["Average {pct}% or higher", "معدل {pct}% أو أعلى"],
-      "emsat": ["EmSAT: {tests}", "اختبارات EmSAT: {tests}"],
-      "tawjihi": ["Tawjihi average {pct}% or higher", "معدل التوجيهي {pct}% أو أعلى"],
-      "tawjihiStream": ["{stream}: {pct}% or higher", "{stream}: {pct}% أو أعلى"],
-      "ielts": ["IELTS {score}", "IELTS {score}"],
-      "ieltsBand": ["IELTS {score}, at least {band} in each part", "IELTS {score} وبحد أدنى {band} في كل مهارة"],
-      "toefl": ["TOEFL iBT {score}", "TOEFL iBT {score}"],
-      "emsatEnglish": ["EmSAT English {score}", "EmSAT للغة الإنجليزية {score}"],
+      "sep": [
+        ", ",
+        "، "
+      ],
+      "or": [
+        " or ",
+        " أو "
+      ],
+      "subjectMin": [
+        "{subject} ({min})",
+        "{subject} ({min})"
+      ],
+      "aLevels": [
+        "A-levels: {grades}",
+        "درجات A-level: {grades}"
+      ],
+      "including": [
+        "Including {subjects}",
+        "تشمل {subjects}"
+      ],
+      "ibPoints": [
+        "{points} points",
+        "{points} نقطة"
+      ],
+      "hl": [
+        "Higher Level: {subjects}",
+        "المستوى العالي: {subjects}"
+      ],
+      "sl": [
+        "Standard Level: {subjects}",
+        "المستوى العادي: {subjects}"
+      ],
+      "gpa": [
+        "GPA {gpa} or higher",
+        "معدل تراكمي {gpa} أو أعلى"
+      ],
+      "sat": [
+        "SAT {score} or higher",
+        "SAT بدرجة {score} أو أعلى"
+      ],
+      "act": [
+        "ACT {score} or higher",
+        "ACT بدرجة {score} أو أعلى"
+      ],
+      "ap": [
+        "AP: {subjects}",
+        "مواد AP: {subjects}"
+      ],
+      "streams": [
+        "Stream: {streams}",
+        "المسار: {streams}"
+      ],
+      "average": [
+        "Average {pct}% or higher",
+        "معدل {pct}% أو أعلى"
+      ],
+      "emsat": [
+        "EmSAT: {tests}",
+        "اختبارات EmSAT: {tests}"
+      ],
+      "tawjihi": [
+        "Tawjihi average {pct}% or higher",
+        "معدل التوجيهي {pct}% أو أعلى"
+      ],
+      "tawjihiStream": [
+        "{stream}: {pct}% or higher",
+        "{stream}: {pct}% أو أعلى"
+      ],
+      "ielts": [
+        "IELTS {score}",
+        "IELTS {score}"
+      ],
+      "ieltsBand": [
+        "IELTS {score}, at least {band} in each part",
+        "IELTS {score} وبحد أدنى {band} في كل مهارة"
+      ],
+      "toefl": [
+        "TOEFL iBT {score}",
+        "TOEFL iBT {score}"
+      ],
+      "emsatEnglish": [
+        "EmSAT English {score}",
+        "EmSAT للغة الإنجليزية {score}"
+      ],
       "policy": {
-        "REQUIRED": ["SAT or ACT required", "اختبار SAT أو ACT مطلوب"],
-        "OPTIONAL": ["SAT or ACT optional", "اختبار SAT أو ACT اختياري"],
-        "BLIND": ["SAT and ACT are not considered", "لا يُنظر في درجات SAT وACT"]
+        "REQUIRED": [
+          "SAT or ACT required",
+          "اختبار SAT أو ACT مطلوب"
+        ],
+        "OPTIONAL": [
+          "SAT or ACT optional",
+          "اختبار SAT أو ACT اختياري"
+        ],
+        "BLIND": [
+          "SAT and ACT are not considered",
+          "لا يُنظر في درجات SAT وACT"
+        ]
       }
     },
     "check": {
       "overall": {
-        "BRITISH": ["A-level grades", "درجات A-level"],
-        "IB": ["IB total points", "مجموع نقاط البكالوريا الدولية"],
-        "AMERICAN": ["GPA", "المعدل التراكمي"],
-        "UAE_MOE": ["Overall average", "المعدل العام"],
-        "JORDAN_TAWJIHI": ["Tawjihi average", "معدل التوجيهي"],
-        "OTHER": ["Overall result", "النتيجة العامة"]
+        "BRITISH": [
+          "A-level grades",
+          "درجات A-level"
+        ],
+        "IB": [
+          "IB total points",
+          "مجموع نقاط البكالوريا الدولية"
+        ],
+        "AMERICAN": [
+          "GPA",
+          "المعدل التراكمي"
+        ],
+        "UAE_MOE": [
+          "Overall average",
+          "المعدل العام"
+        ],
+        "JORDAN_TAWJIHI": [
+          "Tawjihi average",
+          "معدل التوجيهي"
+        ],
+        "OTHER": [
+          "Overall result",
+          "النتيجة العامة"
+        ]
       },
-      "stream": ["Stream", "المسار"],
-      "recommended": ["{subject} (recommended)", "{subject} (مستحسنة)"],
-      "recommendedShort": ["Recommended", "مستحسنة"],
-      "satAct": ["SAT or ACT", "SAT أو ACT"],
-      "admissionsTest": ["{test} admissions test", "اختبار القبول {test}"],
-      "english": ["English test", "اختبار اللغة الإنجليزية"],
-      "gradeMin": ["Grade {min} or better", "درجة {min} أو أفضل"],
-      "mustTake": ["Must be taken", "يجب دراستها"],
-      "mustSit": ["Must be taken before applying", "يجب تقديمه قبل التقديم"],
-      "anyScore": ["A score is needed", "يلزم تقديم درجة"],
-      "optional": ["Optional", "اختياري"],
-      "none": ["Not recorded", "غير مسجلة"],
-      "taking": ["Taking now, no grade yet", "تدرسها الآن، دون درجة بعد"],
-      "notTaking": ["Not taking", "لا تدرسها"],
-      "needed": ["Needed", "المطلوب"],
-      "yours": ["Yours", "لديك"],
-      "predicted": ["Predicted", "متوقعة"],
-      "unconfirmed": ["Awaiting counselor confirmation", "بانتظار تأكيد المرشد"],
-      "nothingListed": ["This programme lists no requirements we can check. Confirm with the university.", "لا يتضمن هذا البرنامج شروطًا يمكن فحصها، تأكد من الجامعة."]
+      "stream": [
+        "Stream",
+        "المسار"
+      ],
+      "recommended": [
+        "{subject} (recommended)",
+        "{subject} (مستحسنة)"
+      ],
+      "recommendedShort": [
+        "Recommended",
+        "مستحسنة"
+      ],
+      "satAct": [
+        "SAT or ACT",
+        "SAT أو ACT"
+      ],
+      "admissionsTest": [
+        "{test} admissions test",
+        "اختبار القبول {test}"
+      ],
+      "english": [
+        "English test",
+        "اختبار اللغة الإنجليزية"
+      ],
+      "gradeMin": [
+        "Grade {min} or better",
+        "درجة {min} أو أفضل"
+      ],
+      "mustTake": [
+        "Must be taken",
+        "يجب دراستها"
+      ],
+      "mustSit": [
+        "Must be taken before applying",
+        "يجب تقديمه قبل التقديم"
+      ],
+      "anyScore": [
+        "A score is needed",
+        "يلزم تقديم درجة"
+      ],
+      "optional": [
+        "Optional",
+        "اختياري"
+      ],
+      "none": [
+        "Not recorded",
+        "غير مسجلة"
+      ],
+      "taking": [
+        "Taking now, no grade yet",
+        "تدرسها الآن، دون درجة بعد"
+      ],
+      "notTaking": [
+        "Not taking",
+        "لا تدرسها"
+      ],
+      "needed": [
+        "Needed",
+        "المطلوب"
+      ],
+      "yours": [
+        "Yours",
+        "لديك"
+      ],
+      "predicted": [
+        "Predicted",
+        "متوقعة"
+      ],
+      "unconfirmed": [
+        "Awaiting counselor confirmation",
+        "بانتظار تأكيد المرشد"
+      ],
+      "nothingListed": [
+        "This programme lists no requirements we can check. Confirm with the university.",
+        "لا يتضمن هذا البرنامج شروطًا يمكن فحصها، تأكد من الجامعة."
+      ]
     },
     "gap": {
-      "takeClass": ["You need to take {subject}.", "تحتاج إلى دراسة {subject}."],
-      "notOffered": ["{subject} is not offered at this school. Ask your counselor about other ways to take it.", "مادة {subject} غير متاحة في هذه المدرسة. اسأل مرشدك عن طرق أخرى لدراستها."],
-      "seeSubjects": ["Choose subjects", "اختيار المواد"],
-      "grade": ["{subject}: {required} needed, you have {have}.", "{subject}: المطلوب {required} ولديك {have}."],
-      "score": ["{test} {required} required, you have {have}.", "المطلوب {test} بدرجة {required} ولديك {have}."],
-      "sitTest": ["Take the {test} and record your score.", "قدّم اختبار {test} وسجّل درجتك."],
-      "register": ["Register for the {test}.", "سجّل في اختبار {test}."],
-      "overall": ["{required} needed, you have {have}.", "المطلوب {required} ولديك {have}."],
-      "stream": ["Your stream is not one this programme accepts.", "مسارك ليس من المسارات التي يقبلها هذا البرنامج."]
+      "takeClass": [
+        "You need to take {subject}.",
+        "تحتاج إلى دراسة {subject}."
+      ],
+      "notOffered": [
+        "{subject} is not offered at this school. Ask your counselor about other ways to take it.",
+        "مادة {subject} غير متاحة في هذه المدرسة. اسأل مرشدك عن طرق أخرى لدراستها."
+      ],
+      "seeSubjects": [
+        "Choose subjects",
+        "اختيار المواد"
+      ],
+      "grade": [
+        "{subject}: {required} needed, you have {have}.",
+        "{subject}: المطلوب {required} ولديك {have}."
+      ],
+      "score": [
+        "{test} {required} required, you have {have}.",
+        "المطلوب {test} بدرجة {required} ولديك {have}."
+      ],
+      "sitTest": [
+        "Take the {test} and record your score.",
+        "قدّم اختبار {test} وسجّل درجتك."
+      ],
+      "register": [
+        "Register for the {test}.",
+        "سجّل في اختبار {test}."
+      ],
+      "overall": [
+        "{required} needed, you have {have}.",
+        "المطلوب {required} ولديك {have}."
+      ],
+      "stream": [
+        "Your stream is not one this programme accepts.",
+        "مسارك ليس من المسارات التي يقبلها هذا البرنامج."
+      ]
     },
     "status": {
-      "met": ["Met", "مستوفى"],
-      "not_met": ["Not met", "غير مستوفى"],
-      "unknown": ["Unknown", "غير معروف"],
-      "optional": ["Optional", "اختياري"]
+      "met": [
+        "Met",
+        "مستوفى"
+      ],
+      "not_met": [
+        "Not met",
+        "غير مستوفى"
+      ],
+      "unknown": [
+        "Unknown",
+        "غير معروف"
+      ],
+      "optional": [
+        "Optional",
+        "اختياري"
+      ]
     },
     "summary": {
-      "met": ["{n} met", "{n} مستوفى"],
-      "notMet": ["{n} not met", "{n} غير مستوفى"],
-      "unknown": ["{n} unknown", "{n} غير معروف"]
+      "met": [
+        "{n} met",
+        "{n} مستوفى"
+      ],
+      "notMet": [
+        "{n} not met",
+        "{n} غير مستوفى"
+      ],
+      "unknown": [
+        "{n} unknown",
+        "{n} غير معروف"
+      ],
+      "notListed": [
+        "Not listed for your curriculum",
+        "غير مدرج لمنهجك"
+      ]
     },
     "checker": {
-      "title": ["Requirements check", "فحص الشروط"],
-      "titleSelf": ["Do I meet the requirements?", "هل أستوفي الشروط؟"],
-      "desc": ["Compared with the {curriculum} requirements, your current subjects, results and test scores.", "مقارنة بشروط منهج {curriculum} وموادك الحالية ونتائجك ودرجات اختباراتك."],
-      "notListed": ["This programme does not list requirements for this curriculum, so only subjects and tests are checked.", "لا يذكر هذا البرنامج شروطًا لهذا المنهج، لذا تُفحص المواد والاختبارات فقط."],
-      "classes": ["Classes you need to take", "المواد التي تحتاج إلى دراستها"],
-      "required": ["Required", "مطلوبة"],
-      "recommended": ["Recommended", "مستحسنة"],
-      "notOffered": ["Not offered at this school", "غير متاحة في هذه المدرسة"],
-      "goSubjects": ["Go to subject choices", "الانتقال إلى اختيار المواد"],
-      "disclaimer": ["A guide only. The university makes the decision.", "هذا للاسترشاد فقط، والقرار للجامعة."],
-      "editResults": ["Update grades and scores", "تحديث الدرجات والنتائج"]
+      "title": [
+        "Requirements check",
+        "فحص الشروط"
+      ],
+      "titleSelf": [
+        "Do I meet the requirements?",
+        "هل أستوفي الشروط؟"
+      ],
+      "desc": [
+        "Compared with the {curriculum} requirements, your current subjects, results and test scores.",
+        "مقارنة بشروط منهج {curriculum} وموادك الحالية ونتائجك ودرجات اختباراتك."
+      ],
+      "notListed": [
+        "This programme does not list requirements for this curriculum, so only subjects and tests are checked.",
+        "لا يذكر هذا البرنامج شروطًا لهذا المنهج، لذا تُفحص المواد والاختبارات فقط."
+      ],
+      "classes": [
+        "Classes you need to take",
+        "المواد التي تحتاج إلى دراستها"
+      ],
+      "required": [
+        "Required",
+        "مطلوبة"
+      ],
+      "recommended": [
+        "Recommended",
+        "مستحسنة"
+      ],
+      "notOffered": [
+        "Not offered at this school",
+        "غير متاحة في هذه المدرسة"
+      ],
+      "goSubjects": [
+        "Go to subject choices",
+        "الانتقال إلى اختيار المواد"
+      ],
+      "disclaimer": [
+        "A guide only. The university makes the decision.",
+        "هذا للاسترشاد فقط، والقرار للجامعة."
+      ],
+      "editResults": [
+        "Update grades and scores",
+        "تحديث الدرجات والنتائج"
+      ]
     },
     "advice": {
-      "title": ["Pathway advice", "نصائح المسار"],
-      "desc": ["A draft summary of routes and gaps, written only from the requirements and results above.", "ملخص مبدئي للمسارات والفجوات، مكتوب فقط من الشروط والنتائج أعلاه."],
-      "draft": ["Draft advice", "صياغة نصيحة مبدئية"],
-      "badge": ["AI draft", "مسودة بالذكاء الاصطناعي"],
-      "disclaimer": ["Check it with your counselor. It adds no new requirements.", "راجعها مع مرشدك، فهي لا تضيف شروطًا جديدة."],
-      "discard": ["Discard draft", "تجاهل المسودة"],
-      "disabled": ["AI drafts are turned off for this school.", "مسودات الذكاء الاصطناعي متوقفة في هذه المدرسة."],
-      "overall": ["Overall result", "النتيجة العامة"],
-      "summary": ["For {programme}, {met} listed requirements look met, {notMet} are not met yet and {unknown} are still unknown.", "في برنامج {programme}، يبدو أن {met} من الشروط المدرجة مستوفاة، و{notMet} غير مستوفاة بعد، و{unknown} ما زالت غير معروفة."],
-      "summaryNotListed": ["{programme} does not list requirements for your curriculum yet, so ask the university which qualifications it accepts.", "لا يذكر برنامج {programme} شروطًا لمنهجك بعد، لذا اسأل الجامعة عن المؤهلات التي تقبلها."],
-      "stepTakeRequired": ["Take {subject}, which this programme requires.", "ادرس مادة {subject} التي يشترطها هذا البرنامج."],
-      "stepTakeRecommended": ["Consider {subject}, which is recommended.", "فكّر في دراسة {subject} لأنها مستحسنة."],
-      "stepRaise": ["Work towards {test} {required}; you have {have} now.", "اعمل للوصول إلى {test} بدرجة {required}، ودرجتك الآن {have}."],
-      "stepRegister": ["Register for the {test} admissions test.", "سجّل في اختبار القبول {test}."],
-      "stepEnglish": ["Book an English test such as IELTS or TOEFL.", "احجز اختبارًا في اللغة الإنجليزية مثل IELTS أو TOEFL."],
-      "stepConfirm": ["Ask your counselor to confirm the grades and scores you entered.", "اطلب من مرشدك تأكيد الدرجات والنتائج التي أدخلتها."],
-      "stepVerify": ["Confirm every requirement on the university's official page before applying.", "تأكد من كل شرط في الصفحة الرسمية للجامعة قبل التقديم."]
+      "title": [
+        "Pathway advice",
+        "نصائح المسار"
+      ],
+      "desc": [
+        "A draft summary of routes and gaps, written only from the requirements and results above.",
+        "ملخص مبدئي للمسارات والفجوات، مكتوب فقط من الشروط والنتائج أعلاه."
+      ],
+      "draft": [
+        "Draft advice",
+        "صياغة نصيحة مبدئية"
+      ],
+      "badge": [
+        "AI draft",
+        "مسودة بالذكاء الاصطناعي"
+      ],
+      "disclaimer": [
+        "Check it with your counselor. It adds no new requirements.",
+        "راجعها مع مرشدك، فهي لا تضيف شروطًا جديدة."
+      ],
+      "discard": [
+        "Discard draft",
+        "تجاهل المسودة"
+      ],
+      "disabled": [
+        "AI drafts are turned off for this school.",
+        "مسودات الذكاء الاصطناعي متوقفة في هذه المدرسة."
+      ],
+      "overall": [
+        "Overall result",
+        "النتيجة العامة"
+      ],
+      "summary": [
+        "For {programme}, {met} listed requirements look met, {notMet} are not met yet and {unknown} are still unknown.",
+        "في برنامج {programme}، يبدو أن {met} من الشروط المدرجة مستوفاة، و{notMet} غير مستوفاة بعد، و{unknown} ما زالت غير معروفة."
+      ],
+      "summaryNotListed": [
+        "{programme} does not list requirements for your curriculum yet, so ask the university which qualifications it accepts.",
+        "لا يذكر برنامج {programme} شروطًا لمنهجك بعد، لذا اسأل الجامعة عن المؤهلات التي تقبلها."
+      ],
+      "stepTakeRequired": [
+        "Take {subject}, which this programme requires.",
+        "ادرس مادة {subject} التي يشترطها هذا البرنامج."
+      ],
+      "stepTakeRecommended": [
+        "Consider {subject}, which is recommended.",
+        "فكّر في دراسة {subject} لأنها مستحسنة."
+      ],
+      "stepRaise": [
+        "Work towards {test} {required}; you have {have} now.",
+        "اعمل للوصول إلى {test} بدرجة {required}، ودرجتك الآن {have}."
+      ],
+      "stepRegister": [
+        "Register for the {test} admissions test.",
+        "سجّل في اختبار القبول {test}."
+      ],
+      "stepEnglish": [
+        "Book an English test such as IELTS or TOEFL.",
+        "احجز اختبارًا في اللغة الإنجليزية مثل IELTS أو TOEFL."
+      ],
+      "stepConfirm": [
+        "Ask your counselor to confirm the grades and scores you entered.",
+        "اطلب من مرشدك تأكيد الدرجات والنتائج التي أدخلتها."
+      ],
+      "stepVerify": [
+        "Confirm every requirement on the university's official page before applying.",
+        "تأكد من كل شرط في الصفحة الرسمية للجامعة قبل التقديم."
+      ]
     },
     "uni": {
-      "facts": ["At a glance", "لمحة سريعة"],
-      "route": ["How to apply", "طريقة التقديم"],
-      "usualDeadline": ["Usual deadline month", "شهر الموعد النهائي المعتاد"],
-      "admitRate": ["Admission rate", "نسبة القبول"],
-      "checkSite": ["Check the university site", "راجع موقع الجامعة"],
-      "scorecardSource": ["Source: US Department of Education College Scorecard.", "المصدر: بطاقة أداء الكليات من وزارة التعليم الأمريكية."],
-      "catalogueSource": ["Indicative figures from the school's university catalogue.", "أرقام استرشادية من دليل الجامعات لدى المدرسة."],
-      "scorecard": ["College Scorecard data", "بيانات بطاقة أداء الكليات"],
-      "scorecardFetched": ["US Department of Education, downloaded {date}", "وزارة التعليم الأمريكية، تاريخ التنزيل {date}"],
-      "satReading": ["SAT reading and writing", "SAT القراءة والكتابة"],
-      "satMath": ["SAT math", "SAT الرياضيات"],
-      "act": ["ACT composite", "ACT المركب"],
-      "size": ["Undergraduate students", "طلاب البكالوريوس"],
-      "range": ["{low} to {high}", "من {low} إلى {high}"],
-      "middle50": ["Score ranges are the middle 50% of admitted students, not minimums.", "نطاقات الدرجات تمثل النصف الأوسط من المقبولين، وليست حدًا أدنى."],
-      "programmes": ["Programmes", "البرامج"],
-      "noProgrammes": ["No programme details yet", "لا توجد تفاصيل برامج بعد"],
-      "noProgrammesBody": ["A counselor can add programmes and requirements for this university.", "يمكن للمرشد إضافة البرامج والشروط لهذه الجامعة."]
+      "facts": [
+        "At a glance",
+        "لمحة سريعة"
+      ],
+      "route": [
+        "How to apply",
+        "طريقة التقديم"
+      ],
+      "usualDeadline": [
+        "Usual deadline month",
+        "شهر الموعد النهائي المعتاد"
+      ],
+      "admitRate": [
+        "Admission rate",
+        "نسبة القبول"
+      ],
+      "checkSite": [
+        "Check the university site",
+        "راجع موقع الجامعة"
+      ],
+      "scorecardSource": [
+        "Source: US Department of Education College Scorecard.",
+        "المصدر: بطاقة أداء الكليات من وزارة التعليم الأمريكية."
+      ],
+      "catalogueSource": [
+        "Indicative figures from the school's university catalogue.",
+        "أرقام استرشادية من دليل الجامعات لدى المدرسة."
+      ],
+      "scorecard": [
+        "College Scorecard data",
+        "بيانات بطاقة أداء الكليات"
+      ],
+      "scorecardFetched": [
+        "US Department of Education, downloaded {date}",
+        "وزارة التعليم الأمريكية، تاريخ التنزيل {date}"
+      ],
+      "satReading": [
+        "SAT reading and writing",
+        "SAT القراءة والكتابة"
+      ],
+      "satMath": [
+        "SAT math",
+        "SAT الرياضيات"
+      ],
+      "act": [
+        "ACT composite",
+        "ACT المركب"
+      ],
+      "size": [
+        "Undergraduate students",
+        "طلاب البكالوريوس"
+      ],
+      "range": [
+        "{low} to {high}",
+        "من {low} إلى {high}"
+      ],
+      "middle50": [
+        "Score ranges are the middle 50% of admitted students, not minimums.",
+        "نطاقات الدرجات تمثل النصف الأوسط من المقبولين، وليست حدًا أدنى."
+      ],
+      "programmes": [
+        "Programmes",
+        "البرامج"
+      ],
+      "noProgrammes": [
+        "No programme details yet",
+        "لا توجد تفاصيل برامج بعد"
+      ],
+      "noProgrammesBody": [
+        "A counselor can add programmes and requirements for this university.",
+        "يمكن للمرشد إضافة البرامج والشروط لهذه الجامعة."
+      ]
     },
     "results": {
-      "title": ["Grades and test scores", "الدرجات ونتائج الاختبارات"],
-      "titleFor": ["Grades and scores: {name}", "الدرجات والنتائج: {name}"],
-      "subtitle": ["Add your predicted grades and test scores. Your counselor confirms them.", "أضف درجاتك المتوقعة ونتائج اختباراتك، ويؤكدها مرشدك."],
-      "subtitleStaff": ["Review, add and confirm results used by the requirements checker.", "راجع النتائج التي تستخدمها أداة فحص الشروط وأضفها وأكّدها."],
-      "pickStudent": ["Choose a student", "اختر طالبًا"],
-      "pickStudentBody": ["Pick a student above to see and confirm their grades and scores.", "اختر طالبًا من الأعلى لعرض درجاته ونتائجه وتأكيدها."],
-      "curriculum": ["Curriculum", "المنهج"],
-      "curriculumHint": ["The checker compares programmes with requirements for this curriculum.", "تقارن أداة الفحص البرامج بشروط هذا المنهج."],
-      "curriculumSaved": ["Curriculum updated", "تم تحديث المنهج"],
-      "subjects": ["Current subjects", "المواد الحالية"],
-      "noSubjects": ["No subjects recorded yet.", "لا توجد مواد مسجلة بعد."],
-      "resultsTitle": ["Predicted and achieved results", "النتائج المتوقعة والمحققة"],
-      "resultsHint": ["Achieved grades are used when present, otherwise predicted grades.", "تُستخدم الدرجات المحققة إن وجدت، وإلا فالدرجات المتوقعة."],
-      "noResults": ["No results recorded yet.", "لا توجد نتائج مسجلة بعد."],
-      "otherCurriculum": ["{n} results from another curriculum are kept but not used.", "توجد {n} نتائج من منهج آخر محفوظة لكنها غير مستخدمة."],
-      "scoresTitle": ["Test scores", "نتائج الاختبارات"],
-      "scoresHint": ["English tests, SAT or ACT, EmSAT and admissions tests.", "اختبارات اللغة الإنجليزية وSAT أو ACT وEmSAT واختبارات القبول."],
-      "noScores": ["No test scores recorded yet.", "لا توجد نتائج اختبارات مسجلة بعد."],
-      "addResult": ["Add a result", "إضافة نتيجة"],
-      "addScore": ["Add a test score", "إضافة نتيجة اختبار"],
-      "subject": ["Subject", "المادة"],
-      "level": ["Level", "المستوى"],
-      "stream": ["Stream", "المسار"],
-      "predicted": ["Predicted", "المتوقعة"],
-      "achieved": ["Achieved", "المحققة"],
-      "gradeHint": ["e.g. A*, 7, 92", "مثل A* أو 7 أو 92"],
-      "predictedValue": ["Predicted {value}", "متوقعة {value}"],
-      "achievedValue": ["Achieved {value}", "محققة {value}"],
-      "test": ["Test", "الاختبار"],
-      "score": ["Score", "الدرجة"],
-      "range": ["From {min} to {max}", "من {min} إلى {max}"],
-      "takenOn": ["Taken on", "تاريخ الاختبار"],
-      "save": ["Save", "حفظ"],
-      "saved": ["Saved", "تم الحفظ"],
-      "needValue": ["Enter a predicted or achieved grade.", "أدخل درجة متوقعة أو محققة."],
-      "delete": ["Delete", "حذف"],
-      "confirmAll": ["Confirm {n, plural, one {# entry} other {# entries}}", "{n, plural, zero {لا شيء للتأكيد} one {تأكيد إدخال واحد} two {تأكيد إدخالين} few {تأكيد # إدخالات} many {تأكيد # إدخالًا} other {تأكيد # إدخال}}"],
-      "confirmed": ["{n, plural, one {# entry confirmed} other {# entries confirmed}}", "{n, plural, zero {لم يُؤكَّد شيء} one {تم تأكيد إدخال واحد} two {تم تأكيد إدخالين} few {تم تأكيد # إدخالات} many {تم تأكيد # إدخالًا} other {تم تأكيد # إدخال}}"],
-      "confirmedBy": ["Confirmed by {name}, {date}", "أكّدها {name} في {date}"],
-      "confirmedShort": ["Confirmed", "مؤكدة"]
+      "title": [
+        "Grades and test scores",
+        "الدرجات ونتائج الاختبارات"
+      ],
+      "titleFor": [
+        "Grades and scores: {name}",
+        "الدرجات والنتائج: {name}"
+      ],
+      "subtitle": [
+        "Add your predicted grades and test scores. Your counselor confirms them.",
+        "أضف درجاتك المتوقعة ونتائج اختباراتك، ويؤكدها مرشدك."
+      ],
+      "subtitleStaff": [
+        "Review, add and confirm results used by the requirements checker.",
+        "راجع النتائج التي تستخدمها أداة فحص الشروط وأضفها وأكّدها."
+      ],
+      "pickStudent": [
+        "Choose a student",
+        "اختر طالبًا"
+      ],
+      "pickStudentBody": [
+        "Pick a student above to see and confirm their grades and scores.",
+        "اختر طالبًا من الأعلى لعرض درجاته ونتائجه وتأكيدها."
+      ],
+      "curriculum": [
+        "Curriculum",
+        "المنهج"
+      ],
+      "curriculumHint": [
+        "The checker compares programmes with requirements for this curriculum.",
+        "تقارن أداة الفحص البرامج بشروط هذا المنهج."
+      ],
+      "curriculumSaved": [
+        "Curriculum updated",
+        "تم تحديث المنهج"
+      ],
+      "subjects": [
+        "Current subjects",
+        "المواد الحالية"
+      ],
+      "noSubjects": [
+        "No subjects recorded yet.",
+        "لا توجد مواد مسجلة بعد."
+      ],
+      "resultsTitle": [
+        "Predicted and achieved results",
+        "النتائج المتوقعة والمحققة"
+      ],
+      "resultsHint": [
+        "Achieved grades are used when present, otherwise predicted grades.",
+        "تُستخدم الدرجات المحققة إن وجدت، وإلا فالدرجات المتوقعة."
+      ],
+      "noResults": [
+        "No results recorded yet.",
+        "لا توجد نتائج مسجلة بعد."
+      ],
+      "otherCurriculum": [
+        "{n} results from another curriculum are kept but not used.",
+        "توجد {n} نتائج من منهج آخر محفوظة لكنها غير مستخدمة."
+      ],
+      "scoresTitle": [
+        "Test scores",
+        "نتائج الاختبارات"
+      ],
+      "scoresHint": [
+        "English tests, SAT or ACT, EmSAT and admissions tests.",
+        "اختبارات اللغة الإنجليزية وSAT أو ACT وEmSAT واختبارات القبول."
+      ],
+      "noScores": [
+        "No test scores recorded yet.",
+        "لا توجد نتائج اختبارات مسجلة بعد."
+      ],
+      "addResult": [
+        "Add a result",
+        "إضافة نتيجة"
+      ],
+      "addScore": [
+        "Add a test score",
+        "إضافة نتيجة اختبار"
+      ],
+      "subject": [
+        "Subject",
+        "المادة"
+      ],
+      "level": [
+        "Level",
+        "المستوى"
+      ],
+      "stream": [
+        "Stream",
+        "المسار"
+      ],
+      "predicted": [
+        "Predicted",
+        "المتوقعة"
+      ],
+      "achieved": [
+        "Achieved",
+        "المحققة"
+      ],
+      "gradeHint": [
+        "e.g. A*, 7, 92",
+        "مثل A* أو 7 أو 92"
+      ],
+      "predictedValue": [
+        "Predicted {value}",
+        "متوقعة {value}"
+      ],
+      "achievedValue": [
+        "Achieved {value}",
+        "محققة {value}"
+      ],
+      "test": [
+        "Test",
+        "الاختبار"
+      ],
+      "score": [
+        "Score",
+        "الدرجة"
+      ],
+      "range": [
+        "From {min} to {max}",
+        "من {min} إلى {max}"
+      ],
+      "takenOn": [
+        "Taken on",
+        "تاريخ الاختبار"
+      ],
+      "save": [
+        "Save",
+        "حفظ"
+      ],
+      "saved": [
+        "Saved",
+        "تم الحفظ"
+      ],
+      "needValue": [
+        "Enter a predicted or achieved grade.",
+        "أدخل درجة متوقعة أو محققة."
+      ],
+      "delete": [
+        "Delete",
+        "حذف"
+      ],
+      "confirmAll": [
+        "Confirm {n, plural, one {# entry} other {# entries}}",
+        "{n, plural, zero {لا شيء للتأكيد} one {تأكيد إدخال واحد} two {تأكيد إدخالين} few {تأكيد # إدخالات} many {تأكيد # إدخالًا} other {تأكيد # إدخال}}"
+      ],
+      "confirmed": [
+        "{n, plural, one {# entry confirmed} other {# entries confirmed}}",
+        "{n, plural, zero {لم يُؤكَّد شيء} one {تم تأكيد إدخال واحد} two {تم تأكيد إدخالين} few {تم تأكيد # إدخالات} many {تم تأكيد # إدخالًا} other {تم تأكيد # إدخال}}"
+      ],
+      "confirmedBy": [
+        "Confirmed by {name}, {date}",
+        "أكّدها {name} في {date}"
+      ],
+      "confirmedShort": [
+        "Confirmed",
+        "مؤكدة"
+      ]
     },
     "admin": {
-      "title": ["Programmes and requirements", "البرامج والشروط"],
-      "subtitle": ["Add universities and programmes, keep requirements current and mark them as checked against the official page.", "أضف الجامعات والبرامج، وحدّث الشروط، وسجّل أنها رُوجعت مع الصفحة الرسمية."],
-      "statUniversities": ["Universities", "الجامعات"],
-      "statUs": ["US institutions from Scorecard", "مؤسسات أمريكية من بطاقة الأداء"],
-      "statChecked": ["Programmes checked", "برامج تمت مراجعتها"],
-      "statUnchecked": ["Programmes not yet checked", "برامج لم تُراجع بعد"],
-      "scorecardTitle": ["US institutions (College Scorecard)", "المؤسسات الأمريكية (بطاقة أداء الكليات)"],
-      "scorecardDesc": ["Imports every currently operating, degree-granting US institution from the US Department of Education. Safe to run again: existing rows are updated, never duplicated.", "يستورد كل مؤسسة أمريكية عاملة تمنح درجات علمية من وزارة التعليم الأمريكية. يمكن تشغيله مجددًا بأمان، إذ تُحدَّث السجلات دون تكرار."],
-      "scorecardHelp": ["Without an API key the import uses the shared demo key, which allows only a few requests an hour. Add COLLEGE_SCORECARD_API_KEY (free from api.data.gov) to import everything. See docs/deploy.md.", "دون مفتاح خاص يستخدم الاستيراد المفتاح التجريبي المشترك الذي يسمح بطلبات قليلة في الساعة. أضف المفتاح COLLEGE_SCORECARD_API_KEY (مجاني من api.data.gov) لاستيراد كل البيانات. راجع docs/deploy.md."],
-      "apiKey": ["API key", "مفتاح الواجهة البرمجية"],
-      "keySet": ["Configured", "مُعدّ"],
-      "keyDemo": ["Not set; using the rate-limited demo key", "غير مُعدّ، يُستخدم المفتاح التجريبي المحدود"],
-      "snapshot": ["Built-in snapshot", "النسخة المضمّنة"],
-      "snapshotRows": ["{n} institutions, downloaded {date}", "{n} مؤسسة، تاريخ التنزيل {date}"],
-      "noSnapshot": ["None yet", "لا توجد بعد"],
-      "runImport": ["Run import", "تشغيل الاستيراد"],
-      "importing": ["Importing...", "جارٍ الاستيراد..."],
-      "importDone": ["Import finished: {created} added, {updated} updated, {linked} linked", "اكتمل الاستيراد: أُضيفت {created}، وحُدّثت {updated}، ورُبطت {linked}"],
-      "runDone": ["{created} added, {updated} updated, {linked} linked", "أُضيفت {created}، وحُدّثت {updated}، ورُبطت {linked}"],
+      "title": [
+        "Programmes and requirements",
+        "البرامج والشروط"
+      ],
+      "subtitle": [
+        "Add universities and programmes, keep requirements current and mark them as checked against the official page.",
+        "أضف الجامعات والبرامج، وحدّث الشروط، وسجّل أنها رُوجعت مع الصفحة الرسمية."
+      ],
+      "statUniversities": [
+        "Universities",
+        "الجامعات"
+      ],
+      "statUs": [
+        "US institutions from Scorecard",
+        "مؤسسات أمريكية من بطاقة الأداء"
+      ],
+      "statChecked": [
+        "Programmes checked",
+        "برامج تمت مراجعتها"
+      ],
+      "statUnchecked": [
+        "Programmes not yet checked",
+        "برامج لم تُراجع بعد"
+      ],
+      "scorecardTitle": [
+        "US institutions (College Scorecard)",
+        "المؤسسات الأمريكية (بطاقة أداء الكليات)"
+      ],
+      "scorecardDesc": [
+        "Imports every currently operating, degree-granting US institution from the US Department of Education. Safe to run again: existing rows are updated, never duplicated.",
+        "يستورد كل مؤسسة أمريكية عاملة تمنح درجات علمية من وزارة التعليم الأمريكية. يمكن تشغيله مجددًا بأمان، إذ تُحدَّث السجلات دون تكرار."
+      ],
+      "scorecardHelp": [
+        "Without an API key the import uses the shared demo key, which allows only a few requests an hour. Add COLLEGE_SCORECARD_API_KEY (free from api.data.gov) to import everything. See docs/deploy.md.",
+        "دون مفتاح خاص يستخدم الاستيراد المفتاح التجريبي المشترك الذي يسمح بطلبات قليلة في الساعة. أضف المفتاح COLLEGE_SCORECARD_API_KEY (مجاني من api.data.gov) لاستيراد كل البيانات. راجع docs/deploy.md."
+      ],
+      "apiKey": [
+        "API key",
+        "مفتاح الواجهة البرمجية"
+      ],
+      "keySet": [
+        "Configured",
+        "مُعدّ"
+      ],
+      "keyDemo": [
+        "Not set; using the rate-limited demo key",
+        "غير مُعدّ، يُستخدم المفتاح التجريبي المحدود"
+      ],
+      "snapshot": [
+        "Built-in snapshot",
+        "النسخة المضمّنة"
+      ],
+      "snapshotRows": [
+        "{n} institutions, downloaded {date}",
+        "{n} مؤسسة، تاريخ التنزيل {date}"
+      ],
+      "noSnapshot": [
+        "None yet",
+        "لا توجد بعد"
+      ],
+      "runImport": [
+        "Run import",
+        "تشغيل الاستيراد"
+      ],
+      "importing": [
+        "Importing...",
+        "جارٍ الاستيراد..."
+      ],
+      "importDone": [
+        "Import finished: {created} added, {updated} updated, {linked} linked",
+        "اكتمل الاستيراد: أُضيفت {created}، وحُدّثت {updated}، ورُبطت {linked}"
+      ],
+      "runDone": [
+        "{created} added, {updated} updated, {linked} linked",
+        "أُضيفت {created}، وحُدّثت {updated}، ورُبطت {linked}"
+      ],
       "importError": {
-        "rate_limited": ["Rate limited by the API. Try later or add an API key.", "تجاوز حد الطلبات. حاول لاحقًا أو أضف مفتاحًا خاصًا."],
-        "unauthorized": ["Access refused (key rejected or network blocked).", "رُفض الوصول (المفتاح مرفوض أو الشبكة محجوبة)."],
-        "unreachable": ["The Scorecard service could not be reached.", "تعذّر الوصول إلى خدمة بطاقة الأداء."],
-        "bad_response": ["The Scorecard service returned an unexpected response.", "أعادت خدمة بطاقة الأداء استجابة غير متوقعة."]
+        "rate_limited": [
+          "Rate limited by the API. Try later or add an API key.",
+          "تجاوز حد الطلبات. حاول لاحقًا أو أضف مفتاحًا خاصًا."
+        ],
+        "unauthorized": [
+          "Access refused (key rejected or network blocked).",
+          "رُفض الوصول (المفتاح مرفوض أو الشبكة محجوبة)."
+        ],
+        "unreachable": [
+          "The Scorecard service could not be reached.",
+          "تعذّر الوصول إلى خدمة بطاقة الأداء."
+        ],
+        "bad_response": [
+          "The Scorecard service returned an unexpected response.",
+          "أعادت خدمة بطاقة الأداء استجابة غير متوقعة."
+        ]
       },
-      "programmes": ["Programmes", "البرامج"],
-      "programmesDesc": ["Unchecked programmes are listed first. Mark a programme as checked only after comparing it with the official page.", "تظهر البرامج غير المراجَعة أولًا. سجّل البرنامج كمراجَع فقط بعد مقارنته بالصفحة الرسمية."],
-      "universities": ["Universities", "الجامعات"],
-      "universitiesDesc": ["Catalogue universities and those you added. US institutions from Scorecard are updated by the import.", "جامعات الدليل والجامعات التي أضفتها. تُحدَّث المؤسسات الأمريكية عبر الاستيراد."],
-      "markChecked": ["Mark as checked", "تسجيل كمراجَع"],
-      "markCheckedHint": ["Records today's date and your name", "يسجل تاريخ اليوم واسمك"],
-      "needsSource": ["Add the official page link first", "أضف رابط الصفحة الرسمية أولًا"],
-      "markedChecked": ["Marked as checked", "تم التسجيل كمراجَع"],
-      "edit": ["Edit", "تعديل"],
-      "newUniversity": ["Add university", "إضافة جامعة"],
-      "editUniversity": ["Edit university", "تعديل الجامعة"],
-      "newProgram": ["Add programme", "إضافة برنامج"],
-      "editProgram": ["Edit programme", "تعديل البرنامج"],
-      "nameEn": ["Name (English)", "الاسم (بالإنجليزية)"],
-      "nameAr": ["Name (Arabic)", "الاسم (بالعربية)"],
-      "countryCode": ["Country code", "رمز الدولة"],
-      "countryHint": ["e.g. GB, JO", "مثل GB أو JO"],
-      "website": ["Website", "الموقع الإلكتروني"],
-      "cityEn": ["City (English)", "المدينة (بالإنجليزية)"],
-      "cityAr": ["City (Arabic)", "المدينة (بالعربية)"],
-      "route": ["Application route", "طريقة التقديم"],
-      "deadlineMonth": ["Usual deadline month", "شهر الموعد النهائي المعتاد"],
-      "notSet": ["Not set", "غير محدد"],
-      "university": ["University", "الجامعة"],
-      "field": ["Field", "التخصص"],
-      "degree": ["Degree", "الدرجة"],
-      "years": ["Years", "السنوات"],
-      "requiredSubjects": ["Required subjects", "المواد المطلوبة"],
-      "recommendedSubjects": ["Recommended subjects", "المواد المستحسنة"],
-      "requirementsJson": ["Requirements by curriculum (JSON)", "الشروط حسب المنهج (JSON)"],
-      "requirementsHint": ["Keys: route, admissionsTests, BRITISH, IB, AMERICAN, UAE_MOE, JORDAN_TAWJIHI. Leave out anything you have not confirmed.", "المفاتيح: route وadmissionsTests وBRITISH وIB وAMERICAN وUAE_MOE وJORDAN_TAWJIHI. لا تُدرج أي شيء لم تتأكد منه."],
-      "englishJson": ["English requirement (JSON)", "شرط اللغة الإنجليزية (JSON)"],
-      "notesEn": ["Notes (English)", "ملاحظات (بالإنجليزية)"],
-      "notesAr": ["Notes (Arabic)", "ملاحظات (بالعربية)"],
-      "sourceUrl": ["Official page link", "رابط الصفحة الرسمية"],
-      "checkedNow": ["I checked these requirements on the official page today", "راجعت هذه الشروط في الصفحة الرسمية اليوم"],
-      "checkedNowHint": ["Otherwise the programme is saved as not yet checked.", "وإلا يُحفظ البرنامج على أنه لم يُراجع بعد."],
-      "save": ["Save", "حفظ"],
-      "saved": ["Saved", "تم الحفظ"],
-      "invalid": ["Please check the fields and try again.", "يرجى مراجعة الحقول والمحاولة مرة أخرى."],
-      "badRequirements": ["The requirements JSON is not valid.", "صيغة JSON للشروط غير صحيحة."],
-      "badEnglish": ["The English requirement JSON is not valid.", "صيغة JSON لشرط اللغة الإنجليزية غير صحيحة."]
+      "programmes": [
+        "Programmes",
+        "البرامج"
+      ],
+      "programmesDesc": [
+        "Unchecked programmes are listed first. Mark a programme as checked only after comparing it with the official page.",
+        "تظهر البرامج غير المراجَعة أولًا. سجّل البرنامج كمراجَع فقط بعد مقارنته بالصفحة الرسمية."
+      ],
+      "universities": [
+        "Universities",
+        "الجامعات"
+      ],
+      "universitiesDesc": [
+        "Catalogue universities and those you added. US institutions from Scorecard are updated by the import.",
+        "جامعات الدليل والجامعات التي أضفتها. تُحدَّث المؤسسات الأمريكية عبر الاستيراد."
+      ],
+      "markChecked": [
+        "Mark as checked",
+        "تسجيل كمراجَع"
+      ],
+      "markCheckedHint": [
+        "Records today's date and your name",
+        "يسجل تاريخ اليوم واسمك"
+      ],
+      "needsSource": [
+        "Add the official page link first",
+        "أضف رابط الصفحة الرسمية أولًا"
+      ],
+      "markedChecked": [
+        "Marked as checked",
+        "تم التسجيل كمراجَع"
+      ],
+      "edit": [
+        "Edit",
+        "تعديل"
+      ],
+      "newUniversity": [
+        "Add university",
+        "إضافة جامعة"
+      ],
+      "editUniversity": [
+        "Edit university",
+        "تعديل الجامعة"
+      ],
+      "newProgram": [
+        "Add programme",
+        "إضافة برنامج"
+      ],
+      "editProgram": [
+        "Edit programme",
+        "تعديل البرنامج"
+      ],
+      "nameEn": [
+        "Name (English)",
+        "الاسم (بالإنجليزية)"
+      ],
+      "nameAr": [
+        "Name (Arabic)",
+        "الاسم (بالعربية)"
+      ],
+      "countryCode": [
+        "Country code",
+        "رمز الدولة"
+      ],
+      "countryHint": [
+        "e.g. GB, JO",
+        "مثل GB أو JO"
+      ],
+      "website": [
+        "Website",
+        "الموقع الإلكتروني"
+      ],
+      "cityEn": [
+        "City (English)",
+        "المدينة (بالإنجليزية)"
+      ],
+      "cityAr": [
+        "City (Arabic)",
+        "المدينة (بالعربية)"
+      ],
+      "route": [
+        "Application route",
+        "طريقة التقديم"
+      ],
+      "deadlineMonth": [
+        "Usual deadline month",
+        "شهر الموعد النهائي المعتاد"
+      ],
+      "notSet": [
+        "Not set",
+        "غير محدد"
+      ],
+      "university": [
+        "University",
+        "الجامعة"
+      ],
+      "field": [
+        "Field",
+        "التخصص"
+      ],
+      "degree": [
+        "Degree",
+        "الدرجة"
+      ],
+      "years": [
+        "Years",
+        "السنوات"
+      ],
+      "requiredSubjects": [
+        "Required subjects",
+        "المواد المطلوبة"
+      ],
+      "recommendedSubjects": [
+        "Recommended subjects",
+        "المواد المستحسنة"
+      ],
+      "requirementsJson": [
+        "Requirements by curriculum (JSON)",
+        "الشروط حسب المنهج (JSON)"
+      ],
+      "requirementsHint": [
+        "Keys: route, admissionsTests, BRITISH, IB, AMERICAN, UAE_MOE, JORDAN_TAWJIHI. Leave out anything you have not confirmed.",
+        "المفاتيح: route وadmissionsTests وBRITISH وIB وAMERICAN وUAE_MOE وJORDAN_TAWJIHI. لا تُدرج أي شيء لم تتأكد منه."
+      ],
+      "englishJson": [
+        "English requirement (JSON)",
+        "شرط اللغة الإنجليزية (JSON)"
+      ],
+      "notesEn": [
+        "Notes (English)",
+        "ملاحظات (بالإنجليزية)"
+      ],
+      "notesAr": [
+        "Notes (Arabic)",
+        "ملاحظات (بالعربية)"
+      ],
+      "sourceUrl": [
+        "Official page link",
+        "رابط الصفحة الرسمية"
+      ],
+      "checkedNow": [
+        "I checked these requirements on the official page today",
+        "راجعت هذه الشروط في الصفحة الرسمية اليوم"
+      ],
+      "checkedNowHint": [
+        "Otherwise the programme is saved as not yet checked.",
+        "وإلا يُحفظ البرنامج على أنه لم يُراجع بعد."
+      ],
+      "save": [
+        "Save",
+        "حفظ"
+      ],
+      "saved": [
+        "Saved",
+        "تم الحفظ"
+      ],
+      "invalid": [
+        "Please check the fields and try again.",
+        "يرجى مراجعة الحقول والمحاولة مرة أخرى."
+      ],
+      "badRequirements": [
+        "The requirements JSON is not valid.",
+        "صيغة JSON للشروط غير صحيحة."
+      ],
+      "badEnglish": [
+        "The English requirement JSON is not valid.",
+        "صيغة JSON لشرط اللغة الإنجليزية غير صحيحة."
+      ]
     }
   }
 }

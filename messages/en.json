@@ -2982,7 +2982,8 @@
     "summary": {
       "met": "{n} met",
       "notMet": "{n} not met",
-      "unknown": "{n} unknown"
+      "unknown": "{n} unknown",
+      "notListed": "Not listed for your curriculum"
     },
     "checker": {
       "title": "Requirements check",

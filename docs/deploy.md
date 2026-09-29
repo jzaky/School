@@ -69,8 +69,15 @@ Put shared values in Project > Settings > Shared Variables and reference them fr
 | `LOCAL_UPLOAD_DIR` | web | Fallback directory for documents when R2 is not set. Default `/app/.uploads`, which is lost on every redeploy. For a demo without R2, attach a Railway volume and point this at its mount path. |
 | `ANTHROPIC_API_KEY` | web | Enables the Anthropic AI provider. Without it the built-in (non-network) provider is used. |
 | `AI_MODEL` | web | Model id for the AI provider. Default `claude-opus-5`. |
+| `COLLEGE_SCORECARD_API_KEY` | web | Free api.data.gov key for the US College Scorecard import (Universities, Manage programmes, Run import). Without it the import uses `DEMO_KEY`, which allows only a few requests an hour, so the button imports the first 5 pages only. |
 
 Set by the image, no action needed: `NODE_ENV=production`, `PORT=3000` (Railway overrides `PORT`, the server follows it), `HOSTNAME=0.0.0.0`.
+
+### US institutions (College Scorecard)
+
+The demo shows every currently operating, degree-granting US institution when the snapshot `prisma/seed/data/us-institutions.json.gz` exists; the seed imports it without a network call. It is not committed yet because api.data.gov was not reachable from the build environment. To create it (about 50 requests of 100 institutions), run `COLLEGE_SCORECARD_API_KEY=... npx tsx scripts/import-scorecard.ts --snapshot` and commit the file.
+
+Other modes: `--org horizon` fetches and upserts straight into one school, `--org horizon --from-snapshot` loads the committed snapshot into an existing school, and `--max-pages N` limits requests. Re-running is safe: institutions are matched by `University.scorecardId`, then by name for catalogue entries, and never duplicated. In the app, a member with `pathways.manage` can run the same import from Universities, Manage programmes.
 
 ## 4. Deploy
 

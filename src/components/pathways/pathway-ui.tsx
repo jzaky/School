@@ -223,6 +223,12 @@ export async function CheckTable({ check, prefs }: { check: CheckResult; prefs: 
 export async function CheckSummary({ check }: { check: CheckResult }) {
   const t = await getTranslations("pathways");
   const { met, notMet, unknown } = check.summary;
+  if (!check.listed)
+    return (
+      <span data-testid="check-summary">
+        <Pill>{t("summary.notListed")}</Pill>
+      </span>
+    );
   return (
     <span className="inline-flex flex-wrap gap-1.5" data-testid="check-summary">
       <Pill tone="success">{t("summary.met", { n: met })}</Pill>

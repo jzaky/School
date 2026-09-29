@@ -2982,7 +2982,8 @@
     "summary": {
       "met": "{n} مستوفى",
       "notMet": "{n} غير مستوفى",
-      "unknown": "{n} غير معروف"
+      "unknown": "{n} غير معروف",
+      "notListed": "غير مدرج لمنهجك"
     },
     "checker": {
       "title": "فحص الشروط",
