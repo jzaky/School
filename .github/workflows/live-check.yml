@@ -28,9 +28,10 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Every page, every persona
         run: npx playwright test tests/e2e/site-check.spec.ts --reporter=list
+      # Hero flows only: access.spec.ts changes school settings and creates accounts, so it runs locally, not against production.
       - name: Hero flows
         if: always()
-        run: npx playwright test --grep-invert "site check" --reporter=list
+        run: npx playwright test tests/e2e/hero-1-career.spec.ts tests/e2e/hero-2-referral.spec.ts tests/e2e/hero-3-document.spec.ts tests/e2e/hero-4-subject-change.spec.ts tests/e2e/hero-5-meeting.spec.ts tests/e2e/pathways-hero.spec.ts --reporter=list
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

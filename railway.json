@@ -2,7 +2,23 @@
   "$schema": "https://railway.com/railway.schema.json",
   "build": {
     "builder": "DOCKERFILE",
-    "dockerfilePath": "Dockerfile"
+    "dockerfilePath": "Dockerfile",
+    "watchPatterns": [
+      "src/**",
+      "prisma/**",
+      "public/**",
+      "assets/**",
+      "messages/**",
+      "scripts/**",
+      "package.json",
+      "package-lock.json",
+      "Dockerfile",
+      "next.config.*",
+      "tsconfig.json",
+      "postcss.config.*",
+      "railway.json",
+      "railway.worker.json"
+    ]
   },
   "deploy": {
     "startCommand": "/app/scripts/docker-start.sh",
