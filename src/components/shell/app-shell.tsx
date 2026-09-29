@@ -48,6 +48,9 @@ function isActive(pathname: string, href: string) {
 function SidebarContent({ nav, org, onNavigate }: Pick<ShellProps, "nav" | "org"> & { onNavigate?: () => void }) {
   const t = useTranslations("nav");
   const pathname = usePathname();
+  // Only the most specific matching item is active (so /career/pathways does not also light up /career).
+  const hrefs = nav.flatMap((section) => section.items.map((item) => item.href));
+  const best = hrefs.filter((href) => isActive(pathname, href)).sort((a, b) => b.length - a.length)[0];
   return (
     <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
       <div className="flex h-16 items-center gap-3 px-5">
@@ -65,7 +68,7 @@ function SidebarContent({ nav, org, onNavigate }: Pick<ShellProps, "nav" | "org"
             <div className="px-3 pb-2 text-[11px] font-medium uppercase tracking-wider text-sidebar-muted">{t(section.key)}</div>
             <ul className="space-y-0.5">
               {section.items.map((item) => {
-                const active = isActive(pathname, item.href);
+                const active = item.href === best;
                 return (
                   <li key={item.key}>
                     <Link

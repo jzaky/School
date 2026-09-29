@@ -1,0 +1,19 @@
+{"engine":{"next":{
+"label":["Next step","الخطوة التالية"],
+"setGoal":["Set my goal","حدّد هدفي"],
+"build":["Build the plan","أنشئ الخطة"],
+"buildMine":["Build my plan","أنشئ خطتي"],
+"send":["Send for approval","أرسل للاعتماد"],
+"review":["Review and approve","راجع واعتمد"],
+"open":["Open the plan","افتح الخطة"],
+"openMine":["Open my plan","افتح خطتي"],
+"whatIf":["Try what if","جرّب ماذا لو"],
+"applications":["Applications","طلبات الالتحاق"],
+"built":["Plan ready with {n} classes. Review it and send it for approval.","الخطة جاهزة وتضم {n} مواد. راجعها ثم أرسلها للاعتماد."],
+"sent":["Sent to your counselor for approval.","أُرسلت إلى المرشد للاعتماد."],
+"noGoal":{"title":{"self":["Choose a career and the countries you are thinking about","اختر مهنة والدول التي تفكر في الدراسة فيها"],"other":["No goal set yet","لم يُحدَّد هدف بعد"]},"body":{"self":["Your matches and your Grade 9 to 12 plan are built from your goal.","تُبنى نتائج المطابقة وخطة الصفوف من التاسع إلى الثاني عشر على هدفك."],"other":["Set a career and countries to see matching programmes and build a plan.","حدّد مهنة ودولًا لعرض البرامج المطابقة وإنشاء خطة."]}},
+"noPlan":{"title":{"self":["Build your Grade 9 to 12 plan","أنشئ خطتك من الصف التاسع إلى الثاني عشر"],"other":["No course plan yet","لا توجد خطة مواد بعد"]},"body":{"self":["We pick the classes your school offers that open the most programmes for your goal. You can change anything before sending it.","نختار المواد التي تقدمها مدرستك والتي تفتح أكبر عدد من البرامج لهدفك. يمكنك تعديل أي شيء قبل الإرسال."],"other":["Build a plan from the school's classes for this goal, then adjust it.","أنشئ خطة من مواد المدرسة لهذا الهدف ثم عدّلها."]}},
+"draft":{"title":{"self":["Your plan is a draft","خطتك مسودة"],"other":["The plan is a draft","الخطة مسودة"]},"body":{"self":["When it looks right, send it to your counselor for approval.","عندما تبدو مناسبة، أرسلها إلى المرشد لاعتمادها."],"other":["Send it for approval when it is ready.","أرسلها للاعتماد عندما تصبح جاهزة."]}},
+"proposed":{"title":{"self":["Waiting for your counselor","بانتظار المرشد"],"other":["Waiting for approval","بانتظار الاعتماد"]},"body":{"self":["Your counselor will approve it or suggest changes. You will get a notification.","سيعتمدها المرشد أو يقترح تعديلات، وستصلك إشعار بذلك."],"other":["A counselor will approve it or ask for changes.","سيعتمدها المرشد أو يطلب تعديلات."]},"bodyApprover":["Check the classes and approve, or send it back with a note.","راجع المواد واعتمدها، أو أعدها مع ملاحظة."]},
+"approved":{"title":{"self":["Your plan is approved","تم اعتماد خطتك"],"other":["Plan approved","تم اعتماد الخطة"]},"body":{"self":["Follow it when you choose classes each year. Try what if to see the effect of changes.","اتبعها عند اختيار المواد كل عام، وجرّب ماذا لو لمعرفة أثر أي تغيير."],"other":["Use it for subject choices each year.","استخدمها عند اختيار المواد كل عام."]}}
+}}}

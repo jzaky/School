@@ -21,7 +21,7 @@ import { gradeOptions } from "@/server/pathway-engine/grade-scales";
 import { canViewRecord } from "@/server/transcripts/access";
 import { STATUS_ORDER } from "./labels";
 import { StatusChip } from "./ui";
-import { AiSummary, GoalForm, PlanBuilder, WhatIfPanel } from "./client";
+import { AiSummary, GoalForm, NextStepCard, PlanBuilder, WhatIfPanel, type NextStepState } from "./client";
 
 export const GOAL_COUNTRIES = ["GB", "US", "CA", "AE", "AU", "IE", "NL", "DE", "SG", "HK", "JO", "CH"];
 type Tab = "overview" | "plan" | "whatIf" | "courses";
@@ -79,8 +79,23 @@ export async function HubView({ ctx, focus }: { ctx: Ctx; focus: EngineFocus }) 
   const programHref = (id: string) => `/career/pathways/programs/${id}${ctx.isStudent ? "" : `?student=${s.id}`}`;
   const fmt = (n: number) => fmtNumber(prefs, n);
 
+  const nextState: NextStepState = !hasGoal ? "noGoal" : !plan ? "noPlan" : plan.status === "APPROVED" ? "approved" : plan.status === "PROPOSED" ? "proposed" : "draft";
+
   return (
     <div className="space-y-6">
+      <NextStepCard
+        state={nextState}
+        studentId={s.id}
+        goal={{ careerKey: goal.careerKey, fieldKeys: goal.fieldKeys, countries: goal.countries }}
+        planId={plan?.id ?? null}
+        planHref={pathwayHref(ctx, s.id, "/plan")}
+        whatIfHref={pathwayHref(ctx, s.id, "/what-if")}
+        applicationsHref={s.gradeLevel >= 11 && (ctx.isStudent || ctx.isParent) ? "/career/applications" : null}
+        canEdit={focus.canEdit}
+        canApprove={focus.canApprove}
+        self={ctx.isStudent}
+      />
+      <div id="goal" className="scroll-mt-24">
       <Panel>
         <PanelHeader title={t("goal.title")} icon={<Target className="size-4" />} description={goal.source === "plan" ? t("goal.fromPlan") : goal.source === "career" ? t("goal.fromCareer") : t("goal.none")} />
         <div className="flex flex-wrap items-center gap-2 text-sm" data-testid="goal-summary">
@@ -95,6 +110,7 @@ export async function HubView({ ctx, focus }: { ctx: Ctx; focus: EngineFocus }) 
           </div>
         )}
       </Panel>
+      </div>
 
       {!hasGoal ? (
         <EmptyState icon={<GraduationCap className="size-5" />} title={t("noGoalTitle")} body={focus.canEdit ? t("noGoalBody") : t("noGoalBodyView")} />

@@ -726,3 +726,113 @@ export function AiSummary({ studentId }: { studentId: string }) {
     </div>
   );
 }
+
+// ---------------------------------------------------------------------------------------------
+// Next step: one clear action at the top of the hub, so nobody hunts for tabs
+
+export type NextStepState = "noGoal" | "noPlan" | "draft" | "proposed" | "approved";
+
+export function NextStepCard({
+  state,
+  studentId,
+  goal,
+  planId,
+  planHref,
+  whatIfHref,
+  applicationsHref,
+  canEdit,
+  canApprove,
+  self,
+}: {
+  state: NextStepState;
+  studentId: string;
+  goal: { careerKey: string | null; fieldKeys: string[]; countries: string[] };
+  planId: string | null;
+  planHref: string;
+  whatIfHref: string;
+  applicationsHref: string | null;
+  canEdit: boolean;
+  canApprove: boolean;
+  self: boolean;
+}) {
+  const t = useTranslations("engine.next");
+  const err = useErr();
+  const router = useRouter();
+  const [pending, start] = useTransition();
+
+  const build = () =>
+    start(async () => {
+      const res = await generatePlanAction({ studentId, careerKey: goal.careerKey, fieldKeys: goal.fieldKeys, countries: goal.countries });
+      if (!res.ok) return err(res.error);
+      toast.success(t("built", { n: res.items }));
+      router.push(planHref);
+    });
+  const submit = () =>
+    start(async () => {
+      if (!planId) return;
+      const res = await submitPlanAction(planId);
+      if (!res.ok) return err(res.error);
+      toast.success(t("sent"));
+      router.refresh();
+    });
+
+  const who = self ? "self" : "other";
+  const title = t(`${state}.title.${who}`);
+  const body = state === "proposed" && canApprove ? t("proposed.bodyApprover") : t(`${state}.body.${who}`);
+
+  return (
+    <div className="flex flex-col gap-3 rounded-xl border border-brand/30 bg-brand/5 p-4 sm:flex-row sm:items-center sm:justify-between" data-testid="next-step" data-state={state}>
+      <div className="min-w-0">
+        <div className="text-xs font-semibold uppercase tracking-wide text-brand">{t("label")}</div>
+        <div className="mt-0.5 font-semibold">{title}</div>
+        <p className="text-sm text-muted-foreground">{body}</p>
+      </div>
+      <div className="flex shrink-0 flex-wrap gap-2">
+        {state === "noGoal" && canEdit && (
+          <Button asChild size="sm">
+            <a href="#goal" data-testid="next-set-goal">
+              {t("setGoal")}
+            </a>
+          </Button>
+        )}
+        {state === "noPlan" && canEdit && (
+          <Button size="sm" onClick={build} disabled={pending} data-testid="next-build-plan">
+            {pending ? <Loader2 className="size-4 animate-spin" /> : <Wand2 className="size-4" />}
+            {self ? t("buildMine") : t("build")}
+          </Button>
+        )}
+        {state === "draft" && canEdit && (
+          <Button size="sm" onClick={submit} disabled={pending} data-testid="next-send">
+            {pending ? <Loader2 className="size-4 animate-spin" /> : <ArrowRight className="size-4 rtl:rotate-180" />}
+            {t("send")}
+          </Button>
+        )}
+        {state === "proposed" && canApprove && (
+          <Button asChild size="sm">
+            <Link href={planHref} data-testid="next-review">
+              <Check className="size-4" />
+              {t("review")}
+            </Link>
+          </Button>
+        )}
+        {state !== "noGoal" && state !== "noPlan" && (
+          <Button asChild size="sm" variant={state === "approved" || (state === "proposed" && !canApprove) ? "default" : "outline"}>
+            <Link href={planHref} data-testid="next-open-plan">
+              {self ? t("openMine") : t("open")}
+            </Link>
+          </Button>
+        )}
+        {state !== "noGoal" && (
+          <Button asChild size="sm" variant="outline">
+            <Link href={whatIfHref}>{t("whatIf")}</Link>
+          </Button>
+        )}
+        {state === "approved" && applicationsHref && (
+          <Button asChild size="sm" variant="outline">
+            <Link href={applicationsHref}>{t("applications")}</Link>
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+}

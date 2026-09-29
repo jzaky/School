@@ -5483,6 +5483,71 @@
       "AUDITION": "Audition",
       "SUPPLEMENTAL": "Supplemental questions",
       "NOTE": "Note to check with the university"
+    },
+    "next": {
+      "label": "Next step",
+      "setGoal": "Set my goal",
+      "build": "Build the plan",
+      "buildMine": "Build my plan",
+      "send": "Send for approval",
+      "review": "Review and approve",
+      "open": "Open the plan",
+      "openMine": "Open my plan",
+      "whatIf": "Try what if",
+      "applications": "Applications",
+      "built": "Plan ready with {n} classes. Review it and send it for approval.",
+      "sent": "Sent to your counselor for approval.",
+      "noGoal": {
+        "title": {
+          "self": "Choose a career and the countries you are thinking about",
+          "other": "No goal set yet"
+        },
+        "body": {
+          "self": "Your matches and your Grade 9 to 12 plan are built from your goal.",
+          "other": "Set a career and countries to see matching programmes and build a plan."
+        }
+      },
+      "noPlan": {
+        "title": {
+          "self": "Build your Grade 9 to 12 plan",
+          "other": "No course plan yet"
+        },
+        "body": {
+          "self": "We pick the classes your school offers that open the most programmes for your goal. You can change anything before sending it.",
+          "other": "Build a plan from the school's classes for this goal, then adjust it."
+        }
+      },
+      "draft": {
+        "title": {
+          "self": "Your plan is a draft",
+          "other": "The plan is a draft"
+        },
+        "body": {
+          "self": "When it looks right, send it to your counselor for approval.",
+          "other": "Send it for approval when it is ready."
+        }
+      },
+      "proposed": {
+        "title": {
+          "self": "Waiting for your counselor",
+          "other": "Waiting for approval"
+        },
+        "body": {
+          "self": "Your counselor will approve it or suggest changes. You will get a notification.",
+          "other": "A counselor will approve it or ask for changes."
+        },
+        "bodyApprover": "Check the classes and approve, or send it back with a note."
+      },
+      "approved": {
+        "title": {
+          "self": "Your plan is approved",
+          "other": "Plan approved"
+        },
+        "body": {
+          "self": "Follow it when you choose classes each year. Try what if to see the effect of changes.",
+          "other": "Use it for subject choices each year."
+        }
+      }
     }
   },
   "transcripts": {
