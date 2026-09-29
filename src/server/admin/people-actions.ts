@@ -9,6 +9,7 @@ import { encryptField } from "@/lib/crypto";
 import { STAFF_ROLE_KEYS } from "@/server/identity/permissions";
 import { RELATIONSHIPS, emiratesIdLast4, isEmail, parseDate, parseEmiratesId } from "@/lib/people-csv";
 import { ImportTooLargeError, importStudentRows } from "@/server/admin/people-import";
+import { AccessError, assertMemberRolesChangeAllowed } from "@/server/access/roles";
 
 type Fail = { ok: false; error: string };
 const fail = (error: string): Fail => ({ ok: false, error });
@@ -115,6 +116,12 @@ export async function updateStaffAction(input: z.input<typeof updateStaffSchema>
     const wanted = await roleIds(tx, d.roleKeys);
     const wantedIds = new Set(wanted.map((r) => r.id));
     const keep = m.roles.filter((r) => wantedIds.has(r.roleId) || !STAFF_ROLE_KEYS.includes(r.role.key));
+    try {
+      await assertMemberRolesChangeAllowed(tx, { orgId: ctx.orgId, membershipId: ctx.membershipId, userId: ctx.user.id }, m.id, [...new Set([...keep.map((r) => r.roleId), ...wanted.map((r) => r.id)])]);
+    } catch (e) {
+      if (e instanceof AccessError) return fail(e.code);
+      throw e;
+    }
     await tx.membershipRole.deleteMany({ where: { membershipId: m.id, id: { notIn: keep.map((r) => r.id) } } });
     const have = new Set(keep.map((r) => r.roleId));
     const add = wanted.filter((r) => !have.has(r.id));

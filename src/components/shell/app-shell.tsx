@@ -30,6 +30,7 @@ import { NotificationsBell } from "./notifications-bell";
 import { setLocaleAction, signInAsPersonaAction, signOutAction } from "@/server/shell/actions";
 import { resetDemoAction } from "@/server/demo/reset";
 import type { NavSection } from "@/server/shell/nav";
+import { SchoolSwitcherItems } from "@/components/access/school-switcher";
 
 export type ShellProps = {
   nav: NavSection[];
@@ -37,6 +38,7 @@ export type ShellProps = {
   org: { name: string; short: string };
   demo: { enabled: boolean; current: string | null; personas: Array<{ key: string; label: string; name: string; initials: string }> };
   unread: number;
+  schools?: Array<{ id: string; name: string; current: boolean }>;
   children: React.ReactNode;
 };
 
@@ -95,7 +97,7 @@ function SidebarContent({ nav, org, onNavigate }: Pick<ShellProps, "nav" | "org"
   );
 }
 
-export function AppShell({ nav, user, org, demo, unread, children }: ShellProps) {
+export function AppShell({ nav, user, org, demo, unread, schools = [], children }: ShellProps) {
   const t = useTranslations("shell");
   const tc = useTranslations("common");
   const locale = useLocale();
@@ -240,6 +242,7 @@ export function AppShell({ nav, user, org, demo, unread, children }: ShellProps)
                     {t("notifications")}
                   </Link>
                 </DropdownMenuItem>
+                {schools.length > 1 && <SchoolSwitcherItems schools={schools} />}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onSelect={() => startTransition(() => signOutAction())}>
                   <LogOut className="size-4" />

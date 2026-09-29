@@ -17,6 +17,8 @@ import { AddStaffDialog, EditStaffDialog, MemberStatusButton } from "@/component
 import { AddStudentDialog } from "@/components/admin/people/student-forms";
 import { GuardianLinkDialog } from "@/components/admin/people/guardian-forms";
 import { CsvImporter, ImportErrors } from "@/components/admin/people/csv-import";
+import { MemberRolesDialog } from "@/components/access/role-forms";
+import { audienceOfRole, isSensitivePermission } from "@/server/access/permission-catalog";
 
 export async function generateMetadata() {
   const t = await getTranslations("adminPeople");
@@ -27,7 +29,7 @@ type Tab = "staff" | "students" | "families" | "imports";
 const TABS: Tab[] = ["staff", "students", "families", "imports"];
 const MEMBER_STATUSES: MembershipStatus[] = ["ACTIVE", "INVITED", "SUSPENDED"];
 const STUDENT_STATUSES: PersonStatus[] = ["ACTIVE", "INACTIVE", "GRADUATED", "WITHDRAWN"];
-const MEMBER_TONE: Record<MembershipStatus, Tone> = { ACTIVE: "success", INVITED: "info", SUSPENDED: "danger" };
+const MEMBER_TONE: Record<MembershipStatus, Tone> = { ACTIVE: "success", INVITED: "info", SUSPENDED: "danger", PENDING_APPROVAL: "warning" };
 const STUDENT_TONE: Record<PersonStatus, Tone> = { ACTIVE: "success", INACTIVE: "neutral", GRADUATED: "brand", WITHDRAWN: "warning" };
 const LIMIT = 200;
 
@@ -42,7 +44,7 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
   const q = sp.q?.trim() || "";
   const grade = sp.grade && /^\d{1,2}$/.test(sp.grade) ? Number(sp.grade) : null;
 
-  const staffBase: Prisma.MembershipWhereInput = { student: { is: null }, guardian: { is: null }, roles: { some: { role: { key: { in: STAFF_ROLE_KEYS } } } } };
+  const staffBase: Prisma.MembershipWhereInput = { student: { is: null }, guardian: { is: null }, roles: { some: { role: { key: { notIn: ["student", "parent"] } } } } };
   const [roles, departments, gradeRows, counts] = await Promise.all([
     db.role.findMany({ orderBy: { nameEn: "asc" } }),
     db.department.findMany({ orderBy: { nameEn: "asc" } }),
@@ -62,6 +64,10 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
   const deptOptions = departments.map((d) => ({ id: d.id, label: pick(locale, d.nameEn, d.nameAr) }));
   const grades = gradeRows.map((g) => g.gradeLevel);
   const canAdminRole = ctx.can("school.manage");
+  const canManageRoles = ctx.can("roles.manage");
+  const memberRoleOptions = roles
+    .filter((r) => audienceOfRole(r.key) === "staff")
+    .map((r) => ({ id: r.id, label: pick(locale, r.nameEn, r.nameAr), description: pick(locale, r.descEn, r.descAr), sensitive: r.permissions.some(isSensitivePermission) }));
 
   const statusFilter = tab === "staff" ? (MEMBER_STATUSES.includes(sp.status as MembershipStatus) ? (sp.status as MembershipStatus) : null) : STUDENT_STATUSES.includes(sp.status as PersonStatus) ? (sp.status as PersonStatus) : null;
 
@@ -144,7 +150,7 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
     if (members.length === 0) return <EmptyState icon={<Contact className="size-5" />} title={t("emptyStaff")} body={t("emptyFiltered")} />;
     const lastAdminId = admins.length === 1 ? admins[0].id : null;
     return (
-      <Table endLast cols="lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.3fr)_110px_190px]" header={[t("colName"), t("colTitleDept"), t("colRoles"), t("colStatus"), t("colActions")]} footer={total > members.length ? t("showing", { shown: members.length, total }) : undefined}>
+      <Table endLast cols="lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.3fr)_110px_280px]" header={[t("colName"), t("colTitleDept"), t("colRoles"), t("colStatus"), t("colActions")]} footer={total > members.length ? t("showing", { shown: members.length, total }) : undefined}>
         {members.map((m) => {
           const name = userName(m.user, locale);
           const other = locale === "ar" ? m.user.nameEn : m.user.nameAr;
@@ -152,7 +158,7 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
           const isAdmin = keys.includes("school_admin");
           const title = pick(locale, m.staffProfile?.jobTitleEn ?? m.titleEn, m.staffProfile?.jobTitleAr ?? m.titleAr);
           return (
-            <Row key={m.id} cols="lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.3fr)_110px_190px]" testId="staff-row">
+            <Row key={m.id} cols="lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.3fr)_110px_280px]" testId="staff-row">
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5 truncate text-sm font-medium">
                   {name}
@@ -180,6 +186,14 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
                 </Pill>
               </div>
               <div className="flex flex-wrap items-center gap-1.5 lg:justify-end">
+                {canManageRoles && (
+                  <MemberRolesDialog
+                    membershipId={m.id}
+                    name={name}
+                    roles={memberRoleOptions}
+                    current={m.roles.filter((r) => audienceOfRole(r.role.key) === "staff").map((r) => r.roleId)}
+                  />
+                )}
                 <EditStaffDialog
                   member={{ id: m.id, name, roleKeys: keys.filter((k) => STAFF_ROLE_KEYS.includes(k)), departmentId: m.staffProfile?.departmentId ?? null, titleEn: m.staffProfile?.jobTitleEn ?? m.titleEn ?? "", titleAr: m.staffProfile?.jobTitleAr ?? m.titleAr ?? "" }}
                   roles={roleOptions}
@@ -189,7 +203,7 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
                 <MemberStatusButton
                   membershipId={m.id}
                   name={name}
-                  status={m.status}
+                  status={m.status as "ACTIVE" | "INVITED" | "SUSPENDED"}
                   blocked={m.id === ctx.membershipId ? "self" : isAdmin && !canAdminRole ? "permission" : m.id === lastAdminId ? "last" : null}
                 />
               </div>

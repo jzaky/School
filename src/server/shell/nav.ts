@@ -4,7 +4,7 @@ export type NavItem = { key: string; href: string; icon: string; badge?: number 
 export type NavSection = { key: string; items: NavItem[] };
 
 /** Role-aware navigation. Only features the member can use appear. */
-export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; notifications: number }): NavSection[] {
+export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; notifications: number; joinRequests?: number }): NavSection[] {
   const c = ctx.can;
   if (ctx.isStudent) {
     return [
@@ -83,6 +83,9 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   const admin: NavItem[] = [];
   if (c("school.manage")) admin.push({ key: "schoolSetup", href: "/admin/school", icon: "building-2" });
   if (c("people.manage")) admin.push({ key: "people", href: "/admin/people", icon: "contact" });
+  if (c("roles.manage")) admin.push({ key: "roles", href: "/admin/roles", icon: "lock" });
+  if (c("people.invite")) admin.push({ key: "invitations", href: "/admin/invitations", icon: "mail" });
+  if (c("people.manage") || c("people.invite")) admin.push({ key: "joinRequests", href: "/admin/join-requests", icon: "users", badge: counts.joinRequests });
   if (c("registration.manage")) admin.push({ key: "registration", href: "/admin/registration", icon: "clipboard-check" });
   if (c("timetable.manage")) admin.push({ key: "timetableAdmin", href: "/admin/timetable", icon: "clock" });
   if (c("cover.manage")) admin.push({ key: "cover", href: "/admin/cover", icon: "calendar-x" });

@@ -78,6 +78,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "approvals", href: "/approvals" },
     { key: "coverBoard", href: "/admin/cover" },
     { key: "curriculumGaps", href: "/curriculum" },
+    { key: "rolesAccess", href: "/admin/roles" },
   ],
   admin: [
     { key: "servicesAdmin", href: "/admin/services" },
@@ -90,6 +91,8 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "timetableSetup", href: "/admin/timetable" },
     { key: "calendarAdmin", href: "/admin/calendar" },
     { key: "examsAdmin", href: "/admin/exams" },
+    { key: "invitePeople", href: "/admin/invitations" },
+    { key: "joinRequests", href: "/admin/join-requests" },
   ],
   registrar: [
     { key: "approvals", href: "/approvals" },

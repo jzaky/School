@@ -144,7 +144,10 @@
     "applications": "Applications",
     "catalogReview": "Catalog review",
     "pathwayPlanning": "University planning",
-    "pathwayDashboard": "Counselor dashboard"
+    "pathwayDashboard": "Counselor dashboard",
+    "roles": "Roles and access",
+    "invitations": "Invitations",
+    "joinRequests": "Join requests"
   },
   "shell": {
     "openMenu": "Open menu",
@@ -171,7 +174,8 @@
     "notifications": "Notifications",
     "keyboardHint": "Press {key} anytime",
     "groupUniversities": "Universities",
-    "groupPrograms": "Programmes"
+    "groupPrograms": "Programmes",
+    "switchSchool": "Switch school"
   },
   "auth": {
     "signInTitle": "Sign in to Horizon OS",
@@ -1772,7 +1776,8 @@
     "memberStatus": {
       "ACTIVE": "Active",
       "INVITED": "Invited",
-      "SUSPENDED": "Suspended"
+      "SUSPENDED": "Suspended",
+      "PENDING_APPROVAL": "Waiting for approval"
     },
     "studentStatus": {
       "ACTIVE": "Active",
@@ -1784,7 +1789,8 @@
       "ACTIVE": "Portal active",
       "INVITED": "Portal invited",
       "SUSPENDED": "Portal suspended",
-      "NONE": "No portal account"
+      "NONE": "No portal account",
+      "PENDING_APPROVAL": "Waiting for approval"
     },
     "importStatus": {
       "PENDING": "Pending",
@@ -1969,7 +1975,9 @@
       "PASSPORT": "A passport number has 5 to 12 letters or digits.",
       "DUPLICATE_STUDENT_NO": "Another student already has this student number.",
       "EMPTY": "The file has no rows to import.",
-      "TOO_MANY_ROWS": "Files are limited to 2,000 rows."
+      "TOO_MANY_ROWS": "Files are limited to 2,000 rows.",
+      "LAST_ROLES_MANAGER": "At least one active person must be able to manage roles.",
+      "SELF_LOCKOUT": "You cannot remove your own ability to manage roles. Ask another administrator."
     }
   },
   "guide": {
@@ -2260,6 +2268,18 @@
       "pathwaySearch": {
         "title": "Search and compare programmes",
         "body": "Filter programmes worldwide by country, subject and cost, see your match status on each, and compare up to four side by side."
+      },
+      "rolesAccess": {
+        "title": "Unlock access by role",
+        "body": "Open a role, switch permissions on or off in plain language, and use Access check to see exactly what someone can do."
+      },
+      "invitePeople": {
+        "title": "Invite staff and families",
+        "body": "Invite a teacher by email, share a staff link, or print the family code poster with its QR code."
+      },
+      "joinRequests": {
+        "title": "Approve new families",
+        "body": "Parents who joined with the school code wait here. Match hints show which student records fit."
       }
     }
   },
@@ -5934,5 +5954,880 @@
       "test": "Admission tests",
       "additional": "Application steps"
     }
+  },
+  "access": {
+    "groups": {
+      "requests": "Requests and services",
+      "cases": "Cases",
+      "safeguarding": "Safeguarding",
+      "people": "People",
+      "grades": "Grades and subjects",
+      "timetable": "Timetable and calendar",
+      "meetings": "Meetings",
+      "documents": "Documents",
+      "university": "University planning",
+      "teaching": "Teaching and trips",
+      "insights": "Insights and AI",
+      "admin": "Admin",
+      "portals": "Portals"
+    },
+    "groupHelp": {
+      "requests": "Asking for things and getting them done.",
+      "cases": "Student support cases.",
+      "safeguarding": "Child protection. Grant with care.",
+      "people": "The directory, invitations and personal data.",
+      "grades": "Marks, reports and subject choices.",
+      "timetable": "Days, times and cover.",
+      "meetings": "Booking time with staff.",
+      "documents": "Letters, files and templates.",
+      "university": "Careers, universities and applications.",
+      "teaching": "Lesson plans, curriculum, trips and messages.",
+      "insights": "Dashboards and AI help.",
+      "admin": "Running the school's setup.",
+      "portals": "Which home screen this person gets."
+    },
+    "perms": {
+      "services": {
+        "use": {
+          "label": "Use school services",
+          "help": "Browse the service catalog and submit requests."
+        },
+        "manage": {
+          "label": "Set up services",
+          "help": "Create and change the services people can request."
+        }
+      },
+      "requests": {
+        "view_all": {
+          "label": "See all requests",
+          "help": "View every request in the school, not only their own."
+        },
+        "process": {
+          "label": "Process requests",
+          "help": "Work on requests assigned to their team and move them forward."
+        }
+      },
+      "approvals": {
+        "decide": {
+          "label": "Approve or decline",
+          "help": "Make approval decisions when a workflow asks them to."
+        }
+      },
+      "tasks": {
+        "use": {
+          "label": "Tasks",
+          "help": "Receive and complete tasks."
+        }
+      },
+      "forms": {
+        "manage": {
+          "label": "Build forms",
+          "help": "Create and edit request forms."
+        }
+      },
+      "workflows": {
+        "manage": {
+          "label": "Build workflows",
+          "help": "Design the steps and approvals behind each service."
+        }
+      },
+      "cases": {
+        "view": {
+          "label": "See cases they work on",
+          "help": "Open student support cases they own or are part of."
+        },
+        "view_all": {
+          "label": "See all standard cases",
+          "help": "View every academic and general case. Wellbeing and safeguarding stay protected."
+        },
+        "manage": {
+          "label": "Manage cases",
+          "help": "Open, assign, update and close support cases."
+        },
+        "wellbeing": {
+          "label": "Wellbeing cases",
+          "help": "See and work on confidential wellbeing cases. Every view is recorded."
+        }
+      },
+      "safeguarding": {
+        "refer": {
+          "label": "Raise a safeguarding concern",
+          "help": "Report a concern to the safeguarding team. They do not see other concerns."
+        },
+        "view": {
+          "label": "See safeguarding cases",
+          "help": "Read child protection records. Every view is recorded."
+        },
+        "manage": {
+          "label": "Manage safeguarding cases",
+          "help": "Decide on referrals, plans and parent notification for child protection cases."
+        },
+        "export": {
+          "label": "Export safeguarding records",
+          "help": "Download a case chronology for the authorities."
+        },
+        "break_glass": {
+          "label": "Emergency access",
+          "help": "Open a safeguarding case in an emergency with a stated reason. The safeguarding lead is alerted."
+        }
+      },
+      "people": {
+        "view": {
+          "label": "Staff and student directory",
+          "help": "Look up students and colleagues."
+        },
+        "manage": {
+          "label": "Manage people",
+          "help": "Add and edit staff, students and families."
+        },
+        "invite": {
+          "label": "Invite people",
+          "help": "Send invitations, share join links and the family code, and approve join requests."
+        },
+        "reveal_ids": {
+          "label": "Reveal ID numbers",
+          "help": "See full Emirates ID and passport numbers. Each reveal is recorded."
+        },
+        "medical": {
+          "label": "Medical records",
+          "help": "See and update student medical information."
+        }
+      },
+      "grades": {
+        "view_own": {
+          "label": "See own grades",
+          "help": "Students see their grades, parents see their children's."
+        },
+        "enter": {
+          "label": "Enter grades",
+          "help": "Record marks for the classes they teach."
+        },
+        "view_all": {
+          "label": "See all grades",
+          "help": "View grades across the school."
+        }
+      },
+      "registration": {
+        "submit": {
+          "label": "Choose subjects",
+          "help": "Submit subject choices during registration."
+        },
+        "manage": {
+          "label": "Run subject registration",
+          "help": "Open registration, allocate places and publish class lists."
+        }
+      },
+      "calendar": {
+        "view": {
+          "label": "School calendar",
+          "help": "See term dates, events and exams."
+        },
+        "manage": {
+          "label": "Manage the calendar",
+          "help": "Add events, holidays and exam sittings."
+        }
+      },
+      "timetable": {
+        "manage": {
+          "label": "Build the timetable",
+          "help": "Set bell times and schedule classes."
+        }
+      },
+      "absence": {
+        "report": {
+          "label": "Report own absence",
+          "help": "Tell the school they will be absent."
+        }
+      },
+      "cover": {
+        "manage": {
+          "label": "Arrange cover",
+          "help": "Assign cover teachers for absent colleagues."
+        }
+      },
+      "appointments": {
+        "book": {
+          "label": "Book meetings",
+          "help": "Book time with staff."
+        },
+        "host": {
+          "label": "Host meetings",
+          "help": "Publish availability and meet students and parents."
+        },
+        "manage": {
+          "label": "Manage meeting types",
+          "help": "Set up meeting types and booking rules."
+        }
+      },
+      "documents": {
+        "view": {
+          "label": "See documents",
+          "help": "Open documents shared with them."
+        },
+        "manage": {
+          "label": "Manage documents",
+          "help": "Upload, issue and share school documents."
+        },
+        "sensitive": {
+          "label": "Sensitive documents",
+          "help": "Open confidential and medical documents."
+        },
+        "templates": {
+          "label": "Letter templates",
+          "help": "Edit the templates used for official letters."
+        }
+      },
+      "career": {
+        "use": {
+          "label": "Career explorer",
+          "help": "Take the interest assessment and explore careers."
+        },
+        "advise": {
+          "label": "Career advising",
+          "help": "See students' career profiles and advise them."
+        }
+      },
+      "pathways": {
+        "view": {
+          "label": "University planning",
+          "help": "See university options and entry requirements."
+        },
+        "manage": {
+          "label": "Manage university planning",
+          "help": "Maintain programmes, shortlists and advice for students."
+        }
+      },
+      "planner": {
+        "approve": {
+          "label": "Approve study plans",
+          "help": "Confirm students' subject plans."
+        }
+      },
+      "applications": {
+        "manage": {
+          "label": "University applications",
+          "help": "Track applications, deadlines and recommendation letters."
+        }
+      },
+      "catalog": {
+        "review": {
+          "label": "Review requirement updates",
+          "help": "Check and publish changes to university entry requirements."
+        }
+      },
+      "curriculum": {
+        "plan": {
+          "label": "Plan lessons",
+          "help": "Write lesson and unit plans."
+        },
+        "review": {
+          "label": "Review lesson plans",
+          "help": "Give feedback on colleagues' plans."
+        },
+        "manage": {
+          "label": "Manage the curriculum",
+          "help": "Maintain frameworks and standards."
+        }
+      },
+      "trips": {
+        "manage": {
+          "label": "Organise trips",
+          "help": "Plan trips and collect consent."
+        },
+        "consent": {
+          "label": "Give trip consent",
+          "help": "Parents approve or decline trips for their children."
+        }
+      },
+      "comms": {
+        "send": {
+          "label": "Send messages",
+          "help": "Message students and families."
+        }
+      },
+      "analytics": {
+        "view": {
+          "label": "School analytics",
+          "help": "See school-wide dashboards. Sensitive cases are counted, never listed."
+        }
+      },
+      "ai": {
+        "use": {
+          "label": "AI assistant",
+          "help": "Use AI drafting help. Drafts always need a person to approve."
+        },
+        "admin_insights": {
+          "label": "AI insights",
+          "help": "Ask questions about school data in plain language."
+        }
+      },
+      "admin": {
+        "access": {
+          "label": "Admin area",
+          "help": "Open the administration pages."
+        }
+      },
+      "school": {
+        "manage": {
+          "label": "School settings",
+          "help": "Change the school profile, departments and academic year."
+        }
+      },
+      "roles": {
+        "manage": {
+          "label": "Roles and access",
+          "help": "Change what each role can do and who has it."
+        }
+      },
+      "compliance": {
+        "manage": {
+          "label": "Compliance",
+          "help": "Manage data protection records and retention."
+        }
+      },
+      "audit": {
+        "view": {
+          "label": "Audit log",
+          "help": "See who did what, including views of sensitive records."
+        }
+      },
+      "demo": {
+        "reset": {
+          "label": "Reset the demo",
+          "help": "Restore the demo school to its starting data."
+        }
+      },
+      "family": {
+        "portal": {
+          "label": "Family portal",
+          "help": "The parent home with their children."
+        }
+      },
+      "student": {
+        "portal": {
+          "label": "Student portal",
+          "help": "The student home and their own records."
+        }
+      }
+    }
+  },
+  "adminRoles": {
+    "title": "Roles and access",
+    "subtitle": "Decide what each role can do and who holds it. Changes apply on the person's next click.",
+    "tabRoles": "Roles",
+    "tabCheck": "Access check",
+    "staffRoles": "Staff roles",
+    "staffRolesBody": "Built-in roles you can adjust, plus roles your school made.",
+    "familyRoles": "Family roles",
+    "familyRolesBody": "Parents and students. They can only receive family permissions.",
+    "noDescription": "No description yet.",
+    "memberCount": "{count, plural, one {# member} other {# members}}",
+    "permissionCount": "{count, plural, one {# permission} other {# permissions}}",
+    "badgeCustom": "Made by your school",
+    "badgeCustomized": "Customized",
+    "badgeBuiltIn": "Built-in",
+    "sensitiveBadge": "Sensitive access",
+    "sensitiveShort": "Sensitive",
+    "checkTitle": "Check someone's access",
+    "checkBody": "Pick a person to see exactly what they can do and which role gives it to them.",
+    "checkEmpty": "Choose a person",
+    "checkEmptyBody": "Their permissions appear here, grouped by area.",
+    "memberStatus": {
+      "ACTIVE": "Active",
+      "INVITED": "Invited",
+      "SUSPENDED": "Suspended",
+      "PENDING_APPROVAL": "Waiting for approval"
+    },
+    "checkInactive": "This account is not active, so it cannot do anything right now.",
+    "canCount": "{count} of {total}",
+    "grantedBy": "From: {roles}",
+    "yes": "Yes",
+    "no": "No",
+    "backToRoles": "All roles",
+    "audience": {
+      "staff": "For staff",
+      "parent": "For parents",
+      "student": "For students"
+    },
+    "customizedNote": "Your school has changed this built-in role, so updates we ship will not overwrite it. Use Restore default to go back.",
+    "builtInNote": "This is a built-in role. It stays up to date with new features until you change it.",
+    "familyAudienceNote": "Only permissions that make sense for families are shown. Staff permissions cannot be given to this role.",
+    "members": "People with this role",
+    "membersBody": "Add or remove staff. It takes effect on their next click.",
+    "familyMembersBody": "Families get this role when they join with an invitation or the school code.",
+    "noMembers": "Nobody has this role yet",
+    "noMembersBody": "Search for a colleague above to add them.",
+    "you": "You",
+    "goToInvitations": "Invite families",
+    "lockLastRole": "Everyone needs at least one role. Give them another role first.",
+    "error": {
+      "generic": "Something went wrong. Please try again.",
+      "FORBIDDEN": "You do not have permission to do this.",
+      "NOT_FOUND": "We could not find that. It may have been removed.",
+      "INVALID": "Please check the details and try again.",
+      "AUDIENCE": "This permission is not available for this kind of role.",
+      "CONFIRM_REQUIRED": "Type the role name exactly to confirm.",
+      "LAST_ROLES_MANAGER": "At least one active person must be able to manage roles.",
+      "SELF_LOCKOUT": "You cannot remove your own ability to manage roles. Ask another administrator.",
+      "BUILT_IN": "Built-in roles cannot be deleted. You can restore their defaults instead.",
+      "HAS_MEMBERS": "Move the people in this role to another role first.",
+      "NOT_STAFF": "Roles for families are managed through invitations.",
+      "FAMILY_ROLE": "Parent and student roles cannot be given to staff here.",
+      "NAME_TAKEN": "Another role already has this name."
+    },
+    "fieldNameEn": "Name in English",
+    "fieldNameAr": "Name in Arabic",
+    "fieldDescEn": "What it is for (English)",
+    "fieldDescAr": "What it is for (Arabic)",
+    "createRole": "New role",
+    "createRoleBody": "Start from scratch or copy another role, then adjust its permissions.",
+    "copyFrom": "Copy permissions from",
+    "copyFromNone": "Start with no permissions",
+    "copyFromHint": "You can change everything after it is created.",
+    "roleCreated": "Role created",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saved": "Saved",
+    "rename": "Rename",
+    "renameTitle": "Name and description",
+    "renameBody": "This is how the role appears across the app.",
+    "renameBuiltInBody": "Renaming a built-in role marks it as customized for your school.",
+    "restoreDefault": "Restore default",
+    "restoreTitle": "Restore the default role?",
+    "restoreBody": "The name, description and permissions go back to the original. People keep the role.",
+    "restored": "Default restored",
+    "delete": "Delete",
+    "deleteTitle": "Delete this role?",
+    "deleteBody": "Nobody has this role. It will be removed.",
+    "deleteMoveBody": "{count, plural, one {# person has} other {# people have}} this role. Choose where to move them.",
+    "moveMembersTo": "Move them to",
+    "chooseRole": "Choose a role",
+    "deleted": "Role deleted",
+    "granted": "Granted: {permission}",
+    "removed": "Removed: {permission}",
+    "sensitiveTitle": "Sensitive access",
+    "sensitiveBody": "{permission} opens confidential records about children. Everyone with the role {role} will get it, and every use is recorded.",
+    "typeToConfirm": "Type the role name to confirm: {role}",
+    "grantAccess": "Grant access",
+    "searchStaff": "Search staff by name or email",
+    "addMember": "Add",
+    "memberAdded": "Added to the role",
+    "sensitiveMemberAck": "I understand this role includes sensitive access to children's records.",
+    "memberRemoved": "{name} removed from the role",
+    "removeMember": "Remove {name}",
+    "remove": "Remove",
+    "rolesButton": "Roles",
+    "memberRolesTitle": "Roles for {name}",
+    "memberRolesBody": "Pick every role this person should have. Changes apply on their next click.",
+    "atLeastOneRole": "Choose at least one role.",
+    "rolesSaved": "Roles updated for {name}",
+    "pickPerson": "Search for a person"
+  },
+  "adminInvites": {
+    "title": "Invitations",
+    "subtitle": "Invite staff, parents and students, share join links, and choose how people sign in.",
+    "tabInvites": "Invitations",
+    "tabLinks": "Join links and code",
+    "tabSignIn": "How people sign in",
+    "gradeN": "Grade {grade}",
+    "statPending": "Waiting to be accepted",
+    "statAccepted": "Accepted",
+    "statExpired": "Expired",
+    "statLinks": "Active staff links",
+    "filterAll": "All",
+    "state": {
+      "PENDING": "Pending",
+      "ACCEPTED": "Accepted",
+      "EXPIRED": "Expired",
+      "REVOKED": "Revoked",
+      "USED_UP": "Used up"
+    },
+    "emptyInvites": "No invitations here",
+    "emptyInvitesBody": "Invite a colleague or a family to get started.",
+    "colPerson": "Person",
+    "colAccess": "Joining as",
+    "colStatus": "Status",
+    "colSent": "Sent",
+    "colActions": "Actions",
+    "kind": {
+      "STAFF": "Staff",
+      "PARENT": "Parent",
+      "STUDENT": "Student"
+    },
+    "childCount": "{count, plural, one {# child} other {# children}}",
+    "sentBy": "By {name} on {date}",
+    "someone": "a colleague",
+    "expiresOn": "Expires {date}",
+    "familyCodeTitle": "Family join code",
+    "familyCodeBody": "Parents enter this code, create an account and add their children. Print the poster for the reception desk or send it home.",
+    "familyCodeOff": "Parents cannot join with the code right now. Switch it on under How people sign in.",
+    "schoolCode": "School code",
+    "downloadPoster": "Download poster (PDF)",
+    "approvalOn": "An admin approves each family before they see anything.",
+    "approvalOff": "Families whose child details match are linked straight away.",
+    "changeJoinSettings": "Change join settings",
+    "staffLinksTitle": "Staff join links",
+    "staffLinksBody": "One link for many colleagues, with a role, a limit on uses and an end date.",
+    "emptyLinks": "No staff links yet",
+    "emptyLinksBody": "Create a link to share in a staff email or meeting.",
+    "linkUses": "Used {uses} of {max}",
+    "error": {
+      "generic": "Something went wrong. Please try again.",
+      "FORBIDDEN": "You do not have permission to do this.",
+      "INVALID": "Please check the details and try again.",
+      "EMAIL": "Enter a valid email address.",
+      "NAME": "Enter the person's name.",
+      "DUPLICATE": "This email appears more than once.",
+      "ROLE": "Unknown role. Use a role name or key from Roles and access.",
+      "DEPARTMENT": "Unknown department.",
+      "ALREADY_MEMBER": "This person is already a member of the school.",
+      "TOO_MANY": "Up to 500 people at a time.",
+      "CHILDREN": "Choose at least one child.",
+      "NOT_FOUND": "We could not find that invitation.",
+      "STUDENT_HAS_ACCOUNT": "This student already has an account.",
+      "ACCEPTED": "This invitation was already accepted.",
+      "REVOKED": "This invitation was revoked.",
+      "CODE": "We could not create a new code. Please try again.",
+      "DOMAIN": "Check the email domains, for example school.ae.",
+      "PUBLIC_DOMAIN": "Public email providers such as gmail.com cannot be staff domains."
+    },
+    "copyFailed": "Could not copy. Select the link and copy it.",
+    "copy": "Copy",
+    "sentBody": "We emailed the invitation. You can also copy the link and send it yourself. It works for 14 days.",
+    "done": "Done",
+    "invite": "Invite",
+    "sentTitle": "Invitation sent",
+    "inviteTitle": "Invite someone",
+    "inviteBody": "They get an email with a personal link to create their account.",
+    "fieldNameOptional": "Name (optional)",
+    "fieldName": "Full name",
+    "fieldEmail": "Email",
+    "fieldRoles": "Roles",
+    "fieldDepartment": "Department",
+    "noDepartment": "No department",
+    "fieldChildren": "Their children",
+    "searchStudent": "Search by name or student number",
+    "addChild": "Add",
+    "removeChild": "Remove child",
+    "fieldStudent": "Student",
+    "allStudentsHaveAccounts": "Every student already has an account.",
+    "cancel": "Cancel",
+    "send": "Send invitation",
+    "bulkStaff": "Invite staff from CSV",
+    "bulkStaffTitle": "Invite staff from a spreadsheet",
+    "bulkStaffBody": "Columns: name, email, roles, department. Separate several roles with a semicolon.",
+    "bulkDone": "{created} invited, {failed} need attention.",
+    "rowProblem": "Row {row}: {problem}",
+    "bulkPlaceholder": "name,email,roles,department\nMaya Haddad,maya.haddad@school.ae,teacher,Science",
+    "bulkHint": "Upload a CSV file or paste rows. Roles can be names or keys such as teacher.",
+    "bulkRows": "{count, plural, one {# person ready} other {# people ready}}",
+    "sendInvites": "{count, plural, one {Send # invitation} other {Send # invitations}}",
+    "familiesInvited": "{count, plural, one {# family invited} other {# families invited}}",
+    "inviteFamilies": "Invite all families",
+    "inviteFamiliesTitle": "Invite every family not yet on the app?",
+    "inviteFamiliesBody": "{count, plural, one {# parent} other {# parents}} from your student records have an email but no account. Each gets a personal link for their own children.",
+    "revoked": "Invitation revoked",
+    "resend": "Resend",
+    "revoke": "Revoke",
+    "resentTitle": "Invitation sent again",
+    "resentBody": "The old link no longer works. This new link works for 14 days.",
+    "revokeTitle": "Revoke this invitation?",
+    "revokeBody": "The link stops working straight away. People who already joined keep their access.",
+    "createLink": "New staff link",
+    "linkReadyTitle": "Your link is ready",
+    "createLinkTitle": "Create a staff join link",
+    "linkReadyBody": "Share it with colleagues. It is only shown once, so copy it now.",
+    "createLinkBody": "Anyone with the link joins as the role you choose, until it runs out or expires.",
+    "qrLabel": "QR code for the join link",
+    "fieldRole": "Role",
+    "fieldMaxUses": "Maximum uses",
+    "fieldDays": "Days until it expires",
+    "codeRegenerated": "New code ready. The old code no longer works.",
+    "regenerate": "New code",
+    "regenerateTitle": "Create a new family code?",
+    "regenerateBody": "The current code and printed posters stop working. Families already on the app are not affected.",
+    "settingsReadOnly": "Only people who manage roles can change this.",
+    "settingsSaved": "Sign-in settings saved",
+    "methodsTitle": "Sign-in methods",
+    "methodsBody": "How people prove who they are.",
+    "methodPassword": "Email and password",
+    "methodPasswordBody": "Works for everyone, including families without a school account.",
+    "methodPasswordLock": "Always on, so everyone has a way in.",
+    "methodGoogle": "Google",
+    "methodGoogleBody": "Staff and families sign in with their Google account.",
+    "providerMissing": "Not set up on this server yet. Ask your IT team to add the sign-in keys.",
+    "methodMicrosoft": "Microsoft",
+    "methodMicrosoftBody": "Staff sign in with their Microsoft 365 school account.",
+    "joinTitle": "Who can join by themselves",
+    "joinBody": "Everyone else joins with a personal invitation or a staff link.",
+    "staffDomains": "Staff email domains",
+    "staffDomainsBody": "People with these email addresses can join as staff with the school code. Separate domains with commas.",
+    "staffDomainsPlaceholder": "e.g. horizon.sch.ae",
+    "staffAutoApprove": "Let staff in straight away",
+    "staffAutoApproveBody": "On: they start with the Teacher role. Off: an admin approves them and picks their roles.",
+    "parentSelfJoin": "Parents can join with the school code",
+    "parentSelfJoinBody": "They verify each child with the student number and date of birth.",
+    "parentApproval": "An admin must approve new families",
+    "parentApprovalBody": "Off: families whose details match are linked straight away. Anything that does not match always waits for approval.",
+    "studentSelfJoin": "Students can join with the school code",
+    "studentSelfJoinBody": "Off by default. Students verify with their student number and date of birth.",
+    "saveSettings": "Save settings"
+  },
+  "joinRequests": {
+    "title": "Join requests",
+    "subtitle": "People who joined with the school code and are waiting for you. They see nothing until you approve.",
+    "joinSettings": "Join settings",
+    "tabPending": "Waiting",
+    "tabDecided": "Decided",
+    "emptyPending": "No one is waiting",
+    "emptyPendingBody": "New requests from families and staff appear here.",
+    "emptyDecided": "No decisions yet",
+    "emptyDecidedBody": "Approved and rejected requests appear here.",
+    "unknownPerson": "Unknown person",
+    "kind": {
+      "STAFF": "Staff",
+      "PARENT": "Parent",
+      "STUDENT": "Student"
+    },
+    "decidedBy": "Decided by {name} on {date}",
+    "automatic": "an invitation",
+    "closedByInvite": "Closed because they accepted an invitation.",
+    "status": {
+      "PENDING": "Waiting",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected"
+    },
+    "gradeSection": "Grade {grade}{section}",
+    "requested": "asked {date}",
+    "theyEntered": "What they entered",
+    "claimByNumber": "Student number {number}, born {dob}",
+    "claimByName": "{name}, Grade {grade}",
+    "giveRoles": "Roles to give",
+    "linkChildren": "Children to link",
+    "noMatches": "No student records look like this. Search below or reject with a note.",
+    "exactMatch": "Exact match",
+    "hasAccount": "Already has an account",
+    "matchedOn": "Matches: {reasons}",
+    "reason": {
+      "STUDENT_NO": "student number",
+      "DOB": "date of birth",
+      "NAME": "name",
+      "GRADE": "grade"
+    },
+    "findAnother": "Find another student",
+    "add": "Add",
+    "note": "Note to the person (optional)",
+    "notePlaceholder": "For example: welcome to Horizon",
+    "reject": "Reject",
+    "approve": "Approve",
+    "rejectTitle": "Reject this request?",
+    "rejectBody": "They will see your note and will not get access. They can contact the school office.",
+    "rejectPlaceholder": "For example: please visit reception with your Emirates ID",
+    "cancel": "Cancel",
+    "approved": "Approved. They have been told.",
+    "rejected": "Rejected. They have been told.",
+    "error": {
+      "generic": "Something went wrong. Please try again.",
+      "FORBIDDEN": "You do not have permission to do this.",
+      "NOT_FOUND": "This request was already handled.",
+      "ROLES_REQUIRED": "Choose at least one role.",
+      "ROLE_AUDIENCE": "Staff roles only.",
+      "CHILDREN_REQUIRED": "Choose the children to link.",
+      "NOTE_REQUIRED": "Add a short note so they know what to do next.",
+      "STUDENT_TAKEN": "That student already has an account.",
+      "OTHER_ACCESS": "This person already has a different kind of access at the school."
+    }
+  },
+  "join": {
+    "inviteMetaTitle": "Join your school",
+    "codeMetaTitle": "Join with a school code",
+    "invalid": {
+      "INVALID": {
+        "title": "This link does not work",
+        "body": "Check that you copied the whole link, or ask the school to send a new one."
+      },
+      "EXPIRED": {
+        "title": "This invitation has expired",
+        "body": "Ask the school to send it again. New links work for 14 days."
+      },
+      "REVOKED": {
+        "title": "This invitation was cancelled",
+        "body": "Contact the school office if you think this is a mistake."
+      },
+      "ACCEPTED": {
+        "title": "This invitation was already used",
+        "body": "If it was you, just sign in."
+      },
+      "UNAVAILABLE": {
+        "title": "Joining is not available right now",
+        "body": "Please try again later or contact the school office."
+      },
+      "RATE_LIMITED": {
+        "title": "Too many attempts",
+        "body": "Please wait a few minutes and try again."
+      }
+    },
+    "signIn": "Sign in",
+    "haveCode": "I have a school code",
+    "inviteHeadline": "Join {school}",
+    "inviteAsParent": "You are invited as a parent. You will see {count, plural, one {your child} other {your # children}} as soon as you join.",
+    "inviteAsStudent": "You are invited to your student account.",
+    "inviteAsStaffLink": "Staff join link. You will join as: {roles}.",
+    "inviteAsStaff": "You are invited as a member of staff: {roles}.",
+    "privacyNote": "Your details are only shared with your school.",
+    "alreadyMember": "Already on the app?",
+    "error": {
+      "generic": "Something went wrong. Please try again.",
+      "CREDENTIALS": "We could not use these details. Check your email and password. If you already have an account, choose I already have an account.",
+      "NAME": "Enter your full name.",
+      "PASSWORD": "Use at least 8 characters for your password.",
+      "RATE_LIMITED": "Too many attempts. Please wait a few minutes.",
+      "INVALID": "This link does not work.",
+      "EXPIRED": "This invitation has expired. Ask the school to send it again.",
+      "REVOKED": "This invitation was cancelled.",
+      "ACCEPTED": "This invitation was already used.",
+      "WRONG_EMAIL": "This invitation was sent to a different email address.",
+      "SUSPENDED": "Your access to this school is paused. Contact the school office.",
+      "OTHER_ACCESS": "You already have a different kind of account at this school. Contact the school office.",
+      "ROLE_AUDIENCE": "This invitation cannot be used. Ask the school for a new one.",
+      "STUDENT_TAKEN": "This student account is already set up. Try signing in.",
+      "NOT_FOUND": "We could not find that.",
+      "CODE": "We could not find a school with that code. Check the letters and numbers.",
+      "CLOSED": "This school is not taking new sign-ups with the code. Ask the school for an invitation.",
+      "CHILD_DETAILS": "Complete the details for each child.",
+      "TOO_MANY_CHILDREN": "Add up to 8 children.",
+      "STAFF_DOMAIN": "Use your school email address to join as staff.",
+      "LOCKED": "Too many details did not match. For your family's safety, please wait an hour or contact the school office.",
+      "ALREADY_MEMBER": "You are already a member of this school. Sign in to continue.",
+      "ALREADY_PENDING": "You have already asked to join. The school will be in touch.",
+      "UNAVAILABLE": "Joining is not available right now. Please try again later."
+    },
+    "createAccount": "Create account",
+    "haveAccount": "I already have an account",
+    "fullName": "Your full name",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "At least 8 characters.",
+    "orContinue": "or",
+    "google": "Continue with Google",
+    "microsoft": "Continue with Microsoft",
+    "signedInAs": "Signed in as",
+    "differentAccount": "Use another account",
+    "inviteForOtherEmail": "This invitation is for a different email. Create an account or sign in with the invited email below.",
+    "acceptAndJoin": "Accept and join",
+    "yourDetails": "Your student details",
+    "childN": "Child {n}",
+    "removeChild": "Remove this child",
+    "byNumber": "Student number",
+    "byName": "Grade and name",
+    "studentNumber": "Student number",
+    "dateOfBirth": "Date of birth",
+    "grade": "Grade",
+    "choose": "Choose",
+    "gradeN": "Grade {grade}",
+    "childFullName": "Child's full name",
+    "codeTitle": "Join your school",
+    "codeBody": "Enter the school code from the letter or poster your school shared.",
+    "schoolCode": "School code",
+    "continue": "Continue",
+    "whoTitle": "Who are you?",
+    "who": {
+      "PARENT": "I am a parent",
+      "STUDENT": "I am a student",
+      "STAFF": "I work at the school"
+    },
+    "whoBody": {
+      "PARENT": "Follow your children, requests and meetings.",
+      "STUDENT": "Your timetable, grades and requests."
+    },
+    "whoStaffBody": "With your school email ({domains}).",
+    "detailsTitle": {
+      "PARENT": "Add your children",
+      "STUDENT": "Check it is you",
+      "STAFF": "Anything the school should know?"
+    },
+    "detailsBody": {
+      "PARENT": "Use the student number and date of birth from the school report or ID card. You can also use grade and full name.",
+      "STUDENT": "Enter your student number and date of birth."
+    },
+    "staffDetailsBody": "Join with your school email ({domains}). Tell the school your role so they can set up your access.",
+    "staffNote": "Your role or department",
+    "staffNotePlaceholder": "For example: Grade 5 class teacher",
+    "addAnotherChild": "Add another child",
+    "back": "Back",
+    "confirmTitle": "Ready to join",
+    "accountTitle": "Create your account",
+    "accountBodyStaff": "Use your school email address.",
+    "accountBodyApproval": "The school checks new families before they can see anything. You will hear back soon.",
+    "accountBodyInstant": "If your details match the school's records, you are in straight away.",
+    "joinSchool": "Join the school",
+    "waitingTitle": "Waiting for the school",
+    "nothingPending": "You are not waiting for any school",
+    "nothingPendingBody": "Join with the code your school shared, or ask for an invitation.",
+    "waitingHeadline": "Waiting for the school",
+    "rejectedHeadline": "The school could not confirm your request",
+    "waitingBodyStaff": "{school} will confirm your account and set up your access.",
+    "waitingBody": "{school} is checking the details you gave. Nothing about your children is shown until they confirm.",
+    "rejectedBody": "{school} left you a note:",
+    "requestedOn": "Sent on {date}",
+    "whatNextTitle": "What happens next",
+    "whatNextBody": "We will email you when the school approves. Most schools reply within one working day. After that, turn on notifications in your settings so you never miss a request or meeting.",
+    "goToSchool": "Go to my school",
+    "checkAgain": "Check again",
+    "signOut": "Sign out"
+  },
+  "accessEmail": {
+    "inviteSubject": "You are invited to join {school}",
+    "inviteBody_staff": "Hello,\n{inviter} has invited you to join {school} on the school app as a member of staff. Open the link below to create your account. The link works for {days} days.",
+    "inviteBody_parent": "Hello,\n{inviter} has invited you to follow your children at {school}: requests, meetings, grades and school news in one place. Open the link below to create your account. The link works for {days} days.",
+    "inviteBody_student": "Hello,\n{inviter} has invited you to your student account at {school}. Open the link below to set your password. The link works for {days} days.",
+    "approvedSubject": "Welcome to {school}",
+    "approvedBody": "Good news: {school} has approved your account. Sign in to get started.",
+    "rejectedSubject": "About your request to join {school}",
+    "rejectedBody": "{school} could not confirm your request. Their note: {note}"
+  },
+  "accessPoster": {
+    "title": "Join our school app",
+    "subtitle": "Requests, meetings, grades and school news for your family, in English and Arabic.",
+    "codeLabel": "Your school code",
+    "step1": "Scan the QR code with your phone camera, or open {url}",
+    "step2": "Enter the school code above and create your account.",
+    "step3": "Add each child with their student number and date of birth.",
+    "footerApproval": "For your children's safety, the school confirms every new family before any details are shown.",
+    "footerInstant": "Your details are checked against the school's records before anything is shown."
+  },
+  "firstRun": {
+    "title": "Welcome to {school}",
+    "parentBody": "Here is where to start. You can find everything later in the menu.",
+    "teacherBody": "Three things most teachers do first.",
+    "gradeN": "Grade {grade}",
+    "tips": {
+      "requests": {
+        "title": "Make a request",
+        "body": "Letters, absences, meetings and more."
+      },
+      "meetings": {
+        "title": "Book a meeting",
+        "body": "Meet teachers and counselors."
+      },
+      "grades": {
+        "title": "See grades",
+        "body": "Marks and reports as they are published."
+      },
+      "gradebook": {
+        "title": "Your gradebook",
+        "body": "Enter marks for your classes."
+      },
+      "refer": {
+        "title": "Refer a student",
+        "body": "Raise an academic or wellbeing concern."
+      },
+      "teacherMeetings": {
+        "title": "Your meetings",
+        "body": "Parents can book time with you."
+      }
+    },
+    "notifications": "Turn on notifications so you never miss an update",
+    "dismiss": "Hide these tips"
   }
 }
