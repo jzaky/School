@@ -6,7 +6,7 @@ import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import type { Ctx } from "@/server/context";
 
-export type AiFeature = "case_brief" | "referral_draft" | "action_plan" | "form_draft" | "workflow_draft" | "admin_question" | "career_summary" | "lesson_plan" | "curriculum_import" | "pathway_advice";
+export type AiFeature = "case_brief" | "referral_draft" | "action_plan" | "form_draft" | "workflow_draft" | "admin_question" | "career_summary" | "lesson_plan" | "curriculum_import" | "pathway_advice" | "requirement_extract";
 
 export type AiRequest<T> = {
   feature: AiFeature;
