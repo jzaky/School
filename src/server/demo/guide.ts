@@ -3,6 +3,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
   student: [
     { key: "assessment", href: "/career/assessment" },
     { key: "matches", href: "/career" },
+    { key: "pathways", href: "/career/universities" },
     { key: "bookAdvisor", href: "/services/career_guidance" },
     { key: "myRequests", href: "/requests" },
     { key: "tasks", href: "/tasks" },
@@ -13,6 +14,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "subjectChange", href: "/services/subject_change" },
     { key: "parentMeeting", href: "/services/parent_meeting" },
     { key: "documents", href: "/documents" },
+    { key: "pathwaysParent", href: "/career/universities/results" },
   ],
   teacher: [
     { key: "refer", href: "/services/academic_concern" },
@@ -22,12 +24,14 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
   ],
   counselor: [
     { key: "caseload", href: "/cases" },
+    { key: "pathwaysConfirm", href: "/career/universities/results" },
     { key: "meetings", href: "/meetings" },
     { key: "calendar", href: "/calendar" },
     { key: "students", href: "/students" },
   ],
   career_advisor: [
     { key: "careerDesk", href: "/career" },
+    { key: "pathwaysManage", href: "/career/universities/manage" },
     { key: "caseload", href: "/cases" },
     { key: "calendar", href: "/calendar" },
   ],

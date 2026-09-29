@@ -17,6 +17,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           { key: "meetings", href: "/meetings", icon: "calendar-clock" },
           { key: "tasks", href: "/tasks", icon: "check-square", badge: counts.tasks },
           { key: "career", href: "/career", icon: "compass" },
+          ...(c("pathways.view") ? [{ key: "universities", href: "/career/universities", icon: "school" }] : []),
           { key: "calendar", href: "/calendar", icon: "calendar" },
           { key: "documents", href: "/documents", icon: "file-text" },
         ],
@@ -30,6 +31,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
         items: [
           { key: "home", href: "/home", icon: "home" },
           { key: "children", href: "/children", icon: "users" },
+          ...(c("pathways.view") ? [{ key: "universities", href: "/career/universities", icon: "school" }] : []),
           { key: "services", href: "/services", icon: "layout-grid" },
           { key: "requests", href: "/requests", icon: "inbox" },
           { key: "approvals", href: "/approvals", icon: "stamp", badge: counts.approvals },
@@ -52,6 +54,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   const school: NavItem[] = [];
   if (c("people.view")) school.push({ key: "students", href: "/students", icon: "graduation-cap" });
   if (c("career.advise")) school.push({ key: "career", href: "/career", icon: "compass" });
+  if (c("pathways.view")) school.push({ key: "universities", href: "/career/universities", icon: "school" });
   if (c("safeguarding.view") || c("safeguarding.refer")) school.push({ key: "safeguarding", href: "/safeguarding", icon: "shield" });
   school.push({ key: "documents", href: "/documents", icon: "file-text" });
   if (c("analytics.view")) school.push({ key: "analytics", href: "/analytics", icon: "bar-chart-3" });

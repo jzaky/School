@@ -4,7 +4,7 @@ import { useMemo, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Check, Loader2, Plus, Search, Trash2 } from "lucide-react";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -86,7 +86,8 @@ export function ReviewRecommendations({ studentId, recs }: { studentId: string; 
 }
 
 type Uni = { id: string; name: string; city: string; country: string; programs: string[]; acceptance: number | null; rank: number | null };
-type Entry = { id: string; university: string; country: string; program: string; category: string; status: string; deadline: string | null; requirements: Array<{ id: string; label: string; done: boolean; due: string | null }> };
+type EntryCheck = { href: string; met: number; notMet: number; unknown: number; gaps: string[] } | null;
+type Entry = { id: string; university: string; country: string; program: string; category: string; status: string; deadline: string | null; check: EntryCheck; requirements: Array<{ id: string; label: string; done: boolean; due: string | null }> };
 
 export function Shortlist({ studentId, entries, universities }: { studentId: string | null; entries: Entry[]; universities: Uni[] }) {
   const t = useTranslations("career");
@@ -135,6 +136,28 @@ export function Shortlist({ studentId, entries, universities }: { studentId: str
                     <Trash2 className="size-3.5" />
                   </Button>
                 </div>
+                {e.check && (
+                  <div className="mt-3 rounded-lg bg-muted/40 p-2.5 text-xs" data-testid="entry-check">
+                    <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+                      <span className="font-medium">{t("entryRequirements")}</span>
+                      <span className="flex gap-2 tabular-nums">
+                        <span className="text-success">{t("reqMet", { n: e.check.met })}</span>
+                        {e.check.notMet > 0 && <span className="text-danger">{t("reqNotMet", { n: e.check.notMet })}</span>}
+                        {e.check.unknown > 0 && <span className="text-muted-foreground">{t("reqUnknown", { n: e.check.unknown })}</span>}
+                      </span>
+                    </div>
+                    {e.check.gaps.length > 0 && (
+                      <ul className="list-disc space-y-0.5 ps-4 text-danger">
+                        {e.check.gaps.map((g, i) => (
+                          <li key={i}>{g}</li>
+                        ))}
+                      </ul>
+                    )}
+                    <Link href={e.check.href} className="mt-1 inline-block font-medium text-brand hover:underline">
+                      {t("seeChecker")}
+                    </Link>
+                  </div>
+                )}
                 <div className="mt-3">
                   <div className="mb-1.5 flex justify-between text-xs text-muted-foreground">
                     <span>{t("requirements")}</span>
@@ -182,6 +205,9 @@ export function Shortlist({ studentId, entries, universities }: { studentId: str
               </button>
             ))}
           </div>
+          <Link href="/career/universities" className="text-xs font-medium text-brand hover:underline" data-testid="browse-all-universities">
+            {t("browseAllUniversities")}
+          </Link>
           <ul className="-mx-2 max-h-[50dvh] overflow-y-auto">
             {list.map((u) => (
               <li key={u.id} className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-muted/50">
