@@ -39,6 +39,7 @@ enum Priority {
 enum MembershipStatus {
   ACTIVE
   INVITED
+  PENDING_APPROVAL
   SUSPENDED
 }
 
@@ -376,34 +377,52 @@ model VerificationToken {
 // ---------------------------------------------------------------------------
 
 model Organization {
-  id                     String    @id @default(cuid())
-  slug                   String    @unique
+  id                     String             @id @default(cuid())
+  slug                   String             @unique
   nameEn                 String
   nameAr                 String
   shortNameEn            String?
   shortNameAr            String?
-  isDemo                 Boolean   @default(false)
-  defaultLocale          Locale    @default(en)
-  timezone               String    @default("Asia/Dubai")
-  currency               String    @default("AED")
-  weekDays               Int[]     @default([1, 2, 3, 4, 5])
-  regulator              Regulator @default(KHDA)
-  emirate                String    @default("Dubai")
-  dataRegion             String    @default("me-central-1")
-  hijriEnabled           Boolean   @default(false)
-  numerals               Numerals  @default(WESTERN)
-  aiEnabled              Boolean   @default(true)
-  aiSensitiveDataEnabled Boolean   @default(false)
-  aiProviderRegion       String    @default("global")
-  emiratesIdPolicy       IdPolicy  @default(OPTIONAL)
-  passportPolicy         IdPolicy  @default(OPTIONAL)
-  crossBorderAllowed     Boolean   @default(false)
-  primaryColor           String    @default("#0F4C81")
-  accentColor            String    @default("#C8A24A")
+  isDemo                 Boolean            @default(false)
+  defaultLocale          Locale             @default(en)
+  timezone               String             @default("Asia/Dubai")
+  currency               String             @default("AED")
+  weekDays               Int[]              @default([1, 2, 3, 4, 5])
+  regulator              Regulator          @default(KHDA)
+  emirate                String             @default("Dubai")
+  dataRegion             String             @default("me-central-1")
+  hijriEnabled           Boolean            @default(false)
+  numerals               Numerals           @default(WESTERN)
+  aiEnabled              Boolean            @default(true)
+  aiSensitiveDataEnabled Boolean            @default(false)
+  aiProviderRegion       String             @default("global")
+  emiratesIdPolicy       IdPolicy           @default(OPTIONAL)
+  passportPolicy         IdPolicy           @default(OPTIONAL)
+  crossBorderAllowed     Boolean            @default(false)
+  primaryColor           String             @default("#0F4C81")
+  accentColor            String             @default("#C8A24A")
   logoUrl                String?
   lastResetAt            DateTime?
-  createdAt              DateTime  @default(now())
-  updatedAt              DateTime  @updatedAt
+  /// Modules switched on for this school (keys from src/lib/modules.ts). Empty means all defaults.
+  enabledModules         String[]
+  /// Curricula (tracks) this school teaches.
+  curricula              SchoolCurriculum[]
+  /// Setup wizard progress: completed step keys, and when setup was finished.
+  onboardingSteps        String[]
+  onboardingCompletedAt  DateTime?
+  /// Who may join without a personal invite: staff with these email domains, families with the school code.
+  staffEmailDomains      String[]
+  staffDomainAutoApprove Boolean            @default(false)
+  parentSelfJoin         Boolean            @default(true)
+  parentJoinApproval     Boolean            @default(true)
+  studentSelfJoin        Boolean            @default(false)
+  joinCode               String?            @unique
+  googleSignIn           Boolean            @default(true)
+  microsoftSignIn        Boolean            @default(true)
+  supportEmail           String?
+  createdById            String?
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
 
   memberships Membership[]
 }
@@ -440,7 +459,10 @@ model Role {
   descAr      String?
   permissions String[]
   isSystem    Boolean  @default(true)
+  /// Set when a school edits a built-in role. Customized roles are never overwritten by deploys.
+  customized  Boolean  @default(false)
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
 
   members MembershipRole[]
 
@@ -2986,4 +3008,62 @@ model ApplicationDeadline {
 
   @@index([programId, intakeYear])
   @@index([universityId, intakeYear])
+}
+
+// ---------------------------------------------------------------------------
+// Self-serve onboarding: invitations and join requests
+// ---------------------------------------------------------------------------
+
+enum InviteKind {
+  STAFF
+  PARENT
+  STUDENT
+}
+
+/// A personal invitation (with an email) or a shareable join link (no email, several uses).
+/// Only a hash of the token is stored.
+model Invitation {
+  id           String     @id @default(cuid())
+  orgId        String
+  kind         InviteKind
+  email        String?
+  nameEn       String?
+  roleKeys     String[]
+  studentIds   String[]
+  tokenHash    String     @unique
+  maxUses      Int        @default(1)
+  uses         Int        @default(0)
+  expiresAt    DateTime
+  revokedAt    DateTime?
+  createdById  String
+  lastSentAt   DateTime?
+  acceptedById String?
+  createdAt    DateTime   @default(now())
+
+  @@index([orgId, kind])
+  @@index([orgId, email])
+}
+
+enum JoinRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+/// Someone who joined with the school code or a staff email domain and is waiting for approval.
+model JoinRequest {
+  id              String            @id @default(cuid())
+  orgId           String
+  membershipId    String
+  kind            InviteKind
+  /// For parents: the children they claim, with the details they entered to verify.
+  claimedStudents Json?
+  note            String?
+  status          JoinRequestStatus @default(PENDING)
+  decidedById     String?
+  decidedAt       DateTime?
+  decisionNote    String?
+  createdAt       DateTime          @default(now())
+
+  @@index([orgId, status])
 }
