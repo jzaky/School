@@ -57,12 +57,27 @@ export async function calendarItems(ctx: Ctx, from: Date, to: Date, scope: CalSc
   }
   if (kinds.includes("event") || kinds.includes("deadline")) {
     const audience = ctx.isStudent ? ["all", "student"] : ctx.isParent ? ["all", "parent"] : ["all", "staff", "student", "parent"];
-    const events = await db.calendarEvent.findMany({ where: { orgId, startsAt: { lt: to }, endsAt: { gt: from }, audience: { hasSome: audience } } });
+    // Students and families only see events for their grade (or whole-school events), and never drafts.
+    const gradeIds = ctx.isStudent && ctx.membership.student ? [ctx.membership.student.id] : studentIds;
+    const grades = gradeIds.length ? [...new Set((await db.student.findMany({ where: { id: { in: gradeIds } }, select: { gradeLevel: true } })).map((s) => s.gradeLevel))] : [];
+    const gradeWhere = !ctx.isStaff || scope.kind === "student" ? { OR: [{ gradeLevels: { isEmpty: true } }, { gradeLevels: { hasSome: grades } }] } : {};
+    let events = await db.calendarEvent.findMany({ where: { orgId, published: true, startsAt: { lt: to }, endsAt: { gt: from }, audience: { hasSome: audience }, ...gradeWhere } });
+    // A trip shows only for its participants (it may be for a few classes, not a whole grade).
+    const trips = await db.trip.findMany({ where: { orgId, calendarEventId: { in: events.map((e) => e.id) } }, select: { id: true, calendarEventId: true, participants: { where: { studentId: { in: gradeIds } }, select: { id: true } } } });
+    if (!ctx.isStaff || scope.kind === "student") {
+      const hidden = new Set(trips.filter((tr) => tr.participants.length === 0).map((tr) => tr.calendarEventId));
+      events = events.filter((e) => !hidden.has(e.id));
+    }
+    const tripHref = new Map(trips.map((tr) => [tr.calendarEventId, `/trips/${tr.id}`]));
     for (const e of events) {
       const kind: CalKind = e.kind === "DEADLINE" ? "deadline" : "event";
       if (!kinds.includes(kind)) continue;
-      items.push({ id: `e-${e.id}`, kind, title: pick(locale, e.titleEn, e.titleAr), subtitle: pick(locale, e.descEn, e.descAr) || undefined, start: e.startsAt.toISOString(), end: e.endsAt.toISOString(), allDay: e.allDay, color: e.kind === "HOLIDAY" ? "#10B981" : e.kind === "EXAM" ? "#EF4444" : undefined });
+      items.push({ id: `e-${e.id}`, kind, title: pick(locale, e.titleEn, e.titleAr), subtitle: pick(locale, e.descEn, e.descAr) || undefined, start: e.startsAt.toISOString(), end: e.endsAt.toISOString(), allDay: e.allDay, href: tripHref.get(e.id) ?? (e.kind === "EXAM" && e.gradeLevels.length ? "/exams" : undefined), color: e.kind === "HOLIDAY" ? "#10B981" : e.kind === "EXAM" ? "#EF4444" : undefined });
     }
+  }
+  if (kinds.includes("event") && ctx.isStaff && memberIds.length) {
+    const duties = await db.examSitting.findMany({ where: { orgId, status: "PUBLISHED", invigilatorIds: { hasSome: memberIds }, startsAt: { lt: to }, endsAt: { gt: from } } });
+    for (const x of duties) items.push({ id: `x-${x.id}`, kind: "event", title: pick(locale, `Invigilation: Grade ${x.gradeLevel} ${x.titleEn}`, `مراقبة امتحان: الصف ${x.gradeLevel} ${x.titleAr}`), subtitle: x.room ?? undefined, start: x.startsAt.toISOString(), end: x.endsAt.toISOString(), allDay: false, href: "/exams", color: "#EF4444" });
   }
   if (kinds.includes("deadline") && (studentIds.length || ctx.isStudent)) {
     const ids = ctx.isStudent && ctx.membership.student ? [ctx.membership.student.id] : studentIds;

@@ -6,9 +6,11 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "bookAdvisor", href: "/services/career_guidance" },
     { key: "myRequests", href: "/requests" },
     { key: "tasks", href: "/tasks" },
+    { key: "examTimetable", href: "/exams" },
   ],
   parent: [
     { key: "children", href: "/children" },
+    { key: "tripConsent", href: "/trips" },
     { key: "letter", href: "/services/document_request" },
     { key: "subjectChange", href: "/services/subject_change" },
     { key: "parentMeeting", href: "/services/parent_meeting" },
@@ -19,6 +21,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "approvals", href: "/approvals" },
     { key: "meetings", href: "/meetings" },
     { key: "safeguardingRefer", href: "/safeguarding" },
+    { key: "tripBoard", href: "/trips" },
   ],
   counselor: [
     { key: "caseload", href: "/cases" },
@@ -48,6 +51,8 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "workflowBuilder", href: "/admin/workflows" },
     { key: "templates", href: "/admin/templates" },
     { key: "compliance", href: "/admin/compliance" },
+    { key: "calendarAdmin", href: "/admin/calendar" },
+    { key: "examsAdmin", href: "/admin/exams" },
   ],
   registrar: [
     { key: "approvals", href: "/approvals" },

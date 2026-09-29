@@ -18,6 +18,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           { key: "tasks", href: "/tasks", icon: "check-square", badge: counts.tasks },
           { key: "career", href: "/career", icon: "compass" },
           { key: "calendar", href: "/calendar", icon: "calendar" },
+          { key: "exams", href: "/exams", icon: "graduation-cap" },
+          { key: "trips", href: "/trips", icon: "bus" },
           { key: "documents", href: "/documents", icon: "file-text" },
         ],
       },
@@ -35,6 +37,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           { key: "approvals", href: "/approvals", icon: "stamp", badge: counts.approvals },
           { key: "meetings", href: "/meetings", icon: "calendar-clock" },
           { key: "calendar", href: "/calendar", icon: "calendar" },
+          { key: "exams", href: "/exams", icon: "graduation-cap" },
+          { key: "trips", href: "/trips", icon: "bus" },
           { key: "documents", href: "/documents", icon: "file-text" },
         ],
       },
@@ -49,6 +53,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
     { key: "calendar", href: "/calendar", icon: "calendar" },
   ];
   if (c("cases.view")) work.splice(3, 0, { key: "cases", href: "/cases", icon: "folder-kanban" });
+  work.push({ key: "exams", href: "/exams", icon: "graduation-cap" });
+  if (c("trips.manage")) work.push({ key: "trips", href: "/trips", icon: "bus" });
   const school: NavItem[] = [];
   if (c("people.view")) school.push({ key: "students", href: "/students", icon: "graduation-cap" });
   if (c("career.advise")) school.push({ key: "career", href: "/career", icon: "compass" });
@@ -62,6 +68,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("forms.manage")) admin.push({ key: "forms", href: "/admin/forms", icon: "list-checks" });
   if (c("workflows.manage")) admin.push({ key: "workflows", href: "/admin/workflows", icon: "workflow" });
   if (c("documents.templates")) admin.push({ key: "templates", href: "/admin/templates", icon: "file-signature" });
+  if (c("calendar.manage")) admin.push({ key: "calendarAdmin", href: "/admin/calendar", icon: "calendar-days" }, { key: "examsAdmin", href: "/admin/exams", icon: "clipboard-check" });
   if (c("compliance.manage")) admin.push({ key: "compliance", href: "/admin/compliance", icon: "scale" });
   if (c("audit.view")) admin.push({ key: "auditLog", href: "/admin/audit", icon: "scroll-text" });
   const sections: NavSection[] = [

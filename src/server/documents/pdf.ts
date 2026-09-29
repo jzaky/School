@@ -6,15 +6,15 @@ import path from "node:path";
 import { applyMerge } from "./merge";
 
 const FONT_DIR = path.join(process.cwd(), "assets", "fonts");
-const FONTS = {
+export const FONTS = {
   regular: path.join(FONT_DIR, "IBMPlexSansArabic-Regular.ttf"),
   semibold: path.join(FONT_DIR, "IBMPlexSansArabic-SemiBold.ttf"),
   bold: path.join(FONT_DIR, "IBMPlexSansArabic-Bold.ttf"),
 };
 
-const NAVY = "#123A63";
-const GOLD = "#C8A24A";
-const MUTED = "#5B6778";
+export const NAVY = "#123A63";
+export const GOLD = "#C8A24A";
+export const MUTED = "#5B6778";
 
 
 type Doc = PDFKit.PDFDocument;
@@ -71,7 +71,7 @@ function wrap(doc: Doc, text: string, width: number): string[] {
 }
 
 /** Draw one right-to-left paragraph block. Returns the y after the block. */
-function drawRtl(doc: Doc, text: string, x: number, y: number, width: number, opts: { size: number; font?: string; color?: string; lineGap?: number; align?: "right" | "center" }) {
+export function drawRtl(doc: Doc, text: string, x: number, y: number, width: number, opts: { size: number; font?: string; color?: string; lineGap?: number; align?: "right" | "center" }) {
   doc.font(opts.font ?? FONTS.regular).fontSize(opts.size).fillColor(opts.color ?? "#1F2937");
   const lineHeight = opts.size * 1.75 + (opts.lineGap ?? 0);
   for (const line of wrap(doc, text, width)) {
@@ -93,7 +93,7 @@ function drawRtl(doc: Doc, text: string, x: number, y: number, width: number, op
   return y;
 }
 
-function drawLtr(doc: Doc, text: string, x: number, y: number, width: number, opts: { size: number; font?: string; color?: string; align?: "left" | "center" | "right" }) {
+export function drawLtr(doc: Doc, text: string, x: number, y: number, width: number, opts: { size: number; font?: string; color?: string; align?: "left" | "center" | "right" }) {
   doc.font(opts.font ?? FONTS.regular).fontSize(opts.size).fillColor(opts.color ?? "#1F2937");
   doc.text(text, x, y, { width, align: opts.align ?? "left", lineGap: opts.size * 0.45 });
   return doc.y;
