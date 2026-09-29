@@ -61,3 +61,14 @@ Ambiguities resolved during the build. Newest last.
 - Grades: a per-grade comment is saved in the language the teacher is using (commentEn or commentAr) and families see it with the usual language fallback. The report card comment is the teacher's latest comment in that subject, or a short comment chosen from the average.
 - Grades: publishing notifies each enrolled student and their guardians who receive updates once per assessment and student (in-app deduplicated by link, outbound by idempotency key grade:<assessment>:<student>). Unpublishing and publishing again never notifies twice.
 - Grades seed: Adam is not enrolled in Computer Science in the core seed, so his strength shows in Maths and Physics (Computing would also be strong if he were enrolled); his weakest area is Arabic extended writing.
+## Timetable, staff absence and cover
+- The standard UAE day preset is 8 lessons of 45 minutes Monday to Thursday (assembly 07:30, breaks after lessons 3 and 6, end 14:35) and 5 lessons of 40 minutes on Friday with one break (end 11:25). 37 lesson periods fit a Grade 9 to 12 week of core subjects plus four option blocks; the preset dialog lets a school change every number.
+- Periods per week come from SubjectOffering.periodsPerWeek (default 4). A section's option block is SchoolClass.optionBlock, or else its SubjectOffering's block for that grade. Sections of one grade and block run in parallel.
+- Homeroom classes are not timetabled; registration happens in the assembly period.
+- The demo seed only defines option blocks (PHYS/BUS/GEO, CHEM/CS/PSY, ECON/BIO, ART/FR) when neither the classes nor the subject offerings define them, and moves any student enrolled in two electives of the same block to a free block, so every student week is clash-free. When registration has already allocated students consistently this is a no-op.
+- Regenerating keeps the row (and id) of every lesson that did not move, so cover already arranged stays linked. A moved lesson is locked automatically.
+- StaffAbsence.reasonEn holds the notes for cover teachers (worksheets, instructions), which substitutes see. The form asks staff not to put private or medical details there.
+- Cover declines are recorded as AuditEvents (`cover.decline`); a decliner is never picked again for that lesson. DECLINED means someone declined and nobody else was free; if someone else is free the cover goes to them and the reason stays visible on the board.
+- Substitute ranking: people who already cover 3 or more lessons that week go last (fairness), then same department, then qualified for the subject, then anyone free; within a tier, under their weekly maximum first, then fewest covers this week and today, then lightest timetable.
+- The head of the absent teacher's department gets the cover summary; when the absent teacher is the head or has no department, the principal does.
+- Timetable lessons are a calendar kind that is off by default; cover is on by default.
