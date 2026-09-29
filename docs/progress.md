@@ -33,6 +33,9 @@
 ## In progress
 - Nothing locally. Waiting on deployment access.
 
+## Grades module
+- /grades: spreadsheet-style gradebook with autosave, keyboard navigation, Excel paste, excused and comments, weighted averages and bands; publish with one notification per assessment and student; student and parent views of published grades with child switcher and term trend; staff overview (class averages, students below a threshold); grade band settings; bilingual term report card PDF stored as a GENERATED document. Seed: prisma/seed/academics/grades.ts. Tests: tests/unit/grades-calc.test.ts, tests/integration/grades.test.ts.
+
 ## Broken
 - Deployment blocked: this environment's network policy denies backboard.railway.com. Deploy by connecting Railway to the GitHub repo (docs/deploy.md), or allow the host and provide a Railway token.
 

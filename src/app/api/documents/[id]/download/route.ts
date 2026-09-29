@@ -5,6 +5,8 @@ import { audit } from "@/server/audit/audit";
 import { renderLetterPdf, renderSamplePdf } from "@/server/documents/pdf";
 import { readLocal, signedUrl } from "@/server/documents/storage";
 import type { MergeData } from "@/server/documents/merge";
+import { renderReportCardPdf } from "@/server/grades/report-pdf";
+import type { ReportCardData } from "@/server/grades/report-card";
 
 export const runtime = "nodejs";
 
@@ -55,6 +57,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       signerName: signer ? { en: signer.user.nameEn, ar: signer.user.nameAr ?? signer.user.nameEn } : null,
       issuedAt: version.createdAt,
     });
+    return new NextResponse(new Uint8Array(pdf), { headers: { "Content-Type": "application/pdf", "Content-Disposition": disposition, "Cache-Control": "private, no-store" } });
+  }
+  if (version.storageKey.startsWith("reportcard:") && version.renderData) {
+    const pdf = await renderReportCardPdf(version.renderData as unknown as ReportCardData);
     return new NextResponse(new Uint8Array(pdf), { headers: { "Content-Type": "application/pdf", "Content-Disposition": disposition, "Cache-Control": "private, no-store" } });
   }
   if (version.storageKey.startsWith("sample:")) {

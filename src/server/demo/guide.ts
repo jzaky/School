@@ -4,6 +4,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "assessment", href: "/career/assessment" },
     { key: "matches", href: "/career" },
     { key: "chooseSubjects", href: "/subjects" },
+    { key: "myGrades", href: "/grades" },
     { key: "bookAdvisor", href: "/services/career_guidance" },
     { key: "myRequests", href: "/requests" },
     { key: "tasks", href: "/tasks" },
@@ -11,12 +12,14 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
   parent: [
     { key: "children", href: "/children" },
     { key: "childSubjects", href: "/subjects" },
+    { key: "childGrades", href: "/grades" },
     { key: "letter", href: "/services/document_request" },
     { key: "subjectChange", href: "/services/subject_change" },
     { key: "parentMeeting", href: "/services/parent_meeting" },
     { key: "documents", href: "/documents" },
   ],
   teacher: [
+    { key: "gradebook", href: "/grades" },
     { key: "refer", href: "/services/academic_concern" },
     { key: "myClasses", href: "/classes" },
     { key: "approvals", href: "/approvals" },
@@ -43,6 +46,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
   principal: [
     { key: "kpis", href: "/home" },
     { key: "analytics", href: "/analytics" },
+    { key: "gradesOverview", href: "/grades?view=overview" },
     { key: "approvals", href: "/approvals" },
   ],
   admin: [
@@ -52,6 +56,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "templates", href: "/admin/templates" },
     { key: "compliance", href: "/admin/compliance" },
     { key: "registration", href: "/admin/registration" },
+    { key: "gradeBands", href: "/grades?view=bands" },
   ],
   registrar: [
     { key: "approvals", href: "/approvals" },
@@ -60,6 +65,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "templates", href: "/admin/templates" },
   ],
   hod_computing: [
+    { key: "gradesOverview", href: "/grades?view=overview" },
     { key: "approvals", href: "/approvals" },
     { key: "requestsAll", href: "/requests?tab=all" },
   ],

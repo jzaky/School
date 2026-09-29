@@ -246,3 +246,6 @@ export async function renderChronologyPdf(input: { title: string; subtitle: stri
   doc.end();
   return done;
 }
+
+/** Shared drawing helpers for other bilingual PDFs (for example term report cards). */
+export { drawRtl, drawLtr, FONTS, NAVY, GOLD, MUTED, ARABIC_LETTER_RE };
