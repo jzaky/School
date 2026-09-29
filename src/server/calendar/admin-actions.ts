@@ -131,6 +131,8 @@ function eventData(input: EventInput) {
 
 /** Linked events (exam sittings, trips) are managed from their own pages. */
 async function isLinked(ctx: NonNullable<Awaited<ReturnType<typeof manager>>>, eventId: string) {
+  const ev = await ctx.db.calendarEvent.findUnique({ where: { id: eventId }, select: { audience: true } });
+  if (ev?.audience.some((a) => !["all", ...AUDIENCES].includes(a))) return true;
   const [exam, trip] = await Promise.all([ctx.db.examSitting.count({ where: { calendarEventId: eventId } }), ctx.db.trip.count({ where: { calendarEventId: eventId } })]);
   return exam + trip > 0;
 }

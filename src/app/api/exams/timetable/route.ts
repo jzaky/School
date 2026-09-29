@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getOptionalCtx } from "@/server/context";
-import { timetableStudents, publishedSittings } from "@/server/exams/queries";
+import { defaultTimetableStudent, timetableStudents, publishedSittings } from "@/server/exams/queries";
 import { renderExamTimetablePdf } from "@/server/exams/timetable-pdf";
 
 export const runtime = "nodejs";
@@ -14,7 +14,7 @@ export async function GET(req: Request) {
   let grade: number | null = null;
   let student: { firstNameEn: string; lastNameEn: string; firstNameAr: string; lastNameAr: string } | null = null;
   if (students) {
-    const chosen = students.find((s) => s.id === sp.get("student")) ?? students[0];
+    const chosen = await defaultTimetableStudent(ctx, students, sp.get("student"));
     if (!chosen) return NextResponse.json({ error: "not_found" }, { status: 404 });
     grade = chosen.gradeLevel;
     student = chosen;

@@ -2859,7 +2859,8 @@
       "NOTHING_TO_SCHEDULE": "Nothing to schedule: every subject already has a sitting.",
       "NO_DRAFTS": "There are no draft sittings to publish.",
       "CLASHES": "Resolve the clashes before publishing."
-    }
+    },
+    "managedElsewhere": "Managed from its own module"
   },
   "exams": {
     "title": "Exam timetable",

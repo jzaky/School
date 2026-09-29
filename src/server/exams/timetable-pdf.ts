@@ -38,12 +38,12 @@ export async function renderExamTimetablePdf(input: {
 
   // Columns: Date | Time | Subject | Room | المادة | التاريخ
   const cols = [
-    { w: 118, head: "Date" },
+    { w: 100, head: "Date" },
     { w: 70, head: "Time" },
-    { w: 110, head: "Subject" },
-    { w: 45, head: "Room" },
-    { w: 86, head: "المادة", rtl: true },
-    { w: 86, head: "التاريخ", rtl: true },
+    { w: 105, head: "Subject" },
+    { w: 72, head: "Room" },
+    { w: 84, head: "المادة", rtl: true },
+    { w: 84, head: "التاريخ", rtl: true },
   ];
   const xs = cols.reduce<number[]>((acc, c, i) => [...acc, i === 0 ? M : acc[i - 1] + cols[i - 1].w], []);
   const header = (y: number) => {
@@ -70,7 +70,7 @@ export async function renderExamTimetablePdf(input: {
     const rowH = 26;
     if (idx % 2 === 1) doc.rect(M, y, inner, rowH).fill("#FAFBFC");
     const time = `${en(r.start, { hour: "2-digit", minute: "2-digit", hour12: false })} - ${en(r.end, { hour: "2-digit", minute: "2-digit", hour12: false })}`;
-    drawLtr(doc, en(r.start, { weekday: "short", day: "numeric", month: "short", year: "numeric" }), xs[0] + 4, y + 8, cols[0].w - 8, { size: 8.5 });
+    drawLtr(doc, en(r.start, { weekday: "short", day: "numeric", month: "short" }), xs[0] + 4, y + 8, cols[0].w - 8, { size: 8.5 });
     drawLtr(doc, time, xs[1] + 4, y + 8, cols[1].w - 8, { size: 8.5 });
     drawLtr(doc, r.subjectEn, xs[2] + 4, y + 8, cols[2].w - 8, { size: 8.5, font: FONTS.semibold });
     drawLtr(doc, r.room ?? "-", xs[3] + 4, y + 8, cols[3].w - 8, { size: 8.5 });

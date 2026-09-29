@@ -1,307 +1,1264 @@
 {
   "nav": {
-    "calendarAdmin": ["School calendar", "التقويم المدرسي"],
-    "examsAdmin": ["Exam schedules", "جداول الامتحانات"],
-    "exams": ["Exams", "الامتحانات"],
-    "trips": ["Trips", "الرحلات"]
+    "calendarAdmin": [
+      "School calendar",
+      "التقويم المدرسي"
+    ],
+    "examsAdmin": [
+      "Exam schedules",
+      "جداول الامتحانات"
+    ],
+    "exams": [
+      "Exams",
+      "الامتحانات"
+    ],
+    "trips": [
+      "Trips",
+      "الرحلات"
+    ]
   },
   "guide": {
     "steps": {
-      "examTimetable": { "title": ["See your exam timetable", "اطّلع على جدول امتحاناتك"], "body": ["End of term exams with rooms and times, and a printable PDF.", "امتحانات نهاية الفصل مع القاعات والمواعيد، ونسخة PDF قابلة للطباعة."] },
-      "tripConsent": { "title": ["Give trip consent", "امنح الموافقة على الرحلة"], "body": ["Read Adam's science trip letter and grant consent in one tap.", "اقرئي خطاب رحلة العلوم الخاصة بآدم وامنحي موافقتك بلمسة واحدة."] },
-      "tripBoard": { "title": ["Track trip consent", "تابع موافقات الرحلة"], "body": ["See who has granted, declined or not replied, remind families and export the list.", "اطّلع على من وافق أو رفض أو لم يرد بعد، وذكّر الأسر وصدّر القائمة."] },
-      "calendarAdmin": { "title": ["Plan the school year", "خطط للعام الدراسي"], "body": ["Terms, UAE holidays, events and deadlines in one year view.", "الفصول الدراسية والعطل الرسمية والفعاليات والمواعيد النهائية في عرض سنوي واحد."] },
-      "examsAdmin": { "title": ["Build the exam timetable", "أنشئ جدول الامتحانات"], "body": ["Auto-suggest a schedule, check clashes and publish to families.", "اقترح جدولاً تلقائياً وتحقق من التعارضات ثم انشره للأسر."] }
+      "examTimetable": {
+        "title": [
+          "See your exam timetable",
+          "اطّلع على جدول امتحاناتك"
+        ],
+        "body": [
+          "End of term exams with rooms and times, and a printable PDF.",
+          "امتحانات نهاية الفصل مع القاعات والمواعيد، ونسخة PDF قابلة للطباعة."
+        ]
+      },
+      "tripConsent": {
+        "title": [
+          "Give trip consent",
+          "امنح الموافقة على الرحلة"
+        ],
+        "body": [
+          "Read Adam's science trip letter and grant consent in one tap.",
+          "اقرئي خطاب رحلة العلوم الخاصة بآدم وامنحي موافقتك بلمسة واحدة."
+        ]
+      },
+      "tripBoard": {
+        "title": [
+          "Track trip consent",
+          "تابع موافقات الرحلة"
+        ],
+        "body": [
+          "See who has granted, declined or not replied, remind families and export the list.",
+          "اطّلع على من وافق أو رفض أو لم يرد بعد، وذكّر الأسر وصدّر القائمة."
+        ]
+      },
+      "calendarAdmin": {
+        "title": [
+          "Plan the school year",
+          "خطط للعام الدراسي"
+        ],
+        "body": [
+          "Terms, UAE holidays, events and deadlines in one year view.",
+          "الفصول الدراسية والعطل الرسمية والفعاليات والمواعيد النهائية في عرض سنوي واحد."
+        ]
+      },
+      "examsAdmin": {
+        "title": [
+          "Build the exam timetable",
+          "أنشئ جدول الامتحانات"
+        ],
+        "body": [
+          "Auto-suggest a schedule, check clashes and publish to families.",
+          "اقترح جدولاً تلقائياً وتحقق من التعارضات ثم انشره للأسر."
+        ]
+      }
     }
   },
   "calendarAdmin": {
-    "title": ["School calendar", "التقويم المدرسي"],
-    "subtitle": ["The academic year, terms, holidays, events and deadlines. Published items appear on everyone's calendar for the right audience.", "العام الدراسي والفصول والعطل والفعاليات والمواعيد النهائية. تظهر العناصر المنشورة في تقويم الفئات المعنية."],
-    "noYear": ["No academic year yet", "لا يوجد عام دراسي بعد"],
-    "noYearBody": ["Create the academic year and its terms to start planning.", "أنشئ العام الدراسي وفصوله لبدء التخطيط."],
-    "current": ["(current)", "(الحالي)"],
-    "currentSet": ["This is now the current academic year", "أصبح هذا العام الدراسي الحالي"],
-    "makeCurrent": ["Make this the current year", "اجعله العام الدراسي الحالي"],
-    "newYear": ["New academic year", "عام دراسي جديد"],
-    "newYearBody": ["Set the year's dates and its terms. You can adjust the suggested dates.", "حدد تواريخ العام وفصوله. يمكنك تعديل التواريخ المقترحة."],
-    "yearCreated": ["Academic year {name} created", "تم إنشاء العام الدراسي {name}"],
-    "terms": ["Terms", "الفصول الدراسية"],
-    "addTerm": ["Add term", "إضافة فصل"],
-    "removeTerm": ["Remove term", "حذف الفصل"],
-    "now": ["Now", "الحالي"],
-    "weeks": ["{count, plural, one {# week} other {# weeks}}", "{count, plural, zero {لا أسابيع} one {أسبوع واحد} two {أسبوعان} few {# أسابيع} many {# أسبوعاً} other {# أسبوع}}"],
-    "statHolidays": ["Holidays", "العطل"],
-    "statEvents": ["Events and deadlines", "الفعاليات والمواعيد النهائية"],
-    "statExams": ["Exam sittings", "جلسات الامتحانات"],
-    "statDrafts": ["Drafts", "المسودات"],
-    "tab": { "year": ["Year view", "العرض السنوي"], "list": ["List", "القائمة"] },
-    "legendTerm": ["Term time", "أيام الدراسة"],
-    "legendHoliday": ["Holiday", "عطلة"],
-    "legendExam": ["Exam", "امتحان"],
-    "legendEvent": ["Event or deadline", "فعالية أو موعد نهائي"],
-    "legendDraft": ["Has a draft", "يتضمن مسودة"],
-    "allKinds": ["All", "الكل"],
-    "kind": { "EVENT": ["Event", "فعالية"], "DEADLINE": ["Deadline", "موعد نهائي"], "HOLIDAY": ["Holiday", "عطلة"], "EXAM": ["Exam", "امتحان"], "FOLLOW_UP": ["Follow-up", "متابعة"] },
-    "audience": { "staff": ["Staff", "الموظفون"], "student": ["Students", "الطلاب"], "parent": ["Parents", "أولياء الأمور"], "all": ["Everyone", "الجميع"] },
-    "gradeN": ["Grade {grade}", "الصف {grade}"],
-    "draft": ["Draft", "مسودة"],
-    "estimate": ["Estimate: moon sighting", "تقديري: حسب رؤية الهلال"],
-    "fixedDate": ["Fixed date", "تاريخ ثابت"],
-    "alreadyOnCalendar": ["Already on the calendar", "موجود في التقويم"],
-    "managedInExams": ["Managed in exam schedules", "يُدار من جداول الامتحانات"],
-    "managedInTrips": ["Managed in trips", "يُدار من الرحلات"],
-    "emptyList": ["Nothing here yet", "لا يوجد شيء هنا بعد"],
-    "emptyListBody": ["Add an event or the UAE holidays to fill the calendar.", "أضف فعالية أو العطل الرسمية لتعبئة التقويم."],
-    "addEvent": ["Add event", "إضافة فعالية"],
-    "editEvent": ["Edit event", "تعديل الفعالية"],
-    "eventDialogBody": ["Events, deadlines and holidays show on the calendar for the audiences and grades you choose.", "تظهر الفعاليات والمواعيد النهائية والعطل في تقويم الفئات والصفوف التي تختارها."],
-    "fieldKind": ["Type", "النوع"],
-    "fieldTitleEn": ["Title (English)", "العنوان (بالإنجليزية)"],
-    "fieldTitleAr": ["Title (Arabic)", "العنوان (بالعربية)"],
-    "fieldDescEn": ["Description (English)", "الوصف (بالإنجليزية)"],
-    "fieldDescAr": ["Description (Arabic)", "الوصف (بالعربية)"],
-    "fieldLocationEn": ["Location (English)", "المكان (بالإنجليزية)"],
-    "fieldLocationAr": ["Location (Arabic)", "المكان (بالعربية)"],
-    "fieldNameEn": ["Name (English)", "الاسم (بالإنجليزية)"],
-    "fieldNameAr": ["Name (Arabic)", "الاسم (بالعربية)"],
-    "fieldAllDay": ["All day", "طوال اليوم"],
-    "fieldStartDate": ["Start date", "تاريخ البداية"],
-    "fieldEndDate": ["End date", "تاريخ النهاية"],
-    "fieldStartTime": ["Start time", "وقت البداية"],
-    "fieldEndTime": ["End time", "وقت النهاية"],
-    "fieldAudience": ["Who sees it", "من يراها"],
-    "fieldGrades": ["Grades", "الصفوف"],
-    "fieldGradesHint": ["Leave empty for the whole school.", "اتركه فارغاً لتشمل المدرسة كلها."],
-    "publishedHint": ["Published: visible on calendars", "منشورة: تظهر في التقاويم"],
-    "draftHint": ["Draft: only visible here", "مسودة: تظهر هنا فقط"],
-    "publish": ["Publish", "نشر"],
-    "unpublish": ["Unpublish", "إلغاء النشر"],
-    "eventSaved": ["Event saved", "تم حفظ الفعالية"],
-    "eventPublished": ["Published to calendars", "تم النشر في التقاويم"],
-    "eventUnpublished": ["Moved back to draft", "أُعيدت إلى المسودات"],
-    "eventDeleted": ["Event deleted", "تم حذف الفعالية"],
-    "deleteEventTitle": ["Delete this event?", "حذف هذه الفعالية؟"],
-    "deleteEventBody": ["\"{title}\" will be removed from every calendar.", "ستتم إزالة \"{title}\" من جميع التقاويم."],
-    "uaeHolidays": ["UAE holidays", "العطل الرسمية"],
-    "uaeHolidaysTitle": ["UAE public holidays for {year}", "العطل الرسمية في دولة الإمارات للعام {year}"],
-    "uaeHolidaysBody": ["Choose the holidays to add. Adjust any date before adding.", "اختر العطل التي تريد إضافتها، ويمكنك تعديل أي تاريخ قبل الإضافة."],
-    "moonNote": ["Islamic holidays depend on the moon sighting. Their dates here are estimates from the Umm al-Qura calendar; update them when the official dates are announced.", "تعتمد المناسبات الإسلامية على رؤية الهلال، والتواريخ هنا تقديرية وفق تقويم أم القرى. حدّثها عند إعلان المواعيد الرسمية."],
-    "days": ["days", "أيام"],
-    "addHolidays": ["{count, plural, one {Add # holiday} other {Add # holidays}}", "{count, plural, zero {لا توجد عطل للإضافة} one {إضافة عطلة واحدة} two {إضافة عطلتين} few {إضافة # عطل} many {إضافة # عطلة} other {إضافة # عطلة}}"],
-    "holidaysAdded": ["{count, plural, =0 {These holidays are already on the calendar} one {# holiday added} other {# holidays added}}", "{count, plural, =0 {هذه العطل موجودة في التقويم} one {تمت إضافة عطلة واحدة} two {تمت إضافة عطلتين} few {تمت إضافة # عطل} many {تمت إضافة # عطلة} other {تمت إضافة # عطلة}}"],
+    "title": [
+      "School calendar",
+      "التقويم المدرسي"
+    ],
+    "subtitle": [
+      "The academic year, terms, holidays, events and deadlines. Published items appear on everyone's calendar for the right audience.",
+      "العام الدراسي والفصول والعطل والفعاليات والمواعيد النهائية. تظهر العناصر المنشورة في تقويم الفئات المعنية."
+    ],
+    "noYear": [
+      "No academic year yet",
+      "لا يوجد عام دراسي بعد"
+    ],
+    "noYearBody": [
+      "Create the academic year and its terms to start planning.",
+      "أنشئ العام الدراسي وفصوله لبدء التخطيط."
+    ],
+    "current": [
+      "(current)",
+      "(الحالي)"
+    ],
+    "currentSet": [
+      "This is now the current academic year",
+      "أصبح هذا العام الدراسي الحالي"
+    ],
+    "makeCurrent": [
+      "Make this the current year",
+      "اجعله العام الدراسي الحالي"
+    ],
+    "newYear": [
+      "New academic year",
+      "عام دراسي جديد"
+    ],
+    "newYearBody": [
+      "Set the year's dates and its terms. You can adjust the suggested dates.",
+      "حدد تواريخ العام وفصوله. يمكنك تعديل التواريخ المقترحة."
+    ],
+    "yearCreated": [
+      "Academic year {name} created",
+      "تم إنشاء العام الدراسي {name}"
+    ],
+    "terms": [
+      "Terms",
+      "الفصول الدراسية"
+    ],
+    "addTerm": [
+      "Add term",
+      "إضافة فصل"
+    ],
+    "removeTerm": [
+      "Remove term",
+      "حذف الفصل"
+    ],
+    "now": [
+      "Now",
+      "الحالي"
+    ],
+    "weeks": [
+      "{count, plural, one {# week} other {# weeks}}",
+      "{count, plural, zero {لا أسابيع} one {أسبوع واحد} two {أسبوعان} few {# أسابيع} many {# أسبوعاً} other {# أسبوع}}"
+    ],
+    "statHolidays": [
+      "Holidays",
+      "العطل"
+    ],
+    "statEvents": [
+      "Events and deadlines",
+      "الفعاليات والمواعيد النهائية"
+    ],
+    "statExams": [
+      "Exam sittings",
+      "جلسات الامتحانات"
+    ],
+    "statDrafts": [
+      "Drafts",
+      "المسودات"
+    ],
+    "tab": {
+      "year": [
+        "Year view",
+        "العرض السنوي"
+      ],
+      "list": [
+        "List",
+        "القائمة"
+      ]
+    },
+    "legendTerm": [
+      "Term time",
+      "أيام الدراسة"
+    ],
+    "legendHoliday": [
+      "Holiday",
+      "عطلة"
+    ],
+    "legendExam": [
+      "Exam",
+      "امتحان"
+    ],
+    "legendEvent": [
+      "Event or deadline",
+      "فعالية أو موعد نهائي"
+    ],
+    "legendDraft": [
+      "Has a draft",
+      "يتضمن مسودة"
+    ],
+    "allKinds": [
+      "All",
+      "الكل"
+    ],
+    "kind": {
+      "EVENT": [
+        "Event",
+        "فعالية"
+      ],
+      "DEADLINE": [
+        "Deadline",
+        "موعد نهائي"
+      ],
+      "HOLIDAY": [
+        "Holiday",
+        "عطلة"
+      ],
+      "EXAM": [
+        "Exam",
+        "امتحان"
+      ],
+      "FOLLOW_UP": [
+        "Follow-up",
+        "متابعة"
+      ]
+    },
+    "audience": {
+      "staff": [
+        "Staff",
+        "الموظفون"
+      ],
+      "student": [
+        "Students",
+        "الطلاب"
+      ],
+      "parent": [
+        "Parents",
+        "أولياء الأمور"
+      ],
+      "all": [
+        "Everyone",
+        "الجميع"
+      ]
+    },
+    "gradeN": [
+      "Grade {grade}",
+      "الصف {grade}"
+    ],
+    "draft": [
+      "Draft",
+      "مسودة"
+    ],
+    "estimate": [
+      "Estimate: moon sighting",
+      "تقديري: حسب رؤية الهلال"
+    ],
+    "fixedDate": [
+      "Fixed date",
+      "تاريخ ثابت"
+    ],
+    "alreadyOnCalendar": [
+      "Already on the calendar",
+      "موجود في التقويم"
+    ],
+    "managedInExams": [
+      "Managed in exam schedules",
+      "يُدار من جداول الامتحانات"
+    ],
+    "managedInTrips": [
+      "Managed in trips",
+      "يُدار من الرحلات"
+    ],
+    "emptyList": [
+      "Nothing here yet",
+      "لا يوجد شيء هنا بعد"
+    ],
+    "emptyListBody": [
+      "Add an event or the UAE holidays to fill the calendar.",
+      "أضف فعالية أو العطل الرسمية لتعبئة التقويم."
+    ],
+    "addEvent": [
+      "Add event",
+      "إضافة فعالية"
+    ],
+    "editEvent": [
+      "Edit event",
+      "تعديل الفعالية"
+    ],
+    "eventDialogBody": [
+      "Events, deadlines and holidays show on the calendar for the audiences and grades you choose.",
+      "تظهر الفعاليات والمواعيد النهائية والعطل في تقويم الفئات والصفوف التي تختارها."
+    ],
+    "fieldKind": [
+      "Type",
+      "النوع"
+    ],
+    "fieldTitleEn": [
+      "Title (English)",
+      "العنوان (بالإنجليزية)"
+    ],
+    "fieldTitleAr": [
+      "Title (Arabic)",
+      "العنوان (بالعربية)"
+    ],
+    "fieldDescEn": [
+      "Description (English)",
+      "الوصف (بالإنجليزية)"
+    ],
+    "fieldDescAr": [
+      "Description (Arabic)",
+      "الوصف (بالعربية)"
+    ],
+    "fieldLocationEn": [
+      "Location (English)",
+      "المكان (بالإنجليزية)"
+    ],
+    "fieldLocationAr": [
+      "Location (Arabic)",
+      "المكان (بالعربية)"
+    ],
+    "fieldNameEn": [
+      "Name (English)",
+      "الاسم (بالإنجليزية)"
+    ],
+    "fieldNameAr": [
+      "Name (Arabic)",
+      "الاسم (بالعربية)"
+    ],
+    "fieldAllDay": [
+      "All day",
+      "طوال اليوم"
+    ],
+    "fieldStartDate": [
+      "Start date",
+      "تاريخ البداية"
+    ],
+    "fieldEndDate": [
+      "End date",
+      "تاريخ النهاية"
+    ],
+    "fieldStartTime": [
+      "Start time",
+      "وقت البداية"
+    ],
+    "fieldEndTime": [
+      "End time",
+      "وقت النهاية"
+    ],
+    "fieldAudience": [
+      "Who sees it",
+      "من يراها"
+    ],
+    "fieldGrades": [
+      "Grades",
+      "الصفوف"
+    ],
+    "fieldGradesHint": [
+      "Leave empty for the whole school.",
+      "اتركه فارغاً لتشمل المدرسة كلها."
+    ],
+    "publishedHint": [
+      "Published: visible on calendars",
+      "منشورة: تظهر في التقاويم"
+    ],
+    "draftHint": [
+      "Draft: only visible here",
+      "مسودة: تظهر هنا فقط"
+    ],
+    "publish": [
+      "Publish",
+      "نشر"
+    ],
+    "unpublish": [
+      "Unpublish",
+      "إلغاء النشر"
+    ],
+    "eventSaved": [
+      "Event saved",
+      "تم حفظ الفعالية"
+    ],
+    "eventPublished": [
+      "Published to calendars",
+      "تم النشر في التقاويم"
+    ],
+    "eventUnpublished": [
+      "Moved back to draft",
+      "أُعيدت إلى المسودات"
+    ],
+    "eventDeleted": [
+      "Event deleted",
+      "تم حذف الفعالية"
+    ],
+    "deleteEventTitle": [
+      "Delete this event?",
+      "حذف هذه الفعالية؟"
+    ],
+    "deleteEventBody": [
+      "\"{title}\" will be removed from every calendar.",
+      "ستتم إزالة \"{title}\" من جميع التقاويم."
+    ],
+    "uaeHolidays": [
+      "UAE holidays",
+      "العطل الرسمية"
+    ],
+    "uaeHolidaysTitle": [
+      "UAE public holidays for {year}",
+      "العطل الرسمية في دولة الإمارات للعام {year}"
+    ],
+    "uaeHolidaysBody": [
+      "Choose the holidays to add. Adjust any date before adding.",
+      "اختر العطل التي تريد إضافتها، ويمكنك تعديل أي تاريخ قبل الإضافة."
+    ],
+    "moonNote": [
+      "Islamic holidays depend on the moon sighting. Their dates here are estimates from the Umm al-Qura calendar; update them when the official dates are announced.",
+      "تعتمد المناسبات الإسلامية على رؤية الهلال، والتواريخ هنا تقديرية وفق تقويم أم القرى. حدّثها عند إعلان المواعيد الرسمية."
+    ],
+    "days": [
+      "days",
+      "أيام"
+    ],
+    "addHolidays": [
+      "{count, plural, one {Add # holiday} other {Add # holidays}}",
+      "{count, plural, zero {لا توجد عطل للإضافة} one {إضافة عطلة واحدة} two {إضافة عطلتين} few {إضافة # عطل} many {إضافة # عطلة} other {إضافة # عطلة}}"
+    ],
+    "holidaysAdded": [
+      "{count, plural, =0 {These holidays are already on the calendar} one {# holiday added} other {# holidays added}}",
+      "{count, plural, =0 {هذه العطل موجودة في التقويم} one {تمت إضافة عطلة واحدة} two {تمت إضافة عطلتين} few {تمت إضافة # عطل} many {تمت إضافة # عطلة} other {تمت إضافة # عطلة}}"
+    ],
     "error": {
-      "generic": ["Something went wrong. Please try again.", "حدث خطأ ما. يُرجى المحاولة مرة أخرى."],
-      "FORBIDDEN": ["You do not have permission to do this.", "ليست لديك صلاحية للقيام بذلك."],
-      "INVALID_DATES": ["Check the dates: the end must be after the start.", "تحقق من التواريخ: يجب أن تكون النهاية بعد البداية."],
-      "INVALID_TIMES": ["Check the times: the end must be after the start.", "تحقق من الأوقات: يجب أن تكون النهاية بعد البداية."],
-      "NO_TERMS": ["Add at least one term.", "أضف فصلاً دراسياً واحداً على الأقل."],
-      "TERM_OUTSIDE_YEAR": ["Every term must fall within the academic year.", "يجب أن يقع كل فصل ضمن العام الدراسي."],
-      "TERMS_OVERLAP": ["Terms cannot overlap.", "لا يمكن أن تتداخل الفصول الدراسية."],
-      "NOT_FOUND": ["This item no longer exists.", "لم يعد هذا العنصر موجوداً."],
-      "TITLE_REQUIRED": ["Add an English title.", "أضف عنواناً باللغة الإنجليزية."],
-      "INVALID": ["Some details are not valid.", "بعض البيانات غير صحيحة."],
-      "AUDIENCE_REQUIRED": ["Choose who should see it.", "اختر من يجب أن يراها."],
-      "LINKED": ["This item is managed from its exam schedule or trip.", "يُدار هذا العنصر من جدول الامتحانات أو الرحلة الخاصة به."],
-      "NOTHING_SELECTED": ["Choose at least one holiday.", "اختر عطلة واحدة على الأقل."],
-      "SUBJECT_REQUIRED": ["Choose a subject.", "اختر مادة."],
-      "GRADES_REQUIRED": ["Choose at least one grade.", "اختر صفاً واحداً على الأقل."],
-      "NOTHING_TO_SCHEDULE": ["Nothing to schedule: every subject already has a sitting.", "لا يوجد ما يُجدول: لكل مادة جلسة امتحان بالفعل."],
-      "NO_DRAFTS": ["There are no draft sittings to publish.", "لا توجد جلسات في المسودات للنشر."],
-      "CLASHES": ["Resolve the clashes before publishing.", "عالج التعارضات قبل النشر."]
-    }
+      "generic": [
+        "Something went wrong. Please try again.",
+        "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
+      ],
+      "FORBIDDEN": [
+        "You do not have permission to do this.",
+        "ليست لديك صلاحية للقيام بذلك."
+      ],
+      "INVALID_DATES": [
+        "Check the dates: the end must be after the start.",
+        "تحقق من التواريخ: يجب أن تكون النهاية بعد البداية."
+      ],
+      "INVALID_TIMES": [
+        "Check the times: the end must be after the start.",
+        "تحقق من الأوقات: يجب أن تكون النهاية بعد البداية."
+      ],
+      "NO_TERMS": [
+        "Add at least one term.",
+        "أضف فصلاً دراسياً واحداً على الأقل."
+      ],
+      "TERM_OUTSIDE_YEAR": [
+        "Every term must fall within the academic year.",
+        "يجب أن يقع كل فصل ضمن العام الدراسي."
+      ],
+      "TERMS_OVERLAP": [
+        "Terms cannot overlap.",
+        "لا يمكن أن تتداخل الفصول الدراسية."
+      ],
+      "NOT_FOUND": [
+        "This item no longer exists.",
+        "لم يعد هذا العنصر موجوداً."
+      ],
+      "TITLE_REQUIRED": [
+        "Add an English title.",
+        "أضف عنواناً باللغة الإنجليزية."
+      ],
+      "INVALID": [
+        "Some details are not valid.",
+        "بعض البيانات غير صحيحة."
+      ],
+      "AUDIENCE_REQUIRED": [
+        "Choose who should see it.",
+        "اختر من يجب أن يراها."
+      ],
+      "LINKED": [
+        "This item is managed from its exam schedule or trip.",
+        "يُدار هذا العنصر من جدول الامتحانات أو الرحلة الخاصة به."
+      ],
+      "NOTHING_SELECTED": [
+        "Choose at least one holiday.",
+        "اختر عطلة واحدة على الأقل."
+      ],
+      "SUBJECT_REQUIRED": [
+        "Choose a subject.",
+        "اختر مادة."
+      ],
+      "GRADES_REQUIRED": [
+        "Choose at least one grade.",
+        "اختر صفاً واحداً على الأقل."
+      ],
+      "NOTHING_TO_SCHEDULE": [
+        "Nothing to schedule: every subject already has a sitting.",
+        "لا يوجد ما يُجدول: لكل مادة جلسة امتحان بالفعل."
+      ],
+      "NO_DRAFTS": [
+        "There are no draft sittings to publish.",
+        "لا توجد جلسات في المسودات للنشر."
+      ],
+      "CLASHES": [
+        "Resolve the clashes before publishing.",
+        "عالج التعارضات قبل النشر."
+      ]
+    },
+    "managedElsewhere": [
+      "Managed from its own module",
+      "يُدار من الوحدة الخاصة به"
+    ]
   },
   "exams": {
-    "title": ["Exam timetable", "جدول الامتحانات"],
-    "subtitleStudent": ["Your upcoming exams with times and rooms.", "امتحاناتك القادمة مع المواعيد والقاعات."],
-    "subtitleParent": ["Upcoming exams for each of your children.", "الامتحانات القادمة لكل من أبنائك."],
-    "subtitleStaff": ["Published exam timetables by grade, and your invigilation duties.", "جداول الامتحانات المنشورة حسب الصف، ومهام المراقبة الخاصة بك."],
-    "downloadPdf": ["Download PDF", "تنزيل PDF"],
-    "gradeN": ["Grade {grade}", "الصف {grade}"],
-    "myDuties": ["My invigilation duties", "مهام المراقبة الخاصة بي"],
-    "myDutiesBody": ["Exams you are invigilating.", "الامتحانات التي تراقبها."],
-    "emptyTitle": ["No upcoming exams", "لا توجد امتحانات قادمة"],
-    "emptyBody": ["When the school publishes an exam timetable it will appear here.", "عندما تنشر المدرسة جدول امتحانات سيظهر هنا."],
-    "pastCount": ["{count, plural, one {# exam already taken this term.} other {# exams already taken this term.}}", "{count, plural, zero {لا امتحانات منتهية هذا الفصل.} one {امتحان واحد منتهٍ هذا الفصل.} two {امتحانان منتهيان هذا الفصل.} few {# امتحانات منتهية هذا الفصل.} many {# امتحاناً منتهياً هذا الفصل.} other {# امتحان منتهٍ هذا الفصل.}}"],
-    "homeTitle": ["Upcoming exams", "الامتحانات القادمة"],
-    "viewAll": ["View all", "عرض الكل"],
-    "adminTitle": ["Exam schedules", "جداول الامتحانات"],
-    "adminSubtitle": ["Build each term's exam timetable, check clashes and publish it to students, parents and invigilators.", "أنشئ جدول امتحانات كل فصل وتحقق من التعارضات ثم انشره للطلاب وأولياء الأمور والمراقبين."],
-    "allGrades": ["All grades", "جميع الصفوف"],
-    "statSittings": ["Sittings", "الجلسات"],
-    "statPublished": ["Published", "منشورة"],
-    "statDrafts": ["Drafts", "المسودات"],
-    "statClashes": ["With clashes", "بها تعارضات"],
-    "statusPublished": ["Published", "منشور"],
-    "statusDraft": ["Draft", "مسودة"],
-    "noRoom": ["No room yet", "لم تحدد القاعة بعد"],
-    "emptyAdmin": ["No exams scheduled for this term", "لا توجد امتحانات مجدولة لهذا الفصل"],
-    "emptyAdminBody": ["Use Suggest schedule to spread subjects over the exam window, or add sittings one by one.", "استخدم اقتراح الجدول لتوزيع المواد على فترة الامتحانات، أو أضف الجلسات واحدة تلو الأخرى."],
+    "title": [
+      "Exam timetable",
+      "جدول الامتحانات"
+    ],
+    "subtitleStudent": [
+      "Your upcoming exams with times and rooms.",
+      "امتحاناتك القادمة مع المواعيد والقاعات."
+    ],
+    "subtitleParent": [
+      "Upcoming exams for each of your children.",
+      "الامتحانات القادمة لكل من أبنائك."
+    ],
+    "subtitleStaff": [
+      "Published exam timetables by grade, and your invigilation duties.",
+      "جداول الامتحانات المنشورة حسب الصف، ومهام المراقبة الخاصة بك."
+    ],
+    "downloadPdf": [
+      "Download PDF",
+      "تنزيل PDF"
+    ],
+    "gradeN": [
+      "Grade {grade}",
+      "الصف {grade}"
+    ],
+    "myDuties": [
+      "My invigilation duties",
+      "مهام المراقبة الخاصة بي"
+    ],
+    "myDutiesBody": [
+      "Exams you are invigilating.",
+      "الامتحانات التي تراقبها."
+    ],
+    "emptyTitle": [
+      "No upcoming exams",
+      "لا توجد امتحانات قادمة"
+    ],
+    "emptyBody": [
+      "When the school publishes an exam timetable it will appear here.",
+      "عندما تنشر المدرسة جدول امتحانات سيظهر هنا."
+    ],
+    "pastCount": [
+      "{count, plural, one {# exam already taken this term.} other {# exams already taken this term.}}",
+      "{count, plural, zero {لا امتحانات منتهية هذا الفصل.} one {امتحان واحد منتهٍ هذا الفصل.} two {امتحانان منتهيان هذا الفصل.} few {# امتحانات منتهية هذا الفصل.} many {# امتحاناً منتهياً هذا الفصل.} other {# امتحان منتهٍ هذا الفصل.}}"
+    ],
+    "homeTitle": [
+      "Upcoming exams",
+      "الامتحانات القادمة"
+    ],
+    "viewAll": [
+      "View all",
+      "عرض الكل"
+    ],
+    "adminTitle": [
+      "Exam schedules",
+      "جداول الامتحانات"
+    ],
+    "adminSubtitle": [
+      "Build each term's exam timetable, check clashes and publish it to students, parents and invigilators.",
+      "أنشئ جدول امتحانات كل فصل وتحقق من التعارضات ثم انشره للطلاب وأولياء الأمور والمراقبين."
+    ],
+    "allGrades": [
+      "All grades",
+      "جميع الصفوف"
+    ],
+    "statSittings": [
+      "Sittings",
+      "الجلسات"
+    ],
+    "statPublished": [
+      "Published",
+      "منشورة"
+    ],
+    "statDrafts": [
+      "Drafts",
+      "المسودات"
+    ],
+    "statClashes": [
+      "With clashes",
+      "بها تعارضات"
+    ],
+    "statusPublished": [
+      "Published",
+      "منشور"
+    ],
+    "statusDraft": [
+      "Draft",
+      "مسودة"
+    ],
+    "noRoom": [
+      "No room yet",
+      "لم تحدد القاعة بعد"
+    ],
+    "emptyAdmin": [
+      "No exams scheduled for this term",
+      "لا توجد امتحانات مجدولة لهذا الفصل"
+    ],
+    "emptyAdminBody": [
+      "Use Suggest schedule to spread subjects over the exam window, or add sittings one by one.",
+      "استخدم اقتراح الجدول لتوزيع المواد على فترة الامتحانات، أو أضف الجلسات واحدة تلو الأخرى."
+    ],
     "clash": {
-      "grade": ["Grade has two exams at once", "للصف امتحانان في الوقت نفسه"],
-      "room": ["Room double-booked", "القاعة محجوزة مرتين"],
-      "invigilator": ["{name} is double-booked", "{name} لديه مهمتان في الوقت نفسه"],
-      "holiday": ["On a holiday: {name}", "في يوم عطلة: {name}"],
-      "weekend": ["On a weekend", "في عطلة نهاية الأسبوع"]
+      "grade": [
+        "Grade has two exams at once",
+        "للصف امتحانان في الوقت نفسه"
+      ],
+      "room": [
+        "Room double-booked",
+        "القاعة محجوزة مرتين"
+      ],
+      "invigilator": [
+        "{name} is double-booked",
+        "{name} لديه مهمتان في الوقت نفسه"
+      ],
+      "holiday": [
+        "On a holiday: {name}",
+        "في يوم عطلة: {name}"
+      ],
+      "weekend": [
+        "On a weekend",
+        "في عطلة نهاية الأسبوع"
+      ]
     },
-    "addSitting": ["Add sitting", "إضافة جلسة"],
-    "editSitting": ["Edit sitting", "تعديل الجلسة"],
-    "sittingBody": ["Clashes with other sittings, holidays and weekends are shown on the list.", "تظهر التعارضات مع الجلسات الأخرى والعطل ونهايات الأسبوع في القائمة."],
-    "sittingSaved": ["Sitting saved", "تم حفظ الجلسة"],
-    "subject": ["Subject", "المادة"],
-    "chooseSubject": ["Choose a subject", "اختر مادة"],
-    "grade": ["Grade", "الصف"],
-    "grades": ["Grades", "الصفوف"],
-    "date": ["Date", "التاريخ"],
-    "time": ["Time", "الوقت"],
-    "room": ["Room", "القاعة"],
-    "start": ["Start", "البداية"],
-    "end": ["End", "النهاية"],
-    "invigilators": ["Invigilators", "المراقبون"],
-    "searchStaff": ["Search staff", "ابحث عن موظف"],
-    "selectedCount": ["{count, plural, =0 {No one selected} one {# selected} other {# selected}}", "{count, plural, =0 {لم يتم اختيار أحد} one {تم اختيار واحد} two {تم اختيار اثنين} few {تم اختيار #} many {تم اختيار #} other {تم اختيار #}}"],
-    "deleteTitle": ["Delete this sitting?", "حذف هذه الجلسة؟"],
-    "deleteBody": ["{label} will be removed, including from calendars if it was published.", "ستتم إزالة {label}، بما في ذلك من التقاويم إن كانت منشورة."],
-    "suggest": ["Suggest schedule", "اقتراح جدول"],
-    "suggestTitle": ["Suggest an exam schedule", "اقتراح جدول امتحانات"],
-    "suggestBody": ["Spreads each grade's subjects evenly over the window, skipping weekends and holidays, and assigns rooms and invigilators without double-booking.", "يوزع مواد كل صف بالتساوي على الفترة مع تجاوز نهايات الأسبوع والعطل، ويخصص القاعات والمراقبين دون حجز مزدوج."],
-    "windowStart": ["Exam window starts", "بداية فترة الامتحانات"],
-    "windowEnd": ["Exam window ends", "نهاية فترة الامتحانات"],
-    "session1": ["Morning session", "الفترة الصباحية"],
-    "session2": ["Second session", "الفترة الثانية"],
-    "maxPerDay": ["Most exams per day for a grade", "الحد الأقصى للامتحانات يومياً لكل صف"],
-    "perDay": ["{count, plural, one {One a day} other {# a day}}", "{count, plural, one {امتحان واحد يومياً} two {امتحانان يومياً} other {# امتحانات يومياً}}"],
-    "duration": ["Length (minutes)", "المدة (بالدقائق)"],
-    "rooms": ["Rooms", "القاعات"],
-    "roomsHint": ["Separate rooms with commas.", "افصل بين القاعات بفواصل."],
-    "invigilatorPool": ["Invigilators to draw from", "المراقبون المتاحون"],
-    "preview": ["Preview", "معاينة"],
-    "previewSummary": ["{count} sittings over {days} exam days.", "{count} جلسة على مدى {days} يوم امتحانات."],
-    "unplaced": ["{count, plural, one {# subject does not fit in the window. Extend it or allow two a day.} other {# subjects do not fit in the window. Extend it or allow two a day.}}", "{count, plural, one {مادة واحدة لا تتسع لها الفترة. مدد الفترة أو اسمح بامتحانين يومياً.} two {مادتان لا تتسع لهما الفترة. مدد الفترة أو اسمح بامتحانين يومياً.} few {# مواد لا تتسع لها الفترة. مدد الفترة أو اسمح بامتحانين يومياً.} many {# مادة لا تتسع لها الفترة. مدد الفترة أو اسمح بامتحانين يومياً.} other {# مادة لا تتسع لها الفترة. مدد الفترة أو اسمح بامتحانين يومياً.}}"],
-    "nothingToSchedule": ["Every subject for these grades already has a sitting this term.", "لكل مادة في هذه الصفوف جلسة امتحان بالفعل هذا الفصل."],
-    "saveDrafts": ["Save {count} as drafts", "حفظ {count} كمسودات"],
-    "suggestApplied": ["{count} draft sittings added. Check them, then publish.", "تمت إضافة {count} جلسة كمسودات. راجعها ثم انشرها."],
-    "publish": ["{count, plural, =0 {Publish drafts} other {Publish # drafts}}", "{count, plural, =0 {نشر} one {نشر مسودة واحدة} two {نشر مسودتين} few {نشر # مسودات} many {نشر # مسودة} other {نشر # مسودة}}"],
-    "publishNoDrafts": ["There are no draft sittings to publish.", "لا توجد جلسات في المسودات للنشر."],
-    "publishClashes": ["Resolve the clashes on draft sittings first.", "عالج تعارضات جلسات المسودات أولاً."],
-    "publishTitle": ["Publish the exam timetable?", "نشر جدول الامتحانات؟"],
-    "publishBody": ["{count} sittings will appear on the calendar for each grade's students and parents and for the invigilators, and they will be notified once.", "ستظهر {count} جلسة في تقويم طلاب كل صف وأولياء أمورهم وفي تقويم المراقبين، وسيتم إشعارهم مرة واحدة."],
-    "publishConfirm": ["Publish and notify", "نشر وإشعار"],
-    "published": ["{count} sittings published, {people} people notified", "تم نشر {count} جلسة وإشعار {people} شخصاً"]
+    "addSitting": [
+      "Add sitting",
+      "إضافة جلسة"
+    ],
+    "editSitting": [
+      "Edit sitting",
+      "تعديل الجلسة"
+    ],
+    "sittingBody": [
+      "Clashes with other sittings, holidays and weekends are shown on the list.",
+      "تظهر التعارضات مع الجلسات الأخرى والعطل ونهايات الأسبوع في القائمة."
+    ],
+    "sittingSaved": [
+      "Sitting saved",
+      "تم حفظ الجلسة"
+    ],
+    "subject": [
+      "Subject",
+      "المادة"
+    ],
+    "chooseSubject": [
+      "Choose a subject",
+      "اختر مادة"
+    ],
+    "grade": [
+      "Grade",
+      "الصف"
+    ],
+    "grades": [
+      "Grades",
+      "الصفوف"
+    ],
+    "date": [
+      "Date",
+      "التاريخ"
+    ],
+    "time": [
+      "Time",
+      "الوقت"
+    ],
+    "room": [
+      "Room",
+      "القاعة"
+    ],
+    "start": [
+      "Start",
+      "البداية"
+    ],
+    "end": [
+      "End",
+      "النهاية"
+    ],
+    "invigilators": [
+      "Invigilators",
+      "المراقبون"
+    ],
+    "searchStaff": [
+      "Search staff",
+      "ابحث عن موظف"
+    ],
+    "selectedCount": [
+      "{count, plural, =0 {No one selected} one {# selected} other {# selected}}",
+      "{count, plural, =0 {لم يتم اختيار أحد} one {تم اختيار واحد} two {تم اختيار اثنين} few {تم اختيار #} many {تم اختيار #} other {تم اختيار #}}"
+    ],
+    "deleteTitle": [
+      "Delete this sitting?",
+      "حذف هذه الجلسة؟"
+    ],
+    "deleteBody": [
+      "{label} will be removed, including from calendars if it was published.",
+      "ستتم إزالة {label}، بما في ذلك من التقاويم إن كانت منشورة."
+    ],
+    "suggest": [
+      "Suggest schedule",
+      "اقتراح جدول"
+    ],
+    "suggestTitle": [
+      "Suggest an exam schedule",
+      "اقتراح جدول امتحانات"
+    ],
+    "suggestBody": [
+      "Spreads each grade's subjects evenly over the window, skipping weekends and holidays, and assigns rooms and invigilators without double-booking.",
+      "يوزع مواد كل صف بالتساوي على الفترة مع تجاوز نهايات الأسبوع والعطل، ويخصص القاعات والمراقبين دون حجز مزدوج."
+    ],
+    "windowStart": [
+      "Exam window starts",
+      "بداية فترة الامتحانات"
+    ],
+    "windowEnd": [
+      "Exam window ends",
+      "نهاية فترة الامتحانات"
+    ],
+    "session1": [
+      "Morning session",
+      "الفترة الصباحية"
+    ],
+    "session2": [
+      "Second session",
+      "الفترة الثانية"
+    ],
+    "maxPerDay": [
+      "Most exams per day for a grade",
+      "الحد الأقصى للامتحانات يومياً لكل صف"
+    ],
+    "perDay": [
+      "{count, plural, one {One a day} other {# a day}}",
+      "{count, plural, one {امتحان واحد يومياً} two {امتحانان يومياً} other {# امتحانات يومياً}}"
+    ],
+    "duration": [
+      "Length (minutes)",
+      "المدة (بالدقائق)"
+    ],
+    "rooms": [
+      "Rooms",
+      "القاعات"
+    ],
+    "roomsHint": [
+      "Separate rooms with commas.",
+      "افصل بين القاعات بفواصل."
+    ],
+    "invigilatorPool": [
+      "Invigilators to draw from",
+      "المراقبون المتاحون"
+    ],
+    "preview": [
+      "Preview",
+      "معاينة"
+    ],
+    "previewSummary": [
+      "{count} sittings over {days} exam days.",
+      "{count} جلسة على مدى {days} يوم امتحانات."
+    ],
+    "unplaced": [
+      "{count, plural, one {# subject does not fit in the window. Extend it or allow two a day.} other {# subjects do not fit in the window. Extend it or allow two a day.}}",
+      "{count, plural, one {مادة واحدة لا تتسع لها الفترة. مدد الفترة أو اسمح بامتحانين يومياً.} two {مادتان لا تتسع لهما الفترة. مدد الفترة أو اسمح بامتحانين يومياً.} few {# مواد لا تتسع لها الفترة. مدد الفترة أو اسمح بامتحانين يومياً.} many {# مادة لا تتسع لها الفترة. مدد الفترة أو اسمح بامتحانين يومياً.} other {# مادة لا تتسع لها الفترة. مدد الفترة أو اسمح بامتحانين يومياً.}}"
+    ],
+    "nothingToSchedule": [
+      "Every subject for these grades already has a sitting this term.",
+      "لكل مادة في هذه الصفوف جلسة امتحان بالفعل هذا الفصل."
+    ],
+    "saveDrafts": [
+      "Save {count} as drafts",
+      "حفظ {count} كمسودات"
+    ],
+    "suggestApplied": [
+      "{count} draft sittings added. Check them, then publish.",
+      "تمت إضافة {count} جلسة كمسودات. راجعها ثم انشرها."
+    ],
+    "publish": [
+      "{count, plural, =0 {Publish drafts} other {Publish # drafts}}",
+      "{count, plural, =0 {نشر} one {نشر مسودة واحدة} two {نشر مسودتين} few {نشر # مسودات} many {نشر # مسودة} other {نشر # مسودة}}"
+    ],
+    "publishNoDrafts": [
+      "There are no draft sittings to publish.",
+      "لا توجد جلسات في المسودات للنشر."
+    ],
+    "publishClashes": [
+      "Resolve the clashes on draft sittings first.",
+      "عالج تعارضات جلسات المسودات أولاً."
+    ],
+    "publishTitle": [
+      "Publish the exam timetable?",
+      "نشر جدول الامتحانات؟"
+    ],
+    "publishBody": [
+      "{count} sittings will appear on the calendar for each grade's students and parents and for the invigilators, and they will be notified once.",
+      "ستظهر {count} جلسة في تقويم طلاب كل صف وأولياء أمورهم وفي تقويم المراقبين، وسيتم إشعارهم مرة واحدة."
+    ],
+    "publishConfirm": [
+      "Publish and notify",
+      "نشر وإشعار"
+    ],
+    "published": [
+      "{count} sittings published, {people} people notified",
+      "تم نشر {count} جلسة وإشعار {people} شخصاً"
+    ]
   },
   "trips": {
-    "title": ["Trips", "الرحلات"],
-    "subtitleStaff": ["School trips with consent letters, a live consent board and trip-day lists.", "الرحلات المدرسية مع خطابات الموافقة ولوحة موافقات مباشرة وقوائم يوم الرحلة."],
-    "subtitleParent": ["Trips for each of your children. Read the letter and give or decline consent.", "رحلات كل من أبنائك. اقرأ الخطاب وامنح موافقتك أو ارفضها."],
-    "subtitleStudent": ["Your upcoming school trips.", "رحلاتك المدرسية القادمة."],
-    "homeTitle": ["Trips", "الرحلات"],
-    "viewAll": ["View all", "عرض الكل"],
-    "back": ["All trips", "جميع الرحلات"],
-    "upcoming": ["Upcoming", "القادمة"],
-    "past": ["Past and cancelled", "السابقة والملغاة"],
-    "forChild": ["{name}", "{name}"],
-    "emptyFamily": ["No trips yet", "لا توجد رحلات بعد"],
-    "emptyFamilyBody": ["When a trip is planned you will get the letter here and a notification.", "عند التخطيط لرحلة ستصلك رسالة إشعار وستجد الخطاب هنا."],
-    "emptyUpcoming": ["No upcoming trips", "لا توجد رحلات قادمة"],
-    "emptyUpcomingBody": ["Create a trip, then publish it to send consent letters to families.", "أنشئ رحلة ثم انشرها لإرسال خطابات الموافقة إلى الأسر."],
-    "status": { "DRAFT": ["Draft", "مسودة"], "PUBLISHED": ["Published", "منشورة"], "CANCELLED": ["Cancelled", "ملغاة"], "COMPLETED": ["Completed", "مكتملة"] },
-    "consent": { "PENDING": ["Consent pending", "بانتظار الموافقة"], "GRANTED": ["Consent given", "تمت الموافقة"], "DECLINED": ["Declined", "مرفوضة"] },
-    "costAed": ["AED {amount}", "{amount} درهم"],
-    "free": ["Free", "مجانية"],
-    "respondBy": ["Reply by {date}", "الرد قبل {date}"],
-    "respond": ["Respond", "الرد"],
-    "deadline": ["Consent deadline: {date}", "آخر موعد للموافقة: {date}"],
-    "organiser": ["Organised by {name}", "المنظم: {name}"],
-    "gradeN": ["Grade {grade}", "الصف {grade}"],
-    "plusClasses": ["{count, plural, one {and # class} other {and # classes}}", "{count, plural, one {وشعبة واحدة} two {وشعبتان} few {و# شعب} many {و# شعبة} other {و# شعبة}}"],
-    "countGranted": ["{count} given", "{count} موافقة"],
-    "countDeclined": ["{count} declined", "{count} رفض"],
-    "countPending": ["{count} pending", "{count} بانتظار الرد"],
-    "noParticipants": ["No students yet", "لا يوجد طلاب بعد"],
-    "draftHint": ["Draft: not sent to families yet", "مسودة: لم تُرسل إلى الأسر بعد"],
-    "newTrip": ["New trip", "رحلة جديدة"],
-    "editTrip": ["Edit trip", "تعديل الرحلة"],
-    "dialogBody": ["Saved as a draft. Publishing sends a bilingual consent letter to every family.", "تُحفظ كمسودة، وعند النشر يُرسل خطاب موافقة ثنائي اللغة إلى كل أسرة."],
-    "fieldTitleEn": ["Title (English)", "العنوان (بالإنجليزية)"],
-    "fieldTitleAr": ["Title (Arabic)", "العنوان (بالعربية)"],
-    "fieldDestinationEn": ["Destination (English)", "الوجهة (بالإنجليزية)"],
-    "fieldDestinationAr": ["Destination (Arabic)", "الوجهة (بالعربية)"],
-    "fieldDescEn": ["Details for families (English)", "تفاصيل للأسر (بالإنجليزية)"],
-    "fieldDescAr": ["Details for families (Arabic)", "تفاصيل للأسر (بالعربية)"],
-    "fieldDate": ["Date", "التاريخ"],
-    "fieldEndDate": ["Return date", "تاريخ العودة"],
-    "fieldDeparts": ["Departs", "المغادرة"],
-    "fieldReturns": ["Returns", "العودة"],
-    "fieldCost": ["Cost (AED)", "التكلفة (بالدرهم)"],
-    "fieldCostHint": ["Leave empty if free.", "اتركه فارغاً إن كانت مجانية."],
-    "fieldDeadline": ["Consent deadline", "آخر موعد للموافقة"],
-    "fieldGrades": ["Whole grades", "صفوف كاملة"],
-    "fieldClasses": ["Or specific classes", "أو شعب محددة"],
-    "fieldClassesHint": ["Students enrolled in these classes are added too.", "يُضاف أيضاً الطلاب المسجلون في هذه الشعب."],
-    "saveDraft": ["Save draft", "حفظ المسودة"],
-    "saved": ["Trip saved", "تم حفظ الرحلة"],
-    "publish": ["Publish and send letters", "نشر وإرسال الخطابات"],
-    "publishTitle": ["Publish this trip?", "نشر هذه الرحلة؟"],
-    "publishBody": ["Every student in the chosen grades or classes is added, a bilingual consent letter is generated for each, their parents are notified once and the trip goes on the calendar.", "سيُضاف كل طالب في الصفوف أو الشعب المختارة، ويُنشأ خطاب موافقة ثنائي اللغة لكل منهم، ويُشعَر أولياء أمورهم مرة واحدة، وتُضاف الرحلة إلى التقويم."],
-    "publishConfirm": ["Publish", "نشر"],
-    "publishedToast": ["Published. {count} families notified.", "تم النشر وإشعار {count} أسرة."],
-    "deleteDraft": ["Delete draft", "حذف المسودة"],
-    "deleteDraftTitle": ["Delete this draft?", "حذف هذه المسودة؟"],
-    "deleteDraftBody": ["The draft trip will be removed. Nothing was sent to families.", "ستُحذف مسودة الرحلة. لم يُرسل أي شيء إلى الأسر."],
-    "deletedToast": ["Draft deleted", "تم حذف المسودة"],
-    "remind": ["{count, plural, =0 {Remind pending families} other {Remind # pending}}", "{count, plural, =0 {تذكير الأسر التي لم ترد} one {تذكير أسرة واحدة} two {تذكير أسرتين} few {تذكير # أسر} many {تذكير # أسرة} other {تذكير # أسرة}}"],
-    "noPendingHint": ["Every family has replied.", "ردت جميع الأسر."],
-    "remindedToast": ["Reminder sent to {count} families", "تم إرسال التذكير إلى {count} أسرة"],
-    "remindedAlready": ["Reminders already went out today. You can send more tomorrow.", "أُرسلت التذكيرات اليوم بالفعل. يمكنك الإرسال مجدداً غداً."],
-    "exportCsv": ["Export list (CSV)", "تصدير القائمة (CSV)"],
-    "markCompleted": ["Mark completed", "تحديد كمكتملة"],
-    "completeTitle": ["Mark this trip as completed?", "تحديد هذه الرحلة كمكتملة؟"],
-    "completeBody": ["The trip moves to past trips. Consent records are kept.", "تنتقل الرحلة إلى الرحلات السابقة مع الاحتفاظ بسجلات الموافقة."],
-    "completedToast": ["Trip completed", "اكتملت الرحلة"],
-    "cancelTrip": ["Cancel trip", "إلغاء الرحلة"],
-    "cancelTitle": ["Cancel this trip?", "إلغاء هذه الرحلة؟"],
-    "cancelBodyPublished": ["Families who received the letter will be told the trip is cancelled, and it leaves the calendar.", "سيتم إبلاغ الأسر التي استلمت الخطاب بإلغاء الرحلة، وستُزال من التقويم."],
-    "cancelBodyDraft": ["The draft was never sent, so no one is notified.", "لم تُرسل المسودة، لذلك لن يتم إشعار أحد."],
-    "reasonEn": ["Reason for families (English, optional)", "السبب للأسر (بالإنجليزية، اختياري)"],
-    "reasonAr": ["Reason for families (Arabic, optional)", "السبب للأسر (بالعربية، اختياري)"],
-    "cancelledToast": ["Trip cancelled. {count} families notified.", "تم إلغاء الرحلة وإشعار {count} أسرة."],
-    "cancelledBanner": ["This trip has been cancelled.", "تم إلغاء هذه الرحلة."],
-    "draftBoardTitle": ["Not published yet", "لم تُنشر بعد"],
-    "draftBoardBody": ["Publish the trip to add students, send letters and start collecting consent.", "انشر الرحلة لإضافة الطلاب وإرسال الخطابات وبدء جمع الموافقات."],
-    "allStudents": ["All ({count})", "الكل ({count})"],
-    "noneInFilter": ["No students in this group.", "لا يوجد طلاب في هذه المجموعة."],
-    "decidedBy": ["{name}, {when}", "{name}، {when}"],
-    "letterSent": ["Letter sent {when}", "أُرسل الخطاب {when}"],
-    "auditNote": ["Every consent decision is recorded with who decided and when.", "يُسجَّل كل قرار موافقة مع صاحب القرار ووقته."],
-    "letter": ["Consent letter", "خطاب الموافقة"],
-    "letterPdf": ["Open PDF", "فتح PDF"],
-    "grant": ["Give consent", "أوافق"],
-    "decline": ["Decline", "أرفض"],
-    "keepGranted": ["Confirm consent", "تأكيد الموافقة"],
-    "keepDeclined": ["Keep declined", "الإبقاء على الرفض"],
-    "addNote": ["Add a note for the organiser", "إضافة ملاحظة للمنظم"],
-    "noteLabel": ["Note (optional)", "ملاحظة (اختيارية)"],
-    "notePlaceholder": ["For example, allergies or pickup arrangements", "مثل الحساسية أو ترتيبات الاستلام"],
-    "grantedToast": ["Consent given for {name}", "تمت الموافقة لـ {name}"],
-    "declinedToast": ["Consent declined for {name}", "تم رفض المشاركة لـ {name}"],
-    "cannotApprove": ["Another guardian makes decisions for this child.", "يتخذ ولي أمر آخر القرارات الخاصة بهذا الطفل."],
-    "closedForDecisions": ["Decisions are closed for this trip.", "انتهت فترة اتخاذ القرار لهذه الرحلة."],
+    "title": [
+      "Trips",
+      "الرحلات"
+    ],
+    "subtitleStaff": [
+      "School trips with consent letters, a live consent board and trip-day lists.",
+      "الرحلات المدرسية مع خطابات الموافقة ولوحة موافقات مباشرة وقوائم يوم الرحلة."
+    ],
+    "subtitleParent": [
+      "Trips for each of your children. Read the letter and give or decline consent.",
+      "رحلات كل من أبنائك. اقرأ الخطاب وامنح موافقتك أو ارفضها."
+    ],
+    "subtitleStudent": [
+      "Your upcoming school trips.",
+      "رحلاتك المدرسية القادمة."
+    ],
+    "homeTitle": [
+      "Trips",
+      "الرحلات"
+    ],
+    "viewAll": [
+      "View all",
+      "عرض الكل"
+    ],
+    "back": [
+      "All trips",
+      "جميع الرحلات"
+    ],
+    "upcoming": [
+      "Upcoming",
+      "القادمة"
+    ],
+    "past": [
+      "Past and cancelled",
+      "السابقة والملغاة"
+    ],
+    "forChild": [
+      "{name}",
+      "{name}"
+    ],
+    "emptyFamily": [
+      "No trips yet",
+      "لا توجد رحلات بعد"
+    ],
+    "emptyFamilyBody": [
+      "When a trip is planned you will get the letter here and a notification.",
+      "عند التخطيط لرحلة ستصلك رسالة إشعار وستجد الخطاب هنا."
+    ],
+    "emptyUpcoming": [
+      "No upcoming trips",
+      "لا توجد رحلات قادمة"
+    ],
+    "emptyUpcomingBody": [
+      "Create a trip, then publish it to send consent letters to families.",
+      "أنشئ رحلة ثم انشرها لإرسال خطابات الموافقة إلى الأسر."
+    ],
+    "status": {
+      "DRAFT": [
+        "Draft",
+        "مسودة"
+      ],
+      "PUBLISHED": [
+        "Published",
+        "منشورة"
+      ],
+      "CANCELLED": [
+        "Cancelled",
+        "ملغاة"
+      ],
+      "COMPLETED": [
+        "Completed",
+        "مكتملة"
+      ]
+    },
+    "consent": {
+      "PENDING": [
+        "Consent pending",
+        "بانتظار الموافقة"
+      ],
+      "GRANTED": [
+        "Consent given",
+        "تمت الموافقة"
+      ],
+      "DECLINED": [
+        "Declined",
+        "مرفوضة"
+      ]
+    },
+    "costAed": [
+      "AED {amount}",
+      "{amount} درهم"
+    ],
+    "free": [
+      "Free",
+      "مجانية"
+    ],
+    "respondBy": [
+      "Reply by {date}",
+      "الرد قبل {date}"
+    ],
+    "respond": [
+      "Respond",
+      "الرد"
+    ],
+    "deadline": [
+      "Consent deadline: {date}",
+      "آخر موعد للموافقة: {date}"
+    ],
+    "organiser": [
+      "Organised by {name}",
+      "المنظم: {name}"
+    ],
+    "gradeN": [
+      "Grade {grade}",
+      "الصف {grade}"
+    ],
+    "plusClasses": [
+      "{count, plural, one {and # class} other {and # classes}}",
+      "{count, plural, one {وشعبة واحدة} two {وشعبتان} few {و# شعب} many {و# شعبة} other {و# شعبة}}"
+    ],
+    "countGranted": [
+      "{count} given",
+      "{count} موافقة"
+    ],
+    "countDeclined": [
+      "{count} declined",
+      "{count} رفض"
+    ],
+    "countPending": [
+      "{count} pending",
+      "{count} بانتظار الرد"
+    ],
+    "noParticipants": [
+      "No students yet",
+      "لا يوجد طلاب بعد"
+    ],
+    "draftHint": [
+      "Draft: not sent to families yet",
+      "مسودة: لم تُرسل إلى الأسر بعد"
+    ],
+    "newTrip": [
+      "New trip",
+      "رحلة جديدة"
+    ],
+    "editTrip": [
+      "Edit trip",
+      "تعديل الرحلة"
+    ],
+    "dialogBody": [
+      "Saved as a draft. Publishing sends a bilingual consent letter to every family.",
+      "تُحفظ كمسودة، وعند النشر يُرسل خطاب موافقة ثنائي اللغة إلى كل أسرة."
+    ],
+    "fieldTitleEn": [
+      "Title (English)",
+      "العنوان (بالإنجليزية)"
+    ],
+    "fieldTitleAr": [
+      "Title (Arabic)",
+      "العنوان (بالعربية)"
+    ],
+    "fieldDestinationEn": [
+      "Destination (English)",
+      "الوجهة (بالإنجليزية)"
+    ],
+    "fieldDestinationAr": [
+      "Destination (Arabic)",
+      "الوجهة (بالعربية)"
+    ],
+    "fieldDescEn": [
+      "Details for families (English)",
+      "تفاصيل للأسر (بالإنجليزية)"
+    ],
+    "fieldDescAr": [
+      "Details for families (Arabic)",
+      "تفاصيل للأسر (بالعربية)"
+    ],
+    "fieldDate": [
+      "Date",
+      "التاريخ"
+    ],
+    "fieldEndDate": [
+      "Return date",
+      "تاريخ العودة"
+    ],
+    "fieldDeparts": [
+      "Departs",
+      "المغادرة"
+    ],
+    "fieldReturns": [
+      "Returns",
+      "العودة"
+    ],
+    "fieldCost": [
+      "Cost (AED)",
+      "التكلفة (بالدرهم)"
+    ],
+    "fieldCostHint": [
+      "Leave empty if free.",
+      "اتركه فارغاً إن كانت مجانية."
+    ],
+    "fieldDeadline": [
+      "Consent deadline",
+      "آخر موعد للموافقة"
+    ],
+    "fieldGrades": [
+      "Whole grades",
+      "صفوف كاملة"
+    ],
+    "fieldClasses": [
+      "Or specific classes",
+      "أو شعب محددة"
+    ],
+    "fieldClassesHint": [
+      "Students enrolled in these classes are added too.",
+      "يُضاف أيضاً الطلاب المسجلون في هذه الشعب."
+    ],
+    "saveDraft": [
+      "Save draft",
+      "حفظ المسودة"
+    ],
+    "saved": [
+      "Trip saved",
+      "تم حفظ الرحلة"
+    ],
+    "publish": [
+      "Publish and send letters",
+      "نشر وإرسال الخطابات"
+    ],
+    "publishTitle": [
+      "Publish this trip?",
+      "نشر هذه الرحلة؟"
+    ],
+    "publishBody": [
+      "Every student in the chosen grades or classes is added, a bilingual consent letter is generated for each, their parents are notified once and the trip goes on the calendar.",
+      "سيُضاف كل طالب في الصفوف أو الشعب المختارة، ويُنشأ خطاب موافقة ثنائي اللغة لكل منهم، ويُشعَر أولياء أمورهم مرة واحدة، وتُضاف الرحلة إلى التقويم."
+    ],
+    "publishConfirm": [
+      "Publish",
+      "نشر"
+    ],
+    "publishedToast": [
+      "Published. {count} families notified.",
+      "تم النشر وإشعار {count} أسرة."
+    ],
+    "deleteDraft": [
+      "Delete draft",
+      "حذف المسودة"
+    ],
+    "deleteDraftTitle": [
+      "Delete this draft?",
+      "حذف هذه المسودة؟"
+    ],
+    "deleteDraftBody": [
+      "The draft trip will be removed. Nothing was sent to families.",
+      "ستُحذف مسودة الرحلة. لم يُرسل أي شيء إلى الأسر."
+    ],
+    "deletedToast": [
+      "Draft deleted",
+      "تم حذف المسودة"
+    ],
+    "remind": [
+      "{count, plural, =0 {Remind pending families} other {Remind # pending}}",
+      "{count, plural, =0 {تذكير الأسر التي لم ترد} one {تذكير أسرة واحدة} two {تذكير أسرتين} few {تذكير # أسر} many {تذكير # أسرة} other {تذكير # أسرة}}"
+    ],
+    "noPendingHint": [
+      "Every family has replied.",
+      "ردت جميع الأسر."
+    ],
+    "remindedToast": [
+      "Reminder sent to {count} families",
+      "تم إرسال التذكير إلى {count} أسرة"
+    ],
+    "remindedAlready": [
+      "Reminders already went out today. You can send more tomorrow.",
+      "أُرسلت التذكيرات اليوم بالفعل. يمكنك الإرسال مجدداً غداً."
+    ],
+    "exportCsv": [
+      "Export list (CSV)",
+      "تصدير القائمة (CSV)"
+    ],
+    "markCompleted": [
+      "Mark completed",
+      "تحديد كمكتملة"
+    ],
+    "completeTitle": [
+      "Mark this trip as completed?",
+      "تحديد هذه الرحلة كمكتملة؟"
+    ],
+    "completeBody": [
+      "The trip moves to past trips. Consent records are kept.",
+      "تنتقل الرحلة إلى الرحلات السابقة مع الاحتفاظ بسجلات الموافقة."
+    ],
+    "completedToast": [
+      "Trip completed",
+      "اكتملت الرحلة"
+    ],
+    "cancelTrip": [
+      "Cancel trip",
+      "إلغاء الرحلة"
+    ],
+    "cancelTitle": [
+      "Cancel this trip?",
+      "إلغاء هذه الرحلة؟"
+    ],
+    "cancelBodyPublished": [
+      "Families who received the letter will be told the trip is cancelled, and it leaves the calendar.",
+      "سيتم إبلاغ الأسر التي استلمت الخطاب بإلغاء الرحلة، وستُزال من التقويم."
+    ],
+    "cancelBodyDraft": [
+      "The draft was never sent, so no one is notified.",
+      "لم تُرسل المسودة، لذلك لن يتم إشعار أحد."
+    ],
+    "reasonEn": [
+      "Reason for families (English, optional)",
+      "السبب للأسر (بالإنجليزية، اختياري)"
+    ],
+    "reasonAr": [
+      "Reason for families (Arabic, optional)",
+      "السبب للأسر (بالعربية، اختياري)"
+    ],
+    "cancelledToast": [
+      "Trip cancelled. {count} families notified.",
+      "تم إلغاء الرحلة وإشعار {count} أسرة."
+    ],
+    "cancelledBanner": [
+      "This trip has been cancelled.",
+      "تم إلغاء هذه الرحلة."
+    ],
+    "draftBoardTitle": [
+      "Not published yet",
+      "لم تُنشر بعد"
+    ],
+    "draftBoardBody": [
+      "Publish the trip to add students, send letters and start collecting consent.",
+      "انشر الرحلة لإضافة الطلاب وإرسال الخطابات وبدء جمع الموافقات."
+    ],
+    "allStudents": [
+      "All ({count})",
+      "الكل ({count})"
+    ],
+    "noneInFilter": [
+      "No students in this group.",
+      "لا يوجد طلاب في هذه المجموعة."
+    ],
+    "decidedBy": [
+      "{name}, {when}",
+      "{name}، {when}"
+    ],
+    "letterSent": [
+      "Letter sent {when}",
+      "أُرسل الخطاب {when}"
+    ],
+    "auditNote": [
+      "Every consent decision is recorded with who decided and when.",
+      "يُسجَّل كل قرار موافقة مع صاحب القرار ووقته."
+    ],
+    "letter": [
+      "Consent letter",
+      "خطاب الموافقة"
+    ],
+    "letterPdf": [
+      "Open PDF",
+      "فتح PDF"
+    ],
+    "grant": [
+      "Give consent",
+      "أوافق"
+    ],
+    "decline": [
+      "Decline",
+      "أرفض"
+    ],
+    "keepGranted": [
+      "Confirm consent",
+      "تأكيد الموافقة"
+    ],
+    "keepDeclined": [
+      "Keep declined",
+      "الإبقاء على الرفض"
+    ],
+    "addNote": [
+      "Add a note for the organiser",
+      "إضافة ملاحظة للمنظم"
+    ],
+    "noteLabel": [
+      "Note (optional)",
+      "ملاحظة (اختيارية)"
+    ],
+    "notePlaceholder": [
+      "For example, allergies or pickup arrangements",
+      "مثل الحساسية أو ترتيبات الاستلام"
+    ],
+    "grantedToast": [
+      "Consent given for {name}",
+      "تمت الموافقة لـ {name}"
+    ],
+    "declinedToast": [
+      "Consent declined for {name}",
+      "تم رفض المشاركة لـ {name}"
+    ],
+    "cannotApprove": [
+      "Another guardian makes decisions for this child.",
+      "يتخذ ولي أمر آخر القرارات الخاصة بهذا الطفل."
+    ],
+    "closedForDecisions": [
+      "Decisions are closed for this trip.",
+      "انتهت فترة اتخاذ القرار لهذه الرحلة."
+    ],
     "error": {
-      "generic": ["Something went wrong. Please try again.", "حدث خطأ ما. يُرجى المحاولة مرة أخرى."],
-      "FORBIDDEN": ["You do not have permission to do this.", "ليست لديك صلاحية للقيام بذلك."],
-      "TITLE_REQUIRED": ["Add an English title and destination.", "أضف عنواناً ووجهة باللغة الإنجليزية."],
-      "INVALID_DATES": ["Check the dates and times: the return must be after departure.", "تحقق من التواريخ والأوقات: يجب أن تكون العودة بعد المغادرة."],
-      "IN_PAST": ["The trip must be in the future.", "يجب أن تكون الرحلة في المستقبل."],
-      "DEADLINE_REQUIRED": ["Set a consent deadline.", "حدد آخر موعد للموافقة."],
-      "DEADLINE_AFTER_TRIP": ["The consent deadline must be before the trip.", "يجب أن يسبق آخر موعد للموافقة موعد الرحلة."],
-      "AUDIENCE_REQUIRED": ["Choose at least one grade or class.", "اختر صفاً أو شعبة واحدة على الأقل."],
-      "NOT_FOUND": ["This trip no longer exists.", "لم تعد هذه الرحلة موجودة."],
-      "NOT_EDITABLE": ["This trip can no longer be changed.", "لم يعد بالإمكان تعديل هذه الرحلة."],
-      "NO_STUDENTS": ["No active students match the chosen grades or classes.", "لا يوجد طلاب نشطون في الصفوف أو الشعب المختارة."],
-      "NOT_OPEN": ["This trip is not open for this action.", "هذه الرحلة غير متاحة لهذا الإجراء."],
-      "STARTED": ["The trip has already started.", "بدأت الرحلة بالفعل."],
-      "CANNOT_APPROVE": ["Another guardian makes decisions for this child.", "يتخذ ولي أمر آخر القرارات الخاصة بهذا الطفل."],
-      "NOT_FINISHED": ["The trip has not finished yet.", "لم تنتهِ الرحلة بعد."],
-      "INVALID": ["Some details are not valid.", "بعض البيانات غير صحيحة."]
+      "generic": [
+        "Something went wrong. Please try again.",
+        "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
+      ],
+      "FORBIDDEN": [
+        "You do not have permission to do this.",
+        "ليست لديك صلاحية للقيام بذلك."
+      ],
+      "TITLE_REQUIRED": [
+        "Add an English title and destination.",
+        "أضف عنواناً ووجهة باللغة الإنجليزية."
+      ],
+      "INVALID_DATES": [
+        "Check the dates and times: the return must be after departure.",
+        "تحقق من التواريخ والأوقات: يجب أن تكون العودة بعد المغادرة."
+      ],
+      "IN_PAST": [
+        "The trip must be in the future.",
+        "يجب أن تكون الرحلة في المستقبل."
+      ],
+      "DEADLINE_REQUIRED": [
+        "Set a consent deadline.",
+        "حدد آخر موعد للموافقة."
+      ],
+      "DEADLINE_AFTER_TRIP": [
+        "The consent deadline must be before the trip.",
+        "يجب أن يسبق آخر موعد للموافقة موعد الرحلة."
+      ],
+      "AUDIENCE_REQUIRED": [
+        "Choose at least one grade or class.",
+        "اختر صفاً أو شعبة واحدة على الأقل."
+      ],
+      "NOT_FOUND": [
+        "This trip no longer exists.",
+        "لم تعد هذه الرحلة موجودة."
+      ],
+      "NOT_EDITABLE": [
+        "This trip can no longer be changed.",
+        "لم يعد بالإمكان تعديل هذه الرحلة."
+      ],
+      "NO_STUDENTS": [
+        "No active students match the chosen grades or classes.",
+        "لا يوجد طلاب نشطون في الصفوف أو الشعب المختارة."
+      ],
+      "NOT_OPEN": [
+        "This trip is not open for this action.",
+        "هذه الرحلة غير متاحة لهذا الإجراء."
+      ],
+      "STARTED": [
+        "The trip has already started.",
+        "بدأت الرحلة بالفعل."
+      ],
+      "CANNOT_APPROVE": [
+        "Another guardian makes decisions for this child.",
+        "يتخذ ولي أمر آخر القرارات الخاصة بهذا الطفل."
+      ],
+      "NOT_FINISHED": [
+        "The trip has not finished yet.",
+        "لم تنتهِ الرحلة بعد."
+      ],
+      "INVALID": [
+        "Some details are not valid.",
+        "بعض البيانات غير صحيحة."
+      ]
     }
   }
 }

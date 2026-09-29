@@ -110,7 +110,7 @@ export default async function AdminCalendarPage({ searchParams }: { searchParams
     endDate: e.allDay ? dayKey(new Date(e.endsAt.getTime() - 1)) : dayKey(e.endsAt),
     startTime: new Date(e.startsAt.getTime() + 4 * 3600_000).toISOString().slice(11, 16),
     endTime: new Date(e.endsAt.getTime() + 4 * 3600_000).toISOString().slice(11, 16),
-    audience: e.audience.includes("all") ? ["staff", "student", "parent"] : e.audience,
+    audience: e.audience.includes("all") ? ["staff", "student", "parent"] : e.audience.filter((a) => ["staff", "student", "parent"].includes(a)),
     gradeLevels: e.gradeLevels,
     published: e.published,
   });
@@ -171,7 +171,7 @@ export default async function AdminCalendarPage({ searchParams }: { searchParams
 
       <div className="flex rounded-lg bg-muted p-1 sm:w-fit">
         {(["year", "list"] as const).map((v) => (
-          <Link key={v} href={qs({ tab: v })} className={cn("flex-1 rounded-md px-4 py-1.5 text-center text-sm font-medium", tab === v ? "bg-card shadow-xs" : "text-muted-foreground hover:text-foreground")} data-testid={`tab-${v}`}>
+          <Link key={v} href={qs({ tab: v })} className={cn("flex-1 whitespace-nowrap rounded-md px-4 py-1.5 text-center text-sm font-medium", tab === v ? "bg-card shadow-xs" : "text-muted-foreground hover:text-foreground")} data-testid={`tab-${v}`}>
             {t(`tab.${v}`)}
           </Link>
         ))}
@@ -277,13 +277,15 @@ export default async function AdminCalendarPage({ searchParams }: { searchParams
                           {!e.published && <Pill tone="neutral">{t("draft")}</Pill>}
                         </div>
                         <div className="mt-0.5 text-xs text-muted-foreground">
-                          {(e.audience.includes("all") ? ["staff", "student", "parent"] : e.audience).map((a) => t(`audience.${a}`)).join(" · ")}
+                          {(e.audience.includes("all") ? ["staff", "student", "parent"] : e.audience).filter((a) => t.has(`audience.${a}`)).map((a) => t(`audience.${a}`)).join(" · ")}
                           {e.gradeLevels.length > 0 && ` · ${e.gradeLevels.map((g) => t("gradeN", { grade: g })).join(", ")}`}
                           {pick(locale, e.locationEn, e.locationAr) && ` · ${pick(locale, e.locationEn, e.locationAr)}`}
                         </div>
                       </div>
                       <div className="flex items-center gap-1">
-                        {linked ? (
+                        {e.audience.some((a) => !["all", "staff", "student", "parent"].includes(a)) ? (
+                          <span className="text-xs text-muted-foreground">{t("managedElsewhere")}</span>
+                        ) : linked ? (
                           <Link href={linked} className="text-xs font-medium text-brand hover:underline">
                             {linkedTrip ? t("managedInTrips") : t("managedInExams")}
                           </Link>

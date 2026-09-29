@@ -81,7 +81,7 @@ export default async function TripsPage() {
             return (
               <section key={k.id} className="space-y-3" data-testid="child-trips">
                 {ctx.isParent && <SectionTitle>{t("forChild", { name: personName(k, locale) })}</SectionTitle>}
-                <div className="grid gap-3 md:grid-cols-2">
+                <div className="grid gap-3 md:grid-cols-2 [&>*]:min-w-0">
                   {[...upcoming, ...other].map((p) => (
                     <TripCard
                       key={p.id}
@@ -157,7 +157,7 @@ export default async function TripsPage() {
         {upcoming.length === 0 ? (
           <EmptyState icon={<Bus className="size-5" />} title={t("emptyUpcoming")} body={canCreate ? t("emptyUpcomingBody") : undefined} />
         ) : (
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="grid gap-3 md:grid-cols-2 [&>*]:min-w-0">
             {upcoming.map((x) => (
               <TripCard key={x.id} trip={x} prefs={prefs} locale={locale} footer={board(x)} />
             ))}
@@ -167,7 +167,7 @@ export default async function TripsPage() {
       {past.length > 0 && (
         <section className="space-y-3">
           <SectionTitle>{t("past")}</SectionTitle>
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="grid gap-3 md:grid-cols-2 [&>*]:min-w-0">
             {past.map((x) => (
               <TripCard key={x.id} trip={x} prefs={prefs} locale={locale} footer={board(x)} />
             ))}

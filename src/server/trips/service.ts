@@ -15,13 +15,14 @@ export class TripError extends Error {
 const TZ = "Asia/Dubai";
 const fmt = (d: Date, locale: "en" | "ar", withYear = true) =>
   new Intl.DateTimeFormat(locale === "ar" ? "ar-AE-u-nu-latn" : "en-GB", { weekday: "long", day: "numeric", month: "long", ...(withYear ? { year: "numeric" } : {}), timeZone: TZ }).format(d);
-const fmtTime = (d: Date, locale: "en" | "ar") => new Intl.DateTimeFormat(locale === "ar" ? "ar-AE-u-nu-latn" : "en-GB", { hour: "numeric", minute: "2-digit", timeZone: TZ }).format(d);
+const fmtTime = (d: Date) => new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZone: TZ }).format(d);
 const dayKey = (d: Date) => new Date(d.getTime() + 4 * 3600_000).toISOString().slice(0, 10);
 
 export function tripDates(trip: Pick<Trip, "startsAt" | "endsAt">, locale: "en" | "ar") {
   const sameDay = dayKey(trip.startsAt) === dayKey(new Date(trip.endsAt.getTime() - 1));
-  if (sameDay) return `${fmt(trip.startsAt, locale)}, ${fmtTime(trip.startsAt, locale)} - ${fmtTime(trip.endsAt, locale)}`;
-  return `${fmt(trip.startsAt, locale)} - ${fmt(trip.endsAt, locale)}`;
+  // Arabic avoids hyphens and brackets between numbers so the right-to-left PDF keeps the reading order.
+  if (sameDay) return locale === "ar" ? `${fmt(trip.startsAt, locale)} من ${fmtTime(trip.startsAt)} حتى ${fmtTime(trip.endsAt)}` : `${fmt(trip.startsAt, locale)}, ${fmtTime(trip.startsAt)} - ${fmtTime(trip.endsAt)}`;
+  return locale === "ar" ? `من ${fmt(trip.startsAt, locale)} حتى ${fmt(trip.endsAt, locale)}` : `${fmt(trip.startsAt, locale)} - ${fmt(trip.endsAt, locale)}`;
 }
 
 function costText(cost: number | null, locale: "en" | "ar") {
@@ -81,7 +82,6 @@ export async function publishTrip(ec: ExecCtx, input: { tripId: string; actorId:
     "trip.destination": locale === "ar" ? trip.destinationAr : trip.destinationEn,
     "trip.dates": tripDates(trip, locale),
     "trip.cost": costText(trip.costAed, locale),
-    "trip.description": (locale === "ar" ? trip.descAr : trip.descEn) ?? "",
     "trip.deadline": fmt(deadline, locale),
     "trip.organizer": organizer[locale],
   });

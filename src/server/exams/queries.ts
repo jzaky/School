@@ -31,3 +31,11 @@ export function timetableStudents(ctx: Ctx) {
 export async function publishedSittings(ctx: Ctx, gradeLevel: number, opts: { from?: Date } = {}) {
   return ctx.db.examSitting.findMany({ where: { gradeLevel, status: "PUBLISHED", ...(opts.from ? { endsAt: { gt: opts.from } } : {}) }, orderBy: { startsAt: "asc" } });
 }
+
+/** The child to show by default: the one asked for, else the first whose grade has upcoming published exams. */
+export async function defaultTimetableStudent<T extends { id: string; gradeLevel: number }>(ctx: Ctx, students: T[], wanted?: string | null): Promise<T | null> {
+  const asked = students.find((s) => s.id === wanted);
+  if (asked) return asked;
+  const rows = await ctx.db.examSitting.findMany({ where: { status: "PUBLISHED", endsAt: { gt: new Date() }, gradeLevel: { in: students.map((s) => s.gradeLevel) } }, select: { gradeLevel: true }, distinct: ["gradeLevel"] });
+  return students.find((s) => rows.some((r) => r.gradeLevel === s.gradeLevel)) ?? students[0] ?? null;
+}

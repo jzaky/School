@@ -11,7 +11,7 @@ import { PageBody, PageHeader } from "@/components/app/page-header";
 import { Panel, PanelHeader } from "@/components/app/panel";
 import { EmptyState } from "@/components/app/empty-state";
 import { Pill } from "@/components/app/badges";
-import { publishedSittings, timetableStudents } from "@/server/exams/queries";
+import { defaultTimetableStudent, publishedSittings, timetableStudents } from "@/server/exams/queries";
 import { dayKey } from "@/server/exams/schedule";
 
 export async function generateMetadata() {
@@ -28,7 +28,7 @@ export default async function ExamsPage({ searchParams }: { searchParams: Promis
   const prefs = await formatPrefs(ctx);
   const { locale } = ctx;
   const students = timetableStudents(ctx);
-  const chosen = students ? (students.find((s) => s.id === sp.student) ?? students[0] ?? null) : null;
+  const chosen = students ? await defaultTimetableStudent(ctx, students, sp.student) : null;
   const grade = students ? (chosen?.gradeLevel ?? null) : sp.grade && /^\d{1,2}$/.test(sp.grade) ? Number(sp.grade) : 9;
   const now = new Date();
   const sittings = grade !== null ? await publishedSittings(ctx, grade) : [];
