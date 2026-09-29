@@ -1,7 +1,7 @@
 // Shared types for university pathways. Pure: safe to import from client and server code.
 // Requirements are always indicative until a person checks them against the official page.
 
-export const CURRICULA = ["BRITISH", "IB", "AMERICAN", "UAE_MOE", "JORDAN_TAWJIHI", "OTHER"] as const;
+export const CURRICULA = ["BRITISH", "IB", "AMERICAN", "UAE_MOE", "JORDAN_TAWJIHI", "CBSE", "ISC", "SABIS", "OTHER"] as const;
 export type Curriculum = (typeof CURRICULA)[number];
 /** Curricula a programme can list requirements for. */
 export const REQ_CURRICULA = ["BRITISH", "IB", "AMERICAN", "UAE_MOE", "JORDAN_TAWJIHI"] as const;
@@ -42,6 +42,9 @@ export const RESULT_LEVELS: Record<Curriculum, string[]> = {
   AMERICAN: ["AP", "HONORS"],
   UAE_MOE: [],
   JORDAN_TAWJIHI: [],
+  CBSE: [],
+  ISC: [],
+  SABIS: [],
   OTHER: [],
 };
 export const OVERALL = "OVERALL";

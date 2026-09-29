@@ -17,13 +17,18 @@ REVOKE UPDATE, DELETE ON TABLE "BreakGlassAccess" FROM app_user;
 REVOKE UPDATE, DELETE ON TABLE "ParentNotificationDecision" FROM app_user;
 REVOKE DELETE ON TABLE "ExternalReferral" FROM app_user;
 
+-- Global reference tables (no orgId): readable by every school, written only by the owner role.
+REVOKE INSERT, UPDATE, DELETE ON TABLE "CanonicalSubject" FROM app_user;
+REVOKE INSERT, UPDATE, DELETE ON TABLE "FieldOfStudy" FROM app_user;
+REVOKE INSERT, UPDATE, DELETE ON TABLE "CareerField" FROM app_user;
+
 -- 2. Tenant isolation on every table with an orgId column
 DO $$
 DECLARE
   t record;
 BEGIN
   FOR t IN
-    SELECT c.table_name
+    SELECT c.table_name, c.is_nullable
     FROM information_schema.columns c
     JOIN information_schema.tables tb
       ON tb.table_schema = c.table_schema AND tb.table_name = c.table_name AND tb.table_type = 'BASE TABLE'
@@ -31,7 +36,32 @@ BEGIN
   LOOP
     EXECUTE format('ALTER TABLE %I ENABLE ROW LEVEL SECURITY', t.table_name);
     EXECUTE format('DROP POLICY IF EXISTS tenant_isolation ON %I', t.table_name);
-    IF t.table_name = 'Membership' THEN
+    EXECUTE format('DROP POLICY IF EXISTS global_read ON %I', t.table_name);
+    EXECUTE format('DROP POLICY IF EXISTS tenant_insert ON %I', t.table_name);
+    EXECUTE format('DROP POLICY IF EXISTS tenant_update ON %I', t.table_name);
+    EXECUTE format('DROP POLICY IF EXISTS tenant_delete ON %I', t.table_name);
+    IF t.is_nullable = 'YES' THEN
+      -- Shared catalog table: rows with a null orgId are the global catalog, readable by every
+      -- school and written only by the platform pipeline (owner role). A school may read, add,
+      -- change and remove only its own rows.
+      EXECUTE format(
+        'CREATE POLICY global_read ON %I FOR SELECT
+           USING ("orgId" IS NULL OR "orgId" = current_setting(''app.current_org_id'', true))',
+        t.table_name);
+      EXECUTE format(
+        'CREATE POLICY tenant_insert ON %I FOR INSERT
+           WITH CHECK ("orgId" = current_setting(''app.current_org_id'', true))',
+        t.table_name);
+      EXECUTE format(
+        'CREATE POLICY tenant_update ON %I FOR UPDATE
+           USING ("orgId" = current_setting(''app.current_org_id'', true))
+           WITH CHECK ("orgId" = current_setting(''app.current_org_id'', true))',
+        t.table_name);
+      EXECUTE format(
+        'CREATE POLICY tenant_delete ON %I FOR DELETE
+           USING ("orgId" = current_setting(''app.current_org_id'', true))',
+        t.table_name);
+    ELSIF t.table_name = 'Membership' THEN
       -- A signed-in user may also read their own memberships in any org (to pick an org at login).
       EXECUTE format(
         'CREATE POLICY tenant_isolation ON %I

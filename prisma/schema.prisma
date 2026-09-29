@@ -1598,7 +1598,8 @@ model CareerRecommendation {
 
 model University {
   id             String   @id @default(cuid())
-  orgId          String
+  /// Null for the shared global catalog; set for a school's own additions.
+  orgId          String?
   key            String
   nameEn         String
   nameAr         String
@@ -1614,6 +1615,9 @@ model University {
   system         String?
   applyVia       String?
   scorecardId    String?
+  stats          Json?
+  nameSearch     String?
+  flagCode       String?
 
   entries ShortlistEntry[]
 
@@ -1627,6 +1631,7 @@ model ShortlistEntry {
   universityId String
   programEn    String
   programAr    String?
+  programId    String?
   category     ShortlistCategory
   status       ApplicationStatus @default(RESEARCHING)
   deadline     DateTime?
@@ -2142,6 +2147,9 @@ enum SchoolCurriculum {
   AMERICAN
   UAE_MOE
   JORDAN_TAWJIHI
+  CBSE
+  ISC
+  SABIS
   OTHER
 }
 
@@ -2149,7 +2157,8 @@ enum SchoolCurriculum {
 /// and carry their source and the date they were last checked.
 model UniversityProgram {
   id                  String    @id @default(cuid())
-  orgId               String
+  /// Null for the shared global catalog; set for a school's own additions.
+  orgId               String?
   universityId        String
   key                 String
   nameEn              String
@@ -2166,11 +2175,20 @@ model UniversityProgram {
   sourceUrl           String?
   lastVerifiedAt      DateTime?
   indicative          Boolean   @default(true)
+  campusId            String?
+  degreeType          String?
+  level               String    @default("UNDERGRADUATE")
+  fieldKeys           String[]
+  tuitionPerYear      Int?
+  tuitionCurrency     String?
+  teachingLanguage    String?
+  searchText          String?
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 
   @@unique([orgId, key])
   @@index([orgId, universityId])
+  @@index([fieldKeys])
 }
 
 /// A student's predicted or achieved result in a subject, used by the requirements checker.
@@ -2436,4 +2454,526 @@ model CoverAssignment {
   @@unique([absenceId, slotId, date])
   @@index([orgId, date])
   @@index([substituteId, date])
+}
+
+// ---------------------------------------------------------------------------
+// Global university requirements and academic pathway engine
+// ---------------------------------------------------------------------------
+// Catalog tables with a nullable orgId are shared: rows with orgId null belong to the global
+// catalog (maintained by the platform ingestion pipeline and read by every school); rows with an
+// orgId are a school's own additions. See prisma/rls.sql for the matching policies.
+
+enum SubjectLevel {
+  FOUNDATION
+  STANDARD
+  ADVANCED
+  HIGHER
+}
+
+enum SubjectRequirementType {
+  REQUIRED
+  RECOMMENDED
+  PREFERRED
+  OPTIONAL
+  ONE_OF
+  TWO_OF
+}
+
+enum DataConfidence {
+  VERIFIED
+  REVIEWED
+  EXTRACTED
+  EXAMPLE
+  UNKNOWN
+}
+
+enum MatchStatus {
+  ELIGIBLE
+  ON_TRACK
+  POSSIBLY_ELIGIBLE
+  MISSING_REQUIREMENTS
+  NEEDS_MANUAL_REVIEW
+  UNKNOWN_DATA
+}
+
+enum StudentCourseStatus {
+  COMPLETED
+  IN_PROGRESS
+  PLANNED
+}
+
+enum MappingStatus {
+  AUTO
+  NEEDS_REVIEW
+  CONFIRMED
+}
+
+enum CoursePlanStatus {
+  DRAFT
+  PROPOSED
+  APPROVED
+  ARCHIVED
+}
+
+enum SourceStatus {
+  PENDING
+  FETCHED
+  UNCHANGED
+  CHANGED
+  FAILED
+}
+
+enum ExtractionStatus {
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum ChangeStatus {
+  NEEDS_REVIEW
+  ACKNOWLEDGED
+}
+
+enum ApplicationStage {
+  RESEARCHING
+  SHORTLISTED
+  PREPARING
+  SUBMITTED
+  INTERVIEW
+  OFFER
+  REJECTED
+  WAITLISTED
+  ACCEPTED
+  ENROLLED
+}
+
+enum ApplicationItemStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+  WAIVED
+}
+
+/// A curriculum-neutral academic concept (for example Mathematics, Calculus, Physics). Global.
+model CanonicalSubject {
+  key       String  @id
+  nameEn    String
+  nameAr    String
+  category  String
+  parentKey String?
+  sortOrder Int     @default(0)
+}
+
+/// A field of study that degrees and careers map to (for example computer_science). Global.
+model FieldOfStudy {
+  key       String   @id
+  nameEn    String
+  nameAr    String
+  cipCodes  String[]
+  related   String[]
+  sortOrder Int      @default(0)
+}
+
+/// Which fields of study lead to a career (career keys match Career.key). Global.
+model CareerField {
+  id        String @id @default(cuid())
+  careerKey String
+  fieldKey  String
+  weight    Int    @default(3)
+
+  @@unique([careerKey, fieldKey])
+}
+
+model UniversityCampus {
+  id           String  @id @default(cuid())
+  orgId        String?
+  universityId String
+  nameEn       String
+  nameAr       String
+  cityEn       String
+  cityAr       String
+  countryCode  String
+
+  @@index([universityId])
+}
+
+model ProgramIntake {
+  id               String    @id @default(cuid())
+  orgId            String?
+  programId        String
+  intakeYear       Int
+  cycleLabel       String?
+  applicationOpens DateTime?
+  isCurrent        Boolean   @default(true)
+
+  @@unique([programId, intakeYear])
+}
+
+/// A course as it exists in a curriculum (for example "A-Level Mathematics", "AP Calculus BC",
+/// "CBSE Mathematics Class 12"). Global rows describe standard qualifications; school rows add local courses.
+model CurriculumCourse {
+  id            String           @id @default(cuid())
+  orgId         String?
+  curriculum    SchoolCurriculum
+  code          String
+  nameEn        String
+  nameAr        String
+  qualification String
+  gradeLevel    Int?
+  gradeScale    String
+  createdAt     DateTime         @default(now())
+
+  mappings CurriculumCourseMapping[]
+
+  @@unique([orgId, curriculum, code])
+  @@index([curriculum])
+}
+
+/// How a curriculum course counts toward a canonical subject, at what level and rigour.
+model CurriculumCourseMapping {
+  id                  String       @id @default(cuid())
+  orgId               String?
+  courseId            String
+  canonicalSubjectKey String
+  level               SubjectLevel
+  rigorScore          Int          @default(3)
+  confidence          Float        @default(1)
+  reviewedById        String?
+  reviewedAt          DateTime?
+
+  course CurriculumCourse @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([orgId, courseId, canonicalSubjectKey])
+  @@index([canonicalSubjectKey])
+}
+
+/// A course the school actually offers, by grade. The planner only recommends these.
+model SchoolCourse {
+  id          String   @id @default(cuid())
+  orgId       String
+  courseId    String
+  subjectId   String?
+  gradeLevels Int[]
+  active      Boolean  @default(true)
+  notesEn     String?
+  notesAr     String?
+  createdAt   DateTime @default(now())
+
+  @@unique([orgId, courseId])
+}
+
+/// A course on a student's record: completed, in progress or planned, with actual or predicted grades.
+model StudentCourse {
+  id             String              @id @default(cuid())
+  orgId          String
+  studentId      String
+  courseId       String?
+  localName      String
+  gradeLevel     Int
+  schoolYear     String?
+  status         StudentCourseStatus
+  finalGrade     String?
+  predictedGrade String?
+  gradeScale     String?
+  source         String              @default("MANUAL")
+  mappingStatus  MappingStatus       @default(AUTO)
+  importId       String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  @@index([orgId, studentId])
+}
+
+model TranscriptImport {
+  id          String       @id @default(cuid())
+  orgId       String
+  studentId   String?
+  fileName    String
+  kind        String
+  status      ImportStatus @default(PENDING)
+  rows        Json?
+  errors      Json?
+  createdById String
+  createdAt   DateTime     @default(now())
+
+  @@index([orgId])
+}
+
+/// A student's grade 9 to 12 course plan, which a counselor can approve.
+model StudentCoursePlan {
+  id               String           @id @default(cuid())
+  orgId            String
+  studentId        String
+  name             String
+  status           CoursePlanStatus @default(DRAFT)
+  goalCareerKey    String?
+  goalFieldKeys    String[]
+  targetCountries  String[]
+  targetProgramIds String[]
+  proposedById     String?
+  approvedById     String?
+  approvedAt       DateTime?
+  counselorNote    String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  items StudentCoursePlanItem[]
+
+  @@index([orgId, studentId])
+}
+
+model StudentCoursePlanItem {
+  id             String  @id @default(cuid())
+  orgId          String
+  planId         String
+  gradeLevel     Int
+  schoolCourseId String?
+  courseId       String?
+  reasonEn       String?
+  reasonAr       String?
+  locked         Boolean @default(false)
+
+  plan StudentCoursePlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, planId])
+}
+
+/// Where a requirement came from. Every requirement version points at a source.
+model RequirementSource {
+  id           String       @id @default(cuid())
+  orgId        String?
+  universityId String
+  programId    String?
+  url          String
+  title        String?
+  sourceType   String
+  status       SourceStatus @default(PENDING)
+  retrievedAt  DateTime?
+  contentHash  String?
+  lastError    String?
+  createdAt    DateTime     @default(now())
+
+  extractions RequirementExtraction[]
+
+  @@index([universityId])
+  @@index([programId])
+}
+
+model RequirementExtraction {
+  id             String           @id @default(cuid())
+  orgId          String?
+  sourceId       String
+  rawText        String
+  normalizedJson Json
+  confidence     Float
+  model          String
+  status         ExtractionStatus @default(PENDING_REVIEW)
+  reviewedById   String?
+  reviewedAt     DateTime?
+  reviewNote     String?
+  createdAt      DateTime         @default(now())
+
+  source RequirementSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@index([sourceId])
+}
+
+/// One version of a program's entry requirements for an intake year and (optionally) one curriculum.
+/// Versions are never overwritten: a change creates a new row and closes the old one.
+model ProgramRequirement {
+  id             String            @id @default(cuid())
+  orgId          String?
+  programId      String
+  intakeYear     Int
+  curriculum     SchoolCurriculum?
+  version        Int               @default(1)
+  isCurrent      Boolean           @default(true)
+  effectiveFrom  DateTime?
+  effectiveTo    DateTime?
+  confidence     DataConfidence    @default(UNKNOWN)
+  sourceId       String?
+  extractionId   String?
+  verifiedAt     DateTime?
+  verifiedById   String?
+  minimumGPA     Float?
+  minimumPercent Float?
+  minimumPoints  Int?
+  gradeProfile   String?
+  stream         String?
+  notesEn        String?
+  notesAr        String?
+  createdAt      DateTime          @default(now())
+
+  subjects   SubjectRequirement[]
+  languages  LanguageRequirement[]
+  tests      TestRequirement[]
+  additional AdditionalRequirement[]
+
+  @@index([programId, isCurrent])
+  @@index([orgId])
+}
+
+model SubjectRequirement {
+  id                   String                 @id @default(cuid())
+  orgId                String?
+  programRequirementId String
+  type                 SubjectRequirementType
+  canonicalSubjectKeys String[]
+  minimumLevel         SubjectLevel?
+  minimumGrade         String?
+  alternatives         String[]
+  noteEn               String?
+  noteAr               String?
+
+  programRequirement ProgramRequirement @relation(fields: [programRequirementId], references: [id], onDelete: Cascade)
+
+  @@index([programRequirementId])
+}
+
+model LanguageRequirement {
+  id                   String  @id @default(cuid())
+  orgId                String?
+  programRequirementId String
+  test                 String
+  minOverall           Float
+  minComponent         Float?
+  waiverNoteEn         String?
+
+  programRequirement ProgramRequirement @relation(fields: [programRequirementId], references: [id], onDelete: Cascade)
+
+  @@index([programRequirementId])
+}
+
+model TestRequirement {
+  id                   String  @id @default(cuid())
+  orgId                String?
+  programRequirementId String
+  test                 String
+  policy               String
+  minScore             Float?
+  noteEn               String?
+
+  programRequirement ProgramRequirement @relation(fields: [programRequirementId], references: [id], onDelete: Cascade)
+
+  @@index([programRequirementId])
+}
+
+model AdditionalRequirement {
+  id                   String  @id @default(cuid())
+  orgId                String?
+  programRequirementId String
+  kind                 String
+  required             Boolean @default(true)
+  noteEn               String?
+  noteAr               String?
+
+  programRequirement ProgramRequirement @relation(fields: [programRequirementId], references: [id], onDelete: Cascade)
+
+  @@index([programRequirementId])
+}
+
+/// A detected difference between two requirement versions, waiting for someone to review it.
+model RequirementChange {
+  id            String       @id @default(cuid())
+  orgId         String?
+  programId     String
+  fromVersionId String?
+  toVersionId   String?
+  summaryEn     String
+  diff          Json
+  status        ChangeStatus @default(NEEDS_REVIEW)
+  reviewedById  String?
+  detectedAt    DateTime     @default(now())
+
+  @@index([programId])
+}
+
+/// Cached result of matching a student (and optionally a plan) against a program's current requirements.
+model RequirementMatch {
+  id                   String      @id @default(cuid())
+  orgId                String
+  studentId            String
+  programId            String
+  planId               String?
+  status               MatchStatus
+  requiredSatisfied    Int         @default(0)
+  requiredMissing      Int         @default(0)
+  recommendedSatisfied Int         @default(0)
+  detail               Json
+  inputsHash           String
+  computedAt           DateTime    @default(now())
+
+  @@unique([studentId, programId, planId])
+  @@index([orgId, studentId])
+}
+
+/// How much adding a course would change a student's options. Recomputed when inputs change.
+model CourseImpactAnalysis {
+  id         String   @id @default(cuid())
+  orgId      String
+  studentId  String
+  planId     String?
+  courseId   String
+  unlocks    Int      @default(0)
+  improves   Int      @default(0)
+  requiredBy Int      @default(0)
+  detail     Json
+  inputsHash String
+  computedAt DateTime @default(now())
+
+  @@index([orgId, studentId])
+}
+
+model Application {
+  id           String           @id @default(cuid())
+  orgId        String
+  studentId    String
+  programId    String?
+  universityId String
+  intakeYear   Int
+  stage        ApplicationStage @default(RESEARCHING)
+  route        String?
+  decisionPlan String?
+  counselorId  String?
+  notes        String?
+  submittedAt  DateTime?
+  decidedAt    DateTime?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  items ApplicationRequirement[]
+
+  @@index([orgId, studentId])
+}
+
+model ApplicationRequirement {
+  id            String                @id @default(cuid())
+  orgId         String
+  applicationId String
+  kind          String
+  titleEn       String
+  titleAr       String
+  status        ApplicationItemStatus @default(TODO)
+  dueAt         DateTime?
+  taskId        String?
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, applicationId])
+}
+
+model ApplicationDeadline {
+  id           String   @id @default(cuid())
+  orgId        String?
+  universityId String?
+  programId    String?
+  intakeYear   Int
+  kind         String
+  date         DateTime
+  sourceId     String?
+  noteEn       String?
+  createdAt    DateTime @default(now())
+
+  @@index([programId, intakeYear])
+  @@index([universityId, intakeYear])
 }

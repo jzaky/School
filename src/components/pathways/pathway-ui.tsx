@@ -5,8 +5,8 @@ import { fmtDate, fmtNumber } from "@/lib/format";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { Pill } from "@/components/app/badges";
-import type { CheckItem, CheckResult, Curriculum, ProgramRequirements, EnglishReq, SubjectMin } from "@/server/pathways/types";
-import { OVERALL } from "@/server/pathways/types";
+import type { CheckItem, CheckResult, Curriculum, ReqCurriculum, ProgramRequirements, EnglishReq, SubjectMin } from "@/server/pathways/types";
+import { OVERALL, REQ_CURRICULA } from "@/server/pathways/types";
 
 export type T = Awaited<ReturnType<typeof getTranslations>>;
 
@@ -61,8 +61,8 @@ export function requirementLines(t: T, cur: Curriculum, req: ProgramRequirements
 }
 
 export function curriculumNote(cur: Curriculum, req: ProgramRequirements, locale: string): string | null {
-  if (cur === "OTHER") return null;
-  const r = req[cur];
+  if (!(REQ_CURRICULA as readonly string[]).includes(cur)) return null;
+  const r = req[cur as ReqCurriculum];
   if (!r) return null;
   return (locale === "ar" ? r.notesAr : r.notesEn) ?? null;
 }

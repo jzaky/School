@@ -5,7 +5,15 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { prisma } from "./prisma";
 
-const GLOBAL_MODELS = new Set(["User", "Account", "VerificationToken", "Organization"]);
+const GLOBAL_MODELS = new Set([
+  "User",
+  "Account",
+  "VerificationToken",
+  "Organization",
+  "CanonicalSubject",
+  "FieldOfStudy",
+  "CareerField",
+]);
 const CREATE_OPS = new Set(["create", "createMany", "createManyAndReturn"]);
 
 function assertId(value: string, label: string) {

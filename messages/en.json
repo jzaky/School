@@ -3582,7 +3582,10 @@
       "AMERICAN": "American",
       "UAE_MOE": "UAE Ministry of Education",
       "JORDAN_TAWJIHI": "Jordanian Tawjihi",
-      "OTHER": "Other curriculum"
+      "OTHER": "Other curriculum",
+      "CBSE": "Indian CBSE",
+      "ISC": "Indian ISC (CISCE)",
+      "SABIS": "SABIS"
     },
     "field": {
       "computer_science": "Computer Science",
