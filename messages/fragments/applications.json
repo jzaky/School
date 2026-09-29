@@ -1,0 +1,798 @@
+{
+ "nav": {
+  "applications": [
+   "Applications",
+   "طلبات الالتحاق"
+  ]
+ },
+ "guide": {
+  "steps": {
+   "myApplications": {
+    "title": [
+     "Track your university applications",
+     "تابع طلبات التحاقك بالجامعات"
+    ],
+    "body": [
+     "See every application, its checklist and the next deadline, with where each date comes from.",
+     "اطلع على كل طلب وقائمة متطلباته والموعد النهائي القادم ومصدر كل موعد."
+    ]
+   },
+   "childApplications": {
+    "title": [
+     "Follow your child's applications",
+     "تابع طلبات التحاق ابنك"
+    ],
+    "body": [
+     "A read-only view of each application, its stage and deadlines.",
+     "عرض للاطلاع فقط على كل طلب ومرحلته ومواعيده."
+    ]
+   },
+   "applicationBoard": {
+    "title": [
+     "Run the application board",
+     "أدر لوحة طلبات الالتحاق"
+    ],
+    "body": [
+     "Move applications between stages, filter by deadline or missing items, and plan tasks in bulk.",
+     "انقل الطلبات بين المراحل، وصفّها حسب المواعيد أو المتطلبات الناقصة، وخطط المهام دفعة واحدة."
+    ]
+   },
+   "letterRequests": {
+    "title": [
+     "Write requested recommendation letters",
+     "اكتب خطابات التوصية المطلوبة"
+    ],
+    "body": [
+     "See which students asked you for a letter and mark each one as sent.",
+     "اعرف الطلاب الذين طلبوا منك خطاب توصية وعلّم كل خطاب عند إرساله."
+    ]
+   }
+  }
+ },
+ "applications": {
+  "title": [
+   "University applications",
+   "طلبات الالتحاق بالجامعات"
+  ],
+  "subtitle": [
+   "Every application with its checklist, deadlines and stage.",
+   "كل طلب مع قائمة متطلباته ومواعيده ومرحلته."
+  ],
+  "subtitleParent": [
+   "A read-only view of your children's applications.",
+   "عرض للاطلاع فقط على طلبات التحاق أبنائك."
+  ],
+  "manageTitle": [
+   "Application board",
+   "لوحة طلبات الالتحاق"
+  ],
+  "manageSubtitle": [
+   "Applications for the next intake by stage. Drag a card or use its menu to change the stage.",
+   "طلبات الدفعة القادمة حسب المرحلة. اسحب البطاقة أو استخدم قائمتها لتغيير المرحلة."
+  ],
+  "lettersTitle": [
+   "Recommendation letters",
+   "خطابات التوصية"
+  ],
+  "lettersSubtitle": [
+   "Letters students' counselors asked you to write. Send each letter through the university or application portal, then mark it as sent.",
+   "خطابات طلب منك المرشدون كتابتها. أرسل كل خطاب عبر بوابة الجامعة أو بوابة التقديم ثم علّمه كمرسل."
+  ],
+  "back": [
+   "All applications",
+   "كل الطلبات"
+  ],
+  "board": [
+   "Board",
+   "اللوحة"
+  ],
+  "intake": [
+   "Entry {year}",
+   "دفعة {year}"
+  ],
+  "student": [
+   "Student",
+   "الطالب"
+  ],
+  "stage": {
+   "RESEARCHING": [
+    "Researching",
+    "قيد البحث"
+   ],
+   "SHORTLISTED": [
+    "Shortlisted",
+    "في القائمة المختصرة"
+   ],
+   "PREPARING": [
+    "Preparing",
+    "قيد الإعداد"
+   ],
+   "SUBMITTED": [
+    "Submitted",
+    "تم التقديم"
+   ],
+   "INTERVIEW": [
+    "Interview",
+    "مقابلة"
+   ],
+   "OFFER": [
+    "Offer",
+    "عرض قبول"
+   ],
+   "REJECTED": [
+    "Not successful",
+    "لم يُقبل"
+   ],
+   "WAITLISTED": [
+    "Waitlisted",
+    "قائمة الانتظار"
+   ],
+   "ACCEPTED": [
+    "Offer accepted",
+    "تم قبول العرض"
+   ],
+   "ENROLLED": [
+    "Enrolled",
+    "مسجّل"
+   ]
+  },
+  "itemStatus": {
+   "TODO": [
+    "To do",
+    "للتنفيذ"
+   ],
+   "IN_PROGRESS": [
+    "In progress",
+    "قيد التنفيذ"
+   ],
+   "DONE": [
+    "Done",
+    "منجز"
+   ],
+   "WAIVED": [
+    "Not needed",
+    "غير مطلوب"
+   ]
+  },
+  "kind": {
+   "FORM": [
+    "Application form",
+    "نموذج الطلب"
+   ],
+   "PERSONAL_STATEMENT": [
+    "Personal statement",
+    "المقال الشخصي"
+   ],
+   "ESSAY": [
+    "Essay",
+    "مقال"
+   ],
+   "RECOMMENDATION": [
+    "Recommendation",
+    "توصية"
+   ],
+   "TEST": [
+    "Test",
+    "اختبار"
+   ],
+   "LANGUAGE_TEST": [
+    "English test",
+    "اختبار اللغة الإنجليزية"
+   ],
+   "PORTFOLIO": [
+    "Portfolio",
+    "ملف الأعمال"
+   ],
+   "INTERVIEW": [
+    "Interview",
+    "مقابلة"
+   ],
+   "TRANSCRIPT": [
+    "Transcript",
+    "كشف الدرجات"
+   ],
+   "PREDICTED_GRADES": [
+    "Predicted grades",
+    "الدرجات المتوقعة"
+   ],
+   "PASSPORT": [
+    "Identity documents",
+    "وثائق الهوية"
+   ],
+   "FINANCIAL": [
+    "Financial documents",
+    "المستندات المالية"
+   ],
+   "OTHER": [
+    "Other",
+    "أخرى"
+   ]
+  },
+  "route": {
+   "UCAS": [
+    "UCAS",
+    "UCAS"
+   ],
+   "COMMON_APP": [
+    "Common App",
+    "التطبيق المشترك Common App"
+   ],
+   "UC_APP": [
+    "UC Application",
+    "طلب جامعة كاليفورنيا"
+   ],
+   "MIT_APP": [
+    "MIT Application",
+    "طلب MIT"
+   ],
+   "OUAC": [
+    "OUAC",
+    "OUAC (أونتاريو)"
+   ],
+   "UAE": [
+    "UAE direct",
+    "مباشر في الإمارات"
+   ],
+   "JORDAN_UNIFIED": [
+    "Jordan unified admission",
+    "القبول الموحد في الأردن"
+   ],
+   "STUDIELINK": [
+    "Studielink",
+    "منصة Studielink"
+   ],
+   "CAO": [
+    "CAO",
+    "CAO"
+   ],
+   "UNI_ASSIST": [
+    "uni-assist",
+    "منصة uni-assist"
+   ],
+   "DIRECT": [
+    "Direct",
+    "مباشر"
+   ]
+  },
+  "deadlineKind": {
+   "OXBRIDGE_MEDICINE": [
+    "Oxford, Cambridge and medicine",
+    "أكسفورد وكامبريدج والطب"
+   ],
+   "UCAS_EQUAL": [
+    "UCAS equal consideration",
+    "موعد UCAS للنظر المتساوي"
+   ],
+   "ED": [
+    "Early decision",
+    "القرار المبكر"
+   ],
+   "EA": [
+    "Early action",
+    "الإجراء المبكر"
+   ],
+   "UC": [
+    "UC filing period closes",
+    "إغلاق فترة التقديم لجامعة كاليفورنيا"
+   ],
+   "RD": [
+    "Regular decision",
+    "القرار العادي"
+   ],
+   "OUAC_EQUAL": [
+    "OUAC equal consideration",
+    "موعد OUAC للنظر المتساوي"
+   ],
+   "UAE_WINDOW": [
+    "Fall admission window closes",
+    "إغلاق باب القبول للفصل الأول"
+   ],
+   "UNIFIED": [
+    "Unified admission window",
+    "فترة القبول الموحد"
+   ],
+   "REGULAR": [
+    "Application deadline",
+    "الموعد النهائي للتقديم"
+   ],
+   "SCHOLARSHIP": [
+    "Scholarship deadline",
+    "موعد المنح الدراسية"
+   ],
+   "FINANCIAL_AID": [
+    "Financial aid deadline",
+    "موعد المساعدات المالية"
+   ],
+   "INTERVIEW": [
+    "Interview",
+    "المقابلة"
+   ],
+   "DECISION": [
+    "Decision release",
+    "إعلان القرار"
+   ],
+   "REPLY": [
+    "Reply by",
+    "الرد قبل"
+   ]
+  },
+  "source": {
+   "PROGRAM": [
+    "From the programme",
+    "من البرنامج"
+   ],
+   "UNIVERSITY": [
+    "From the university",
+    "من الجامعة"
+   ],
+   "ROUTE_DEFAULT": [
+    "Typical date, confirm with the university",
+    "موعد معتاد، يرجى التأكد من الجامعة"
+   ]
+  },
+  "urgency": {
+   "overdue": [
+    "Overdue by {n} days",
+    "متأخر {n} يوما"
+   ],
+   "today": [
+    "Due today",
+    "مستحق اليوم"
+   ],
+   "urgent": [
+    "{n} days left",
+    "متبقي {n} يوما"
+   ],
+   "soon": [
+    "{n} days left",
+    "متبقي {n} يوما"
+   ],
+   "upcoming": [
+    "{n} days left",
+    "متبقي {n} يوما"
+   ],
+   "later": [
+    "{n} days left",
+    "متبقي {n} يوما"
+   ],
+   "none": [
+    "No date yet",
+    "لا يوجد موعد بعد"
+   ]
+  },
+  "nextDeadline": [
+   "Next deadline",
+   "الموعد النهائي القادم"
+  ],
+  "noDeadline": [
+   "No deadline yet",
+   "لا يوجد موعد نهائي بعد"
+  ],
+  "progress": [
+   "{done} of {total} done",
+   "{done} من {total} منجزة"
+  ],
+  "checklist": [
+   "Checklist",
+   "قائمة المتطلبات"
+  ],
+  "checklistHint": [
+   "Built from the application route and the programme's current entry requirements.",
+   "مبنية على مسار التقديم ومتطلبات القبول الحالية للبرنامج."
+  ],
+  "deadlines": [
+   "Deadlines",
+   "المواعيد النهائية"
+  ],
+  "deadlinesHint": [
+   "Each date shows where it comes from. Typical dates must be confirmed with the university.",
+   "يظهر مصدر كل موعد. المواعيد المعتادة يجب تأكيدها مع الجامعة."
+  ],
+  "timeline": [
+   "Timeline",
+   "السجل الزمني"
+  ],
+  "timelineEmpty": [
+   "No changes yet",
+   "لا توجد تغييرات بعد"
+  ],
+  "documents": [
+   "Documents",
+   "المستندات"
+  ],
+  "documentsHint": [
+   "Transcripts, letters and certificates the school has issued.",
+   "كشوف الدرجات والخطابات والشهادات الصادرة عن المدرسة."
+  ],
+  "openDocuments": [
+   "Open documents",
+   "فتح المستندات"
+  ],
+  "due": [
+   "Due {date}",
+   "مستحق {date}"
+  ],
+  "emptyTitle": [
+   "No applications yet",
+   "لا توجد طلبات بعد"
+  ],
+  "emptyBody": [
+   "Start an application from a programme on your shortlist. The checklist and deadlines are prepared for you.",
+   "ابدأ طلبا من برنامج في قائمتك المختصرة. سنجهز لك قائمة المتطلبات والمواعيد."
+  ],
+  "emptyEarlyTitle": [
+   "Applications start in Grade 12",
+   "تبدأ طلبات الالتحاق في الصف الثاني عشر"
+  ],
+  "emptyEarlyBody": [
+   "{name} is in Grade {grade}. Now is the time to build a course plan and a shortlist; applications open in the autumn of Grade 12.",
+   "{name} في الصف {grade}. هذا هو الوقت المناسب لبناء خطة المواد والقائمة المختصرة؛ يبدأ التقديم في خريف الصف الثاني عشر."
+  ],
+  "openPlan": [
+   "Open my plan",
+   "فتح خطتي"
+  ],
+  "openShortlist": [
+   "Explore universities",
+   "استكشاف الجامعات"
+  ],
+  "emptyParentTitle": [
+   "No applications yet",
+   "لا توجد طلبات بعد"
+  ],
+  "emptyParentBody": [
+   "When your child starts a university application it appears here with its checklist and deadlines.",
+   "عندما يبدأ ابنك طلب التحاق بجامعة سيظهر هنا مع قائمة المتطلبات والمواعيد."
+  ],
+  "parentReadOnly": [
+   "View only. Your child and the school counselor update applications.",
+   "للاطلاع فقط. يحدّث ابنك والمرشد المدرسي الطلبات."
+  ],
+  "startApplication": [
+   "Start application",
+   "بدء الطلب"
+  ],
+  "openApplication": [
+   "Open application",
+   "فتح الطلب"
+  ],
+  "started": [
+   "Application started",
+   "تم بدء الطلب"
+  ],
+  "stageLabel": [
+   "Stage",
+   "المرحلة"
+  ],
+  "moveTo": [
+   "Move to",
+   "نقل إلى"
+  ],
+  "changeStage": [
+   "Change stage",
+   "تغيير المرحلة"
+  ],
+  "stageUpdated": [
+   "Stage updated",
+   "تم تحديث المرحلة"
+  ],
+  "invalidTransition": [
+   "That stage change is not allowed",
+   "لا يمكن الانتقال إلى هذه المرحلة"
+  ],
+  "studentStageHint": [
+   "Your counselor records interviews and university decisions.",
+   "يسجل مرشدك المقابلات وقرارات الجامعات."
+  ],
+  "noNextStage": [
+   "This application is closed.",
+   "هذا الطلب مغلق."
+  ],
+  "submittedOn": [
+   "Submitted {date}",
+   "قُدّم في {date}"
+  ],
+  "decidedOn": [
+   "Decision {date}",
+   "القرار في {date}"
+  ],
+  "decisionPlan": [
+   "Decision plan",
+   "خطة القرار"
+  ],
+  "decisionPlanAuto": [
+   "Earliest upcoming deadline",
+   "أقرب موعد قادم"
+  ],
+  "counselor": [
+   "Counselor",
+   "المرشد"
+  ],
+  "unassigned": [
+   "Unassigned",
+   "غير مسند"
+  ],
+  "notes": [
+   "Counselor notes",
+   "ملاحظات المرشد"
+  ],
+  "notesHint": [
+   "Visible to staff who manage applications only.",
+   "تظهر فقط للموظفين الذين يديرون الطلبات."
+  ],
+  "notesPlaceholder": [
+   "For example, reference agreed with Mr Carter, interview practice booked.",
+   "مثلا: تم الاتفاق مع المعلم على الخطاب المرجعي، وحجز جلسة تدريب على المقابلة."
+  ],
+  "saveNotes": [
+   "Save notes",
+   "حفظ الملاحظات"
+  ],
+  "saved": [
+   "Saved",
+   "تم الحفظ"
+  ],
+  "error": [
+   "Something went wrong. Please try again.",
+   "حدث خطأ ما. يرجى المحاولة مرة أخرى."
+  ],
+  "assignTeacher": [
+   "Assign teacher",
+   "تكليف معلم"
+  ],
+  "reassign": [
+   "Reassign",
+   "إعادة التكليف"
+  ],
+  "chooseTeacher": [
+   "Choose a teacher",
+   "اختر معلما"
+  ],
+  "requestLetter": [
+   "Request letter",
+   "طلب الخطاب"
+  ],
+  "letterRequested": [
+   "Letter requested",
+   "تم طلب الخطاب"
+  ],
+  "assignedTo": [
+   "Requested from {name}",
+   "مطلوب من {name}"
+  ],
+  "letterNotAssigned": [
+   "No teacher asked yet",
+   "لم يُطلب من معلم بعد"
+  ],
+  "letterPrivate": [
+   "Letters go straight to the university. Students never see their content.",
+   "ترسل الخطابات إلى الجامعة مباشرة، ولا يطّلع الطلاب على محتواها."
+  ],
+  "setDue": [
+   "Due date",
+   "تاريخ الاستحقاق"
+  ],
+  "lockedHint": [
+   "A date you set here is kept when tasks are planned again.",
+   "التاريخ الذي تحدده هنا يبقى كما هو عند إعادة تخطيط المهام."
+  ],
+  "generateTasks": [
+   "Plan tasks",
+   "تخطيط المهام"
+  ],
+  "generateAll": [
+   "Plan tasks for {n} applications",
+   "تخطيط المهام لـ {n} طلبات"
+  ],
+  "generated": [
+   "{created} tasks created, {archived} archived",
+   "تم إنشاء {created} مهام وأرشفة {archived}"
+  ],
+  "tasks": [
+   "Planned tasks",
+   "المهام المخططة"
+  ],
+  "tasksHint": [
+   "Dates count back from the deadline. A late start compresses the plan, and work waits for its prerequisites.",
+   "تُحسب التواريخ رجوعا من الموعد النهائي. عند التأخر تُضغط الخطة، وتنتظر كل خطوة ما يسبقها."
+  ],
+  "noTasks": [
+   "No tasks yet. Plan tasks to turn the checklist into dated steps.",
+   "لا توجد مهام بعد. خطط المهام لتحويل قائمة المتطلبات إلى خطوات بتواريخ."
+  ],
+  "archived": [
+   "Archived: {reason}",
+   "مؤرشفة: {reason}"
+  ],
+  "taskStatus": {
+   "TODO": [
+    "To do",
+    "للتنفيذ"
+   ],
+   "IN_PROGRESS": [
+    "In progress",
+    "قيد التنفيذ"
+   ],
+   "DONE": [
+    "Done",
+    "منجزة"
+   ],
+   "CANCELLED": [
+    "Archived",
+    "مؤرشفة"
+   ]
+  },
+  "owner": {
+   "student": [
+    "Student",
+    "الطالب"
+   ],
+   "counselor": [
+    "Counselor",
+    "المرشد"
+   ],
+   "teacher": [
+    "Teacher",
+    "المعلم"
+   ]
+  },
+  "event": {
+   "start": [
+    "Application started",
+    "بدء الطلب"
+   ],
+   "stage": [
+    "{from} to {to}",
+    "من {from} إلى {to}"
+   ],
+   "letterAssign": [
+    "Recommendation letter requested",
+    "طلب خطاب توصية"
+   ],
+   "letterSent": [
+    "Recommendation letter sent",
+    "إرسال خطاب التوصية"
+   ],
+   "tasks": [
+    "Tasks planned",
+    "تخطيط المهام"
+   ],
+   "item": [
+    "Checklist updated",
+    "تحديث قائمة المتطلبات"
+   ],
+   "notes": [
+    "Notes updated",
+    "تحديث الملاحظات"
+   ],
+   "plan": [
+    "Decision plan changed",
+    "تغيير خطة القرار"
+   ],
+   "counselor": [
+    "Counselor changed",
+    "تغيير المرشد"
+   ],
+   "due": [
+    "Due date set",
+    "تحديد تاريخ الاستحقاق"
+   ]
+  },
+  "filter": {
+   "grade": [
+    "Grade",
+    "الصف"
+   ],
+   "allGrades": [
+    "All grades",
+    "كل الصفوف"
+   ],
+   "gradeN": [
+    "Grade {n}",
+    "الصف {n}"
+   ],
+   "counselor": [
+    "Counselor",
+    "المرشد"
+   ],
+   "allCounselors": [
+    "All counselors",
+    "كل المرشدين"
+   ],
+   "country": [
+    "Country",
+    "الدولة"
+   ],
+   "allCountries": [
+    "All countries",
+    "كل الدول"
+   ],
+   "route": [
+    "Route",
+    "مسار التقديم"
+   ],
+   "allRoutes": [
+    "All routes",
+    "كل المسارات"
+   ],
+   "due": [
+    "Deadline",
+    "الموعد النهائي"
+   ],
+   "anyDue": [
+    "Any deadline",
+    "أي موعد"
+   ],
+   "dueN": [
+    "Within {n} days",
+    "خلال {n} يوما"
+   ],
+   "missing": [
+    "Checklist",
+    "قائمة المتطلبات"
+   ],
+   "anyMissing": [
+    "Any",
+    "الكل"
+   ],
+   "missingYes": [
+    "Items overdue or due in 14 days",
+    "متطلبات متأخرة أو مستحقة خلال 14 يوما"
+   ]
+  },
+  "stats": {
+   "total": [
+    "Applications",
+    "الطلبات"
+   ],
+   "students": [
+    "Students",
+    "الطلاب"
+   ],
+   "dueSoon": [
+    "Deadlines in 30 days",
+    "مواعيد خلال 30 يوما"
+   ],
+   "offers": [
+    "Offers",
+    "عروض القبول"
+   ]
+  },
+  "columnEmpty": [
+   "None",
+   "لا يوجد"
+  ],
+  "boardEmptyTitle": [
+   "No applications match",
+   "لا توجد طلبات مطابقة"
+  ],
+  "boardEmptyBody": [
+   "Change the filters, or start an application from a student's shortlist.",
+   "غيّر عوامل التصفية أو ابدأ طلبا من القائمة المختصرة لأحد الطلاب."
+  ],
+  "missingCount": [
+   "{n} items due",
+   "{n} متطلبات مستحقة"
+  ],
+  "markSent": [
+   "Mark as sent",
+   "تعليم كمرسل"
+  ],
+  "sent": [
+   "Sent",
+   "أُرسل"
+  ],
+  "noLetters": [
+   "No letter requests",
+   "لا توجد طلبات خطابات"
+  ],
+  "noLettersBody": [
+   "When a counselor asks you for a recommendation letter it appears here and in your tasks.",
+   "عندما يطلب منك مرشد خطاب توصية سيظهر هنا وفي مهامك."
+  ],
+  "letterFor": [
+   "{item}",
+   "{item}"
+  ]
+ }
+}

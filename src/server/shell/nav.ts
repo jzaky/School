@@ -21,6 +21,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           ...(c("registration.submit") ? [{ key: "subjects", href: "/subjects", icon: "book-open" }] : []),
           ...(c("grades.view_own") ? [{ key: "grades", href: "/grades", icon: "clipboard-check" }] : []),
           ...(c("pathways.view") ? [{ key: "universities", href: "/career/universities", icon: "landmark" }] : []),
+          ...(c("pathways.view") ? [{ key: "applications", href: "/career/applications", icon: "send" }] : []),
           { key: "calendar", href: "/calendar", icon: "calendar" },
           { key: "exams", href: "/exams", icon: "graduation-cap" },
           { key: "trips", href: "/trips", icon: "bus" },
@@ -39,6 +40,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           ...(c("registration.submit") ? [{ key: "subjects", href: "/subjects", icon: "book-open" }] : []),
           ...(c("grades.view_own") ? [{ key: "grades", href: "/grades", icon: "clipboard-check" }] : []),
           ...(c("pathways.view") ? [{ key: "universities", href: "/career/universities", icon: "landmark" }] : []),
+          ...(c("pathways.view") ? [{ key: "applications", href: "/career/applications", icon: "send" }] : []),
           { key: "services", href: "/services", icon: "layout-grid" },
           { key: "requests", href: "/requests", icon: "inbox" },
           { key: "approvals", href: "/approvals", icon: "stamp", badge: counts.approvals },
@@ -70,6 +72,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("grades.enter") || c("grades.view_all")) school.push({ key: "grades", href: "/grades", icon: "clipboard-check" });
   if (c("career.advise")) school.push({ key: "career", href: "/career", icon: "compass" });
   if (c("pathways.view")) school.push({ key: "universities", href: "/career/universities", icon: "landmark" });
+  if (c("applications.manage")) school.push({ key: "applications", href: "/career/applications/manage", icon: "send" });
   if (c("safeguarding.view") || c("safeguarding.refer")) school.push({ key: "safeguarding", href: "/safeguarding", icon: "shield" });
   school.push({ key: "documents", href: "/documents", icon: "file-text" });
   if (c("curriculum.plan") || c("curriculum.review") || c("curriculum.manage")) school.push({ key: "curriculum", href: "/curriculum", icon: "book-open" });

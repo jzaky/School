@@ -46,6 +46,12 @@ export async function CareerOverview({ ctx, prefs, studentId, mode }: { ctx: Ctx
   const tp = await getTranslations("pathways");
   const pathway = entries.length ? await loadStudentPathway(db, orgId, studentId) : null;
   const entryPrograms = await programsForEntries(db, entries);
+  const applications = entries.length ? await db.application.findMany({ where: { orgId, studentId }, select: { id: true, universityId: true, programId: true } }) : [];
+  const appFor = (e: (typeof entries)[number]) => {
+    const p = entryPrograms.get(`${e.universityId}|${e.programEn}`);
+    return applications.find((a) => (p ? a.programId === p.id : a.universityId === e.universityId && !a.programId))?.id ?? null;
+  };
+  const canApply = (mode === "student" && ctx.isStudent) || (mode === "advisor" && ctx.can("applications.manage"));
   const entryCheck = (e: (typeof entries)[number]) => {
     const p = entryPrograms.get(`${e.universityId}|${e.programEn}`);
     if (!p || !pathway) return null;
@@ -165,8 +171,10 @@ export async function CareerOverview({ ctx, prefs, studentId, mode }: { ctx: Ctx
         <PanelHeader title={t("shortlist")} icon={<GraduationCap className="size-4" />} description={t("shortlistHint")} />
         <Shortlist
           studentId={mode === "advisor" ? studentId : null}
+          canApply={canApply}
           entries={entries.map((e) => ({
             id: e.id,
+            applicationId: appFor(e),
             university: pick(locale, e.university.nameEn, e.university.nameAr),
             country: countryName(e.university.countryCode, locale),
             program: pick(locale, e.programEn, e.programAr),

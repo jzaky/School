@@ -28,6 +28,7 @@ import { seedGrades } from "./academics/grades";
 import { seedTrips } from "./academics/trips";
 import { seedCalendar } from "./academics/calendar";
 import { seedPathways } from "./academics/pathways";
+import { seedApplications } from "./academics/applications";
 import { seedCurriculum } from "./academics/curriculum";
 
 export const DEMO_SLUG = "horizon";
@@ -939,6 +940,7 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   await seedTrips(world);
   await seedCalendar(world);
   await seedPathways(world);
+  await seedApplications(world);
   await seedCurriculum(world);
 
   log(`demo seed finished in ${Date.now() - started}ms`);

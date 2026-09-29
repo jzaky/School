@@ -6,6 +6,7 @@ import { tenantTx } from "@/lib/tenant-db";
 import { execCtx, type Effect } from "@/server/db";
 import { flushEffects } from "@/server/queue";
 import { resumeRunsForTask } from "@/server/workflows/engine";
+import { syncLetterTask } from "@/server/applications/service";
 
 export async function setTaskStatusAction(taskId: string, status: "TODO" | "IN_PROGRESS" | "DONE") {
   const ctx = await getCtx();
@@ -16,6 +17,8 @@ export async function setTaskStatusAction(taskId: string, status: "TODO" | "IN_P
   const effects: Effect[] = [];
   await tenantTx(ctx.orgId, async (tx) => {
     await tx.task.update({ where: { id: taskId }, data: { status, completedAt: status === "DONE" ? new Date() : null } });
+    // A recommendation letter task keeps its application checklist item in step.
+    await syncLetterTask(tx, ctx.orgId, taskId, status);
     if (status === "DONE") {
       if (task.caseId) {
         await tx.timelineEvent.create({ data: { orgId: ctx.orgId, caseId: task.caseId, studentId: task.studentId, actorId: ctx.membershipId, kind: "task", titleEn: `Task done: ${task.titleEn}`, titleAr: `تم إنجاز المهمة: ${task.titleAr}`, staffOnly: true, sensitivity: task.sensitivity } });
