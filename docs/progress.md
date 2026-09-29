@@ -47,7 +47,7 @@
 - /admin/roles (roles with member counts, plain-language permissions grouped by area with typed confirmation for sensitive ones, create, copy, rename, restore default, delete with move, members, Access check), a Roles control on /admin/people, /admin/invitations (staff single and CSV, parents, students, all families, resend, revoke, staff join links with QR, family join code with printable poster PDF, How people sign in), /admin/join-requests (match hints, approve with chosen children or roles, reject with a note, nav badge). Public /join/[token], /join (school code, children verification, rate limits, lockout) and /join/waiting. First-run cards for new parents and teachers, school switcher. Seed prisma/seed/access.ts. Tests: tests/unit/access.test.ts, tests/integration/access.test.ts, tests/e2e/access.spec.ts.
 
 ## In progress
-- Global University Requirements + Academic Pathway Engine (owner spec, Sept 2026). Done: reference analysis (docs/university-engine-reference-analysis.md), schema with a shared global catalog (nullable orgId, RLS read-global/write-own, tests/integration/global-catalog-isolation.test.ts), evidence fields, permissions (planner.approve, applications.manage, catalog.review). Building in parallel: engine (canonical subjects, curriculum mappings for 8 curricula, global catalog, deterministic match, unlock, what-if, goal-first planner, /career/pathways), pipeline (sources, fetch and hash, validated extraction, review queue, change monitor, Scorecard), applications (tracker, deadline engine, tasks, reminders). Next wave: transcript import and mapping review, counselor dashboard, parent view, compare and global search, demo hero flow, E2E, deploy.
+- Nothing building. Pathway engine (all waves), application tracker, requirement pipeline, self-serve sign-up and setup wizard, roles and access, invitations and joining are merged, tested (450 unit and integration tests, 36 E2E) and pushed. A daily GitHub Actions job (.github/workflows/live-check.yml) checks every page for every persona in en and ar on desktop and phone against production, plus the hero flows.
 
 ## Grades module
 - /grades: spreadsheet-style gradebook with autosave, keyboard navigation, Excel paste, excused and comments, weighted averages and bands; publish with one notification per assessment and student; student and parent views of published grades with child switcher and term trend; staff overview (class averages, students below a threshold); grade band settings; bilingual term report card PDF stored as a GENERATED document. Seed: prisma/seed/academics/grades.ts. Tests: tests/unit/grades-calc.test.ts, tests/integration/grades.test.ts.
@@ -64,11 +64,11 @@
 - Tests: tests/unit/onboarding.test.ts, tests/integration/onboarding.test.ts.
 
 ## Next
-1. Deploy and smoke test the hero flows on the deployed URL in en and ar.
-2. Run the E2E suite against production (E2E_BASE_URL) and fix anything environment-specific.
-3. Phase 7 QA pass on production.
+1. Owner actions on Railway: RESEND_API_KEY and EMAIL_FROM (real email), optional Google/Microsoft sign-in keys, Postgres backups, custom domain; press Reset demo after deploys.
+2. Pilot school: verify the requirement rows of the 50 to 100 programmes its students apply to (Mark verified), import its people, run the setup wizard with the school.
+3. Security review of the whole app before real student data.
 4. Everything-editable gaps still open (onboarding audit):
-   - Sidebar shows a hard-coded "H" badge instead of the school logo (src/components/shell/app-shell.tsx), and the marketing Logo and app title say Horizon OS.
+   - The marketing Logo and app title say Horizon OS (the sidebar now shows the school logo or initial).
    - School logo is not yet printed on generated letters and PDFs.
    - Service categories cannot be renamed or added from the UI.
    - Appointment types (meeting kinds, durations, buffers, hosts) and staff availability have no admin page.
