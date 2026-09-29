@@ -22,6 +22,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           ...(c("grades.view_own") ? [{ key: "grades", href: "/grades", icon: "clipboard-check" }] : []),
           ...(c("pathways.view") ? [{ key: "universities", href: "/career/universities", icon: "landmark" }] : []),
           { key: "calendar", href: "/calendar", icon: "calendar" },
+          { key: "exams", href: "/exams", icon: "graduation-cap" },
+          { key: "trips", href: "/trips", icon: "bus" },
           { key: "documents", href: "/documents", icon: "file-text" },
         ],
       },
@@ -43,6 +45,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           { key: "meetings", href: "/meetings", icon: "calendar-clock" },
           { key: "timetable", href: "/timetable", icon: "calendar-days" },
           { key: "calendar", href: "/calendar", icon: "calendar" },
+          { key: "exams", href: "/exams", icon: "graduation-cap" },
+          { key: "trips", href: "/trips", icon: "bus" },
           { key: "documents", href: "/documents", icon: "file-text" },
         ],
       },
@@ -58,6 +62,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
     { key: "timetable", href: "/timetable", icon: "calendar-days" },
   ];
   if (c("cases.view")) work.splice(3, 0, { key: "cases", href: "/cases", icon: "folder-kanban" });
+  work.push({ key: "exams", href: "/exams", icon: "graduation-cap" });
+  if (c("trips.manage")) work.push({ key: "trips", href: "/trips", icon: "bus" });
   const school: NavItem[] = [];
   if (c("people.view")) school.push({ key: "students", href: "/students", icon: "graduation-cap" });
   if (c("grades.enter") || c("registration.manage")) school.push({ key: "classes", href: "/classes", icon: "school" });
@@ -78,6 +84,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("forms.manage")) admin.push({ key: "forms", href: "/admin/forms", icon: "list-checks" });
   if (c("workflows.manage")) admin.push({ key: "workflows", href: "/admin/workflows", icon: "workflow" });
   if (c("documents.templates")) admin.push({ key: "templates", href: "/admin/templates", icon: "file-signature" });
+  if (c("calendar.manage")) admin.push({ key: "calendarAdmin", href: "/admin/calendar", icon: "calendar-days" }, { key: "examsAdmin", href: "/admin/exams", icon: "clipboard-check" });
   if (c("compliance.manage")) admin.push({ key: "compliance", href: "/admin/compliance", icon: "scale" });
   if (c("audit.view")) admin.push({ key: "auditLog", href: "/admin/audit", icon: "scroll-text" });
   const sections: NavSection[] = [

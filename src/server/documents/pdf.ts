@@ -12,9 +12,9 @@ export const FONTS = {
   bold: path.join(FONT_DIR, "IBMPlexSansArabic-Bold.ttf"),
 };
 
-const NAVY = "#123A63";
-const GOLD = "#C8A24A";
-const MUTED = "#5B6778";
+export const NAVY = "#123A63";
+export const GOLD = "#C8A24A";
+export const MUTED = "#5B6778";
 
 
 type Doc = PDFKit.PDFDocument;
@@ -248,4 +248,3 @@ export async function renderChronologyPdf(input: { title: string; subtitle: stri
 }
 
 /** Shared drawing helpers for other bilingual PDFs (for example term report cards). */
-export { NAVY, GOLD, MUTED };

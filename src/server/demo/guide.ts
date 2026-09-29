@@ -15,6 +15,8 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "children", href: "/children" },
     { key: "childSubjects", href: "/subjects" },
     { key: "childGrades", href: "/grades" },
+    { key: "examTimetable", href: "/exams" },
+    { key: "tripConsent", href: "/trips" },
     { key: "letter", href: "/services/document_request" },
     { key: "subjectChange", href: "/services/subject_change" },
     { key: "parentMeeting", href: "/services/parent_meeting" },
@@ -32,6 +34,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "teachingWeek", href: "/timetable" },
     { key: "lessonPlans", href: "/curriculum/plans" },
     { key: "curriculumGaps", href: "/curriculum" },
+    { key: "tripBoard", href: "/trips" },
   ],
   counselor: [
     { key: "caseload", href: "/cases" },
@@ -69,6 +72,8 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "registration", href: "/admin/registration" },
     { key: "gradeBands", href: "/grades?view=bands" },
     { key: "timetableSetup", href: "/admin/timetable" },
+    { key: "calendarAdmin", href: "/admin/calendar" },
+    { key: "examsAdmin", href: "/admin/exams" },
   ],
   registrar: [
     { key: "approvals", href: "/approvals" },

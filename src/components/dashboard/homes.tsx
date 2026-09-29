@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { SchoolDatesPanel } from "@/components/calendar-admin/family-home";
 import {
   AlertOctagon,
   AlertTriangle,
@@ -60,6 +61,7 @@ export async function StudentHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs
           <QuickServices ctx={ctx} keys={["career_guidance", "counselor_meeting", "subject_change", "document_request", "talk_to_someone", "it_support"]} />
         </div>
         <div className="space-y-6">
+          <SchoolDatesPanel ctx={ctx} prefs={prefs} />
           <MeetingsPanel ctx={ctx} prefs={prefs} limit={3} title={t("nextMeetings")} />
           <Panel className="overflow-hidden bg-gradient-to-br from-violet-50 to-card">
             <PanelHeader title={t("careerTitle")} icon={<Compass className="size-4 text-violet-600" />} />
@@ -165,6 +167,7 @@ export async function ParentHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs 
           <RequestsPanel ctx={ctx} prefs={prefs} limit={5} title={t("familyRequests")} />
         </div>
         <div className="space-y-6">
+          <SchoolDatesPanel ctx={ctx} prefs={prefs} />
           <MeetingsPanel ctx={ctx} prefs={prefs} limit={3} />
           <QuickServices ctx={ctx} keys={["parent_meeting", "document_request", "absence_request", "counselor_meeting"]} />
           <AnnouncementsPanel ctx={ctx} prefs={prefs} audience="parent" />
