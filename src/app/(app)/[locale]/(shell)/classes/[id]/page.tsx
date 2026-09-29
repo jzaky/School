@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { LIVE_MODULES } from "@/lib/modules";
 import { getTranslations } from "next-intl/server";
 import { ArrowLeft, CalendarDays, ClipboardList, Users } from "lucide-react";
 import { getCtx } from "@/server/context";
@@ -52,7 +53,7 @@ export default async function ClassRosterPage({ params }: { params: Promise<{ id
         description={[cls.isHomeroom ? t("homeroom") : cls.subject ? pick(locale, cls.subject.nameEn, cls.subject.nameAr) : "", t("gradeN", { grade: cls.gradeLevel }), cls.room ? t("roomN", { room: cls.room }) : ""].filter(Boolean).join(" · ")}
         actions={
           <>
-            {!cls.isHomeroom && (
+            {LIVE_MODULES.grades && !cls.isHomeroom && (
               <Button asChild variant="outline">
                 <Link href={`/grades?class=${cls.id}`}>
                   <ClipboardList className="size-4" />
@@ -60,12 +61,14 @@ export default async function ClassRosterPage({ params }: { params: Promise<{ id
                 </Link>
               </Button>
             )}
-            <Button asChild variant="outline">
-              <Link href="/timetable">
-                <CalendarDays className="size-4" />
-                {t("timetable")}
-              </Link>
-            </Button>
+            {LIVE_MODULES.timetable && (
+              <Button asChild variant="outline">
+                <Link href="/timetable">
+                  <CalendarDays className="size-4" />
+                  {t("timetable")}
+                </Link>
+              </Button>
+            )}
           </>
         }
       />

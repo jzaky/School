@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { LIVE_MODULES } from "@/lib/modules";
 import { getTranslations } from "next-intl/server";
 import { CalendarDays, ClipboardList, School, Users } from "lucide-react";
 import { getCtx } from "@/server/context";
@@ -83,16 +84,18 @@ export default async function ClassesPage({ searchParams }: { searchParams: Prom
                   <Link href={`/classes/${c.id}`} className="text-brand hover:underline">
                     {t("roster")}
                   </Link>
-                  {!c.isHomeroom && (
+                  {LIVE_MODULES.grades && !c.isHomeroom && (
                     <Link href={`/grades?class=${c.id}`} className="inline-flex items-center gap-1 text-brand hover:underline">
                       <ClipboardList className="size-3.5" />
                       {t("gradebook")}
                     </Link>
                   )}
-                  <Link href="/timetable" className="inline-flex items-center gap-1 text-brand hover:underline">
-                    <CalendarDays className="size-3.5" />
-                    {t("timetable")}
-                  </Link>
+                  {LIVE_MODULES.timetable && (
+                    <Link href="/timetable" className="inline-flex items-center gap-1 text-brand hover:underline">
+                      <CalendarDays className="size-3.5" />
+                      {t("timetable")}
+                    </Link>
+                  )}
                 </div>
               </li>
             );
