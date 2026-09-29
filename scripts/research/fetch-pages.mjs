@@ -66,15 +66,19 @@ const sha = (s) => createHash("sha256").update(s).digest("hex");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function fetchWayback(browser, url) {
+  return fetchWaybackAt(browser, url, WAYBACK_BEFORE, list.waybackLatest ?? "20260301");
+}
+
+async function fetchWaybackAt(browser, url, target, latest) {
   try {
-    const q = `https://archive.org/wayback/available?url=${encodeURIComponent(url)}&timestamp=${WAYBACK_BEFORE}`;
+    const q = `https://archive.org/wayback/available?url=${encodeURIComponent(url)}&timestamp=${target}`;
     const res = await fetch(q, { headers: { "User-Agent": UA } });
     if (!res.ok) return null;
     const j = await res.json();
     const snap = j?.archived_snapshots?.closest;
     if (!snap?.available || !snap.timestamp) return null;
-    // Closest snapshot to the target date; ignore ones newer than list.waybackLatest (too recent to compare).
-    if (Number(snap.timestamp.slice(0, 8)) > Number(list.waybackLatest ?? "20260301")) return null;
+    // Closest snapshot to the target date; ignore ones newer than `latest` (too recent to compare).
+    if (Number(snap.timestamp.slice(0, 8)) > Number(latest)) return null;
     const raw = `https://web.archive.org/web/${snap.timestamp}id_/${url}`;
     const r2 = await fetch(raw, { headers: { "User-Agent": UA }, redirect: "follow" });
     if (!r2.ok) return { timestamp: snap.timestamp, snapshotUrl: snap.url, status: r2.status, text: "", hash: null };
@@ -90,12 +94,45 @@ async function fetchWayback(browser, url) {
   }
 }
 
+
+/** PDFs: download and convert to text with pdftotext (poppler-utils on the runner). */
+async function fetchPdf(url) {
+  const { execFileSync } = await import("node:child_process");
+  const { mkdtempSync, writeFileSync: wf, readFileSync: rf } = await import("node:fs");
+  const res = await fetch(url, { headers: { "User-Agent": UA }, redirect: "follow" });
+  if (!res.ok) return { status: res.status, text: "" };
+  const dir = mkdtempSync("/tmp/pdf-");
+  wf(`${dir}/f.pdf`, Buffer.from(await res.arrayBuffer()));
+  execFileSync("pdftotext", ["-layout", "-enc", "UTF-8", `${dir}/f.pdf`, `${dir}/f.txt`], { timeout: 60000 });
+  const text = rf(`${dir}/f.txt`, "utf8").split("\n").map((l) => l.replace(/\s+/g, " ").trim()).filter(Boolean).join("\n");
+  return { status: res.status, text, finalUrl: res.url };
+}
+
+/** When the live site blocks automated reading, use the Internet Archive's most recent copy of the same official page. */
+async function fetchArchiveLatest(browser, url) {
+  const w = await fetchWaybackAt(browser, url, new Date().toISOString().slice(0, 10).replace(/-/g, ""), "29991231");
+  return w && w.text ? w : null;
+}
+
 const browser = await chromium.launch();
 const context = await browser.newContext({ userAgent: UA, locale: "en-US", viewport: { width: 1366, height: 900 } });
 const records = [];
 for (const entry of mine) {
   const page = await context.newPage();
   const rec = { url: entry.url, fetchedAt: new Date().toISOString() };
+  if (/\.pdf(\?|$)/i.test(entry.url)) {
+    try {
+      const r = await fetchPdf(entry.url);
+      Object.assign(rec, { status: r.status, finalUrl: r.finalUrl ?? entry.url, title: "PDF", text: r.text.slice(0, 400000), kind: "pdf" });
+      rec.hash = sha(rec.text);
+    } catch (e) {
+      Object.assign(rec, { status: 0, error: String(e).slice(0, 300), text: "" });
+    }
+    console.log(`${rec.status}\t${(rec.text || "").length}\tpdf\t${entry.url}`);
+    records.push(rec);
+    await page.close();
+    continue;
+  }
   try {
     const res = await page.goto(entry.url, { waitUntil: "domcontentloaded", timeout: 60000 });
     await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => undefined);
@@ -125,6 +162,14 @@ for (const entry of mine) {
     rec.status = 0;
     rec.error = String(e).slice(0, 300);
     rec.text = "";
+  }
+  // Blocked or failed: fall back to the archive's latest copy of the same official page.
+  if (!(rec.status >= 200 && rec.status < 400) || !rec.text || rec.text.length < 500) {
+    const a = await fetchArchiveLatest(browser, entry.url);
+    if (a) {
+      rec.liveStatus = rec.status;
+      Object.assign(rec, { status: 200, text: a.text.slice(0, 400000), hash: a.hash, via: `archive:${a.timestamp}`, archiveUrl: a.snapshotUrl, fetchedAt: `${a.timestamp.slice(0, 4)}-${a.timestamp.slice(4, 6)}-${a.timestamp.slice(6, 8)}T00:00:00Z` });
+    }
   }
   if (entry.wayback) rec.wayback = await fetchWayback(browser, entry.url);
   console.log(`${rec.status}\t${(rec.text || "").length}\t${rec.wayback?.timestamp ?? "-"}\t${entry.url}`);
