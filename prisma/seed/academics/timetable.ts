@@ -51,6 +51,12 @@ export async function seedTimetable(w: World) {
     log(`timetable: ${report?.stats.lessonsPlaced ?? 0} of ${report?.stats.lessonsRequired ?? 0} lessons placed`);
   }
 
+  // Nobody starts the demo over their weekly maximum: raise it to their current teaching load.
+  const sections = await loadSections(tx, orgId, year.id);
+  const loads = new Map<string, number>();
+  for (const s of sections) if (s.teacherMembershipId) loads.set(s.teacherMembershipId, (loads.get(s.teacherMembershipId) ?? 0) + s.periods);
+  for (const [m, load] of loads) await db.teacherSubject.updateMany({ where: { orgId, membershipId: m, maxPeriodsPerWeek: { lt: load } }, data: { maxPeriodsPerWeek: load } });
+
   // 4. Absences and cover.
   if ((await db.staffAbsence.count({ where: { orgId } })) === 0) await seedAbsences(db, orgId, now);
 }

@@ -122,7 +122,7 @@
     "DONE": ["Done", "تمت"]
   },
   "declinedBy": ["Declined by {name}", "اعتذر عنها {name}"],
-  "declineReasonShown": ["Reason: {reason}", "السبب: {reason}"],
+  "declineReasonShown": ["Decline reason: {reason}", "سبب الاعتذار: {reason}"],
   "reassign": ["Reassign", "إعادة إسناد"],
   "reassignTitle": ["Choose a substitute", "اختر المعلم البديل"],
   "findingFree": ["Finding who is free", "جارٍ البحث عن المعلمين المتاحين"],

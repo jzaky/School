@@ -17,7 +17,6 @@ import { CancelAbsenceButton, ReassignCoverButton, ReportAbsenceDialog } from "@
 import { names, periodsOf, yearOf } from "@/server/timetable/queries";
 import { addDays, dateKey, keyToDate, weekdayOfKey } from "@/server/timetable/cover";
 import { dubaiDateKey } from "@/server/appointments/slots";
-import { dayName } from "@/components/timetable/day-name";
 
 export async function generateMetadata() {
   const t = await getTranslations("timetable");
@@ -100,7 +99,7 @@ export default async function CoverPage({ searchParams }: { searchParams: Promis
       <Panel>
         <PanelHeader
           title={t("coverBoard")}
-          description={`${dayName(locale, wd)} ${fmtDate(prefs, keyToDate(date), "long")}`}
+          description={fmtDate(prefs, keyToDate(date), "long")}
           action={
             <div className="flex items-center gap-1">
               <Button variant="outline" size="icon" asChild>

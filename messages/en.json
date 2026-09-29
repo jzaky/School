@@ -2852,7 +2852,7 @@
       "DONE": "Done"
     },
     "declinedBy": "Declined by {name}",
-    "declineReasonShown": "Reason: {reason}",
+    "declineReasonShown": "Decline reason: {reason}",
     "reassign": "Reassign",
     "reassignTitle": "Choose a substitute",
     "findingFree": "Finding who is free",

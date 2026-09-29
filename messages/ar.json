@@ -2852,7 +2852,7 @@
       "DONE": "تمت"
     },
     "declinedBy": "اعتذر عنها {name}",
-    "declineReasonShown": "السبب: {reason}",
+    "declineReasonShown": "سبب الاعتذار: {reason}",
     "reassign": "إعادة إسناد",
     "reassignTitle": "اختر المعلم البديل",
     "findingFree": "جارٍ البحث عن المعلمين المتاحين",

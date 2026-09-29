@@ -107,16 +107,28 @@ export async function runGenerate(tx: Tx, orgId: string, opts: { actorId?: strin
     options: { maxTeacherPerDay: opts.maxTeacherPerDay },
   });
   const byId = new Map(input.sections.map((s) => [s.id, s]));
-  await tx.timetableSlot.deleteMany({ where: { orgId, academicYearId: year.id, locked: false } });
-  // Slots of classes that are no longer timetabled (for example turned into a homeroom) go too.
-  await tx.timetableSlot.deleteMany({ where: { orgId, academicYearId: year.id, classId: { notIn: [...known] } } });
+  // Keep the rows of lessons that did not move, so cover already arranged for them stays linked.
+  const want = new Set(res.placements.filter((p) => !p.locked).map((p) => `${p.classId}|${p.day}|${p.period}`));
+  const keep = new Set<string>();
+  const drop: string[] = [];
+  for (const s of input.slots) {
+    if (s.locked && known.has(s.classId)) continue;
+    const k = `${s.classId}|${s.dayOfWeek}|${s.periodNo}`;
+    if (known.has(s.classId) && want.has(k) && !keep.has(k)) keep.add(k);
+    else drop.push(s.id);
+  }
+  if (drop.length) await tx.timetableSlot.deleteMany({ where: { orgId, id: { in: drop } } });
   const rows = res.placements
-    .filter((p) => !p.locked)
+    .filter((p) => !p.locked && !keep.has(`${p.classId}|${p.day}|${p.period}`))
     .map((p) => {
       const c = byId.get(p.classId)!;
       return { orgId, academicYearId: year.id, classId: p.classId, teacherMembershipId: c.teacherMembershipId, dayOfWeek: p.day, periodNo: p.period, room: c.room, locked: false };
     });
   if (rows.length) await tx.timetableSlot.createMany({ data: rows, skipDuplicates: true });
+  for (const s of input.sections) {
+    const stale = input.slots.some((x) => x.classId === s.id && !x.locked && (x.teacherMembershipId !== s.teacherMembershipId || x.room !== s.room));
+    if (stale) await tx.timetableSlot.updateMany({ where: { orgId, classId: s.id, locked: false }, data: { teacherMembershipId: s.teacherMembershipId, room: s.room } });
+  }
   const report: GenerateReport = { unplaced: res.unplaced, warnings: res.warnings, stats: res.stats };
   await tx.auditEvent.create({ data: { orgId, actorId: opts.actorId ?? null, action: "timetable.generate", entityType: "AcademicYear", entityId: year.id, meta: report as never } });
   return report;
