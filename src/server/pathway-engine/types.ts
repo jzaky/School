@@ -19,7 +19,7 @@ export const LEVEL_RANK: Record<SubjectLevel, number> = { FOUNDATION: 0, STANDAR
 
 export type CourseStatus = "COMPLETED" | "IN_PROGRESS" | "PLANNED";
 export type MappingStatus = "AUTO" | "NEEDS_REVIEW" | "CONFIRMED";
-export type Confidence = "VERIFIED" | "REVIEWED" | "EXTRACTED" | "EXAMPLE" | "UNKNOWN";
+export type Confidence = "VERIFIED" | "OFFICIAL" | "REVIEWED" | "EXTRACTED" | "EXAMPLE" | "UNKNOWN";
 export type SubjectRequirementType = "REQUIRED" | "RECOMMENDED" | "PREFERRED" | "OPTIONAL" | "ONE_OF" | "TWO_OF";
 
 export const MATCH_STATUSES = ["ELIGIBLE", "ON_TRACK", "POSSIBLY_ELIGIBLE", "MISSING_REQUIREMENTS", "NEEDS_MANUAL_REVIEW", "UNKNOWN_DATA"] as const;

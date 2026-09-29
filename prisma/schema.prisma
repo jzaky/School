@@ -2503,6 +2503,8 @@ enum SubjectRequirementType {
 
 enum DataConfidence {
   VERIFIED
+  /// Taken from the university's official page, with a verbatim quote for every value, not yet checked by a person.
+  OFFICIAL
   REVIEWED
   EXTRACTED
   EXAMPLE

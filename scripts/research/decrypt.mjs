@@ -27,12 +27,13 @@ for (const f of readdirSync(args.in).filter((x) => x.endsWith(".json"))) {
     const pid = id(r.url);
     const head = [`URL: ${r.url}`, `FINAL: ${r.finalUrl ?? ""}`, `STATUS: ${r.status}`, `FETCHED: ${r.fetchedAt}`, `TITLE: ${r.title ?? ""}`, `HASH: ${r.hash ?? ""}`, "---", ""].join("\n");
     writeFileSync(join(args.out, `${pid}.txt`), head + (r.text ?? ""));
+    if (r.links?.length) writeFileSync(join(args.out, `${pid}.links.txt`), r.links.map(([t, h]) => `${t || "(no text)"} | ${h}`).join("\n"));
     const w = r.wayback && r.wayback.text ? r.wayback : null;
     if (w) {
       const wh = [`URL: ${r.url}`, `WAYBACK: ${w.snapshotUrl}`, `TIMESTAMP: ${w.timestamp}`, `HASH: ${w.hash}`, "---", ""].join("\n");
       writeFileSync(join(args.out, `${pid}.wayback.txt`), wh + w.text);
     }
-    index[r.url] = { id: pid, file: `${pid}.txt`, status: r.status, finalUrl: r.finalUrl ?? null, chars: (r.text ?? "").length, fetchedAt: r.fetchedAt, hash: r.hash ?? null, error: r.error ?? null, wayback: w ? { file: `${pid}.wayback.txt`, timestamp: w.timestamp, hash: w.hash } : null };
+    index[r.url] = { id: pid, file: `${pid}.txt`, links: r.links?.length ? `${pid}.links.txt` : null, status: r.status, finalUrl: r.finalUrl ?? null, chars: (r.text ?? "").length, fetchedAt: r.fetchedAt, hash: r.hash ?? null, error: r.error ?? null, wayback: w ? { file: `${pid}.wayback.txt`, timestamp: w.timestamp, hash: w.hash } : null };
     n++;
   }
 }

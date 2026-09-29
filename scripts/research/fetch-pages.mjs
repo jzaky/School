@@ -106,6 +106,21 @@ for (const entry of mine) {
     rec.title = await page.title().catch(() => "");
     rec.text = (await page.evaluate(domText)).slice(0, 400000);
     rec.hash = sha(rec.text);
+    // Links on the page (text and address), so the next round can follow them without a search engine.
+    rec.links = await page
+      .evaluate(() => {
+        const seen = new Set();
+        const out = [];
+        for (const a of document.querySelectorAll("a[href]")) {
+          const h = a.href.split("#")[0];
+          if (!/^https?:/.test(h) || seen.has(h)) continue;
+          seen.add(h);
+          out.push([(a.innerText || a.getAttribute("aria-label") || "").replace(/\s+/g, " ").trim().slice(0, 120), h]);
+          if (out.length >= 800) break;
+        }
+        return out;
+      })
+      .catch(() => []);
   } catch (e) {
     rec.status = 0;
     rec.error = String(e).slice(0, 300);

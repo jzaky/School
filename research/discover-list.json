@@ -1,0 +1,1484 @@
+{
+ "universities": [
+  {
+   "key": "abu_dhabi_university",
+   "domains": [
+    "www.adu.ac.ae",
+    "adu.ac.ae"
+   ],
+   "keywords": [
+    "artificial-intelligence",
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "law",
+    "llb",
+    "science"
+   ]
+  },
+  {
+   "key": "american_university_sharjah",
+   "domains": [
+    "www.aus.edu",
+    "aus.edu"
+   ],
+   "keywords": [
+    "architecture",
+    "bba",
+    "business",
+    "commerce",
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "management",
+    "mechanical",
+    "science"
+   ]
+  },
+  {
+   "key": "anu",
+   "domains": [
+    "www.anu.edu.au",
+    "anu.edu.au",
+    "study.anu.edu.au"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "economics",
+    "science"
+   ]
+  },
+  {
+   "key": "aud",
+   "domains": [
+    "www.aud.edu",
+    "aud.edu"
+   ],
+   "keywords": [
+    "bba",
+    "business",
+    "commerce",
+    "computer-science",
+    "computing",
+    "management",
+    "science"
+   ]
+  },
+  {
+   "key": "bath",
+   "domains": [
+    "www.bath.ac.uk",
+    "bath.ac.uk"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "engineering",
+    "mechanical",
+    "science"
+   ]
+  },
+  {
+   "key": "birmingham",
+   "domains": [
+    "www.birmingham.ac.uk",
+    "birmingham.ac.uk"
+   ],
+   "keywords": [
+    "artificial-intelligence",
+    "computer-science",
+    "computing",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "birmingham_dubai",
+   "domains": [
+    "www.birmingham.ac.uk"
+   ],
+   "keywords": [
+    "artificial-intelligence",
+    "bba",
+    "business",
+    "commerce",
+    "computer-science",
+    "computing",
+    "dubai",
+    "management",
+    "science"
+   ]
+  },
+  {
+   "key": "bristol",
+   "domains": [
+    "www.bristol.ac.uk",
+    "bristol.ac.uk"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "cambridge",
+   "domains": [
+    "www.cam.ac.uk",
+    "cam.ac.uk"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "economics",
+    "engineering",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "carnegie_mellon",
+   "domains": [
+    "www.cmu.edu",
+    "cmu.edu",
+    "admission.enrollment.cmu.edu"
+   ],
+   "keywords": [
+    "artificial-intelligence",
+    "computer-science",
+    "computing",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "columbia",
+   "domains": [
+    "www.columbia.edu",
+    "columbia.edu",
+    "undergrad.admissions.columbia.edu",
+    "www.engineering.columbia.edu"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "cornell",
+   "domains": [
+    "www.cornell.edu",
+    "cornell.edu",
+    "admissions.cornell.edu",
+    "www.engineering.cornell.edu"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "cuhk",
+   "domains": [
+    "www.cuhk.edu.hk",
+    "cuhk.edu.hk",
+    "admission.cuhk.edu.hk"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "durham",
+   "domains": [
+    "www.durham.ac.uk",
+    "durham.ac.uk"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "law",
+    "llb",
+    "science"
+   ]
+  },
+  {
+   "key": "edinburgh",
+   "domains": [
+    "www.ed.ac.uk",
+    "ed.ac.uk"
+   ],
+   "keywords": [
+    "artificial-intelligence",
+    "computer-science",
+    "computing",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "epfl",
+   "domains": [
+    "www.epfl.ch",
+    "epfl.ch"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "science"
+   ]
+  },
+  {
+   "key": "eth_zurich",
+   "domains": [
+    "www.ethz.ch",
+    "ethz.ch"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "exeter",
+   "domains": [
+    "www.exeter.ac.uk",
+    "exeter.ac.uk"
+   ],
+   "keywords": [
+    "bba",
+    "business",
+    "commerce",
+    "computer-science",
+    "computing",
+    "management",
+    "science"
+   ]
+  },
+  {
+   "key": "georgia_tech",
+   "domains": [
+    "www.gatech.edu",
+    "gatech.edu",
+    "admission.gatech.edu",
+    "catalog.gatech.edu"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "engineering",
+    "mechanical",
+    "science"
+   ]
+  },
+  {
+   "key": "gju",
+   "domains": [
+    "www.gju.edu.jo",
+    "gju.edu.jo"
+   ],
+   "keywords": [
+    "electrical",
+    "electronic",
+    "engineering",
+    "maintenance",
+    "mechanical"
+   ]
+  },
+  {
+   "key": "glasgow",
+   "domains": [
+    "www.gla.ac.uk",
+    "gla.ac.uk"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "harvard",
+   "domains": [
+    "www.harvard.edu",
+    "harvard.edu",
+    "college.harvard.edu"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "economics",
+    "science"
+   ]
+  },
+  {
+   "key": "heriot_watt_dubai",
+   "domains": [
+    "www.hw.ac.uk"
+   ],
+   "keywords": [
+    "bba",
+    "business",
+    "commerce",
+    "computer-science",
+    "computing",
+    "dubai",
+    "engineering",
+    "management",
+    "mechanical",
+    "science"
+   ]
+  },
+  {
+   "key": "hku",
+   "domains": [
+    "www.hku.hk",
+    "hku.hk",
+    "admissions.hku.hk"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "law",
+    "llb",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "hkust",
+   "domains": [
+    "www.hkust.edu.hk",
+    "hkust.edu.hk",
+    "join.hkust.edu.hk"
+   ],
+   "keywords": [
+    "artificial-intelligence",
+    "computer-science",
+    "computing",
+    "science"
+   ]
+  },
+  {
+   "key": "ie_university",
+   "domains": [
+    "www.ie.edu",
+    "ie.edu"
+   ],
+   "keywords": [
+    "bba",
+    "business",
+    "commerce",
+    "data-science",
+    "management",
+    "science"
+   ]
+  },
+  {
+   "key": "imperial_college_london",
+   "domains": [
+    "www.imperial.ac.uk",
+    "imperial.ac.uk"
+   ],
+   "keywords": [
+    "artificial-intelligence",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "mbbs",
+    "mbchb",
+    "mechanical",
+    "medical",
+    "medicine"
+   ]
+  },
+  {
+   "key": "johns_hopkins",
+   "domains": [
+    "www.jhu.edu",
+    "jhu.edu",
+    "apply.jhu.edu",
+    "e-catalogue.jhu.edu"
+   ],
+   "keywords": [
+    "biomedical",
+    "computer-science",
+    "computing",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "just",
+   "domains": [
+    "www.just.edu.jo",
+    "just.edu.jo"
+   ],
+   "keywords": [
+    "civil",
+    "computer-science",
+    "computing",
+    "dental",
+    "dentistry",
+    "electrical",
+    "electronic",
+    "engineering",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "khalifa_university",
+   "domains": [
+    "www.ku.ac.ae",
+    "ku.ac.ae"
+   ],
+   "keywords": [
+    "aeronautic",
+    "aerospace",
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "mechanical",
+    "science"
+   ]
+  },
+  {
+   "key": "kings_college_london",
+   "domains": [
+    "www.kcl.ac.uk",
+    "kcl.ac.uk"
+   ],
+   "keywords": [
+    "artificial-intelligence",
+    "dental",
+    "dentistry",
+    "law",
+    "llb",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine"
+   ]
+  },
+  {
+   "key": "kit",
+   "domains": [
+    "www.kit.edu",
+    "kit.edu"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "science"
+   ]
+  },
+  {
+   "key": "leeds",
+   "domains": [
+    "www.leeds.ac.uk",
+    "leeds.ac.uk"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "engineering",
+    "mbbs",
+    "mbchb",
+    "mechanical",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "leiden",
+   "domains": [
+    "www.universiteitleiden.nl",
+    "universiteitleiden.nl"
+   ],
+   "keywords": [
+    "international-relations",
+    "politics"
+   ]
+  },
+  {
+   "key": "lmu_munich",
+   "domains": [
+    "www.lmu.de",
+    "lmu.de"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "science"
+   ]
+  },
+  {
+   "key": "lse",
+   "domains": [
+    "www.lse.ac.uk",
+    "lse.ac.uk"
+   ],
+   "keywords": [
+    "bba",
+    "business",
+    "commerce",
+    "data-science",
+    "economics",
+    "law",
+    "llb",
+    "management",
+    "science"
+   ]
+  },
+  {
+   "key": "manchester",
+   "domains": [
+    "www.manchester.ac.uk",
+    "manchester.ac.uk"
+   ],
+   "keywords": [
+    "bba",
+    "business",
+    "commerce",
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "management",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "pharmacy",
+    "science"
+   ]
+  },
+  {
+   "key": "mbzuai",
+   "domains": [
+    "www.mbzuai.ac.ae",
+    "mbzuai.ac.ae"
+   ],
+   "keywords": [
+    "artificial-intelligence"
+   ]
+  },
+  {
+   "key": "mcgill",
+   "domains": [
+    "www.mcgill.ca",
+    "mcgill.ca"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "mcmaster",
+   "domains": [
+    "www.mcmaster.ca",
+    "mcmaster.ca",
+    "future.mcmaster.ca"
+   ],
+   "keywords": [
+    "biomedical",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "middlesex_dubai",
+   "domains": [
+    "www.mdx.ac.ae",
+    "mdx.ac.ae"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "cyber",
+    "science"
+   ]
+  },
+  {
+   "key": "mit",
+   "domains": [
+    "www.mit.edu",
+    "mit.edu",
+    "mitadmissions.org",
+    "catalog.mit.edu",
+    "www.eecs.mit.edu"
+   ],
+   "keywords": [
+    "artificial-intelligence",
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "mechanical",
+    "science"
+   ]
+  },
+  {
+   "key": "monash",
+   "domains": [
+    "www.monash.edu",
+    "monash.edu"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "pharmacy",
+    "science"
+   ]
+  },
+  {
+   "key": "northeastern",
+   "domains": [
+    "www.northeastern.edu",
+    "northeastern.edu",
+    "admissions.northeastern.edu"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "cyber",
+    "data-science",
+    "science"
+   ]
+  },
+  {
+   "key": "nottingham",
+   "domains": [
+    "www.nottingham.ac.uk",
+    "nottingham.ac.uk"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "pharmacy",
+    "science"
+   ]
+  },
+  {
+   "key": "ntu",
+   "domains": [
+    "www.ntu.edu.sg",
+    "ntu.edu.sg"
+   ],
+   "keywords": [
+    "artificial-intelligence",
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "nus",
+   "domains": [
+    "www.nus.edu.sg",
+    "nus.edu.sg"
+   ],
+   "keywords": [
+    "artificial-intelligence",
+    "computer-science",
+    "computing",
+    "engineering",
+    "law",
+    "llb",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "nyu",
+   "domains": [
+    "www.nyu.edu",
+    "nyu.edu"
+   ],
+   "keywords": [
+    "bba",
+    "business",
+    "commerce",
+    "computer-science",
+    "computing",
+    "data-science",
+    "management",
+    "science"
+   ]
+  },
+  {
+   "key": "nyu_abu_dhabi",
+   "domains": [
+    "www.nyuad.nyu.edu",
+    "nyuad.nyu.edu"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "economics",
+    "electrical",
+    "electronic",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "oxford",
+   "domains": [
+    "www.ox.ac.uk",
+    "ox.ac.uk"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "engineering",
+    "law",
+    "llb",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "psut",
+   "domains": [
+    "www.psut.edu.jo",
+    "psut.edu.jo"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "cyber",
+    "data-science",
+    "science"
+   ]
+  },
+  {
+   "key": "purdue",
+   "domains": [
+    "www.purdue.edu",
+    "purdue.edu",
+    "admissions.purdue.edu"
+   ],
+   "keywords": [
+    "aeronautic",
+    "aerospace",
+    "computer-science",
+    "computing",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "qmul",
+   "domains": [
+    "www.qmul.ac.uk",
+    "qmul.ac.uk"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "dental",
+    "dentistry",
+    "science"
+   ]
+  },
+  {
+   "key": "queens_university",
+   "domains": [
+    "www.queensu.ca",
+    "queensu.ca"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "rcsi",
+   "domains": [
+    "www.rcsi.com",
+    "rcsi.com"
+   ],
+   "keywords": [
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "pharmacy"
+   ]
+  },
+  {
+   "key": "rit_dubai",
+   "domains": [
+    "www.rit.edu"
+   ],
+   "keywords": [
+    "cyber",
+    "dubai",
+    "electrical",
+    "electronic",
+    "engineering",
+    "software"
+   ]
+  },
+  {
+   "key": "rwth_aachen",
+   "domains": [
+    "www.rwth-aachen.de",
+    "rwth-aachen.de"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "engineering",
+    "mechanical",
+    "science"
+   ]
+  },
+  {
+   "key": "sciences_po",
+   "domains": [
+    "www.sciencespo.fr",
+    "sciencespo.fr"
+   ],
+   "keywords": [
+    "international-relations",
+    "politics"
+   ]
+  },
+  {
+   "key": "sheffield",
+   "domains": [
+    "www.sheffield.ac.uk",
+    "sheffield.ac.uk"
+   ],
+   "keywords": [
+    "aeronautic",
+    "aerospace",
+    "artificial-intelligence",
+    "engineering"
+   ]
+  },
+  {
+   "key": "sorbonne_abu_dhabi",
+   "domains": [
+    "www.sorbonne.ae",
+    "sorbonne.ae"
+   ],
+   "keywords": [
+    "economics",
+    "law",
+    "llb"
+   ]
+  },
+  {
+   "key": "southampton",
+   "domains": [
+    "www.southampton.ac.uk",
+    "southampton.ac.uk"
+   ],
+   "keywords": [
+    "artificial-intelligence",
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "st_andrews",
+   "domains": [
+    "www.st-andrews.ac.uk",
+    "st-andrews.ac.uk"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "stanford",
+   "domains": [
+    "www.stanford.edu",
+    "stanford.edu",
+    "admission.stanford.edu",
+    "bulletin.stanford.edu"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "data-science",
+    "electrical",
+    "electronic",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "trinity_college_dublin",
+   "domains": [
+    "www.tcd.ie",
+    "tcd.ie"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "law",
+    "llb",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "tu_delft",
+   "domains": [
+    "www.tudelft.nl",
+    "tudelft.nl"
+   ],
+   "keywords": [
+    "aeronautic",
+    "aerospace",
+    "computer-science",
+    "computing",
+    "engineering",
+    "mechanical",
+    "science"
+   ]
+  },
+  {
+   "key": "tu_eindhoven",
+   "domains": [
+    "www.tue.nl",
+    "tue.nl"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "data-science",
+    "science"
+   ]
+  },
+  {
+   "key": "tu_munich",
+   "domains": [
+    "www.tum.de",
+    "tum.de"
+   ],
+   "keywords": [
+    "electrical",
+    "electronic",
+    "engineering",
+    "informatics"
+   ]
+  },
+  {
+   "key": "uae_university",
+   "domains": [
+    "www.uaeu.ac.ae",
+    "uaeu.ac.ae"
+   ],
+   "keywords": [
+    "artificial-intelligence",
+    "bba",
+    "business",
+    "commerce",
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "law",
+    "llb",
+    "management",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "ubc",
+   "domains": [
+    "www.ubc.ca",
+    "ubc.ca",
+    "you.ubc.ca"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "uc_berkeley",
+   "domains": [
+    "www.berkeley.edu",
+    "berkeley.edu",
+    "admissions.berkeley.edu",
+    "eecs.berkeley.edu"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "data-science",
+    "electrical",
+    "electronic",
+    "engineering",
+    "mechanical",
+    "science"
+   ]
+  },
+  {
+   "key": "ucd",
+   "domains": [
+    "www.ucd.ie",
+    "ucd.ie"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "ucl",
+   "domains": [
+    "www.ucl.ac.uk",
+    "ucl.ac.uk"
+   ],
+   "keywords": [
+    "architecture",
+    "computer-science",
+    "computing",
+    "data-science",
+    "electrical",
+    "electronic",
+    "engineering",
+    "law",
+    "llb",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "psychology",
+    "science"
+   ]
+  },
+  {
+   "key": "ucla",
+   "domains": [
+    "www.ucla.edu",
+    "ucla.edu",
+    "admission.ucla.edu"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "psychology",
+    "science"
+   ]
+  },
+  {
+   "key": "uiuc",
+   "domains": [
+    "www.illinois.edu",
+    "illinois.edu",
+    "admissions.illinois.edu",
+    "grainger.illinois.edu"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "unimelb",
+   "domains": [
+    "www.unimelb.edu.au",
+    "unimelb.edu.au",
+    "study.unimelb.edu.au"
+   ],
+   "keywords": [
+    "bba",
+    "business",
+    "commerce",
+    "management",
+    "science"
+   ]
+  },
+  {
+   "key": "university_of_alberta",
+   "domains": [
+    "www.ualberta.ca",
+    "ualberta.ca"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "university_of_amsterdam",
+   "domains": [
+    "www.uva.nl",
+    "uva.nl"
+   ],
+   "keywords": [
+    "artificial-intelligence",
+    "economics",
+    "psychology"
+   ]
+  },
+  {
+   "key": "university_of_jordan",
+   "domains": [
+    "www.ju.edu.jo",
+    "ju.edu.jo"
+   ],
+   "keywords": [
+    "bba",
+    "business",
+    "commerce",
+    "computer-science",
+    "computing",
+    "dental",
+    "dentistry",
+    "law",
+    "llb",
+    "management",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "pharmacy",
+    "science"
+   ]
+  },
+  {
+   "key": "university_of_michigan",
+   "domains": [
+    "www.umich.edu",
+    "umich.edu",
+    "admissions.umich.edu"
+   ],
+   "keywords": [
+    "bba",
+    "business",
+    "commerce",
+    "computer-science",
+    "computing",
+    "engineering",
+    "management",
+    "science"
+   ]
+  },
+  {
+   "key": "university_of_sharjah",
+   "domains": [
+    "www.sharjah.ac.ae",
+    "sharjah.ac.ae"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "dental",
+    "dentistry",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "pharmacy",
+    "science"
+   ]
+  },
+  {
+   "key": "university_of_toronto",
+   "domains": [
+    "www.utoronto.ca",
+    "utoronto.ca",
+    "future.utoronto.ca",
+    "discover.engineering.utoronto.ca"
+   ],
+   "keywords": [
+    "bba",
+    "business",
+    "commerce",
+    "computer-science",
+    "computing",
+    "engineering",
+    "management",
+    "science"
+   ]
+  },
+  {
+   "key": "unsw",
+   "domains": [
+    "www.unsw.edu.au",
+    "unsw.edu.au"
+   ],
+   "keywords": [
+    "artificial-intelligence",
+    "computer-science",
+    "computing",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "uq",
+   "domains": [
+    "www.uq.edu.au",
+    "uq.edu.au",
+    "study.uq.edu.au"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "mbbs",
+    "mbchb",
+    "medical",
+    "medicine",
+    "science"
+   ]
+  },
+  {
+   "key": "usyd",
+   "domains": [
+    "www.sydney.edu.au",
+    "sydney.edu.au"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "law",
+    "llb",
+    "science"
+   ]
+  },
+  {
+   "key": "ut_austin",
+   "domains": [
+    "www.utexas.edu",
+    "utexas.edu",
+    "admissions.utexas.edu"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "uw_seattle",
+   "domains": [
+    "www.washington.edu",
+    "washington.edu",
+    "admit.washington.edu"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "engineering",
+    "science"
+   ]
+  },
+  {
+   "key": "warwick",
+   "domains": [
+    "www.warwick.ac.uk",
+    "warwick.ac.uk"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "economics",
+    "management",
+    "mathematics",
+    "science"
+   ]
+  },
+  {
+   "key": "waterloo",
+   "domains": [
+    "www.uwaterloo.ca",
+    "uwaterloo.ca"
+   ],
+   "keywords": [
+    "computer-science",
+    "computing",
+    "data-science",
+    "engineering",
+    "mechatronic",
+    "robotic",
+    "science",
+    "software"
+   ]
+  },
+  {
+   "key": "western",
+   "domains": [
+    "www.uwo.ca",
+    "uwo.ca",
+    "welcome.uwo.ca"
+   ],
+   "keywords": [
+    "bba",
+    "business",
+    "commerce",
+    "computer-science",
+    "computing",
+    "management",
+    "science"
+   ]
+  },
+  {
+   "key": "wollongong_dubai",
+   "domains": [
+    "www.uowdubai.ac.ae",
+    "uowdubai.ac.ae"
+   ],
+   "keywords": [
+    "bba",
+    "business",
+    "commerce",
+    "computer-science",
+    "computing",
+    "management",
+    "science"
+   ]
+  },
+  {
+   "key": "yarmouk",
+   "domains": [
+    "www.yu.edu.jo",
+    "yu.edu.jo"
+   ],
+   "keywords": [
+    "bba",
+    "business",
+    "commerce",
+    "computer-science",
+    "computing",
+    "management",
+    "science"
+   ]
+  },
+  {
+   "key": "zayed_university",
+   "domains": [
+    "www.zu.ac.ae",
+    "zu.ac.ae"
+   ],
+   "keywords": [
+    "bba",
+    "business",
+    "commerce",
+    "computer-science",
+    "computing",
+    "cyber",
+    "management",
+    "science"
+   ]
+  }
+ ]
+}
