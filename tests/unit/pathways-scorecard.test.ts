@@ -105,6 +105,7 @@ describe("College Scorecard import", () => {
     const res = await runScorecardImport({
       store,
       apiKey: "TEST",
+      expectFields: ["id", "school.name"],
       fetchImpl: async (url) => {
         urls.push(url);
         const page = Number(new URL(url).searchParams.get("page"));
@@ -118,11 +119,12 @@ describe("College Scorecard import", () => {
 
   it("reports rate limiting and unreachable hosts as typed errors", async () => {
     const { store } = memoryStore();
-    await expect(runScorecardImport({ store, apiKey: "DEMO_KEY", fetchImpl: async () => ({ ok: false, status: 429, json: async () => ({}) }) })).rejects.toMatchObject({ code: "rate_limited" });
+    await expect(runScorecardImport({ store, apiKey: "DEMO_KEY", sleep: async () => undefined, fetchImpl: async () => ({ ok: false, status: 429, json: async () => ({}) }) })).rejects.toMatchObject({ code: "rate_limited" });
     await expect(
       runScorecardImport({
         store,
         apiKey: "DEMO_KEY",
+        sleep: async () => undefined,
         fetchImpl: async () => {
           throw new Error("ECONNREFUSED");
         },

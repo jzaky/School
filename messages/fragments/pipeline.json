@@ -1,0 +1,1058 @@
+{
+  "nav": {
+    "catalogReview": [
+      "Catalog review",
+      "مراجعة دليل الجامعات"
+    ]
+  },
+  "guide": {
+    "steps": {
+      "catalogReview": {
+        "title": [
+          "Review requirement updates",
+          "راجع تحديثات متطلبات القبول"
+        ],
+        "body": [
+          "Check drafts extracted from official university pages, publish them with evidence and confirm changes before students see them.",
+          "افحص المسودات المستخرجة من صفحات الجامعات الرسمية، وانشرها مع الأدلة، وأكّد التغييرات قبل أن يراها الطلاب."
+        ]
+      }
+    }
+  },
+  "pathways": {
+    "admin": {
+      "importError": {
+        "schema_drift": [
+          "The Scorecard data format changed (expected fields are missing). The import stopped without changes.",
+          "تغيّر تنسيق بيانات Scorecard (بعض الحقول المتوقعة مفقودة). توقف الاستيراد دون أي تغيير."
+        ]
+      }
+    }
+  },
+  "catalog": {
+    "title": [
+      "Catalog review",
+      "مراجعة دليل الجامعات"
+    ],
+    "subtitle": [
+      "Keep university entry requirements accurate: review extracted drafts, watch official sources and confirm changes.",
+      "حافظ على دقة متطلبات القبول الجامعي: راجع المسودات المستخرجة، وتابع المصادر الرسمية، وأكّد التغييرات."
+    ],
+    "tabs": {
+      "queue": [
+        "Review queue",
+        "قائمة المراجعة"
+      ],
+      "sources": [
+        "Sources",
+        "المصادر"
+      ],
+      "changes": [
+        "Change monitor",
+        "رصد التغييرات"
+      ],
+      "scorecard": [
+        "US data",
+        "بيانات الجامعات الأمريكية"
+      ]
+    },
+    "exampleData": [
+      "Example data, confirm on the official page",
+      "بيانات توضيحية، تحقّق منها في الصفحة الرسمية"
+    ],
+    "exampleShort": [
+      "Example data",
+      "بيانات توضيحية"
+    ],
+    "readOnly": [
+      "Read-only mode",
+      "وضع القراءة فقط"
+    ],
+    "percent": [
+      "{value}%",
+      "{value}٪"
+    ],
+    "error": {
+      "forbidden": [
+        "You do not have permission to review catalog data.",
+        "ليست لديك صلاحية مراجعة بيانات الدليل."
+      ],
+      "not_platform_reviewer": [
+        "Only platform catalog reviewers can publish shared requirements. Ask the platform team to add your email.",
+        "لا يمكن نشر المتطلبات المشتركة إلا لمراجعي الدليل في المنصة. اطلب من فريق المنصة إضافة بريدك الإلكتروني."
+      ],
+      "no_owner_url": [
+        "Publishing needs the platform database connection (PLATFORM_DATABASE_URL), which is not configured here.",
+        "يتطلب النشر اتصال قاعدة بيانات المنصة (PLATFORM_DATABASE_URL)، وهو غير مُعدّ هنا."
+      ],
+      "no_redis": [
+        "Background jobs are not running here, so pages cannot be checked now.",
+        "المهام الخلفية لا تعمل هنا، لذلك لا يمكن فحص الصفحات الآن."
+      ],
+      "no_api_key": [
+        "Set COLLEGE_SCORECARD_API_KEY to run the import.",
+        "اضبط المتغير COLLEGE_SCORECARD_API_KEY لتشغيل الاستيراد."
+      ],
+      "not_found": [
+        "This item no longer exists.",
+        "لم يعد هذا العنصر موجودا."
+      ],
+      "not_pending": [
+        "Someone already decided on this draft.",
+        "اتخذ شخص آخر قرارا بشأن هذه المسودة بالفعل."
+      ],
+      "no_program": [
+        "Link this source to a programme before publishing.",
+        "اربط هذا المصدر ببرنامج قبل النشر."
+      ],
+      "mirror_cannot_override": [
+        "A mirror site cannot replace data from an official page.",
+        "لا يمكن لموقع ناقل أن يحل محل بيانات صفحة رسمية."
+      ],
+      "invalid_edit": [
+        "Some edited lines are not valid. Check the values and try again.",
+        "بعض الأسطر المعدّلة غير صالحة. تحقّق من القيم وحاول مرة أخرى."
+      ],
+      "empty": [
+        "There are no lines to publish.",
+        "لا توجد أسطر للنشر."
+      ],
+      "note_required": [
+        "Add a note explaining the decision.",
+        "أضف ملاحظة توضّح القرار."
+      ],
+      "invalid": [
+        "Check the details and try again.",
+        "تحقّق من البيانات وحاول مرة أخرى."
+      ],
+      "invalid_url": [
+        "Enter a full web address starting with http or https.",
+        "أدخل عنوان ويب كاملا يبدأ بـ http أو https."
+      ],
+      "already_reviewed": [
+        "This change was already reviewed.",
+        "تمت مراجعة هذا التغيير بالفعل."
+      ],
+      "import_failed": [
+        "The import failed. See the recent runs below.",
+        "فشل الاستيراد. راجع عمليات التشغيل الأخيرة أدناه."
+      ]
+    },
+    "queue": {
+      "pendingTitle": [
+        "Waiting for review",
+        "بانتظار المراجعة"
+      ],
+      "pendingDesc": [
+        "Drafts extracted from official pages. Nothing is shown to students until a person approves it.",
+        "مسودات مستخرجة من الصفحات الرسمية. لا يظهر أي شيء للطلاب قبل أن يعتمده شخص مسؤول."
+      ],
+      "emptyTitle": [
+        "Nothing to review",
+        "لا شيء للمراجعة"
+      ],
+      "emptyBody": [
+        "New drafts appear here when a source page changes.",
+        "تظهر المسودات الجديدة هنا عندما تتغير صفحة أحد المصادر."
+      ],
+      "decidedTitle": [
+        "Recent decisions",
+        "القرارات الأخيرة"
+      ],
+      "review": [
+        "Review",
+        "مراجعة"
+      ],
+      "lines": [
+        "{n, plural, one {# line} other {# lines}}",
+        "{n, plural, zero {لا أسطر} one {سطر واحد} two {سطران} few {# أسطر} many {# سطرا} other {# سطر}}"
+      ],
+      "rejectedLines": [
+        "{n, plural, one {# line rejected} other {# lines rejected}}",
+        "{n, plural, zero {لم يُرفض أي سطر} one {رُفض سطر واحد} two {رُفض سطران} few {رُفضت # أسطر} many {رُفض # سطرا} other {رُفض # سطر}}"
+      ],
+      "confidence": [
+        "Confidence {value}%",
+        "درجة الثقة {value}٪"
+      ],
+      "extractedOn": [
+        "Extracted {date}",
+        "استُخرجت في {date}"
+      ],
+      "decidedOn": [
+        "Decided {date}",
+        "حُسمت في {date}"
+      ],
+      "status": {
+        "PENDING_REVIEW": [
+          "Waiting for review",
+          "بانتظار المراجعة"
+        ],
+        "APPROVED": [
+          "Published",
+          "منشورة"
+        ],
+        "REJECTED": [
+          "Rejected",
+          "مرفوضة"
+        ]
+      }
+    },
+    "review": {
+      "back": [
+        "Review queue",
+        "قائمة المراجعة"
+      ],
+      "officialPage": [
+        "Open the source page",
+        "افتح صفحة المصدر"
+      ],
+      "extractor": [
+        "Extractor: {model}",
+        "أداة الاستخراج: {model}"
+      ],
+      "evidence": [
+        "Quote from the page",
+        "اقتباس من الصفحة"
+      ],
+      "proposed": [
+        "Proposed",
+        "المقترح"
+      ],
+      "current": [
+        "Current version",
+        "النسخة الحالية"
+      ],
+      "noCurrent": [
+        "Not in the current version",
+        "غير موجود في النسخة الحالية"
+      ],
+      "noCurrentVersion": [
+        "No published version yet",
+        "لا توجد نسخة منشورة بعد"
+      ],
+      "general": [
+        "All applicants",
+        "جميع المتقدمين"
+      ],
+      "groupTitle": [
+        "{curriculum}",
+        "{curriculum}"
+      ],
+      "currentVersion": [
+        "Version {n}, {confidence}",
+        "النسخة {n}، {confidence}"
+      ],
+      "rejectedTitle": [
+        "Lines the validator rejected",
+        "أسطر رفضها المدقق"
+      ],
+      "rejectedDesc": [
+        "These lines are not proposed because an automatic check failed.",
+        "هذه الأسطر غير مقترحة لأن أحد الفحوص التلقائية لم ينجح."
+      ],
+      "approve": [
+        "Approve and publish",
+        "اعتماد ونشر"
+      ],
+      "editApprove": [
+        "Edit and approve",
+        "تعديل ثم اعتماد"
+      ],
+      "reject": [
+        "Reject",
+        "رفض"
+      ],
+      "rerunAi": [
+        "Extract again with AI",
+        "استخراج مجددا بالذكاء الاصطناعي"
+      ],
+      "rerunAiDisabled": [
+        "Set ANTHROPIC_API_KEY to use the AI extractor. The built-in extractor already ran.",
+        "اضبط ANTHROPIC_API_KEY لاستخدام أداة الاستخراج بالذكاء الاصطناعي. أداة الاستخراج المدمجة عملت بالفعل."
+      ],
+      "approved": [
+        "Published as a new version",
+        "نُشرت كنسخة جديدة"
+      ],
+      "rejectedToast": [
+        "Draft rejected",
+        "رُفضت المسودة"
+      ],
+      "rerunDone": [
+        "A new draft was extracted",
+        "استُخرجت مسودة جديدة"
+      ],
+      "rerunCached": [
+        "Nothing new: this page was already extracted with this model.",
+        "لا جديد: استُخرجت هذه الصفحة بهذا النموذج من قبل."
+      ],
+      "approveTitle": [
+        "Publish these requirements?",
+        "هل تريد نشر هذه المتطلبات؟"
+      ],
+      "approveBody": [
+        "A new version is created for each group and the previous version is closed. Every school using the shared catalog sees the new version.",
+        "ستُنشأ نسخة جديدة لكل مجموعة وتُغلق النسخة السابقة. ستظهر النسخة الجديدة لكل مدرسة تستخدم الدليل المشترك."
+      ],
+      "note": [
+        "Note (optional)",
+        "ملاحظة (اختيارية)"
+      ],
+      "rejectTitle": [
+        "Reject this draft",
+        "رفض هذه المسودة"
+      ],
+      "rejectBody": [
+        "Explain why, so the next reviewer knows what to look for.",
+        "وضّح السبب ليعرف المراجع التالي ما يجب التحقق منه."
+      ],
+      "rejectNote": [
+        "Reason",
+        "السبب"
+      ],
+      "editTitle": [
+        "Edit before publishing",
+        "تعديل قبل النشر"
+      ],
+      "editBody": [
+        "Change values or remove lines. Quotes stay exactly as they appear on the page.",
+        "عدّل القيم أو احذف الأسطر. تبقى الاقتباسات كما وردت في الصفحة تماما."
+      ],
+      "keep": [
+        "Keep",
+        "إبقاء"
+      ],
+      "reviewerNote": [
+        "Reviewer note: {note}",
+        "ملاحظة المراجع: {note}"
+      ],
+      "decided": [
+        "This draft is {status}.",
+        "حالة هذه المسودة: {status}."
+      ],
+      "reason": {
+        "missing_evidence": [
+          "No quote from the page",
+          "لا يوجد اقتباس من الصفحة"
+        ],
+        "evidence_too_long": [
+          "Quote too long",
+          "الاقتباس طويل جدا"
+        ],
+        "evidence_not_in_text": [
+          "Quote not found on the page",
+          "الاقتباس غير موجود في الصفحة"
+        ],
+        "value_not_in_evidence": [
+          "Value does not appear in its quote",
+          "القيمة لا تظهر في الاقتباس"
+        ],
+        "unknown_subject_code": [
+          "Subject not in the catalog vocabulary",
+          "المادة غير موجودة في مفردات الدليل"
+        ],
+        "unknown_test_code": [
+          "Unknown test",
+          "اختبار غير معروف"
+        ],
+        "invalid_type": [
+          "Invalid requirement type",
+          "نوع متطلب غير صالح"
+        ],
+        "invalid_level": [
+          "Invalid subject level",
+          "مستوى مادة غير صالح"
+        ],
+        "invalid_policy": [
+          "Invalid test policy",
+          "سياسة اختبار غير صالحة"
+        ],
+        "invalid_curriculum": [
+          "Unknown curriculum",
+          "منهاج غير معروف"
+        ],
+        "unknown_kind": [
+          "Unknown requirement kind",
+          "نوع متطلب غير معروف"
+        ],
+        "out_of_range": [
+          "Number outside the allowed range",
+          "رقم خارج النطاق المسموح"
+        ],
+        "malformed": [
+          "Incomplete line",
+          "سطر غير مكتمل"
+        ],
+        "duplicate": [
+          "Duplicate line",
+          "سطر مكرر"
+        ]
+      }
+    },
+    "field": {
+      "grade": [
+        "Minimum grade",
+        "الحد الأدنى للدرجة"
+      ],
+      "type": [
+        "Type",
+        "النوع"
+      ],
+      "overall": [
+        "Overall",
+        "الدرجة الكلية"
+      ],
+      "component": [
+        "Each component",
+        "كل مكوّن"
+      ],
+      "policy": [
+        "Policy",
+        "السياسة"
+      ],
+      "minScore": [
+        "Minimum score",
+        "الحد الأدنى للدرجة"
+      ],
+      "required": [
+        "Required",
+        "مطلوب"
+      ],
+      "value": [
+        "Value",
+        "القيمة"
+      ]
+    },
+    "line": {
+      "gradeProfile": [
+        "Grade profile {value}",
+        "الدرجات المطلوبة {value}"
+      ],
+      "minimumPoints": [
+        "At least {value} IB points",
+        "{value} نقطة IB على الأقل"
+      ],
+      "minimumGPA": [
+        "Minimum GPA {value}",
+        "الحد الأدنى للمعدل التراكمي {value}"
+      ],
+      "minimumPercent": [
+        "Minimum average {value}%",
+        "الحد الأدنى للمعدل {value}٪"
+      ],
+      "subject": [
+        "{type}: {subjects}",
+        "{type}: {subjects}"
+      ],
+      "subjectGrade": [
+        "{type}: {subjects}, grade {grade} or above",
+        "{type}: {subjects}، بدرجة {grade} أو أعلى"
+      ],
+      "language": [
+        "{test} {overall} overall",
+        "{test} بدرجة كلية {overall}"
+      ],
+      "languageComponent": [
+        "{test} {overall} overall, {component} in each component",
+        "{test} بدرجة كلية {overall} و{component} في كل مكوّن"
+      ],
+      "test": [
+        "{test}: {policy}",
+        "{test}: {policy}"
+      ],
+      "testMin": [
+        "{test}: {policy}, minimum {score}",
+        "{test}: {policy}، بحد أدنى {score}"
+      ],
+      "additional": [
+        "{kind}: {required}",
+        "{kind}: {required}"
+      ],
+      "or": [
+        " or ",
+        " أو "
+      ],
+      "requiredYes": [
+        "required",
+        "مطلوب"
+      ],
+      "requiredNo": [
+        "optional",
+        "اختياري"
+      ]
+    },
+    "type": {
+      "REQUIRED": [
+        "Required",
+        "مطلوبة"
+      ],
+      "RECOMMENDED": [
+        "Recommended",
+        "موصى بها"
+      ],
+      "PREFERRED": [
+        "Preferred",
+        "مفضلة"
+      ],
+      "OPTIONAL": [
+        "Optional",
+        "اختيارية"
+      ],
+      "ONE_OF": [
+        "One of",
+        "واحدة من"
+      ],
+      "TWO_OF": [
+        "Two of",
+        "اثنتان من"
+      ]
+    },
+    "policy": {
+      "REQUIRED": [
+        "Required",
+        "مطلوب"
+      ],
+      "RECOMMENDED": [
+        "Recommended",
+        "موصى به"
+      ],
+      "OPTIONAL": [
+        "Test optional",
+        "اختياري"
+      ],
+      "NOT_CONSIDERED": [
+        "Not considered",
+        "لا يُؤخذ به"
+      ]
+    },
+    "kind": {
+      "INTERVIEW": [
+        "Interview",
+        "مقابلة"
+      ],
+      "PERSONAL_STATEMENT": [
+        "Personal statement",
+        "بيان شخصي"
+      ],
+      "PORTFOLIO": [
+        "Portfolio",
+        "ملف أعمال"
+      ],
+      "REFERENCE": [
+        "Reference",
+        "خطاب توصية"
+      ],
+      "ESSAY": [
+        "Essay",
+        "مقال"
+      ],
+      "OTHER": [
+        "Other requirement",
+        "متطلب آخر"
+      ]
+    },
+    "section": {
+      "overall": [
+        "Overall",
+        "المتطلبات العامة"
+      ],
+      "subject": [
+        "Subjects",
+        "المواد"
+      ],
+      "language": [
+        "English language",
+        "اللغة الإنجليزية"
+      ],
+      "test": [
+        "Tests",
+        "الاختبارات"
+      ],
+      "additional": [
+        "Other requirements",
+        "متطلبات أخرى"
+      ],
+      "group": [
+        "Group",
+        "مجموعة"
+      ],
+      "source": [
+        "Source",
+        "المصدر"
+      ]
+    },
+    "sources": {
+      "title": [
+        "Requirement sources",
+        "مصادر المتطلبات"
+      ],
+      "desc": [
+        "Official pages the checker watches. It identifies itself, respects robots.txt and ignores cosmetic page changes.",
+        "الصفحات الرسمية التي يتابعها الفاحص. يعرّف بنفسه ويحترم ملف robots.txt ويتجاهل التغييرات الشكلية في الصفحات."
+      ],
+      "emptyTitle": [
+        "No sources yet",
+        "لا توجد مصادر بعد"
+      ],
+      "emptyBody": [
+        "Add the official admissions page of a programme to start watching it.",
+        "أضف صفحة القبول الرسمية لبرنامج ما لبدء متابعتها."
+      ],
+      "add": [
+        "Add source",
+        "إضافة مصدر"
+      ],
+      "addTitle": [
+        "Add a source page",
+        "إضافة صفحة مصدر"
+      ],
+      "addBody": [
+        "Use the university's official page where possible. Mirrors never override official data.",
+        "استخدم الصفحة الرسمية للجامعة كلما أمكن. لا تحل المواقع الناقلة محل البيانات الرسمية أبدا."
+      ],
+      "program": [
+        "Programme",
+        "البرنامج"
+      ],
+      "chooseProgram": [
+        "Choose a programme",
+        "اختر برنامجا"
+      ],
+      "url": [
+        "Page address",
+        "عنوان الصفحة"
+      ],
+      "type": [
+        "Source type",
+        "نوع المصدر"
+      ],
+      "label": [
+        "Label (optional)",
+        "اسم مختصر (اختياري)"
+      ],
+      "added": [
+        "Source added",
+        "أُضيف المصدر"
+      ],
+      "exists": [
+        "This source was already registered",
+        "هذا المصدر مسجّل بالفعل"
+      ],
+      "checkNow": [
+        "Check now",
+        "افحص الآن"
+      ],
+      "queued": [
+        "Check queued. The result appears here when the worker finishes.",
+        "أُضيف الفحص إلى قائمة الانتظار. ستظهر النتيجة هنا عند انتهاء المعالج."
+      ],
+      "lastChecked": [
+        "Checked {date}",
+        "فُحصت في {date}"
+      ],
+      "never": [
+        "Not checked yet",
+        "لم تُفحص بعد"
+      ],
+      "hash": [
+        "Content hash {hash}",
+        "بصمة المحتوى {hash}"
+      ],
+      "lastError": [
+        "Last error: {error}",
+        "آخر خطأ: {error}"
+      ],
+      "universityLevel": [
+        "University website",
+        "موقع الجامعة"
+      ],
+      "count": [
+        "{n, plural, one {# source} other {# sources}}",
+        "{n, plural, zero {لا مصادر} one {مصدر واحد} two {مصدران} few {# مصادر} many {# مصدرا} other {# مصدر}}"
+      ],
+      "status": {
+        "PENDING": [
+          "Waiting",
+          "بالانتظار"
+        ],
+        "FETCHED": [
+          "First fetch",
+          "أول جلب"
+        ],
+        "UNCHANGED": [
+          "Unchanged",
+          "بلا تغيير"
+        ],
+        "CHANGED": [
+          "Changed",
+          "تغيّرت"
+        ],
+        "FAILED": [
+          "Failed",
+          "فشل"
+        ]
+      },
+      "sourceType": {
+        "OFFICIAL_UNIVERSITY": [
+          "Official university page",
+          "صفحة الجامعة الرسمية"
+        ],
+        "OFFICIAL_BODY": [
+          "Official body",
+          "جهة رسمية"
+        ],
+        "MIRROR": [
+          "Mirror",
+          "موقع ناقل"
+        ],
+        "MANUAL": [
+          "Entered by hand",
+          "إدخال يدوي"
+        ]
+      },
+      "search": [
+        "Search by address or label",
+        "ابحث بالعنوان أو الاسم"
+      ],
+      "pageOf": [
+        "Page {page} of {pages}, {total} sources",
+        "الصفحة {page} من {pages}، {total} مصدر"
+      ]
+    },
+    "changes": {
+      "title": [
+        "Requirement changes",
+        "تغييرات المتطلبات"
+      ],
+      "desc": [
+        "Differences between published versions. After review, advising staff with affected students get an in-app notice; students and parents are never notified automatically.",
+        "الفروق بين النسخ المنشورة. بعد المراجعة يتلقى موظفو الإرشاد الذين لديهم طلاب معنيون تنبيها داخل المنصة، ولا يُبلَّغ الطلاب وأولياء الأمور تلقائيا أبدا."
+      ],
+      "emptyTitle": [
+        "No changes here",
+        "لا توجد تغييرات هنا"
+      ],
+      "emptyBody": [
+        "Changes appear when a new version of a programme's requirements is published.",
+        "تظهر التغييرات عند نشر نسخة جديدة من متطلبات أحد البرامج."
+      ],
+      "needsReview": [
+        "Needs review",
+        "بحاجة إلى مراجعة"
+      ],
+      "reviewedTab": [
+        "Reviewed",
+        "تمت مراجعتها"
+      ],
+      "all": [
+        "All",
+        "الكل"
+      ],
+      "allSeverities": [
+        "All levels",
+        "كل المستويات"
+      ],
+      "severity": {
+        "WATCH": [
+          "Watch",
+          "للمتابعة"
+        ],
+        "NOTABLE": [
+          "Notable",
+          "مهم"
+        ],
+        "MAJOR": [
+          "Major",
+          "جوهري"
+        ]
+      },
+      "detected": [
+        "Detected {date}",
+        "رُصد في {date}"
+      ],
+      "markReviewed": [
+        "Mark reviewed",
+        "تأكيد المراجعة"
+      ],
+      "dismiss": [
+        "Dismiss",
+        "تجاهل"
+      ],
+      "reviewTitle": [
+        "Confirm this change",
+        "تأكيد هذا التغيير"
+      ],
+      "reviewBody": [
+        "Advising staff whose students have this programme on a shortlist, plan or application get an in-app notice. Students and parents are not notified.",
+        "سيتلقى موظفو الإرشاد الذين لدى طلابهم هذا البرنامج في قائمة مختصرة أو خطة أو طلب تنبيها داخل المنصة. لن يُبلَّغ الطلاب وأولياء الأمور."
+      ],
+      "dismissTitle": [
+        "Dismiss this change",
+        "تجاهل هذا التغيير"
+      ],
+      "dismissBody": [
+        "Use this when the difference is extraction noise. Nobody is notified.",
+        "استخدم هذا الخيار عندما يكون الفرق ناتجا عن خطأ في الاستخراج. لن يُبلَّغ أحد."
+      ],
+      "reviewedDone": [
+        "Marked reviewed. {n, plural, =0 {No staff needed a notice.} one {# staff member notified.} other {# staff members notified.}}",
+        "تم تأكيد المراجعة. {n, plural, =0 {لم يحتج أي موظف إلى تنبيه.} one {أُبلغ موظف واحد.} two {أُبلغ موظفان.} few {أُبلغ # موظفين.} many {أُبلغ # موظفا.} other {أُبلغ # موظف.}}"
+      ],
+      "dismissedDone": [
+        "Change dismissed",
+        "تم تجاهل التغيير"
+      ],
+      "outcome": {
+        "REVIEWED": [
+          "Reviewed",
+          "تمت المراجعة"
+        ],
+        "DISMISSED": [
+          "Dismissed",
+          "تم التجاهل"
+        ]
+      },
+      "reviewedOn": [
+        "{outcome} on {date}",
+        "{outcome} في {date}"
+      ],
+      "history": [
+        "Version history",
+        "سجل النسخ"
+      ],
+      "details": [
+        "What changed",
+        "ما الذي تغيّر"
+      ],
+      "fromTo": [
+        "{from} to {to}",
+        "من {from} إلى {to}"
+      ],
+      "firstVersion": [
+        "First published version",
+        "أول نسخة منشورة"
+      ],
+      "type": {
+        "ADDED": [
+          "Added",
+          "إضافة"
+        ],
+        "REMOVED": [
+          "Removed",
+          "إزالة"
+        ],
+        "THRESHOLD_RAISED": [
+          "Raised",
+          "رفع"
+        ],
+        "THRESHOLD_LOWERED": [
+          "Lowered",
+          "خفض"
+        ],
+        "STRENGTH_CHANGED": [
+          "Changed",
+          "تغيير"
+        ],
+        "SOURCE_CHANGED": [
+          "Source changed",
+          "تغيّر المصدر"
+        ],
+        "SOURCE_REMOVED": [
+          "Source removed",
+          "أُزيل المصدر"
+        ]
+      }
+    },
+    "history": {
+      "title": [
+        "Requirement history",
+        "سجل المتطلبات"
+      ],
+      "desc": [
+        "Every published version with its source, check date and confidence. Versions are never overwritten.",
+        "كل نسخة منشورة مع مصدرها وتاريخ التحقق ودرجة الثقة. لا تُستبدل النسخ أبدا."
+      ],
+      "empty": [
+        "No published requirements yet.",
+        "لا توجد متطلبات منشورة بعد."
+      ],
+      "version": [
+        "Version {n}",
+        "النسخة {n}"
+      ],
+      "current": [
+        "Current",
+        "الحالية"
+      ],
+      "period": [
+        "{from} to {to}",
+        "من {from} إلى {to}"
+      ],
+      "since": [
+        "Since {date}",
+        "منذ {date}"
+      ],
+      "intake": [
+        "Entry {year}",
+        "القبول لعام {year}"
+      ],
+      "verify": [
+        "Mark verified",
+        "تأكيد التحقق"
+      ],
+      "verifyTitle": [
+        "Mark as verified",
+        "تأكيد التحقق"
+      ],
+      "verifyBody": [
+        "Confirm you checked these requirements on the official page today.",
+        "أكّد أنك راجعت هذه المتطلبات في الصفحة الرسمية اليوم."
+      ],
+      "verified": [
+        "Marked as verified",
+        "تم تأكيد التحقق"
+      ],
+      "back": [
+        "Change monitor",
+        "رصد التغييرات"
+      ],
+      "noLines": [
+        "No lines in this version",
+        "لا توجد أسطر في هذه النسخة"
+      ]
+    },
+    "confidence": {
+      "VERIFIED": [
+        "Verified",
+        "تم التحقق"
+      ],
+      "REVIEWED": [
+        "Reviewed",
+        "تمت المراجعة"
+      ],
+      "EXTRACTED": [
+        "Machine extracted, not reviewed",
+        "مستخرجة آليا ولم تُراجع"
+      ],
+      "EXAMPLE": [
+        "Example data",
+        "بيانات توضيحية"
+      ],
+      "UNKNOWN": [
+        "Unknown",
+        "غير معروفة"
+      ]
+    },
+    "freshness": {
+      "checked": [
+        "Checked {date}",
+        "تم التحقق في {date}"
+      ],
+      "notChecked": [
+        "Not checked yet",
+        "لم يُتحقق منها بعد"
+      ],
+      "source": [
+        "Source",
+        "المصدر"
+      ]
+    },
+    "scorecard": {
+      "title": [
+        "College Scorecard import",
+        "استيراد بيانات College Scorecard"
+      ],
+      "desc": [
+        "US Department of Education data for US universities in the shared catalog: admission rate, SAT and ACT ranges, cost, net price, completion, retention and earnings.",
+        "بيانات وزارة التعليم الأمريكية للجامعات الأمريكية في الدليل المشترك: نسبة القبول ونطاقات SAT وACT والتكلفة وصافي السعر ونسب التخرج والاستمرار والدخل."
+      ],
+      "lastImport": [
+        "Last import",
+        "آخر استيراد"
+      ],
+      "never": [
+        "Never",
+        "لم يتم بعد"
+      ],
+      "usUniversities": [
+        "US universities in the catalog",
+        "الجامعات الأمريكية في الدليل"
+      ],
+      "withStats": [
+        "With Scorecard details",
+        "مع تفاصيل Scorecard"
+      ],
+      "run": [
+        "Run import",
+        "تشغيل الاستيراد"
+      ],
+      "queued": [
+        "Import queued. It runs in the background.",
+        "أُضيف الاستيراد إلى قائمة الانتظار وسيعمل في الخلفية."
+      ],
+      "done": [
+        "Import finished",
+        "انتهى الاستيراد"
+      ],
+      "runs": [
+        "Recent runs",
+        "عمليات التشغيل الأخيرة"
+      ],
+      "noRuns": [
+        "No imports from this school yet.",
+        "لا توجد عمليات استيراد من هذه المدرسة بعد."
+      ],
+      "runDone": [
+        "{created} added, {updated} updated, {linked} linked",
+        "أُضيف {created}، وحُدّث {updated}، ورُبط {linked}"
+      ],
+      "runFailed": [
+        "Failed: {error}",
+        "فشل: {error}"
+      ],
+      "running": [
+        "Running",
+        "قيد التشغيل"
+      ],
+      "keyHelp": [
+        "The API key is read from the COLLEGE_SCORECARD_API_KEY environment variable and is never shown or stored.",
+        "يُقرأ مفتاح الواجهة البرمجية من متغير البيئة COLLEGE_SCORECARD_API_KEY ولا يُعرض أو يُخزَّن أبدا."
+      ],
+      "retryHelp": [
+        "Rate limits and server errors are retried with increasing waits. If the data format changes, the import stops before writing anything.",
+        "يُعاد المحاولة عند تجاوز حد الطلبات أو أخطاء الخادم مع فترات انتظار متزايدة. وإذا تغيّر تنسيق البيانات يتوقف الاستيراد قبل كتابة أي شيء."
+      ],
+      "errorCode": {
+        "rate_limited": [
+          "rate limited",
+          "تجاوز حد الطلبات"
+        ],
+        "unauthorized": [
+          "key rejected",
+          "رُفض المفتاح"
+        ],
+        "unreachable": [
+          "service unreachable",
+          "تعذّر الوصول إلى الخدمة"
+        ],
+        "bad_response": [
+          "unexpected response",
+          "استجابة غير متوقعة"
+        ],
+        "schema_drift": [
+          "data format changed",
+          "تغيّر تنسيق البيانات"
+        ],
+        "no_owner_url": [
+          "no platform database",
+          "لا توجد قاعدة بيانات للمنصة"
+        ],
+        "no_api_key": [
+          "no API key",
+          "لا يوجد مفتاح"
+        ]
+      }
+    }
+  }
+}

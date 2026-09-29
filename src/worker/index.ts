@@ -5,6 +5,7 @@ import { PrismaClient } from "@prisma/client";
 import { Worker, type Job, type Processor } from "bullmq";
 import IORedis from "ioredis";
 import type { DeliverJob, ReminderJob, ResumeJob, TestIdempotentJob } from "./handlers";
+import type { RefreshJob, ScorecardJob } from "@/server/catalog-pipeline/jobs";
 
 async function loadDotenv() {
   // Local development convenience. In production the platform injects variables and .env is absent.
@@ -38,6 +39,7 @@ async function main() {
   const { queue, closeQueues } = await import("@/server/queue-core");
   const { prisma } = await import("@/lib/prisma");
   const { runDemoResetCore } = await import("@/server/demo/run-reset");
+  const catalogJobs = await import("@/server/catalog-pipeline/jobs");
 
   // Organization rows are only fully listable by the owner role (RLS hides non-demo orgs from app_user).
   const platform = process.env.MIGRATION_DATABASE_URL ? new PrismaClient({ datasourceUrl: process.env.MIGRATION_DATABASE_URL }) : prisma;
@@ -70,6 +72,16 @@ async function main() {
       if (job.name !== "resume") throw new Error(`unknown job ${job.name}`);
       return handlers.resumeWorkflowRun(job.data as ResumeJob);
     },
+    catalog: async (job: Job) => {
+      switch (job.name) {
+        case catalogJobs.REFRESH_JOB:
+          return catalogJobs.runCatalogRefresh(job.data as RefreshJob);
+        case catalogJobs.SCORECARD_JOB:
+          return catalogJobs.runCatalogScorecard(job.data as ScorecardJob);
+        default:
+          throw new Error(`unknown job ${job.name}`);
+      }
+    },
     maintenance: async (job: Job) => {
       switch (job.name) {
         case "sweep":
@@ -94,7 +106,7 @@ async function main() {
     const connection = new IORedis(redisUrl, { maxRetriesPerRequest: null });
     connection.on("error", () => undefined);
     connections.push(connection);
-    const w = new Worker(name, processor, { connection, concurrency: name === "maintenance" ? 1 : 5 });
+    const w = new Worker(name, processor, { connection, concurrency: name === "maintenance" || name === "catalog" ? 1 : 5 });
     w.on("failed", (job, err) => console.error(`[worker] ${name}:${job?.name ?? "?"} job ${job?.id ?? "?"} failed: ${describeError(err)}`));
     w.on("error", (err) => console.error(`[worker] ${name} worker error: ${describeError(err)}`));
     return w;
@@ -114,6 +126,11 @@ async function main() {
     } else {
       await maintenance.removeJobScheduler("demo-reset");
     }
+  }
+  // Weekly requirement page refresh (Sunday 01:10 UTC). Skips cleanly without an owner database URL.
+  const catalogQueue = queue(catalogJobs.CATALOG_QUEUE);
+  if (catalogQueue) {
+    await catalogQueue.upsertJobScheduler("catalog-refresh-weekly", { pattern: "10 1 * * 0", tz: "UTC" }, { name: catalogJobs.REFRESH_JOB, data: {}, opts: { attempts: 2 } });
   }
   console.log(`[worker] started: queues=${Object.keys(processors).join(",")} demoReset=${demoMode ? "on" : "off"} email=${process.env.RESEND_API_KEY ? "resend" : "console"}`);
 

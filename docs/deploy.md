@@ -69,7 +69,9 @@ Put shared values in Project > Settings > Shared Variables and reference them fr
 | `LOCAL_UPLOAD_DIR` | web | Fallback directory for documents when R2 is not set. Default `/app/.uploads`, which is lost on every redeploy. For a demo without R2, attach a Railway volume and point this at its mount path. |
 | `ANTHROPIC_API_KEY` | web | Enables the Anthropic AI provider. Without it the built-in (non-network) provider is used. |
 | `AI_MODEL` | web | Model id for the AI provider. Default `claude-opus-5`. |
-| `COLLEGE_SCORECARD_API_KEY` | web | Free api.data.gov key for the US College Scorecard import (Universities, Manage programmes, Run import). Without it the import uses `DEMO_KEY`, which allows only a few requests an hour, so the button imports the first 5 pages only. |
+| `COLLEGE_SCORECARD_API_KEY` | web, worker | Free api.data.gov key for the US College Scorecard import (Universities, Manage programmes, Run import). Without it the import uses `DEMO_KEY`, which allows only a few requests an hour, so the button imports the first 5 pages only. |
+| `PLATFORM_DATABASE_URL` | web, worker | Optional owner-role Postgres URL for writing the shared university catalog (catalog review publish, requirement page checks, Scorecard catalog import). Falls back to `MIGRATION_DATABASE_URL`. Without either, catalog review is read-only and the catalog jobs log a skip. |
+| `PLATFORM_ADMIN_EMAILS` | web | Comma-separated emails of platform catalog reviewers who may publish shared requirements from a non-demo school. Members of the demo school with `catalog.review` may always publish. |
 
 Set by the image, no action needed: `NODE_ENV=production`, `PORT=3000` (Railway overrides `PORT`, the server follows it), `HOSTNAME=0.0.0.0`.
 

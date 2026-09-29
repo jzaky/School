@@ -48,3 +48,6 @@
 1. Deploy and smoke test the hero flows on the deployed URL in en and ar.
 2. Run the E2E suite against production (E2E_BASE_URL) and fix anything environment-specific.
 3. Phase 7 QA pass on production.
+
+## Requirement data pipeline (catalog review)
+- Built: source registry, polite fetcher with normalization and hashing, evidence-validated extraction (rule-based offline, AI on demand), versioned publishing with structured diffs and severity, change monitor with staff notifications, Scorecard import into the global catalog, worker jobs `catalog.refresh` (weekly) and `catalog.scorecard`, review screens under Career > Catalog review, demo seed `prisma/seed/catalog/pipeline-demo.ts`.
