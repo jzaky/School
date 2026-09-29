@@ -1,0 +1,54 @@
+{
+ "voice": "af_heart",
+ "speed": 1.0,
+ "timings": [
+  {
+   "id": "s01-open",
+   "seconds": 22.2
+  },
+  {
+   "id": "s02-meet",
+   "seconds": 22.68
+  },
+  {
+   "id": "s03-letter",
+   "seconds": 26.9
+  },
+  {
+   "id": "s04-counseling",
+   "seconds": 23.45
+  },
+  {
+   "id": "s05-safeguarding",
+   "seconds": 23.7
+  },
+  {
+   "id": "s06-academics",
+   "seconds": 35.77
+  },
+  {
+   "id": "s07-university",
+   "seconds": 53.65
+  },
+  {
+   "id": "s08-applications",
+   "seconds": 15.16
+  },
+  {
+   "id": "s09-leaders",
+   "seconds": 20.53
+  },
+  {
+   "id": "s10-setup",
+   "seconds": 32.99
+  },
+  {
+   "id": "s11-trust",
+   "seconds": 15.16
+  },
+  {
+   "id": "s12-close",
+   "seconds": 11.26
+  }
+ ]
+}
