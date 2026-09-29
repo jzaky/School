@@ -6559,7 +6559,8 @@
       "REVOKED": "This invitation was revoked.",
       "CODE": "We could not create a new code. Please try again.",
       "DOMAIN": "Check the email domains, for example school.ae.",
-      "PUBLIC_DOMAIN": "Public email providers such as gmail.com cannot be staff domains."
+      "PUBLIC_DOMAIN": "Public email providers such as gmail.com cannot be staff domains.",
+      "UNVERIFIED_SCHOOL": "Confirm the school's email address first. Use the link we sent to the person who created the school."
     },
     "copyFailed": "Could not copy. Select the link and copy it.",
     "copy": "Copy",

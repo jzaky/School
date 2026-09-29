@@ -9,6 +9,7 @@
 // Rules: inputs are validated before they reach a query, nothing here writes, and no personal data is returned.
 import { catalogDb } from "@/server/platform/catalog-db";
 import { tenantDb } from "@/lib/tenant-db";
+import { schoolVerified } from "@/server/onboarding/verification";
 import { looksLikeToken, hashToken, normalizeJoinCode } from "@/server/access/tokens";
 
 export class JoinUnavailableError extends Error {
@@ -70,11 +71,13 @@ export async function findInvitationByToken(token: string): Promise<{ orgId: str
 export async function findSchoolByJoinCode(code: string): Promise<PublicSchool | null> {
   const norm = normalizeJoinCode(code);
   if (!norm) return null;
-  const rows = await db().$queryRaw<Array<{ id: string }>>`
-    SELECT "id" FROM "Organization"
+  const rows = await db().$queryRaw<Array<{ id: string; createdById: string | null }>>`
+    SELECT "id", "createdById" FROM "Organization"
     WHERE "joinCode" IS NOT NULL AND regexp_replace(upper("joinCode"), '[^A-Z0-9]', '', 'g') = ${norm}
     LIMIT 1`;
   if (!rows[0]) return null;
+  // A new school's family code works only after its founding administrator confirms their email.
+  if (!(await schoolVerified({ id: rows[0].id, createdById: rows[0].createdById }))) return null;
   return schoolById(rows[0].id);
 }
 

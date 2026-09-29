@@ -53,7 +53,7 @@ export default async function ShellLayout({ children }: { children: React.ReactN
         email: ctx.user.email,
         roleLabel: pick(locale, ctx.membership.titleEn, ctx.membership.titleAr) || (primaryRole ? (tRoles.has(primaryRole) ? tRoles(primaryRole) : pick(locale, ctx.membership.roles[0]?.role.nameEn, ctx.membership.roles[0]?.role.nameAr)) : ""),
       }}
-      org={{ name: pick(locale, ctx.org.nameEn, ctx.org.nameAr), short: pick(locale, ctx.org.shortNameEn, ctx.org.shortNameAr) || ctx.org.nameEn }}
+      org={{ name: pick(locale, ctx.org.nameEn, ctx.org.nameAr), short: pick(locale, ctx.org.shortNameEn, ctx.org.shortNameAr) || ctx.org.nameEn, hasLogo: !!ctx.org.logoUrl, logoVersion: ctx.org.updatedAt.getTime() }}
       schools={schools.length > 1 ? schools.map((s) => ({ id: s.id, name: pick(locale, s.nameEn, s.nameAr), current: s.id === orgId })) : []}
       demo={{
         enabled: personas.length > 0,

@@ -35,7 +35,7 @@ import { SchoolSwitcherItems } from "@/components/access/school-switcher";
 export type ShellProps = {
   nav: NavSection[];
   user: { name: string; initials: string; roleLabel: string; email: string };
-  org: { name: string; short: string };
+  org: { name: string; short: string; hasLogo?: boolean; logoVersion?: number };
   demo: { enabled: boolean; current: string | null; personas: Array<{ key: string; label: string; name: string; initials: string }> };
   unread: number;
   schools?: Array<{ id: string; name: string; current: boolean }>;
@@ -56,9 +56,14 @@ function SidebarContent({ nav, org, onNavigate }: Pick<ShellProps, "nav" | "org"
   return (
     <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
       <div className="flex h-16 items-center gap-3 px-5">
-        <div className="grid size-9 place-items-center rounded-lg bg-gradient-to-br from-gold to-[oklch(0.62_0.12_70)] text-sm font-bold text-sidebar shadow-sm">
-          H
-        </div>
+        {org.hasLogo ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={`/api/org/logo?v=${org.logoVersion ?? 0}`} alt="" className="size-9 rounded-lg bg-white object-contain p-0.5 shadow-sm" />
+        ) : (
+          <div className="grid size-9 place-items-center rounded-lg bg-gradient-to-br from-gold to-[oklch(0.62_0.12_70)] text-sm font-bold text-sidebar shadow-sm">
+            {Array.from(org.short.trim())[0]?.toUpperCase() ?? ""}
+          </div>
+        )}
         <div className="min-w-0">
           <div className="truncate text-sm font-semibold leading-tight">{org.short}</div>
           <div className="truncate text-xs text-sidebar-muted">{org.name}</div>

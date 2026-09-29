@@ -39,6 +39,7 @@ import { approveJoinRequest, rejectJoinRequest } from "./join-requests";
 import { JoinError } from "./membership-setup";
 import type { Permission } from "@/server/identity/permissions";
 import { FIRST_RUN_COOKIE } from "./first-run";
+import { schoolVerified } from "@/server/onboarding/verification";
 
 type Fail = { ok: false; error: string };
 const fail = (error: string): Fail => ({ ok: false, error });
@@ -47,6 +48,14 @@ async function actorWith(...perms: Permission[]): Promise<{ ctx: Ctx; actor: Act
   const ctx = await getCtx();
   if (!perms.some((p) => ctx.can(p))) return null;
   return { ctx, actor: { orgId: ctx.orgId, membershipId: ctx.membershipId, userId: ctx.user.id } };
+}
+
+/** Invitations and family access stay locked until the school's founding administrator confirms their email. */
+async function inviteActor(): Promise<{ ctx: Ctx; actor: Actor } | Fail> {
+  const a = await actorWith("people.invite");
+  if (!a) return fail("FORBIDDEN");
+  if (!(await schoolVerified(a.ctx.org))) return fail("UNVERIFIED_SCHOOL");
+  return a;
 }
 
 function codeOf(e: unknown): string | null {
@@ -168,8 +177,8 @@ export async function removeRoleMemberAction(input: { roleId: string; membership
 const staffRowSchema = z.object({ nameEn: z.string().max(120), email: z.string().max(254), roleKeys: z.array(z.string().max(80)).max(10), department: z.string().max(120).nullable().optional() });
 
 export async function inviteStaffAction(input: { rows: Array<z.input<typeof staffRowSchema>> }) {
-  const a = await actorWith("people.invite");
-  if (!a) return fail("FORBIDDEN");
+  const a = await inviteActor();
+  if ("ok" in a) return a;
   const rows = z.array(staffRowSchema).min(1).max(500).safeParse(input.rows);
   if (!rows.success) return fail("INVALID");
   const res = await run(() => inviteStaff(a.actor, rows.data));
@@ -180,8 +189,8 @@ export async function inviteStaffAction(input: { rows: Array<z.input<typeof staf
 }
 
 export async function inviteParentAction(input: { email: string; nameEn?: string; studentIds: string[] }) {
-  const a = await actorWith("people.invite");
-  if (!a) return fail("FORBIDDEN");
+  const a = await inviteActor();
+  if ("ok" in a) return a;
   const res = await run(() => inviteParent(a.actor, { email: String(input.email ?? ""), nameEn: input.nameEn ?? null, studentIds: (input.studentIds ?? []).map(String) }));
   if (!res.ok) return res;
   await flushEffects(res.value.effects);
@@ -190,8 +199,8 @@ export async function inviteParentAction(input: { email: string; nameEn?: string
 }
 
 export async function inviteStudentAction(input: { studentId: string; email: string }) {
-  const a = await actorWith("people.invite");
-  if (!a) return fail("FORBIDDEN");
+  const a = await inviteActor();
+  if ("ok" in a) return a;
   const res = await run(() => inviteStudent(a.actor, { studentId: String(input.studentId), email: String(input.email ?? "") }));
   if (!res.ok) return res;
   await flushEffects(res.value.effects);
@@ -200,8 +209,8 @@ export async function inviteStudentAction(input: { studentId: string; email: str
 }
 
 export async function inviteAllFamiliesAction() {
-  const a = await actorWith("people.invite");
-  if (!a) return fail("FORBIDDEN");
+  const a = await inviteActor();
+  if ("ok" in a) return a;
   const res = await run(() => inviteAllFamilies(a.actor));
   if (!res.ok) return res;
   await flushEffects(res.value.effects);
@@ -210,8 +219,8 @@ export async function inviteAllFamiliesAction() {
 }
 
 export async function resendInvitationAction(invitationId: string) {
-  const a = await actorWith("people.invite");
-  if (!a) return fail("FORBIDDEN");
+  const a = await inviteActor();
+  if ("ok" in a) return a;
   const res = await run(() => resendInvitation(a.actor, String(invitationId)));
   if (!res.ok) return res;
   await flushEffects(res.value.effects);
@@ -228,8 +237,8 @@ export async function revokeInvitationAction(invitationId: string) {
 }
 
 export async function createStaffLinkAction(input: { roleKey: string; maxUses: number; days: number }) {
-  const a = await actorWith("people.invite");
-  if (!a) return fail("FORBIDDEN");
+  const a = await inviteActor();
+  if ("ok" in a) return a;
   const res = await run(() => createStaffLink(a.actor, { roleKey: String(input.roleKey), maxUses: Number(input.maxUses), days: Number(input.days) }));
   if (!res.ok) return res;
   refreshInvites();
@@ -237,8 +246,8 @@ export async function createStaffLinkAction(input: { roleKey: string; maxUses: n
 }
 
 export async function regenerateJoinCodeAction() {
-  const a = await actorWith("people.invite");
-  if (!a) return fail("FORBIDDEN");
+  const a = await inviteActor();
+  if ("ok" in a) return a;
   const res = await run(() => regenerateJoinCode(a.actor));
   if (!res.ok) return res;
   refreshInvites();
