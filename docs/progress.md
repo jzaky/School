@@ -48,7 +48,7 @@
 
 ## In progress
 - Official university requirements (docs/decisions.md): the official-page pipeline (scripts/research, encrypted snapshots under research/cache, fetched on GitHub Actions). Done (5 rounds plus a Sharjah pass; 1,081 official pages fetched, 1,029 with text): 1,074 OFFICIAL requirement rows with a verbatim quote and source page per line, 233 of 256 programmes, 90 universities, 121 official deadlines, 3 real year-on-year changes from archived copies. Not covered because the sites block automated reading or only render in a browser: Michigan, most of UCL, MBZUAI, Leeds CS and ME, HKU CS, JUST, 2 University of Jordan and a few others (listed in docs/decisions.md). Programmes without official data show no requirements (indicative) instead of example data.
-- Sales materials: pitch deck, brochure (en/ar) and product video being produced under docs/sales.
+- Sales materials (done): docs/sales/Horizon-Pitch-Deck.pptx (18 slides with speaker notes), Horizon-Brochure.pdf and Horizon-Brochure-AR.pdf (8 pages each), screens/ (71 product screenshots). The narrated product video (5:29, 1080p) and a 37 s teaser are not in git (too large); they were delivered in the session. Build scripts live outside the repo.
 - Earlier: Pathway engine (all waves), application tracker, requirement pipeline, self-serve sign-up and setup wizard, roles and access, invitations and joining are merged, tested (450 unit and integration tests, 36 E2E) and pushed. A daily GitHub Actions job (.github/workflows/live-check.yml) checks every page for every persona in en and ar on desktop and phone against production, plus the hero flows.
 
 ## Grades module
