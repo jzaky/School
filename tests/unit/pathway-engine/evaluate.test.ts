@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { evaluate, statusCounts } from "@/server/pathway-engine/evaluate";
+import { evaluate, statusCounts, homeCurriculumFor } from "@/server/pathway-engine/evaluate";
 import { course, m, profile, program, row, subj } from "./fixtures";
 
 const maths = (grade: string, status: "COMPLETED" | "IN_PROGRESS" | "PLANNED" = "COMPLETED", extra = {}) =>
@@ -273,5 +273,17 @@ describe("official page rules", () => {
     const req = { subjects: [subj("REQUIRED", ["mathematics"])] };
     expect(evaluate(profile({ courses: [maths("A")] }), program(row({ ...req, confidence: "OFFICIAL" }))).status).toBe("ELIGIBLE");
     expect(evaluate(profile({ courses: [maths("A")] }), program(row({ ...req, confidence: "EXTRACTED" }))).status).toBe("POSSIBLY_ELIGIBLE");
+  });
+
+  it("the general row covers students on the university's home curriculum", () => {
+    const general = row({ id: "g", curriculum: null, confidence: "OFFICIAL", subjects: [subj("REQUIRED", ["mathematics"])] });
+    const ib = row({ id: "ib", curriculum: "IB", confidence: "OFFICIAL", minimumPoints: 34 });
+    const us = { ...program(general), requirements: [general, ib] };
+    const student = profile({ curriculum: "AMERICAN", courses: [maths("A")] });
+    expect(evaluate(student, us).status).toBe("NEEDS_MANUAL_REVIEW");
+    expect(evaluate(student, { ...us, homeCurriculum: "AMERICAN" }).status).toBe("ELIGIBLE");
+    expect(evaluate(profile({ curriculum: "BRITISH", courses: [maths("A")] }), { ...us, homeCurriculum: "AMERICAN" }).status).toBe("NEEDS_MANUAL_REVIEW");
+    expect(homeCurriculumFor("us")).toBe("AMERICAN");
+    expect(homeCurriculumFor("CA")).toBeNull();
   });
 });

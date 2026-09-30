@@ -108,7 +108,13 @@ function builder(sourceIdFor: (sid?: string) => string | null) {
     subjects: subjects(g.subjects, g.source),
     languages: (g.english ?? []).map((e) => ({ ...src(e), test: e.test, minOverall: e.minOverall, minComponent: e.minComponent ?? null, waiverNoteEn: e.waiverNoteEn ?? null })),
     tests: (g.tests ?? []).map((t) => ({ ...src(t), test: t.test, policy: t.policy, minScore: t.minScore ?? null, noteEn: t.noteEn ?? null })),
-    additional: (g.additional ?? []).map((a) => ({ ...src(a), kind: a.kind, required: a.required !== false, noteEn: a.noteEn ?? null, noteAr: a.noteAr ?? a.noteEn ?? null })),
+    // The general row applies to every curriculum, so a "not accepted" or "foundation year" rule there
+    // (usually about one stream or curriculum) is shown as a note, never as a block. OTHER lines are
+    // information from the page (how to apply, how majors work), shown but not counted.
+    additional: (g.additional ?? []).map((a) => {
+      const scoped = a.kind === "NOT_ACCEPTED" || a.kind === "FOUNDATION_REQUIRED";
+      return { ...src(a), kind: scoped ? "NOTE" : a.kind, required: scoped || a.kind === "OTHER" ? false : a.required !== false, noteEn: a.noteEn ?? null, noteAr: a.noteAr ?? a.noteEn ?? null };
+    }),
   });
   const curriculumRow = (c: SchoolCurriculum, r: ORow): BuiltRow => {
     const base: BuiltRow = {

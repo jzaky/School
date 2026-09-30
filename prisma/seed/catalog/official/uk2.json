@@ -1,6 +1,6 @@
 {
  "batch": "uk2",
- "assembledAt": "2026-09-30T08:18:19.094Z",
+ "assembledAt": "2026-09-30T08:32:58.435Z",
  "universities": [
   {
    "key": "manchester",
@@ -2605,6 +2605,13 @@
      "hash": "9c901817b367c7b05afaa3d9ba55e7e19873c95151d4cc35ad804b1baff3ff89",
      "waybackTimestamp": "20250930042814",
      "waybackHash": "079306945437d575613f232c9df30582b4810b1f1c052ba52c0fd985bffb6a07"
+    },
+    {
+     "id": "s12",
+     "url": "https://www.st-andrews.ac.uk/subjects/medicine/entry-requirements/academic-requirements/uk-qualifications/",
+     "title": "UK qualifications - Medicine - University of St Andrews",
+     "retrievedAt": "2026-09-30T08:19:40.048Z",
+     "hash": "aa28759b906c95f0a2032761eb58d339272fe63e0007cabb90e70ae1783e4ba5"
     }
    ],
    "english": [],
@@ -2787,6 +2794,37 @@
      "durationYears": 6,
      "url": "https://www.st-andrews.ac.uk/subjects/medicine/medicine-bsc-a100/",
      "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s12",
+         "quote": "Standard entry grades: AAA including Chemistry and one of Biology, Mathematics or Physics"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "mathematics",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s12",
+         "quote": "Standard entry grades: AAA including Chemistry and one of Biology, Mathematics or Physics"
+        }
+       ],
+       "notesEn": "Minimum entry grades AAB with the same subjects; five GCSEs at grade A or 7 also required.",
+       "notesAr": "الحد الأدنى للدخول AAB بالمواد نفسها؛ ويُشترط أيضا خمس شهادات GCSE بدرجة A أو 7.",
+       "source": "s12",
+       "quote": "Standard entry grades: AAA including Chemistry and one of Biology, Mathematics or Physics"
+      },
       "IB": {
        "minimumPoints": 38,
        "subjects": [
@@ -3037,12 +3075,56 @@
      "title": "Entry Requirements for University of Warwick",
      "retrievedAt": "2026-09-30T07:58:13.437Z",
      "hash": "1be396da9b15e672d8160851ec8f83fe0dc5bd26713f919b358b43a32b8df9c7"
+    },
+    {
+     "id": "s3",
+     "url": "https://warwick.ac.uk/study/undergraduate/applying/english-language-requirements/",
+     "title": "English Language Requirements | The University of Warwick",
+     "retrievedAt": "2026-09-30T07:58:03.946Z",
+     "hash": "d17b7160d56998d90949c96a33fd4376c897118b3af6bd99439735fe6231c0fd"
+    },
+    {
+     "id": "s4",
+     "url": "https://warwick.ac.uk/study/undergraduate/courses/bsc-computer-science",
+     "title": "Computer Science BSc | The University of Warwick",
+     "retrievedAt": "2026-09-30T08:19:44.489Z",
+     "hash": "78d13f1658b5498c41466e101c05946a64b6060c914ee8e9817cad207c6e4c24"
+    },
+    {
+     "id": "s5",
+     "url": "https://warwick.ac.uk/study/undergraduate/courses/bsc-economics",
+     "title": "Economics BSc | The University of Warwick",
+     "retrievedAt": "2026-09-30T08:20:04.848Z",
+     "hash": "f84ca46a3b27c2d8817060d1b55e6a83293e9a70495841503ec53c5a8793e336"
+    },
+    {
+     "id": "s6",
+     "url": "https://warwick.ac.uk/study/undergraduate/courses/bsc-management",
+     "title": "Business and Management BSc | The University of Warwick",
+     "retrievedAt": "2026-09-30T08:20:00.755Z",
+     "hash": "ead127c5046400c038950dba4567980a4ceb2987fa7dd268c4d19393f468fcbd"
+    },
+    {
+     "id": "s7",
+     "url": "https://warwick.ac.uk/study/undergraduate/courses/bsc-mathematics",
+     "title": "Mathematics BSc | The University of Warwick",
+     "retrievedAt": "2026-09-30T08:20:08.162Z",
+     "hash": "37d32b79c3902429098cf57fd58d0317560f62fd26566879fde0c0a84605d13d"
     }
    ],
    "english": [],
    "tests": [],
    "deadlines": [],
-   "curriculumRules": {},
+   "curriculumRules": {
+    "AMERICAN": {
+     "accepted": true,
+     "notesEn": "The US High School Diploma alone is not typically sufficient for direct entry; APs (typically 4 or 5) are needed, otherwise the International Foundation Programme.",
+     "notesAr": "لا تكفي شهادة الثانوية الأمريكية وحدها عادة للقبول المباشر؛ يلزم اجتياز اختبارات AP (عادة 4 أو 5)، وإلا فالبرنامج التأسيسي الدولي.",
+     "source": "s4",
+     "quote": "The US High School Diploma alone is not typically considered sufficient for direct undergraduate entry.",
+     "subjects": []
+    }
+   },
    "additional": [
     {
      "kind": "ADMISSIONS_TEST",
@@ -3077,7 +3159,394 @@
      "quote": "All applicants must possess a minimum level of a pass at Grade C / Grade 4 or above in both GCSE English Language and Mathematics, or an equivalent qualification."
     }
    ],
-   "programs": []
+   "programs": [
+    {
+     "key": "warwick-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://warwick.ac.uk/study/undergraduate/courses/bsc-computer-science",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*A*A",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A*",
+         "source": "s4",
+         "quote": "A*A*A to include A* in Mathematics."
+        },
+        {
+         "type": "RECOMMENDED",
+         "keys": [
+          "further_mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s4",
+         "quote": "Further Maths is not essential, however it is a highly recommended subject choice for a student considering Computer Science at degree level."
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s4",
+       "quote": "A level typical offer A*A*A to include A* in Mathematics."
+      },
+      "IB": {
+       "minimumPoints": 39,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "7",
+         "source": "s4",
+         "quote": "39 with 7, 6, 6 in three Higher Level subjects to include 7 in Higher Level Mathematics ('Analysis and Approaches' only).",
+         "noteEn": "Analysis and Approaches only.",
+         "noteAr": "التحليل والمقاربات فقط."
+        }
+       ],
+       "source": "s4",
+       "quote": "39 with 7, 6, 6 in three Higher Level subjects to include 7 in Higher Level Mathematics ('Analysis and Approaches' only)."
+      },
+      "AMERICAN": {
+       "subjects": [],
+       "notesEn": "US High School Diploma alone is not typically enough; Warwick typically asks for 4 or 5 AP tests in separate subjects including subject requirements. Requirements are under review for 2027/28.",
+       "notesAr": "لا تكفي شهادة الثانوية الأمريكية وحدها عادة؛ إذ تطلب وارويك عادة 4 أو 5 اختبارات AP في مواد مختلفة تشمل المواد المطلوبة. المتطلبات قيد المراجعة لعام 2027/28.",
+       "source": "s4",
+       "quote": "For students who have completed the US High School Diploma, we would typically require a combination of 4 or 5 AP Tests in separate subjects including any subject requirements."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6,
+        "minComponent": 5.5,
+        "waiverNoteEn": "This course requires Band A. The band table on the English page is labelled for September 2026 entry.",
+        "waiverNoteAr": "يتطلب هذا البرنامج المستوى A. جدول المستويات في صفحة اللغة الإنجليزية مخصص للقبول في سبتمبر 2026.",
+        "source": "s3",
+        "quote": "Band A 6.0 including minimum 5.5 in each component"
+       }
+      ],
+      "tests": [
+       {
+        "test": "TMUA",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "The page wording refers to 2026-27 applicants; the threshold is set after all results are in.",
+        "noteAr": "تشير صياغة الصفحة إلى متقدمي 2026-27؛ ويُحدَّد الحد المطلوب بعد ورود جميع النتائج.",
+        "source": "s4",
+        "quote": "All 2026-27 applicants will be required to take TMUA except for applicants who are eligible for a Contextual Offer"
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English language: Band A.",
+        "noteAr": "اللغة الإنجليزية: المستوى A.",
+        "source": "s4",
+        "quote": "This course requires: Band A"
+       }
+      ],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "warwick-econ",
+     "status": "EXISTS",
+     "nameEn": "Economics BSc",
+     "nameAr": "بكالوريوس العلوم في الاقتصاد",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://warwick.ac.uk/study/undergraduate/courses/bsc-economics",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s5",
+         "quote": "A*AA including A in Mathematics"
+        }
+       ],
+       "notesEn": "GCSE English Language grade 6/B also required. High TMUA scorers may receive a reduced AAA offer.",
+       "notesAr": "يُشترط أيضا الحصول على 6/B في اللغة الإنجليزية GCSE. قد يحصل أصحاب الدرجات العالية في TMUA على عرض مخفّض AAA.",
+       "source": "s5",
+       "quote": "A level typical offer A*AA including A in Mathematics"
+      },
+      "IB": {
+       "minimumPoints": 38,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s5",
+         "quote": "38 including 6 in Higher Level Mathematics (either ‘Analysis and Approaches’ or ‘Applications and Interpretation’)."
+        }
+       ],
+       "source": "s5",
+       "quote": "38 including 6 in Higher Level Mathematics (either ‘Analysis and Approaches’ or ‘Applications and Interpretation’)."
+      },
+      "AMERICAN": {
+       "subjects": [],
+       "notesEn": "US High School Diploma alone is not typically enough; Warwick typically asks for 4 or 5 AP tests in separate subjects including subject requirements. Requirements are under review for 2027/28.",
+       "notesAr": "لا تكفي شهادة الثانوية الأمريكية وحدها عادة؛ إذ تطلب وارويك عادة 4 أو 5 اختبارات AP في مواد مختلفة تشمل المواد المطلوبة. المتطلبات قيد المراجعة لعام 2027/28.",
+       "source": "s5",
+       "quote": "For students who have completed the US High School Diploma, we would typically require a combination of 4 or 5 AP Tests in separate subjects including any subject requirements."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7,
+        "minComponent": 6.5,
+        "waiverNoteEn": "This course requires Band C. The band table on the English page is labelled for September 2026 entry.",
+        "waiverNoteAr": "يتطلب هذا البرنامج المستوى C. جدول المستويات في صفحة اللغة الإنجليزية مخصص للقبول في سبتمبر 2026.",
+        "source": "s3",
+        "quote": "Band C 7.0 including minimum 6.5 in each component"
+       }
+      ],
+      "tests": [
+       {
+        "test": "TMUA",
+        "policy": "OPTIONAL",
+        "minScore": null,
+        "noteEn": "Top TMUA scorers may get a reduced offer of AAA.",
+        "noteAr": "قد يحصل أصحاب أعلى الدرجات في TMUA على عرض مخفّض AAA.",
+        "source": "s5",
+        "quote": "Optionally, applicants are encouraged to sit the Test of Mathematics for University Admission (TMUA)."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English language: Band C.",
+        "noteAr": "اللغة الإنجليزية: المستوى C.",
+        "source": "s5",
+        "quote": "This course requires: Band C"
+       }
+      ],
+      "source": "s5"
+     },
+     "previous": null
+    },
+    {
+     "key": "warwick-management-bsc",
+     "status": "REPLACED",
+     "nameEn": "Business and Management BSc",
+     "nameAr": "بكالوريوس العلوم في الأعمال والإدارة",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://warwick.ac.uk/study/undergraduate/courses/bsc-management",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "FOUNDATION",
+         "minimumGrade": "7",
+         "source": "s6",
+         "quote": "You will need a grade 7/A in GCSE Mathematics and grade 6/B in GCSE English Language, or we may be able to consider grade 6/B in GCSE English Literature alongside grade 4/C in GCSE English Language."
+        }
+       ],
+       "notesEn": "GCSE Maths 7/A and GCSE English Language 6/B required.",
+       "notesAr": "يُشترط الحصول على 7/A في رياضيات GCSE و6/B في اللغة الإنجليزية GCSE.",
+       "source": "s6",
+       "quote": "A level typical offer A*AA A level additional information"
+      },
+      "IB": {
+       "minimumPoints": 38,
+       "subjects": [],
+       "notesEn": "No further Higher Level requirements.",
+       "notesAr": "لا توجد متطلبات إضافية للمستوى العالي.",
+       "source": "s6",
+       "quote": "38. There are no further Higher Level requirements for this course."
+      },
+      "AMERICAN": {
+       "subjects": [],
+       "notesEn": "US High School Diploma alone is not typically enough; Warwick typically asks for 4 or 5 AP tests in separate subjects including subject requirements. Requirements are under review for 2027/28.",
+       "notesAr": "لا تكفي شهادة الثانوية الأمريكية وحدها عادة؛ إذ تطلب وارويك عادة 4 أو 5 اختبارات AP في مواد مختلفة تشمل المواد المطلوبة. المتطلبات قيد المراجعة لعام 2027/28.",
+       "source": "s6",
+       "quote": "For students who have completed the US High School Diploma, we would typically require a combination of 4 or 5 AP Tests in separate subjects including any subject requirements."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7,
+        "minComponent": 6.5,
+        "waiverNoteEn": "This course requires Band C. The band table on the English page is labelled for September 2026 entry.",
+        "waiverNoteAr": "يتطلب هذا البرنامج المستوى C. جدول المستويات في صفحة اللغة الإنجليزية مخصص للقبول في سبتمبر 2026.",
+        "source": "s3",
+        "quote": "Band C 7.0 including minimum 6.5 in each component"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English language: Band C.",
+        "noteAr": "اللغة الإنجليزية: المستوى C.",
+        "source": "s6",
+        "quote": "This course requires: Band C"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "The Management URL now leads to the BSc Business and Management page (UCAS N200).",
+        "noteAr": "يؤدي رابط الإدارة الآن إلى صفحة بكالوريوس الأعمال والإدارة (UCAS N200).",
+        "source": "s6",
+        "quote": "Business and Management BSc UCAS course code N200"
+       }
+      ],
+      "source": "s6"
+     },
+     "previous": null
+    },
+    {
+     "key": "warwick-math",
+     "status": "EXISTS",
+     "nameEn": "Mathematics BSc",
+     "nameAr": "بكالوريوس العلوم في الرياضيات",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://warwick.ac.uk/study/undergraduate/courses/bsc-mathematics",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": null,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A*",
+         "source": "s7",
+         "quote": "A*A* in Maths and Further Maths, plus A in a third subject at A level"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "further_mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A*",
+         "source": "s7",
+         "quote": "A*A* in Maths and Further Maths, plus A in a third subject at A level"
+        }
+       ],
+       "notesEn": "A* in Mathematics and A* in Further Mathematics, plus A in a third subject (A*A*A overall).",
+       "notesAr": "A* في الرياضيات وA* في الرياضيات الإضافية، مع A في مادة ثالثة (A*A*A إجمالا).",
+       "source": "s7",
+       "quote": "A*A* in Maths and Further Maths, plus A in a third subject at A level"
+      },
+      "IB": {
+       "minimumPoints": 39,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s7",
+         "quote": "39 with 6 in three Higher Level subjects to include Mathematics ('Analysis and Approaches' only)",
+         "noteEn": "Analysis and Approaches only.",
+         "noteAr": "التحليل والمقاربات فقط."
+        }
+       ],
+       "source": "s7",
+       "quote": "39 with 6 in three Higher Level subjects to include Mathematics ('Analysis and Approaches' only)"
+      },
+      "AMERICAN": {
+       "subjects": [],
+       "notesEn": "US High School Diploma alone is not typically enough; Warwick typically asks for 4 or 5 AP tests in separate subjects including subject requirements. Requirements are under review for 2027/28.",
+       "notesAr": "لا تكفي شهادة الثانوية الأمريكية وحدها عادة؛ إذ تطلب وارويك عادة 4 أو 5 اختبارات AP في مواد مختلفة تشمل المواد المطلوبة. المتطلبات قيد المراجعة لعام 2027/28.",
+       "source": "s7",
+       "quote": "For students who have completed the US High School Diploma, we would typically require a combination of 4 or 5 AP Tests in separate subjects including any subject requirements."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6,
+        "minComponent": 5.5,
+        "waiverNoteEn": "This course requires Band A. The band table on the English page is labelled for September 2026 entry.",
+        "waiverNoteAr": "يتطلب هذا البرنامج المستوى A. جدول المستويات في صفحة اللغة الإنجليزية مخصص للقبول في سبتمبر 2026.",
+        "source": "s3",
+        "quote": "Band A 6.0 including minimum 5.5 in each component"
+       }
+      ],
+      "tests": [
+       {
+        "test": "TMUA",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s7",
+        "quote": "All applicants will typically be required to take TMUA except for applicants who are eligible for a Contextual Offer"
+       },
+       {
+        "test": "STEP",
+        "policy": "OPTIONAL",
+        "minScore": null,
+        "noteEn": "Alternative to TMUA: STEP grade 2 becomes an offer condition.",
+        "noteAr": "بديل عن TMUA: تصبح الدرجة 2 في STEP شرطا في العرض.",
+        "source": "s7",
+        "quote": "Grade 2 in STEP will be a requirement of offer to applicants who have not taken TMUA."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English language: Band A.",
+        "noteAr": "اللغة الإنجليزية: المستوى A.",
+        "source": "s7",
+        "quote": "This course requires: Band A"
+       }
+      ],
+      "source": "s7"
+     },
+     "previous": null
+    }
+   ]
   }
  ]
 }

@@ -120,7 +120,7 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
                 <li key={r.id} className="grid gap-2 py-3 md:grid-cols-3 md:gap-3">
                   <blockquote className="flex gap-2 rounded-md bg-muted/60 p-2 text-sm" dir="ltr">
                     <Quote className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
-                    <span className="break-words">{r.quote}</span>
+                    <span className="break-words" dir="auto">{r.quote}</span>
                   </blockquote>
                   <div className="text-sm font-medium">
                     <span className="me-1 text-xs font-normal text-muted-foreground md:hidden">{t("review.proposed")}:</span>
@@ -168,7 +168,7 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
                   </span>
                 </div>
                 {r.evidenceQuote && (
-                  <blockquote className="rounded-md bg-muted/60 p-2 text-xs" dir="ltr">
+                  <blockquote className="rounded-md bg-muted/60 p-2 text-xs" dir="auto">
                     {r.evidenceQuote}
                   </blockquote>
                 )}

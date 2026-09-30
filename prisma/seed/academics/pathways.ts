@@ -61,10 +61,11 @@ export async function seedPathwaysFor(db: PrismaClient, orgId: string, now = new
     const hasShortlist = await db.shortlistEntry.count({ where: { orgId, studentId: adam.id } });
     if (!hasShortlist) {
       const keys: Array<[string, number]> = [
-        ["ucl-computer-science-bsc", 40],
-        ["imperial-computing-beng", 32],
-        ["uoft-computer-science-bsc", 21],
-        ["lse-economics-bsc", 12],
+        // Programmes whose official pages state requirements for American-curriculum applicants.
+        ["mit-computer-science-sb", 40],
+        ["imperial-college-london-ai", 32],
+        ["mcgill-cs", 21],
+        ["georgia-tech-cs", 12],
       ];
       for (const [key, daysAgo] of keys) {
         const p = await db.universityProgram.findFirst({ where: { orgId: null, key } });

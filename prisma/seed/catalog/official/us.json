@@ -1,6 +1,6 @@
 {
  "batch": "us",
- "assembledAt": "2026-09-30T08:18:19.239Z",
+ "assembledAt": "2026-09-30T08:32:58.568Z",
  "universities": [
   {
    "key": "carnegie_mellon",
@@ -1169,10 +1169,89 @@
      "title": "International First-Year Admission | Undergraduate Admission",
      "retrievedAt": "2026-09-30T07:59:26.700Z",
      "hash": "49dfeb7f283a1ab0f025bc0f7776bd58b75526b7820ae05aed1d037f0b4109cd"
+    },
+    {
+     "id": "s7",
+     "url": "https://admission.gatech.edu/first-year/standardized-tests",
+     "title": "Standardized Tests | Undergraduate Admission",
+     "retrievedAt": "2026-09-30T08:19:51.842Z",
+     "hash": "78dddf49d0f0fdf2cd09e6e9ca56f720e2d72a6fe8528a9dbc37065932fdee41"
+    },
+    {
+     "id": "s8",
+     "url": "https://www.usg.edu/international_education/esl_programs/english_proficiency_requirements",
+     "title": "USG English Proficiency Requirements | University System of Georgia",
+     "retrievedAt": "2026-09-30T08:19:56.159Z",
+     "hash": "a29a758b41481bdb6fe190618193af0d86760c7c8942040ac458b71b5e8dbec0"
     }
    ],
-   "english": [],
-   "tests": [],
+   "english": [
+    {
+     "test": "TOEFL",
+     "minOverall": 3.5,
+     "minComponent": null,
+     "waiverNoteEn": "New TOEFL scale; 4.0 recommended. University System of Georgia minimum, which Georgia Tech applies to international applicants; institutions may set higher scores. Waived after academic instruction in English where English is the official language of instruction.",
+     "waiverNoteAr": "مقياس TOEFL الجديد، ويوصى بدرجة 4.0. الحد الأدنى لنظام جامعات جورجيا الذي تطبقه جورجيا تك على المتقدمين الدوليين، ويحق للمؤسسات اشتراط درجات أعلى. ويعفى من درس بالإنجليزية حيث تكون لغة التدريس الرسمية.",
+     "source": "s8",
+     "quote": "TOEFL iBT (includes Home Edition & My Best) | 3.5 (69 if taken prior to 2026) | 4.0 (79 if taken prior to 2026) |"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 69,
+     "minComponent": null,
+     "waiverNoteEn": "TOEFL taken before 2026; 79 recommended. University System of Georgia minimum, which Georgia Tech applies to international applicants; institutions may set higher scores. Waived after academic instruction in English where English is the official language of instruction.",
+     "waiverNoteAr": "اختبار TOEFL قبل 2026، ويوصى بدرجة 79. الحد الأدنى لنظام جامعات جورجيا الذي تطبقه جورجيا تك على المتقدمين الدوليين، ويحق للمؤسسات اشتراط درجات أعلى. ويعفى من درس بالإنجليزية حيث تكون لغة التدريس الرسمية.",
+     "source": "s8",
+     "quote": "TOEFL iBT (includes Home Edition & My Best) | 3.5 (69 if taken prior to 2026) | 4.0 (79 if taken prior to 2026) |"
+    },
+    {
+     "test": "IELTS",
+     "minOverall": 6,
+     "minComponent": null,
+     "waiverNoteEn": "6.5 recommended. University System of Georgia minimum, which Georgia Tech applies to international applicants; institutions may set higher scores. Waived after academic instruction in English where English is the official language of instruction.",
+     "waiverNoteAr": "يوصى بدرجة 6.5. الحد الأدنى لنظام جامعات جورجيا الذي تطبقه جورجيا تك على المتقدمين الدوليين، ويحق للمؤسسات اشتراط درجات أعلى. ويعفى من درس بالإنجليزية حيث تكون لغة التدريس الرسمية.",
+     "source": "s8",
+     "quote": "IELTS Academic (including IELTS Online and One Skill Retake) | 6 | 6.5 |"
+    },
+    {
+     "test": "PTE",
+     "minOverall": 53,
+     "minComponent": null,
+     "waiverNoteEn": "58 recommended. University System of Georgia minimum, which Georgia Tech applies to international applicants; institutions may set higher scores. Waived after academic instruction in English where English is the official language of instruction.",
+     "waiverNoteAr": "يوصى بدرجة 58. الحد الأدنى لنظام جامعات جورجيا الذي تطبقه جورجيا تك على المتقدمين الدوليين، ويحق للمؤسسات اشتراط درجات أعلى. ويعفى من درس بالإنجليزية حيث تكون لغة التدريس الرسمية.",
+     "source": "s8",
+     "quote": "Pearson (PTE) Academic (conventional and online) | 53 | 58 |"
+    },
+    {
+     "test": "CAMBRIDGE",
+     "minOverall": 169,
+     "minComponent": null,
+     "waiverNoteEn": "Cambridge English Scale (B2 First, C1 Advanced or C2 Proficiency); 177 recommended. University System of Georgia minimum, which Georgia Tech applies to international applicants; institutions may set higher scores. Waived after academic instruction in English where English is the official language of instruction.",
+     "waiverNoteAr": "مقياس كامبريدج (B2 First أو C1 Advanced أو C2 Proficiency)، ويوصى بدرجة 177. الحد الأدنى لنظام جامعات جورجيا الذي تطبقه جورجيا تك على المتقدمين الدوليين، ويحق للمؤسسات اشتراط درجات أعلى. ويعفى من درس بالإنجليزية حيث تكون لغة التدريس الرسمية.",
+     "source": "s8",
+     "quote": "Cambridge English Scale Score - which can be demonstrated in B2 First (First Certificate in English -FCE), C1 Advanced (Certificate in Advanced English - CAE) or C2 Proficiency (Certificate of Proficiency in English - CPE) | 169 | 177 |"
+    }
+   ],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "At least one SAT or ACT is required; AP, IB, A-level and CLT are optional.",
+     "noteAr": "يشترط تقديم نتيجة SAT أو ACT واحدة على الأقل، أما AP والبكالوريا الدولية وA-level وCLT فاختيارية.",
+     "source": "s7",
+     "quote": "All first-year applicants must submit results from at least one SAT and/or ACT in order to be considered for admission."
+    },
+    {
+     "test": "ACT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "At least one SAT or ACT is required; AP, IB, A-level and CLT are optional.",
+     "noteAr": "يشترط تقديم نتيجة SAT أو ACT واحدة على الأقل، أما AP والبكالوريا الدولية وA-level وCLT فاختيارية.",
+     "source": "s7",
+     "quote": "All first-year applicants must submit results from at least one SAT and/or ACT in order to be considered for admission."
+    }
+   ],
    "additional": [
     {
      "kind": "OTHER",
@@ -2209,6 +2288,13 @@
      "hash": "8ff9711f5014080b8d62ddfc4fc1f2255e42886c2d0c58a60324877c5b618d5c",
      "waybackTimestamp": "20251208214822",
      "waybackHash": "15507731d5ee14ee05ac1b6f5c0d3a5b43653852b874877c47de8a97ff798a47"
+    },
+    {
+     "id": "n8",
+     "url": "https://catalog.northeastern.edu/undergraduate/computer-information-science/data-science/",
+     "title": "Data Science < Northeastern University Academic Catalog",
+     "retrievedAt": "2026-09-30T08:20:00.897Z",
+     "hash": "88b71f2897516c240d2c472a2dd0e684e1ea35280395d20cd4b3d39342e6d185"
     }
    ],
    "english": [],
@@ -2351,6 +2437,33 @@
       "source": "n7"
      },
      "previous": null
+    },
+    {
+     "key": "northeastern-ds",
+     "status": "REPLACED",
+     "nameEn": "Artificial Intelligence BS",
+     "nameAr": "بكالوريوس العلوم في الذكاء الاصطناعي",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://catalog.northeastern.edu/undergraduate/computer-information-science/data-science/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "The catalog's Data Science area now lists the Artificial Intelligence, BS (Boston) as its bachelor's major; no standalone Data Science BS is listed there.",
+        "noteAr": "يدرج قسم علوم البيانات في الدليل الآن بكالوريوس الذكاء الاصطناعي (بوسطن) كتخصص البكالوريوس الوحيد فيه، ولا يدرج بكالوريوس مستقل في علوم البيانات.",
+        "source": "n8",
+        "quote": "The data science and artificial intelligence field focuses on the foundations of machine learning and modern data-driven methods."
+       }
+      ],
+      "source": "n8"
+     },
+     "previous": null
     }
    ]
   },
@@ -2395,9 +2508,53 @@
      "title": "Purdue University Application Guide",
      "retrievedAt": "2026-09-30T07:59:29.239Z",
      "hash": "493355aecf0829f891fff8e0b0920040323f05299edf30c951a10893509aa43a"
+    },
+    {
+     "id": "p6",
+     "url": "https://admissions.purdue.edu/become-student/english-proficiency/",
+     "title": "Purdue University - English Proficiency Requirements - Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T08:20:22.549Z",
+     "hash": "d08974496e30f0f1c46ff815d7a7b5480d874ce3a917b3cd78bce9be47099bc6"
     }
    ],
-   "english": [],
+   "english": [
+    {
+     "test": "TOEFL",
+     "minOverall": 88,
+     "minComponent": 20,
+     "waiverNoteEn": "120-point TOEFL scale. Required from international applicants whose native language is not English; scores must be from the past two years.",
+     "waiverNoteAr": "مقياس TOEFL من 120 نقطة. مطلوب من المتقدمين الدوليين الذين ليست الإنجليزية لغتهم الأم، ويجب ألا يزيد عمر النتيجة على سنتين.",
+     "source": "p6",
+     "quote": "We require a minimum TOEFL iBT score of 88 or higher with at least a 20 or higher per section."
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 4.5,
+     "minComponent": 4,
+     "waiverNoteEn": "New 6-point TOEFL scale. Required from international applicants whose native language is not English; scores must be from the past two years.",
+     "waiverNoteAr": "مقياس TOEFL الجديد من 6 نقاط. مطلوب من المتقدمين الدوليين الذين ليست الإنجليزية لغتهم الأم، ويجب ألا يزيد عمر النتيجة على سنتين.",
+     "source": "p6",
+     "quote": "We require a minimum TOEFL iBT score of 4.5 or higher with at least a 4.0 in each section."
+    },
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": "Typical overall score; 6.0 minimum per section. Required from international applicants whose native language is not English; scores must be from the past two years.",
+     "waiverNoteAr": "الدرجة الإجمالية المعتادة، و6.0 حد أدنى لكل قسم. مطلوب من المتقدمين الدوليين الذين ليست الإنجليزية لغتهم الأم، ويجب ألا يزيد عمر النتيجة على سنتين.",
+     "source": "p6",
+     "quote": "Generally, applicants have a score of 6.5 or higher with a minimum score of 6.0 in each section."
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 115,
+     "minComponent": 110,
+     "waiverNoteEn": "Typical overall score; 110 or higher in each subscore. Required from international applicants whose native language is not English; scores must be from the past two years.",
+     "waiverNoteAr": "الدرجة الإجمالية المعتادة، و110 أو أعلى في كل درجة فرعية. مطلوب من المتقدمين الدوليين الذين ليست الإنجليزية لغتهم الأم، ويجب ألا يزيد عمر النتيجة على سنتين.",
+     "source": "p6",
+     "quote": "Generally, applicants have a 115 with a 110 or higher in all individual subscores."
+    }
+   ],
    "tests": [
     {
      "test": "SAT",
@@ -3530,6 +3687,20 @@
      "title": "International Students - University of Texas Admissions",
      "retrievedAt": "2026-09-30T07:59:27.989Z",
      "hash": "dd092bcebdead27e30a4ac8776e80c46a63428991bf2dfe7572c084a403e24be"
+    },
+    {
+     "id": "t4",
+     "url": "https://www.cs.utexas.edu/undergraduate/core-degrees",
+     "title": "Core Computer Science Degrees | UT Austin Computer Science",
+     "retrievedAt": "2026-09-30T08:20:05.761Z",
+     "hash": "cfcedb404abb27d2506bc26ff39652ed0bd4ecc5738f55140c02d5e965dcf99f"
+    },
+    {
+     "id": "t5",
+     "url": "https://ece.utexas.edu/academics/undergraduate/curriculum",
+     "title": "Curriculum | Texas ECE - Electrical & Computer Engineering at UT Austin",
+     "retrievedAt": "2026-09-30T08:20:18.286Z",
+     "hash": "bd5277d08d525487d84b5bf87f5b6726b044bc8246b4c86b315e51bf247adf12"
     }
    ],
    "english": [
@@ -3681,7 +3852,62 @@
      ]
     }
    },
-   "programs": []
+   "programs": [
+    {
+     "key": "ut-austin-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BS",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://www.cs.utexas.edu/undergraduate/core-degrees",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Bachelor of Science in Computer Science, emphasising advanced mathematics, science and computer science (a BSA option also exists). Applicants must show calculus readiness.",
+        "noteAr": "يركز بكالوريوس العلوم في علوم الحاسوب على الرياضيات المتقدمة والعلوم وعلوم الحاسوب (ويوجد أيضا خيار بكالوريوس العلوم والآداب). ويجب على المتقدمين إثبات الجاهزية للتفاضل والتكامل.",
+        "source": "t4",
+        "quote": "Bachelor of Science (BS) The BS in Computer Science emphasizes advanced mathematics, science and computer science"
+       }
+      ],
+      "source": "t4"
+     },
+     "previous": null
+    },
+    {
+     "key": "ut-austin-ee",
+     "status": "REPLACED",
+     "nameEn": "Electrical and Computer Engineering (Bachelor's degree)",
+     "nameAr": "الهندسة الكهربائية وهندسة الحاسوب (درجة البكالوريوس)",
+     "degree": null,
+     "durationYears": null,
+     "url": "https://ece.utexas.edu/academics/undergraduate/curriculum",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "The page names the award only as \"Bachelor's degrees in Electrical and Computer Engineering\" (ABET-accredited, from fall 2022); the exact award abbreviation is not stated.",
+        "noteAr": "تذكر الصفحة الدرجة فقط باسم \"درجات البكالوريوس في الهندسة الكهربائية وهندسة الحاسوب\" (معتمدة من ABET اعتبارا من خريف 2022)، ولا تذكر اختصار الدرجة بدقة.",
+        "source": "t5",
+        "quote": "The Chandra Family Department of Electrical and Computer Engineering offers ABET-accredited Bachelor's degrees in Electrical and Computer Engineering (Effective Fall 2022: 2022-2024 catalogs and beyond)."
+       }
+      ],
+      "source": "t5"
+     },
+     "previous": null
+    }
+   ]
   },
   {
    "key": "uw_seattle",
@@ -3964,6 +4190,20 @@
      "title": "Bachelor of Science | NYU Tandon School of Engineering",
      "retrievedAt": "2026-09-30T08:00:07.969Z",
      "hash": "ae340d49ffb4e876b586709a6a8c2128cbf8d58a0ec555a241f5033bbcde30a7"
+    },
+    {
+     "id": "y3",
+     "url": "https://engineering.nyu.edu/academics/programs/computer-science-bs",
+     "title": "Computer Science, B.S. | NYU Tandon School of Engineering",
+     "retrievedAt": "2026-09-30T08:19:51.030Z",
+     "hash": "70906a3d164266919dc44b14460aa1f8c0d9d86eba2a895b1ec8833e9704e389"
+    },
+    {
+     "id": "y4",
+     "url": "https://www.stern.nyu.edu/programs-admissions/undergraduate/academics/bs-degree-business",
+     "title": "BS Degree in Business - NYU Stern",
+     "retrievedAt": "2026-09-30T08:20:30.010Z",
+     "hash": "b7f4000610a3a7c9dd083f56af5cd658e31857ee10606050044c2e7b6c9aba2e"
     }
    ],
    "english": [],
@@ -3979,7 +4219,7 @@
      "nameAr": "بكالوريوس العلوم في الأعمال",
      "degree": "BS",
      "durationYears": null,
-     "url": "https://www.stern.nyu.edu/programs-admissions/undergraduate",
+     "url": "https://www.stern.nyu.edu/programs-admissions/undergraduate/academics/bs-degree-business",
      "curricula": {},
      "general": {
       "subjects": [],
@@ -4006,7 +4246,7 @@
      "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
      "degree": "BS",
      "durationYears": null,
-     "url": "https://engineering.nyu.edu/academics/programs/bachelor-science",
+     "url": "https://engineering.nyu.edu/academics/programs/computer-science-bs",
      "curricula": {},
      "general": {
       "subjects": [],

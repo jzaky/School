@@ -1,6 +1,6 @@
 {
  "batch": "uk1",
- "assembledAt": "2026-09-30T08:18:18.918Z",
+ "assembledAt": "2026-09-30T08:32:58.279Z",
  "universities": [
   {
    "key": "bath",
@@ -4373,9 +4373,33 @@
      "title": "University of Glasgow - Undergraduate study - How to apply for an undergraduate degree - Entry requirements - 2026 Admissions guidance",
      "retrievedAt": "2026-09-30T07:58:00.573Z",
      "hash": "b3e0334b45cafc811359a9f83fc10b3aae40e4024ba89472532e10dba362cf22"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.gla.ac.uk/undergraduate/degrees/computingscience/",
+     "title": "University of Glasgow - Undergraduate study - 2027 Degree programmes A‑Z - Computing Science",
+     "retrievedAt": "2026-09-30T08:19:34.047Z",
+     "hash": "802db2fa91884d4464657829992a6e5bc4dfaa3dee7b7f3a47c77baa6e071fc8"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.gla.ac.uk/undergraduate/degrees/medicine/",
+     "title": "University of Glasgow - Undergraduate study - 2027 Degree programmes A‑Z - Medicine",
+     "retrievedAt": "2026-09-30T08:19:39.036Z",
+     "hash": "be330484dee8fb87829ac7d401c6ab8b8cf065dfa1c6058320db8709d111650d"
     }
    ],
-   "english": [],
+   "english": [
+    {
+     "test": "OTHER",
+     "minOverall": 80,
+     "minComponent": null,
+     "waiverNoteEn": "CBSE or ISC English at 80% is accepted as an English language qualification.",
+     "waiverNoteAr": "تقبل درجة 80% في الإنجليزية ضمن CBSE أو ISC كمؤهل للغة الإنجليزية.",
+     "source": "s2",
+     "quote": "India: Central Board of Secondary Education (CBSE) / All India School Certificate (ISC) English at 80%"
+    }
+   ],
    "tests": [],
    "additional": [
     {
@@ -4396,6 +4420,15 @@
      "labelAr": "الموعد النهائي عبر UCAS",
      "source": "s1",
      "quote": "The deadline for submitting your application is stated in the How to apply section of the relevant subject page. The UCAS deadline is 13 January 2027 18:00 (UK time)."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_OXBRIDGE_MEDICINE",
+     "date": "2026-10-15",
+     "labelEn": "UCAS deadline for Medicine",
+     "labelAr": "الموعد النهائي عبر UCAS للطب",
+     "source": "s3",
+     "quote": "15 October: if including Dentistry, Medicine, Veterinary Medicine or also applying to Oxford or Cambridge"
     }
    ],
    "curriculumRules": {
@@ -4421,7 +4454,226 @@
      "quote": "We do accept many national school qualifications, including many European, SAT & AP if applying from the USA, and CICSE or CBSE if applying from India. A range of Foundation programmes are also available via Glasgow International College."
     }
    },
-   "programs": []
+   "programs": [
+    {
+     "key": "glasgow-cs",
+     "status": "EXISTS",
+     "nameEn": "Computing Science BSc (G400)",
+     "nameAr": "بكالوريوس العلوم في علوم الحوسبة",
+     "degree": "BSc",
+     "durationYears": 4,
+     "url": "https://www.gla.ac.uk/undergraduate/degrees/computingscience/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAB",
+       "notesEn": "Standard entry range AAA to AAB.",
+       "notesAr": "نطاق القبول القياسي من AAA إلى AAB.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s2",
+         "quote": "Additional requirements: A-level Mathematics."
+        }
+       ],
+       "source": "s2",
+       "quote": "A-level standard entry requirements AAA - AAB"
+      },
+      "IB": {
+       "minimumPoints": 38,
+       "notesEn": "38 points with 6,6,6 at Higher Level.",
+       "notesAr": "38 نقطة مع 6،6،6 في المستوى العالي.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s2",
+         "quote": "Additional requirements: HL6 Mathematics (Analysis & Approaches)."
+        }
+       ],
+       "source": "s2",
+       "quote": "IB standard entry requirements 38 (6,6,6)"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s2",
+        "quote": "International English Language Testing System (IELTS) Academic and Academic Online (not General Training) 6.5 with no subtests under 6.0"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 92,
+        "minComponent": null,
+        "waiverNoteEn": "Tests from 21 January 2026 (subtests: Reading 22, Listening 20, Speaking 23, Writing 21).",
+        "waiverNoteAr": "للاختبارات منذ 21 يناير 2026 (المهارات: القراءة 22، الاستماع 20، التحدث 23، الكتابة 21).",
+        "source": "s2",
+        "quote": "Tests taken from 21 January 2026 92 Overall, no subtest lower than Reading 22; Listening 20; Speaking 23; Writing 21"
+       },
+       {
+        "test": "PTE",
+        "minOverall": 59,
+        "minComponent": 59,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s2",
+        "quote": "Pearsons PTE Academic 59 with minimum 59 in all subtests"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "glasgow-med",
+     "status": "EXISTS",
+     "nameEn": "Medicine MBChB (A100)",
+     "nameAr": "بكالوريوس الطب والجراحة (MBChB)",
+     "degree": "MBChB",
+     "durationYears": 5,
+     "url": "https://www.gla.ac.uk/undergraduate/degrees/medicine/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "notesEn": "International A-level route: Chemistry, Biology and one of Physics or Mathematics; IGCSE English at B or 6. Re-sits not permitted.",
+       "notesAr": "مسار A-level الدولي: الكيمياء والأحياء وواحدة من الفيزياء أو الرياضيات؛ والإنجليزية في IGCSE بدرجة B أو 6. لا تسمح بإعادة الامتحانات.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s3",
+         "quote": "International A-level Standard Entry Requirements AAA Additional requirements: A-levels Chemistry, Biology and one of either Physics or Mathematics. IGCSE English literature or English language at Grade B or 6. UCAT (www.ucat.ac.uk for more information). Interview."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s3",
+         "quote": "International A-level Standard Entry Requirements AAA Additional requirements: A-levels Chemistry, Biology and one of either Physics or Mathematics. IGCSE English literature or English language at Grade B or 6. UCAT (www.ucat.ac.uk for more information). Interview."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "physics",
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s3",
+         "quote": "International A-level Standard Entry Requirements AAA Additional requirements: A-levels Chemistry, Biology and one of either Physics or Mathematics. IGCSE English literature or English language at Grade B or 6. UCAT (www.ucat.ac.uk for more information). Interview."
+        }
+       ],
+       "source": "s3",
+       "quote": "International A-level Standard Entry Requirements AAA Additional requirements: A-levels Chemistry, Biology and one of either Physics or Mathematics. IGCSE English literature or English language at Grade B or 6. UCAT (www.ucat.ac.uk for more information). Interview."
+      },
+      "IB": {
+       "minimumPoints": 38,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "HIGHER",
+         "source": "s3",
+         "quote": "Additional requirements: HL subjects Chemistry and Biology, SL Physics or Mathematics at 6 (HL recommended) SL English at 6. UCAT (www.ucat.ac.uk for more information). Interview."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "HIGHER",
+         "source": "s3",
+         "quote": "Additional requirements: HL subjects Chemistry and Biology, SL Physics or Mathematics at 6 (HL recommended) SL English at 6. UCAT (www.ucat.ac.uk for more information). Interview."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "physics",
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": "6",
+         "source": "s3",
+         "quote": "Additional requirements: HL subjects Chemistry and Biology, SL Physics or Mathematics at 6 (HL recommended) SL English at 6. UCAT (www.ucat.ac.uk for more information). Interview."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "english_language"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": "6",
+         "source": "s3",
+         "quote": "Additional requirements: HL subjects Chemistry and Biology, SL Physics or Mathematics at 6 (HL recommended) SL English at 6. UCAT (www.ucat.ac.uk for more information). Interview."
+        }
+       ],
+       "source": "s3",
+       "quote": "IB Standard Entry Requirements 38 (6,6,6 HL)"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7,
+        "minComponent": 7,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s3",
+        "quote": "International English Language Testing System (IELTS) Academic module (not General Training) 7.0 with no sub-test under 7.0"
+       }
+      ],
+      "tests": [
+       {
+        "test": "UCAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "UCAT required.",
+        "noteAr": "اختبار UCAT مطلوب.",
+        "source": "s3",
+        "quote": "International A-level Standard Entry Requirements AAA Additional requirements: A-levels Chemistry, Biology and one of either Physics or Mathematics. IGCSE English literature or English language at Grade B or 6. UCAT (www.ucat.ac.uk for more information). Interview."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "About 1,100 applicants are interviewed; offers follow interview.",
+        "noteAr": "تجرى مقابلات لنحو 1100 متقدم؛ وتصدر العروض بعد المقابلة.",
+        "source": "s3",
+        "quote": "You may be invited to attend an interview."
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    }
+   ]
   },
   {
    "key": "lse",
@@ -4434,6 +4686,41 @@
      "title": "How to apply",
      "retrievedAt": "2026-09-30T07:57:57.416Z",
      "hash": "3f9b686ae3a3538b49864a64cc2a68d5d4db332b500695faa4ca9cd2a8910d64"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.lse.ac.uk/study-at-lse/international-students/country-pages/united-arab-emirates",
+     "title": "LSE for Emirati students | Study, funding, careers, support - LSE",
+     "retrievedAt": "2026-09-30T08:19:41.186Z",
+     "hash": "c5a02e8eccc6d1d8c8a9df9fa04cf54571dc612f0fcc36ec1d7d9426a79dc988"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.lse.ac.uk/study-at-lse/international-students/country-pages/jordan",
+     "title": "LSE for Jordanian students | Study, funding, careers, support - LSE",
+     "retrievedAt": "2026-09-30T08:19:53.672Z",
+     "hash": "f32453fa90a18c358ee91d03e3bb6ebaed8d13fe9d94a66a001d9c803ebafdfa"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.lse.ac.uk/study-at-lse/international-students/country-pages/united-states-of-america",
+     "title": "LSE for American students | Study, funding, careers, support - LSE",
+     "retrievedAt": "2026-09-30T08:19:57.261Z",
+     "hash": "d4cfeece3a396b957e6b7c1064fb17d05bdedfc4dffb0220dc814b5406b2b713"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.lse.ac.uk/study-at-lse/international-students/country-pages/india",
+     "title": "LSE for Indian students | Study, funding, careers, support - LSE",
+     "retrievedAt": "2026-09-30T08:19:37.267Z",
+     "hash": "4fb805a666f57f5337621ad2f95e894ac69a6eea159aca54e65800a0a8877e7d"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.lse.ac.uk/study-at-lse/Undergraduate/Prospective-Students/How-to-Apply/Entry-Requirements",
+     "title": "Entry requirements",
+     "retrievedAt": "2026-09-30T08:19:40.056Z",
+     "hash": "0d02f88f1f94ffc52e6924b0ec594ea49ca74ae3f00e3b0e9f7e271c9d8dd40d"
     }
    ],
    "english": [],
@@ -4450,7 +4737,54 @@
      "quote": "The last date for the receipt of applications to LSE to qualify for full and equal consideration is 13 January 2027, 18.00 (GMT)."
     }
    ],
-   "curriculumRules": {},
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "UAE school-leaving qualifications are not accepted for entry; A-levels, IB or another accepted international qualification is needed.",
+     "notesAr": "لا تقبل شهادات إتمام الدراسة الثانوية الإماراتية للالتحاق؛ يلزم A-levels أو البكالوريا الدولية أو مؤهل دولي مقبول آخر.",
+     "source": "s2",
+     "quote": "The United Arab Emirates school-leaving qualifications aren't acceptable as an entry qualification for LSE."
+    },
+    "JORDAN_TAWJIHI": {
+     "accepted": false,
+     "notesEn": "Jordanian Tawjihi is not accepted for entry.",
+     "notesAr": "لا يقبل التوجيهي الأردني للالتحاق.",
+     "source": "s3",
+     "quote": "The Jordan Certificate of General Secondary Education and the Certificate of Vocational Secondary Education aren't acceptable as an entry qualification for LSE."
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "minimumGPA": null,
+     "notesEn": "For AAB programmes: three APs at 5 and two at 4 with GPA 3.7, or GPA 3.7 with ACT 30+ or SAT 1400+. For A*AA/AAA: five APs at 5 with GPA 3.7, or GPA 3.7 with ACT 32+ or SAT 1450+. AP Calculus BC at 5 where Mathematics is required.",
+     "notesAr": "لبرامج AAB: ثلاثة اختبارات AP بدرجة 5 واثنان بدرجة 4 مع معدل 3.7، أو معدل 3.7 مع ACT بدرجة 30 فأكثر أو SAT بدرجة 1400 فأكثر. لبرامج A*AA/AAA: خمسة اختبارات AP بدرجة 5 مع معدل 3.7، أو معدل 3.7 مع ACT بدرجة 32 فأكثر أو SAT بدرجة 1450 فأكثر. ويشترط AP Calculus BC بدرجة 5 عند اشتراط الرياضيات.",
+     "source": "s4",
+     "quote": "Below we have listed our various A level grade requirements and their equivalency in the Advanced Placement (AP) and SAT/ACT tests. Please note that the US High School Diploma by itself isn't sufficient for entry to LSE."
+    },
+    "CBSE": {
+     "accepted": true,
+     "minimumPercent": 85,
+     "notesEn": "CBSE and CISCE only. AAA = 90% average with 5 subjects at 90%; A*AA = 95% average. Mathematics 90% (A) or 95% (A*); from 2027/28 Applied Maths is not accepted as A-level Maths.",
+     "notesAr": "CBSE وCISCE فقط. AAA تعادل متوسط 90% مع 5 مواد بنسبة 90%؛ وA*AA تعادل 95%. الرياضيات 90% (A) أو 95% (A*)؛ ومن 2027/28 لا تقبل الرياضيات التطبيقية بديلا عن رياضيات A-level.",
+     "source": "s5",
+     "quote": "AAB | An overall average of 85 per cent or above. One or more subjects may be specified at 90 per cent or above |"
+    },
+    "ISC": {
+     "accepted": true,
+     "minimumPercent": 85,
+     "notesEn": "CBSE and CISCE only. AAA = 90% average with 5 subjects at 90%; A*AA = 95% average. Mathematics 90% (A) or 95% (A*); from 2027/28 Applied Maths is not accepted as A-level Maths.",
+     "notesAr": "CBSE وCISCE فقط. AAA تعادل متوسط 90% مع 5 مواد بنسبة 90%؛ وA*AA تعادل 95%. الرياضيات 90% (A) أو 95% (A*)؛ ومن 2027/28 لا تقبل الرياضيات التطبيقية بديلا عن رياضيات A-level.",
+     "source": "s5",
+     "quote": "AAB | An overall average of 85 per cent or above. One or more subjects may be specified at 90 per cent or above |"
+    },
+    "IB": {
+     "accepted": true,
+     "minimumPoints": 37,
+     "notesEn": "Range 37 (6,6,6 HL) to 39 (7,6,6 HL) depending on programme.",
+     "notesAr": "النطاق من 37 (6،6،6 في المستوى العالي) إلى 39 (7،6،6) حسب البرنامج.",
+     "source": "s6",
+     "quote": "The International Baccalaureate is scored out of 45 points and the entry requirements for LSE range from 37 points overall (with three Higher level subjects at grades 6 6 6) to 39 points overall (with three Higher level subjects at grades 7 6 6)."
+    }
+   },
    "programs": []
   }
  ]

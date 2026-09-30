@@ -1,6 +1,6 @@
 {
  "batch": "cawide",
- "assembledAt": "2026-09-30T08:18:18.575Z",
+ "assembledAt": "2026-09-30T08:32:57.938Z",
  "universities": [
   {
    "key": "anu",
@@ -1495,6 +1495,13 @@
      "title": "Bachelor of Computer Science - Study - The University of Queensland",
      "retrievedAt": "2026-09-30T08:01:33.143Z",
      "hash": "13250fed05337a01aabce1f5a0a5347845524e347aae19a922aa50bef31fffdb"
+    },
+    {
+     "id": "s5",
+     "url": "https://study.uq.edu.au/admissions/doctor-medicine/pathways-high-school-leavers/direct-entry",
+     "title": "Doctor of Medicine (MD) direct entry - Study - The University of Queensland",
+     "retrievedAt": "2026-09-30T08:19:47.155Z",
+     "hash": "8246c8fcf4bbd17f0be9e2770f475c24e4b57b71030846c9df483276ccf08241"
     }
    ],
    "english": [
@@ -1564,6 +1571,14 @@
         "noteAr": "سنتان من الدراسة التمهيدية للطب يليهما مباشرة برنامج دكتور في الطب لمدة 4 سنوات. لم تظهر درجات القبول للطلاب الدوليين في الصفحة التي جُلبت.",
         "source": "s3",
         "quote": "The Bachelor of Medical Science/Doctor of Medicine is a vertical dual degree which enables you to complete 2 years of tailored pre-medicine study before progressing directly into the 4-year Doctor of Medicine (MD) program."
+       },
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "The fetched direct-entry page describes places for domestic students (ATAR 95 or equivalent, UCAT ANZ, MMI, apply via QTAC); it does not confirm entry for international school leavers.",
+        "noteAr": "تصف صفحة القبول المباشر مقاعد مخصصة للطلاب المحليين (ATAR 95 أو ما يعادله، واختبار UCAT ANZ، ومقابلات MMI، والتقديم عبر QTAC)، ولا تؤكد إتاحة القبول للطلاب الدوليين من خريجي الثانوية.",
+        "source": "s5",
+        "quote": "There are approximately approximately 20 places available for domestic students entering the MD through the Bachelor of Medical Science / Doctor of Medicine each year."
        }
       ],
       "source": "s3"
@@ -1777,9 +1792,53 @@
      "title": "FAQs: U.S. high school applicants (Fall 2027) | Undergraduate Admissions - McGill University",
      "retrievedAt": "2026-09-30T07:32:28.910Z",
      "hash": "1d3c840c2362cbf3cb61c81ea91cac35183902e2a724c69cd040c357bccfde30"
+    },
+    {
+     "id": "s9",
+     "url": "https://www.mcgill.ca/undergraduate-admissions/apply/english-proficiency",
+     "title": "Proof of English proficiency | Undergraduate Admissions - McGill University",
+     "retrievedAt": "2026-09-30T08:19:48.414Z",
+     "hash": "b6e1fc0174d4049939125839372e75e98e711940c0159f75956486814069c8aa"
     }
    ],
-   "english": [],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": "IELTS One Skill Retake is not accepted.",
+     "waiverNoteAr": "لا يُقبل IELTS One Skill Retake.",
+     "source": "s9",
+     "quote": "A band score of 6.5 or better; individual component scores of 6.0 or better."
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 4.5,
+     "minComponent": 4.5,
+     "waiverNoteEn": "Science and Engineering: 4.5 on the 6-point scale (tests from 21 January 2026), or 90 on the 120-point scale; 4.5 (or 21) in each component.",
+     "waiverNoteAr": "العلوم والهندسة: 4.5 على مقياس 6 نقاط (للاختبارات اعتبارا من 21 يناير 2026)، أو 90 على مقياس 120 نقطة؛ مع 4.5 (أو 21) في كل قسم.",
+     "source": "s9",
+     "quote": "| 90* | 4.5* | * Minimum component scores: | Reading: 21 Listening: 21 Writing: 21 Speaking: 21 | Reading: 4.5 Listening: 4.5 Writing: 4.5"
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 125,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s9",
+     "quote": "Score of 125 or better (130 for B.Ed. (TESL), B.Com.) (updated September 2022)."
+    },
+    {
+     "test": "PTE",
+     "minOverall": 65,
+     "minComponent": 60,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s9",
+     "quote": "Overall score of 65 or better; individual component scores of 60 or better"
+    }
+   ],
    "tests": [],
    "additional": [],
    "deadlines": [
@@ -3473,6 +3532,13 @@
      "title": "English Language Requirements | Trinity College Dublin",
      "retrievedAt": "2026-09-30T08:01:57.410Z",
      "hash": "dd7300a96210354982fc25d6263b646d88582ffbc2e2d1fe0d95f703fc8b6f1e"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.tcd.ie/study/assets/PDF/AdmissionGuideUGNonEUFinal.pdf",
+     "title": "Undergraduate Admission Guide for non-EU students (Trinity College Dublin)",
+     "retrievedAt": "2026-09-30T08:20:15.647Z",
+     "hash": "860061b710d83d9411520c5f0c458c25b4aa4065ff2d8f78b43a6e9ac0eaba3c"
     }
    ],
    "english": [
@@ -3573,6 +3639,7 @@
      "url": "https://www.tcd.ie/courses/undergraduate/courses/computer-science/",
      "curricula": {
       "BRITISH": {
+       "gradeProfile": "AAA",
        "subjects": [
         {
          "type": "REQUIRED",
@@ -3587,12 +3654,13 @@
          "quote": "Advanced GCE (A-Level): Grade C Mathematics"
         }
        ],
-       "notesEn": "Minimum subject requirement only; no overall grade offer is published for non-EU applicants on this page.",
-       "notesAr": "هذا حد أدنى لمتطلبات المواد فقط، ولا تنشر الصفحة عرضا بالدرجات الإجمالية للمتقدمين من خارج الاتحاد الأوروبي.",
-       "source": "s1",
-       "quote": "Advanced GCE (A-Level): Grade C Mathematics"
+       "notesEn": "Non-EU competitive admission bands (Table 1 columns: Special, Band 1, Band 2, Band 3). This course is Band 2: AAA from 3 A-levels.",
+       "notesAr": "نطاقات القبول التنافسي لغير مواطني الاتحاد الأوروبي (أعمدة الجدول 1: الخاص، النطاق 1، النطاق 2، النطاق 3). هذا البرنامج في النطاق 2: AAA في 3 مواد A Level.",
+       "source": "s5",
+       "quote": "A-levels, 3 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*A A*AA AAA ABB"
       },
       "IB": {
+       "minimumPoints": 33,
        "subjects": [
         {
          "type": "REQUIRED",
@@ -3607,10 +3675,26 @@
          "quote": "International Baccalaureate: HL Grade 5 Mathematics"
         }
        ],
-       "notesEn": "Minimum subject requirement only.",
-       "notesAr": "حد أدنى لمتطلبات المواد فقط.",
-       "source": "s1",
-       "quote": "International Baccalaureate: HL Grade 5 Mathematics"
+       "notesEn": "Non-EU competitive admission bands (Table 1 columns: Special, Band 1, Band 2, Band 3). Band 2: 33 points including bonus points, no HL below 5 or SL below 4.",
+       "notesAr": "نطاقات القبول التنافسي لغير مواطني الاتحاد الأوروبي (أعمدة الجدول 1: الخاص، النطاق 1، النطاق 2، النطاق 3). النطاق 2: 33 نقطة تشمل النقاط الإضافية، دون أي درجة أقل من 5 في المستوى العالي أو 4 في المستوى القياسي.",
+       "source": "s5",
+       "quote": "International Baccalaureate Including bonus points. No HL below 5 or SL below 4 40 36 33 30"
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.4,
+       "subjects": [],
+       "notesEn": "Non-EU competitive admission bands (Table 1 columns: Special, Band 1, Band 2, Band 3). Band 2: SAT 1350 with GPA 3.4 (ACT 30 with GPA 3.4).",
+       "notesAr": "نطاقات القبول التنافسي لغير مواطني الاتحاد الأوروبي (أعمدة الجدول 1: الخاص، النطاق 1، النطاق 2، النطاق 3). النطاق 2: SAT بدرجة 1350 مع معدل 3.4 (أو ACT بدرجة 30 مع معدل 3.4).",
+       "source": "s5",
+       "quote": "USA - SAT SAT score plus high school GPA n/a 1400, 3.5 1350, 3.4 1250, 3.2"
+      },
+      "CBSE": {
+       "minimumPercent": 85,
+       "subjects": [],
+       "notesEn": "Non-EU competitive admission bands (Table 1 columns: Special, Band 1, Band 2, Band 3). Band 2: Standard XII average 85.",
+       "notesAr": "نطاقات القبول التنافسي لغير مواطني الاتحاد الأوروبي (أعمدة الجدول 1: الخاص، النطاق 1، النطاق 2، النطاق 3). النطاق 2: متوسط الصف الثاني عشر 85.",
+       "source": "s5",
+       "quote": "India - Standard XII Average of St. XII subjects (A1=95, A2=85, B1=75, B2=65, C1=55, C2=45) n/a 90 85 75"
       }
      },
      "general": {
@@ -3641,9 +3725,129 @@
         "noteAr": "يتقدم مواطنو الاتحاد الأوروبي عبر CAO، بينما يتقدم غيرهم مباشرة إلى الكلية.",
         "source": "s1",
         "quote": "EU Applicants Read the information about how to apply, then apply directly to CAO. Non-EU Applicants"
+       },
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "Computer Science is in competitive admission Band 2 with a Mathematics requirement (level 2).",
+        "noteAr": "علوم الحاسوب في نطاق القبول التنافسي 2 مع اشتراط الرياضيات (المستوى 2).",
+        "source": "s5",
+        "quote": "2 Computer Science Mathematics 2"
        }
       ],
       "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "trinity-college-dublin-law",
+     "status": "EXISTS",
+     "nameEn": "Law",
+     "nameAr": "القانون",
+     "degree": null,
+     "durationYears": null,
+     "url": "https://www.tcd.ie/courses/undergraduate/courses/law/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "subjects": [],
+       "notesEn": "Non-EU competitive admission bands (Table 1 columns: Special, Band 1, Band 2, Band 3). This course is Band 2: AAA from 3 A-levels.",
+       "notesAr": "نطاقات القبول التنافسي لغير مواطني الاتحاد الأوروبي (أعمدة الجدول 1: الخاص، النطاق 1، النطاق 2، النطاق 3). هذا البرنامج في النطاق 2: AAA في 3 مواد A Level.",
+       "source": "s5",
+       "quote": "A-levels, 3 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*A A*AA AAA ABB"
+      },
+      "IB": {
+       "minimumPoints": 33,
+       "subjects": [],
+       "notesEn": "Non-EU competitive admission bands (Table 1 columns: Special, Band 1, Band 2, Band 3). Band 2: 33 points including bonus points, no HL below 5 or SL below 4.",
+       "notesAr": "نطاقات القبول التنافسي لغير مواطني الاتحاد الأوروبي (أعمدة الجدول 1: الخاص، النطاق 1، النطاق 2، النطاق 3). النطاق 2: 33 نقطة تشمل النقاط الإضافية، دون أي درجة أقل من 5 في المستوى العالي أو 4 في المستوى القياسي.",
+       "source": "s5",
+       "quote": "International Baccalaureate Including bonus points. No HL below 5 or SL below 4 40 36 33 30"
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.4,
+       "subjects": [],
+       "notesEn": "Non-EU competitive admission bands (Table 1 columns: Special, Band 1, Band 2, Band 3). Band 2: SAT 1350 with GPA 3.4 (ACT 30 with GPA 3.4).",
+       "notesAr": "نطاقات القبول التنافسي لغير مواطني الاتحاد الأوروبي (أعمدة الجدول 1: الخاص، النطاق 1، النطاق 2، النطاق 3). النطاق 2: SAT بدرجة 1350 مع معدل 3.4 (أو ACT بدرجة 30 مع معدل 3.4).",
+       "source": "s5",
+       "quote": "USA - SAT SAT score plus high school GPA n/a 1400, 3.5 1350, 3.4 1250, 3.2"
+      },
+      "CBSE": {
+       "minimumPercent": 85,
+       "subjects": [],
+       "notesEn": "Non-EU competitive admission bands (Table 1 columns: Special, Band 1, Band 2, Band 3). Band 2: Standard XII average 85.",
+       "notesAr": "نطاقات القبول التنافسي لغير مواطني الاتحاد الأوروبي (أعمدة الجدول 1: الخاص، النطاق 1، النطاق 2، النطاق 3). النطاق 2: متوسط الصف الثاني عشر 85.",
+       "source": "s5",
+       "quote": "India - Standard XII Average of St. XII subjects (A1=95, A2=85, B1=75, B2=65, C1=55, C2=45) n/a 90 85 75"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "Law is in competitive admission Band 2 with no specific subject requirements.",
+        "noteAr": "القانون في نطاق القبول التنافسي 2 دون متطلبات مواد محددة.",
+        "source": "s5",
+        "quote": "2 Law, Law (JH)"
+       }
+      ],
+      "source": "s5"
+     },
+     "previous": null
+    },
+    {
+     "key": "trinity-college-dublin-med",
+     "status": "EXISTS",
+     "nameEn": "Medicine",
+     "nameAr": "الطب",
+     "degree": null,
+     "durationYears": null,
+     "url": "https://www.tcd.ie/courses/undergraduate/courses/medicine/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*A*A",
+       "subjects": [],
+       "notesEn": "Non-EU competitive admission bands (Table 1 columns: Special, Band 1, Band 2, Band 3). Medicine is in the Special band: A*A*A from 3 A-levels.",
+       "notesAr": "نطاقات القبول التنافسي لغير مواطني الاتحاد الأوروبي (أعمدة الجدول 1: الخاص، النطاق 1، النطاق 2، النطاق 3). الطب في النطاق الخاص: A*A*A في 3 مواد A Level.",
+       "source": "s5",
+       "quote": "A-levels, 3 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*A A*AA AAA ABB"
+      },
+      "IB": {
+       "minimumPoints": 40,
+       "subjects": [],
+       "notesEn": "Non-EU competitive admission bands (Table 1 columns: Special, Band 1, Band 2, Band 3). Special band: 40 points including bonus points.",
+       "notesAr": "نطاقات القبول التنافسي لغير مواطني الاتحاد الأوروبي (أعمدة الجدول 1: الخاص، النطاق 1، النطاق 2، النطاق 3). النطاق الخاص: 40 نقطة تشمل النقاط الإضافية.",
+       "source": "s5",
+       "quote": "International Baccalaureate Including bonus points. No HL below 5 or SL below 4 40 36 33 30"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Medicine is in the Special band with science subject requirements (Group C); SAT/ACT and Indian Standard XII show n/a for the Special band.",
+        "noteAr": "الطب في النطاق الخاص مع اشتراط مواد علمية (المجموعة C)، ويظهر SAT/ACT والصف الثاني عشر الهندي بعلامة غير متاح في هذا النطاق.",
+        "source": "s5",
+        "quote": "S Medicine † Group C 1 Group C 2"
+       },
+       {
+        "kind": "HEALTH_CHECK",
+        "required": true,
+        "noteEn": "Garda vetting, health screening and fitness to practise required.",
+        "noteAr": "يلزم التحقق الأمني وفحص اللياقة الصحية والأهلية لممارسة المهنة.",
+        "source": "s5",
+        "quote": "Medicine Garda Vetting, Health Screening, Fitness to Practice"
+       }
+      ],
+      "source": "s5"
      },
      "previous": null
     }
@@ -3957,6 +4161,13 @@
      "title": "Application and document deadlines | Undergraduate Programs | University of Waterloo",
      "retrievedAt": "2026-09-30T08:01:34.006Z",
      "hash": "3efa3b4623f9ca02c6b1f1e703bb0883f7b36484c0973cce9eea7a9070b605fb"
+    },
+    {
+     "id": "s6",
+     "url": "https://uwaterloo.ca/future-students/programs/computer-engineering",
+     "title": "Computer Engineering degree | Undergraduate Programs | University of Waterloo",
+     "retrievedAt": "2026-09-30T08:19:50.401Z",
+     "hash": "cd0eddc595f9f8f977f173abb96fcc0d47742d9440f6e60e4ae9e80957ba60a6"
     }
    ],
    "english": [
@@ -4126,6 +4337,33 @@
       "source": "s3"
      },
      "previous": null
+    },
+    {
+     "key": "waterloo-ce",
+     "status": "EXISTS",
+     "nameEn": "Computer Engineering, Bachelor of Applied Science in Computer Engineering",
+     "nameAr": "هندسة الحاسوب، بكالوريوس العلوم التطبيقية في هندسة الحاسوب",
+     "degree": "BASc",
+     "durationYears": null,
+     "url": "https://uwaterloo.ca/future-students/programs/computer-engineering",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Admission Information Form and online interview required.",
+        "noteAr": "يلزم تقديم نموذج معلومات القبول وإجراء مقابلة عبر الإنترنت.",
+        "source": "s6",
+        "quote": "The Admission Information Form and online interview are required for admission to all Engineering programs."
+       }
+      ],
+      "source": "s6"
+     },
+     "previous": null
     }
    ]
   },
@@ -4154,6 +4392,13 @@
      "title": "Undergraduate Admission Deadlines | Queen's University",
      "retrievedAt": "2026-09-30T08:01:42.709Z",
      "hash": "051e32dda049379c92f40251655a99ed5a01ae542b3be9dde1e23b1fb93bdaa8"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.queensu.ca/admission/applying/admission-requirements/international-baccalaureat",
+     "title": "High School Student: International Baccalaureate (IB) | Undergraduate Admission & Recruitment",
+     "retrievedAt": "2026-09-30T08:19:55.777Z",
+     "hash": "9901a6f39b709038b23750c42f033b5fdb66b2758555e2de5d22ea1322faaed1"
     }
    ],
    "english": [
@@ -4216,7 +4461,17 @@
      "quote": "November 20, 2026 To give you enough time to access the online Major Admission Award Application (MAA), we strongly recommend applying to Queen’s on OUAC by November 20."
     }
    ],
-   "curriculumRules": {},
+   "curriculumRules": {
+    "IB": {
+     "accepted": true,
+     "minimumPoints": 28,
+     "subjects": [],
+     "notesEn": "Full IB Diploma, six subjects with three at HL, no mark below 3, minimum 28 excluding bonus points.",
+     "notesAr": "دبلوم بكالوريا دولية كامل بست مواد منها ثلاث بالمستوى العالي، دون أي درجة أقل من 3، وبحد أدنى 28 نقطة دون النقاط الإضافية.",
+     "source": "s4",
+     "quote": "Complete the full IB Diploma with passes in six subjects with three at the Higher Level, no mark lower than 3, and a minimum grade total of 28 (excluding bonus points)."
+    }
+   },
    "programs": [
     {
      "key": "queens-university-cs",
@@ -4226,7 +4481,29 @@
      "degree": null,
      "durationYears": null,
      "url": "https://www.queensu.ca/admission/",
-     "curricula": {},
+     "curricula": {
+      "IB": {
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "english_language",
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s4",
+         "quote": "Computing (QD) English and Mathematics."
+        }
+       ],
+       "notesEn": "IB prerequisites: English and Mathematics (not Math AI SL). General IB minimum 28.",
+       "notesAr": "المتطلبات المسبقة: اللغة الإنجليزية والرياضيات (لا تُقبل الرياضيات AI بالمستوى القياسي). الحد الأدنى العام للبكالوريا الدولية 28.",
+       "source": "s4",
+       "quote": "Computing (QD) English and Mathematics. Please Note: Mathematics Applications and Interpretations SL is not an acceptable prerequisite."
+      }
+     },
      "general": {
       "subjects": [],
       "english": [],
@@ -4253,7 +4530,31 @@
      "degree": null,
      "durationYears": null,
      "url": "https://smithengineering.queensu.ca/",
-     "curricula": {},
+     "curricula": {
+      "IB": {
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics",
+          "chemistry",
+          "physics",
+          "english_language"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s4",
+         "quote": "Smith Engineering (QE) Mathematics, Chemistry, Physics and English."
+        }
+       ],
+       "notesEn": "Admission average uses only the prerequisites (Maths, Chemistry, Physics, English).",
+       "notesAr": "يُحسب معدل القبول من المواد المطلوبة فقط (الرياضيات والكيمياء والفيزياء واللغة الإنجليزية).",
+       "source": "s4",
+       "quote": "Smith Engineering (QE) Mathematics, Chemistry, Physics and English. The Engineering admission average is calculated using only the prerequisite subjects."
+      }
+     },
      "general": {
       "subjects": [],
       "english": [],

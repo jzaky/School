@@ -79,11 +79,11 @@ export default async function ProgramPage({ params, searchParams }: { params: Pr
         )}
         {withStatus && l.status === "unknown" && l.reason && <div className="text-xs text-info">{t(`reason.${l.reason}`)}</div>}
         {withStatus && l.status === "not_met" && l.reason === "not_accepted" && <div className="text-xs text-danger">{t("reason.not_accepted")}</div>}
-        {(l.noteEn || l.noteAr) && <div className="text-xs text-muted-foreground">{pick(locale, l.noteEn ?? "", l.noteAr ?? l.noteEn ?? "")}</div>}
+        {(l.noteEn || l.noteAr) && <div className="text-xs text-muted-foreground" dir="auto">{pick(locale, l.noteEn ?? "", l.noteAr ?? l.noteEn ?? "")}</div>}
         {l.evidenceQuote && (
           <div className="flex items-start gap-1 text-xs text-muted-foreground" data-testid="evidence-quote">
             <Quote className="mt-0.5 size-3 shrink-0" />
-            <q className="italic">{l.evidenceQuote}</q>
+            <q className="italic" dir="auto">{l.evidenceQuote}</q>
             {l.sourceUrl && l.sourceUrl !== sourceUrl && (
               <a href={l.sourceUrl} target="_blank" rel="noopener noreferrer" className="ms-1 inline-flex shrink-0 items-center gap-0.5 not-italic text-brand hover:underline" data-testid="line-source">
                 {t("program.lineSource")}

@@ -4,7 +4,7 @@ import "server-only";
 import type { Ctx } from "@/server/context";
 import { personName } from "@/lib/i18n-data";
 import { catalogScope } from "@/server/pathways/scope";
-import { evaluate } from "@/server/pathway-engine/evaluate";
+import { evaluate, homeCurriculumFor } from "@/server/pathway-engine/evaluate";
 import type { EngineFocus } from "@/server/pathway-engine/page-data";
 import { computeMatches, getCurrentPlan, loadProgramMeta, loadPrograms, loadRequirements, loadStudentProfile, type ProgramMeta } from "@/server/pathway-engine/service";
 import type { Curriculum, EvalResult, RequirementRow, StudentProfile } from "@/server/pathway-engine/types";
@@ -25,10 +25,17 @@ export async function staffStudentOptions(ctx: Ctx, focus: EngineFocus) {
 /** Match status and missing count for many programmes, evaluated in memory (used to filter and sort). */
 async function statusesFor(focus: EngineFocus, studentId: string, planId: string | null, ids: string[]): Promise<Map<string, MatchInfo>> {
   const { actor } = focus;
-  const [loaded, reqs] = await Promise.all([loadStudentProfile(actor, studentId, { planId }), loadRequirements(actor.db, actor.orgId, ids)]);
+  const [loaded, reqs, countries] = await Promise.all([
+    loadStudentProfile(actor, studentId, { planId }),
+    loadRequirements(actor.db, actor.orgId, ids),
+    actor.db.universityProgram.findMany({ where: { id: { in: ids } }, select: { id: true, universityId: true } }),
+  ]);
+  const unis = await actor.db.university.findMany({ where: { id: { in: [...new Set(countries.map((p) => p.universityId))] } }, select: { id: true, countryCode: true } });
+  const countryOf = new Map(unis.map((u) => [u.id, u.countryCode]));
+  const home = new Map(countries.map((p) => [p.id, homeCurriculumFor(countryOf.get(p.universityId))]));
   const out = new Map<string, MatchInfo>();
   for (const id of ids) {
-    const r = evaluate(loaded.profile, { id, requirements: reqs.get(id) ?? [] });
+    const r = evaluate(loaded.profile, { id, requirements: reqs.get(id) ?? [], homeCurriculum: home.get(id) ?? null });
     out.set(id, { status: r.status, missing: r.counts.requiredMissing });
   }
   return out;

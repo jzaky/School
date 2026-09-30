@@ -2,7 +2,9 @@
 //
 // Rules (see docs/decisions.md, "Pathway engine evaluation rules"):
 // - Applicable rows: the general row (curriculum null) plus the row for the student's curriculum.
-//   If the programme has curriculum rows but none for the student's curriculum, it is not covered.
+//   If the programme has curriculum rows but none for the student's curriculum, it is not covered,
+//   unless the student's curriculum is the university's home curriculum (a US university's general
+//   requirements are its requirements for American high school students).
 // - Subject lines are ANDed. Several keys on one line (or ONE_OF) means any one of them. TWO_OF needs
 //   two DIFFERENT keys filled by two DIFFERENT courses (a course is counted once per group).
 // - Only REQUIRED, ONE_OF and TWO_OF can make a student miss. RECOMMENDED, PREFERRED and OPTIONAL are advice.
@@ -57,7 +59,14 @@ export function applicableRows(program: ProgramForEval, curriculum: string): { r
   const rows: RequirementRow[] = [];
   if (general.length) rows.push(pickOne(general));
   if (own.length) rows.push(pickOne(own));
-  return { rows, covered: own.length > 0 || specific.length === 0 };
+  const home = !!program.homeCurriculum && program.homeCurriculum === curriculum && general.length > 0;
+  return { rows, covered: own.length > 0 || specific.length === 0 || home };
+}
+
+const HOME_CURRICULUM: Record<string, string> = { US: "AMERICAN", GB: "BRITISH", AE: "UAE_MOE", JO: "JORDAN_TAWJIHI" };
+/** The curriculum a country's universities write their general admissions requirements for, if any. */
+export function homeCurriculumFor(countryCode: string | null | undefined): string | null {
+  return (countryCode && HOME_CURRICULUM[countryCode.toUpperCase()]) || null;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -381,7 +390,7 @@ export function evaluate(profile: StudentProfile, program: ProgramForEval): Eval
       if (t) rowLines.push(t);
     }
     for (const a of row.additional) {
-      if (BLOCKING_KINDS.has(a.kind.toUpperCase())) {
+      if (BLOCKING_KINDS.has(a.kind.toUpperCase()) && a.required) {
         rowLines.push({
           id: a.id,
           rowId: row.id,

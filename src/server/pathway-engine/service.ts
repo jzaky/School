@@ -9,7 +9,7 @@ import { audit } from "@/server/audit/audit";
 import { catalogScope } from "@/server/pathways/scope";
 import { OVERALL } from "@/server/pathways/types";
 import { EngineAccessError, assertView, canApprovePlan, canEditPlan, type EngineActor } from "./access";
-import { evaluate, statusCounts } from "./evaluate";
+import { evaluate, homeCurriculumFor, statusCounts } from "./evaluate";
 import { scaleFor } from "./grade-scales";
 import { stableStringify } from "./hash";
 import { planCourses, findTargetPrograms, type Goal, type PlannerOutput, type PlannerProgram } from "./planner";
@@ -277,7 +277,7 @@ export async function loadRequirements(db: TenantDb, orgId: string, programIds: 
 export async function loadPrograms(db: TenantDb, orgId: string, programIds: string[]): Promise<LoadedProgram[]> {
   const meta = new Map((await loadProgramMeta(db, orgId)).map((m) => [m.id, m]));
   const reqs = await loadRequirements(db, orgId, programIds);
-  return programIds.filter((id) => meta.has(id)).map((id) => ({ meta: meta.get(id)!, program: { id, requirements: reqs.get(id) ?? [] } }));
+  return programIds.filter((id) => meta.has(id)).map((id) => ({ meta: meta.get(id)!, program: { id, requirements: reqs.get(id) ?? [], homeCurriculum: homeCurriculumFor(meta.get(id)!.university.countryCode) } }));
 }
 
 /** Programme, university, intakes and current requirement rows for one programme page. */
@@ -314,7 +314,15 @@ export async function targetProgramIds(actor: EngineActor, goal: Goal, extraIds:
   const metas = await loadProgramMeta(actor.db, actor.orgId);
   const careerFields = await loadCareerFields(actor.db);
   const light: PlannerProgram[] = metas.map((m) => ({ id: m.id, nameEn: m.nameEn, nameAr: m.nameAr, universityEn: m.university.nameEn, universityAr: m.university.nameAr, countryCode: m.university.countryCode, fieldKeys: m.fieldKeys, worldRank: m.university.worldRank, program: { id: m.id, requirements: [] } }));
-  const found = findTargetPrograms(goal, careerFields, light, max).map((t) => t.p.id);
+  const candidates = findTargetPrograms(goal, careerFields, light, max * 3).map((t) => t.p.id);
+  // Programmes with requirement rows come first (keeping the ranking), so the overview is not
+  // filled with programmes whose official requirements could not be read yet.
+  const withData = new Set(
+    candidates.length
+      ? (await actor.db.programRequirement.findMany({ where: { programId: { in: candidates }, isCurrent: true, ...catalogScope(actor.orgId) }, select: { programId: true }, distinct: ["programId"] })).map((r) => r.programId)
+      : [],
+  );
+  const found = [...candidates.filter((id) => withData.has(id)), ...candidates.filter((id) => !withData.has(id))];
   return [...new Set([...extraIds, ...found])].slice(0, max);
 }
 
@@ -324,7 +332,7 @@ export async function targetProgramIds(actor: EngineActor, goal: Goal, extraIds:
 export type ProgramMatch = { meta: ProgramMeta; result: EvalResult; cached: boolean };
 
 function programFingerprint(p: ProgramForEval) {
-  return p.requirements.map((r) => `${r.id}:${r.version}:${r.confidence}`).sort().join(",");
+  return `${p.homeCurriculum ?? ""}|` + p.requirements.map((r) => `${r.id}:${r.version}:${r.confidence}`).sort().join(",");
 }
 
 /**

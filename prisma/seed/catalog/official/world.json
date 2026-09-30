@@ -1,6 +1,6 @@
 {
  "batch": "world",
- "assembledAt": "2026-09-30T08:18:19.447Z",
+ "assembledAt": "2026-09-30T08:32:58.745Z",
  "universities": [
   {
    "key": "epfl",
@@ -956,6 +956,13 @@
      "hash": "d662d14544be7e110d7b370493cea459e7a7cadc4d78724b927c310145eaaf5d",
      "waybackTimestamp": "20250906184936",
      "waybackHash": "e3faf270675aa6922cba2948a6fa42867d33607de2076cf4de7f11c0d045ff4e"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.tum.de/en/studies/degree-programs/detail/electrical-engineering-and-information-technology-bachelor-of-science-bsc",
+     "title": "Electrical Engineering and Information Technology - Bachelor of Science (B.Sc.) - TUM",
+     "retrievedAt": "2026-09-30T08:20:13.674Z",
+     "hash": "687a697a3447318d16f441dee69256f2fc81dd33a3ad75f8c4502b4ae41663ed"
     }
    ],
    "english": [],
@@ -1045,6 +1052,57 @@
        }
       ],
       "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "tu-munich-ee",
+     "status": "EXISTS",
+     "nameEn": "Electrical Engineering and Information Technology BSc",
+     "nameAr": "بكالوريوس العلوم في الهندسة الكهربائية وتقنية المعلومات",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.tum.de/en/studies/degree-programs/detail/electrical-engineering-and-information-technology-bachelor-of-science-bsc",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Six semesters (180 ECTS) in Munich, starting in the winter semester.",
+        "noteAr": "ستة فصول دراسية (180 وحدة ECTS) في ميونخ، وتبدأ في الفصل الشتوي.",
+        "source": "s5",
+        "quote": "Standard Duration of Studies 6 semesters (fulltime)"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Unrestricted admission (no aptitude assessment listed).",
+        "noteAr": "قبول غير مقيد (لا يوجد تقييم أهلية مدرج).",
+        "source": "s5",
+        "quote": "Admission Category Unrestricted Admission"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Taught mainly in German; proof of German is required by the application deadline.",
+        "noteAr": "الدراسة بالألمانية أساسا، ويلزم إثبات إتقان الألمانية قبل الموعد النهائي للتقديم.",
+        "source": "s5",
+        "quote": "The language of instruction for this program is usually German."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Tuition for non-EU students: EUR 3,000 per semester.",
+        "noteAr": "الرسوم للطلاب من خارج الاتحاد الأوروبي: 3000 يورو لكل فصل دراسي.",
+        "source": "s5",
+        "quote": "The tuition fees for international students from third countries for this degree program are 3,000 euros per semester."
+       }
+      ],
+      "source": "s5"
      },
      "previous": null
     }
@@ -1453,6 +1511,13 @@
      "title": "International undergraduate admissions | Sciences Po",
      "retrievedAt": "2026-09-30T07:58:18.652Z",
      "hash": "47bbf66536d107b6546a3b2ad908f77c89b7ab3ea8ba62969e7878b8777d1809"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.sciencespo.fr/admissions/en/undergraduate/foreign-secondary-schools/language-requirements",
+     "title": "Language requirements | Sciences Po undergraduate admissions",
+     "retrievedAt": "2026-09-30T08:20:39.446Z",
+     "hash": "3d01d1484625578ee70f52ef0564fc29ba47de1850debe9d7e9c22017a6e26ad"
     }
    ],
    "english": [],
@@ -1497,6 +1562,22 @@
      "noteAr": "رسوم طلب قدرها 150 يورو غير مستردة.",
      "source": "s3",
      "quote": "In order to avoid any inconvenience, we strongly recommend our applicants to ensure that their profile is eligible before applying as the 150 euros application fees are non refundable."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Language (English and/or French, depending on the programmes chosen) is assessed through the written texts and the interview; most campus programmes require C1 in the teaching language.",
+     "noteAr": "تُقيَّم اللغة (الإنجليزية و/أو الفرنسية حسب البرامج المختارة) عبر النصوص المكتوبة والمقابلة، وتشترط معظم برامج الأحرم الجامعية مستوى C1 في لغة التدريس.",
+     "source": "s4",
+     "quote": "During the interview (as well as via the texts submitted), candidates will be tested on their language proficiency (in English and/or French, based on the programmes they are applying to)."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Menton campus (Mediterranean and Middle East minor), English track: English at CEFR C1.",
+     "noteAr": "حرم منتون (تخصص البحر المتوسط والشرق الأوسط)، المسار الإنجليزي: الإنجليزية بمستوى C1.",
+     "source": "s4",
+     "quote": "Menton campus - The Mediterranean and Middle east Minor"
     }
    ],
    "deadlines": [
@@ -1610,6 +1691,20 @@
      "hash": "269e9ea4e629e93e0cf409601455e629680ac41efa9ff66970498b66b9a53688",
      "waybackTimestamp": "20251114060733",
      "waybackHash": "10ddc330840d667f208216e3b9953b00f97416c6d1d8e8c43664a8a56e57ff67"
+    },
+    {
+     "id": "s5",
+     "url": "https://admission.cuhk.edu.hk/programme/bcsen/",
+     "title": "Computer Science and Engineering (BCSEN) - CUHK Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T08:20:21.817Z",
+     "hash": "dc1a58b32bb1833f4f2ca6682a3404b33a0f4e306fc9f6c52dbc3905780b5aa4"
+    },
+    {
+     "id": "s6",
+     "url": "https://admission.cuhk.edu.hk/programme/medun/",
+     "title": "MBChB (MEDUN) - CUHK Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T08:20:34.699Z",
+     "hash": "00c39c86004873d54aac0a3be191a7515342dcf8bd9090de06e789d0f58fc96e"
     }
    ],
    "english": [
@@ -1770,8 +1865,8 @@
      "nameEn": "Bachelor of Medicine and Bachelor of Surgery MBChB",
      "nameAr": "بكالوريوس الطب وبكالوريوس الجراحة",
      "degree": "MBChB",
-     "durationYears": null,
-     "url": "https://www.cuhk.edu.hk/english/faculties/medicine.html",
+     "durationYears": 6,
+     "url": "https://admission.cuhk.edu.hk/programme/medun/",
      "curricula": {},
      "general": {
       "subjects": [],
@@ -1785,6 +1880,14 @@
         "noteAr": "الشهادة الطبية في الجامعة هي MB ChB (وليست MBBS)، بمنهج متكامل قائم على الأجهزة الحيوية وتعرض سريري مبكر. لم تُستخرج شروط القبول بعد.",
         "source": "s2",
         "quote": "The MB ChB programme adopts a system-based integrated curriculum which emphasizes early clinical exposure"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Six-year full-time MBChB, open to international applicants; graduates then complete a one-year internship in Hong Kong.",
+        "noteAr": "برنامج MBChB بدوام كامل لمدة ست سنوات متاح للمتقدمين الدوليين، ثم يُكمل الخريجون سنة امتياز في هونغ كونغ.",
+        "source": "s6",
+        "quote": "The six-year full-time MBChB programme has a unique SMART medical curriculum, allowing us to nurture competent and compassionate doctors who are amply qualified both to meet the challenges of modern-day healthcare and to serve the community with clinical excellence and passion."
        }
       ],
       "source": "s2"
@@ -1797,8 +1900,8 @@
      "nameEn": "Computer Science and Engineering (broad-based admission)",
      "nameAr": "علوم الحاسوب والهندسة (قبول واسع القاعدة)",
      "degree": null,
-     "durationYears": null,
-     "url": "https://admission.cuhk.edu.hk/programmes/list/",
+     "durationYears": 4,
+     "url": "https://admission.cuhk.edu.hk/programme/bcsen/",
      "curricula": {},
      "general": {
       "subjects": [],
@@ -1812,6 +1915,14 @@
         "noteAr": "يكون الالتحاق بالسنة الأولى في علوم الحاسوب عبر القبول الواسع في علوم الحاسوب والهندسة، ويختار الطالب علوم الحاسوب أو هندسة الحاسوب في نهاية السنة الأولى. أما قائمة علوم الحاسوب المنفصلة فهي للالتحاق بالسنوات المتقدمة فقط.",
         "source": "s4",
         "quote": "Computer Science and Engineering: Broad-based admission designed for students interested in pursuing a major in one of the following subjects: Computer Science, Computer Engineering. Students will declare their majors at the end of Year 1."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Four-year programme, open to international applicants; students declare Computer Engineering or Computer Science after Year 1.",
+        "noteAr": "برنامج لمدة أربع سنوات متاح للمتقدمين الدوليين، ويختار الطلاب هندسة الحاسوب أو علوم الحاسوب بعد السنة الأولى.",
+        "source": "s5",
+        "quote": "Study Period 4 Years | Open for JUPAS / Non-JUPAS Year 1 / Mainland (Gaokao) / International"
        }
       ],
       "source": "s4"
@@ -1852,9 +1963,78 @@
      "title": "International Qualifications | HKU Admissions",
      "retrievedAt": "2026-09-30T07:58:34.961Z",
      "hash": "b92414147b0b87ec01f195646b69454bf852c647bda73fe873084427bc7b7fe7"
+    },
+    {
+     "id": "s5",
+     "url": "https://admissions.hku.hk/apply/international-qualifications/english-language-requirement",
+     "title": "English Language Requirement | HKU Admissions",
+     "retrievedAt": "2026-09-30T08:20:27.980Z",
+     "hash": "f0c410621e7c4a47fed5394a0d234b97b41f13ded6733bf78a252b5a497c74b1"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.law.hku.hk/prospective-students/ug-introduction/",
+     "title": "Undergraduate Programme | Introduction - Faculty of Law, HKU",
+     "retrievedAt": "2026-09-30T08:20:08.644Z",
+     "hash": "ba562dfcac3032e9a95b84b0cf2ad1c1270e13ff7c809745699973fd1020f62f"
     }
    ],
-   "english": [],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": "One of the listed qualifications is enough; tests must be taken within 2 years of the programme start.",
+     "waiverNoteAr": "يكفي أحد المؤهلات المذكورة، ويجب أن يكون الاختبار خلال سنتين من بدء البرنامج.",
+     "source": "s5",
+     "quote": "An overall band score of 6.5 or above in the IELTS Academic Module, with no less than 6.0 in both the Writing and Speaking components, achieved in the same attempt."
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 95,
+     "minComponent": 25,
+     "waiverNoteEn": "For tests before 21 January 2026; newer tests need 5.0 overall with 5.0 in Writing and Speaking. One of the listed qualifications is enough; tests must be taken within 2 years of the programme start.",
+     "waiverNoteAr": "للاختبارات قبل 21 يناير 2026، أما الأحدث فتتطلب 5.0 إجمالا و5.0 في الكتابة والمحادثة. يكفي أحد المؤهلات المذكورة، ويجب أن يكون الاختبار خلال سنتين من بدء البرنامج.",
+     "source": "s5",
+     "quote": "An overall score of 95 or above in the TOEFL internet-based test (TOEFL iBT), with no less than 25 in both the Writing and Speaking components, achieved in the same attempt, under the legacy TOEFL iBT scoring scale."
+    },
+    {
+     "test": "IB_ENGLISH",
+     "minOverall": 5,
+     "minComponent": null,
+     "waiverNoteEn": "IB English A grade 5 (or English B grade 6).",
+     "waiverNoteAr": "اللغة الإنجليزية A في البكالوريا الدولية بدرجة 5 (أو الإنجليزية B بدرجة 6).",
+     "source": "s5",
+     "quote": "(a) Grade 5 in English Language A (HL/SL);"
+    },
+    {
+     "test": "IGCSE_ENGLISH",
+     "minOverall": 6,
+     "minComponent": null,
+     "waiverNoteEn": "IGCSE English First Language grade B/6 (with Speaking and Listening).",
+     "waiverNoteAr": "اللغة الإنجليزية كلغة أولى في IGCSE بتقدير B أو 6 (مع مكون المحادثة والاستماع).",
+     "source": "s5",
+     "quote": "(b) Grade B or Grade 6 or above in English First Language with Speaking and Listening component at IGCSE; or"
+    },
+    {
+     "test": "OTHER",
+     "minOverall": 610,
+     "minComponent": null,
+     "waiverNoteEn": "SAT Reading and Writing section 610.",
+     "waiverNoteAr": "قسم القراءة والكتابة في SAT بدرجة 610.",
+     "source": "s5",
+     "quote": "Section score of 610 or above in the Reading and Writing section of the SAT, achieved in the same attempt."
+    },
+    {
+     "test": "OTHER",
+     "minOverall": 90,
+     "minComponent": null,
+     "waiverNoteEn": "Indian Grade 12 English (CBSE or ISC) at 90%.",
+     "waiverNoteAr": "اللغة الإنجليزية للصف الثاني عشر في المناهج الهندية (CBSE أو ISC) بنسبة 90%.",
+     "source": "s5",
+     "quote": "A score of 90% or above in English at Grade 12 level in All India Senior School Certificate Examination / Indian School Certificate Examination/ Higher / Higher School Certificate |"
+    }
+   ],
    "tests": [],
    "additional": [
     {
@@ -1902,7 +2082,7 @@
      "nameEn": "Bachelor of Laws LLB",
      "nameAr": "بكالوريوس القانون",
      "degree": "LLB",
-     "durationYears": null,
+     "durationYears": 4,
      "url": "https://www.hku.hk/en/academics/faculties/law",
      "curricula": {},
      "general": {
@@ -1917,6 +2097,14 @@
         "noteAr": "تقدم كلية القانون بكالوريوس القانون LLB ودرجات مزدوجة معه. لم تُستخرج شروط القبول بعد.",
         "source": "s2",
         "quote": "LLB, BBA(Law)&LLB, BSocSc (Govt & Laws)&LLB, BA&LLB, BSc&LLB"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "The LLB is a four-year degree; five-year double degrees with the LLB are also offered.",
+        "noteAr": "بكالوريوس القانون مدته أربع سنوات، وتُقدَّم أيضا درجات مزدوجة معه لمدة خمس سنوات.",
+        "source": "s6",
+        "quote": "In addition to our 4-year LLB, several 5-year integrated double-degree programmes are now available to students."
        }
       ],
       "source": "s2"
@@ -1988,6 +2176,13 @@
      "title": "Entry Requirements - PSUT",
      "retrievedAt": "2026-09-30T07:36:25.146Z",
      "hash": "a56045bc27c7424d6e76dd26521518f50fc621edc1d9b337674fd3d37b97f365"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.psut.edu.jo/en/admission-platform",
+     "title": "Admission Platform - PSUT",
+     "retrievedAt": "2026-09-30T08:20:27.694Z",
+     "hash": "0017c8c5e7a490ae12209765149403b7328d983f1857c55109fd805c5abdaeb3"
     }
    ],
    "english": [],
@@ -2008,6 +2203,14 @@
      "noteAr": "القبول تنافسي، وتعلن الجامعة الحد الأدنى للمعدل كل عام لكل برنامج.",
      "source": "s4",
      "quote": "The student’s average should not be lower than the minimum average announced by the university to compete for admission in the current academic year for the desired program."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "PSUT's admission platform covers both Jordanian and international students, including an entrance examination and interview step.",
+     "noteAr": "تغطي منصة القبول في الجامعة الطلاب الأردنيين والدوليين، وتشمل خطوة امتحان القبول والمقابلة.",
+     "source": "s5",
+     "quote": "This platform has been created to simplify the PSUT Admission Procedures for students including admission of Jordanian Students, and admission of International Students"
     }
    ],
    "deadlines": [],
@@ -2118,9 +2321,42 @@
      "hash": "6fd7d3028b7963bca324bfb96adaade5ad120e110273046a999510e3907d3c60",
      "waybackTimestamp": "20251215182851",
      "waybackHash": "3ab372a2b22ec3b8868842ac34e2c172f79613d8550be4db31327fc7500f2bfc"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.uva.nl/en/programmes/bachelors/psychology/application-and-admission/international-prior-education/application-and-admission.html",
+     "title": "Application process (international prior education) - Bachelor's Psychology - UvA",
+     "retrievedAt": "2026-09-30T08:20:36.510Z",
+     "hash": "c1425f18ac48d104c7347a4fe29a018c75bb2d7c71216481716ce4d28aeea4b1"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.uva.nl/en/education/bachelor-s/bachelor-s-programmes/bachelor-s-programmes.html",
+     "title": "Bachelor's programmes - University of Amsterdam",
+     "retrievedAt": "2026-09-30T08:21:07.791Z",
+     "hash": "24a809a4955a131419d91df0da092ac63974e2ee26a2c989db50659ae12d54aa"
     }
    ],
-   "english": [],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": "Exempt: fully English-taught secondary education in the UK, US, Canada (not Quebec), Australia, Ireland or New Zealand, or an IB diploma with English as an exam subject.",
+     "waiverNoteAr": "مُعفى: من أتم تعليما ثانويا بالإنجليزية بالكامل في بريطانيا أو الولايات المتحدة أو كندا (عدا كيبيك) أو أستراليا أو إيرلندا أو نيوزيلندا، أو حامل البكالوريا الدولية مع الإنجليزية كمادة امتحان.",
+     "source": "s2",
+     "quote": "IELTS Academic | 6.5 | Each subscore: 6"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 92,
+     "minComponent": 22,
+     "waiverNoteEn": "Exempt: fully English-taught secondary education in the UK, US, Canada (not Quebec), Australia, Ireland or New Zealand, or an IB diploma with English as an exam subject.",
+     "waiverNoteAr": "مُعفى: من أتم تعليما ثانويا بالإنجليزية بالكامل في بريطانيا أو الولايات المتحدة أو كندا (عدا كيبيك) أو أستراليا أو إيرلندا أو نيوزيلندا، أو حامل البكالوريا الدولية مع الإنجليزية كمادة امتحان.",
+     "source": "s2",
+     "quote": "TOEFL (iBT) Scoring scale: 0-120* | 92 | Each subscore: 22"
+    }
+   ],
    "tests": [],
    "additional": [],
    "deadlines": [
@@ -2146,7 +2382,19 @@
      "url": "https://www.uva.nl/en/programmes/bachelors/psychology/psychology.html",
      "curricula": {},
      "general": {
-      "subjects": [],
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "source": "s2",
+        "quote": "In general, mathematics has to be included in the upper secondary education curriculum up until the final year and final examinations.",
+        "noteEn": "Mathematics to the final year and final exams, at least Dutch VWO Wiskunde A level (or OMPT-A 70%).",
+        "noteAr": "الرياضيات حتى السنة النهائية والامتحانات النهائية بمستوى لا يقل عن رياضيات A الهولندية (أو OMPT-A بنسبة 70%)."
+       }
+      ],
       "english": [],
       "tests": [],
       "additional": [
@@ -2165,9 +2413,71 @@
         "noteAr": "180 وحدة ECTS على مدى 36 شهرا، بمسار إنجليزي أو هولندي.",
         "source": "s1",
         "quote": "180 EC ECTS, 36 months"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Foreign diploma must be equivalent to the Dutch VWO; English at CEFR C1; 300 places on the English track for 2027-2028.",
+        "noteAr": "يجب أن تعادل الشهادة الأجنبية شهادة VWO الهولندية، مع الإنجليزية بمستوى C1، و300 مقعد في المسار الإنجليزي لعام 2027-2028.",
+        "source": "s2",
+        "quote": "You can submit your enrolment application for the academic year 2027-2028 in Studielink from 1 October 2026 till 15 January 2027."
        }
       ],
       "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "university-of-amsterdam-ai",
+     "status": "EXISTS",
+     "nameEn": "Artificial Intelligence BSc",
+     "nameAr": "بكالوريوس العلوم في الذكاء الاصطناعي",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.uva.nl/en/education/bachelor-s/bachelor-s-programmes/bachelor-s-programmes.html",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Listed among UvA bachelor's programmes. Entry requirements not yet extracted.",
+        "noteAr": "مدرج ضمن برامج البكالوريوس في الجامعة. لم تُستخرج شروط القبول بعد.",
+        "source": "s3",
+        "quote": "As an Artificial Intelligence student, you study and analyse AI from different academic perspectives."
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    },
+    {
+     "key": "university-of-amsterdam-econ",
+     "status": "REPLACED",
+     "nameEn": "Economics and Business Economics BSc",
+     "nameAr": "بكالوريوس العلوم في الاقتصاد واقتصاديات الأعمال",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.uva.nl/en/education/bachelor-s/bachelor-s-programmes/bachelor-s-programmes.html",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "UvA's broad economics bachelor is Economics and Business Economics. Entry requirements not yet extracted.",
+        "noteAr": "بكالوريوس الاقتصاد العام في الجامعة هو الاقتصاد واقتصاديات الأعمال. لم تُستخرج شروط القبول بعد.",
+        "source": "s3",
+        "quote": "Economics and Business Economics is a very broad programme."
+       }
+      ],
+      "source": "s3"
      },
      "previous": null
     }
@@ -2209,6 +2519,20 @@
      "hash": "00e2f4e8d29328f17eacb3336cb6712d01575851eb9c1d1b072598f2c20005fc",
      "waybackTimestamp": "20251022045703",
      "waybackHash": "b6af5db5497cc43ad2f730fa0bae784ea2ed1e1ba989627101f9698c66fbed9d"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.ntu.edu.sg/computing/admissions/undergraduate-programmes/detail/bachelor-of-computing-in-computer-science",
+     "title": "Bachelor of Computing (Hons) in Computer Science | NTU CCDS",
+     "retrievedAt": "2026-09-30T08:21:43.732Z",
+     "hash": "44215002724ceb2ebe178c03f65bbf382fbe087e8adb33f39c6d725a402d4ad1"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.ntu.edu.sg/engineering/coe-programmes/undergraduate?page=3",
+     "title": "College of Engineering undergraduate programmes (page 3) | NTU",
+     "retrievedAt": "2026-09-30T08:20:55.663Z",
+     "hash": "46bd100c64402aa7592af8e02dde4a649036b40f6ae9426587f812cbe625c466"
     }
    ],
    "english": [
@@ -2360,11 +2684,23 @@
      "nameEn": "Bachelor of Computing (Hons) in Computer Science",
      "nameAr": "بكالوريوس الحوسبة (مع مرتبة الشرف) في علوم الحاسوب",
      "degree": "BComp",
-     "durationYears": null,
-     "url": "https://www.ntu.edu.sg/computing/admissions/undergraduate-programmes",
+     "durationYears": 4,
+     "url": "https://www.ntu.edu.sg/computing/admissions/undergraduate-programmes/detail/bachelor-of-computing-in-computer-science",
      "curricula": {},
      "general": {
-      "subjects": [],
+      "subjects": [
+       {
+        "type": "ONE_OF",
+        "keys": [
+         "mathematics",
+         "physics",
+         "computer_science"
+        ],
+        "minimumLevel": "ADVANCED",
+        "source": "s5",
+        "quote": "A strong foundation in Mathematics or Physics or Computing"
+       }
+      ],
       "english": [],
       "tests": [],
       "additional": [
@@ -2375,9 +2711,44 @@
         "noteAr": "تقدمه كلية الحوسبة وعلم البيانات. لم تُستخرج شروط القبول الخاصة بالبرنامج بعد.",
         "source": "s4",
         "quote": "Bachelor of Computing (Hons) in Computer Science"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Full-time four-year direct honours degree with a mandatory industrial attachment.",
+        "noteAr": "درجة شرف مباشرة بدوام كامل لمدة أربع سنوات مع تدريب صناعي إلزامي.",
+        "source": "s5",
+        "quote": "The Computer Science programme is structured as a full-time, 4 year direct honours degree with a blend of core modules, electives, and projects, designed to provide strong foundations alongside applied skills."
        }
       ],
       "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "ntu-ee",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Engineering in Electrical and Electronic Engineering",
+     "nameAr": "بكالوريوس الهندسة في الهندسة الكهربائية والإلكترونية",
+     "degree": "BEng",
+     "durationYears": null,
+     "url": "https://www.ntu.edu.sg/engineering/coe-programmes/undergraduate?page=3",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Offered by the School of Electrical and Electronic Engineering. Programme-specific entry requirements not yet extracted.",
+        "noteAr": "تقدمه كلية الهندسة الكهربائية والإلكترونية. لم تُستخرج شروط القبول الخاصة بالبرنامج بعد.",
+        "source": "s6",
+        "quote": "Bachelor of Engineering in Electrical and Electronic Engineering"
+       }
+      ],
+      "source": "s6"
      },
      "previous": null
     }
@@ -2403,6 +2774,27 @@
      "hash": "13e8ef67d8d7fa1332c600d435c1fbaf0e6f9217f08abdcd98b6adf6585ab3b0",
      "waybackTimestamp": "20251016135416",
      "waybackHash": "c9f42a5f62c3bcd59310fb0c7f739933d019523036690d865bbee4865242f8bb"
+    },
+    {
+     "id": "s3",
+     "url": "https://join.hkust.edu.hk/our-programs/school-of-engineering/artificial-intelligence",
+     "title": "BEng in Artificial Intelligence | HKUST",
+     "retrievedAt": "2026-09-30T08:20:29.944Z",
+     "hash": "fedb50a29c851bd6dd3350246b831b1f29c956c9f2e86f8e3fd6334dbbfc1349"
+    },
+    {
+     "id": "s4",
+     "url": "https://join.hkust.edu.hk/our-programs/school-of-engineering/computer-science",
+     "title": "BEng/BSc in Computer Science | HKUST",
+     "retrievedAt": "2026-09-30T08:20:18.896Z",
+     "hash": "12a5295c21764e2d858e475f4c677090bb40d1e492f91a696b7e60305ff009b8"
+    },
+    {
+     "id": "s5",
+     "url": "https://join.hkust.edu.hk/admissions/international-qualifications-requirements/application-procedures",
+     "title": "Application Procedures | HKUST",
+     "retrievedAt": "2026-09-30T08:20:45.121Z",
+     "hash": "3c1def97329c801f4c07a00f74fe20ca67b3e19310606d61d269cd8a44083600"
     }
    ],
    "english": [],
@@ -2415,6 +2807,30 @@
      "noteAr": "يتقدم حاملو المؤهلات الدولية مباشرة عبر الإنترنت، ويجب استيفاء المتطلبات العامة ومتطلبات البرنامج واللغة الإنجليزية.",
      "source": "s1",
      "quote": "All applicants with international qualifications must fulfill the General Admissions Requirements, School/Program-specific Requirements, and English Language Requirements."
+    },
+    {
+     "kind": "PERSONAL_STATEMENT",
+     "required": true,
+     "noteEn": "Application includes a personal statement, three years of transcripts, proof of English and public exam certificates.",
+     "noteAr": "يتضمن الطلب بيانا شخصيا وكشوف درجات ثلاث سنوات وإثبات اللغة الإنجليزية وشهادات الامتحانات العامة.",
+     "source": "s5",
+     "quote": "You are required to include identity documents, a personal statement, high school transcripts for the past three years, proof of English language proficiency, public examination certificates, and proof of significant prizes and awards (if any) with your online application."
+    },
+    {
+     "kind": "REFERENCE",
+     "required": true,
+     "noteEn": "At least one academic referee; IB, A-level and Indian curriculum students also need a predicted grade report from their counsellor.",
+     "noteAr": "مُزكٍّ أكاديمي واحد على الأقل، ويحتاج طلاب البكالوريا الدولية والمستوى المتقدم والمناهج الهندية إلى تقرير درجات متوقعة من المرشد.",
+     "source": "s5",
+     "quote": "Each student is required to nominate at least ONE academic referee."
+    },
+    {
+     "kind": "INTERVIEW",
+     "required": false,
+     "noteEn": "Interviews may be arranged; mandatory only for some programmes.",
+     "noteAr": "قد تُعقد مقابلات، وهي إلزامية لبعض البرامج فقط.",
+     "source": "s5",
+     "quote": "An admissions interview may be arranged, but is not a mandatory procedure of the admissions exercise except for some programs."
     }
    ],
    "deadlines": [
@@ -2445,8 +2861,8 @@
      "nameEn": "Artificial Intelligence BEng",
      "nameAr": "بكالوريوس الهندسة في الذكاء الاصطناعي",
      "degree": "BEng",
-     "durationYears": null,
-     "url": "https://join.hkust.edu.hk/our-programs/school-of-engineering",
+     "durationYears": 4,
+     "url": "https://join.hkust.edu.hk/our-programs/school-of-engineering/artificial-intelligence",
      "curricula": {},
      "general": {
       "subjects": [],
@@ -2460,6 +2876,22 @@
         "noteAr": "مدرج باسم بكالوريوس الهندسة في الذكاء الاصطناعي في كلية الهندسة (وليس بكالوريوس علوم). لم تُستخرج شروط القبول بعد.",
         "source": "s2",
         "quote": "BEng in Artificial Intelligence ^"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Four-year programme.",
+        "noteAr": "برنامج لمدة أربع سنوات.",
+        "source": "s3",
+        "quote": "Duration 4Y"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Apply through department-based admission to the Department of Computer Science and Engineering; after Year 1 students choose BEng AI, BEng Computer Science or BSc Computer Science.",
+        "noteAr": "يُقدَّم عبر القبول القائم على القسم في قسم علوم الحاسوب والهندسة، وبعد السنة الأولى يختار الطالب بين بكالوريوس الهندسة في الذكاء الاصطناعي أو علوم الحاسوب أو بكالوريوس العلوم في علوم الحاسوب.",
+        "source": "s3",
+        "quote": "Students who have decided to pursue a major in Artificial Intelligence are strongly encouraged to apply to the Department directly."
        }
       ],
       "source": "s2"
@@ -2472,8 +2904,8 @@
      "nameEn": "Computer Science BEng/BSc",
      "nameAr": "بكالوريوس الهندسة أو العلوم في علوم الحاسوب",
      "degree": "BEng",
-     "durationYears": null,
-     "url": "https://join.hkust.edu.hk/our-programs/school-of-engineering",
+     "durationYears": 4,
+     "url": "https://join.hkust.edu.hk/our-programs/school-of-engineering/computer-science",
      "curricula": {},
      "general": {
       "subjects": [],
@@ -2487,6 +2919,22 @@
         "noteAr": "يُقدَّم بكالوريوس الهندسة أو العلوم في علوم الحاسوب، والقبول المباشر عبر قسم علوم الحاسوب والهندسة (JS5240). لم تُستخرج شروط القبول بعد.",
         "source": "s2",
         "quote": "BEng/BSc in Computer Science ^"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Four-year programme.",
+        "noteAr": "برنامج لمدة أربع سنوات.",
+        "source": "s4",
+        "quote": "Duration 4Y"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Apply through department-based admission to the Department of Computer Science and Engineering; after Year 1 students choose BEng AI, BEng Computer Science or BSc Computer Science.",
+        "noteAr": "يُقدَّم عبر القبول القائم على القسم في قسم علوم الحاسوب والهندسة، وبعد السنة الأولى يختار الطالب بين بكالوريوس الهندسة في الذكاء الاصطناعي أو علوم الحاسوب أو بكالوريوس العلوم في علوم الحاسوب.",
+        "source": "s4",
+        "quote": "Students who have decided to pursue a major in Computer Science are strongly encouraged to apply to the Department directly."
        }
       ],
       "source": "s2"
@@ -2606,12 +3054,101 @@
      "title": "Bachelor programmes - TU Delft",
      "retrievedAt": "2026-09-30T07:58:47.560Z",
      "hash": "fcbc80bbcd3bded4479c3cfb3307b9a4c0b2d7a8123a6c13325c2e35e71bb54b"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.tudelft.nl/en/education/admission-and-application/bsc-international-diploma/admission-requirements",
+     "title": "Admission Requirements (BSc international diploma) - TU Delft",
+     "retrievedAt": "2026-09-30T08:20:32.021Z",
+     "hash": "81a738366929a70ec87f20652aa05a39df63478f3bb48120c130e3787d8f6556"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.tudelft.nl/en/education/admission-and-application/bsc-international-diploma/dates-deadlines",
+     "title": "Dates & Deadlines - TU Delft",
+     "retrievedAt": "2026-09-30T08:21:03.178Z",
+     "hash": "97ecc99d9b0673a78784592832965c5d4ca07ea27b575df710f0a535162f0cfa"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.tudelft.nl/en/education/admission-and-application/bsc-international-diploma/numerus-clausus-programmes",
+     "title": "Numerus clausus programmes - TU Delft",
+     "retrievedAt": "2026-09-30T08:21:39.494Z",
+     "hash": "22e91528f57d4a729afbc03158a376386adffb56106eb57656f60a91c9915921"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.tudelft.nl/en/onderwijs/opleidingen/bachelors/computer-science-and-engineering/bachelor-of-computer-science-and-engineering",
+     "title": "Bachelor of Computer Science and Engineering - TU Delft",
+     "retrievedAt": "2026-09-30T08:21:54.163Z",
+     "hash": "6a1f817ec17eb74e69d0602106219363fd687d5fc4cfe8f326a31d9aa6702225"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.tudelft.nl/en/onderwijs/opleidingen/bachelors/werktuigbouwkunde/bsc-mechanical-engineering",
+     "title": "BSc Mechanical Engineering - TU Delft",
+     "retrievedAt": "2026-09-30T08:20:50.894Z",
+     "hash": "eebae197442a638fcddb8603c4f0c17e7271612da51ac10125ae3c6c5abd6560"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.tudelft.nl/en/onderwijs/opleidingen/bachelors/ae/bsc-aerospace-engineering",
+     "title": "BSc Aerospace Engineering - TU Delft",
+     "retrievedAt": "2026-09-30T08:20:41.557Z",
+     "hash": "f26875250976ac032bd1ad2014cf9f672f042b9384be1d1109c6c09c805ff8ca"
     }
    ],
-   "english": [],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": null,
+     "waiverNoteEn": "Exempt: applicants with British A-levels or a US high school diploma, and IB holders taught in English or with English A; required for English-taught programmes.",
+     "waiverNoteAr": "مُعفى: حملة شهادات المستوى المتقدم البريطانية أو الثانوية الأمريكية، وحملة البكالوريا الدولية المدرَّسة بالإنجليزية أو مع English A؛ ومطلوب للبرامج المدرَّسة بالإنجليزية.",
+     "source": "s2",
+     "quote": "IELTS (Academic version) with an overall band score of at least 6.5."
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 90,
+     "minComponent": null,
+     "waiverNoteEn": "Tests from 21 January 2026 need an overall band of 5. Exempt: applicants with British A-levels or a US high school diploma, and IB holders taught in English or with English A; required for English-taught programmes.",
+     "waiverNoteAr": "الاختبارات من 21 يناير 2026 تتطلب 5 إجمالا. مُعفى: حملة شهادات المستوى المتقدم البريطانية أو الثانوية الأمريكية، وحملة البكالوريا الدولية المدرَّسة بالإنجليزية أو مع English A؛ ومطلوب للبرامج المدرَّسة بالإنجليزية.",
+     "source": "s2",
+     "quote": "TOEFL test reports obtained before January 21, 2026: A TOEFL iBT with an overall band score of at least 90."
+    }
+   ],
    "tests": [],
-   "additional": [],
-   "deadlines": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Diploma must be equivalent to the Dutch VWO diploma, with programme-specific exam subjects; missing subjects can be made up by VWO entrance exams before 1 September.",
+     "noteAr": "يجب أن تعادل الشهادة شهادة VWO الهولندية مع مواد امتحان خاصة بالبرنامج، ويمكن تعويض المواد الناقصة بامتحانات VWO قبل 1 سبتمبر.",
+     "source": "s2",
+     "quote": "To be eligible for admission, you must hold a secondary school diploma that is considered equivalent to the Dutch pre-university VWO diploma."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-01-15",
+     "labelEn": "Numerus clausus programmes (Aerospace Engineering, Computer Science and Engineering)",
+     "labelAr": "برامج المقاعد المحدودة (هندسة الطيران والفضاء، علوم الحاسوب والهندسة)",
+     "source": "s4",
+     "quote": "The application deadline for all Numerus Clausus programmes is 15 January (23:59 CET)."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-04-01",
+     "labelEn": "Regular BSc programmes, international diplomas",
+     "labelAr": "برامج البكالوريوس العادية لحملة الشهادات الدولية",
+     "source": "s3",
+     "quote": "1 April (23:59 CEST) This application deadline applies to applicants with an international secondary school diploma, including international secondary school diplomas obtained in the Netherlands."
+    }
+   ],
    "curriculumRules": {},
    "programs": [
     {
@@ -2621,10 +3158,20 @@
      "nameAr": "بكالوريوس العلوم في علوم الحاسوب والهندسة",
      "degree": "BSc",
      "durationYears": null,
-     "url": "https://www.tudelft.nl/en/education/programmes/bachelors",
+     "url": "https://www.tudelft.nl/en/onderwijs/opleidingen/bachelors/computer-science-and-engineering/bachelor-of-computer-science-and-engineering",
      "curricula": {},
      "general": {
-      "subjects": [],
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "source": "s2",
+        "quote": "Computer Science and Engineering | X | | | |"
+       }
+      ],
       "english": [],
       "tests": [],
       "additional": [
@@ -2635,6 +3182,14 @@
         "noteAr": "الاسم الرسمي علوم الحاسوب والهندسة، ومدرج كبرنامج باللغة الإنجليزية. لم تُستخرج شروط القبول بعد.",
         "source": "s1",
         "quote": "Computer Science & Engineering - English"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Numerus fixus with 590 places; English track available (also a Dutch-English track).",
+        "noteAr": "عدد مقاعد محدود بـ 590 مقعدا، مع مسار بالإنجليزية (وآخر هولندي إنجليزي).",
+        "source": "s5",
+        "quote": "Numerus fixus: Yes (590)"
        }
       ],
       "source": "s1"
@@ -2648,10 +3203,21 @@
      "nameAr": "بكالوريوس العلوم في الهندسة الميكانيكية",
      "degree": "BSc",
      "durationYears": null,
-     "url": "https://www.tudelft.nl/en/education/programmes/bachelors",
+     "url": "https://www.tudelft.nl/en/onderwijs/opleidingen/bachelors/werktuigbouwkunde/bsc-mechanical-engineering",
      "curricula": {},
      "general": {
-      "subjects": [],
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics",
+         "physics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "source": "s2",
+        "quote": "Mechanical Engineering | X | X | | |"
+       }
+      ],
       "english": [],
       "tests": [],
       "additional": [
@@ -2662,6 +3228,14 @@
         "noteAr": "مدرج دون علامة '- English' التي تحملها البرامج المدرَّسة بالإنجليزية، لذا يجب التحقق من لغة التدريس في صفحة البرنامج. لم تُستخرج شروط القبول بعد.",
         "source": "s1",
         "quote": "Mechanical Engineering"
+       },
+       {
+        "kind": "NOT_ACCEPTED",
+        "required": true,
+        "noteEn": "Taught in Dutch only, so Dutch proficiency is required; not an option for students without Dutch.",
+        "noteAr": "يُدرَّس بالهولندية فقط، لذا يلزم إتقان الهولندية، وليس خيارا لغير المتحدثين بها.",
+        "source": "s6",
+        "quote": "The Mechanical Engineering programme is taught in Dutch."
        }
       ],
       "source": "s1"
@@ -2675,10 +3249,21 @@
      "nameAr": "بكالوريوس العلوم في هندسة الطيران والفضاء",
      "degree": "BSc",
      "durationYears": null,
-     "url": "https://www.tudelft.nl/en/education/programmes/bachelors",
+     "url": "https://www.tudelft.nl/en/onderwijs/opleidingen/bachelors/ae/bsc-aerospace-engineering",
      "curricula": {},
      "general": {
-      "subjects": [],
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics",
+         "physics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "source": "s2",
+        "quote": "Aerospace Engineering | X | X | | |"
+       }
+      ],
       "english": [],
       "tests": [],
       "additional": [
@@ -2689,6 +3274,22 @@
         "noteAr": "مدرج كبرنامج باللغة الإنجليزية. لم تُستخرج شروط القبول بعد.",
         "source": "s1",
         "quote": "Aerospace Engineering - English"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Taught in English.",
+        "noteAr": "يُدرَّس بالإنجليزية.",
+        "source": "s7",
+        "quote": "Working language: English"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Numerus fixus with a selection procedure; apply by 15 January.",
+        "noteAr": "عدد مقاعد محدود مع إجراءات اختيار، والتقديم قبل 15 يناير.",
+        "source": "s7",
+        "quote": "Numerus Fixus: Yes"
        }
       ],
       "source": "s1"
@@ -2724,6 +3325,20 @@
      "title": "Application and admission - TU/e",
      "retrievedAt": "2026-09-30T07:59:02.268Z",
      "hash": "f5f3607ea6cc5ac93de35560298cf4b750787df185f2bfe188f94a62a94a65ff"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.tue.nl/en/education/bachelor-college/bachelor-computer-science-and-engineering",
+     "title": "Bachelor Computer Science and Engineering - TU/e",
+     "retrievedAt": "2026-09-30T08:21:00.912Z",
+     "hash": "5fabc5ef3296792a82c64c37f96f52e0901335ec729c6b1a9b1016e016eac178"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.tue.nl/en/education/bachelor-college/bachelor-data-science",
+     "title": "Bachelor Data Science - TU/e",
+     "retrievedAt": "2026-09-30T08:20:59.202Z",
+     "hash": "38bd1c6f42283dd662ffbd2899314ec425a6004775f80cfa8d386a0dc7d64219"
     }
    ],
    "english": [],
@@ -2757,8 +3372,8 @@
      "nameEn": "Computer Science and Engineering BSc",
      "nameAr": "بكالوريوس العلوم في علوم الحاسوب والهندسة",
      "degree": "BSc",
-     "durationYears": null,
-     "url": "https://www.tue.nl/en/education/degree-programs/bachelor-programs",
+     "durationYears": 3,
+     "url": "https://www.tue.nl/en/education/bachelor-college/bachelor-computer-science-and-engineering",
      "curricula": {},
      "general": {
       "subjects": [],
@@ -2772,6 +3387,14 @@
         "noteAr": "برنامج اختيار بعدد مقاعد محدود لعام 2027-2028، والاختبار الإلكتروني للاختيار في 6 مارس 2027 والمشاركة إلزامية.",
         "source": "s2",
         "quote": "6 March 2027: Computer Science and Engineering online test"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Three years, taught in English, Bachelor of Science.",
+        "noteAr": "ثلاث سنوات بالإنجليزية، بكالوريوس العلوم.",
+        "source": "s4",
+        "quote": "Duration Three years Language English Degree Bachelor of Science"
        }
       ],
       "source": "s2"
@@ -2784,8 +3407,8 @@
      "nameEn": "Data Science BSc",
      "nameAr": "بكالوريوس العلوم في علم البيانات",
      "degree": "BSc",
-     "durationYears": null,
-     "url": "https://www.tue.nl/en/education/degree-programs/bachelor-programs",
+     "durationYears": 3,
+     "url": "https://www.tue.nl/en/education/bachelor-college/bachelor-data-science",
      "curricula": {},
      "general": {
       "subjects": [],
@@ -2799,6 +3422,22 @@
         "noteAr": "مدرج ضمن برامج البكالوريوس في الجامعة. لم تُستخرج شروط القبول بعد.",
         "source": "s1",
         "quote": "Bachelor Data Science"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Three years, taught in English, Bachelor of Science.",
+        "noteAr": "ثلاث سنوات بالإنجليزية، بكالوريوس العلوم.",
+        "source": "s5",
+        "quote": "Duration Three years Language English Degree Bachelor of Science"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Joint bachelor of Tilburg University and TU/e, with lectures in both cities.",
+        "noteAr": "بكالوريوس مشترك بين جامعة تيلبورغ وجامعة آيندهوفن للتكنولوجيا، مع محاضرات في المدينتين.",
+        "source": "s5",
+        "quote": "Data Science is a joint bachelor of Tilburg University and Eindhoven University of Technology."
        }
       ],
       "source": "s1"
@@ -2841,10 +3480,62 @@
      "title": "Indicative Grade Profile | NUS",
      "retrievedAt": "2026-09-30T07:58:37.990Z",
      "hash": "fce1186d7f212c9d16262d77ba7150ce6aa64485643cf719e3deb3aa7ffde26d"
+    },
+    {
+     "id": "s5",
+     "url": "https://medicine.nus.edu.sg/prospective-students/bachelor-of-medicine-and-bachelor-of-surgery-mbbs/",
+     "title": "MBBS: Bachelor of Medicine and Bachelor of Surgery - NUS Medicine",
+     "retrievedAt": "2026-09-30T08:21:01.736Z",
+     "hash": "997b36699835a4209f74683aabd70371f149641490363b73ac6fb6e98d5f476a"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.nus.edu.sg/oam/admissions/international-qualifications-for-foreigners/international-qualifications/american-high-school-diploma",
+     "title": "American High School Diploma | NUS",
+     "retrievedAt": "2026-09-30T08:20:47.120Z",
+     "hash": "4b8a945bad137ed4651983eb0832f253f8d263094bbf100cd1c91e9d7a4dbdcb"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.nus.edu.sg/oam/admissions/international-qualifications-for-foreigners/international-qualifications/indian-standard-12-cbse-and-isc",
+     "title": "Indian Standard 12 (Central and ISC Boards) | NUS",
+     "retrievedAt": "2026-09-30T08:21:05.792Z",
+     "hash": "45315f899ffedd4b229ce448b6f264c9502d976d37e7bf4cd2984379e4556591"
+    },
+    {
+     "id": "s8",
+     "url": "https://www.nus.edu.sg/oam/admissions/international-qualifications-for-foreigners/international-qualifications/other-high-school-qualifications",
+     "title": "Other High School Qualifications | NUS",
+     "retrievedAt": "2026-09-30T08:21:04.757Z",
+     "hash": "5b218724bcfcdb06b01946ae405386adacee4233b645f98278104874ef60973e"
+    },
+    {
+     "id": "s9",
+     "url": "https://www.comp.nus.edu.sg/programmes/ug/cs/",
+     "title": "Computer Science - NUS Computing",
+     "retrievedAt": "2026-09-30T08:21:50.955Z",
+     "hash": "6584d669b01d92d4495029932be501bd1c9dae4e4db0e877c8a047626f4cd152"
+    },
+    {
+     "id": "s10",
+     "url": "https://ceg.nus.edu.sg/",
+     "title": "Computer Engineering @ NUS",
+     "retrievedAt": "2026-09-30T08:22:06.163Z",
+     "hash": "91a0d1d6c56a12b73f11df4ef76dce40fa56b53cd5de2be5f6890ef3e30f586e"
     }
    ],
    "english": [],
-   "tests": [],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "Standardised tests (SAT, ACT with Writing or AP) are required for US high school diploma and other high school qualifications (including UAE and Jordanian certificates); not required for Indian CBSE/ISC.",
+     "noteAr": "الاختبارات المعيارية (SAT أو ACT مع الكتابة أو AP) مطلوبة لحملة الشهادة الأمريكية وغيرها من الشهادات الثانوية (ومنها الإماراتية والأردنية)، وغير مطلوبة لشهادات CBSE/ISC الهندية.",
+     "source": "s6",
+     "quote": "Standardised Test (Advanced Placement, ACT with Writing, SAT) | Required | Required"
+    }
+   ],
    "additional": [
     {
      "kind": "OTHER",
@@ -2910,6 +3601,66 @@
        "quote": "English must be one of the subjects taken at the IB examination."
       }
      ]
+    },
+    "UAE_MOE": {
+     "accepted": true,
+     "notesEn": "Falls under 'Other High School Qualifications': graduation certificate with a good pass, plus SAT, ACT with Writing or AP tests (required). No English test required. Applicants still completing school when applications close are not eligible for Dentistry, Law or Medicine.",
+     "notesAr": "تندرج ضمن 'شهادات ثانوية أخرى': شهادة التخرج بنجاح جيد مع اختبارات SAT أو ACT مع الكتابة أو AP (مطلوبة). لا يلزم اختبار لغة إنجليزية. ولا يحق لمن لم ينهِ الدراسة عند إغلاق التقديم التقدم لطب الأسنان أو القانون أو الطب.",
+     "source": "s8",
+     "quote": "High School Graduation Certificate and transcript | Most recent High School exam results prior to High School graduation | A good pass certificate",
+     "subjects": []
+    },
+    "JORDAN_TAWJIHI": {
+     "accepted": true,
+     "notesEn": "Falls under 'Other High School Qualifications': graduation certificate with a good pass, plus SAT, ACT with Writing or AP tests (required). No English test required. Applicants still completing school when applications close are not eligible for Dentistry, Law or Medicine.",
+     "notesAr": "تندرج ضمن 'شهادات ثانوية أخرى': شهادة التخرج بنجاح جيد مع اختبارات SAT أو ACT مع الكتابة أو AP (مطلوبة). لا يلزم اختبار لغة إنجليزية. ولا يحق لمن لم ينهِ الدراسة عند إغلاق التقديم التقدم لطب الأسنان أو القانون أو الطب.",
+     "source": "s8",
+     "quote": "High School Graduation Certificate and transcript | Most recent High School exam results prior to High School graduation | A good pass certificate",
+     "subjects": []
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "notesEn": "Good pass in the US high school diploma plus SAT, ACT with Writing or AP tests (required). No English test required.",
+     "notesAr": "نجاح جيد في شهادة الثانوية الأمريكية مع اختبارات SAT أو ACT مع الكتابة أو AP (مطلوبة). لا يلزم اختبار لغة إنجليزية.",
+     "source": "s6",
+     "quote": "American High School Diploma and transcript | Most recent high school exam results prior to High School graduation | A good pass certificate",
+     "subjects": []
+    },
+    "CBSE": {
+     "accepted": true,
+     "notesEn": "Good pass in five subjects including English; SAT/ACT/AP and English tests not required. Applicants still sitting Class 12 when applications close are not eligible for Dentistry, Law, Medicine or Nursing.",
+     "notesAr": "نجاح جيد في خمس مواد منها الإنجليزية، ولا تلزم اختبارات SAT/ACT/AP ولا اختبارات اللغة. ولا يحق لمن يؤدي امتحانات الصف الثاني عشر عند إغلاق التقديم التقدم لطب الأسنان أو القانون أو الطب أو التمريض.",
+     "source": "s7",
+     "quote": "A good pass in five subjects including English | Sitting for Indian Standard 12 (CBSE/ISC) examination in 2026, and a good pass in five subjects including English",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "english_language"
+       ],
+       "minimumLevel": "ADVANCED",
+       "source": "s7",
+       "quote": "A good pass in five subjects including English"
+      }
+     ]
+    },
+    "ISC": {
+     "accepted": true,
+     "notesEn": "Good pass in five subjects including English; SAT/ACT/AP and English tests not required. Applicants still sitting Class 12 when applications close are not eligible for Dentistry, Law, Medicine or Nursing.",
+     "notesAr": "نجاح جيد في خمس مواد منها الإنجليزية، ولا تلزم اختبارات SAT/ACT/AP ولا اختبارات اللغة. ولا يحق لمن يؤدي امتحانات الصف الثاني عشر عند إغلاق التقديم التقدم لطب الأسنان أو القانون أو الطب أو التمريض.",
+     "source": "s7",
+     "quote": "A good pass in five subjects including English | Sitting for Indian Standard 12 (CBSE/ISC) examination in 2026, and a good pass in five subjects including English",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "english_language"
+       ],
+       "minimumLevel": "ADVANCED",
+       "source": "s7",
+       "quote": "A good pass in five subjects including English"
+      }
+     ]
     }
    },
    "programs": [
@@ -2919,7 +3670,7 @@
      "nameEn": "Bachelor of Medicine and Bachelor of Surgery MBBS",
      "nameAr": "بكالوريوس الطب وبكالوريوس الجراحة",
      "degree": "MBBS",
-     "durationYears": null,
+     "durationYears": 5,
      "url": "https://medicine.nus.edu.sg/prospective-students/bachelor-of-medicine-and-bachelor-of-surgery-mbbs/",
      "curricula": {},
      "general": {
@@ -2942,9 +3693,503 @@
         "noteAr": "يتطلب الطب تقييمات إضافية مثل المقابلات والاختبارات، ويعتمد الاختيار أيضا على الأداء فيها.",
         "source": "s4",
         "quote": "Undergraduate programmes such as Architecture, Dentistry, Industrial Design, Landscape Architecture, Law, Medicine, Music, Nursing and Philosophy, Politics & Economics (PPE) require additional rigorous assessments, which may include interviews, auditions, selection tests and portfolios as part of the admission requirement."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Five-year MBBS curriculum.",
+        "noteAr": "منهج MBBS لمدة خمس سنوات.",
+        "source": "s5",
+        "quote": "Our five-year MBBS curriculum is future-oriented, inter-disciplinary and inter-professional in nature."
        }
       ],
       "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "nus-cs",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Computing in Computer Science (with Honours)",
+     "nameAr": "بكالوريوس الحوسبة في علوم الحاسوب (مع مرتبة الشرف)",
+     "degree": "BComp",
+     "durationYears": null,
+     "url": "https://www.comp.nus.edu.sg/programmes/ug/cs/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Offered by the NUS School of Computing. Programme prerequisites not yet extracted.",
+        "noteAr": "تقدمه كلية الحوسبة في الجامعة. لم تُستخرج متطلبات البرنامج بعد.",
+        "source": "s9",
+        "quote": "Bachelor of Computing in Computer Science (with Honours*)"
+       }
+      ],
+      "source": "s9"
+     },
+     "previous": null
+    },
+    {
+     "key": "nus-ai",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Computing in Computer Science (with Honours), AI focus",
+     "nameAr": "بكالوريوس الحوسبة في علوم الحاسوب (مع مرتبة الشرف) بتركيز على الذكاء الاصطناعي",
+     "degree": "BComp",
+     "durationYears": null,
+     "url": "https://www.comp.nus.edu.sg/programmes/ug/cs/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "No standalone AI bachelor appears in the NUS undergraduate programme list; AI is studied as an elective area within Computer Science (at least 10 AI electives).",
+        "noteAr": "لا يظهر بكالوريوس مستقل في الذكاء الاصطناعي في قائمة برامج البكالوريوس، ويُدرس الذكاء الاصطناعي كمجال اختياري ضمن علوم الحاسوب (10 مقررات اختيارية على الأقل).",
+        "source": "s9",
+        "quote": "Choose from at least 10 electives that range from the fundamentals (e.g. is a problem learnable?) to the applications (e.g. natural language processing, computer vision) of the field."
+       }
+      ],
+      "source": "s9"
+     },
+     "previous": null
+    },
+    {
+     "key": "nus-ce",
+     "status": "EXISTS",
+     "nameEn": "Computer Engineering",
+     "nameAr": "هندسة الحاسوب",
+     "degree": null,
+     "durationYears": null,
+     "url": "https://ceg.nus.edu.sg/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Offered by the College of Design and Engineering with the School of Computing. Degree title and prerequisites not yet extracted.",
+        "noteAr": "تقدمه كلية التصميم والهندسة مع كلية الحوسبة. لم يُستخرج اسم الدرجة والمتطلبات بعد.",
+        "source": "s10",
+        "quote": "Computer Engineering @ NUS"
+       }
+      ],
+      "source": "s10"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "gju",
+   "website": "https://www.gju.edu.jo",
+   "applyVia": "JORDAN_UNIFIED",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.gju.edu.jo/gju-programs",
+     "title": "GJU Programs | German Jordanian University",
+     "retrievedAt": "2026-09-30T08:20:34.172Z",
+     "hash": "c5e9031810115525b36d941180e383646716359cb359bc133cfaca456b2e73a2"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.gju.edu.jo/content/tuition-fees-8319",
+     "title": "Tuition Fees | German Jordanian University",
+     "retrievedAt": "2025-08-31T00:00:00Z",
+     "hash": "70aac2539e6b296f37ed2692fdbde0fe034af34c9cc4560902403401c167cd64",
+     "via": "archive:20250831093430"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Separate tuition categories: Regular (Jordanians with Tawjihi), Foreign Certificates (Jordanians with IB, IGCSE/GCE, US diploma and SAT II) and International (all non-Jordanians).",
+     "noteAr": "فئات رسوم منفصلة: العادي (الأردنيون بالتوجيهي)، والشهادات الأجنبية (الأردنيون بالبكالوريا الدولية أو IGCSE/GCE أو الشهادة الأمريكية مع SAT II)، والدولي (جميع غير الأردنيين).",
+     "source": "s2",
+     "quote": "International: Students All Non-Jordanian nationalities."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "gju-ee",
+     "status": "EXISTS",
+     "nameEn": "Electrical Engineering BSc",
+     "nameAr": "بكالوريوس الهندسة الكهربائية",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.gju.edu.jo/gju-programs",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Listed among GJU bachelor programmes. Entry requirements not yet extracted.",
+        "noteAr": "مدرج ضمن برامج البكالوريوس في الجامعة. لم تُستخرج شروط القبول بعد.",
+        "source": "s1",
+        "quote": "Electrical Engineering"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "gju-mechanical-engineering-bsc",
+     "status": "EXISTS",
+     "nameEn": "Mechanical and Maintenance Engineering BSc",
+     "nameAr": "بكالوريوس الهندسة الميكانيكية والصيانة",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.gju.edu.jo/gju-programs",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Listed among GJU bachelor programmes. Entry requirements not yet extracted.",
+        "noteAr": "مدرج ضمن برامج البكالوريوس في الجامعة. لم تُستخرج شروط القبول بعد.",
+        "source": "s1",
+        "quote": "Mechanical and Maintenance Engineering"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "university_of_jordan",
+   "website": "https://www.ju.edu.jo",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://registration.ju.edu.jo/en/english/Pages/ParallelProgram/PrllConditions_new.aspx",
+     "title": "Parallel/International Program Admission - The University of Jordan",
+     "retrievedAt": "2026-09-30T08:20:54.817Z",
+     "hash": "3d8a3afed9604cc702a3be8539195b7516ffc825794ce52cbe1194e56dec51eb"
+    },
+    {
+     "id": "s2",
+     "url": "https://registration.ju.edu.jo/en/english/Pages/MajorsAndFees_new.aspx",
+     "title": "Majors and university fees - The University of Jordan",
+     "retrievedAt": "2026-09-30T08:21:45.754Z",
+     "hash": "f05ec7d874e511165d9960f4b1880ff3c1754046c7c6b24282b9edbe19ced376"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Non-Jordanian applicants apply to UJ's International Program (fees in US dollars); Arab certificates such as the UAE certificate need authentication or equivalence from the Jordanian Ministry of Education. Admission is competitive on the secondary certificate average.",
+     "noteAr": "يتقدم غير الأردنيين إلى البرنامج الدولي في الجامعة (الرسوم بالدولار الأمريكي)، وتحتاج الشهادات العربية مثل الشهادة الإماراتية إلى تصديق أو معادلة من وزارة التربية والتعليم الأردنية. والقبول تنافسي حسب معدل الثانوية.",
+     "source": "s1",
+     "quote": "Foreign certificates need Jordanian Ministry of Education's equivalence. Arab certificates need authentication or equivalence from the Jordanian Ministry of Education. | US Dollar |"
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Students admitted to the International Program cannot transfer to the regular or parallel program.",
+     "noteAr": "لا يجوز للمقبولين في البرنامج الدولي الانتقال إلى البرنامج العادي أو الموازي.",
+     "source": "s1",
+     "quote": "6. Those admitted to the international program are not allowed to transfer to the regular program or the parallel program."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": true,
+     "notesEn": "Accepted for the International Program after authentication or equivalence by the Jordanian Ministry of Education. Minimum averages for non-Jordanians: Medicine and Dentistry 85%, Pharmacy and Engineering 80%, most other schools 65%.",
+     "notesAr": "مقبولة في البرنامج الدولي بعد التصديق أو المعادلة من وزارة التربية والتعليم الأردنية. الحد الأدنى لغير الأردنيين: الطب وطب الأسنان 85%، والصيدلة والهندسة 80%، ومعظم الكليات الأخرى 65%.",
+     "source": "s1",
+     "quote": "Foreign certificates need Jordanian Ministry of Education's equivalence. Arab certificates need authentication or equivalence from the Jordanian Ministry of Education. | US Dollar |",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "ju-medicine-md",
+     "status": "EXISTS",
+     "nameEn": "Doctor of Medicine MD",
+     "nameAr": "دكتور في الطب",
+     "degree": "MD",
+     "durationYears": null,
+     "url": "https://registration.ju.edu.jo/en/english/Pages/MajorsAndFees_new.aspx",
+     "curricula": {
+      "UAE_MOE": {
+       "minimumPercent": 85,
+       "notesEn": "Minimum secondary certificate average for non-Jordanian nationals (International Program), after Jordanian Ministry of Education equivalence.",
+       "notesAr": "الحد الأدنى لمعدل الثانوية لغير الأردنيين (البرنامج الدولي) بعد معادلة وزارة التربية والتعليم الأردنية.",
+       "source": "s1",
+       "quote": "2. The minimum required GPA for the General Secondary Education Certificate to join the schools of Medicine and Dentistry is 85% for those whose original nationality is foreign (non-Jordanian) , for Pharmacy and Engineering is 80%, for Sharia is 75%, and for Medical Laboratory Sciences, Nursing, and schools of Rehabilitation Sciences is 70%. For other schools, the minimum GPA required is 65%.",
+       "subjects": []
+      },
+      "JORDAN_TAWJIHI": {
+       "minimumPercent": 90,
+       "notesEn": "Minimum average listed in UJ's majors and fees table.",
+       "notesAr": "الحد الأدنى للمعدل كما ورد في جدول التخصصات والرسوم في الجامعة.",
+       "source": "s2",
+       "quote": "Medicine - MD | 256 | 90 | 45 | 175 | 250 | 500 |",
+       "subjects": []
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Doctor of Medicine (MD), 256 credit hours; listed minimum average 90.",
+        "noteAr": "دكتور في الطب، 256 ساعة معتمدة، والحد الأدنى المدرج للمعدل 90.",
+        "source": "s2",
+        "quote": "Medicine - MD | 256 | 90 | 45 | 175 | 250 | 500 |"
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "university-of-jordan-dent",
+     "status": "EXISTS",
+     "nameEn": "Doctor of Dental Surgery DDS",
+     "nameAr": "دكتور في جراحة الأسنان",
+     "degree": "DDS",
+     "durationYears": null,
+     "url": "https://registration.ju.edu.jo/en/english/Pages/MajorsAndFees_new.aspx",
+     "curricula": {
+      "UAE_MOE": {
+       "minimumPercent": 85,
+       "notesEn": "Minimum secondary certificate average for non-Jordanian nationals (International Program), after Jordanian Ministry of Education equivalence.",
+       "notesAr": "الحد الأدنى لمعدل الثانوية لغير الأردنيين (البرنامج الدولي) بعد معادلة وزارة التربية والتعليم الأردنية.",
+       "source": "s1",
+       "quote": "2. The minimum required GPA for the General Secondary Education Certificate to join the schools of Medicine and Dentistry is 85% for those whose original nationality is foreign (non-Jordanian) , for Pharmacy and Engineering is 80%, for Sharia is 75%, and for Medical Laboratory Sciences, Nursing, and schools of Rehabilitation Sciences is 70%. For other schools, the minimum GPA required is 65%.",
+       "subjects": []
+      },
+      "JORDAN_TAWJIHI": {
+       "minimumPercent": 90,
+       "notesEn": "Minimum average listed in UJ's majors and fees table.",
+       "notesAr": "الحد الأدنى للمعدل كما ورد في جدول التخصصات والرسوم في الجامعة.",
+       "source": "s2",
+       "quote": "Dental Surgery -DDS | 210 | 90 | 40 | 175 | 250 | 500 |",
+       "subjects": []
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Dental Surgery (DDS), 210 credit hours; listed minimum average 90.",
+        "noteAr": "جراحة الأسنان، 210 ساعات معتمدة، والحد الأدنى المدرج للمعدل 90.",
+        "source": "s2",
+        "quote": "Dental Surgery -DDS | 210 | 90 | 40 | 175 | 250 | 500 |"
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "university-of-jordan-pharm",
+     "status": "EXISTS",
+     "nameEn": "Doctor of Pharmacy PharmD",
+     "nameAr": "دكتور في الصيدلة",
+     "degree": "PharmD",
+     "durationYears": null,
+     "url": "https://registration.ju.edu.jo/en/english/Pages/MajorsAndFees_new.aspx",
+     "curricula": {
+      "UAE_MOE": {
+       "minimumPercent": 80,
+       "notesEn": "Minimum secondary certificate average for non-Jordanian nationals (International Program), after Jordanian Ministry of Education equivalence.",
+       "notesAr": "الحد الأدنى لمعدل الثانوية لغير الأردنيين (البرنامج الدولي) بعد معادلة وزارة التربية والتعليم الأردنية.",
+       "source": "s1",
+       "quote": "2. The minimum required GPA for the General Secondary Education Certificate to join the schools of Medicine and Dentistry is 85% for those whose original nationality is foreign (non-Jordanian) , for Pharmacy and Engineering is 80%, for Sharia is 75%, and for Medical Laboratory Sciences, Nursing, and schools of Rehabilitation Sciences is 70%. For other schools, the minimum GPA required is 65%.",
+       "subjects": []
+      },
+      "JORDAN_TAWJIHI": {
+       "minimumPercent": 80,
+       "notesEn": "Minimum average listed in UJ's majors and fees table.",
+       "notesAr": "الحد الأدنى للمعدل كما ورد في جدول التخصصات والرسوم في الجامعة.",
+       "source": "s2",
+       "quote": "Pharmacy(Pharm.D) | 216 | 80 | 50 | 105 | 130 | 225 |",
+       "subjects": []
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Pharm.D, 216 credit hours; listed minimum average 80. UJ also offers a separate BSc Pharmacy.",
+        "noteAr": "دكتور صيدلة، 216 ساعة معتمدة، والحد الأدنى المدرج للمعدل 80. وتقدم الجامعة أيضا بكالوريوس صيدلة منفصلا.",
+        "source": "s2",
+        "quote": "Pharmacy(Pharm.D) | 216 | 80 | 50 | 105 | 130 | 225 |"
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "ju-law-llb",
+     "status": "EXISTS",
+     "nameEn": "Law (Bachelor)",
+     "nameAr": "بكالوريوس القانون",
+     "degree": null,
+     "durationYears": null,
+     "url": "https://registration.ju.edu.jo/en/english/Pages/MajorsAndFees_new.aspx",
+     "curricula": {
+      "UAE_MOE": {
+       "minimumPercent": 65,
+       "notesEn": "Minimum secondary certificate average for non-Jordanian nationals (International Program), after Jordanian Ministry of Education equivalence.",
+       "notesAr": "الحد الأدنى لمعدل الثانوية لغير الأردنيين (البرنامج الدولي) بعد معادلة وزارة التربية والتعليم الأردنية.",
+       "source": "s1",
+       "quote": "2. The minimum required GPA for the General Secondary Education Certificate to join the schools of Medicine and Dentistry is 85% for those whose original nationality is foreign (non-Jordanian) , for Pharmacy and Engineering is 80%, for Sharia is 75%, and for Medical Laboratory Sciences, Nursing, and schools of Rehabilitation Sciences is 70%. For other schools, the minimum GPA required is 65%.",
+       "subjects": []
+      },
+      "JORDAN_TAWJIHI": {
+       "minimumPercent": 65,
+       "notesEn": "Minimum average listed in UJ's majors and fees table.",
+       "notesAr": "الحد الأدنى للمعدل كما ورد في جدول التخصصات والرسوم في الجامعة.",
+       "source": "s2",
+       "quote": "Law | 141 | 65 | 16 | 65 | 85 | 140 |",
+       "subjects": []
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Law, 141 credit hours; listed minimum average 65.",
+        "noteAr": "القانون، 141 ساعة معتمدة، والحد الأدنى المدرج للمعدل 65.",
+        "source": "s2",
+        "quote": "Law | 141 | 65 | 16 | 65 | 85 | 140 |"
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "leiden",
+   "website": "https://www.universiteitleiden.nl",
+   "applyVia": "STUDIELINK",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.universiteitleiden.nl/en/education/admission-and-application/bachelors/admission-requirements",
+     "title": "Admission requirements - Leiden University",
+     "retrievedAt": "2026-09-30T08:20:22.621Z",
+     "hash": "cc1ee2edff8727b2f620c32b7c670d2a78f2637ba92137934a087d8bb401a16f"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.universiteitleiden.nl/en/education/admission-and-application/bachelors/application-deadlines",
+     "title": "Application deadlines - Leiden University",
+     "retrievedAt": "2026-09-30T08:20:41.899Z",
+     "hash": "7192bf4d62d88ab0b9c39e37d37bde984898fb8448e90970ccc696dc8fccfef1"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "A diploma at least equal to the Dutch pre-university (VWO) diploma is the minimum; international applicants must apply for admission; English proficiency required for English-taught programmes.",
+     "noteAr": "الحد الأدنى شهادة تعادل على الأقل شهادة ما قبل الجامعة الهولندية (VWO)، ويجب على الطلاب الدوليين التقدم بطلب قبول، وتُشترط الإنجليزية للبرامج المدرَّسة بها.",
+     "source": "s1",
+     "quote": "The minimum requirement for admission to any bachelor’s programme at Leiden University is a diploma that is at least equal to the Dutch pre-university diploma (VWO)."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-01-15",
+     "labelEn": "Numerus fixus programmes (including International Relations and Organisations): apply in Studielink",
+     "labelAr": "برامج المقاعد المحدودة (ومنها العلاقات الدولية والمنظمات): التقديم عبر Studielink",
+     "source": "s2",
+     "quote": "Bachelor’s programmes with a numerus fixus (limited places) The application deadline is 15 January"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2027-01-31",
+     "labelEn": "Numerus fixus: transcripts due in uSis",
+     "labelAr": "برامج المقاعد المحدودة: آخر موعد لرفع كشوف الدرجات في uSis",
+     "source": "s1",
+     "quote": "31 January, by 23:59 hrs at the latest | Submit the necessary transcript of grades in uSis, as requested."
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "leiden-ir",
+     "status": "REPLACED",
+     "nameEn": "International Relations and Organisations BSc",
+     "nameAr": "بكالوريوس العلوم في العلاقات الدولية والمنظمات",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.universiteitleiden.nl/en/education/study-programmes/bachelor/political-science/international-relations-and-organisations",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English-taught numerus fixus programme: a selection and placement procedure applies and admission alone does not guarantee a place. Programme-specific entry requirements not yet extracted.",
+        "noteAr": "برنامج بالإنجليزية بعدد مقاعد محدود: تُطبق إجراءات اختيار وتوزيع، ولا يضمن القبول وحده الحصول على مقعد. لم تُستخرج شروط القبول الخاصة بالبرنامج بعد.",
+        "source": "s1",
+        "quote": "International Relations and Organisations (in English)"
+       }
+      ],
+      "source": "s1"
      },
      "previous": null
     }

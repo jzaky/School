@@ -8,7 +8,7 @@
 //   (curriculum null) and one row per curriculum.
 // - evaluate() compares them line by line with three-valued logic (met, not met, unknown).
 
-export const ENGINE_VERSION = "pe-1";
+export const ENGINE_VERSION = "pe-2";
 
 export const CURRICULA = ["BRITISH", "IB", "AMERICAN", "UAE_MOE", "JORDAN_TAWJIHI", "CBSE", "ISC", "SABIS", "OTHER"] as const;
 export type Curriculum = (typeof CURRICULA)[number];
@@ -102,7 +102,9 @@ export type RequirementRow = {
   additional: AdditionalLine[];
 };
 
-export type ProgramForEval = { id: string; requirements: RequirementRow[] };
+/** homeCurriculum: the curriculum a university's general admissions requirements are written for
+ * (for example AMERICAN at a US university). Students on it are covered by the general row. */
+export type ProgramForEval = { id: string; requirements: RequirementRow[]; homeCurriculum?: string | null };
 
 // ---------------------------------------------------------------------------------------------
 // Results

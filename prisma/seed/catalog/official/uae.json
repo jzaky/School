@@ -1,6 +1,6 @@
 {
  "batch": "uae",
- "assembledAt": "2026-09-30T08:18:18.712Z",
+ "assembledAt": "2026-09-30T08:32:58.088Z",
  "universities": [
   {
    "key": "abu_dhabi_university",
@@ -2146,7 +2146,7 @@
     {
      "id": "s3",
      "url": "https://www.ku.ac.ae/admissions/undergraduate-admissions/undergraduate-admissions-procedure",
-     "title": "Khalifa University – Undergraduate Admission Procedure",
+     "title": "Khalifa University - Undergraduate Admission Procedure",
      "retrievedAt": "2026-09-30T07:33:19.957Z",
      "hash": "998247c3fc4d844e49f01b43e80675c5301a85205aa16aa64f295329959cd60e"
     },
@@ -2199,6 +2199,13 @@
      "title": "BSc in Computer Science - Khalifa University",
      "retrievedAt": "2026-09-30T07:58:59.900Z",
      "hash": "d1b78e6598c424a8746f00214265f82e5f50a6fc3b273118fa848356a2fb4410"
+    },
+    {
+     "id": "s10",
+     "url": "https://www.ku.ac.ae/undergraduate-admissions",
+     "title": "Undergraduate Admissions - Khalifa University",
+     "retrievedAt": "2026-09-30T08:20:16.797Z",
+     "hash": "03782d2849f7164e257eeceb85e348e1c2f673d32c8d7afe0649ad070b4dd120"
     }
    ],
    "english": [
@@ -2248,6 +2255,15 @@
      "noteAr": "قد تُقبل درجة SAT رياضيات 700 أو أعلى.",
      "source": "s2",
      "quote": "Yes. SAT Math scores of 700 or higher may be considered, especially for international applicants or UAE students who studied outside the national system."
+    },
+    {
+     "test": "SAT",
+     "policy": "OPTIONAL",
+     "minScore": 625,
+     "noteEn": "The Mathematics requirement can be met by high school grades (Elite/Advanced 80%, General 90%), AP 2, A-Level C, IB 4 or SAT Math 625.",
+     "noteAr": "يمكن استيفاء متطلب الرياضيات بدرجات الثانوية (النخبة والمتقدم 80%، العام 90%) أو AP بدرجة 2 أو A-Level بدرجة C أو IB بدرجة 4 أو SAT رياضيات 625.",
+     "source": "s10",
+     "quote": "Math | High School | Elite/Advanced 80%, General 90% | AP | 2 | A-Level | C | IB | 4 | SAT | 625 |"
     }
    ],
    "additional": [
@@ -2274,10 +2290,218 @@
      "noteAr": "طلبة المسار التطبيقي غير مؤهلين.",
      "source": "s2",
      "quote": "Please note that students from the Applied Stream are not eligible."
+    },
+    {
+     "kind": "ADMISSIONS_TEST",
+     "required": true,
+     "noteEn": "Shortlisted applicants take the Khalifa University Admission Test (KUAT); outstanding applicants may be exempt.",
+     "noteAr": "يخضع المتقدمون المرشحون لاختبار القبول في جامعة خليفة، ويمكن إعفاء المتفوقين منه.",
+     "source": "s10",
+     "quote": "Shortlisted applicants will be required to take KU Admission Tests."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "High school graduation within the last two years.",
+     "noteAr": "التخرج من الثانوية العامة خلال السنتين الأخيرتين.",
+     "source": "s10",
+     "quote": "Applicants must have graduated from high school within the last two years."
     }
    ],
    "deadlines": [],
-   "curriculumRules": {},
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": true,
+     "minimumPercent": 80,
+     "stream": "ADVANCED|ELITE",
+     "notesEn": "Subject scores in Mathematics and one science: Advanced and Elite 80%, General 90%. Applied Stream students are not eligible.",
+     "notesAr": "درجات مادتي الرياضيات والعلوم: المتقدم والنخبة 80%، العام 90%. طلبة المسار التطبيقي غير مؤهلين.",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "source": "s10",
+       "quote": "Applicants must complete Mathematics as a mandatory subject, along with one science subject (Physics, Biology, or Chemistry) *."
+      },
+      {
+       "type": "ONE_OF",
+       "keys": [
+        "physics",
+        "biology",
+        "chemistry"
+       ],
+       "minimumLevel": "ADVANCED",
+       "noteEn": "The science subject depends on the programme.",
+       "noteAr": "تعتمد المادة العلمية على البرنامج.",
+       "source": "s10",
+       "quote": "Applicants must complete Mathematics as a mandatory subject, along with one science subject (Physics, Biology, or Chemistry) *."
+      }
+     ],
+     "source": "s10",
+     "quote": "Applicants must achieve a minimum score of 80% for the Advanced and Elite streams, or 90% for the General stream, in the above-mentioned subjects."
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "minimumPercent": 80,
+     "notesEn": "Minimum 80% in Grade 12 Mathematics and the required science subject.",
+     "notesAr": "80% على الأقل في الرياضيات والمادة العلمية المطلوبة في الصف الثاني عشر.",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "source": "s10",
+       "quote": "Applicants must complete Mathematics as a mandatory subject, along with one science subject (Physics, Biology, or Chemistry) *."
+      },
+      {
+       "type": "ONE_OF",
+       "keys": [
+        "physics",
+        "biology",
+        "chemistry"
+       ],
+       "minimumLevel": "ADVANCED",
+       "noteEn": "The science subject depends on the programme.",
+       "noteAr": "تعتمد المادة العلمية على البرنامج.",
+       "source": "s10",
+       "quote": "Applicants must complete Mathematics as a mandatory subject, along with one science subject (Physics, Biology, or Chemistry) *."
+      }
+     ],
+     "source": "s10",
+     "quote": "Applicants must achieve a minimum of 80% in the final grade (Grade 12) in the above-mentioned subjects."
+    },
+    "SABIS": {
+     "accepted": true,
+     "minimumPercent": 80,
+     "notesEn": "Minimum 80% in Grade 12 Mathematics and the required science subject.",
+     "notesAr": "80% على الأقل في الرياضيات والمادة العلمية المطلوبة في الصف الثاني عشر.",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "source": "s10",
+       "quote": "Applicants must complete Mathematics as a mandatory subject, along with one science subject (Physics, Biology, or Chemistry) *."
+      },
+      {
+       "type": "ONE_OF",
+       "keys": [
+        "physics",
+        "biology",
+        "chemistry"
+       ],
+       "minimumLevel": "ADVANCED",
+       "noteEn": "The science subject depends on the programme.",
+       "noteAr": "تعتمد المادة العلمية على البرنامج.",
+       "source": "s10",
+       "quote": "Applicants must complete Mathematics as a mandatory subject, along with one science subject (Physics, Biology, or Chemistry) *."
+      }
+     ],
+     "source": "s10",
+     "quote": "Applicants must achieve a minimum of 80% in the final grade (Grade 12) in the above-mentioned subjects."
+    },
+    "CBSE": {
+     "accepted": true,
+     "minimumPercent": 80,
+     "notesEn": "Minimum 80% in Grade 12 Mathematics and the required science subject.",
+     "notesAr": "80% على الأقل في الرياضيات والمادة العلمية المطلوبة في الصف الثاني عشر.",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "source": "s10",
+       "quote": "Applicants must complete Mathematics as a mandatory subject, along with one science subject (Physics, Biology, or Chemistry) *."
+      },
+      {
+       "type": "ONE_OF",
+       "keys": [
+        "physics",
+        "biology",
+        "chemistry"
+       ],
+       "minimumLevel": "ADVANCED",
+       "noteEn": "The science subject depends on the programme.",
+       "noteAr": "تعتمد المادة العلمية على البرنامج.",
+       "source": "s10",
+       "quote": "Applicants must complete Mathematics as a mandatory subject, along with one science subject (Physics, Biology, or Chemistry) *."
+      }
+     ],
+     "source": "s10",
+     "quote": "Applicants must achieve a minimum of 80% in the final grade (Grade 12) in the above-mentioned subjects."
+    },
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "Five IGCSE/GCSE subjects at C or above plus three AS or A levels (or a mix) at C or above, including Mathematics; Arabic and Islamic Studies excluded.",
+     "notesAr": "خمس مواد IGCSE/GCSE بدرجة C أو أعلى، إضافة إلى ثلاث مواد AS أو A level (أو مزيج منها) بدرجة C أو أعلى تشمل الرياضيات؛ ولا تُحتسب العربية والدراسات الإسلامية.",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": "C",
+       "source": "s10",
+       "quote": "Mathematics (Mandatory) (minimum Grade C)"
+      },
+      {
+       "type": "TWO_OF",
+       "keys": [
+        "physics",
+        "chemistry",
+        "biology"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": "C",
+       "source": "s10",
+       "quote": "Two of the following: Physics, Chemistry, and/or Biology (minimum Grade C)"
+      }
+     ],
+     "source": "s10",
+     "quote": "Applicants with 3 A Level subjects may be considered."
+    },
+    "IB": {
+     "minimumPoints": 24,
+     "notesEn": "Full IB Diploma with six HL/SL subjects (excluding Islamic Education), at least 4 in each.",
+     "notesAr": "دبلوم البكالوريا الدولية الكامل بست مواد HL/SL (باستثناء التربية الإسلامية) بدرجة 4 على الأقل في كل مادة.",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "source": "s10",
+       "quote": "Applicants must complete Mathematics as a mandatory subject, along with one science subject (Physics, Biology, or Chemistry) *."
+      },
+      {
+       "type": "ONE_OF",
+       "keys": [
+        "physics",
+        "biology",
+        "chemistry"
+       ],
+       "minimumLevel": "ADVANCED",
+       "noteEn": "The science subject depends on the programme.",
+       "noteAr": "تعتمد المادة العلمية على البرنامج.",
+       "source": "s10",
+       "quote": "Applicants must complete Mathematics as a mandatory subject, along with one science subject (Physics, Biology, or Chemistry) *."
+      }
+     ],
+     "source": "s10",
+     "quote": "*Minimum score of 4 in each subject - with a total of 24 points."
+    }
+   },
    "programs": [
     {
      "key": "khalifa-university-aero",
@@ -3073,6 +3297,13 @@
      "hash": "0740eeb85094014d5df93c51f42059a29d9dc37d3955c984fddd2f548984de85",
      "waybackTimestamp": "20250907140413",
      "waybackHash": "76225813ce245ac87c6860510a21c02faffa3f50c797eadc4bca858e88bd0ac1"
+    },
+    {
+     "id": "s8",
+     "url": "https://www.uaeu.ac.ae/en/admission/undergraduate-admissions-current-student.shtml",
+     "title": "Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T08:19:59.682Z",
+     "hash": "993b031a6fe3a4e76d2956b0f8dbd24f6e836d1167d75463d4e8ff82572e5990"
     }
    ],
    "english": [
@@ -3104,6 +3335,14 @@
      "noteAr": "شهادة معادلة من وزارة التربية لشهادات الثانوية غير التابعة لمنهج الوزارة.",
      "source": "s1",
      "quote": "Obtaining equivalency certificate issued by the Ministry of Education in the UAE, for all High School Certificates that does not follow the MOE curriculum."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "UAE nationals and children of Emirati mothers apply through the Ministry of Higher Education portal.",
+     "noteAr": "يتقدم المواطنون وأبناء المواطنات عبر بوابة وزارة التعليم العالي والبحث العلمي.",
+     "source": "s8",
+     "quote": "Applying for admission through the official Ministry of Higher Education and Scientific Research portal during the announced application periods."
     }
    ],
    "deadlines": [],
@@ -3117,7 +3356,29 @@
      "degree": "BBA",
      "durationYears": null,
      "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-business-administration.shtml",
-     "curricula": {},
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "notesEn": "UAE nationals and children of Emirati mothers apply through the Ministry portal. English: 80% in Grade 12 English, or IELTS 5.0 / TOEFL iBT 61.",
+       "notesAr": "يتقدم المواطنون وأبناء المواطنات عبر بوابة الوزارة. اللغة الإنجليزية: 80% في مادة الإنجليزية للصف الثاني عشر، أو IELTS 5.0 أو TOEFL iBT 61.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "80",
+         "noteEn": "Mathematics 80% in Grade 12 or equivalent.",
+         "noteAr": "الرياضيات 80% في الصف الثاني عشر أو ما يعادلها.",
+         "source": "s8",
+         "quote": "Math: HS 80% or its equivalent: SAT Math: 555 points"
+        }
+       ],
+       "source": "s8",
+       "quote": "College of Business and Economics English Language Proficiency Requirement | Mathematics Requirement | Science Requirement | Other College-Specific Requirements | English: HS 80% or its equivalent:"
+      }
+     },
      "general": {
       "subjects": [
        {
@@ -3166,7 +3427,40 @@
      "degree": "BSc",
      "durationYears": null,
      "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
-     "curricula": {},
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "notesEn": "UAE nationals and children of Emirati mothers apply through the Ministry portal. English: 80% in Grade 12 English, or IELTS 5.0 / TOEFL iBT 61.",
+       "notesAr": "يتقدم المواطنون وأبناء المواطنات عبر بوابة الوزارة. اللغة الإنجليزية: 80% في مادة الإنجليزية للصف الثاني عشر، أو IELTS 5.0 أو TOEFL iBT 61.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "80",
+         "noteEn": "Mathematics 80% in Grade 12 or equivalent.",
+         "noteAr": "الرياضيات 80% في الصف الثاني عشر أو ما يعادلها.",
+         "source": "s8",
+         "quote": "Math: HS 80% or its equivalent: SAT Math: 555 points"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "physics",
+          "computer_science"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "80",
+         "source": "s8",
+         "quote": "One of the Science Subjects (Physics or Computer Science): HS 80% or its equivalent:"
+        }
+       ],
+       "source": "s8",
+       "quote": "One of the Science Subjects (Physics or Computer Science): HS 80% or its equivalent:"
+      }
+     },
      "general": {
       "subjects": [
        {
@@ -3225,7 +3519,50 @@
      "degree": "BSc",
      "durationYears": null,
      "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-electrical-engineering.shtml",
-     "curricula": {},
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "notesEn": "UAE nationals and children of Emirati mothers apply through the Ministry portal. English: 80% in Grade 12 English, or IELTS 5.0 / TOEFL iBT 61.",
+       "notesAr": "يتقدم المواطنون وأبناء المواطنات عبر بوابة الوزارة. اللغة الإنجليزية: 80% في مادة الإنجليزية للصف الثاني عشر، أو IELTS 5.0 أو TOEFL iBT 61.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "80",
+         "noteEn": "Mathematics 80% in Grade 12 or equivalent.",
+         "noteAr": "الرياضيات 80% في الصف الثاني عشر أو ما يعادلها.",
+         "source": "s8",
+         "quote": "Math: HS 80% or its equivalent: SAT Math: 555 points"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "80",
+         "source": "s8",
+         "quote": "Physics plus one Science Subject (Chemistry or Biology): HS 80% or its equivalent:"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "chemistry",
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "80",
+         "source": "s8",
+         "quote": "Physics plus one Science Subject (Chemistry or Biology): HS 80% or its equivalent:"
+        }
+       ],
+       "source": "s8",
+       "quote": "Physics plus one Science Subject (Chemistry or Biology): HS 80% or its equivalent:"
+      }
+     },
      "general": {
       "subjects": [
        {
@@ -3293,7 +3630,41 @@
      "degree": "LLB",
      "durationYears": null,
      "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-law.shtml",
-     "curricula": {},
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "notesEn": "UAE nationals and children of Emirati mothers apply through the Ministry portal. English: 80% in Grade 12 English, or IELTS 5.0 / TOEFL iBT 61.",
+       "notesAr": "يتقدم المواطنون وأبناء المواطنات عبر بوابة الوزارة. اللغة الإنجليزية: 80% في مادة الإنجليزية للصف الثاني عشر، أو IELTS 5.0 أو TOEFL iBT 61.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "70",
+         "noteEn": "Mathematics 70% in Grade 12 or equivalent.",
+         "noteAr": "الرياضيات 70% في الصف الثاني عشر أو ما يعادلها.",
+         "source": "s8",
+         "quote": "Math: HS 70% or its equivalent: SAT Math: 520 points"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "arabic"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "80",
+         "noteEn": "Arabic 80% or Al Ain Arabic Language Test 5.5.",
+         "noteAr": "اللغة العربية 80% أو 5.5 في اختبار العين للغة العربية.",
+         "source": "s8",
+         "quote": "Arabic: HS 80% or its equivalent: Al Ain Arabic Language Test: score of 5.5"
+        }
+       ],
+       "source": "s8",
+       "quote": "College of Law English Language Proficiency Requirement | Mathematics Requirement | Science Requirement | Other College-Specific Requirements | English: HS 80% or its equivalent:"
+      }
+     },
      "general": {
       "subjects": [
        {
@@ -3353,7 +3724,40 @@
      "degree": "MD",
      "durationYears": 6,
      "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/doctor-of-medicine.shtml",
-     "curricula": {},
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "stream": "ADVANCED|ELITE",
+       "notesEn": "General and Applied tracks are not eligible. English 90% in Grade 12 or IELTS 5.5 / TOEFL iBT 70; Fall intake only.",
+       "notesAr": "المساران العام والتطبيقي غير مؤهلين. اللغة الإنجليزية 90% في الصف الثاني عشر أو IELTS 5.5 أو TOEFL iBT 70؛ القبول في الخريف فقط.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "90",
+         "source": "s8",
+         "quote": "Math: HS 90% or its equivalent: SAT Math: 590 points"
+        },
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "chemistry",
+          "biology",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "90",
+         "source": "s8",
+         "quote": "Two of the Science Subjects (Chemistry, or Biology, or Physics): HS 90% or its equivalent:"
+        }
+       ],
+       "source": "s8",
+       "quote": "Not Eligible: General Track or its equivalent Applied Track or its equivalent"
+      }
+     },
      "general": {
       "subjects": [],
       "english": [],
@@ -3366,6 +3770,22 @@
         "noteAr": "يقتصر على المواطنين وأبناء المواطنات والطلبة الذين يضمنون تمويل الرسوم؛ مع قبول واحد في فصل الخريف.",
         "source": "s1",
         "quote": "Admission to the Doctor of Medicine (MD) program at the College of Medicine and Health Sciences is limited to UAE nationals and children of Emirati mothers, and students who have secured funding to cover the tuition fees throughout their studies at the university."
+       },
+       {
+        "kind": "ADMISSIONS_TEST",
+        "required": true,
+        "noteEn": "MD entrance exam (pass required).",
+        "noteAr": "اختبار القبول لبرنامج الطب (يشترط النجاح).",
+        "source": "s8",
+        "quote": "MD Entrance Exam: PASS"
+       },
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Multiple Mini Interviews (pass required).",
+        "noteAr": "المقابلات المصغرة المتعددة (يشترط النجاح).",
+        "source": "s8",
+        "quote": "Multiple Mini Interviews (MMI): PASS"
        }
       ],
       "source": "s1"
@@ -3381,10 +3801,10 @@
    "sources": [
     {
      "id": "s1",
-     "url": "https://www.zu.ac.ae/main/ar/admission/undergraduate-programs/_hidden/uae-nationals.aspx",
-     "title": "الطلبة الإماراتيون",
-     "retrievedAt": "2026-09-30T07:33:54.438Z",
-     "hash": "bcafeb2eed85ec35fd1c5c6ec06c97086b262e91a65b5b8dd5a9ef2f81c16383"
+     "url": "https://www.zu.ac.ae/main/en/undergraduate-programs/admission-criteria",
+     "title": "Admissions Criteria | Zayed University",
+     "retrievedAt": "2026-09-30T08:20:09.602Z",
+     "hash": "3465742c47c0e5b92a9f02ac0d62f0f6d852d2656b0d1e6deda2bce4c2f58a2d"
     },
     {
      "id": "s2",
@@ -3397,41 +3817,21 @@
     },
     {
      "id": "s3",
-     "url": "https://www.zu.ac.ae/main/en/colleges/colleges/__college_of_technological_innovation/index.aspx",
-     "title": "College of Technological Innovation | Zayed University",
-     "retrievedAt": "2026-09-30T07:59:43.838Z",
-     "hash": "e28988dee6d92888445d0c5dcf6253fbfcee6b6a8c2f4c9d44e08d962d767184",
-     "waybackTimestamp": "20230130051922",
-     "waybackHash": "5b8ed1a43a3cb12536abdf2973f40d2abc5eeca9eec1568fb4bf03d75c0f6146"
+     "url": "https://www.zu.ac.ae/main/en/colleges/colleges/__college_of_technological_innovation/AcademicPrograms/UndergraduatePrograms.aspx",
+     "title": "Undergraduate Programs | Zayed University",
+     "retrievedAt": "2026-09-30T08:20:04.386Z",
+     "hash": "ea526a70ddd2da63ac27afa9996523291c5bcee9150c851d9889f7ed864a193b"
     }
    ],
    "english": [
     {
-     "test": "EMSAT_ENGLISH",
-     "minOverall": 1250,
-     "minComponent": null,
-     "waiverNoteEn": "Conditional admission with EmSAT English 1100; the English requirement must then be met within a year.",
-     "waiverNoteAr": "قبول مشروط بدرجة 1100 في EmSAT الإنجليزي، على أن يُستوفى متطلب اللغة خلال عام.",
-     "source": "s1",
-     "quote": "تحقيق درجة 1250 في اختبار الامسات لمادة الانجليزية أو 5.5 في اختبار الآيلتس أو 71 في اختبار التوفل IBT"
-    },
-    {
-     "test": "IELTS",
-     "minOverall": 5.5,
-     "minComponent": null,
-     "waiverNoteEn": null,
-     "waiverNoteAr": null,
-     "source": "s1",
-     "quote": "تحقيق درجة 1250 في اختبار الامسات لمادة الانجليزية أو 5.5 في اختبار الآيلتس أو 71 في اختبار التوفل IBT"
-    },
-    {
      "test": "TOEFL",
-     "minOverall": 71,
+     "minOverall": 72,
      "minComponent": null,
-     "waiverNoteEn": null,
-     "waiverNoteAr": null,
+     "waiverNoteEn": "Or at least 80% in Grade 12 English. Only TOEFL iBT at an authorized test center; Home Edition not accepted.",
+     "waiverNoteAr": "أو 80% على الأقل في مادة الإنجليزية للصف الثاني عشر. يُقبل TOEFL iBT من مراكز معتمدة فقط، ولا تُقبل النسخة المنزلية.",
      "source": "s1",
-     "quote": "تحقيق درجة 1250 في اختبار الامسات لمادة الانجليزية أو 5.5 في اختبار الآيلتس أو 71 في اختبار التوفل IBT"
+     "quote": "Minimum 80% in English (Grade 12) or TOEFL iBT 72*"
     }
    ],
    "tests": [],
@@ -3439,22 +3839,47 @@
     {
      "kind": "OTHER",
      "required": true,
-     "noteEn": "Private and non-UAE curricula need a UAE Ministry equivalency letter.",
-     "noteAr": "يجب على طلبة المناهج الخاصة والمناهج من خارج الدولة تقديم خطاب معادلة من الوزارة.",
+     "noteEn": "TOEFL iBT Home Edition is not accepted.",
+     "noteAr": "لا تُقبل النسخة المنزلية من TOEFL iBT.",
      "source": "s1",
-     "quote": "يجب على الطالب تقديم نسخة من خطاب المعادلة الصادرة عن وزارة التعليم بدولة الإمارات."
-    },
-    {
-     "kind": "OTHER",
-     "required": true,
-     "noteEn": "High school certificate must be no more than ten years old.",
-     "noteAr": "يجب ألا يتجاوز عمر شهادة الثانوية العامة عشر سنوات.",
-     "source": "s1",
-     "quote": "يجب ان لا تتعدى شهادة الثانوية العامة عشر سنوات منذ تخرج الطالب"
+     "quote": "* Only the TOEFL iBT test taken at an authorized test center is accepted. The TOEFL iBT Home Edition is not accepted."
     }
    ],
    "deadlines": [],
-   "curriculumRules": {},
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": true,
+     "notesEn": "No minimum overall average; programme subject requirements apply.",
+     "notesAr": "لا يوجد حد أدنى للمعدل العام؛ وتنطبق متطلبات المواد الخاصة بالبرنامج.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "UAE Ministry of Education Curriculum | No minimum high school overall average required. Subject requirements apply"
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "notesEn": "No minimum overall average; programme subject requirements apply.",
+     "notesAr": "لا يوجد حد أدنى للمعدل العام؛ وتنطبق متطلبات المواد الخاصة بالبرنامج.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "American Curriculum | No minimum high school overall average required. Subject requirements apply"
+    },
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "At least two A-levels at grade C or higher, excluding Arabic and Islamic Studies.",
+     "notesAr": "مادتان A-Level على الأقل بدرجة C أو أعلى، باستثناء العربية والدراسات الإسلامية.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "British Curriculum | Minimum 2 A-Levels with a grade C or higher (excluding Arabic and Islamic Studies)"
+    },
+    "IB": {
+     "minimumPoints": 24,
+     "notesEn": "IB Certificate holders: 21 points including two programme-related subjects at grade 5.",
+     "notesAr": "لحملة شهادة البكالوريا الدولية الجزئية: 21 نقطة تشمل مادتين مرتبطتين بالبرنامج بدرجة 5.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "International Baccalaureate (IB Diploma) | Minimum 24 points"
+    }
+   },
    "programs": [
     {
      "key": "zayed-university-bus",
@@ -3464,65 +3889,47 @@
      "degree": "BSc",
      "durationYears": null,
      "url": "https://www.zu.ac.ae/main/en/colleges/colleges/__college_of_business/index.aspx",
-     "curricula": {
-      "UAE_MOE": {
-       "accepted": true,
-       "minimumPercent": 70,
-       "stream": "ADVANCED",
-       "notesEn": "College of Business: General stream 75%, Advanced stream 70%.",
-       "notesAr": "كلية الإدارة: المسار العام 75%، المسار المتقدم 70%.",
-       "subjects": [],
-       "source": "s1",
-       "quote": "كلية الإدارة * | 75% | 70% |"
-      },
-      "AMERICAN": {
-       "accepted": true,
-       "minimumPercent": 75,
-       "notesEn": "Five subjects passed with an average of 75% or above (Arabic and Islamic Studies not counted).",
-       "notesAr": "اجتياز خمس مواد بمعدل 75% فما فوق (لا تُحتسب العربية والدراسات الإسلامية).",
-       "subjects": [],
-       "source": "s1",
-       "quote": "كلية الإدارة * | 75% | 70% | اجتياز خمس مواد بنجاح بمعدل 75% فما فوق"
-      },
-      "BRITISH": {
-       "accepted": true,
-       "notesEn": "Five O-level/IGCSE subjects at C or above plus four AS-levels at B or above, or two A-levels at C or above (Arabic and Islamic Studies not counted).",
-       "notesAr": "خمس مواد O-level بدرجة C أو أعلى مع أربع مواد AS بدرجة B أو أعلى، أو مادتان A-Level بدرجة C أو أعلى (لا تُحتسب العربية والدراسات الإسلامية).",
-       "subjects": [],
-       "source": "s1",
-       "quote": "اجتياز مادتينA-Level مع الحصول على علامة (جيد) (C) أو أكثر كحد أدنى في جميع المواد."
-      },
-      "IB": {
-       "minimumPoints": 24,
-       "subjects": [],
-       "source": "s1",
-       "quote": "اتمام شهادة البكالوريا الدولية والحصول على 24 نقطة أو أكثر."
-      }
-     },
+     "curricula": {},
      "general": {
-      "subjects": [],
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "english_language"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "80",
+        "noteEn": "Grade 12 English 80% (or TOEFL iBT 72).",
+        "noteAr": "الإنجليزية 80% في الصف الثاني عشر (أو TOEFL iBT 72).",
+        "source": "s1",
+        "quote": "Bachelor of Science in Accounting | Minimum 80% in English (Grade 12) or TOEFL iBT 72* | Minimum 80% in Mathematics (Grade 12) or SAT Math 530 | Not Required | Bachelor of Science in Finance | Bachelor of Science in Marketing and Entrepreneurship"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "80",
+        "noteEn": "Grade 12 Mathematics 80% (or SAT Math 530).",
+        "noteAr": "الرياضيات 80% في الصف الثاني عشر (أو SAT رياضيات 530).",
+        "source": "s1",
+        "quote": "Bachelor of Science in Accounting | Minimum 80% in English (Grade 12) or TOEFL iBT 72* | Minimum 80% in Mathematics (Grade 12) or SAT Math 530 | Not Required | Bachelor of Science in Finance | Bachelor of Science in Marketing and Entrepreneurship"
+       }
+      ],
       "english": [],
       "tests": [
        {
-        "test": "EMSAT_MATH",
-        "policy": "REQUIRED",
-        "minScore": 600,
-        "noteEn": "EmSAT Math 600 for the College of Business.",
-        "noteAr": "درجة 600 في اختبار الإمسات للرياضيات لكلية الإدارة.",
+        "test": "SAT",
+        "policy": "OPTIONAL",
+        "minScore": 530,
+        "noteEn": "SAT Math 530 can replace the Grade 12 Mathematics requirement.",
+        "noteAr": "يمكن أن تحل درجة SAT رياضيات 530 محل متطلب الرياضيات في الصف الثاني عشر.",
         "source": "s1",
-        "quote": "كلية الإدارة تحصيل درجة درجة (600) في اختبار امسات لمادة الرياضيات"
+        "quote": "Bachelor of Science in Accounting | Minimum 80% in English (Grade 12) or TOEFL iBT 72* | Minimum 80% in Mathematics (Grade 12) or SAT Math 530 | Not Required | Bachelor of Science in Finance | Bachelor of Science in Marketing and Entrepreneurship"
        }
       ],
-      "additional": [
-       {
-        "kind": "INTERVIEW",
-        "required": true,
-        "noteEn": "Personal interview for the College of Business.",
-        "noteAr": "اجتياز المقابلة الشخصية لكلية الإدارة.",
-        "source": "s1",
-        "quote": "اجتياز المقابلة الشخصية لكلية الإدارة"
-       }
-      ],
+      "additional": [],
       "source": "s1"
      },
      "previous": null
@@ -3534,54 +3941,98 @@
      "nameAr": "بكالوريوس العلوم في تقنية المعلومات",
      "degree": "BSc",
      "durationYears": null,
-     "url": "https://www.zu.ac.ae/main/en/colleges/colleges/__college_of_technological_innovation/index.aspx",
-     "curricula": {
-      "UAE_MOE": {
-       "accepted": true,
-       "minimumPercent": 75,
-       "stream": "ADVANCED",
-       "notesEn": "College of Technological Innovation: General stream 80%, Advanced stream 75%.",
-       "notesAr": "كلية الابتكار التقني: المسار العام 80%، المسار المتقدم 75%.",
-       "subjects": [],
-       "source": "s1",
-       "quote": "كلية الابتكار التقني* | 80% | 75% |"
-      },
-      "AMERICAN": {
-       "accepted": true,
-       "minimumPercent": 80,
-       "notesEn": "Five subjects passed with an average of 80% or above (Arabic and Islamic Studies not counted).",
-       "notesAr": "اجتياز خمس مواد بمعدل 80% فما فوق (لا تُحتسب العربية والدراسات الإسلامية).",
-       "subjects": [],
-       "source": "s1",
-       "quote": "كلية الابتكار التقني* | 80% | 75% | اجتياز خمس مواد بنجاح بمعدل 80% فما فوق"
-      },
-      "BRITISH": {
-       "accepted": true,
-       "notesEn": "Five O-level/IGCSE subjects at C or above plus four AS-levels at B or above, or two A-levels at C or above (Arabic and Islamic Studies not counted).",
-       "notesAr": "خمس مواد O-level بدرجة C أو أعلى مع أربع مواد AS بدرجة B أو أعلى، أو مادتان A-Level بدرجة C أو أعلى (لا تُحتسب العربية والدراسات الإسلامية).",
-       "subjects": [],
-       "source": "s1",
-       "quote": "اجتياز مادتينA-Level مع الحصول على علامة (جيد) (C) أو أكثر كحد أدنى في جميع المواد."
-      },
-      "IB": {
-       "minimumPoints": 24,
-       "subjects": [],
-       "source": "s1",
-       "quote": "اتمام شهادة البكالوريا الدولية والحصول على 24 نقطة أو أكثر."
-      }
-     },
+     "url": "https://www.zu.ac.ae/main/en/colleges/colleges/__college_of_technological_innovation/AcademicPrograms/UndergraduatePrograms.aspx",
+     "curricula": {},
      "general": {
-      "subjects": [],
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "english_language"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "80",
+        "noteEn": "Grade 12 English 80% (or TOEFL iBT 72).",
+        "noteAr": "الإنجليزية 80% في الصف الثاني عشر (أو TOEFL iBT 72).",
+        "source": "s1",
+        "quote": "Minimum 80% in Mathematics (Grade 12) or SAT Math 530 | Not Required | Bachelor of Science in Information Technology Concentration: Security and Network Technologies"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "80",
+        "noteEn": "Grade 12 Mathematics 80% (or SAT Math 530).",
+        "noteAr": "الرياضيات 80% في الصف الثاني عشر (أو SAT رياضيات 530).",
+        "source": "s1",
+        "quote": "Minimum 80% in Mathematics (Grade 12) or SAT Math 530 | Not Required | Bachelor of Science in Information Technology Concentration: Security and Network Technologies"
+       }
+      ],
       "english": [],
       "tests": [
        {
-        "test": "EMSAT_MATH",
-        "policy": "REQUIRED",
-        "minScore": 500,
-        "noteEn": "EmSAT Math 500 for the College of Technological Innovation.",
-        "noteAr": "درجة 500 في اختبار الإمسات للرياضيات لكلية الابتكار التقني.",
+        "test": "SAT",
+        "policy": "OPTIONAL",
+        "minScore": 530,
+        "noteEn": "SAT Math 530 can replace the Grade 12 Mathematics requirement.",
+        "noteAr": "يمكن أن تحل درجة SAT رياضيات 530 محل متطلب الرياضيات في الصف الثاني عشر.",
         "source": "s1",
-        "quote": "كلية الابتكار التقني تحصيل درجة درجة (500) في اختبار امسات لمادة الرياضيات"
+        "quote": "Minimum 80% in Mathematics (Grade 12) or SAT Math 530 | Not Required | Bachelor of Science in Information Technology Concentration: Security and Network Technologies"
+       }
+      ],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "zayed-university-cyber",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Science in Information Technology (Concentration: Security and Network Technologies)",
+     "nameAr": "بكالوريوس العلوم في تقنية المعلومات (تركيز: تقنيات الأمن والشبكات)",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.zu.ac.ae/main/en/colleges/colleges/__college_of_technological_innovation/AcademicPrograms/UndergraduatePrograms.aspx",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "english_language"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "80",
+        "noteEn": "Grade 12 English 80% (or TOEFL iBT 72).",
+        "noteAr": "الإنجليزية 80% في الصف الثاني عشر (أو TOEFL iBT 72).",
+        "source": "s1",
+        "quote": "Minimum 80% in Mathematics (Grade 12) or SAT Math 530 | Not Required | Bachelor of Science in Information Technology Concentration: Security and Network Technologies"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "80",
+        "noteEn": "Grade 12 Mathematics 80% (or SAT Math 530).",
+        "noteAr": "الرياضيات 80% في الصف الثاني عشر (أو SAT رياضيات 530).",
+        "source": "s1",
+        "quote": "Minimum 80% in Mathematics (Grade 12) or SAT Math 530 | Not Required | Bachelor of Science in Information Technology Concentration: Security and Network Technologies"
+       }
+      ],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "OPTIONAL",
+        "minScore": 530,
+        "noteEn": "SAT Math 530 can replace the Grade 12 Mathematics requirement.",
+        "noteAr": "يمكن أن تحل درجة SAT رياضيات 530 محل متطلب الرياضيات في الصف الثاني عشر.",
+        "source": "s1",
+        "quote": "Minimum 80% in Mathematics (Grade 12) or SAT Math 530 | Not Required | Bachelor of Science in Information Technology Concentration: Security and Network Technologies"
        }
       ],
       "additional": [],
@@ -3629,6 +4080,13 @@
      "hash": "687f65e56d22c8ad6cbc5874a37ec4e311392a0a7cd52671389cffdefa4c65d0",
      "waybackTimestamp": "20250807000840",
      "waybackHash": "0ce98daa68bb932d7f701a969d6f59af851cf0a08a68708f6510b0fad7f86a76"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.rit.edu/dubai/bachelor-science-computing-and-information-technologies",
+     "title": "Bachelor of Science in Computing and Information Technologies | RIT Dubai | RIT",
+     "retrievedAt": "2026-09-30T08:20:28.039Z",
+     "hash": "bf4513d0f4711c7ab16756c15fa74c5b42a52a59406d7c61f54c3df7b2c864fd"
     }
    ],
    "english": [
