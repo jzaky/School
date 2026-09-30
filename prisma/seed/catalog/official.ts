@@ -224,6 +224,8 @@ export function fingerprint(r: { curriculum: string | null; minimumGPA: number |
   });
 }
 
+const builtFingerprint = (r: BuiltRow) => fingerprint({ ...r, subjects: r.subjects.map((x) => ({ ...x, canonicalSubjectKeys: x.keys })) });
+
 const DEADLINE_KIND: Record<string, string> = {
   UCAS_EQUAL_CONSIDERATION: "UCAS_EQUAL",
   UCAS_OXBRIDGE_MEDICINE: "OXBRIDGE_MEDICINE",
@@ -333,36 +335,40 @@ export async function seedOfficialRequirements(
       const stored = await tx.programRequirement.findMany({ where: { orgId: null, programId, isCurrent: true }, include: { subjects: true, languages: true, tests: true, additional: true } });
       const storedBy = new Map(stored.map((r) => [r.curriculum ?? "GENERAL", r]));
       const wanted = new Set<string>(current.map((r) => r.curriculum ?? "GENERAL"));
-      const firstLoad = stored.length === 0;
+      const inc = { subjects: true, languages: true, tests: true, additional: true } as const;
       for (const r of current) {
         const k = r.curriculum ?? "GENERAL";
         const e = storedBy.get(k);
         const from = retrieved((u.sources ?? []).find((s) => sourceIdFor(s.id) === r.sourceId)?.id);
         if (e && (e.confidence === "VERIFIED" || e.confidence === "REVIEWED")) continue; // a person checked it
-        if (e && fingerprint(e) === fingerprint({ ...r, subjects: r.subjects.map((s) => ({ ...s, canonicalSubjectKeys: s.keys })) })) continue;
-        const prevRow = firstLoad ? previous?.rows.find((x) => (x.curriculum ?? "GENERAL") === k) : undefined;
-        let version = (e?.version ?? 0) + 1;
-        let fromVersion: { id: string } | null = e ?? null;
+        const prevRow = previous?.rows.find((x) => (x.curriculum ?? "GENERAL") === k) ?? null;
+        // History for one programme and curriculum is rebuilt from the official data: the archived version
+        // (when the archive showed a difference) and the current one. A change record only ever comes from the
+        // university's own archived page against its current page, never from our research getting more complete.
+        const history = await tx.programRequirement.findMany({ where: { orgId: null, programId, curriculum: r.curriculum, confidence: "OFFICIAL" }, include: inc });
+        const archived = history.find((h) => !h.isCurrent && prevRow && previous && h.effectiveFrom?.getTime() === previous.asOf.getTime() && fingerprint(h) === builtFingerprint(prevRow));
+        const changes = history.length ? await tx.requirementChange.findMany({ where: { programId, OR: [{ fromVersionId: { in: history.map((h) => h.id) } }, { toVersionId: { in: history.map((h) => h.id) } }] }, select: { id: true, fromVersionId: true, toVersionId: true } }) : [];
+        const upToDate = e && fingerprint(e) === builtFingerprint(r) && (prevRow ? !!archived && changes.every((c) => c.fromVersionId === archived.id && c.toVersionId === e.id) && changes.length <= 1 : changes.length === 0);
+        if (upToDate) continue;
+        if (changes.length) await tx.requirementChange.deleteMany({ where: { id: { in: changes.map((c) => c.id) } } });
+        if (history.length) await tx.programRequirement.deleteMany({ where: { id: { in: history.map((h) => h.id) } } });
+        if (e && e.confidence !== "OFFICIAL") await tx.programRequirement.update({ where: { id: e.id }, data: { isCurrent: false, effectiveTo: from } });
+        let version = 1;
+        let old: Awaited<ReturnType<typeof tx.programRequirement.create>> | null = null;
         if (prevRow && previous) {
-          const old = await tx.programRequirement.create({ data: rowData(programId, intakeYear, prevRow, version, false, previous.asOf, from), include: { subjects: true, languages: true, tests: true, additional: true } });
+          old = await tx.programRequirement.create({ data: rowData(programId, intakeYear, prevRow, version++, false, previous.asOf, from), include: inc });
           counts.previous++;
-          fromVersion = old;
-          version++;
         }
-        if (e) await tx.programRequirement.update({ where: { id: e.id }, data: { isCurrent: false, effectiveTo: from } });
-        const created = await tx.programRequirement.create({ data: rowData(programId, intakeYear, r, version, true, from, null), include: { subjects: true, languages: true, tests: true, additional: true } });
+        const created = await tx.programRequirement.create({ data: rowData(programId, intakeYear, r, version, true, from, null), include: inc });
         counts.rows++;
-        if (fromVersion) {
-          const before = await tx.programRequirement.findUnique({ where: { id: fromVersion.id }, include: { subjects: true, languages: true, tests: true, additional: true } });
-          if (before) {
-            const d = diffGroups({ prev: groupFromVersion(before), next: groupFromVersion(created), prevSourceId: before.sourceId, nextSourceId: created.sourceId });
-            if (d.entries.length) {
-              await tx.requirementChange.createMany({
-                data: [{ id: changeId(["requirement-change", programId, k, before.id, created.id]), orgId: null, programId, fromVersionId: before.id, toVersionId: created.id, summaryEn: d.summaryEn, diff: { severity: d.severity, curriculum: d.curriculum, entries: d.entries, summaryAr: d.summaryAr, official: true } as unknown as Prisma.InputJsonValue, status: "NEEDS_REVIEW", detectedAt: from }],
-                skipDuplicates: true,
-              });
-              counts.changes++;
-            }
+        if (old) {
+          const before = await tx.programRequirement.findUniqueOrThrow({ where: { id: old.id }, include: inc });
+          const d = diffGroups({ prev: groupFromVersion(before), next: groupFromVersion(created), prevSourceId: before.sourceId, nextSourceId: created.sourceId });
+          if (d.entries.length) {
+            await tx.requirementChange.create({
+              data: { id: changeId(["requirement-change", programId, k, previous!.asOf.toISOString(), builtFingerprint(r)]), orgId: null, programId, fromVersionId: before.id, toVersionId: created.id, summaryEn: d.summaryEn, diff: { severity: d.severity, curriculum: d.curriculum, entries: d.entries, summaryAr: d.summaryAr, official: true } as unknown as Prisma.InputJsonValue, status: "NEEDS_REVIEW", detectedAt: from },
+            });
+            counts.changes++;
           }
         }
       }

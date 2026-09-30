@@ -139,7 +139,7 @@ test("university planning: goal, matches, what-if, search, compare, plan approva
   // --- Layla: catalog change monitor and application board -----------------------------------
   const layla = await loginAs(browser, "career_advisor", "en");
   await go(layla, "/career/catalog/changes");
-  await expect(layla.page.locator("[data-testid=change-item]", { hasText: /IELTS/ }).first()).toBeVisible();
+  await expect(layla.page.locator("[data-testid=change-item]", { hasText: /IB points|Grade profile/ }).first()).toBeVisible();
   await go(layla, "/career/applications/manage");
   await expect(layla.page.locator("[data-testid=application-board]")).toBeVisible();
   await expect(layla.page.locator("[data-testid=board-card]").first()).toBeVisible();
