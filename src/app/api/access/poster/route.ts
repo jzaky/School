@@ -4,6 +4,7 @@ import { audit } from "@/server/audit/audit";
 import { ensureJoinCode } from "@/server/access/invitations";
 import { bothLanguages } from "@/server/access/email-text";
 import { renderJoinPoster } from "@/server/access/poster";
+import { loadLogo } from "@/server/documents/letterhead";
 
 export const runtime = "nodejs";
 
@@ -27,6 +28,7 @@ export async function GET(req: Request) {
     footer: ctx.org.parentJoinApproval ? t("footerApproval") : t("footerInstant"),
     steps: { en: steps.map((s) => s.en), ar: steps.map((s) => s.ar) },
     color: ctx.org.primaryColor,
+    logo: await loadLogo(ctx.org.logoUrl),
   });
   await audit(ctx.db, ctx.orgId, { actorId: ctx.membershipId, actorUserId: ctx.user.id, action: "join.poster_download", entityType: "Organization", entityId: ctx.orgId });
   return new NextResponse(new Uint8Array(pdf), {

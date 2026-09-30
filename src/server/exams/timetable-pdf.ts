@@ -1,6 +1,6 @@
 // Printable bilingual exam timetable, in the same letterhead style as school letters.
 import PDFDocument from "pdfkit";
-import { drawLtr, drawRtl, FONTS, GOLD, MUTED, NAVY } from "@/server/documents/pdf";
+import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY } from "@/server/documents/pdf";
 
 export type TimetableRow = { start: Date; end: Date; subjectEn: string; subjectAr: string; room: string | null };
 
@@ -14,6 +14,8 @@ export async function renderExamTimetablePdf(input: {
   subheading: { en: string; ar: string };
   rows: TimetableRow[];
   generatedAt: Date;
+  /** The school's logo; the school's initial is drawn when there is none. */
+  logo?: Buffer | null;
 }): Promise<Buffer> {
   const doc = new PDFDocument({ size: "A4", margin: 0, info: { Title: input.heading.en, Author: input.school.en } });
   const chunks: Buffer[] = [];
@@ -27,12 +29,14 @@ export async function renderExamTimetablePdf(input: {
   const letterhead = () => {
     doc.rect(0, 0, W, 8).fill(NAVY);
     doc.rect(0, 8, W, 2).fill(GOLD);
-    drawLtr(doc, input.school.en, M, 26, inner / 2, { size: 11, font: FONTS.semibold, color: NAVY });
-    drawRtl(doc, input.school.ar, W / 2, 22, inner / 2, { size: 11, font: FONTS.semibold, color: NAVY });
-    drawLtr(doc, input.heading.en, M, 50, inner / 2, { size: 16, font: FONTS.bold, color: NAVY });
-    drawRtl(doc, input.heading.ar, W / 2, 44, inner / 2, { size: 16, font: FONTS.bold, color: NAVY });
-    drawLtr(doc, input.subheading.en, M, 76, inner / 2, { size: 9, color: MUTED });
-    drawRtl(doc, input.subheading.ar, W / 2, 72, inner / 2, { size: 9, color: MUTED });
+    drawSchoolMark(doc, W / 2 - 20, 24, 40, { logo: input.logo, name: input.school.en });
+    const half = inner / 2 - 30;
+    drawLtr(doc, input.school.en, M, 26, half, { size: 11, font: FONTS.semibold, color: NAVY });
+    drawRtl(doc, input.school.ar, W / 2 + 30, 22, half, { size: 11, font: FONTS.semibold, color: NAVY });
+    drawLtr(doc, input.heading.en, M, 50, half, { size: 16, font: FONTS.bold, color: NAVY });
+    drawRtl(doc, input.heading.ar, W / 2 + 30, 44, half, { size: 16, font: FONTS.bold, color: NAVY });
+    drawLtr(doc, input.subheading.en, M, 76, half, { size: 9, color: MUTED });
+    drawRtl(doc, input.subheading.ar, W / 2 + 30, 72, half, { size: 9, color: MUTED });
     doc.moveTo(M, 100).lineTo(W - M, 100).lineWidth(0.6).strokeColor("#D9DEE5").stroke();
   };
 

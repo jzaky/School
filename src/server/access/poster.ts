@@ -1,7 +1,7 @@
 // Printable bilingual family join poster: school name, the join code, a QR code to the join page and
 // three short steps in English and Arabic. Arabic is shaped and laid out by the shared PDF helpers.
 import PDFDocument from "pdfkit";
-import { FONTS, GOLD, MUTED, NAVY, drawLtr, drawRtl } from "@/server/documents/pdf";
+import { FONTS, GOLD, MUTED, NAVY, drawLtr, drawRtl, drawSchoolMark } from "@/server/documents/pdf";
 import { encodeQr } from "./qr";
 
 export type PosterInput = {
@@ -14,6 +14,8 @@ export type PosterInput = {
   codeLabel: { en: string; ar: string };
   footer: { en: string; ar: string };
   color?: string;
+  /** The school's logo, shown on a white tile in the header band. */
+  logo?: Buffer | null;
 };
 
 export async function renderJoinPoster(input: PosterInput): Promise<Buffer> {
@@ -30,8 +32,13 @@ export async function renderJoinPoster(input: PosterInput): Promise<Buffer> {
 
   doc.rect(0, 0, W, 118).fill(brand);
   doc.rect(0, 118, W, 4).fill(GOLD);
-  drawLtr(doc, input.school.en, M, 40, half, { size: 15, font: FONTS.semibold, color: "#FFFFFF" });
-  drawRtl(doc, input.school.ar, M + half + 24, 36, half, { size: 15, font: FONTS.semibold, color: "#FFFFFF" });
+  const nameW = input.logo ? half - 34 : half;
+  if (input.logo) {
+    doc.roundedRect(W / 2 - 30, 29, 60, 60, 10).fill("#FFFFFF");
+    drawSchoolMark(doc, W / 2 - 25, 34, 50, { logo: input.logo, name: input.school.en });
+  }
+  drawLtr(doc, input.school.en, M, 40, nameW, { size: 15, font: FONTS.semibold, color: "#FFFFFF" });
+  drawRtl(doc, input.school.ar, M + inner - nameW, 36, nameW, { size: 15, font: FONTS.semibold, color: "#FFFFFF" });
 
   drawLtr(doc, input.title.en, M, 150, inner, { size: 26, font: FONTS.bold, color: brand, align: "center" });
   drawRtl(doc, input.title.ar, M, 188, inner, { size: 24, font: FONTS.bold, color: brand, align: "center" });

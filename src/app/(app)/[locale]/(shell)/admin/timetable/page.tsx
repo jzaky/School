@@ -60,7 +60,7 @@ export default async function AdminTimetablePage({ searchParams }: { searchParam
     db.timetableSlot.count({ where: { academicYearId: year.id, locked: true } }),
     periodsOf(ctx, year.id),
     db.membership.findMany({
-      where: { status: "ACTIVE", OR: [{ roles: { some: { role: { key: { in: ["teacher", "department_head"] } } } } }, { id: { in: (await db.teacherSubject.findMany({ select: { membershipId: true } })).map((q) => q.membershipId) } }] },
+      where: { status: { in: ["ACTIVE", "INVITED"] }, OR: [{ roles: { some: { role: { key: { in: ["teacher", "department_head"] } } } } }, { id: { in: (await db.teacherSubject.findMany({ select: { membershipId: true } })).map((q) => q.membershipId) } }] },
       include: { user: true, staffProfile: { include: { department: true } } },
       orderBy: { user: { nameEn: "asc" } },
     }),

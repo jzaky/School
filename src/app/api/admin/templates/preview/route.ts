@@ -3,6 +3,7 @@ import { getOptionalCtx } from "@/server/context";
 import { tenantTx } from "@/lib/tenant-db";
 import { buildMergeData } from "@/server/documents/merge";
 import { renderLetterPdf } from "@/server/documents/pdf";
+import { letterheadFor } from "@/server/documents/letterhead";
 
 export const runtime = "nodejs";
 
@@ -28,6 +29,7 @@ export async function POST(req: Request) {
     signatory: { en: body.signatoryEn ?? "", ar: body.signatoryAr ?? "" },
     signerName: { en: ctx.user.nameEn, ar: ctx.user.nameAr ?? ctx.user.nameEn },
     issuedAt: new Date(),
+    letterhead: await letterheadFor(ctx.db, ctx.org),
   });
   return new NextResponse(new Uint8Array(pdf), { headers: { "Content-Type": "application/pdf", "Content-Disposition": 'inline; filename="preview.pdf"', "Cache-Control": "no-store" } });
 }

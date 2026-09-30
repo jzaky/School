@@ -3,6 +3,7 @@ import { getOptionalCtx } from "@/server/context";
 import { canOpenDocument } from "@/server/access/document-access";
 import { audit } from "@/server/audit/audit";
 import { renderLetterPdf, renderSamplePdf } from "@/server/documents/pdf";
+import { letterheadFor } from "@/server/documents/letterhead";
 import { readLocal, signedUrl } from "@/server/documents/storage";
 import type { MergeData } from "@/server/documents/merge";
 import { renderReportCardPdf } from "@/server/grades/report-pdf";
@@ -56,11 +57,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       signatory: { en: template.signatoryEn ?? "", ar: template.signatoryAr ?? "" },
       signerName: signer ? { en: signer.user.nameEn, ar: signer.user.nameAr ?? signer.user.nameEn } : null,
       issuedAt: version.createdAt,
+      letterhead: await letterheadFor(ctx.db, org),
     });
     return new NextResponse(new Uint8Array(pdf), { headers: { "Content-Type": "application/pdf", "Content-Disposition": disposition, "Cache-Control": "private, no-store" } });
   }
   if (version.storageKey.startsWith("reportcard:") && version.renderData) {
-    const pdf = await renderReportCardPdf(version.renderData as unknown as ReportCardData);
+    const pdf = await renderReportCardPdf(version.renderData as unknown as ReportCardData, await letterheadFor(ctx.db, ctx.org));
     return new NextResponse(new Uint8Array(pdf), { headers: { "Content-Type": "application/pdf", "Content-Disposition": disposition, "Cache-Control": "private, no-store" } });
   }
   if (version.storageKey.startsWith("sample:")) {
