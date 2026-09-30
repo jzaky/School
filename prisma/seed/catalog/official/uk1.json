@@ -1,6 +1,6 @@
 {
  "batch": "uk1",
- "assembledAt": "2026-09-30T08:04:49.400Z",
+ "assembledAt": "2026-09-30T08:18:18.918Z",
  "universities": [
   {
    "key": "bath",
@@ -4361,6 +4361,97 @@
      "previous": null
     }
    ]
+  },
+  {
+   "key": "glasgow",
+   "website": "https://www.gla.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.gla.ac.uk/undergraduate/how-to-apply-for-an-undergraduate-degree/entry-requirements/admissions-guidance/",
+     "title": "University of Glasgow - Undergraduate study - How to apply for an undergraduate degree - Entry requirements - 2026 Admissions guidance",
+     "retrievedAt": "2026-09-30T07:58:00.573Z",
+     "hash": "b3e0334b45cafc811359a9f83fc10b3aae40e4024ba89472532e10dba362cf22"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Apply through UCAS or the Common App.",
+     "noteAr": "التقديم عبر UCAS أو Common App.",
+     "source": "s1",
+     "quote": "All applications must be made through UCAS: www.ucas.com or Common App: www.commonapp.org"
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_EQUAL_CONSIDERATION",
+     "date": "2027-01-13",
+     "labelEn": "UCAS deadline",
+     "labelAr": "الموعد النهائي عبر UCAS",
+     "source": "s1",
+     "quote": "The deadline for submitting your application is stated in the How to apply section of the relevant subject page. The UCAS deadline is 13 January 2027 18:00 (UK time)."
+    }
+   ],
+   "curriculumRules": {
+    "AMERICAN": {
+     "accepted": true,
+     "notesEn": "SAT and AP accepted for applicants from the USA; programme grades are on each degree page.",
+     "notesAr": "يقبل SAT وAP للمتقدمين من الولايات المتحدة؛ والدرجات المطلوبة في صفحة كل برنامج.",
+     "source": "s1",
+     "quote": "We do accept many national school qualifications, including many European, SAT & AP if applying from the USA, and CICSE or CBSE if applying from India. A range of Foundation programmes are also available via Glasgow International College."
+    },
+    "CBSE": {
+     "accepted": true,
+     "notesEn": "CBSE accepted for applicants from India; programme grades are on each degree page.",
+     "notesAr": "تقبل شهادة CBSE للمتقدمين من الهند؛ والدرجات المطلوبة في صفحة كل برنامج.",
+     "source": "s1",
+     "quote": "We do accept many national school qualifications, including many European, SAT & AP if applying from the USA, and CICSE or CBSE if applying from India. A range of Foundation programmes are also available via Glasgow International College."
+    },
+    "ISC": {
+     "accepted": true,
+     "notesEn": "CISCE accepted for applicants from India.",
+     "notesAr": "تقبل شهادة CISCE للمتقدمين من الهند.",
+     "source": "s1",
+     "quote": "We do accept many national school qualifications, including many European, SAT & AP if applying from the USA, and CICSE or CBSE if applying from India. A range of Foundation programmes are also available via Glasgow International College."
+    }
+   },
+   "programs": []
+  },
+  {
+   "key": "lse",
+   "website": "https://www.lse.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.lse.ac.uk/study-at-lse/Undergraduate/Prospective-Students/How-to-Apply",
+     "title": "How to apply",
+     "retrievedAt": "2026-09-30T07:57:57.416Z",
+     "hash": "3f9b686ae3a3538b49864a64cc2a68d5d4db332b500695faa4ca9cd2a8910d64"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_EQUAL_CONSIDERATION",
+     "date": "2027-01-13",
+     "labelEn": "UCAS equal consideration deadline",
+     "labelAr": "الموعد النهائي للنظر المتساوي عبر UCAS",
+     "source": "s1",
+     "quote": "The last date for the receipt of applications to LSE to qualify for full and equal consideration is 13 January 2027, 18.00 (GMT)."
+    }
+   ],
+   "curriculumRules": {},
+   "programs": []
   }
  ]
 }

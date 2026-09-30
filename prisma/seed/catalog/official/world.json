@@ -1,6 +1,6 @@
 {
  "batch": "world",
- "assembledAt": "2026-09-30T08:04:49.819Z",
+ "assembledAt": "2026-09-30T08:18:19.447Z",
  "universities": [
   {
    "key": "epfl",
@@ -940,6 +940,22 @@
      "title": "Bewerbende mit International Baccalaureate Diplom - TUM",
      "retrievedAt": "2026-09-30T07:36:02.898Z",
      "hash": "301300785f66e4fb275e6578ab1887eed4277baaffc5935bd10ba88c23e95d44"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.tum.de/en/studies/application/application-info-portal/application-international",
+     "title": "International Applicants - TUM",
+     "retrievedAt": "2026-09-30T07:58:12.514Z",
+     "hash": "0ab08509371e8b879a8eae69d1b7b4bb6aeda2ae29ac5643b6149e5676da82fe"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.tum.de/en/studies/application/application-info-portal/admission-requirements/language-certificates",
+     "title": "Language Certificates - TUM",
+     "retrievedAt": "2026-09-30T07:58:11.060Z",
+     "hash": "d662d14544be7e110d7b370493cea459e7a7cadc4d78724b927c310145eaaf5d",
+     "waybackTimestamp": "20250906184936",
+     "waybackHash": "e3faf270675aa6922cba2948a6fa42867d33607de2076cf4de7f11c0d045ff4e"
     }
    ],
    "english": [],
@@ -968,6 +984,22 @@
      "noteAr": "الرسوم الدراسية للطلاب من خارج الاتحاد الأوروبي: 3000 يورو لكل فصل دراسي لهذا البرنامج، مع وجود إعفاءات ومنح.",
      "source": "s1",
      "quote": "The tuition fees for international students from third countries for this degree program are 3,000 euros per semester."
+    },
+    {
+     "kind": "FOUNDATION_REQUIRED",
+     "required": false,
+     "noteEn": "Not every foreign school diploma gives direct access to German universities (check anabin); without it, the route is a Studienkolleg preparatory year.",
+     "noteAr": "لا تمنح كل شهادة ثانوية أجنبية حق الالتحاق المباشر بالجامعات الألمانية (راجع قاعدة anabin)، وإلا فالطريق هو سنة تحضيرية في Studienkolleg.",
+     "source": "s3",
+     "quote": "You are not qualified for university studies in Germany? Then you cannot apply for a Bachelor’s directly."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "German proof: DSH-2, TestDaF level 4 in all sections, or equivalent certificates on TUM's list.",
+     "noteAr": "إثبات اللغة الألمانية: DSH-2 أو TestDaF بمستوى 4 في جميع الأقسام أو شهادات معادلة من قائمة الجامعة.",
+     "source": "s4",
+     "quote": "A DSH passed with an overall result of at least DSH-2 is considered proof of linguistic study ability for admission or enrollment to all degree programs and degrees."
     }
    ],
    "deadlines": [],
@@ -1029,9 +1061,67 @@
      "title": "IE University Admission",
      "retrievedAt": "2026-09-30T07:37:12.211Z",
      "hash": "414bc50035fff5c30a6ab8308833c128b4038ff6f43ff253d81e6ffa286f7dec"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+     "title": "Requirements to access university as a freshman | IE University",
+     "retrievedAt": "2026-09-30T07:58:08.344Z",
+     "hash": "c879411c158e0c796bd8ef38a46d44d6fa1be6321dd0ed37b14467a59fff199c"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.ie.edu/university/admission/admission-process/admissions-rounds/",
+     "title": "Admissions Rounds | IE University",
+     "retrievedAt": "2026-09-30T07:58:28.736Z",
+     "hash": "7af6f96ee6dd1ce25a8fa8d9a29ed35dbb883b42484b01592650f32956c234fe"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.ie.edu/university/studies/academic-programs/bachelor-business-administration/",
+     "title": "BBA - Bachelor in Business Administration | IE University",
+     "retrievedAt": "2026-09-30T07:58:10.880Z",
+     "hash": "95adbb101aeccad78ac77a4a8582126b2bd7dcaa51179e11f80f1ccf9b56161b"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.ie.edu/university/studies/academic-programs/bachelor-data-business-analytics/",
+     "title": "Bachelor's in Data & Business Analytics | IE University",
+     "retrievedAt": "2026-09-30T07:58:13.778Z",
+     "hash": "40c25c66d0cfde358401e89433c053fffc410cb440657c5663eb61f026e8e2cc",
+     "waybackTimestamp": "20250808202826",
+     "waybackHash": "1de46ae7962a5f6c66976cb7088afec046164f3e0bfbafc8d6b41766d76e06b3"
     }
    ],
-   "english": [],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 7,
+     "minComponent": null,
+     "waiverNoteEn": "Not needed for applicants who studied in an English-speaking system (such as American high school, IB in English or A-levels) for their whole education or at least the last two years of high school, or who lived in an English-speaking country for over two years.",
+     "waiverNoteAr": "لا يلزم لمن درس في نظام تعليمي بالإنجليزية (مثل الثانوية الأمريكية أو البكالوريا الدولية بالإنجليزية أو المستوى المتقدم البريطاني) طوال تعليمه أو في آخر سنتين من الثانوية على الأقل، أو لمن عاش في بلد ناطق بالإنجليزية أكثر من سنتين.",
+     "source": "s2",
+     "quote": "IELTS: minimum 7, 7.5 recommended"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 100,
+     "minComponent": null,
+     "waiverNoteEn": "Not needed for applicants who studied in an English-speaking system (such as American high school, IB in English or A-levels) for their whole education or at least the last two years of high school, or who lived in an English-speaking country for over two years.",
+     "waiverNoteAr": "لا يلزم لمن درس في نظام تعليمي بالإنجليزية (مثل الثانوية الأمريكية أو البكالوريا الدولية بالإنجليزية أو المستوى المتقدم البريطاني) طوال تعليمه أو في آخر سنتين من الثانوية على الأقل، أو لمن عاش في بلد ناطق بالإنجليزية أكثر من سنتين.",
+     "source": "s2",
+     "quote": "TOEFL: Minimum score 100; 105 recommended (or 5.0 on the new 1-6 scale)."
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 130,
+     "minComponent": null,
+     "waiverNoteEn": "Not needed for applicants who studied in an English-speaking system (such as American high school, IB in English or A-levels) for their whole education or at least the last two years of high school, or who lived in an English-speaking country for over two years.",
+     "waiverNoteAr": "لا يلزم لمن درس في نظام تعليمي بالإنجليزية (مثل الثانوية الأمريكية أو البكالوريا الدولية بالإنجليزية أو المستوى المتقدم البريطاني) طوال تعليمه أو في آخر سنتين من الثانوية على الأقل، أو لمن عاش في بلد ناطق بالإنجليزية أكثر من سنتين.",
+     "source": "s2",
+     "quote": "Duolingo English Test: minimum score of 130"
+    }
+   ],
    "tests": [
     {
      "test": "SAT",
@@ -1041,6 +1131,24 @@
      "noteAr": "اختبار القبول في الجامعة بديل عن الاختبارات المعيارية مثل SAT.",
      "source": "s1",
      "quote": "This rigorous exam serves as a flexible alternative to standardized tests such as the SAT or LNAT."
+    },
+    {
+     "test": "SAT",
+     "policy": "OPTIONAL",
+     "minScore": 1300,
+     "noteEn": "Accepted instead of the IE Admissions Test.",
+     "noteAr": "يُقبل بدلا من اختبار القبول في الجامعة.",
+     "source": "s2",
+     "quote": "New SAT: 1300* or above (IE University’s identification code “6293”)"
+    },
+    {
+     "test": "ACT",
+     "policy": "OPTIONAL",
+     "minScore": 28,
+     "noteEn": "Accepted instead of the IE Admissions Test.",
+     "noteAr": "يُقبل بدلا من اختبار القبول في الجامعة.",
+     "source": "s2",
+     "quote": "ACT: 28 or above (IE University’s identification code “5360”)"
     }
    ],
    "additional": [
@@ -1067,11 +1175,258 @@
      "noteAr": "تقييم إلكتروني بأسئلة مصورة وكتابية، ثم مقابلة شخصية.",
      "source": "s1",
      "quote": "The Admissions Committee will also invite you to a personal interview for further evaluation."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Applications can also be made through the Common App.",
+     "noteAr": "يمكن التقديم أيضا عبر منصة Common App.",
+     "source": "s3",
+     "quote": "Remember that you can also apply through Common App."
     }
    ],
-   "deadlines": [],
-   "curriculumRules": {},
-   "programs": []
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "EARLY_ACTION",
+     "date": "2026-09-18",
+     "labelEn": "Early Round application deadline",
+     "labelAr": "آخر موعد لجولة التقديم المبكرة",
+     "source": "s3",
+     "quote": "Early Round Application deadline: September 18, 2026"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2026-11-06",
+     "labelEn": "Round 1 application deadline",
+     "labelAr": "آخر موعد للجولة الأولى",
+     "source": "s3",
+     "quote": "Round 1 Application deadline: November 6, 2026"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2027-01-15",
+     "labelEn": "Round 2 application deadline",
+     "labelAr": "آخر موعد للجولة الثانية",
+     "source": "s3",
+     "quote": "Round 2 Application deadline: January 15, 2027"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2027-03-05",
+     "labelEn": "Round 3 application deadline (later applications considered from May 2027 if places remain)",
+     "labelAr": "آخر موعد للجولة الثالثة (يُنظر في الطلبات اللاحقة من مايو 2027 إذا توفرت مقاعد)",
+     "source": "s3",
+     "quote": "Round 3 Application deadline: March 5, 2027"
+    }
+   ],
+   "curriculumRules": {
+    "IB": {
+     "accepted": true,
+     "minimumPoints": 34,
+     "notesEn": "Typical admitted range 34 to 45 points (average 36); full IB Diploma required; first results only.",
+     "notesAr": "النطاق المعتاد للقبول من 34 إلى 45 نقطة (المتوسط 36)، ويُشترط دبلوم البكالوريا الدولية الكامل، وتُعتمد النتائج الأولى فقط.",
+     "source": "s2",
+     "quote": "Typical admissions are based on scores between 34 and 45.",
+     "subjects": []
+    },
+    "BRITISH": {
+     "accepted": true,
+     "gradeProfile": "AAB",
+     "notesEn": "At least three A-levels; admitted profiles range from AAB to A*A*A*; retakes not accepted; five GCSEs at C/4 or above legally required.",
+     "notesAr": "ثلاث مواد على الأقل في المستوى المتقدم، ويتراوح المقبولون بين AAB وA*A*A*، ولا تُقبل إعادة الامتحانات، ويُشترط قانونا خمس مواد GCSE بتقدير C أو 4 فأعلى.",
+     "source": "s2",
+     "quote": "IE University requires a minimum of three A-Levels, and our applications range from AAB to A*A*A*, in the ordinary intake.",
+     "subjects": []
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "minimumGPA": 3.4,
+     "notesEn": "Unweighted GPA of at least 3.4 over the last three years; AP and Honors courses highly recommended; transcripts for grades 10 to 12 required for Spanish homologation.",
+     "notesAr": "معدل غير موزون لا يقل عن 3.4 في السنوات الثلاث الأخيرة، ويُنصح بشدة بمواد AP والمواد المتقدمة، ويلزم كشف درجات الصفوف من العاشر إلى الثاني عشر لمعادلة الشهادة في إسبانيا.",
+     "source": "s2",
+     "quote": "Applicants are expected to have an unweighted GPA of at least 3.4 on a 4.0 scale (unweighted) for the last three years of high school.",
+     "subjects": []
+    },
+    "CBSE": {
+     "accepted": true,
+     "minimumPercent": 80,
+     "notesEn": "Indian national system: overall average of at least 80%.",
+     "notesAr": "النظام الهندي: معدل عام لا يقل عن 80%.",
+     "source": "s2",
+     "quote": "You are also expected to obtain the Senior Secondary Exam or the Central Board Education Diploma with a final average of at least 80%.",
+     "subjects": []
+    },
+    "JORDAN_TAWJIHI": {
+     "accepted": true,
+     "minimumPercent": 85,
+     "notesEn": "Tawjihi with an overall average of at least 85%; transcripts for the three upper secondary years must be legalized and translated.",
+     "notesAr": "التوجيهي بمعدل عام لا يقل عن 85%، مع تصديق وترجمة كشوف الدرجات للسنوات الثلاث الأخيرة.",
+     "source": "s2",
+     "quote": "Students are expected to obtain an academic trajectory and the award of the Tawjihi with at least an overall average of at least 85 %.",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "ie-university-bus",
+     "status": "EXISTS",
+     "nameEn": "Bachelor in Business Administration BBA",
+     "nameAr": "بكالوريوس إدارة الأعمال",
+     "degree": "BBA",
+     "durationYears": 4,
+     "url": "https://www.ie.edu/university/studies/academic-programs/bachelor-business-administration/",
+     "curricula": {
+      "IB": {
+       "minimumPoints": 34,
+       "source": "s2",
+       "quote": "Typical admissions are based on scores between 34 and 45.",
+       "subjects": [
+        {
+         "type": "PREFERRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "source": "s2",
+         "quote": "Bachelor in Business Administration/Bachelor in Economics/Bachelor in Philosophy, Politics, Law & Economics: Ideally Mathematics AA HL/SL. Mathematics AI can also be considered."
+        }
+       ]
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.4,
+       "source": "s2",
+       "quote": "Applicants are expected to have an unweighted GPA of at least 3.4 on a 4.0 scale (unweighted) for the last three years of high school.",
+       "subjects": [
+        {
+         "type": "PREFERRED",
+         "keys": [
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s2",
+         "quote": "Bachelor in Business Administration/Bachelor in Economics/Bachelor in Philosophy, Politics, Law & Economics: AP Calculus is desirable."
+        }
+       ]
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Four years, taught in English, in Segovia or Madrid, starting in September.",
+        "noteAr": "أربع سنوات باللغة الإنجليزية في سيغوفيا أو مدريد، وتبدأ الدراسة في سبتمبر.",
+        "source": "s4",
+        "quote": "You can study the Bachelor in Business Administration in Segovia and Madrid."
+       }
+      ],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "ie-university-ds",
+     "status": "REPLACED",
+     "nameEn": "Bachelor in Data and Business Analytics BSc",
+     "nameAr": "بكالوريوس البيانات وتحليلات الأعمال",
+     "degree": "BSc",
+     "durationYears": 4,
+     "url": "https://www.ie.edu/university/studies/academic-programs/bachelor-data-business-analytics/",
+     "curricula": {
+      "IB": {
+       "minimumPoints": 34,
+       "source": "s2",
+       "quote": "Typical admissions are based on scores between 34 and 45.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "source": "s2",
+         "quote": "Bachelor in Data & Business Analytics: Math AA HL/SL, Math AI HL. If taking computer science and/or physics, Math AI SL can also be considered.",
+         "noteEn": "Mathematics AA at HL or SL, or Math AI at HL.",
+         "noteAr": "الرياضيات AA بالمستوى العالي أو العادي، أو الرياضيات AI بالمستوى العالي."
+        }
+       ]
+      },
+      "BRITISH": {
+       "gradeProfile": "AAB",
+       "source": "s2",
+       "quote": "IE University requires a minimum of three A-Levels, and our applications range from AAB to A*A*A*, in the ordinary intake.",
+       "subjects": [
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "mathematics",
+          "further_mathematics",
+          "computer_science",
+          "information_technology",
+          "physics",
+          "statistics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s2",
+         "quote": "Bachelor in Data & Business Analytics: Mathematics, Further Mathematics, Computer Science, Digital Technology, Information Technology, Physics, Software Systems Development, Statistics."
+        }
+       ]
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.4,
+       "source": "s2",
+       "quote": "Applicants are expected to have an unweighted GPA of at least 3.4 on a 4.0 scale (unweighted) for the last three years of high school.",
+       "subjects": [
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "calculus",
+          "statistics",
+          "computer_science"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s2",
+         "quote": "Bachelor in Data & Business Analytics: At least one of these subjects: AP Calculus AB, AP Calculus BC, AP Statistics, AP Computer Science."
+        }
+       ]
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "OPTIONAL",
+        "minScore": 700,
+        "noteEn": "If submitting the SAT: at least 700 in the Mathematics section.",
+        "noteAr": "عند تقديم SAT: 700 على الأقل في قسم الرياضيات.",
+        "source": "s2",
+        "quote": "Candidates applying to the Bachelor in Applied Mathematics, Bachelor in ComputerScience and Artificial Intelligence, Bachelor in Data and Business Analytics, Bachelor in Environmental Sciences for Sustainability, and their Dual Degrees who choose to submit SAT scores must obtain a minimum score of 700 in the SAT Mathematics section, in addition to meeting the overall SAT requirement."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "IE has no standalone Data Science bachelor; the closest is the four-year Bachelor in Data and Business Analytics (Science and Technology school, includes a Mathematics Assessment).",
+        "noteAr": "لا تقدم الجامعة بكالوريوس مستقلا في علم البيانات، والأقرب هو بكالوريوس البيانات وتحليلات الأعمال لمدة أربع سنوات (كلية العلوم والتكنولوجيا، مع تقييم في الرياضيات).",
+        "source": "s5",
+        "quote": "You can study the Data and Business Analytics degree in Segovia and in Madrid."
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
   },
   {
    "key": "sciences_po",
@@ -1091,6 +1446,13 @@
      "title": "Admissions en bachelor par la voie d'acces internationale pour la rentree 2027 | Sciences Po",
      "retrievedAt": "2026-09-30T07:41:25.128Z",
      "hash": "30013990a03b7348a56853d6bb6d2da6e6a15bf5d60405969db9bf82af003a01"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.sciencespo.fr/admissions/en/undergraduate/foreign-secondary-schools/",
+     "title": "International undergraduate admissions | Sciences Po",
+     "retrievedAt": "2026-09-30T07:58:18.652Z",
+     "hash": "47bbf66536d107b6546a3b2ad908f77c89b7ab3ea8ba62969e7878b8777d1809"
     }
    ],
    "english": [],
@@ -1111,6 +1473,30 @@
      "noteAr": "يُسمح بطلب واحد فقط لبرنامج البكالوريوس.",
      "source": "s1",
      "quote": "Candidates may only submit one application to the Sciences Po undergraduate programme."
+    },
+    {
+     "kind": "PERSONAL_STATEMENT",
+     "required": true,
+     "noteEn": "Written pieces on motivation and academic project, written in the language(s) of the two chosen programmes; with the academic record they are marked out of 50.",
+     "noteAr": "نصوص مكتوبة عن الدافع والمشروع الأكاديمي بلغة البرنامجين المختارين، وتُقيَّم مع السجل الأكاديمي من 50.",
+     "source": "s3",
+     "quote": "The written pieces consist of a series of questions related to the applicant's of motivations and academic project for Sciences Po."
+    },
+    {
+     "kind": "INTERVIEW",
+     "required": true,
+     "noteEn": "Shortlisted candidates have a remote interview of about 25 minutes (presentation, image analysis, motivation discussion), marked out of 50.",
+     "noteAr": "يُجري المرشحون المختارون مقابلة عن بعد لنحو 25 دقيقة (تقديم وتحليل صورة ونقاش حول الدافع)، وتُقيَّم من 50.",
+     "source": "s3",
+     "quote": "Candidates who have obtained the necessary mark will be invited to an interview, which is the fourth and final evaluation for admission."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Application fee of 150 euros, non-refundable.",
+     "noteAr": "رسوم طلب قدرها 150 يورو غير مستردة.",
+     "source": "s3",
+     "quote": "In order to avoid any inconvenience, we strongly recommend our applicants to ensure that their profile is eligible before applying as the 150 euros application fees are non refundable."
     }
    ],
    "deadlines": [
@@ -1124,7 +1510,32 @@
      "quote": "Les candidatures sont ouvertes jusqu’au 1er mars 2027, 23h59 (heure de Paris)."
     }
    ],
-   "curriculumRules": {},
+   "curriculumRules": {
+    "IB": {
+     "accepted": true,
+     "notesEn": "IB Diploma is an eligible diploma for the international route; no minimum points are published.",
+     "notesAr": "دبلوم البكالوريا الدولية مؤهل للتقديم عبر المسار الدولي، ولا يوجد حد أدنى منشور للنقاط.",
+     "source": "s3",
+     "quote": "Examples of eligible secondary school diplomas: International Baccalaureate Diploma Programme (IBDP), A-levels or International A-levels, Abitur, Maturité suisse, US High school diploma.",
+     "subjects": []
+    },
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "A-levels and International A-levels are eligible for the international route; no grade profile is published.",
+     "notesAr": "شهادات المستوى المتقدم البريطانية والدولية مؤهلة للتقديم عبر المسار الدولي، ولا توجد درجات منشورة.",
+     "source": "s3",
+     "quote": "Examples of eligible secondary school diplomas: International Baccalaureate Diploma Programme (IBDP), A-levels or International A-levels, Abitur, Maturité suisse, US High school diploma.",
+     "subjects": []
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "notesEn": "A US high school diploma is eligible for the international route; no GPA or test minimum is published.",
+     "notesAr": "شهادة الثانوية الأمريكية مؤهلة للتقديم عبر المسار الدولي، ولا يوجد حد أدنى منشور للمعدل أو الاختبارات.",
+     "source": "s3",
+     "quote": "Examples of eligible secondary school diplomas: International Baccalaureate Diploma Programme (IBDP), A-levels or International A-levels, Abitur, Maturité suisse, US High school diploma.",
+     "subjects": []
+    }
+   },
    "programs": [
     {
      "key": "sciences-po-ir",
@@ -1183,11 +1594,110 @@
      "hash": "087394a10e44dbb0d25632ae0d32678366a028498ed2255a5aee5a26add06392",
      "waybackTimestamp": "20251111211224",
      "waybackHash": "3a7121e86f82b044761c5d13cfc69ae2836bd238a5a14e92a3c774778eaf6778"
+    },
+    {
+     "id": "s3",
+     "url": "https://admission.cuhk.edu.hk/application/overseas-other-qualifications-non-local-international-team/",
+     "title": "Requirements - CUHK Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T07:58:19.968Z",
+     "hash": "0108a701b5807b6033eacff320b2b408ea0171c43f88a4790b26fd11b34918ee"
+    },
+    {
+     "id": "s4",
+     "url": "https://admission.cuhk.edu.hk/programmes/list/",
+     "title": "Programme list - CUHK Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T07:58:27.803Z",
+     "hash": "269e9ea4e629e93e0cf409601455e629680ac41efa9ff66970498b66b9a53688",
+     "waybackTimestamp": "20251114060733",
+     "waybackHash": "10ddc330840d667f208216e3b9953b00f97416c6d1d8e8c43664a8a56e57ff67"
     }
    ],
-   "english": [],
-   "tests": [],
-   "additional": [],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6,
+     "minComponent": null,
+     "waiverNoteEn": "Minimum scores for the University's English requirement; one of the listed qualifications is enough.",
+     "waiverNoteAr": "الحد الأدنى لمتطلبات اللغة الإنجليزية في الجامعة، ويكفي تحقيق أحد المؤهلات المذكورة.",
+     "source": "s3",
+     "quote": "IELTS (Academic) | 6.0 (Overall Band Score)"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 80,
+     "minComponent": null,
+     "waiverNoteEn": "80/120 for tests before 21 January 2026; 4.5/6 for tests on or after that date. Home Edition not accepted.",
+     "waiverNoteAr": "80 من 120 للاختبارات قبل 21 يناير 2026، و4.5 من 6 للاختبارات بعده. لا تُقبل النسخة المنزلية.",
+     "source": "s3",
+     "quote": "TOEFL (iBT) | 80 out of 120 (Total Score) [For tests taken before 21 January 2026]"
+    },
+    {
+     "test": "IGCSE_ENGLISH",
+     "minOverall": 4,
+     "minComponent": null,
+     "waiverNoteEn": "GCSE/IGCSE English at grade C or 4.",
+     "waiverNoteAr": "اللغة الإنجليزية في GCSE أو IGCSE بتقدير C أو 4.",
+     "source": "s3",
+     "quote": "GCSE / IGCSE / GCE OL | Grade C / Grade 4 |"
+    },
+    {
+     "test": "IB_ENGLISH",
+     "minOverall": 4,
+     "minComponent": null,
+     "waiverNoteEn": "IB English at grade 4.",
+     "waiverNoteAr": "اللغة الإنجليزية في البكالوريا الدولية بدرجة 4.",
+     "source": "s3",
+     "quote": "IB | 4 | HKDSE | Level 3"
+    },
+    {
+     "test": "OTHER",
+     "minOverall": 80,
+     "minComponent": null,
+     "waiverNoteEn": "Indian Grade 12 English (CBSE, ISC or state board) at 80%.",
+     "waiverNoteAr": "اللغة الإنجليزية للصف الثاني عشر في المناهج الهندية بنسبة 80%.",
+     "source": "s3",
+     "quote": "Indian Central or State Board Exam Grade 12 English | 80% |"
+    }
+   ],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "REQUIRED",
+     "minScore": 1190,
+     "noteEn": "For US high school diploma applicants only (SAT or ACT).",
+     "noteAr": "لحاملي شهادة الثانوية الأمريكية فقط (SAT أو ACT).",
+     "source": "s3",
+     "quote": "an overall total score of 1190 out of 1600 in SAT / a composite score of 24 in ACT; and"
+    },
+    {
+     "test": "ACT",
+     "policy": "REQUIRED",
+     "minScore": 24,
+     "noteEn": "For US high school diploma applicants only (SAT or ACT).",
+     "noteAr": "لحاملي شهادة الثانوية الأمريكية فقط (SAT أو ACT).",
+     "source": "s3",
+     "quote": "an overall total score of 1190 out of 1600 in SAT / a composite score of 24 in ACT; and"
+    },
+    {
+     "test": "AP",
+     "policy": "REQUIRED",
+     "minScore": 3,
+     "noteEn": "For US high school diploma applicants: two AP tests at grade 3.",
+     "noteAr": "لحاملي شهادة الثانوية الأمريكية: اختباران من AP بدرجة 3.",
+     "source": "s3",
+     "quote": "grade 3 each in 2 Advanced Placement (AP) Tests"
+    }
+   ],
+   "additional": [
+    {
+     "kind": "INTERVIEW",
+     "required": false,
+     "noteEn": "Selection considers academic and non-academic achievements; shortlisted applicants may be interviewed.",
+     "noteAr": "يراعي الاختيار الإنجازات الأكاديمية وغير الأكاديمية، وقد يُدعى المرشحون إلى مقابلة.",
+     "source": "s3",
+     "quote": "Applicants will be considered on the basis of their education background, academic and non-academic achievements."
+    }
+   ],
    "deadlines": [
     {
      "intakeYear": 2027,
@@ -1199,7 +1709,60 @@
      "quote": "Applications will officially open on 2 October 2026."
     }
    ],
-   "curriculumRules": {},
+   "curriculumRules": {
+    "IB": {
+     "accepted": true,
+     "minimumPoints": 30,
+     "notesEn": "General minimum 30 of 45; programme subject preferences apply; admission is competitive.",
+     "notesAr": "الحد الأدنى العام 30 من 45، مع تفضيلات للمواد حسب البرنامج، والقبول تنافسي.",
+     "source": "s3",
+     "quote": "International Baccalaureate Diploma (IB) with 30 points out of 45",
+     "subjects": []
+    },
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "General minimum: 3 A-level passes or 2 A-level plus 2 AS passes (GCE or International A-level); programmes set their own subject requirements.",
+     "notesAr": "الحد الأدنى العام: النجاح في 3 مواد بالمستوى المتقدم أو مادتين مع مادتين بالمستوى AS (البريطاني أو الدولي)، ولكل برنامج متطلبات مواد خاصة.",
+     "source": "s3",
+     "quote": "GCE AL / International AL: 3AL passes / 2AL+2AS passes; different programmes have different subject requirements",
+     "subjects": []
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "notesEn": "High school diploma plus SAT total of 1190/1600 or ACT composite 24, and grade 3 in two AP tests.",
+     "notesAr": "شهادة الثانوية مع مجموع 1190 من 1600 في SAT أو 24 في ACT، ودرجة 3 في اختبارين من اختبارات AP.",
+     "source": "s3",
+     "quote": "an overall total score of 1190 out of 1600 in SAT / a composite score of 24 in ACT; and",
+     "subjects": []
+    },
+    "UAE_MOE": {
+     "accepted": true,
+     "minimumPercent": 80,
+     "notesEn": "UAE Secondary Education Certificate (Tawjihiyya) with an overall average of 80% (general minimum).",
+     "notesAr": "شهادة الثانوية العامة الإماراتية بمعدل عام 80% (الحد الأدنى العام).",
+     "source": "s3",
+     "quote": "Tawjihiyya (Secondary Education Certificate) with an overall average of 80%",
+     "subjects": []
+    },
+    "CBSE": {
+     "accepted": true,
+     "minimumPercent": 80,
+     "notesEn": "Standard X and XII pass certificates with an average of 80% in all subjects (general minimum).",
+     "notesAr": "شهادتا الصف العاشر والثاني عشر بمعدل 80% في جميع المواد (الحد الأدنى العام).",
+     "source": "s3",
+     "quote": "Pass Certificates obtained on completion of Standard X and Standard XII (State or National Boards) with an average of 80% in all subjects",
+     "subjects": []
+    },
+    "ISC": {
+     "accepted": true,
+     "minimumPercent": 80,
+     "notesEn": "Standard X and XII pass certificates with an average of 80% in all subjects (general minimum).",
+     "notesAr": "شهادتا الصف العاشر والثاني عشر بمعدل 80% في جميع المواد (الحد الأدنى العام).",
+     "source": "s3",
+     "quote": "Pass Certificates obtained on completion of Standard X and Standard XII (State or National Boards) with an average of 80% in all subjects",
+     "subjects": []
+    }
+   },
    "programs": [
     {
      "key": "cuhk-med",
@@ -1225,6 +1788,33 @@
        }
       ],
       "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "cuhk-cs",
+     "status": "REPLACED",
+     "nameEn": "Computer Science and Engineering (broad-based admission)",
+     "nameAr": "علوم الحاسوب والهندسة (قبول واسع القاعدة)",
+     "degree": null,
+     "durationYears": null,
+     "url": "https://admission.cuhk.edu.hk/programmes/list/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Year-one entry to computer science is through broad-based Computer Science and Engineering admission; students choose Computer Science or Computer Engineering at the end of Year 1. The separate Computer Science listing is Senior Year entry only.",
+        "noteAr": "يكون الالتحاق بالسنة الأولى في علوم الحاسوب عبر القبول الواسع في علوم الحاسوب والهندسة، ويختار الطالب علوم الحاسوب أو هندسة الحاسوب في نهاية السنة الأولى. أما قائمة علوم الحاسوب المنفصلة فهي للالتحاق بالسنوات المتقدمة فقط.",
+        "source": "s4",
+        "quote": "Computer Science and Engineering: Broad-based admission designed for students interested in pursuing a major in one of the following subjects: Computer Science, Computer Engineering. Students will declare their majors at the end of Year 1."
+       }
+      ],
+      "source": "s4"
      },
      "previous": null
     }
@@ -1255,6 +1845,13 @@
      "title": "Li Ka Shing Faculty of Medicine | HKU",
      "retrievedAt": "2026-09-30T07:36:12.344Z",
      "hash": "9ed4a59c3083641d851b6b724925aac7b56c3ce96364cfb30f0f0520ffeb3a68"
+    },
+    {
+     "id": "s4",
+     "url": "https://admissions.hku.hk/apply/international-qualifications",
+     "title": "International Qualifications | HKU Admissions",
+     "retrievedAt": "2026-09-30T07:58:34.961Z",
+     "hash": "b92414147b0b87ec01f195646b69454bf852c647bda73fe873084427bc7b7fe7"
     }
    ],
    "english": [],
@@ -1267,9 +1864,36 @@
      "noteAr": "يتقدم الطلاب الدوليون عبر نظام القبول الدولي (غير JUPAS).",
      "source": "s1",
      "quote": "Application through international/ non-JUPAS admissions scheme is now open."
+    },
+    {
+     "kind": "INTERVIEW",
+     "required": false,
+     "noteEn": "Decisions consider academic results, interview, personal statement and references; shortlisted students may be interviewed between November and January.",
+     "noteAr": "تراعي القرارات النتائج الأكاديمية والمقابلة والبيان الشخصي والتوصيات، وقد يُدعى المرشحون إلى مقابلات بين نوفمبر ويناير.",
+     "source": "s4",
+     "quote": "Shortlisted students may be invited for interviews between November and January."
     }
    ],
-   "deadlines": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "PRIORITY",
+     "date": "2026-11-25",
+     "labelEn": "First-round evaluation deadline (noon HKT); later applications reviewed on a rolling basis",
+     "labelAr": "آخر موعد للتقييم في الجولة الأولى (ظهرا بتوقيت هونغ كونغ)، وتُراجع الطلبات اللاحقة بشكل متجدد",
+     "source": "s4",
+     "quote": "25 Nov (noon) 2026 Submit your application for first-round evaluation"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2026-12-01",
+     "labelEn": "Predicted grades and references due for first-round evaluation",
+     "labelAr": "آخر موعد لإدخال الدرجات المتوقعة والتوصيات للجولة الأولى",
+     "source": "s4",
+     "quote": "By 1 Dec 2026 Input predicted and/or actual grades and submit supporting documents for first-round evaluation (counsellors and referees)"
+    }
+   ],
    "curriculumRules": {},
    "programs": [
     {
@@ -1560,11 +2184,91 @@
      "title": "Undergraduate | NTU Singapore",
      "retrievedAt": "2026-09-30T07:42:14.845Z",
      "hash": "825d2e558ad56923f35b06811d04ec9bd4f56befc9e08b37f99e65634fed00c8"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.ntu.edu.sg/admissions/undergraduate/admission-guide/international-qualifications",
+     "title": "International Qualifications | NTU Singapore",
+     "retrievedAt": "2026-09-30T07:58:54.462Z",
+     "hash": "dfd92cc93fcbb23e0ce7e8578adab2937a6354c14fe3a9574b4dc59a9b0651fe"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.ntu.edu.sg/education/undergraduate-programme/bachelor-of-science-in-data-science-artificial-intelligence",
+     "title": "Bachelor of Computing (Hons) in Data Science and Artificial Intelligence | NTU",
+     "retrievedAt": "2026-09-30T07:59:04.866Z",
+     "hash": "043abf279a997d766b8e9839a76bd6824498900c4e1cf6bd02c87e5dfd6734f3",
+     "waybackTimestamp": "20260210145029",
+     "waybackHash": "af61d4c4a98915e662dcec42a1fe8549051123f844962893f95ef3930e51a463"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.ntu.edu.sg/computing/admissions/undergraduate-programmes",
+     "title": "Computing undergraduate programmes | NTU",
+     "retrievedAt": "2026-09-30T07:59:07.353Z",
+     "hash": "00e2f4e8d29328f17eacb3336cb6712d01575851eb9c1d1b072598f2c20005fc",
+     "waybackTimestamp": "20251022045703",
+     "waybackHash": "b6af5db5497cc43ad2f730fa0bae784ea2ed1e1ba989627101f9698c66fbed9d"
     }
    ],
-   "english": [],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6.5,
+     "waiverNoteEn": "Required only for certain qualifications (for example Gaokao, HKDSE) and for applicants who did not study English in both junior and senior high school or studied it only as a second language; applies to Science, Engineering and Computing programmes.",
+     "waiverNoteAr": "مطلوب فقط لبعض المؤهلات (مثل Gaokao وHKDSE) ولمن لم يدرس الإنجليزية في المرحلتين الإعدادية والثانوية أو درسها كلغة ثانية فقط، وينطبق على برامج العلوم والهندسة والحوسبة.",
+     "source": "s2",
+     "quote": "IELTS Academic; IELTS UKAI Academic | Overall score - 6.5 Writing - 6.5, Speaking - 6.5 |"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 90,
+     "minComponent": 25,
+     "waiverNoteEn": "Required only for certain qualifications (for example Gaokao, HKDSE) and for applicants who did not study English in both junior and senior high school or studied it only as a second language; applies to Science, Engineering and Computing programmes.",
+     "waiverNoteAr": "مطلوب فقط لبعض المؤهلات (مثل Gaokao وHKDSE) ولمن لم يدرس الإنجليزية في المرحلتين الإعدادية والثانوية أو درسها كلغة ثانية فقط، وينطبق على برامج العلوم والهندسة والحوسبة.",
+     "source": "s2",
+     "quote": "TOEFL / TOEFL iBT Home Edition | Total Score - 90 or 4.5 Writing - 25 or 4.5 Verbal/Speaking - 25 or 4.5 |"
+    },
+    {
+     "test": "PTE",
+     "minOverall": 55,
+     "minComponent": null,
+     "waiverNoteEn": "Required only for certain qualifications (for example Gaokao, HKDSE) and for applicants who did not study English in both junior and senior high school or studied it only as a second language; applies to Science, Engineering and Computing programmes.",
+     "waiverNoteAr": "مطلوب فقط لبعض المؤهلات (مثل Gaokao وHKDSE) ولمن لم يدرس الإنجليزية في المرحلتين الإعدادية والثانوية أو درسها كلغة ثانية فقط، وينطبق على برامج العلوم والهندسة والحوسبة.",
+     "source": "s2",
+     "quote": "Pearson Test of English (PTE) Academic | Overall score - 55 Speaking - 55, Writing - 59 |"
+    },
+    {
+     "test": "CAMBRIDGE",
+     "minOverall": 170,
+     "minComponent": 170,
+     "waiverNoteEn": "Required only for certain qualifications (for example Gaokao, HKDSE) and for applicants who did not study English in both junior and senior high school or studied it only as a second language; applies to Science, Engineering and Computing programmes.",
+     "waiverNoteAr": "مطلوب فقط لبعض المؤهلات (مثل Gaokao وHKDSE) ولمن لم يدرس الإنجليزية في المرحلتين الإعدادية والثانوية أو درسها كلغة ثانية فقط، وينطبق على برامج العلوم والهندسة والحوسبة.",
+     "source": "s2",
+     "quote": "C1 Advanced (formerly Cambridge English Advanced (CAE)) | Overall score - 170 Writing - 170 Speaking - 170 |"
+    },
+    {
+     "test": "OTHER",
+     "minOverall": 1250,
+     "minComponent": null,
+     "waiverNoteEn": "SAT total 1250 (Reading and Writing 60) accepted as English proof. Required only for certain qualifications (for example Gaokao, HKDSE) and for applicants who did not study English in both junior and senior high school or studied it only as a second language; applies to Science, Engineering and Computing programmes.",
+     "waiverNoteAr": "يُقبل SAT بمجموع 1250 (القراءة والكتابة 60) كإثبات للغة الإنجليزية. مطلوب فقط لبعض المؤهلات (مثل Gaokao وHKDSE) ولمن لم يدرس الإنجليزية في المرحلتين الإعدادية والثانوية أو درسها كلغة ثانية فقط، وينطبق على برامج العلوم والهندسة والحوسبة.",
+     "source": "s2",
+     "quote": "SAT | Total score - 1250 Reading and Writing - 60 |"
+    }
+   ],
    "tests": [],
-   "additional": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Applicants must also meet each programme's minimum subject requirements for their qualification.",
+     "noteAr": "يجب أيضا استيفاء الحد الأدنى لمتطلبات المواد لكل برنامج حسب المؤهل.",
+     "source": "s2",
+     "quote": "Applicants must also satisfy the minimum subject requirements for the programmes you wish to apply for."
+    }
+   ],
    "deadlines": [
     {
      "intakeYear": 2027,
@@ -1574,10 +2278,677 @@
      "labelAr": "فتح باب التقديم لحاملي المؤهلات الدولية (بما فيها البكالوريا الدولية)",
      "source": "s1",
      "quote": "15 Oct 2026 | Application for AY2027 opens for students with international qualifications. (including IB Diploma)"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-03-19",
+     "labelEn": "American High School Diploma (with AP) applications close",
+     "labelAr": "إغلاق التقديم لحاملي الشهادة الأمريكية (مع AP)",
+     "source": "s2",
+     "quote": "American High School Diploma/ High School Diploma with AP (Advanced Placement) | Closed | 15 Oct 2026 - 19 Mar 2027"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-03-19",
+     "labelEn": "IB Diploma applications close",
+     "labelAr": "إغلاق التقديم لحاملي دبلوم البكالوريا الدولية",
+     "source": "s2",
+     "quote": "International Baccalaureate (IB) Diploma [2][3] | Closed | 15 Oct 2026 - 19 Mar 2027"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-03-19",
+     "labelEn": "India Standard 12 applications close",
+     "labelAr": "إغلاق التقديم لحاملي الشهادة الهندية للصف الثاني عشر",
+     "source": "s2",
+     "quote": "India Standard 12 [2] | Closed | 15 Oct 2026 - 19 Mar 2027"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-03-19",
+     "labelEn": "UK A-Level applications close",
+     "labelAr": "إغلاق التقديم لحاملي شهادات المستوى المتقدم البريطانية",
+     "source": "s2",
+     "quote": "UK A-Level certificates/Cambridge Pre-U [2][4] | Closed | 15 Oct 2026 - 19 Mar 2027"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-01-20",
+     "labelEn": "All other international qualifications not listed separately (UAE and Jordanian certificates are not listed separately)",
+     "labelAr": "جميع المؤهلات الدولية الأخرى غير المدرجة منفصلة (الشهادتان الإماراتية والأردنية غير مدرجتين منفصلتين)",
+     "source": "s2",
+     "quote": "Please check the list below first. If your qualification is listed, apply under the corresponding qualification category instead. | Closed | 15 Oct 2026 - 20 Jan 2027"
     }
    ],
    "curriculumRules": {},
-   "programs": []
+   "programs": [
+    {
+     "key": "ntu-ai",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Computing (Hons) in Data Science and Artificial Intelligence",
+     "nameAr": "بكالوريوس الحوسبة (مع مرتبة الشرف) في علم البيانات والذكاء الاصطناعي",
+     "degree": "BComp",
+     "durationYears": 4,
+     "url": "https://www.ntu.edu.sg/education/undergraduate-programme/bachelor-of-science-in-data-science-artificial-intelligence",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Four-year direct honours degree offered jointly by the College of Computing and Data Science and the School of Physical and Mathematical Sciences; aimed at students with strong mathematics and computing. NTU also offers a Bachelor of Computing (Hons) in Artificial Intelligence and Society.",
+        "noteAr": "درجة شرف مباشرة لمدة أربع سنوات تقدمها كلية الحوسبة وعلم البيانات مع كلية العلوم الفيزيائية والرياضية، وموجهة لأصحاب الأساس القوي في الرياضيات والحوسبة. وتقدم الجامعة أيضا بكالوريوس الحوسبة في الذكاء الاصطناعي والمجتمع.",
+        "source": "s3",
+        "quote": "This 4-year direct honours degree provides rigorous training in statistics, computing, and AI, preparing students to design innovative, data-driven solutions for society’s most pressing challenges."
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    },
+    {
+     "key": "ntu-cs",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Computing (Hons) in Computer Science",
+     "nameAr": "بكالوريوس الحوسبة (مع مرتبة الشرف) في علوم الحاسوب",
+     "degree": "BComp",
+     "durationYears": null,
+     "url": "https://www.ntu.edu.sg/computing/admissions/undergraduate-programmes",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Offered by the College of Computing and Data Science. Programme-specific entry requirements not yet extracted.",
+        "noteAr": "تقدمه كلية الحوسبة وعلم البيانات. لم تُستخرج شروط القبول الخاصة بالبرنامج بعد.",
+        "source": "s4",
+        "quote": "Bachelor of Computing (Hons) in Computer Science"
+       }
+      ],
+      "source": "s4"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "hkust",
+   "website": "https://hkust.edu.hk",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://join.hkust.edu.hk/admissions/international-qualifications",
+     "title": "International Qualifications | HKUST Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T07:58:29.973Z",
+     "hash": "f5b9e2ac3b4362a251039ded7a8deb64196369e07c4faec06c344280e3e55972"
+    },
+    {
+     "id": "s2",
+     "url": "https://join.hkust.edu.hk/our-programs/school-of-engineering",
+     "title": "School of Engineering | HKUST Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T07:58:33.475Z",
+     "hash": "13e8ef67d8d7fa1332c600d435c1fbaf0e6f9217f08abdcd98b6adf6585ab3b0",
+     "waybackTimestamp": "20251016135416",
+     "waybackHash": "c9f42a5f62c3bcd59310fb0c7f739933d019523036690d865bbee4865242f8bb"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Applicants with international qualifications apply directly online and must meet general, programme-specific and English requirements.",
+     "noteAr": "يتقدم حاملو المؤهلات الدولية مباشرة عبر الإنترنت، ويجب استيفاء المتطلبات العامة ومتطلبات البرنامج واللغة الإنجليزية.",
+     "source": "s1",
+     "quote": "All applicants with international qualifications must fulfill the General Admissions Requirements, School/Program-specific Requirements, and English Language Requirements."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "PRIORITY",
+     "date": "2026-11-25",
+     "labelEn": "Priority round deadline",
+     "labelAr": "آخر موعد لجولة الأولوية",
+     "source": "s1",
+     "quote": "25 Nov Year 2026 Description Title Deadline for Priority Round Applications"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "ROLLING",
+     "date": "2026-11-26",
+     "labelEn": "Rolling applications from 26 November 2026",
+     "labelAr": "تقديم متجدد اعتبارا من 26 نوفمبر 2026",
+     "source": "s1",
+     "quote": "Application on rolling basis from 26 Nov, 2026 onwards"
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "hkust-ai",
+     "status": "EXISTS",
+     "nameEn": "Artificial Intelligence BEng",
+     "nameAr": "بكالوريوس الهندسة في الذكاء الاصطناعي",
+     "degree": "BEng",
+     "durationYears": null,
+     "url": "https://join.hkust.edu.hk/our-programs/school-of-engineering",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Listed as BEng in Artificial Intelligence in the School of Engineering (not a BSc). Entry requirements not yet extracted.",
+        "noteAr": "مدرج باسم بكالوريوس الهندسة في الذكاء الاصطناعي في كلية الهندسة (وليس بكالوريوس علوم). لم تُستخرج شروط القبول بعد.",
+        "source": "s2",
+        "quote": "BEng in Artificial Intelligence ^"
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "hkust-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BEng/BSc",
+     "nameAr": "بكالوريوس الهندسة أو العلوم في علوم الحاسوب",
+     "degree": "BEng",
+     "durationYears": null,
+     "url": "https://join.hkust.edu.hk/our-programs/school-of-engineering",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Offered as BEng/BSc in Computer Science; direct admission is through the Department of Computer Science and Engineering (JS5240). Entry requirements not yet extracted.",
+        "noteAr": "يُقدَّم بكالوريوس الهندسة أو العلوم في علوم الحاسوب، والقبول المباشر عبر قسم علوم الحاسوب والهندسة (JS5240). لم تُستخرج شروط القبول بعد.",
+        "source": "s2",
+        "quote": "BEng/BSc in Computer Science ^"
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "just",
+   "website": "https://www.just.edu.jo",
+   "applyVia": "JORDAN_UNIFIED",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.just.edu.jo/ar/FacultiesandDepartments/FacultyofMedicine/Pages/programs.aspx?degree=1",
+     "title": "Faculty of Medicine programmes - JUST",
+     "retrievedAt": "2026-09-30T07:58:33.099Z",
+     "hash": "7e182cefb80c9195a7c9db59fbd7af32237f4585071b2a61d82c28867ff31f31",
+     "waybackTimestamp": "20251016043204",
+     "waybackHash": "a2ca4e88debc08bd9160aab1eb1bbf0abf0165061e2b94c9cda00c022e790e97"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "just-medicine-md",
+     "status": "EXISTS",
+     "nameEn": "Doctor of Medicine MD",
+     "nameAr": "دكتور في الطب",
+     "degree": "MD",
+     "durationYears": null,
+     "url": "https://www.just.edu.jo/ar/FacultiesandDepartments/FacultyofMedicine/Pages/programs.aspx?degree=1",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "The Faculty of Medicine lists the Doctor of Medicine programme at bachelor level (study plan 2026). Entry requirements not yet extracted.",
+        "noteAr": "تدرج كلية الطب برنامج دكتور في الطب ضمن برامج البكالوريوس (الخطة الدراسية 2026). لم تُستخرج شروط القبول بعد.",
+        "source": "s1",
+        "quote": "البكالوريوس في دكتور في الطب | 2026"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "yarmouk",
+   "website": "https://www.yu.edu.jo",
+   "applyVia": "JORDAN_UNIFIED",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://it.yu.edu.jo/",
+     "title": "Faculty of Information Technology and Computer Sciences - Yarmouk University",
+     "retrievedAt": "2026-09-30T07:58:48.602Z",
+     "hash": "52d9286ed740fe2b8ff9f1d70d8a3e0ef331e081f9bb4b5c597f416c67d418ce",
+     "waybackTimestamp": "20251016235636",
+     "waybackHash": "5597da0973cb4db6e1eeeded71dce0a58dd8bbe83f5b882e934b3389ed9242ee"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "yarmouk-computer-science-bsc",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc",
+     "nameAr": "بكالوريوس علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://it.yu.edu.jo/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "The Faculty of IT publishes the Bachelor study plan in Computer Science (2025). Entry requirements not yet extracted.",
+        "noteAr": "تنشر كلية تكنولوجيا المعلومات الخطة الدراسية لبكالوريوس علوم الحاسوب (2025). لم تُستخرج شروط القبول بعد.",
+        "source": "s1",
+        "quote": "الخطة الدراسية لدرجة البكالوريوس في تخصص علوم الحاســـوب (Computer Science) (CS) 2025"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "tu_delft",
+   "website": "https://www.tudelft.nl",
+   "applyVia": "STUDIELINK",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.tudelft.nl/en/education/programmes/bachelors",
+     "title": "Bachelor programmes - TU Delft",
+     "retrievedAt": "2026-09-30T07:58:47.560Z",
+     "hash": "fcbc80bbcd3bded4479c3cfb3307b9a4c0b2d7a8123a6c13325c2e35e71bb54b"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "tu-delft-cs",
+     "status": "REPLACED",
+     "nameEn": "Computer Science and Engineering BSc",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب والهندسة",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.tudelft.nl/en/education/programmes/bachelors",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Official name Computer Science and Engineering; listed as English-taught. Entry requirements not yet extracted.",
+        "noteAr": "الاسم الرسمي علوم الحاسوب والهندسة، ومدرج كبرنامج باللغة الإنجليزية. لم تُستخرج شروط القبول بعد.",
+        "source": "s1",
+        "quote": "Computer Science & Engineering - English"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "tu-delft-me",
+     "status": "EXISTS",
+     "nameEn": "Mechanical Engineering BSc",
+     "nameAr": "بكالوريوس العلوم في الهندسة الميكانيكية",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.tudelft.nl/en/education/programmes/bachelors",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Listed without the '- English' label that TU Delft's English-taught bachelors carry; check the programme page for the language of instruction. Entry requirements not yet extracted.",
+        "noteAr": "مدرج دون علامة '- English' التي تحملها البرامج المدرَّسة بالإنجليزية، لذا يجب التحقق من لغة التدريس في صفحة البرنامج. لم تُستخرج شروط القبول بعد.",
+        "source": "s1",
+        "quote": "Mechanical Engineering"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "tudelft-aerospace-bsc",
+     "status": "EXISTS",
+     "nameEn": "Aerospace Engineering BSc",
+     "nameAr": "بكالوريوس العلوم في هندسة الطيران والفضاء",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.tudelft.nl/en/education/programmes/bachelors",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Listed as English-taught. Entry requirements not yet extracted.",
+        "noteAr": "مدرج كبرنامج باللغة الإنجليزية. لم تُستخرج شروط القبول بعد.",
+        "source": "s1",
+        "quote": "Aerospace Engineering - English"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "tu_eindhoven",
+   "website": "https://www.tue.nl",
+   "applyVia": "STUDIELINK",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.tue.nl/en/education/degree-programs/bachelor-programs",
+     "title": "Bachelor programs - TU/e",
+     "retrievedAt": "2026-09-30T07:59:13.857Z",
+     "hash": "ceb65783b04de21d88219084321ae6e13a0affd32153a63faedbae876a3976db",
+     "waybackTimestamp": "20251016202735",
+     "waybackHash": "0636a5e7353ff5454c90f589e6e0b26d9ce8c3be1f62221deefe68e82517b6b7"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.tue.nl/en/education/bachelor-college/selection",
+     "title": "Selection - TU/e",
+     "retrievedAt": "2026-09-30T07:58:32.202Z",
+     "hash": "aa6924089fe16b723a52956532328ae5d83fee9d4479438ea5b45fdebe4022af"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.tue.nl/en/education/become-a-tue-student/application-and-admission",
+     "title": "Application and admission - TU/e",
+     "retrievedAt": "2026-09-30T07:59:02.268Z",
+     "hash": "f5f3607ea6cc5ac93de35560298cf4b750787df185f2bfe188f94a62a94a65ff"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-01-15",
+     "labelEn": "Selection programmes (including Computer Science and Engineering), via Studielink",
+     "labelAr": "برامج الاختيار (ومنها علوم الحاسوب والهندسة) عبر Studielink",
+     "source": "s2",
+     "quote": "Application is possible from 1 October 2026 until 15 January 2027 via Studielink."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-05-01",
+     "labelEn": "All other bachelor programmes (international applicants)",
+     "labelAr": "جميع برامج البكالوريوس الأخرى (للمتقدمين الدوليين)",
+     "source": "s3",
+     "quote": "| May 1 - 23.59h CET | All bachelor’s programs (except selection programs) |"
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "tu-eindhoven-cs",
+     "status": "REPLACED",
+     "nameEn": "Computer Science and Engineering BSc",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب والهندسة",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.tue.nl/en/education/degree-programs/bachelor-programs",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "ADMISSIONS_TEST",
+        "required": true,
+        "noteEn": "Selection programme (numerus fixus) for 2027-2028; the selection online test is on 6 March 2027 and participation is mandatory.",
+        "noteAr": "برنامج اختيار بعدد مقاعد محدود لعام 2027-2028، والاختبار الإلكتروني للاختيار في 6 مارس 2027 والمشاركة إلزامية.",
+        "source": "s2",
+        "quote": "6 March 2027: Computer Science and Engineering online test"
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "tu-eindhoven-ds",
+     "status": "EXISTS",
+     "nameEn": "Data Science BSc",
+     "nameAr": "بكالوريوس العلوم في علم البيانات",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.tue.nl/en/education/degree-programs/bachelor-programs",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Listed among TU/e bachelor programmes. Entry requirements not yet extracted.",
+        "noteAr": "مدرج ضمن برامج البكالوريوس في الجامعة. لم تُستخرج شروط القبول بعد.",
+        "source": "s1",
+        "quote": "Bachelor Data Science"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "nus",
+   "website": "https://www.nus.edu.sg",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.nus.edu.sg/oam/admissions/international-qualifications-for-foreigners/admission-requirements",
+     "title": "Admission Requirements (International Qualifications for Foreigners) | NUS",
+     "retrievedAt": "2026-09-30T07:59:07.896Z",
+     "hash": "0238e30a263d8b23a8c2ab9b49ae0695fc5cb8fe4a5a629d320cce9cf4a4dc5c",
+     "waybackTimestamp": "20251119070226",
+     "waybackHash": "401004a5ef50ad54bceaeaff7d2f6f0a50c10f6dba427f6629ff3645e736e370"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.nus.edu.sg/oam/admissions/ib-diploma/admission-requirements",
+     "title": "Admission Requirements (IB Diploma) | NUS",
+     "retrievedAt": "2026-09-30T07:59:19.454Z",
+     "hash": "5fa021da6d86036e294f118cdd79a5a065fd4534b0ddf8861874b3b6d8e38c45"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.nus.edu.sg/oam/admissions/important-dates",
+     "title": "Important Dates | NUS Office of Admissions",
+     "retrievedAt": "2026-09-30T07:58:36.928Z",
+     "hash": "ca74f5d5a9418cb232eda08964274670fbf369f40da39eec5b5ab3e8ce51a24f"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.nus.edu.sg/oam/admissions/indicative-grade-profile",
+     "title": "Indicative Grade Profile | NUS",
+     "retrievedAt": "2026-09-30T07:58:37.990Z",
+     "hash": "fce1186d7f212c9d16262d77ba7150ce6aa64485643cf719e3deb3aa7ffde26d"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "At least 12 years of general education completed by July of the application year, plus the programme prerequisites.",
+     "noteAr": "إتمام 12 سنة على الأقل من التعليم العام بحلول يوليو من سنة التقديم، مع استيفاء متطلبات البرنامج.",
+     "source": "s1",
+     "quote": "Applicants must have completed or will be completing high school with at least 12 years of general education by July in the year of application."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "IB applicants must submit English test scores if at least three IB subjects were taught in a language other than English.",
+     "noteAr": "على المتقدمين بالبكالوريا الدولية تقديم نتائج اختبار لغة إنجليزية إذا دُرست ثلاث مواد على الأقل بلغة غير الإنجليزية.",
+     "source": "s2",
+     "quote": "Submit English test scores if at least three IB subjects are taught in non-English language."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2026-12-16",
+     "labelEn": "Applications open (international qualifications and IB)",
+     "labelAr": "فتح باب التقديم (المؤهلات الدولية والبكالوريا الدولية)",
+     "source": "s3",
+     "quote": "International Qualifications (except IB Diploma) | Application Period | 16 December 2026 to 17 February 2027"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-02-17",
+     "labelEn": "International qualifications (except IB) application deadline",
+     "labelAr": "آخر موعد لتقديم المؤهلات الدولية (باستثناء البكالوريا الدولية)",
+     "source": "s3",
+     "quote": "International Qualifications (except IB Diploma) | Application Period | 16 December 2026 to 17 February 2027"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-02-17",
+     "labelEn": "IB Diploma application deadline",
+     "labelAr": "آخر موعد لتقديم دبلوم البكالوريا الدولية",
+     "source": "s3",
+     "quote": "IB Diploma | Application Period | 16 December 2026 to 17 February 2027"
+    }
+   ],
+   "curriculumRules": {
+    "IB": {
+     "accepted": true,
+     "notesEn": "IB Diploma (or IB Career-related Programme) accepted; English must be one of the subjects; holistic, competitive admission with programme prerequisites; no IB grade profile is published.",
+     "notesAr": "يُقبل دبلوم البكالوريا الدولية (أو برنامجها المهني)، ويجب أن تكون الإنجليزية إحدى المواد، والقبول تنافسي وشامل مع متطلبات البرنامج، ولا تُنشر درجات مرجعية للبكالوريا الدولية.",
+     "source": "s2",
+     "quote": "English must be one of the subjects taken at the IB examination.",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "english_language"
+       ],
+       "minimumLevel": "STANDARD",
+       "source": "s2",
+       "quote": "English must be one of the subjects taken at the IB examination."
+      }
+     ]
+    }
+   },
+   "programs": [
+    {
+     "key": "nus-med",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Medicine and Bachelor of Surgery MBBS",
+     "nameAr": "بكالوريوس الطب وبكالوريوس الجراحة",
+     "degree": "MBBS",
+     "durationYears": null,
+     "url": "https://medicine.nus.edu.sg/prospective-students/bachelor-of-medicine-and-bachelor-of-surgery-mbbs/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "ADMISSIONS_TEST",
+        "required": true,
+        "noteEn": "IB applicants to Medicine must submit predicted IB results plus either the UCAT (UK or ANZ) or the SAT/ACT with Writing and AP exams by 17 February 2027.",
+        "noteAr": "على المتقدمين بالبكالوريا الدولية لبرنامج الطب تقديم النتائج المتوقعة مع اختبار UCAT (البريطاني أو الأسترالي) أو SAT/ACT مع الكتابة واختبارات AP بحلول 17 فبراير 2027.",
+        "source": "s2",
+        "quote": "Applicants who wish to apply for NUS Medicine are required to submit the following documents and test scores by 17 February 2027:"
+       },
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Medicine requires additional assessments such as interviews and tests; selection also depends on performance in them.",
+        "noteAr": "يتطلب الطب تقييمات إضافية مثل المقابلات والاختبارات، ويعتمد الاختيار أيضا على الأداء فيها.",
+        "source": "s4",
+        "quote": "Undergraduate programmes such as Architecture, Dentistry, Industrial Design, Landscape Architecture, Law, Medicine, Music, Nursing and Philosophy, Politics & Economics (PPE) require additional rigorous assessments, which may include interviews, auditions, selection tests and portfolios as part of the admission requirement."
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
   }
  ]
 }

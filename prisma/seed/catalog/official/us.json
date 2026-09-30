@@ -1,6 +1,6 @@
 {
  "batch": "us",
- "assembledAt": "2026-09-30T08:04:49.713Z",
+ "assembledAt": "2026-09-30T08:18:19.239Z",
  "universities": [
   {
    "key": "carnegie_mellon",
@@ -1155,13 +1155,88 @@
      "title": "Bachelor of Science in Mechanical Engineering | Georgia Tech Catalog",
      "retrievedAt": "2026-09-30T07:40:11.282Z",
      "hash": "0dc4c039b466cf875645f4adc3ab255c5738eb5d932dccb6a77295c4ea401a10"
+    },
+    {
+     "id": "s5",
+     "url": "https://admission.gatech.edu/first-year/deadlines",
+     "title": "First-Year Application Plans and Deadlines | Undergraduate Admission",
+     "retrievedAt": "2026-09-30T07:59:54.318Z",
+     "hash": "aa0c1cfa44240f5f354d36f38107c621e27cf537d868095e6bbe9fa15d84147b"
+    },
+    {
+     "id": "s6",
+     "url": "https://admission.gatech.edu/international/first-year",
+     "title": "International First-Year Admission | Undergraduate Admission",
+     "retrievedAt": "2026-09-30T07:59:26.700Z",
+     "hash": "49dfeb7f283a1ab0f025bc0f7776bd58b75526b7820ae05aed1d037f0b4109cd"
     }
    ],
    "english": [],
    "tests": [],
-   "additional": [],
-   "deadlines": [],
-   "curriculumRules": {},
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "International applicants use Early Action 2 (Early Action 1 is for Georgia students only).",
+     "noteAr": "يتقدم الطلاب الدوليون ضمن القبول المبكر 2 (القبول المبكر 1 مخصص لطلاب ولاية جورجيا فقط).",
+     "source": "s5",
+     "quote": "Early Action 2 - This application deadline is for non-Georgia students."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "International applicants must prove English proficiency by a University System of Georgia approved method; Duolingo is welcomed as a supplement.",
+     "noteAr": "يجب على المتقدمين الدوليين إثبات الكفاءة في الإنجليزية بإحدى الطرق المعتمدة من نظام جامعات جورجيا، ويرحب باختبار Duolingo كمادة داعمة.",
+     "source": "s6",
+     "quote": "The University System of Georgia requires that all international applicants demonstrate English proficiency using one of the USG approved methods."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "EARLY_ACTION",
+     "date": "2026-11-02",
+     "labelEn": "Early Action 2 (non-Georgia and international students)",
+     "labelAr": "القبول المبكر 2 (لطلاب خارج ولاية جورجيا والطلاب الدوليين)",
+     "source": "s5",
+     "quote": "2026-2027 Important Dates | Early Action 1 | Early Action 2 | Regular Decision | Application Opens | August 1 | August 1 | August 1 | Application Deadline | October 15 | November 2 | January 6 |"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "REGULAR_DECISION",
+     "date": "2027-01-06",
+     "labelEn": "Regular Decision",
+     "labelAr": "القرار العادي",
+     "source": "s5",
+     "quote": "2026-2027 Important Dates | Early Action 1 | Early Action 2 | Regular Decision | Application Opens | August 1 | August 1 | August 1 | Application Deadline | October 15 | November 2 | January 6 |"
+    }
+   ],
+   "curriculumRules": {
+    "IB": {
+     "accepted": true,
+     "notesEn": "No minimum IB score; competitive applicants have mostly 6s and 7s. Predicted scores strongly recommended.",
+     "notesAr": "لا يوجد حد أدنى لدرجات البكالوريا الدولية؛ والمتقدمون المنافسون يحصلون غالبا على 6 و7. ويوصى بشدة بتقديم الدرجات المتوقعة.",
+     "source": "s6",
+     "quote": "There is no minimum IB score needed to apply, but to be competitive, students should have mostly scores of 6 and 7.",
+     "subjects": []
+    },
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "Competitive applicants complete at least 3 full A-levels; send IGCSE/O-level, AS and predicted A-level results. No grade profile published.",
+     "notesAr": "ينهي المتقدمون المنافسون ثلاث مواد A-level كاملة على الأقل؛ وترسل نتائج IGCSE/O-level وAS ونتائج A-level المتوقعة. لا يوجد ملف درجات منشور.",
+     "source": "s6",
+     "quote": "To be competitive for admission, students should be on track to complete at least 3 full A-levels before enrolling at Georgia Tech.",
+     "subjects": []
+    },
+    "CBSE": {
+     "accepted": true,
+     "notesEn": "Indian national curriculum accepted: send Class X board results and Class XI marks; predicted Class XII results strongly recommended. No minimum percentage published.",
+     "notesAr": "المنهج الوطني الهندي مقبول: ترسل نتائج الصف العاشر ودرجات الصف الحادي عشر، ويوصى بشدة بالنتائج المتوقعة للصف الثاني عشر. لا توجد نسبة دنيا منشورة.",
+     "source": "s6",
+     "quote": "Class X board results and XI internal marks Predicted XII board results are strongly recommended",
+     "subjects": []
+    }
+   },
    "programs": [
     {
      "key": "georgia-tech-ce",
@@ -1522,6 +1597,13 @@
      "title": "Standardized Testing | Johns Hopkins University Admissions",
      "retrievedAt": "2026-09-30T07:36:45.708Z",
      "hash": "8e752745f273932119095986cf430bb25baf73614e0c897a15c2c4638e69d540"
+    },
+    {
+     "id": "j5",
+     "url": "https://apply.jhu.edu/international-applicants/",
+     "title": "International Applicants | Johns Hopkins University Admissions",
+     "retrievedAt": "2026-09-30T07:59:51.492Z",
+     "hash": "69d9f8636ebfa555eecd4fd823081b1e39bea96b490b163682a667703f3ed067"
     }
    ],
    "english": [
@@ -1621,7 +1703,24 @@
      "quote": "Early Decision I | Early Decision II | Regular Decision | Transfer | Application Deadline | November 1, 2026 | January 2, 2027 | January 2, 2027 | March 1, 2027 |"
     }
    ],
-   "curriculumRules": {},
+   "curriculumRules": {
+    "IB": {
+     "accepted": true,
+     "notesEn": "IB accepted; include IB exam results. No minimum published.",
+     "notesAr": "البكالوريا الدولية مقبولة؛ ترفق نتائج امتحاناتها. لا يوجد حد أدنى منشور.",
+     "source": "j5",
+     "quote": "Please include any certificates, diplomas, or examination results marking the completion of secondary education or preparation for higher education (i.e., O- or A-level or IB exam results).",
+     "subjects": []
+    },
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "O-level and A-level accepted; include exam results. No grade profile published.",
+     "notesAr": "شهادات O-level وA-level مقبولة؛ ترفق نتائج الامتحانات. لا يوجد ملف درجات منشور.",
+     "source": "j5",
+     "quote": "Please include any certificates, diplomas, or examination results marking the completion of secondary education or preparation for higher education (i.e., O- or A-level or IB exam results).",
+     "subjects": []
+    }
+   },
    "programs": [
     {
      "key": "johns-hopkins-bme",
@@ -2087,6 +2186,29 @@
      "title": "International Applicants | Undergraduate Admissions",
      "retrievedAt": "2026-09-30T07:35:57.106Z",
      "hash": "b47e8231b797b7afc3d89c677c2a90e31eddf4a60b14eb1f6ad68195de268ec0"
+    },
+    {
+     "id": "n5",
+     "url": "https://admissions.northeastern.edu/academics/specialized-entry-programs/admissions-deadlines-decisions/",
+     "title": "Deadlines & Decisions | Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T08:00:00.035Z",
+     "hash": "2cf6daf94edc54640bf612ed39c93cae7e00877aedc5e915d2e91333e1244616"
+    },
+    {
+     "id": "n6",
+     "url": "http://catalog.northeastern.edu/undergraduate/computer-information-science/computer-science/",
+     "title": "Computer Science < Northeastern University Academic Catalog",
+     "retrievedAt": "2026-09-30T07:59:19.631Z",
+     "hash": "e48a853fddcaf278e170aea4e0661ec31d675fc2f79202ece63de1e3e30f4247"
+    },
+    {
+     "id": "n7",
+     "url": "http://catalog.northeastern.edu/undergraduate/computer-information-science/cybersecurity/",
+     "title": "Cybersecurity < Northeastern University Academic Catalog",
+     "retrievedAt": "2026-09-30T07:59:23.877Z",
+     "hash": "8ff9711f5014080b8d62ddfc4fc1f2255e42886c2d0c58a60324877c5b618d5c",
+     "waybackTimestamp": "20251208214822",
+     "waybackHash": "15507731d5ee14ee05ac1b6f5c0d3a5b43653852b874877c47de8a97ff798a47"
     }
    ],
    "english": [],
@@ -2136,19 +2258,71 @@
      "quote": "Northeastern does not have minimum score requirements. Instead, we publish the middle 50% range for admitted students"
     }
    ],
-   "deadlines": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "EARLY_DECISION",
+     "date": "2026-11-01",
+     "labelEn": "Early Decision I",
+     "labelAr": "القرار المبكر الأول",
+     "source": "n5",
+     "quote": "Early Decision I Application Deadline: November 1"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "EARLY_ACTION",
+     "date": "2026-11-01",
+     "labelEn": "Early Action",
+     "labelAr": "القبول المبكر",
+     "source": "n5",
+     "quote": "Early Action is non-binding. Application Deadline: November 1"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "EARLY_DECISION_II",
+     "date": "2027-01-01",
+     "labelEn": "Early Decision II",
+     "labelAr": "القرار المبكر الثاني",
+     "source": "n5",
+     "quote": "Early Decision II Application Deadline: January 1"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "REGULAR_DECISION",
+     "date": "2027-01-01",
+     "labelEn": "Regular Decision",
+     "labelAr": "القرار العادي",
+     "source": "n5",
+     "quote": "Regular Decision is non-binding. Application Deadline: January 1"
+    }
+   ],
    "curriculumRules": {},
    "programs": [
     {
      "key": "northeastern-cs",
      "status": "EXISTS",
-     "nameEn": "Computer Science BS",
+     "nameEn": "Computer Science BSCS",
      "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
-     "degree": "BS",
+     "degree": "BSCS",
      "durationYears": null,
      "url": "https://admissions.northeastern.edu/major/computer-science/",
      "curricula": {},
-     "general": null,
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Official catalog name: Computer Science, BSCS (Bachelor of Science in Computer Science), Boston campus.",
+        "noteAr": "الاسم الرسمي في الدليل: علوم الحاسوب، بكالوريوس العلوم في علوم الحاسوب، حرم بوسطن.",
+        "source": "n6",
+        "quote": "Computer Science, BSCS (Boston)"
+       }
+      ],
+      "source": "n6"
+     },
      "previous": null
     },
     {
@@ -2160,7 +2334,22 @@
      "durationYears": null,
      "url": "https://admissions.northeastern.edu/major/cybersecurity/",
      "curricula": {},
-     "general": null,
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Official catalog name: Cybersecurity, BS, Boston campus.",
+        "noteAr": "الاسم الرسمي في الدليل: الأمن السيبراني، بكالوريوس العلوم، حرم بوسطن.",
+        "source": "n7",
+        "quote": "Cybersecurity, BS (Boston)"
+       }
+      ],
+      "source": "n7"
+     },
      "previous": null
     }
    ]
@@ -2192,10 +2381,43 @@
      "hash": "d21c3e4d0f58ae5e8284393c8cf96508e41777c8a48289da09de0bf6f6e1957d",
      "waybackTimestamp": "20251002023411",
      "waybackHash": "ac8589df785c0b5cb09de4ff9f3c09861f7b2487427a049b3bcc68ce3a5a8611"
+    },
+    {
+     "id": "p4",
+     "url": "https://admissions.purdue.edu/become-student/international/",
+     "title": "Purdue University - International High School Curriculum Requirements - Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T08:00:09.159Z",
+     "hash": "455de9d468a53eff23f6fcb9cee2298c61845777de465838b9eae0937a1d5d51"
+    },
+    {
+     "id": "p5",
+     "url": "https://admissions.purdue.edu/become-student/guide/",
+     "title": "Purdue University Application Guide",
+     "retrievedAt": "2026-09-30T07:59:29.239Z",
+     "hash": "493355aecf0829f891fff8e0b0920040323f05299edf30c951a10893509aa43a"
     }
    ],
    "english": [],
-   "tests": [],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "SAT, ACT or CLT expected; applications without a score are allowed only in exceptional cases.",
+     "noteAr": "يتوقع تقديم SAT أو ACT أو CLT، ولا تقبل الطلبات دون درجة إلا في حالات استثنائية.",
+     "source": "p5",
+     "quote": "Purdue expects applicants to have SAT, ACT or CLT scores."
+    },
+    {
+     "test": "ACT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "SAT, ACT or CLT expected; applications without a score are allowed only in exceptional cases.",
+     "noteAr": "يتوقع تقديم SAT أو ACT أو CLT، ولا تقبل الطلبات دون درجة إلا في حالات استثنائية.",
+     "source": "p5",
+     "quote": "Purdue expects applicants to have SAT, ACT or CLT scores."
+    }
+   ],
    "additional": [],
    "deadlines": [
     {
@@ -2206,9 +2428,51 @@
      "labelAr": "الموعد ذو الأولوية (السنة الأولى في الهندسة)",
      "source": "p1",
      "quote": "The priority application deadline for first-year engineering is Nov. 1."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "EARLY_ACTION",
+     "date": "2026-11-01",
+     "labelEn": "Early Action",
+     "labelAr": "القبول المبكر",
+     "source": "p5",
+     "quote": "Be sure to submit a complete application by our Nov. 1 Early Action deadline to receive full consideration for admission, merit-based scholarships and the John Martinson Honors College."
     }
    ],
-   "curriculumRules": {},
+   "curriculumRules": {
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "No AS/A-level subject requirements; most applicants take three to four AS or A-level subjects. IGCSE/GCSE alone is generally not competitive.",
+     "notesAr": "لا توجد متطلبات مواد محددة في AS/A-level؛ ويدرس معظم المتقدمين ثلاث إلى أربع مواد. ولا تعد شهادة IGCSE/GCSE وحدها منافسة عادة.",
+     "source": "p4",
+     "quote": "Purdue does not have any AS- or A-level subject requirements; however, most applicants complete three to four AS- or A-level subjects.",
+     "subjects": []
+    },
+    "IB": {
+     "accepted": true,
+     "notesEn": "IB courses accepted with or without the full diploma, if minimum course requirements are met. HL is not preferred over SL.",
+     "notesAr": "تقبل مقررات البكالوريا الدولية مع الدبلوم الكامل أو دونه إذا استوفيت متطلبات المقررات الدنيا، ولا تفضل المستوى العالي على العادي.",
+     "source": "p4",
+     "quote": "If you are taking International Baccalaureate (IB) courses, you will be considered for admission whether or not you are pursuing the IB diploma as long as the minimum high school course requirements are met.",
+     "subjects": []
+    },
+    "CBSE": {
+     "accepted": true,
+     "notesEn": "CBSE accepted (Standard X and XII certificates). Four years of math and three years of lab science are required for all majors.",
+     "notesAr": "منهج CBSE مقبول (شهادتا الصف العاشر والثاني عشر). وتشترط أربع سنوات رياضيات وثلاث سنوات علوم مخبرية لجميع التخصصات.",
+     "source": "p4",
+     "quote": "Purdue requires four years of secondary mathematics coursework and three years of laboratory science coursework for all majors.",
+     "subjects": []
+    },
+    "ISC": {
+     "accepted": true,
+     "notesEn": "ISC/ICSE accepted (Standard X and XII certificates). Four years of math and three years of lab science are required for all majors.",
+     "notesAr": "منهج ISC/ICSE مقبول (شهادتا الصف العاشر والثاني عشر). وتشترط أربع سنوات رياضيات وثلاث سنوات علوم مخبرية لجميع التخصصات.",
+     "source": "p4",
+     "quote": "Purdue requires four years of secondary mathematics coursework and three years of laboratory science coursework for all majors.",
+     "subjects": []
+    }
+   },
    "programs": [
     {
      "key": "purdue-aero",
@@ -2381,6 +2645,31 @@
      "title": "First-Year Applicants : Stanford University",
      "retrievedAt": "2026-09-30T07:41:15.344Z",
      "hash": "4faa288f0a5acea95ce5127c1954d28832f793b91ac43e6053060ef002bd11ca"
+    },
+    {
+     "id": "st5",
+     "url": "https://www.cs.stanford.edu/academics-overview/academics-bachelors-program",
+     "title": "Academics | Bachelor's Program | Computer Science",
+     "retrievedAt": "2026-09-30T08:00:16.921Z",
+     "hash": "f94d9a2cfe71247bddebb915810c943e463fad5b29769687f9632d463962626a",
+     "waybackTimestamp": "20250920003320",
+     "waybackHash": "d6c20c9baae41cdc2cf20ef7d711832ca6cbc46098f82809314c247d3e39db13"
+    },
+    {
+     "id": "st6",
+     "url": "https://ee.stanford.edu/admissions/bs/prospective-undergrads",
+     "title": "Welcome Prospective Students!",
+     "retrievedAt": "2026-09-30T08:00:18.520Z",
+     "hash": "b546254f1bf444c59a144980dfd3b112251df25bd59bb2194f91a5d3fdba9a30",
+     "waybackTimestamp": "20250918023857",
+     "waybackHash": "b95f59e32f7510892e03c1f1eb4008f3e46f7279aa11c651873ca7ba432e0d9a"
+    },
+    {
+     "id": "st7",
+     "url": "https://majors.stanford.edu/",
+     "title": "Explore Majors",
+     "retrievedAt": "2026-09-30T07:59:57.326Z",
+     "hash": "230f4c46f90008e0aa0a4ad0f1a560e2f6563fea5910f98beac309b615fdaee0"
     }
    ],
    "english": [],
@@ -2529,7 +2818,62 @@
      ]
     }
    },
-   "programs": []
+   "programs": [
+    {
+     "key": "stanford-computer-science-bs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BS",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://www.cs.stanford.edu/academics-overview/academics-bachelors-program",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Students are admitted to Stanford, not to a major; the major is declared later.",
+        "noteAr": "يقبل الطلاب في جامعة ستانفورد وليس في تخصص محدد، ويختار التخصص لاحقا.",
+        "source": "st7",
+        "quote": "You can declare anytime during your first year or sophomore year."
+       }
+      ],
+      "source": "st5"
+     },
+     "previous": null
+    },
+    {
+     "key": "stanford-ee",
+     "status": "EXISTS",
+     "nameEn": "Electrical Engineering BS",
+     "nameAr": "بكالوريوس العلوم في الهندسة الكهربائية",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://ee.stanford.edu/admissions/bs/prospective-undergrads",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Official degree: Bachelor of Science (B.S.), Electrical Engineering.",
+        "noteAr": "الدرجة الرسمية: بكالوريوس العلوم في الهندسة الكهربائية.",
+        "source": "st6",
+        "quote": "Bachelor of Science (B.S.), Electrical Engineering"
+       }
+      ],
+      "source": "st6"
+     },
+     "previous": null
+    }
+   ]
   },
   {
    "key": "uc_berkeley",
@@ -2563,6 +2907,13 @@
      "title": "First-Year Policies - Office of Undergraduate Admissions",
      "retrievedAt": "2026-09-30T07:35:46.758Z",
      "hash": "b615a65c1aee4c2f5ce02d6cd3f94004e5817cff22b13c32d478c4d3be22535f"
+    },
+    {
+     "id": "b5",
+     "url": "https://eecs.berkeley.edu/academics/undergraduate/eecs-bs/",
+     "title": "EECS Bachelor of Science - EECS at Berkeley",
+     "retrievedAt": "2026-09-30T08:00:36.834Z",
+     "hash": "432e59226dead0d964de86e6378236eeed4dd4cbe6fb13832a2cafa094d7e383"
     }
    ],
    "english": [
@@ -2653,7 +3004,47 @@
      "subjects": []
     }
    },
-   "programs": []
+   "programs": [
+    {
+     "key": "berkeley-eecs-bs",
+     "status": "EXISTS",
+     "nameEn": "Electrical Engineering and Computer Sciences BS",
+     "nameAr": "بكالوريوس العلوم في الهندسة الكهربائية وعلوم الحاسوب",
+     "degree": "BS",
+     "durationYears": 4,
+     "url": "https://eecs.berkeley.edu/academics/undergraduate/eecs-bs/",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "mathematics",
+         "science"
+        ],
+        "noteEn": "Additional math and science courses are encouraged for engineering applicants",
+        "noteAr": "يشجع المتقدمون للهندسة على دراسة مقررات إضافية في الرياضيات والعلوم",
+        "source": "b5",
+        "quote": "First-years are admitted directly into the EECS major and spend all four years in the program. In addition to the UC Admission requirements, engineering applicants are encouraged to take additional courses, particularly in math and science."
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Apply directly to the EECS major on the UC application; first-years are admitted directly to the major.",
+        "noteAr": "يتقدم الطالب مباشرة إلى تخصص EECS في طلب جامعة كاليفورنيا، ويقبل طلاب السنة الأولى في التخصص مباشرة.",
+        "source": "b5",
+        "quote": "Students interested in EECS should apply directly to the major on the University of California Application for Admission."
+       }
+      ],
+      "source": "b5"
+     },
+     "previous": null
+    }
+   ]
   },
   {
    "key": "ucla",
@@ -2687,6 +3078,15 @@
      "title": "Majors | UCLA Undergraduate Admission",
      "retrievedAt": "2026-09-30T07:36:11.924Z",
      "hash": "4c77ad32dc1f3c222c4e295213cfae0e29afe8e9ae1c1216ce5ddb811d972fd2"
+    },
+    {
+     "id": "u5",
+     "url": "https://www.seasoasa.ucla.edu/undergraduate-admissions/",
+     "title": "Undergraduate Admissions | OASA",
+     "retrievedAt": "2026-09-30T08:00:16.074Z",
+     "hash": "2a7be49157bae5de9a6d1953d9b92270ed23ebcb01609d7b773b9488a9477868",
+     "waybackTimestamp": "20251008010332",
+     "waybackHash": "32f37364eb8f9bb9945e8cb2dfae30536964faddb259c81861e4049944e8c905"
     }
    ],
    "english": [
@@ -2843,6 +3243,14 @@
         "noteAr": "مدرج في قائمة تخصصات UCLA باسم علوم الحاسوب (بكالوريوس علوم).",
         "source": "u4",
         "quote": "Computer Science (B.S.)"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Computer Science is in the Samueli School of Engineering; meeting UC minimum eligibility is rarely enough for an engineering major.",
+        "noteAr": "يتبع تخصص علوم الحاسوب كلية صموئيلي للهندسة، ونادرا ما يكفي استيفاء الحد الأدنى لأهلية جامعة كاليفورنيا للقبول في تخصص هندسي.",
+        "source": "u5",
+        "quote": "Because admission to HSSEAS is competitive, merely meeting the minimum eligibility requirements of the University is rarely sufficient for admission to an engineering major."
        }
       ],
       "source": "u1"
@@ -3115,9 +3523,53 @@
      "title": "Freshman - University of Texas Admissions",
      "retrievedAt": "2026-09-30T07:37:29.494Z",
      "hash": "159a688cea7ba8f7727eba7fd2015ab5c4b5ab6f7169b194e2c5623d4c5e6db3"
+    },
+    {
+     "id": "t3",
+     "url": "https://admissions.utexas.edu/info-for/international-students/",
+     "title": "International Students - University of Texas Admissions",
+     "retrievedAt": "2026-09-30T07:59:27.989Z",
+     "hash": "dd092bcebdead27e30a4ac8776e80c46a63428991bf2dfe7572c084a403e24be"
     }
    ],
-   "english": [],
+   "english": [
+    {
+     "test": "TOEFL",
+     "minOverall": 79,
+     "minComponent": null,
+     "waiverNoteEn": "79 on the 120-point scale. Required for international applicants unless from a country where English is the sole official language and the primary conversational language (the UAE is not exempt on that basis).",
+     "waiverNoteAr": "79 على مقياس 120 نقطة. مطلوب للمتقدمين الدوليين إلا إذا كانوا من بلد تكون فيه الإنجليزية اللغة الرسمية الوحيدة ولغة التخاطب الأساسية (ولا تعفى الإمارات على هذا الأساس).",
+     "source": "t3",
+     "quote": "TOEFL: 79 (120 scale) or 4 (6-point scale) internet-based test"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 4,
+     "minComponent": null,
+     "waiverNoteEn": "4 on the new 6-point scale. Required for international applicants unless from a country where English is the sole official language and the primary conversational language (the UAE is not exempt on that basis).",
+     "waiverNoteAr": "4 على المقياس الجديد من 6 نقاط. مطلوب للمتقدمين الدوليين إلا إذا كانوا من بلد تكون فيه الإنجليزية اللغة الرسمية الوحيدة ولغة التخاطب الأساسية (ولا تعفى الإمارات على هذا الأساس).",
+     "source": "t3",
+     "quote": "TOEFL: 79 (120 scale) or 4 (6-point scale) internet-based test"
+    },
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": null,
+     "waiverNoteEn": "Required for international applicants unless from a country where English is the sole official language and the primary conversational language (the UAE is not exempt on that basis).",
+     "waiverNoteAr": "مطلوب للمتقدمين الدوليين إلا إذا كانوا من بلد تكون فيه الإنجليزية اللغة الرسمية الوحيدة ولغة التخاطب الأساسية (ولا تعفى الإمارات على هذا الأساس).",
+     "source": "t3",
+     "quote": "IELTS: An overall band of 6.5 on the Academic Examination"
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 115,
+     "minComponent": null,
+     "waiverNoteEn": "Required for international applicants unless from a country where English is the sole official language and the primary conversational language (the UAE is not exempt on that basis).",
+     "waiverNoteAr": "مطلوب للمتقدمين الدوليين إلا إذا كانوا من بلد تكون فيه الإنجليزية اللغة الرسمية الوحيدة ولغة التخاطب الأساسية (ولا تعفى الإمارات على هذا الأساس).",
+     "source": "t3",
+     "quote": "DET: 115 minimum overall score"
+    }
+   ],
    "tests": [
     {
      "test": "SAT",
@@ -3270,6 +3722,13 @@
      "title": "Admission to majors - Office of Admissions",
      "retrievedAt": "2026-09-30T07:35:55.355Z",
      "hash": "c3e70831143351a41513cbcdc6081265b5924eaad7ae65c9fc55c0fb2ed1952b"
+    },
+    {
+     "id": "w6",
+     "url": "https://www.cs.washington.edu/academics/undergraduate/",
+     "title": "Undergraduate Education - Paul G. Allen School of Computer Science & Engineering",
+     "retrievedAt": "2026-09-30T08:00:24.177Z",
+     "hash": "d1972d1bdb4765214b06b566dda9197c879fc0e26aa08bda7099b34222ca0a14"
     }
    ],
    "english": [
@@ -3412,7 +3871,162 @@
      ]
     }
    },
-   "programs": []
+   "programs": [
+    {
+     "key": "uw-seattle-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BS",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://www.cs.washington.edu/academics/undergraduate/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Allen School degree: Bachelor of Science in Computer Science (College of Arts & Sciences).",
+        "noteAr": "درجة مدرسة ألين: بكالوريوس العلوم في علوم الحاسوب (كلية الآداب والعلوم).",
+        "source": "w6",
+        "quote": "The Allen School offers two undergraduate degrees: the Bachelor of Science in Computer Science (CS) and the Bachelor of Science in Computer Engineering (CE)."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "List the major as first choice on the UW application to be considered for direct-to-major admission to the Allen School.",
+        "noteAr": "اختر التخصص كخيار أول في طلب جامعة واشنطن للنظر في القبول المباشر في مدرسة ألين.",
+        "source": "w5",
+        "quote": "Most students earning computer science or computer engineering degrees from the UW will be admitted directly to the Allen School of Computer Science & Engineering as a first-year student."
+       }
+      ],
+      "source": "w6"
+     },
+     "previous": null
+    },
+    {
+     "key": "uw-seattle-ce",
+     "status": "EXISTS",
+     "nameEn": "Computer Engineering BS",
+     "nameAr": "بكالوريوس العلوم في هندسة الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://www.cs.washington.edu/academics/undergraduate/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Allen School degree: Bachelor of Science in Computer Engineering (ABET accredited).",
+        "noteAr": "درجة مدرسة ألين: بكالوريوس العلوم في هندسة الحاسوب (معتمد من ABET).",
+        "source": "w6",
+        "quote": "The Allen School offers two undergraduate degrees: the Bachelor of Science in Computer Science (CS) and the Bachelor of Science in Computer Engineering (CE)."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "List the major as first choice on the UW application to be considered for direct-to-major admission to the Allen School.",
+        "noteAr": "اختر التخصص كخيار أول في طلب جامعة واشنطن للنظر في القبول المباشر في مدرسة ألين.",
+        "source": "w5",
+        "quote": "Most students earning computer science or computer engineering degrees from the UW will be admitted directly to the Allen School of Computer Science & Engineering as a first-year student."
+       }
+      ],
+      "source": "w6"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "nyu",
+   "website": "https://www.nyu.edu",
+   "applyVia": "COMMON_APP",
+   "sources": [
+    {
+     "id": "y1",
+     "url": "https://www.stern.nyu.edu/programs-admissions/undergraduate",
+     "title": "Undergraduate - NYU Stern",
+     "retrievedAt": "2026-09-30T07:59:49.859Z",
+     "hash": "1c173db343a907ffd26ba917ef75919014290ecb5410bdaf3a40456eecb3862d",
+     "waybackTimestamp": "20250911065843",
+     "waybackHash": "fae6f32c9b210c383f5c86cd80adf6d06424c49978b13b319fa07fbc2e670ab2"
+    },
+    {
+     "id": "y2",
+     "url": "https://engineering.nyu.edu/academics/programs/bachelor-science",
+     "title": "Bachelor of Science | NYU Tandon School of Engineering",
+     "retrievedAt": "2026-09-30T08:00:07.969Z",
+     "hash": "ae340d49ffb4e876b586709a6a8c2128cbf8d58a0ec555a241f5033bbcde30a7"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "nyu-bus",
+     "status": "REPLACED",
+     "nameEn": "Business BS",
+     "nameAr": "بكالوريوس العلوم في الأعمال",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://www.stern.nyu.edu/programs-admissions/undergraduate",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "NYU Stern's undergraduate degree is the BS in Business (not Business Administration).",
+        "noteAr": "الدرجة الجامعية في كلية ستيرن هي بكالوريوس العلوم في الأعمال (وليس إدارة الأعمال).",
+        "source": "y1",
+        "quote": "BS in Business"
+       }
+      ],
+      "source": "y1"
+     },
+     "previous": null
+    },
+    {
+     "key": "nyu-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BS",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://engineering.nyu.edu/academics/programs/bachelor-science",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Offered by NYU Tandon School of Engineering.",
+        "noteAr": "تقدمه كلية تاندون للهندسة في جامعة نيويورك.",
+        "source": "y2",
+        "quote": "Computer Science, B.S."
+       }
+      ],
+      "source": "y2"
+     },
+     "previous": null
+    }
+   ]
   }
  ]
 }

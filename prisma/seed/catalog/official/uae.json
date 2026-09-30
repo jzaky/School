@@ -1,6 +1,6 @@
 {
  "batch": "uae",
- "assembledAt": "2026-09-30T08:04:49.208Z",
+ "assembledAt": "2026-09-30T08:18:18.712Z",
  "universities": [
   {
    "key": "abu_dhabi_university",
@@ -2149,6 +2149,56 @@
      "title": "Khalifa University – Undergraduate Admission Procedure",
      "retrievedAt": "2026-09-30T07:33:19.957Z",
      "hash": "998247c3fc4d844e49f01b43e80675c5301a85205aa16aa64f295329959cd60e"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.ku.ac.ae/academics/undergraduate-programs",
+     "title": "Undergraduate Degree Programs at Khalifa University | UAE",
+     "retrievedAt": "2026-09-30T07:59:19.628Z",
+     "hash": "631310a9f40a0a0ca57475459cfa04146268114d565b0150fd451932876505b9",
+     "waybackTimestamp": "20251222055726",
+     "waybackHash": "f3098eeb50758eee231030e5f1d80e8f60c717525faa733f354e2a363342d654"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.ku.ac.ae/academics/undergraduate-programs/b-sc-in-aerospace-engineering",
+     "title": "BSc in Aerospace Engineering - Khalifa University",
+     "retrievedAt": "2026-09-30T07:58:57.497Z",
+     "hash": "9844e2bd1afb39d5a04721f9e384289250f0eb481f50bed8456c724310555f5f",
+     "waybackTimestamp": "20251222065814",
+     "waybackHash": "3883a5361525452dbf3ab71ac1c4986d096a20c01658287a599e73189349b501"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.ku.ac.ae/program/bsc-in-computer-engineering-concentration-software-engineering",
+     "title": "BSc in Computer Engineering - Khalifa University",
+     "retrievedAt": "2026-09-30T07:58:50.693Z",
+     "hash": "6c834f37d8fb33c280a80951834c23e783e8aa9c03cf6d8d4dff0179a5c90c6d"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.ku.ac.ae/academics/undergraduate-programs/b-sc-in-electrical-engineering",
+     "title": "BSc in Electrical Engineering - Khalifa University",
+     "retrievedAt": "2026-09-30T07:59:14.410Z",
+     "hash": "413ca6d99445e2c82d86d85b29daec7ce9e521de5e49e1fc7d0aad767c678415",
+     "waybackTimestamp": "20251222081053",
+     "waybackHash": "55f5efd588616976afd7db23df418a8f7561796673d8886a31f26f76cc173fce"
+    },
+    {
+     "id": "s8",
+     "url": "https://www.ku.ac.ae/academics/undergraduate-programs/b-sc-in-mechanical-engineering",
+     "title": "BSc in Mechanical Engineering - Khalifa University",
+     "retrievedAt": "2026-09-30T07:59:18.525Z",
+     "hash": "6ea55acdca97a9af5044fa10cb7d84f11d4cfc1b30cbec4cd3393a99fb471b83",
+     "waybackTimestamp": "20251222055923",
+     "waybackHash": "fc721b8e53ae215302ef345cb8bbff543acd77f7c7cc96beab340ab3fda17381"
+    },
+    {
+     "id": "s9",
+     "url": "https://www.ku.ac.ae/program/bsc-in-computer-science",
+     "title": "BSc in Computer Science - Khalifa University",
+     "retrievedAt": "2026-09-30T07:58:59.900Z",
+     "hash": "d1b78e6598c424a8746f00214265f82e5f50a6fc3b273118fa848356a2fb4410"
     }
    ],
    "english": [
@@ -2228,7 +2278,68 @@
    ],
    "deadlines": [],
    "curriculumRules": {},
-   "programs": []
+   "programs": [
+    {
+     "key": "khalifa-university-aero",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Aerospace Engineering",
+     "nameAr": "بكالوريوس العلوم في هندسة الطيران والفضاء",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.ku.ac.ae/academics/undergraduate-programs/b-sc-in-aerospace-engineering",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "khalifa-university-ce",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Computer Engineering",
+     "nameAr": "بكالوريوس العلوم في هندسة الحاسوب",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.ku.ac.ae/program/bsc-in-computer-engineering-concentration-software-engineering",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "khalifa-university-ee",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Electrical Engineering",
+     "nameAr": "بكالوريوس العلوم في الهندسة الكهربائية",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.ku.ac.ae/academics/undergraduate-programs/b-sc-in-electrical-engineering",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "khalifa-university-me",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Mechanical Engineering",
+     "nameAr": "بكالوريوس العلوم في الهندسة الميكانيكية",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.ku.ac.ae/academics/undergraduate-programs/b-sc-in-mechanical-engineering",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "ku-computer-science-bsc",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Computer Science",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.ku.ac.ae/program/bsc-in-computer-science",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    }
+   ]
   },
   {
    "key": "middlesex_dubai",
@@ -2243,6 +2354,22 @@
      "hash": "36f25498b1ed5aa52886e9ec7797dd40788f399c6ac6218e5d51ce4abbcbc857",
      "waybackTimestamp": "20250809031641",
      "waybackHash": "b36d5ac2a6b8a1bdc32c36a317572bc2266adf3461dd5fa5f280ddf2543de162"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.mdx.ac.ae/courses/computer-engineering-and-informatics",
+     "title": "Computer Engineering and Informatics",
+     "retrievedAt": "2026-09-30T07:58:44.985Z",
+     "hash": "2e716b6d5dd5e316fabcf8efd4f01583411204ed866414b13616e97203e93ac1"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.mdx.ac.ae/courses/bsc-honours-artificial-intelligence-and-data-science",
+     "title": "Artificial Intelligence & Data Science Dubai",
+     "retrievedAt": "2026-09-30T07:39:01.446Z",
+     "hash": "011974583fc5177da8a135857e81021aa19dd7646f4fd80de9088e1313811e89",
+     "waybackTimestamp": "20250717083733",
+     "waybackHash": "c16fd6cd78397a7e4c2b102f3ed68ebd6d7f2458c688b35c73e7bfd1e2f9faf2"
     }
    ],
    "english": [
@@ -2279,6 +2406,104 @@
    "deadlines": [],
    "curriculumRules": {},
    "programs": [
+    {
+     "key": "middlesex-dubai-cs",
+     "status": "REPLACED",
+     "nameEn": "BSc Honours Artificial Intelligence and Data Science",
+     "nameAr": "بكالوريوس العلوم (مع مرتبة الشرف) في الذكاء الاصطناعي وعلوم البيانات",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.mdx.ac.ae/courses/bsc-honours-artificial-intelligence-and-data-science",
+     "curricula": {
+      "CBSE": {
+       "accepted": true,
+       "minimumPercent": 65,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "70",
+         "source": "s3",
+         "quote": "minimum grade of 65% overall with 70% in Grade 12 Mathematics"
+        }
+       ],
+       "source": "s3",
+       "quote": "Indian Secondary School Certificates issued by the CBSE/ISC boards/NIOS/All State Boards may be considered: minimum grade of 65% overall with 70% in Grade 12 Mathematics"
+      },
+      "ISC": {
+       "accepted": true,
+       "minimumPercent": 65,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "70",
+         "source": "s3",
+         "quote": "minimum grade of 65% overall with 70% in Grade 12 Mathematics"
+        }
+       ],
+       "source": "s3",
+       "quote": "Indian Secondary School Certificates issued by the CBSE/ISC boards/NIOS/All State Boards may be considered: minimum grade of 65% overall with 70% in Grade 12 Mathematics"
+      },
+      "BRITISH": {
+       "gradeProfile": "BBC",
+       "notesEn": "Two A levels at A*A* or three at BBC.",
+       "notesAr": "مادتان بدرجة A*A* أو ثلاث مواد بدرجة BBC.",
+       "subjects": [],
+       "source": "s3",
+       "quote": "Minimum Two or Three with grades A*A* / BBC"
+      },
+      "IB": {
+       "minimumPoints": 24,
+       "notesEn": "Full IB Diploma with 24 to 28 points.",
+       "notesAr": "دبلوم البكالوريا الدولية الكامل بمجموع 24 إلى 28 نقطة.",
+       "subjects": [],
+       "source": "s3",
+       "quote": "You must have passed the full IB Diploma with 24 - 28 Points"
+      },
+      "AMERICAN": {
+       "accepted": true,
+       "minimumGPA": 2.8,
+       "notesEn": "Also SAT 1100 (at least 550 per section), ACT 23, or two AP exams; otherwise the Foundation Programme.",
+       "notesAr": "يُشترط أيضا SAT بمجموع 1100 (550 على الأقل لكل قسم) أو ACT بدرجة 23 أو اختباران AP؛ وإلا فالبرنامج التأسيسي.",
+       "subjects": [],
+       "source": "s3",
+       "quote": "For students coming from the American Schooling System, direct entry into Year 1 of the undergraduate programme is possible with a minimum GPA of 2.8."
+      },
+      "UAE_MOE": {
+       "accepted": false,
+       "notesEn": "Not accepted for direct entry: UAE Tawjihiyya graduates must first complete the International Foundation Programme (IFP).",
+       "notesAr": "لا يُقبل للالتحاق المباشر: يجب على خريجي الثانوية العامة الإماراتية إتمام البرنامج التأسيسي الدولي أولا.",
+       "subjects": [],
+       "source": "s3",
+       "quote": "Students applying for direct entry into Year 1 of an undergraduate programme from the UAE schooling system must have successfully completed the Tawjihiyya (Secondary School Certificate) plus successful completion of the Middlesex Univeristy International Foundation Programme (IFP)."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": 1100,
+        "noteEn": "American-curriculum applicants: SAT 1100 (550 per section), or ACT 23, or two AP exams.",
+        "noteAr": "لطلبة المنهج الأمريكي: SAT بمجموع 1100 (550 لكل قسم) أو ACT بدرجة 23 أو اختباران AP.",
+        "source": "s3",
+        "quote": "Additionally, students must have SAT scores of 1100 at least 550 in each section or an ACT composite score of 23 or alternatively, two AP exams with scores of 3 GPA and above."
+       }
+      ],
+      "additional": [],
+      "source": "s3"
+     },
+     "previous": null
+    },
     {
      "key": "middlesex-dubai-cyber",
      "status": "EXISTS",
@@ -2442,9 +2667,62 @@
      "hash": "968ce2f3a5e74229e9cb6334854068f03c3088302cd3d5a0987c6f67e693e95e",
      "waybackTimestamp": "20251011232730",
      "waybackHash": "3e32a07aa33291cc5d57660a1cb7f6c6cc102bf7bc5e37214afc88d5b06d3549"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.nyu.edu/admissions/undergraduate-admissions/how-to-apply/standardized-tests/english-language-testing.html",
+     "title": "Human Verification",
+     "retrievedAt": "2026-08-07T00:00:00Z",
+     "hash": "6a1144d8841a9def5f3103f1adb09a4948101d330df035bf38b1f076f3d67677",
+     "via": "archive:20260807190737"
+    },
+    {
+     "id": "s8",
+     "url": "https://www.nyu.edu/admissions/undergraduate-admissions/how-to-apply/standardized-tests.html",
+     "title": "Human Verification",
+     "retrievedAt": "2026-08-06T00:00:00Z",
+     "hash": "2a2929bc0cf3ec7ec4e1c31ca042d737ad972f88e913f803315eb3bd72c00e77",
+     "via": "archive:20260806144700"
     }
    ],
-   "english": [],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 7.5,
+     "minComponent": null,
+     "waiverNoteEn": "No minimum score; this is the level competitive applicants receive. NYU does not waive the requirement based on SAT, ACT, AP, IGCSE, A-levels or the IB.",
+     "waiverNoteAr": "لا يوجد حد أدنى؛ هذا هو مستوى المتقدمين التنافسيين. ولا تعفي الجامعة من المتطلب بناء على SAT أو ACT أو AP أو IGCSE أو A-level أو البكالوريا الدولية.",
+     "source": "s7",
+     "quote": "7.5 and above on the IELTS Academic"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 100,
+     "minComponent": null,
+     "waiverNoteEn": "No minimum score; this is the level competitive applicants receive. NYU does not waive the requirement based on SAT, ACT, AP, IGCSE, A-levels or the IB. New-scale TOEFL (from 21 January 2026): 5 or above.",
+     "waiverNoteAr": "لا يوجد حد أدنى؛ هذا هو مستوى المتقدمين التنافسيين. ولا تعفي الجامعة من المتطلب بناء على SAT أو ACT أو AP أو IGCSE أو A-level أو البكالوريا الدولية. وفق مقياس TOEFL الجديد (منذ 21 يناير 2026): 5 أو أعلى.",
+     "source": "s7",
+     "quote": "100 and above on the TOEFL iBT taken on or before January 20, 2026."
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 135,
+     "minComponent": null,
+     "waiverNoteEn": "No minimum score; this is the level competitive applicants receive. NYU does not waive the requirement based on SAT, ACT, AP, IGCSE, A-levels or the IB.",
+     "waiverNoteAr": "لا يوجد حد أدنى؛ هذا هو مستوى المتقدمين التنافسيين. ولا تعفي الجامعة من المتطلب بناء على SAT أو ACT أو AP أو IGCSE أو A-level أو البكالوريا الدولية.",
+     "source": "s7",
+     "quote": "135 and above on the Duolingo English Test"
+    },
+    {
+     "test": "PTE",
+     "minOverall": 70,
+     "minComponent": null,
+     "waiverNoteEn": "No minimum score; this is the level competitive applicants receive. NYU does not waive the requirement based on SAT, ACT, AP, IGCSE, A-levels or the IB.",
+     "waiverNoteAr": "لا يوجد حد أدنى؛ هذا هو مستوى المتقدمين التنافسيين. ولا تعفي الجامعة من المتطلب بناء على SAT أو ACT أو AP أو IGCSE أو A-level أو البكالوريا الدولية.",
+     "source": "s7",
+     "quote": "70 and above on the PTE Academic"
+    }
+   ],
    "tests": [
     {
      "test": "SAT",
@@ -2503,7 +2781,24 @@
      "quote": "Regular Decision | January 5 | April 1 |"
     }
    ],
-   "curriculumRules": {},
+   "curriculumRules": {
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "At least 3 A-levels required; predicted or final results must be submitted.",
+     "notesAr": "يُشترط ثلاث مواد A-level على الأقل، مع تقديم النتائج المتوقعة أو النهائية.",
+     "subjects": [],
+     "source": "s8",
+     "quote": "Please Note: All A-Level students must submit predictions or final results to have a complete application, regardless of the type of testing they choose to submit. A minimum of 3 A-Levels are required for admissions eligibility."
+    },
+    "CBSE": {
+     "accepted": true,
+     "notesEn": "Class XII predicted or final results are required for a complete application.",
+     "notesAr": "تُشترط النتائج المتوقعة أو النهائية للصف الثاني عشر لاكتمال الطلب.",
+     "subjects": [],
+     "source": "s8",
+     "quote": "Note: All students in the Indian Class XII and Australian ATAR systems must submit predictions or final results to have a complete application, regardless of the type of testing they choose to submit."
+    }
+   },
    "programs": [
     {
      "key": "nyu-abu-dhabi-ce",
@@ -2609,11 +2904,43 @@
      "hash": "9955444470664cf1f566907597dbdc2558956693ac219f0c37ce5458422f47ae",
      "waybackTimestamp": "20250905181930",
      "waybackHash": "6888a7b94da53d5b0a61b44a96fa99b7263349eb817a886c46afcab28f166a33"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.sorbonne.ae/education/apply-now/undergraduate",
+     "title": "Undergrad Hub | Prestigious Bachelor degrees | Sorbonne Abu Dhabi",
+     "retrievedAt": "2026-09-30T07:59:34.871Z",
+     "hash": "20d5682161119d524ffc362c48647e6c8952ca46c3cf7aeefa5ca6e69ead16e6"
     }
    ],
    "english": [],
    "tests": [],
-   "additional": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "French B2 certificate (DELF, TEF, TCF or SELFEE) for bachelor's programmes taught in French.",
+     "noteAr": "شهادة كفاءة في اللغة الفرنسية بمستوى B2 (DELF أو TEF أو TCF أو SELFEE) للبرامج التي تُدرَّس بالفرنسية.",
+     "source": "s3",
+     "quote": "French Aptitude Certificate for the students applying for the bachelor's programmes taught in French (B2 level diplomas: DELF, TEF, TCF, or SELFEE)"
+    },
+    {
+     "kind": "PERSONAL_STATEMENT",
+     "required": true,
+     "noteEn": "Personal statement of 400 to 500 words in French.",
+     "noteAr": "بيان شخصي من 400 إلى 500 كلمة باللغة الفرنسية.",
+     "source": "s3",
+     "quote": "Personal statement minimum 400-500 words in French (for the bachelor's programmes taught in French)"
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Apply online directly; UAE nationals may apply through NAPO.",
+     "noteAr": "التقديم مباشرة عبر الموقع، ويمكن للمواطنين التقديم عبر نظام القبول الوطني NAPO.",
+     "source": "s3",
+     "quote": "Prospective students are welcome to apply to any of Sorbonne University Abu Dhabi's programmes online at Apply Now or through NAPO for UAE national students."
+    }
+   ],
    "deadlines": [],
    "curriculumRules": {},
    "programs": [
@@ -2701,6 +3028,51 @@
      "hash": "2708e77a1b690802c1ffe830137a726c321d8337893af048570d0a1be0ca97e4",
      "waybackTimestamp": "20250926094641",
      "waybackHash": "82df868b42a83c9ad7cdcbb2f0103199974a87b01f2d436062ad901ee60031e3"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/doctor-of-medicine.shtml",
+     "title": "Doctor of Medicine",
+     "retrievedAt": "2026-09-30T07:59:19.425Z",
+     "hash": "64a728fa5750c7abf3c88b15b5d98f4cb5eb43f16d3bbe20293a2ab4a1654b36",
+     "waybackTimestamp": "20251018160023",
+     "waybackHash": "fcba4816529b821373592891aeb7419784c893e28a4e3a5eaf761371c65ab4ca"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-business-administration.shtml",
+     "title": "Bachelor of Business Administration",
+     "retrievedAt": "2026-09-30T07:59:35.735Z",
+     "hash": "1360e9eaa40477defa17e732a3b735eadf429377c36ab3ce3384cd68cb48876d",
+     "waybackTimestamp": "20250624015029",
+     "waybackHash": "e5e19212facde1cf0f333c8260b227dc6ba61833cff8845c1ab9e808f15c541e"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+     "title": "Bachelor of Science in Computer Science",
+     "retrievedAt": "2026-09-30T07:59:23.967Z",
+     "hash": "18bcff01a90624a674a864506acb12b73f1b9b8246c3c5d90d0de86812394b6a",
+     "waybackTimestamp": "20250905152837",
+     "waybackHash": "ea068a983767e8b9d10d5ebdfc75873cfff40906759406709072857d2e99b7c2"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-electrical-engineering.shtml",
+     "title": "Bachelor of Science in Electrical Engineering",
+     "retrievedAt": "2026-09-30T07:59:14.816Z",
+     "hash": "cac12ce9c7b0f09086623bd7595b779b10f74ba213ea0b9defb93a36ac29ca41",
+     "waybackTimestamp": "20250905151735",
+     "waybackHash": "b235ec64cdd729f1d592fc7ef6d5280f1e8a19e9e0bab6cc9a3587fb5eb093b0"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-law.shtml",
+     "title": "Bachelor of Law",
+     "retrievedAt": "2026-09-30T07:59:21.999Z",
+     "hash": "0740eeb85094014d5df93c51f42059a29d9dc37d3955c984fddd2f548984de85",
+     "waybackTimestamp": "20250907140413",
+     "waybackHash": "76225813ce245ac87c6860510a21c02faffa3f50c797eadc4bca858e88bd0ac1"
     }
    ],
    "english": [
@@ -2979,7 +3351,7 @@
      "nameEn": "Doctor of Medicine",
      "nameAr": "دكتور في الطب",
      "degree": "MD",
-     "durationYears": null,
+     "durationYears": 6,
      "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/doctor-of-medicine.shtml",
      "curricula": {},
      "general": {
@@ -3013,6 +3385,24 @@
      "title": "الطلبة الإماراتيون",
      "retrievedAt": "2026-09-30T07:33:54.438Z",
      "hash": "bcafeb2eed85ec35fd1c5c6ec06c97086b262e91a65b5b8dd5a9ef2f81c16383"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.zu.ac.ae/main/en/colleges/colleges/__college_of_business/index.aspx",
+     "title": "College of Business | Zayed University",
+     "retrievedAt": "2026-09-30T07:59:47.995Z",
+     "hash": "debf1462def6cf20d49bf84b56b29b33ca4010a98242f607deb2be0ea856bfe8",
+     "waybackTimestamp": "20230130041803",
+     "waybackHash": "23d5e028eb98136bd73b67803ca2deffc563990db040480aa8022415cf052989"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.zu.ac.ae/main/en/colleges/colleges/__college_of_technological_innovation/index.aspx",
+     "title": "College of Technological Innovation | Zayed University",
+     "retrievedAt": "2026-09-30T07:59:43.838Z",
+     "hash": "e28988dee6d92888445d0c5dcf6253fbfcee6b6a8c2f4c9d44e08d962d767184",
+     "waybackTimestamp": "20230130051922",
+     "waybackHash": "5b8ed1a43a3cb12536abdf2973f40d2abc5eeca9eec1568fb4bf03d75c0f6146"
     }
    ],
    "english": [
@@ -3065,7 +3455,719 @@
    ],
    "deadlines": [],
    "curriculumRules": {},
-   "programs": []
+   "programs": [
+    {
+     "key": "zayed-university-bus",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Science in Marketing and Entrepreneurship",
+     "nameAr": "بكالوريوس العلوم في التسويق وريادة الأعمال",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.zu.ac.ae/main/en/colleges/colleges/__college_of_business/index.aspx",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "minimumPercent": 70,
+       "stream": "ADVANCED",
+       "notesEn": "College of Business: General stream 75%, Advanced stream 70%.",
+       "notesAr": "كلية الإدارة: المسار العام 75%، المسار المتقدم 70%.",
+       "subjects": [],
+       "source": "s1",
+       "quote": "كلية الإدارة * | 75% | 70% |"
+      },
+      "AMERICAN": {
+       "accepted": true,
+       "minimumPercent": 75,
+       "notesEn": "Five subjects passed with an average of 75% or above (Arabic and Islamic Studies not counted).",
+       "notesAr": "اجتياز خمس مواد بمعدل 75% فما فوق (لا تُحتسب العربية والدراسات الإسلامية).",
+       "subjects": [],
+       "source": "s1",
+       "quote": "كلية الإدارة * | 75% | 70% | اجتياز خمس مواد بنجاح بمعدل 75% فما فوق"
+      },
+      "BRITISH": {
+       "accepted": true,
+       "notesEn": "Five O-level/IGCSE subjects at C or above plus four AS-levels at B or above, or two A-levels at C or above (Arabic and Islamic Studies not counted).",
+       "notesAr": "خمس مواد O-level بدرجة C أو أعلى مع أربع مواد AS بدرجة B أو أعلى، أو مادتان A-Level بدرجة C أو أعلى (لا تُحتسب العربية والدراسات الإسلامية).",
+       "subjects": [],
+       "source": "s1",
+       "quote": "اجتياز مادتينA-Level مع الحصول على علامة (جيد) (C) أو أكثر كحد أدنى في جميع المواد."
+      },
+      "IB": {
+       "minimumPoints": 24,
+       "subjects": [],
+       "source": "s1",
+       "quote": "اتمام شهادة البكالوريا الدولية والحصول على 24 نقطة أو أكثر."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "EMSAT_MATH",
+        "policy": "REQUIRED",
+        "minScore": 600,
+        "noteEn": "EmSAT Math 600 for the College of Business.",
+        "noteAr": "درجة 600 في اختبار الإمسات للرياضيات لكلية الإدارة.",
+        "source": "s1",
+        "quote": "كلية الإدارة تحصيل درجة درجة (600) في اختبار امسات لمادة الرياضيات"
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Personal interview for the College of Business.",
+        "noteAr": "اجتياز المقابلة الشخصية لكلية الإدارة.",
+        "source": "s1",
+        "quote": "اجتياز المقابلة الشخصية لكلية الإدارة"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "zayed-university-cs",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Science in Information Technology",
+     "nameAr": "بكالوريوس العلوم في تقنية المعلومات",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.zu.ac.ae/main/en/colleges/colleges/__college_of_technological_innovation/index.aspx",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "minimumPercent": 75,
+       "stream": "ADVANCED",
+       "notesEn": "College of Technological Innovation: General stream 80%, Advanced stream 75%.",
+       "notesAr": "كلية الابتكار التقني: المسار العام 80%، المسار المتقدم 75%.",
+       "subjects": [],
+       "source": "s1",
+       "quote": "كلية الابتكار التقني* | 80% | 75% |"
+      },
+      "AMERICAN": {
+       "accepted": true,
+       "minimumPercent": 80,
+       "notesEn": "Five subjects passed with an average of 80% or above (Arabic and Islamic Studies not counted).",
+       "notesAr": "اجتياز خمس مواد بمعدل 80% فما فوق (لا تُحتسب العربية والدراسات الإسلامية).",
+       "subjects": [],
+       "source": "s1",
+       "quote": "كلية الابتكار التقني* | 80% | 75% | اجتياز خمس مواد بنجاح بمعدل 80% فما فوق"
+      },
+      "BRITISH": {
+       "accepted": true,
+       "notesEn": "Five O-level/IGCSE subjects at C or above plus four AS-levels at B or above, or two A-levels at C or above (Arabic and Islamic Studies not counted).",
+       "notesAr": "خمس مواد O-level بدرجة C أو أعلى مع أربع مواد AS بدرجة B أو أعلى، أو مادتان A-Level بدرجة C أو أعلى (لا تُحتسب العربية والدراسات الإسلامية).",
+       "subjects": [],
+       "source": "s1",
+       "quote": "اجتياز مادتينA-Level مع الحصول على علامة (جيد) (C) أو أكثر كحد أدنى في جميع المواد."
+      },
+      "IB": {
+       "minimumPoints": 24,
+       "subjects": [],
+       "source": "s1",
+       "quote": "اتمام شهادة البكالوريا الدولية والحصول على 24 نقطة أو أكثر."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "EMSAT_MATH",
+        "policy": "REQUIRED",
+        "minScore": 500,
+        "noteEn": "EmSAT Math 500 for the College of Technological Innovation.",
+        "noteAr": "درجة 500 في اختبار الإمسات للرياضيات لكلية الابتكار التقني.",
+        "source": "s1",
+        "quote": "كلية الابتكار التقني تحصيل درجة درجة (500) في اختبار امسات لمادة الرياضيات"
+       }
+      ],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "rit_dubai",
+   "website": "https://www.rit.edu/dubai",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.rit.edu/dubai/undergraduate-degree-programs",
+     "title": "Undergraduate Degree Programs | RIT Dubai | RIT",
+     "retrievedAt": "2026-09-30T07:59:11.944Z",
+     "hash": "0cee36b7550f80f7c746332d53fb475001ef359a31328ea6430ff526dde9bb22",
+     "waybackTimestamp": "20251005071326",
+     "waybackHash": "9288907558c00bcf755704350158d064124c82a21c9697bdb1ed05cfa8a43186"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.rit.edu/dubai/undergraduate-admissions",
+     "title": "Undergraduate Admissions | RIT Dubai | RIT",
+     "retrievedAt": "2026-09-30T07:59:42.293Z",
+     "hash": "45c6f30a0370750e52d3b7626dcf52978bf167e7102de433393f90c32822aeaa"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.rit.edu/dubai/bachelor-science-cybersecurity",
+     "title": "Bachelor of Science in Cybersecurity | RIT Dubai | RIT",
+     "retrievedAt": "2026-09-30T07:59:06.336Z",
+     "hash": "534fc86022d308de251b65422ddaa72d8a01ea39d24a4736af5911eb460343c4",
+     "waybackTimestamp": "20250810073916",
+     "waybackHash": "c4062a5e5aa580ba552911d8823a95da10fd1706d25e2a7d3d1382eeff68f17c"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.rit.edu/dubai/bachelor-science-electrical-engineering",
+     "title": "Bachelor of Science in Electrical Engineering | RIT Dubai | RIT",
+     "retrievedAt": "2026-09-30T07:59:13.981Z",
+     "hash": "687f65e56d22c8ad6cbc5874a37ec4e311392a0a7cd52671389cffdefa4c65d0",
+     "waybackTimestamp": "20250807000840",
+     "waybackHash": "0ce98daa68bb932d7f701a969d6f59af851cf0a08a68708f6510b0fad7f86a76"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": null,
+     "waiverNoteEn": "IELTS 5.0 to 6.0 gives conditional admission. IELTS Indicator, Duolingo, PTE and home-based TOEFL are not accepted.",
+     "waiverNoteAr": "درجة IELTS من 5.0 إلى 6.0 تمنح قبولا مشروطا. لا يُقبل IELTS Indicator ولا Duolingo ولا PTE ولا TOEFL المنزلي.",
+     "source": "s2",
+     "quote": "Academic IELTS | Overall 6.5 and above | Overall 5.0 - 6.0"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 79,
+     "minComponent": null,
+     "waiverNoteEn": "TOEFL iBT 61 to 78 gives conditional admission.",
+     "waiverNoteAr": "درجة TOEFL iBT من 61 إلى 78 تمنح قبولا مشروطا.",
+     "source": "s2",
+     "quote": "TOEFL IBT | 79 and above | 61 - 78"
+    },
+    {
+     "test": "EMSAT_ENGLISH",
+     "minOverall": 1550,
+     "minComponent": null,
+     "waiverNoteEn": "EmSAT English 1100 to 1525 gives conditional admission.",
+     "waiverNoteAr": "درجة EmSAT إنجليزي من 1100 إلى 1525 تمنح قبولا مشروطا.",
+     "source": "s2",
+     "quote": "EmSAT - English | 1550 and above | 1100 - 1525"
+    }
+   ],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "PRIORITY",
+     "date": "2027-01-15",
+     "labelEn": "Fall 2027 early admission phase ends",
+     "labelAr": "نهاية مرحلة القبول المبكر لخريف 2027",
+     "source": "s2",
+     "quote": "Fall Semester Early Admission Phase: Until January 15"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "REGULAR_DECISION",
+     "date": "2027-05-31",
+     "labelEn": "Fall 2027 regular admission phase ends",
+     "labelAr": "نهاية مرحلة القبول العادي لخريف 2027",
+     "source": "s2",
+     "quote": "Regular Admission Phase: Until May 31"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-08-22",
+     "labelEn": "Fall 2027 application deadline (later applications reviewed if space allows)",
+     "labelAr": "آخر موعد للتقديم لخريف 2027 (تُراجع الطلبات المتأخرة حسب توفر المقاعد)",
+     "source": "s2",
+     "quote": "Application deadline: August 22"
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "rit-dubai-cyber",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Cybersecurity",
+     "nameAr": "بكالوريوس العلوم في الأمن السيبراني",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://www.rit.edu/dubai/bachelor-science-cybersecurity",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "minimumPercent": 70,
+       "stream": "ADVANCED|ELITE",
+       "notesEn": "Elite and Advanced 70%, General and Applied 75%.",
+       "notesAr": "النخبة والمتقدم 70%، العام والتطبيقي 75%.",
+       "subjects": [],
+       "source": "s2",
+       "quote": "UAE | Elite & Advanced 70% General & Applied 75%"
+      },
+      "AMERICAN": {
+       "accepted": true,
+       "minimumPercent": 70,
+       "notesEn": "Also covers SABIS and Canadian curricula (SAT not required for Canadian).",
+       "notesAr": "يشمل أيضا منهجي سابيس والكندي (لا يُشترط SAT للمنهج الكندي).",
+       "subjects": [],
+       "source": "s2",
+       "quote": "Minimum 70% SAT 1 Math of 450 (MOE Equivalency Requirement)"
+      },
+      "SABIS": {
+       "accepted": true,
+       "minimumPercent": 70,
+       "subjects": [],
+       "source": "s2",
+       "quote": "Minimum 70% SAT 1 Math of 450 (MOE Equivalency Requirement)"
+      },
+      "BRITISH": {
+       "accepted": true,
+       "minimumPercent": 70,
+       "notesEn": "Five IGCSEs at C or above plus two AS or one A level at D; Year 13 completed.",
+       "notesAr": "خمس مواد IGCSE بدرجة C أو أعلى، إضافة إلى مادتين AS أو مادة A level واحدة بدرجة D؛ مع إتمام الصف الثالث عشر.",
+       "subjects": [],
+       "source": "s2",
+       "quote": "Minimum 5 IGCSE (C or above) and 2 As or 1 A level (D grade) Completion of Grade 12/ Year 13 Minimum average 70%"
+      },
+      "CBSE": {
+       "accepted": true,
+       "minimumPercent": 60,
+       "subjects": [],
+       "source": "s2",
+       "quote": "Pakistan/India | Minimum score 60%"
+      },
+      "IB": {
+       "minimumPoints": 24,
+       "subjects": [],
+       "source": "s2",
+       "quote": "International Baccalaureate | Minimum 24 points"
+      }
+     },
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics",
+         "science"
+        ],
+        "noteEn": "Math and one science; Physics or Chemistry preferred.",
+        "noteAr": "الرياضيات ومادة علمية واحدة، ويُفضَّل الفيزياء أو الكيمياء.",
+        "source": "s2",
+        "quote": "Must cover math and one science at secondary high school and the preferred sciences are Physics or Chemistry."
+       }
+      ],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": 450,
+        "noteEn": "SAT Math 450 for American and SABIS curricula (not required for Canadian).",
+        "noteAr": "درجة SAT رياضيات 450 لمنهجي المدارس الأمريكية وسابيس (غير مطلوبة للمنهج الكندي).",
+        "source": "s2",
+        "quote": "Minimum 70% SAT 1 Math of 450 (MOE Equivalency Requirement)"
+       }
+      ],
+      "additional": [],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "rit-dubai-ee",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Electrical Engineering",
+     "nameAr": "بكالوريوس العلوم في الهندسة الكهربائية",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://www.rit.edu/dubai/bachelor-science-electrical-engineering",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "minimumPercent": 75,
+       "stream": "ELITE",
+       "notesEn": "Elite 75%, Advanced 80%, Applied/General 85%.",
+       "notesAr": "النخبة 75%، المتقدم 80%، التطبيقي أو العام 85%.",
+       "subjects": [],
+       "source": "s2",
+       "quote": "UAE | Elite 75% Advanced 80% Applied/General 85%"
+      },
+      "AMERICAN": {
+       "accepted": true,
+       "minimumPercent": 80,
+       "notesEn": "Also covers SABIS and Canadian curricula (SAT not required for Canadian).",
+       "notesAr": "يشمل أيضا منهجي سابيس والكندي (لا يُشترط SAT للمنهج الكندي).",
+       "subjects": [],
+       "source": "s2",
+       "quote": "Minimum 80% SAT 1 Math of 450"
+      },
+      "SABIS": {
+       "accepted": true,
+       "minimumPercent": 80,
+       "subjects": [],
+       "source": "s2",
+       "quote": "Minimum 80% SAT 1 Math of 450"
+      },
+      "BRITISH": {
+       "accepted": true,
+       "notesEn": "Year 13 completion and a minimum average of 80%.",
+       "notesAr": "إتمام الصف الثالث عشر بمعدل لا يقل عن 80%.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics",
+          "physics"
+         ],
+         "minimumGrade": "C",
+         "source": "s2",
+         "quote": "Math, Physics and 1 of Chemistry/Biology minimum grade C or above in IGCSE or in AS/A Level."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "chemistry",
+          "biology"
+         ],
+         "minimumGrade": "C",
+         "source": "s2",
+         "quote": "Math, Physics and 1 of Chemistry/Biology minimum grade C or above in IGCSE or in AS/A Level."
+        }
+       ],
+       "source": "s2",
+       "quote": "Minimum 5 IGCSE (C's or above) and 2 As or 1 A level (D's or above)"
+      },
+      "CBSE": {
+       "accepted": true,
+       "minimumPercent": 65,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "61",
+         "source": "s2",
+         "quote": "Pakistan/India | Minimum score 65% Math, Physics and 1 of Chemistry/Biology minimum grade is 61% (B-1)"
+        }
+       ],
+       "source": "s2",
+       "quote": "Pakistan/India | Minimum score 65% Math, Physics and 1 of Chemistry/Biology minimum grade is 61% (B-1)"
+      },
+      "IB": {
+       "minimumPoints": 28,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics",
+          "physics"
+         ],
+         "minimumGrade": "4",
+         "source": "s2",
+         "quote": "International Baccalaureate | Minimum 28 points Math, Physics and 1 of Chemistry/Biology minimum grade is 4 or above"
+        }
+       ],
+       "source": "s2",
+       "quote": "International Baccalaureate | Minimum 28 points Math, Physics and 1 of Chemistry/Biology minimum grade is 4 or above"
+      }
+     },
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "80",
+        "source": "s2",
+        "quote": "Must cover Math preferably pre-calculus at secondary school (minimum grade 80% or equivalent)."
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "physics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "80",
+        "source": "s2",
+        "quote": "Must cover two sciences: physics and chemistry or biology at secondary school (minimum grade 80% or equivalent)."
+       },
+       {
+        "type": "ONE_OF",
+        "keys": [
+         "chemistry",
+         "biology"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "80",
+        "source": "s2",
+        "quote": "Must cover two sciences: physics and chemistry or biology at secondary school (minimum grade 80% or equivalent)."
+       }
+      ],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": 450,
+        "noteEn": "SAT Math 450 for American and SABIS curricula (not required for Canadian).",
+        "noteAr": "درجة SAT رياضيات 450 لمنهجي المدارس الأمريكية وسابيس (غير مطلوبة للمنهج الكندي).",
+        "source": "s2",
+        "quote": "Minimum 80% SAT 1 Math of 450"
+       }
+      ],
+      "additional": [],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "rit-dubai-se",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Science in Computing and Information Technologies",
+     "nameAr": "بكالوريوس العلوم في الحوسبة وتقنيات المعلومات",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://www.rit.edu/dubai/bachelor-science-computing-and-information-technologies",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "minimumPercent": 70,
+       "stream": "ADVANCED|ELITE",
+       "notesEn": "Elite and Advanced 70%, General and Applied 75%.",
+       "notesAr": "النخبة والمتقدم 70%، العام والتطبيقي 75%.",
+       "subjects": [],
+       "source": "s2",
+       "quote": "UAE | Elite & Advanced 70% General & Applied 75%"
+      },
+      "AMERICAN": {
+       "accepted": true,
+       "minimumPercent": 70,
+       "notesEn": "Also covers SABIS and Canadian curricula (SAT not required for Canadian).",
+       "notesAr": "يشمل أيضا منهجي سابيس والكندي (لا يُشترط SAT للمنهج الكندي).",
+       "subjects": [],
+       "source": "s2",
+       "quote": "Minimum 70% SAT 1 Math of 450 (MOE Equivalency Requirement)"
+      },
+      "SABIS": {
+       "accepted": true,
+       "minimumPercent": 70,
+       "subjects": [],
+       "source": "s2",
+       "quote": "Minimum 70% SAT 1 Math of 450 (MOE Equivalency Requirement)"
+      },
+      "BRITISH": {
+       "accepted": true,
+       "minimumPercent": 70,
+       "notesEn": "Five IGCSEs at C or above plus two AS or one A level at D; Year 13 completed.",
+       "notesAr": "خمس مواد IGCSE بدرجة C أو أعلى، إضافة إلى مادتين AS أو مادة A level واحدة بدرجة D؛ مع إتمام الصف الثالث عشر.",
+       "subjects": [],
+       "source": "s2",
+       "quote": "Minimum 5 IGCSE (C or above) and 2 As or 1 A level (D grade) Completion of Grade 12/ Year 13 Minimum average 70%"
+      },
+      "CBSE": {
+       "accepted": true,
+       "minimumPercent": 60,
+       "subjects": [],
+       "source": "s2",
+       "quote": "Pakistan/India | Minimum score 60%"
+      },
+      "IB": {
+       "minimumPoints": 24,
+       "subjects": [],
+       "source": "s2",
+       "quote": "International Baccalaureate | Minimum 24 points"
+      }
+     },
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics",
+         "science"
+        ],
+        "noteEn": "Math and one science; Physics or Chemistry preferred.",
+        "noteAr": "الرياضيات ومادة علمية واحدة، ويُفضَّل الفيزياء أو الكيمياء.",
+        "source": "s2",
+        "quote": "Must cover math and one science at secondary high school and the preferred sciences are Physics or Chemistry."
+       }
+      ],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": 450,
+        "noteEn": "SAT Math 450 for American and SABIS curricula (not required for Canadian).",
+        "noteAr": "درجة SAT رياضيات 450 لمنهجي المدارس الأمريكية وسابيس (غير مطلوبة للمنهج الكندي).",
+        "source": "s2",
+        "quote": "Minimum 70% SAT 1 Math of 450 (MOE Equivalency Requirement)"
+       }
+      ],
+      "additional": [],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "wollongong_dubai",
+   "website": "https://www.uowdubai.ac.ae",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.uowdubai.ac.ae/join-uowd/admission-requirements/bachelors-degrees",
+     "title": "Bachelor's Degree Admission Requirements | UOWD",
+     "retrievedAt": "2026-09-30T07:59:40.161Z",
+     "hash": "fbfeaea2d3c7bc5e68a332ff9565f3f0d955a6e29902b713d8c57f0eff340b71",
+     "waybackTimestamp": "20250718043834",
+     "waybackHash": "a299ce4960e80c59d6837ccba631105e255cf238a56381519cc76826387cd4e8"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.uowdubai.ac.ae/degrees/bachelors/business/bachelor-business-administration",
+     "title": "Bachelor of Business Administration Degree, UAE | BBA in Dubai | UOWD",
+     "retrievedAt": "2026-09-30T07:59:45.553Z",
+     "hash": "efe6a2a17262d890b15968dd47143819202ac9a497194949956801b057f00a26",
+     "waybackTimestamp": "20251007234031",
+     "waybackHash": "316bb0cf0467da5686b62ee1fa092e163b4c59c789e8c39d549b3c04c46d4eed"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.uowdubai.ac.ae/degrees/bachelors/computer-science/bachelor-computer-science",
+     "title": "Bachelor of Computer Science Degree in UAE | UOWD",
+     "retrievedAt": "2026-09-30T07:59:19.710Z",
+     "hash": "669e2ca3bfa7d5e5ab188fa97c645e4bcd54abdc6388ee5c5c03c900263a2b2c"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 5,
+     "minComponent": null,
+     "waiverNoteEn": "Direct Entry (4 years) requirement; Advanced Entry (3 years) requires more. Advanced Entry needs IELTS 6.0.",
+     "waiverNoteAr": "شرط الالتحاق المباشر (4 سنوات)؛ ويتطلب الالتحاق المتقدم (3 سنوات) شروطا أعلى. ويتطلب الالتحاق المتقدم IELTS 6.0.",
+     "source": "s1",
+     "quote": "Overall IELTS (Academic) score of 6.0 & Minimum score of 6.0 in Reading & Writing, 5.0 in Listening & Speaking | Overall IELTS (Academic) score of 5.0 |"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 40,
+     "minComponent": null,
+     "waiverNoteEn": "Direct Entry (4 years) requirement; Advanced Entry (3 years) requires more. Advanced Entry needs TOEFL iBT 79.",
+     "waiverNoteAr": "شرط الالتحاق المباشر (4 سنوات)؛ ويتطلب الالتحاق المتقدم (3 سنوات) شروطا أعلى. ويتطلب الالتحاق المتقدم TOEFL iBT 79.",
+     "source": "s1",
+     "quote": "79 with not less than 18 in Reading and Writing, 16 in Listening and Speaking | 40 overall |"
+    },
+    {
+     "test": "PTE",
+     "minOverall": 42,
+     "minComponent": null,
+     "waiverNoteEn": "Direct Entry (4 years) requirement; Advanced Entry (3 years) requires more. Advanced Entry needs PTE 54.",
+     "waiverNoteAr": "شرط الالتحاق المباشر (4 سنوات)؛ ويتطلب الالتحاق المتقدم (3 سنوات) شروطا أعلى. ويتطلب الالتحاق المتقدم PTE 54.",
+     "source": "s1",
+     "quote": "54 over all with Minimum 54 PTE Communicative Skill Scores | 42 overall |"
+    }
+   ],
+   "tests": [],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": true,
+     "minimumPercent": 70,
+     "notesEn": "Direct Entry (4 years); no Advanced Entry for this certificate.",
+     "notesAr": "الالتحاق المباشر (4 سنوات)؛ لا يتاح الالتحاق المتقدم لهذه الشهادة.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "UAE Al-Thanawiyya Al-Aama | N/A | 70% |"
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "minimumPercent": 70,
+     "minimumGPA": 2.5,
+     "notesEn": "Direct Entry (4 years): C average. Advanced Entry (3 years) also needs SAT 1100.",
+     "notesAr": "الالتحاق المباشر (4 سنوات): معدل C. ويتطلب الالتحاق المتقدم (3 سنوات) أيضا SAT بمجموع 1100.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "American High School Diploma | Overall average grade of C (70% or 2.5/4.0) + SAT 1100 | Overall average grade of C (70% or 2.5/4.0) |"
+    },
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "Direct Entry (4 years): five IGCSE/GCSE at D plus 2 AS or 1 A level at D. Advanced Entry (3 years): three A levels at CCD.",
+     "notesAr": "الالتحاق المباشر (4 سنوات): خمس مواد IGCSE/GCSE بدرجة D ومادتا AS أو مادة A level بدرجة D. الالتحاق المتقدم (3 سنوات): ثلاث مواد A level بدرجات CCD.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "Minimum 5 IGCSE/GCSE subjects - Grade D and 2 AS or 1 A level subject (s) - Grade D Completion of Year 13"
+    },
+    "IB": {
+     "minimumPoints": 21,
+     "notesEn": "Direct Entry (4 years) 21 points; Advanced Entry (3 years) 25 points.",
+     "notesAr": "الالتحاق المباشر (4 سنوات) 21 نقطة؛ الالتحاق المتقدم (3 سنوات) 25 نقطة.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "International Baccalaureate Diploma | 25 Points | 21 Points |"
+    },
+    "CBSE": {
+     "accepted": true,
+     "notesEn": "Score of 7 (Direct Entry) or 10.5 (Advanced Entry), calculated from positional grades in English or Hindi plus the best four other subjects.",
+     "notesAr": "درجة 7 (التحاق مباشر) أو 10.5 (التحاق متقدم)، تُحسب من الدرجات الموضعية في الإنجليزية أو الهندية وأفضل أربع مواد أخرى.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "CBSE Grade 12 | 10.5 | 7 |"
+    },
+    "ISC": {
+     "accepted": true,
+     "minimumPercent": 55,
+     "notesEn": "Listed as ICSE Grade 12: Direct Entry 55%, Advanced Entry 77%.",
+     "notesAr": "مدرج باسم ICSE للصف الثاني عشر: التحاق مباشر 55%، التحاق متقدم 77%.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "ICSE Grade 12 | 77% | 55% |"
+    }
+   },
+   "programs": [
+    {
+     "key": "wollongong-dubai-bus",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Business Administration",
+     "nameAr": "بكالوريوس إدارة الأعمال",
+     "degree": "BBA",
+     "durationYears": null,
+     "url": "https://www.uowdubai.ac.ae/degrees/bachelors/business/bachelor-business-administration",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "wollongong-dubai-cs",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Computer Science",
+     "nameAr": "بكالوريوس علوم الحاسوب",
+     "degree": "BCompSc",
+     "durationYears": null,
+     "url": "https://www.uowdubai.ac.ae/degrees/bachelors/computer-science/bachelor-computer-science",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    }
+   ]
   }
  ]
 }

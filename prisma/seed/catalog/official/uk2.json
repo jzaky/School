@@ -1,6 +1,6 @@
 {
  "batch": "uk2",
- "assembledAt": "2026-09-30T08:04:49.592Z",
+ "assembledAt": "2026-09-30T08:18:19.094Z",
  "universities": [
   {
    "key": "manchester",
@@ -2578,6 +2578,33 @@
      "title": "India - Study at St Andrews - University of St Andrews",
      "retrievedAt": "2026-09-30T07:34:20.454Z",
      "hash": "8c5e37c4ff105e420ea21e382c018742b5a35529a87fa57984334c4d303647fc"
+    },
+    {
+     "id": "s9",
+     "url": "https://www.st-andrews.ac.uk/subjects/medicine/medicine-bsc-a100/",
+     "title": "Medicine BSc A100 - Subjects - University of St Andrews",
+     "retrievedAt": "2026-09-30T07:58:11.424Z",
+     "hash": "f3970e6979bc767858b1a76d42e1c06061a9ad5fab38828ae7cd58c053055a5d",
+     "waybackTimestamp": "20250822044403",
+     "waybackHash": "ec0fc44ff496a75f678e595d87462afa642760ef56d3210ac899cbe624e876ae"
+    },
+    {
+     "id": "s10",
+     "url": "https://www.st-andrews.ac.uk/subjects/entry/language-requirements/profiles/7-d/",
+     "title": "English language test profiles: Profile 7-D - University of St Andrews",
+     "retrievedAt": "2026-09-30T07:57:58.422Z",
+     "hash": "7e9a43caaf147ba172bf0fa4c8bfc7f3c9e70450a7c471d6eea2fcb447f3a215",
+     "waybackTimestamp": "20251030201519",
+     "waybackHash": "ef4e79040ee26ba67720046ff6d0aaf011721b4aa2b480c1deb0ef9a92be8723"
+    },
+    {
+     "id": "s11",
+     "url": "https://www.st-andrews.ac.uk/subjects/entry/language-requirements/profiles/2-m/",
+     "title": "English language test profiles: Profile 2-M - University of St Andrews",
+     "retrievedAt": "2026-09-30T07:58:00.454Z",
+     "hash": "9c901817b367c7b05afaa3d9ba55e7e19873c95151d4cc35ad804b1baff3ff89",
+     "waybackTimestamp": "20250930042814",
+     "waybackHash": "079306945437d575613f232c9df30582b4810b1f1c052ba52c0fd985bffb6a07"
     }
    ],
    "english": [],
@@ -2707,7 +2734,35 @@
      },
      "general": {
       "subjects": [],
-      "english": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": "Science faculty uses English profile 7-D.",
+        "waiverNoteAr": "تستخدم كلية العلوم ملف اللغة الإنجليزية 7-D.",
+        "source": "s10",
+        "quote": "IELTS Academic (including IELTS One Skill retake) | 6.0 | 6.5 |"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 81,
+        "minComponent": null,
+        "waiverNoteEn": "Minimum Listening 16, Reading 16, Writing 19, Speaking 19.",
+        "waiverNoteAr": "حد أدنى 16 في الاستماع و16 في القراءة و19 في الكتابة و19 في المحادثة.",
+        "source": "s10",
+        "quote": "TOEFL iBT | Listening: 16 Reading: 16 Writing: 19 Speaking: 19 | 81 |"
+       },
+       {
+        "test": "PTE",
+        "minOverall": 70,
+        "minComponent": 64,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s10",
+        "quote": "PTE Academic | 64 | 70 |"
+       }
+      ],
       "tests": [],
       "additional": [
        {
@@ -2729,8 +2784,8 @@
      "nameEn": "Medicine BSc (Hons) A100",
      "nameAr": "بكالوريوس العلوم (مع مرتبة الشرف) في الطب A100",
      "degree": "BSc",
-     "durationYears": 3,
-     "url": "https://www.st-andrews.ac.uk/subjects/medicine/medicine-bsc-a100/partner-medical-schools/",
+     "durationYears": 6,
+     "url": "https://www.st-andrews.ac.uk/subjects/medicine/medicine-bsc-a100/",
      "curricula": {
       "IB": {
        "minimumPoints": 38,
@@ -2804,7 +2859,17 @@
      },
      "general": {
       "subjects": [],
-      "english": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7,
+        "minComponent": 7,
+        "waiverNoteEn": "Faculty of Medicine English profile 2-M.",
+        "waiverNoteAr": "ملف اللغة الإنجليزية 2-M لكلية الطب.",
+        "source": "s11",
+        "quote": "IELTS Academic | 7.0 | 7.0 |"
+       }
+      ],
       "tests": [
        {
         "test": "UCAT",
@@ -2817,6 +2882,14 @@
        }
       ],
       "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Six-year programme: BSc (Hons) Medicine after three years at St Andrews, then three years at a partner medical school for the MBChB or MBBS.",
+        "noteAr": "برنامج مدته ست سنوات: بكالوريوس العلوم (مع مرتبة الشرف) في الطب بعد ثلاث سنوات في سانت أندروز، ثم ثلاث سنوات في كلية طب شريكة للحصول على MBChB أو MBBS.",
+        "source": "s9",
+        "quote": "A100 Medicine is a six-year programme with three years at St Andrews and three years of training with a partner medical school."
+       },
        {
         "kind": "OTHER",
         "required": true,
@@ -2945,6 +3018,66 @@
      "previous": null
     }
    ]
+  },
+  {
+   "key": "warwick",
+   "website": "https://warwick.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://warwick.ac.uk/study/undergraduate/applying/admissions-tests/",
+     "title": "Admissions Tests (TMUA) | The University of Warwick",
+     "retrievedAt": "2026-09-30T07:58:03.200Z",
+     "hash": "1cd20eb577cbc5900ba9464c9051706e9ae8c8600a3690ac871b1a3ecc650219"
+    },
+    {
+     "id": "s2",
+     "url": "https://warwick.ac.uk/study/undergraduate/applying/entry-requirements/",
+     "title": "Entry Requirements for University of Warwick",
+     "retrievedAt": "2026-09-30T07:58:13.437Z",
+     "hash": "1be396da9b15e672d8160851ec8f83fe0dc5bd26713f919b358b43a32b8df9c7"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "deadlines": [],
+   "curriculumRules": {},
+   "additional": [
+    {
+     "kind": "ADMISSIONS_TEST",
+     "required": true,
+     "noteEn": "TMUA is required for BSc Computer Science (G400), except for contextual-offer applicants.",
+     "noteAr": "اختبار TMUA مطلوب لبكالوريوس علوم الحاسوب (G400)، باستثناء المؤهلين للعرض السياقي.",
+     "source": "s1",
+     "quote": "BSc Computer Science (G400)"
+    },
+    {
+     "kind": "ADMISSIONS_TEST",
+     "required": false,
+     "noteEn": "TMUA is optional but encouraged for Economics degrees.",
+     "noteAr": "اختبار TMUA اختياري ولكنه مستحسن لبرامج الاقتصاد.",
+     "source": "s1",
+     "quote": "Optionally, applicants are encouraged to sit the Test of Mathematics for University Admission (TMUA)."
+    },
+    {
+     "kind": "ADMISSIONS_TEST",
+     "required": true,
+     "noteEn": "Mathematics applicants typically take TMUA or STEP.",
+     "noteAr": "يتقدم طلاب الرياضيات عادة لاختبار TMUA أو STEP.",
+     "source": "s1",
+     "quote": "All applicants will typically be required to take TMUA or STEP, except for applicants who are eligible for a Contextual Offer"
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "All applicants need at least grade C/4 in GCSE English Language and Mathematics, or an equivalent.",
+     "noteAr": "يحتاج جميع المتقدمين إلى درجة C/4 على الأقل في اللغة الإنجليزية والرياضيات في GCSE أو ما يعادلها.",
+     "source": "s2",
+     "quote": "All applicants must possess a minimum level of a pass at Grade C / Grade 4 or above in both GCSE English Language and Mathematics, or an equivalent qualification."
+    }
+   ],
+   "programs": []
   }
  ]
 }

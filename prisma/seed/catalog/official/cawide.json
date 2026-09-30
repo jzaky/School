@@ -1,6 +1,6 @@
 {
  "batch": "cawide",
- "assembledAt": "2026-09-30T08:04:49.057Z",
+ "assembledAt": "2026-09-30T08:18:18.575Z",
  "universities": [
   {
    "key": "anu",
@@ -92,6 +92,13 @@
      "title": "ANU Policy Library - Policy - English language admission requirements and post-admission support",
      "retrievedAt": "2026-09-30T07:36:44.521Z",
      "hash": "3daddf846d312a2418bb214d89a8262eae76d5cc3182b0175e92da19fd55cff9"
+    },
+    {
+     "id": "s13",
+     "url": "https://study.anu.edu.au/apply/international-applications/indicative-entry-requirement/jordanian-general-secondary-education",
+     "title": "Jordanian General Secondary Education Certificate Examination (Tawjiha) | The Australian National University",
+     "retrievedAt": "2026-09-30T08:01:26.077Z",
+     "hash": "8599e06814979c5320187a144b2c7775a20bf1008a370c35c9d1bd5f42f7d145"
     }
    ],
    "english": [
@@ -277,6 +284,14 @@
        "notesAr": "شهادة الثانوية الأمريكية مع درجة SAT استرشادية 1170 أو ACT بدرجة 23 للرتبة 80.",
        "source": "s8",
        "quote": "80 | 1170 |"
+      },
+      "JORDAN_TAWJIHI": {
+       "minimumPercent": 95,
+       "subjects": [],
+       "notesEn": "Indicative Tawjihi score 95 for ANU rank 80 (the rank this degree requires).",
+       "notesAr": "الدرجة الاسترشادية في التوجيهي 95 للرتبة 80 (وهي الرتبة المطلوبة لهذا البرنامج).",
+       "source": "s13",
+       "quote": "80 | 95 |"
       }
      },
      "general": {
@@ -370,6 +385,14 @@
        "notesAr": "شهادة الثانوية الأمريكية مع درجة SAT استرشادية 1170 أو ACT بدرجة 23 للرتبة 80.",
        "source": "s8",
        "quote": "80 | 1170 |"
+      },
+      "JORDAN_TAWJIHI": {
+       "minimumPercent": 95,
+       "subjects": [],
+       "notesEn": "Indicative Tawjihi score 95 for ANU rank 80 (the rank this degree requires).",
+       "notesAr": "الدرجة الاسترشادية في التوجيهي 95 للرتبة 80 (وهي الرتبة المطلوبة لهذا البرنامج).",
+       "source": "s13",
+       "quote": "80 | 95 |"
       }
      },
      "general": {
@@ -1465,6 +1488,13 @@
      "title": "Bachelor of Medical Science / Doctor of Medicine - Study - The University of Queensland",
      "retrievedAt": "2026-09-30T07:32:16.858Z",
      "hash": "e7ba6ef324ffb03f41ff305e9ff5ac57dbfdbefe2d1d99c908b982f0aca22c0a"
+    },
+    {
+     "id": "s4",
+     "url": "https://study.uq.edu.au/study-options/programs/bachelor-computer-science-2559",
+     "title": "Bachelor of Computer Science - Study - The University of Queensland",
+     "retrievedAt": "2026-09-30T08:01:33.143Z",
+     "hash": "13250fed05337a01aabce1f5a0a5347845524e347aae19a922aa50bef31fffdb"
     }
    ],
    "english": [
@@ -1498,9 +1528,18 @@
      "nameEn": "Bachelor of Computer Science",
      "nameAr": "بكالوريوس علوم الحاسوب",
      "degree": "BCompSc",
-     "durationYears": null,
-     "url": "https://study.uq.edu.au/study-options/programs/bachelor-computer-science-2559/artificial-intelligence-artinc2559?year=2026",
-     "curricula": {},
+     "durationYears": 3,
+     "url": "https://study.uq.edu.au/study-options/programs/bachelor-computer-science-2559",
+     "curricula": {
+      "IB": {
+       "minimumPoints": 32,
+       "subjects": [],
+       "notesEn": "Entry score threshold (a guide based on the previous year): IB 32, equivalent to ATAR 84. Queensland prerequisites: English and Mathematical Methods.",
+       "notesAr": "حد درجة القبول (استرشادي بناء على العام السابق): 32 في البكالوريا الدولية، ويعادل 84 في ATAR. المتطلبات المسبقة في كوينزلاند: اللغة الإنجليزية والرياضيات (Mathematical Methods).",
+       "source": "s4",
+       "quote": "ENTRY SCORE THRESHOLD 84 ATAR / Rank 32 IB"
+      }
+     },
      "general": null,
      "previous": null
     },
@@ -3413,13 +3452,116 @@
      "hash": "26aed4b12a3a50c1e85895aacafed0f97b8d200dd05c063ae8250ad9a03b58fe",
      "waybackTimestamp": "20251006172207",
      "waybackHash": "7bf13251856fd03b1022ba85fdd3e3eada9b1143b01902365bcb078d31c0b967"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.tcd.ie/study/country/uae/",
+     "title": "United Arab Emirates | Trinity College Dublin",
+     "retrievedAt": "2026-09-30T08:01:44.620Z",
+     "hash": "80050c17d693b47c6493483467e0d7828403de9e83bc3bbf57fff452d5281e97"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.tcd.ie/study/country/india/",
+     "title": "India | Trinity College Dublin",
+     "retrievedAt": "2026-09-30T08:01:46.971Z",
+     "hash": "2add915ff92548135bc62b82284120763493673522749cdc2d81a4376831bb36"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.tcd.ie/study/english-language-requirements/",
+     "title": "English Language Requirements | Trinity College Dublin",
+     "retrievedAt": "2026-09-30T08:01:57.410Z",
+     "hash": "dd7300a96210354982fc25d6263b646d88582ffbc2e2d1fe0d95f703fc8b6f1e"
     }
    ],
-   "english": [],
-   "tests": [],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": "Band B (standard entry); some courses require Band A (7.0).",
+     "waiverNoteAr": "الفئة B (القبول القياسي)، وتشترط بعض البرامج الفئة A (7.0).",
+     "source": "s4",
+     "quote": "Band B (Standard entry) | UG & PG Standard requirements | 6.5 overall 6.0 in each band"
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 120,
+     "minComponent": 100,
+     "waiverNoteEn": "Band B.",
+     "waiverNoteAr": "الفئة B.",
+     "source": "s4",
+     "quote": "120 overall 100 in each subscore"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 4.5,
+     "minComponent": 4,
+     "waiverNoteEn": "Band B, TOEFL iBT after January 2026.",
+     "waiverNoteAr": "الفئة B، اختبار TOEFL iBT بعد يناير 2026.",
+     "source": "s4",
+     "quote": "4.5 overall 4.0 in each section"
+    },
+    {
+     "test": "PTE",
+     "minOverall": 69,
+     "minComponent": 59,
+     "waiverNoteEn": "Band B.",
+     "waiverNoteAr": "الفئة B.",
+     "source": "s4",
+     "quote": "69 overall 59 in each section"
+    }
+   ],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "SAT or ACT required with a US High School Diploma.",
+     "noteAr": "يُشترط SAT أو ACT مع شهادة الثانوية الأمريكية.",
+     "source": "s2",
+     "quote": "US High School Diploma with SAT or ACT"
+    }
+   ],
    "additional": [],
    "deadlines": [],
-   "curriculumRules": {},
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": false,
+     "subjects": [],
+     "notesEn": "Not accepted for direct entry. Accepted direct-entry qualifications for UAE applicants are A Levels, IB and US High School Diploma with SAT/ACT; the Thanawiya (80% overall) qualifies only for the International Foundation Programme.",
+     "notesAr": "لا تُقبل للقبول المباشر. المؤهلات المقبولة للقبول المباشر لطلاب الإمارات هي A Level والبكالوريا الدولية وشهادة الثانوية الأمريكية مع SAT/ACT، أما الثانوية العامة (بمعدل 80%) فتؤهل فقط لبرنامج السنة التأسيسية الدولية.",
+     "source": "s2",
+     "quote": "Thanawiya - 80% overall average, including relevant subjects"
+    },
+    "CBSE": {
+     "accepted": true,
+     "minimumPercent": 80,
+     "subjects": [],
+     "notesEn": "Overall average of 80% to 85% in six Grade XII subjects (minimum matriculation); course-specific requirements also apply.",
+     "notesAr": "معدل إجمالي من 80% إلى 85% في ست مواد من الصف الثاني عشر (الحد الأدنى للقبول)، مع تطبيق متطلبات كل برنامج.",
+     "source": "s3",
+     "quote": "Overall average of 80% - 85% in six subjects on Grade XII or if student did not take 6 subjects in Grade XII, in five subjects on Grade XII and one (different) subject on Grade X."
+    },
+    "ISC": {
+     "accepted": true,
+     "minimumPercent": 80,
+     "subjects": [],
+     "notesEn": "Same rule as CBSE.",
+     "notesAr": "القاعدة نفسها المطبقة على CBSE.",
+     "source": "s3",
+     "quote": "Overall average of 80% - 85% in six subjects on Grade XII or if student did not take 6 subjects in Grade XII, in five subjects on Grade XII and one (different) subject on Grade X."
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "subjects": [],
+     "notesEn": "US High School Diploma accepted with SAT or ACT.",
+     "notesAr": "تُقبل شهادة الثانوية الأمريكية مع SAT أو ACT.",
+     "source": "s2",
+     "quote": "US High School Diploma with SAT or ACT"
+    }
+   },
    "programs": [
     {
      "key": "tcd-computer-science-ba",
@@ -3787,12 +3929,105 @@
      "hash": "719c1dc1c7a9ab9de7d7a507cea49ab99df5bb3737a8336f45272f39ccd3306c",
      "waybackTimestamp": "20250907135815",
      "waybackHash": "6e49de8391ffd441aeb28e64754dbfc38fcca23a56fb59b161d8668a151e1fb8"
+    },
+    {
+     "id": "s2",
+     "url": "https://uwaterloo.ca/future-students/programs/software-engineering",
+     "title": "Software Engineering degree | Undergraduate Programs | University of Waterloo",
+     "retrievedAt": "2026-09-30T08:01:41.253Z",
+     "hash": "54a3e437784159a43fe68b58a59c1d15e06e9be450ab21d227756f7a0d09095e"
+    },
+    {
+     "id": "s3",
+     "url": "https://uwaterloo.ca/future-students/programs/data-science",
+     "title": "Data Science degree | Undergraduate Programs | University of Waterloo",
+     "retrievedAt": "2026-09-30T08:01:27.138Z",
+     "hash": "4f92c7d792d4e59ed0f9938e647a6cf4c5019994cab8bfc144d0607606b41802"
+    },
+    {
+     "id": "s4",
+     "url": "https://uwaterloo.ca/future-students/admissions/english-language-requirements",
+     "title": "English language requirements | Undergraduate Programs | University of Waterloo",
+     "retrievedAt": "2026-09-30T08:01:47.567Z",
+     "hash": "ad27e9cc6f10af4b2b489fd736a5cc150f7d30f04e2a542324956f649c17376b"
+    },
+    {
+     "id": "s5",
+     "url": "https://uwaterloo.ca/future-students/admissions/deadlines",
+     "title": "Application and document deadlines | Undergraduate Programs | University of Waterloo",
+     "retrievedAt": "2026-09-30T08:01:34.006Z",
+     "hash": "3efa3b4623f9ca02c6b1f1e703bb0883f7b36484c0973cce9eea7a9070b605fb"
     }
    ],
-   "english": [],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": "Writing and Speaking 6.5; Reading and Listening 6.0. One Skill Retake accepted.",
+     "waiverNoteAr": "الكتابة والتحدث 6.5، والقراءة والاستماع 6.0. يُقبل IELTS One Skill Retake.",
+     "source": "s4",
+     "quote": "6.5 overall 6.5 writing, 6.5 speaking, 6.0 reading, 6.0 listening"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 4.5,
+     "minComponent": 5,
+     "waiverNoteEn": "New TOEFL scale (tests from 21 January 2026).",
+     "waiverNoteAr": "مقياس TOEFL الجديد (للاختبارات اعتبارا من 21 يناير 2026).",
+     "source": "s4",
+     "quote": "Tests completed as of January 21, 2026 require 4.5 overall 5 in writing, 5 in speaking."
+    },
+    {
+     "test": "PTE",
+     "minOverall": 63,
+     "minComponent": 65,
+     "waiverNoteEn": "Writing and Speaking 65.",
+     "waiverNoteAr": "الكتابة والتحدث 65.",
+     "source": "s4",
+     "quote": "63 overall 65 writing, 65 speaking"
+    },
+    {
+     "test": "CAMBRIDGE",
+     "minOverall": 180,
+     "minComponent": 176,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s4",
+     "quote": "180 overall 176 writing, 176 reading, 176 speaking, 176 listening"
+    }
+   ],
    "tests": [],
-   "additional": [],
-   "deadlines": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "International students have the same deadlines.",
+     "noteAr": "للطلاب الدوليين المواعيد النهائية نفسها.",
+     "source": "s5",
+     "quote": "International students have the same deadlines as those listed above."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-02-01",
+     "labelEn": "Application deadline (non-Engineering programmes)",
+     "labelAr": "الموعد النهائي للتقديم (البرامج غير الهندسية)",
+     "source": "s5",
+     "quote": "Programs other than Engineering | February 1, 2027 | February 15, 2027"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-01-15",
+     "labelEn": "Application deadline (Engineering, incl. Software Engineering)",
+     "labelAr": "الموعد النهائي للتقديم (الهندسة، ومنها هندسة البرمجيات)",
+     "source": "s5",
+     "quote": "Engineering programs (other than Architecture) | January 15, 2027 | February 1, 2027"
+    }
+   ],
    "curriculumRules": {},
    "programs": [
     {
@@ -3816,6 +4051,221 @@
         "noteAr": "كلية الرياضيات؛ تُمنح درجة بكالوريوس علوم الحاسوب أو بكالوريوس الرياضيات في علوم الحاسوب، بنظام التعليم التعاوني أو النظام العادي.",
         "source": "s1",
         "quote": "Bachelor of Computer Science in Computer Science or Bachelor of Mathematics in Computer Science"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "waterloo-se",
+     "status": "EXISTS",
+     "nameEn": "Software Engineering, Bachelor of Software Engineering",
+     "nameAr": "هندسة البرمجيات، بكالوريوس هندسة البرمجيات",
+     "degree": "BSE",
+     "durationYears": null,
+     "url": "https://uwaterloo.ca/future-students/programs/software-engineering",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Admission Information Form (AIF) required.",
+        "noteAr": "يلزم تقديم نموذج معلومات القبول (AIF).",
+        "source": "s2",
+        "quote": "For all students The Admission Information Form is required for admission."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Programming experience (course or self-study) required.",
+        "noteAr": "يُشترط وجود خبرة في البرمجة (مقرر دراسي أو تعلم ذاتي).",
+        "source": "s2",
+        "quote": "You're required to have experience in a programming course (such as Grade 11 or 12 computing and/or information science or equivalent) or self-study"
+       },
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Online interview required for Engineering programmes.",
+        "noteAr": "مقابلة عبر الإنترنت مطلوبة لبرامج الهندسة.",
+        "source": "s5",
+        "quote": "Online interviews: required for admission to all Engineering programs (excluding Architecture)"
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "waterloo-ds",
+     "status": "EXISTS",
+     "nameEn": "Data Science (BCS or BMath)",
+     "nameAr": "علم البيانات (بكالوريوس علوم الحاسوب أو بكالوريوس الرياضيات)",
+     "degree": "BCS/BMath",
+     "durationYears": null,
+     "url": "https://uwaterloo.ca/future-students/programs/data-science",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "Awarded as a BCS or BMath in Data Science (Faculty of Mathematics).",
+        "noteAr": "تُمنح درجة بكالوريوس علوم الحاسوب أو بكالوريوس الرياضيات في علم البيانات (كلية الرياضيات).",
+        "source": "s3",
+        "quote": "Bachelor of Computer Science or a Bachelor of Mathematics in Data Science"
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "queens_university",
+   "website": "https://www.queensu.ca",
+   "applyVia": "OUAC",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.queensu.ca/admission/applying/competitive-average",
+     "title": "Undergraduate Competitive Averages | Queen's University",
+     "retrievedAt": "2026-09-30T08:01:52.289Z",
+     "hash": "774b6b065e1a96ed44bee6c462689004b05068b6be1e9b4cf513969255bc1edb"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.queensu.ca/admission/applicants/english-proficiency",
+     "title": "English Proficiency Requirements",
+     "retrievedAt": "2026-09-30T08:01:39.675Z",
+     "hash": "66a49a9a7bf03d1ace109f37919e20c8ab01bb6ab7b0beca7b820500cee1e100"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.queensu.ca/admission/applying/dates-deadlines",
+     "title": "Undergraduate Admission Deadlines | Queen's University",
+     "retrievedAt": "2026-09-30T08:01:42.709Z",
+     "hash": "051e32dda049379c92f40251655a99ed5a01ae542b3be9dde1e23b1fb93bdaa8"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s2",
+     "quote": "A score of 6.5 on Academic Module with no band below 6.0"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 4.5,
+     "minComponent": 4,
+     "waiverNoteEn": "New TOEFL scale.",
+     "waiverNoteAr": "مقياس TOEFL الجديد.",
+     "source": "s2",
+     "quote": "4.5 overall with no skill lower than 4.0."
+    },
+    {
+     "test": "PTE",
+     "minOverall": 60,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s2",
+     "quote": "Pearson Test of English Academic (PTE Academic) | Overall score of 60"
+    }
+   ],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-03-01",
+     "labelEn": "Application deadline (most programmes, incl. Computing and Engineering)",
+     "labelAr": "الموعد النهائي للتقديم (معظم البرامج، ومنها الحوسبة والهندسة)",
+     "source": "s3",
+     "quote": "March 1, 2027 Applications are due for all first-year full-time programs, except Commerce, Health Sciences, and Nursing."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2027-03-31",
+     "labelEn": "Documents and English test scores deadline",
+     "labelAr": "الموعد النهائي للمستندات ونتائج اختبار اللغة الإنجليزية",
+     "source": "s3",
+     "quote": "March 31, 2027 Deadline to submit all documents, including transcripts and English test scores."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "PRIORITY",
+     "date": "2026-11-20",
+     "labelEn": "Recommended OUAC date for Major Admission Award applicants",
+     "labelAr": "الموعد الموصى به عبر OUAC لمتقدمي منحة القبول الكبرى",
+     "source": "s3",
+     "quote": "November 20, 2026 To give you enough time to access the online Major Admission Award Application (MAA), we strongly recommend applying to Queen’s on OUAC by November 20."
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "queens-university-cs",
+     "status": "REPLACED",
+     "nameEn": "Computing (QD)",
+     "nameAr": "الحوسبة (QD)",
+     "degree": null,
+     "durationYears": null,
+     "url": "https://www.queensu.ca/admission/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "Minimum competitive average last year: mid 80s (high school percentage, prerequisite courses); may be higher.",
+        "noteAr": "أدنى معدل تنافسي في العام الماضي: منتصف الثمانينات (نسبة الثانوية في المواد المطلوبة)، وقد يكون أعلى.",
+        "source": "s1",
+        "quote": "Computing (QD) | Mid 80s |"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "queens-university-eng",
+     "status": "EXISTS",
+     "nameEn": "Smith Engineering, Engineering and Applied Science (QE)",
+     "nameAr": "هندسة سميث، الهندسة والعلوم التطبيقية (QE)",
+     "degree": null,
+     "durationYears": null,
+     "url": "https://smithengineering.queensu.ca/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "Minimum competitive average last year: mid 80s; Electrical and Computing stream and Mechatronics: high 80s.",
+        "noteAr": "أدنى معدل تنافسي في العام الماضي: منتصف الثمانينات، ومسار الكهرباء والحوسبة والميكاترونكس: أواخر الثمانينات.",
+        "source": "s1",
+        "quote": "Smith Engineering, Engineering and Applied Science (QE) | Mid 80s |"
        }
       ],
       "source": "s1"
