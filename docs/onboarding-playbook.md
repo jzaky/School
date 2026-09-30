@@ -26,9 +26,10 @@ Send this list about a week before. Every template is downloadable from **School
 
 1. **School details**: official name in English and Arabic, short name, emirate, regulator (KHDA, ADEK, SPEA or MoE), curricula taught, school days, time zone.
 2. **Logo**: PNG or SVG, transparent background, at least 512 pixels wide. **Brand colors**: two hex codes (main and accent).
-3. **Staff list** (staff template): name in English (Arabic optional), work email, role (teacher, counselor, registrar, principal, and so on), department, job title, subjects taught.
+3. **Staff list** (staff template): name in English (Arabic optional), work email, roles (teacher, counselor, registrar, principal, and so on; several allowed), department, job title, subjects taught, grades taught (for example 9-12).
 4. **Students and guardians** (student template): student number, names in English and Arabic, grade, section, date of birth, and for each guardian: name, email, phone, relationship.
-5. **Classes and enrollments** (classes template): class code, name, subject, grade, section, teacher email, room, capacity; and which students are in each class (class code plus student number).
+5. **Classes and enrollments** (classes template): class code, name, subject, grade, section, teacher email, room, capacity, homeroom yes or no; and which students are in each class (enrollments template: class code plus student number, or a student numbers column in the classes file).
+   Optional: **subject choices** (one column per option subject) for schools that run option blocks.
 6. **Calendar**: first and last day of each term, holidays, exam weeks. (UAE public holidays are pre-filled; Islamic dates are estimates to confirm.)
 7. **Bell schedule**: period start and end times (a standard UAE schedule is pre-filled).
 8. **Letters**: wording and signatory for the official letters they issue (enrollment, good conduct, fee, transfer). The defaults can be used as they are.
@@ -78,7 +79,8 @@ After the call: the school sends the staff invitations and the family letter or 
 
 - New schools get a complete working configuration automatically; you do not build anything per school.
 - The school's own administrators change everything: names, logo, colors, services, forms, approval routes, letters, notification texts, subjects, departments, roles, modules, calendar.
-- Imports are idempotent: re-running a file updates rather than duplicates.
+- Imports are idempotent: re-running a file updates rather than duplicates. A staff re-import adds roles and subjects but never removes them, so a file can never lock anyone out. Every import shows a preview with row-level errors before anything is saved, and is kept in the import history.
+- Letters, report cards, exam timetables and the join poster carry the school's own logo, name, address and seal automatically.
 - The university requirements catalog is shared by all schools and refreshes itself weekly from official pages; changes wait in a review queue.
 - A GitHub job checks the live site every morning at 06:45 Dubai time for every role, in both languages, on desktop and phone.
 - Deploys only happen when app code changes.
