@@ -6,7 +6,7 @@ import type { Ctx } from "@/server/context";
 import type { Permission } from "@/server/identity/permissions";
 import { visibleStudentIds } from "@/server/access/student-access";
 import { EngineAccessError, type EngineActor } from "@/server/pathway-engine/access";
-import { approvePlan, computeMatches, generatePlan, loadStudentProfile, requestPlanChanges, submitPlan } from "@/server/pathway-engine/service";
+import { approvePlan, computeMatches, generatePlan, getCurrentPlan, loadStudentProfile, requestPlanChanges, submitPlan } from "@/server/pathway-engine/service";
 import { seedGlobalCatalog } from "../../prisma/seed/catalog";
 import { wipeTenant } from "../../prisma/seed/lib";
 import { ownerClient, uid } from "./helpers";
@@ -99,6 +99,13 @@ describe("pathway engine service", () => {
     const events = await owner.auditEvent.findMany({ where: { orgId, entityType: "StudentCoursePlan", entityId: planId }, orderBy: { createdAt: "asc" } });
     expect(events.map((e) => e.action)).toEqual(expect.arrayContaining(["pathways.plan.generate", "pathways.plan.submit", "pathways.plan.approve"]));
     expect(events.find((e) => e.action === "pathways.plan.approve")?.actorId).toBe("m-counselor");
+  });
+
+  it("a plan waiting for approval is the current plan even when a newer draft exists", async () => {
+    const staff = actor({ perms: ["pathways.view"] });
+    const proposed = await owner.studentCoursePlan.create({ data: { orgId, studentId: studentB, name: "Submitted", status: "PROPOSED" } });
+    await owner.studentCoursePlan.create({ data: { orgId, studentId: studentB, name: "Newer draft", status: "DRAFT" } });
+    expect((await getCurrentPlan(staff, studentB))?.id).toBe(proposed.id);
   });
 
   it("a parent cannot load another family's student", async () => {

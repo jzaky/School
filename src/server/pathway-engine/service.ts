@@ -469,8 +469,11 @@ export async function runWhatIf(actor: EngineActor, studentId: string, input: { 
 
 const ACTIVE_PLAN: CoursePlanStatus[] = ["DRAFT", "PROPOSED", "APPROVED"];
 
+/** The plan people see: one waiting for approval comes first (so the counselor always sees what was
+ * submitted), otherwise the most recently updated active plan. */
 async function currentPlanRow(db: TenantDb, orgId: string, studentId: string) {
-  return db.studentCoursePlan.findFirst({ where: { orgId, studentId, status: { in: ACTIVE_PLAN } }, orderBy: { updatedAt: "desc" } });
+  const proposed = await db.studentCoursePlan.findFirst({ where: { orgId, studentId, status: "PROPOSED" }, orderBy: { updatedAt: "desc" } });
+  return proposed ?? db.studentCoursePlan.findFirst({ where: { orgId, studentId, status: { in: ACTIVE_PLAN } }, orderBy: { updatedAt: "desc" } });
 }
 
 export type PlanView = {
