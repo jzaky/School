@@ -5517,7 +5517,13 @@
       "PORTFOLIO": "ملف أعمال",
       "AUDITION": "تجربة أداء",
       "SUPPLEMENTAL": "أسئلة إضافية",
-      "NOTE": "ملاحظة للتحقق منها مع الجامعة"
+      "NOTE": "ملاحظة للتحقق منها مع الجامعة",
+      "OTHER": "من صفحة الجامعة",
+      "ADMISSIONS_TEST": "اختبار القبول",
+      "WORK_EXPERIENCE": "خبرة عملية",
+      "HEALTH_CHECK": "فحص صحي",
+      "NOT_ACCEPTED": "غير مقبول للقبول المباشر",
+      "FOUNDATION_REQUIRED": "السنة التأسيسية"
     },
     "next": {
       "label": "الخطوة التالية",

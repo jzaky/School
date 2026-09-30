@@ -25,6 +25,10 @@ RUN npm ci --no-audit --no-fund
 FROM deps AS build
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
+# Railway passes the commit as a build argument. It becomes the Next.js deployment id, so a browser
+# still holding a page from the previous deploy reloads instead of mixing old and new versions.
+ARG RAILWAY_GIT_COMMIT_SHA
+ENV NEXT_DEPLOYMENT_ID=${RAILWAY_GIT_COMMIT_SHA}
 COPY . .
 RUN mkdir -p public \
   && npx prisma generate \

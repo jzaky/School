@@ -5517,7 +5517,13 @@
       "PORTFOLIO": "Portfolio",
       "AUDITION": "Audition",
       "SUPPLEMENTAL": "Supplemental questions",
-      "NOTE": "Note to check with the university"
+      "NOTE": "Note to check with the university",
+      "OTHER": "From the university's page",
+      "ADMISSIONS_TEST": "Admissions test",
+      "WORK_EXPERIENCE": "Work experience",
+      "HEALTH_CHECK": "Health check",
+      "NOT_ACCEPTED": "Not accepted for direct entry",
+      "FOUNDATION_REQUIRED": "Foundation year"
     },
     "next": {
       "label": "Next step",

@@ -562,6 +562,8 @@ async function writePlan(actor: EngineActor, studentId: string, existingId: stri
     status: "DRAFT" as const,
     approvedById: null,
     approvedAt: null,
+    // A regenerated plan is a new proposal: an earlier counselor note was about the old one.
+    counselorNote: null,
   };
   let planId = existingId;
   if (planId) {
