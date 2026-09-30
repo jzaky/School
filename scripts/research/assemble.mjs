@@ -51,7 +51,7 @@ writeFileSync(
     'import type { OfficialBatch } from "../official";',
     ...batches.map((b, i) => `import ${ids[i]} from "./${b}.json";`),
     "",
-    `export const OFFICIAL_BATCHES: OfficialBatch[] = [${ids.map((i) => `${i} as OfficialBatch`).join(", ")}];`,
+    `export const OFFICIAL_BATCHES: OfficialBatch[] = [${ids.map((i) => `${i} as unknown as OfficialBatch`).join(", ")}];`,
     "",
   ].join("\n"),
 );

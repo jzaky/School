@@ -7,4 +7,4 @@ import uk2 from "./uk2.json";
 import us from "./us.json";
 import world from "./world.json";
 
-export const OFFICIAL_BATCHES: OfficialBatch[] = [cawide as OfficialBatch, uae as OfficialBatch, uk1 as OfficialBatch, uk2 as OfficialBatch, us as OfficialBatch, world as OfficialBatch];
+export const OFFICIAL_BATCHES: OfficialBatch[] = [cawide as unknown as OfficialBatch, uae as unknown as OfficialBatch, uk1 as unknown as OfficialBatch, uk2 as unknown as OfficialBatch, us as unknown as OfficialBatch, world as unknown as OfficialBatch];
