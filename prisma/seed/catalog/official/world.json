@@ -1,6 +1,6 @@
 {
  "batch": "world",
- "assembledAt": "2026-09-30T02:36:29.172Z",
+ "assembledAt": "2026-09-30T08:00:45.109Z",
  "universities": [
   {
    "key": "epfl",
@@ -788,7 +788,7 @@
   {
    "key": "rwth_aachen",
    "website": "https://www.rwth-aachen.de",
-   "applyVia": "UNI_ASSIST",
+   "applyVia": "DIRECT",
    "sources": [
     {
      "id": "s1",
@@ -810,6 +810,13 @@
      "title": "Mechanical Engineering B.Sc. | RWTH Aachen University",
      "retrievedAt": "2026-09-29T23:50:57.108Z",
      "hash": "594619c111c255081b4c4e553e42b3bb9218a2d974dd3a9e149a13294d5730a8"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.rwth-aachen.de/cms/root/studium/Vor-dem-Studium/~egg/Bewerbung-um-einen-Studienplatz/lidx/1/",
+     "title": "Application for Admission | RWTH Aachen University",
+     "retrievedAt": "2026-09-30T07:37:45.142Z",
+     "hash": "6196fd2370aafe23ccfb1033e52d6f28d5734c9fe8cb2cab9fe1c16315406740"
     }
    ],
    "english": [],
@@ -830,6 +837,14 @@
      "noteAr": "المشاركة في التقييم الذاتي الإلكتروني للجامعة إلزامية، ويُطلب الإثبات عند التسجيل لا عند التقديم.",
      "source": "s1",
      "quote": "You need to submit proof that you have taken the self assessment when you enroll. It is not required at the time of application."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Applications go directly to RWTH through its RWTHonline portal (not uni-assist). Applicants from outside the EU/EEA must always apply by the deadline.",
+     "noteAr": "يُقدَّم الطلب مباشرة إلى الجامعة عبر بوابة RWTHonline (وليس عبر uni-assist). ويجب على المتقدمين من خارج الاتحاد الأوروبي والمنطقة الاقتصادية الأوروبية التقديم دائما قبل الموعد النهائي.",
+     "source": "s4",
+     "quote": "For all academic programs, the process begins with submitting an application through RWTHonline by the specified deadlines."
     }
    ],
    "deadlines": [],
@@ -906,6 +921,663 @@
      "previous": null
     }
    ]
+  },
+  {
+   "key": "tu_munich",
+   "website": "https://www.tum.de",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.tum.de/en/studies/degree-programs/detail/informatics-bachelor-of-science-bsc",
+     "title": "Informatics - Bachelor of Science (B.Sc.) - TUM",
+     "retrievedAt": "2026-09-30T07:36:53.810Z",
+     "hash": "5cd1882aaf9e02f96c342cef3f1d0d1ea6a93bac490a0725ed5fedf9085a894b"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.tum.de/studium/bewerbung/infoportal-bewerbung/bewerberinnen-mit-international-baccalaureate",
+     "title": "Bewerbende mit International Baccalaureate Diplom - TUM",
+     "retrievedAt": "2026-09-30T07:36:02.898Z",
+     "hash": "301300785f66e4fb275e6578ab1887eed4277baaffc5935bd10ba88c23e95d44"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Apply through the TUMonline portal; applicants with an international school qualification generally need a uni-assist preliminary review (VPD) first.",
+     "noteAr": "يُقدَّم الطلب عبر بوابة TUMonline، ويحتاج حاملو المؤهلات المدرسية الدولية عادة إلى مراجعة مسبقة للوثائق (VPD) عبر uni-assist أولا.",
+     "source": "s1",
+     "quote": "Generally, applicants with an international higher education entrance qualification must have their documents reviewed in advance through uni-assist."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Winter semester application period: 15 May to 15 July.",
+     "noteAr": "فترة التقديم للفصل الشتوي: من 15 مايو إلى 15 يوليو.",
+     "source": "s1",
+     "quote": "Application period for the winter semester: 15.05. - 15.07."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Tuition for students from non-EU (third) countries: EUR 3,000 per semester for this programme; waivers and scholarships exist.",
+     "noteAr": "الرسوم الدراسية للطلاب من خارج الاتحاد الأوروبي: 3000 يورو لكل فصل دراسي لهذا البرنامج، مع وجود إعفاءات ومنح.",
+     "source": "s1",
+     "quote": "The tuition fees for international students from third countries for this degree program are 3,000 euros per semester."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {
+    "IB": {
+     "notesEn": "IB Diploma holders must have their diploma checked against the German KMK rules via a uni-assist preliminary review (VPD) or a Bavarian recognition notice (ZAST) before applying. The IB counts as proof of German only with German A at Higher Level.",
+     "notesAr": "يجب على حاملي دبلوم البكالوريا الدولية التحقق من مطابقة شهادتهم لقواعد مؤتمر وزراء التعليم الألماني عبر مراجعة مسبقة من uni-assist أو قرار اعتراف من مكتب بافاريا قبل التقديم. ولا تُعد البكالوريا الدولية إثباتا للغة الألمانية إلا مع مادة German A في المستوى العالي.",
+     "source": "s2",
+     "quote": "Absolventen des IB Diploma müssen vor einer Bewerbung ihren Abschluss prüfen lassen, ob dieser den Vorgaben der Kultusministerkonferenz entspricht.",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "tum-informatics-bsc",
+     "status": "EXISTS",
+     "nameEn": "Informatics BSc",
+     "nameAr": "بكالوريوس العلوم في المعلوماتية",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.tum.de/en/studies/degree-programs/detail/informatics-bachelor-of-science-bsc",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Taught in German; proof of German must be submitted before the application deadline.",
+        "noteAr": "الدراسة باللغة الألمانية، ويجب تقديم إثبات إتقان الألمانية قبل الموعد النهائي للتقديم.",
+        "source": "s1",
+        "quote": "You need sufficient German language skills if you wish to apply for this program."
+       },
+       {
+        "kind": "ADMISSIONS_TEST",
+        "required": false,
+        "noteEn": "Two-stage aptitude assessment: school grades and subject grades are scored; applicants are admitted, rejected or invited to a written test.",
+        "noteAr": "تقييم أهلية من مرحلتين: تُحتسب نقاط للدرجات المدرسية ودرجات المواد، ثم يُقبل المتقدم أو يُرفض أو يُدعى إلى اختبار كتابي.",
+        "source": "s1",
+        "quote": "Depending on the amount of points accumulated, applicants are either immediately admitted, rejected, or invited to take a written test."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "ie_university",
+   "website": "https://www.ie.edu",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ie.edu/university/admissions/",
+     "title": "IE University Admission",
+     "retrievedAt": "2026-09-30T07:37:12.211Z",
+     "hash": "414bc50035fff5c30a6ab8308833c128b4038ff6f43ff253d81e6ffa286f7dec"
+    }
+   ],
+   "english": [],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "OPTIONAL",
+     "minScore": null,
+     "noteEn": "The IE Admissions Test is an alternative to standardized tests such as the SAT.",
+     "noteAr": "اختبار القبول في الجامعة بديل عن الاختبارات المعيارية مثل SAT.",
+     "source": "s1",
+     "quote": "This rigorous exam serves as a flexible alternative to standardized tests such as the SAT or LNAT."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "ADMISSIONS_TEST",
+     "required": true,
+     "noteEn": "IE Admissions Test in English (verbal, logical and numerical reasoning).",
+     "noteAr": "اختبار القبول في الجامعة باللغة الإنجليزية (الاستدلال اللفظي والمنطقي والعددي).",
+     "source": "s1",
+     "quote": "IE University’s Admissions Test is conducted exclusively in English and evaluates verbal, logical, and numerical reasoning skills."
+    },
+    {
+     "kind": "ADMISSIONS_TEST",
+     "required": false,
+     "noteEn": "Applicants to School of Science and Technology programmes (for example data programmes) also take a Mathematics Assessment.",
+     "noteAr": "يؤدي المتقدمون لبرامج كلية العلوم والتكنولوجيا (مثل برامج البيانات) أيضا تقييما في الرياضيات.",
+     "source": "s1",
+     "quote": "Applicants to programs within the School of Science and Technology will also complete a Mathematics Assessment as part of the admissions process."
+    },
+    {
+     "kind": "INTERVIEW",
+     "required": true,
+     "noteEn": "Online assessment with video and written questions, then a personal interview.",
+     "noteAr": "تقييم إلكتروني بأسئلة مصورة وكتابية، ثم مقابلة شخصية.",
+     "source": "s1",
+     "quote": "The Admissions Committee will also invite you to a personal interview for further evaluation."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": []
+  },
+  {
+   "key": "sciences_po",
+   "website": "https://www.sciencespo.fr",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.sciencespo.fr/en/admissions-and-financial-aid/undergraduate-studies/",
+     "title": "Undergraduate Admissions | Sciences Po",
+     "retrievedAt": "2026-09-30T07:36:22.390Z",
+     "hash": "1d4e19101058987c7622aa75e74e9913d2ac06483a245e5fdba49c5a36a46026"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.sciencespo.fr/fr/actualites/candidats-tout-savoir-sur-les-admissions-en-bachelor-par-la-voie-dacces-internationale-po/",
+     "title": "Admissions en bachelor par la voie d'acces internationale pour la rentree 2027 | Sciences Po",
+     "retrievedAt": "2026-09-30T07:41:25.128Z",
+     "hash": "30013990a03b7348a56853d6bb6d2da6e6a15bf5d60405969db9bf82af003a01"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Students with a foreign (non-French) secondary diploma apply through the international route on the Sciences Po portal, not Parcoursup.",
+     "noteAr": "يتقدم الطلاب الحاصلون على شهادة ثانوية أجنبية (غير فرنسية) عبر المسار الدولي في بوابة الجامعة وليس عبر Parcoursup.",
+     "source": "s2",
+     "quote": "Les lycéens préparant un diplôme d’études secondaires étranger doivent candidater via la voie d’accès internationale en complétant leur dossier de candidature sur le portail Sciences Po et selon un calendrier défini par Sciences Po."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Only one application to the undergraduate programme is allowed.",
+     "noteAr": "يُسمح بطلب واحد فقط لبرنامج البكالوريوس.",
+     "source": "s1",
+     "quote": "Candidates may only submit one application to the Sciences Po undergraduate programme."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-03-01",
+     "labelEn": "International route closes (23:59 Paris time)",
+     "labelAr": "إغلاق المسار الدولي للتقديم (الساعة 23:59 بتوقيت باريس)",
+     "source": "s2",
+     "quote": "Les candidatures sont ouvertes jusqu’au 1er mars 2027, 23h59 (heure de Paris)."
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "sciences-po-ir",
+     "status": "REPLACED",
+     "nameEn": "Bachelor's Degree (Undergraduate College) BA",
+     "nameAr": "درجة البكالوريوس (الكلية الجامعية) في العلوم الاجتماعية والإنسانية",
+     "degree": "BA",
+     "durationYears": 3,
+     "url": "https://www.sciencespo.fr/en/admissions-and-financial-aid/undergraduate-studies/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Sciences Po has no standalone International Relations bachelor; its multidisciplinary social sciences Bachelor's degree runs three years on one of seven campuses.",
+        "noteAr": "لا تقدم الجامعة بكالوريوس مستقلا في العلاقات الدولية، بل بكالوريوس متعدد التخصصات في العلوم الاجتماعية مدته ثلاث سنوات في أحد سبعة أحرم جامعية.",
+        "source": "s1",
+        "quote": "Sciences Po Undergraduate College is a three-year first cycle education, made up of a network of seven campuses."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Eligible if currently preparing a French Baccalaureate or an equivalent foreign secondary diploma for the first time.",
+        "noteAr": "يحق التقديم لمن يستعد حاليا لنيل البكالوريا الفرنسية أو شهادة ثانوية أجنبية معادلة للمرة الأولى.",
+        "source": "s1",
+        "quote": "Accordingly, candidates are eligible to enter Sciences Po in the first year of the Undergraduate College if they are currently enrolled in study for a French Baccalaureate, or an equivalent foreign diploma of secondary education."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "cuhk",
+   "website": "https://www.cuhk.edu.hk",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://admission.cuhk.edu.hk/",
+     "title": "Homepage - CUHK Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T07:36:01.119Z",
+     "hash": "27b903992222e1dd8728cb5a84f64defe582294e46d82eebe835159f9e8a1b21"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.cuhk.edu.hk/english/faculties/medicine.html",
+     "title": "Faculty of Medicine | Faculties | CUHK",
+     "retrievedAt": "2026-09-30T07:37:06.420Z",
+     "hash": "087394a10e44dbb0d25632ae0d32678366a028498ed2255a5aee5a26add06392",
+     "waybackTimestamp": "20251111211224",
+     "waybackHash": "3a7121e86f82b044761c5d13cfc69ae2836bd238a5a14e92a3c774778eaf6778"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2026-10-02",
+     "labelEn": "Applications open",
+     "labelAr": "فتح باب التقديم",
+     "source": "s1",
+     "quote": "Applications will officially open on 2 October 2026."
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "cuhk-med",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Medicine and Bachelor of Surgery MBChB",
+     "nameAr": "بكالوريوس الطب وبكالوريوس الجراحة",
+     "degree": "MBChB",
+     "durationYears": null,
+     "url": "https://www.cuhk.edu.hk/english/faculties/medicine.html",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "CUHK's medical degree is the MB ChB (not MBBS), with a system-based integrated curriculum and early clinical exposure. Entry requirements not yet extracted.",
+        "noteAr": "الشهادة الطبية في الجامعة هي MB ChB (وليست MBBS)، بمنهج متكامل قائم على الأجهزة الحيوية وتعرض سريري مبكر. لم تُستخرج شروط القبول بعد.",
+        "source": "s2",
+        "quote": "The MB ChB programme adopts a system-based integrated curriculum which emphasizes early clinical exposure"
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "hku",
+   "website": "https://www.hku.hk",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://admissions.hku.hk/",
+     "title": "Home | Admissions Office, the Registry, HKU",
+     "retrievedAt": "2026-09-30T07:37:41.284Z",
+     "hash": "52a8c4f2a9f530a9e81a25c61825be1129e547355c4ae1f5807326382ec0acb2"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.hku.hk/en/academics/faculties/law",
+     "title": "Faculty of Law | HKU",
+     "retrievedAt": "2026-09-30T07:37:14.350Z",
+     "hash": "a14605200bb5c77cfbaf644401a5cf6b2a21fe3f9fa1a649f7b4434c8ecfc358"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.hku.hk/en/academics/faculties/medicine",
+     "title": "Li Ka Shing Faculty of Medicine | HKU",
+     "retrievedAt": "2026-09-30T07:36:12.344Z",
+     "hash": "9ed4a59c3083641d851b6b724925aac7b56c3ce96364cfb30f0f0520ffeb3a68"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "International applicants apply through the international (non-JUPAS) admissions scheme.",
+     "noteAr": "يتقدم الطلاب الدوليون عبر نظام القبول الدولي (غير JUPAS).",
+     "source": "s1",
+     "quote": "Application through international/ non-JUPAS admissions scheme is now open."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "hku-law",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Laws LLB",
+     "nameAr": "بكالوريوس القانون",
+     "degree": "LLB",
+     "durationYears": null,
+     "url": "https://www.hku.hk/en/academics/faculties/law",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "HKU Law offers the LLB and double degrees with the LLB. Entry requirements not yet extracted.",
+        "noteAr": "تقدم كلية القانون بكالوريوس القانون LLB ودرجات مزدوجة معه. لم تُستخرج شروط القبول بعد.",
+        "source": "s2",
+        "quote": "LLB, BBA(Law)&LLB, BSocSc (Govt & Laws)&LLB, BA&LLB, BSc&LLB"
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "hku-med",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Medicine and Bachelor of Surgery MBBS",
+     "nameAr": "بكالوريوس الطب وبكالوريوس الجراحة",
+     "degree": "MBBS",
+     "durationYears": null,
+     "url": "https://www.hku.hk/en/academics/faculties/medicine",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "HKUMed offers the MBBS. Entry requirements not yet extracted.",
+        "noteAr": "تقدم كلية الطب برنامج MBBS. لم تُستخرج شروط القبول بعد.",
+        "source": "s3",
+        "quote": "MBBS & MBBS (Distinguished MedScholar), MBBS (Graduate Entry)"
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "psut",
+   "website": "https://www.psut.edu.jo",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.psut.edu.jo/en/entry-requirements-and-fees-bachelor-degree-of-computer-science",
+     "title": "Bachelor's Degree in Computer Science - PSUT",
+     "retrievedAt": "2026-09-30T07:37:27.930Z",
+     "hash": "88098a5be3e94942e79c7e1fbf2ec6a1d309958dd50e541594a355f103fae0eb",
+     "waybackTimestamp": "20251010091811",
+     "waybackHash": "c4dcc15eefb12d86576140b822e9065f9372ab01703c9fd45ed949b7a8188735"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.psut.edu.jo/en/entry-requirements-and-fees-bachelor-degree-of-cyber-security",
+     "title": "Bachelor's Degree in Cyber Security - PSUT",
+     "retrievedAt": "2026-09-30T07:38:23.727Z",
+     "hash": "6ab08506fb48e4b93edbad760f16f503f43ced1e28b5a2b5d6d11336ffd23faf",
+     "waybackTimestamp": "20250912102233",
+     "waybackHash": "fc861f13f96fc03f02f1d67851757f6a904ae21ad6df755acb82d3bbdda6cc48"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.psut.edu.jo/en/entry-requirements-and-fees-bachelor-degree-of-data-science-and-artificial-intelligence",
+     "title": "Bachelor's Degree in Data Science and Artificial Intelligence - PSUT",
+     "retrievedAt": "2026-09-30T07:36:26.452Z",
+     "hash": "e0c1ed7398af328b63156d9087af9022c57fdf6c5ba7472e099fb27f7dfc17e4"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.psut.edu.jo/en/entry-requirements-and-fees",
+     "title": "Entry Requirements - PSUT",
+     "retrievedAt": "2026-09-30T07:36:25.146Z",
+     "hash": "a56045bc27c7424d6e76dd26521518f50fc621edc1d9b337674fd3d37b97f365"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "ADMISSIONS_TEST",
+     "required": true,
+     "noteEn": "Final acceptance requires meeting the competitive criteria and passing PSUT's own admission exam.",
+     "noteAr": "يتطلب القبول النهائي استيفاء معايير المنافسة واجتياز امتحان القبول الذي تعقده الجامعة.",
+     "source": "s4",
+     "quote": "Rather, the student is accepted as a final acceptance if the student meets the competition criteria and passes the admission exam held by the university."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Admission is competitive; the minimum average is announced by the university each year for each programme.",
+     "noteAr": "القبول تنافسي، وتعلن الجامعة الحد الأدنى للمعدل كل عام لكل برنامج.",
+     "source": "s4",
+     "quote": "The student’s average should not be lower than the minimum average announced by the university to compete for admission in the current academic year for the desired program."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {
+    "JORDAN_TAWJIHI": {
+     "accepted": true,
+     "notesEn": "Jordanian high school diploma (Tawjihi) or equivalent; the minimum average is announced each year.",
+     "notesAr": "شهادة الثانوية العامة الأردنية (التوجيهي) أو ما يعادلها، ويُعلن الحد الأدنى للمعدل سنويا.",
+     "source": "s4",
+     "quote": "The student must have a Jordanian high school diploma or its equivalent.",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "psut-computer-science-bsc",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc",
+     "nameAr": "بكالوريوس علم الحاسوب",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.psut.edu.jo/en/entry-requirements-and-fees-bachelor-degree-of-computer-science",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "ADMISSIONS_TEST",
+        "required": true,
+        "noteEn": "Final acceptance requires passing PSUT's admission exam.",
+        "noteAr": "يتطلب القبول النهائي اجتياز امتحان القبول في الجامعة.",
+        "source": "s1",
+        "quote": "Rather, the student is accepted as a final acceptance if the student meets the competition criteria and passes the admission exam held by the university."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "psut-cyber",
+     "status": "EXISTS",
+     "nameEn": "Cyber Security BSc",
+     "nameAr": "بكالوريوس الأمن السيبراني",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.psut.edu.jo/en/entry-requirements-and-fees-bachelor-degree-of-cyber-security",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "ADMISSIONS_TEST",
+        "required": true,
+        "noteEn": "Final acceptance requires passing PSUT's admission exam.",
+        "noteAr": "يتطلب القبول النهائي اجتياز امتحان القبول في الجامعة.",
+        "source": "s2",
+        "quote": "Rather, the student is accepted as a final acceptance if the student meets the competition criteria and passes the admission exam held by the university."
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "psut-ds",
+     "status": "REPLACED",
+     "nameEn": "Data Science and Artificial Intelligence BSc",
+     "nameAr": "بكالوريوس علم البيانات والذكاء الاصطناعي",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.psut.edu.jo/en/entry-requirements-and-fees-bachelor-degree-of-data-science-and-artificial-intelligence",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "ADMISSIONS_TEST",
+        "required": true,
+        "noteEn": "Final acceptance requires passing PSUT's admission exam.",
+        "noteAr": "يتطلب القبول النهائي اجتياز امتحان القبول في الجامعة.",
+        "source": "s3",
+        "quote": "Rather, the student is accepted as a final acceptance if the student meets the competition criteria and passes the admission exam held by the university."
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "university_of_amsterdam",
+   "website": "https://www.uva.nl",
+   "applyVia": "STUDIELINK",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.uva.nl/en/programmes/bachelors/psychology/psychology.html",
+     "title": "Bachelor's Psychology - University of Amsterdam",
+     "retrievedAt": "2026-09-30T07:37:27.600Z",
+     "hash": "6fd7d3028b7963bca324bfb96adaade5ad120e110273046a999510e3907d3c60",
+     "waybackTimestamp": "20251215182851",
+     "waybackHash": "3ab372a2b22ec3b8868842ac34e2c172f79613d8550be4db31327fc7500f2bfc"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-01-15",
+     "labelEn": "Psychology (numerus fixus): apply for selection",
+     "labelAr": "علم النفس (عدد مقاعد محدود): التقديم لإجراءات الاختيار",
+     "source": "s1",
+     "quote": "This Bachelor's programme has a numerus fixus. This means that you need to apply for the selection procedure by 15 January at the latest."
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "uva-psychology-bsc",
+     "status": "EXISTS",
+     "nameEn": "Psychology BSc",
+     "nameAr": "بكالوريوس العلوم في علم النفس",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.uva.nl/en/programmes/bachelors/psychology/psychology.html",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Numerus fixus with 300 places on the English track; selection procedure, apply by 15 January.",
+        "noteAr": "عدد مقاعد محدود بـ 300 مقعد في المسار الإنجليزي، مع إجراءات اختيار، والتقديم قبل 15 يناير.",
+        "source": "s1",
+        "quote": "The programme has 300 places available for the English track."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "180 EC over 36 months, English or Dutch track.",
+        "noteAr": "180 وحدة ECTS على مدى 36 شهرا، بمسار إنجليزي أو هولندي.",
+        "source": "s1",
+        "quote": "180 EC ECTS, 36 months"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "ntu",
+   "website": "https://www.ntu.edu.sg",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ntu.edu.sg/admissions/undergraduate",
+     "title": "Undergraduate | NTU Singapore",
+     "retrievedAt": "2026-09-30T07:42:14.845Z",
+     "hash": "825d2e558ad56923f35b06811d04ec9bd4f56befc9e08b37f99e65634fed00c8"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2026-10-15",
+     "labelEn": "Applications open for international qualifications (including IB)",
+     "labelAr": "فتح باب التقديم لحاملي المؤهلات الدولية (بما فيها البكالوريا الدولية)",
+     "source": "s1",
+     "quote": "15 Oct 2026 | Application for AY2027 opens for students with international qualifications. (including IB Diploma)"
+    }
+   ],
+   "curriculumRules": {},
+   "programs": []
   }
  ]
 }

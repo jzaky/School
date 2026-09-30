@@ -1,6 +1,6 @@
 {
  "batch": "uk1",
- "assembledAt": "2026-09-30T02:36:28.814Z",
+ "assembledAt": "2026-09-30T08:00:44.703Z",
  "universities": [
   {
    "key": "bath",
@@ -1055,7 +1055,31 @@
       ],
       "source": "s9"
      },
-     "previous": null
+     "previous": {
+      "asOf": "2025-09-11",
+      "curricula": {
+       "BRITISH": {
+        "gradeProfile": "A*AA",
+        "notesEn": "2026 entry page: A*AA (predicted AAA); now AAA (predicted AAB).",
+        "notesAr": "صفحة دخول 2026: A*AA (متوقع AAA)؛ والآن AAA (متوقع AAB).",
+        "source": "s9",
+        "quote": "A*AA with predicted AAA including Chemistry and a second science from Biology/Physics/Maths.",
+        "wayback": true
+       },
+       "IB": {
+        "minimumPoints": 32,
+        "notesEn": "Previously 7,6,6 at Higher Level; now 6,6,6.",
+        "notesAr": "سابقا 7،6،6 في المستوى العالي؛ والآن 6،6،6.",
+        "source": "s9",
+        "quote": "7,6,6 at Higher Level including Chemistry and a second science from Biology/Physics/Maths. Minimum of 32 points.",
+        "wayback": true
+       }
+      },
+      "general": {
+       "english": [],
+       "tests": []
+      }
+     }
     }
    ]
   },
@@ -2080,6 +2104,2259 @@
        }
       ],
       "source": "s9"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "durham",
+   "website": "https://www.durham.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ucas.com/events/2027-entry-deadline-for-all-undergraduate-courses-except-those-with-a-15-october-deadline-475546",
+     "title": "2027 entry deadline for all undergraduate courses, except those with a 15 October deadline | UCAS",
+     "retrievedAt": "2026-09-29T23:52:05.747Z",
+     "hash": "42e7cce7af0b177d9fe63405d6ee7ddb14c615f2fce64e6ee97f45478ed862fa"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.durham.ac.uk/study/international/regional-pages/africa--middle-east-/",
+     "title": "Africa & Middle East - Durham University",
+     "retrievedAt": "2026-09-29T23:48:26.807Z",
+     "hash": "a2ab334baff68eb27062cbbe0c18753b23aae5ddd76420fc5e1ac52876acb147"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.durham.ac.uk/study/courses/computer-science-g400/",
+     "title": "Computer Science G400 - Durham University",
+     "retrievedAt": "2026-09-29T23:48:35.699Z",
+     "hash": "e926959c96c683724543d23160e4092fafdc493589375662da3bec26871966ed"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.durham.ac.uk/study/international/entry-requirements/english-language-requirements/english-language-levels-required/",
+     "title": "English Language Levels Required - Durham University",
+     "retrievedAt": "2026-09-29T23:48:34.788Z",
+     "hash": "280cee0dd8ee63d6480043e61da413117c56cece18c14b76c9cedb6044129b67",
+     "waybackTimestamp": "20260215093951",
+     "waybackHash": "6dd97c0e7468ee44e3e18d4c8cfce45dd798d0ebf9f37eb6aa781d1e9db11dd1"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.durham.ac.uk/study/courses/law-m101/",
+     "title": "Law M101 - Durham University",
+     "retrievedAt": "2026-09-29T23:53:26.368Z",
+     "hash": "f51fc0612c79e09cf5b89a177195b1bb9d0440e50725ec9b29f962e33bbd85e7",
+     "waybackTimestamp": "20251112140925",
+     "waybackHash": "7531129464b50094dbe635f74966bcd9b3bc0f51f3253a1bdd1625ed5b590141"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.durham.ac.uk/study/international/entry-requirements/english-language-requirements/direct-entry-band-b/",
+     "title": "Direct Entry Band B - Durham University",
+     "retrievedAt": "2026-09-30T07:34:27.633Z",
+     "hash": "50d741d6b97cb37bb664594296861467934c485d9febd53dc2b5645318cde407"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.durham.ac.uk/study/international/entry-requirements/english-language-requirements/direct-entry-band-a/",
+     "title": "Direct Entry Band A - Durham University",
+     "retrievedAt": "2026-09-30T07:34:10.394Z",
+     "hash": "94a80e9ca4a1da5f30469cee95c5aefde2f479ce79dffe028c5bcb878fdb36cf",
+     "waybackTimestamp": "20250410002721",
+     "waybackHash": "a9eca265927faffc7509191afba9a023f971e85878ed61759a021f15b42d06d2"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_EQUAL_CONSIDERATION",
+     "date": "2027-01-13",
+     "labelEn": "UCAS equal consideration deadline (most courses)",
+     "labelAr": "الموعد النهائي للنظر المتساوي عبر UCAS (معظم البرامج)",
+     "source": "s1",
+     "quote": "Applications for all 2027 entry undergraduate courses, except those with a 15 October deadline, should arrive at UCAS by 18:00 (UK time) on 13 January 2027."
+    }
+   ],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "Not accepted for direct entry; an alternative qualification (for example A levels or IB) or a foundation programme is required.",
+     "notesAr": "لا تقبل للقبول المباشر؛ يلزم مؤهل بديل (مثل A levels أو البكالوريا الدولية) أو برنامج تأسيسي.",
+     "source": "s2",
+     "quote": "Kuwait Undergraduate The Al-Thanawayaa or Tawjihyah are not suitable for direct entry. We require students to complete an alternative qualification or a foundation programme for direct entry, please visit our Durham University International Study Centre website for more information."
+    },
+    "JORDAN_TAWJIHI": {
+     "accepted": false,
+     "notesEn": "Jordanian Certificate of General Secondary Education: not accepted for direct entry; an alternative qualification or a foundation programme is required.",
+     "notesAr": "شهادة الدراسة الثانوية العامة الأردنية: لا تقبل للقبول المباشر؛ يلزم مؤهل بديل أو برنامج تأسيسي.",
+     "source": "s2",
+     "quote": "The Certificate of General Secondary Education is not suitable for direct entry. We require students to complete an alternative qualification or a foundation programme for direct entry, please visit our Durham University International Study Centre website for more information."
+    }
+   },
+   "programs": [
+    {
+     "key": "durham-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc (Hons) (G400)",
+     "nameAr": "بكالوريوس العلوم (مع مرتبة الشرف) في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.durham.ac.uk/study/courses/computer-science-g400/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "notesEn": "Contextual offer AAB.",
+       "notesAr": "العرض السياقي AAB.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s3",
+         "quote": "A*AA including A in Mathematics."
+        }
+       ],
+       "source": "s3",
+       "quote": "Entry requirements | Entry requirements A*AA including A in Mathematics."
+      },
+      "IB": {
+       "minimumPoints": 37,
+       "notesEn": "37 points with 766 in Higher Level subjects.",
+       "notesAr": "37 نقطة مع 766 في مواد المستوى العالي.",
+       "source": "s3",
+       "quote": "IB diploma score | IB diploma score 37 with 766 in higher level subjects, including Mathematics."
+      },
+      "CBSE": {
+       "minimumPercent": 87,
+       "notesEn": "Average of the best 4 academic subjects, excluding Physical Education. CBSE, CISCE and some State Boards accepted.",
+       "notesAr": "متوسط أفضل 4 مواد أكاديمية باستثناء التربية البدنية. تقبل شهادات CBSE وCISCE وبعض مجالس الولايات.",
+       "source": "s3",
+       "quote": "A*AA | Standard XII with an average score of 87% (best of 4 academic subjects, excluding Physical Education)"
+      },
+      "ISC": {
+       "minimumPercent": 87,
+       "notesEn": "Same table covers CBSE / ISC.",
+       "notesAr": "الجدول نفسه يشمل CBSE وISC.",
+       "source": "s3",
+       "quote": "A*AA | Standard XII with an average score of 87% (best of 4 academic subjects, excluding Physical Education)"
+      },
+      "AMERICAN": {
+       "notesEn": "Three AP scores of 5,5,5, or two APs at 5,5 plus SAT 1350 (min 700 RW, 650 M), ACT 30, an Honours course at A+ or a dual enrolment course at A. Schools without AP: Honours courses considered.",
+       "notesAr": "ثلاث درجات AP بواقع 5،5،5، أو اختباران AP بدرجة 5،5 مع SAT بدرجة 1350 (700 للقراءة والكتابة و650 للرياضيات على الأقل) أو ACT بدرجة 30 أو مقرر شرف بدرجة A+ أو مقرر تسجيل مزدوج بدرجة A. المدارس التي لا تقدم AP: تقبل مقررات الشرف.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "5",
+         "source": "s3",
+         "quote": "For students wishing to gain entry to a programme that requires A-level Mathematics, AP Calculus BC at grade 5 is required."
+        }
+       ],
+       "source": "s3",
+       "quote": "A*AA | Three AP test scores of: 5,5,5"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": "Durham Direct Entry Band B.",
+        "waiverNoteAr": "مستوى القبول المباشر Band B في دورهام.",
+        "source": "s6",
+        "quote": "Non UKVI/SELT IELTS | 6.5 with no component under 6.0"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 4.5,
+        "minComponent": 4,
+        "waiverNoteEn": "New TOEFL scale (tests from 21 January 2026).",
+        "waiverNoteAr": "مقياس TOEFL الجديد (للاختبارات منذ 21 يناير 2026).",
+        "source": "s6",
+        "quote": "Tests taken from 21 Jan 2026 4.5 with no component under 4"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English language: Durham Direct Entry Band B (IELTS values are on the band page).",
+        "noteAr": "اللغة الإنجليزية: مستوى القبول المباشر Band B في جامعة دورهام (درجات IELTS في صفحة المستوى).",
+        "source": "s4",
+        "quote": "Computer Science Study level | Language level | Undergraduate | BAND B"
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    },
+    {
+     "key": "durham-law",
+     "status": "EXISTS",
+     "nameEn": "Law LLB (Hons) (M101)",
+     "nameAr": "بكالوريوس القانون (مع مرتبة الشرف) (LLB)",
+     "degree": "LLB",
+     "durationYears": 3,
+     "url": "https://www.durham.ac.uk/study/courses/law-m101/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "notesEn": "Contextual offer AAB.",
+       "notesAr": "العرض السياقي AAB.",
+       "subjects": [],
+       "source": "s5",
+       "quote": "Entry requirements | Entry requirements A*AA"
+      },
+      "IB": {
+       "minimumPoints": 37,
+       "notesEn": "37 points with 766 in Higher Level subjects.",
+       "notesAr": "37 نقطة مع 766 في مواد المستوى العالي.",
+       "source": "s5",
+       "quote": "IB diploma score | IB diploma score 37 with 766 in higher level subjects."
+      },
+      "CBSE": {
+       "minimumPercent": 87,
+       "notesEn": "Average of the best 4 academic subjects, excluding Physical Education. CBSE, CISCE and some State Boards accepted.",
+       "notesAr": "متوسط أفضل 4 مواد أكاديمية باستثناء التربية البدنية. تقبل شهادات CBSE وCISCE وبعض مجالس الولايات.",
+       "source": "s5",
+       "quote": "A*AA | Standard XII with an average score of 87% (best of 4 academic subjects, excluding Physical Education)"
+      },
+      "ISC": {
+       "minimumPercent": 87,
+       "notesEn": "Same table covers CBSE / ISC.",
+       "notesAr": "الجدول نفسه يشمل CBSE وISC.",
+       "source": "s5",
+       "quote": "A*AA | Standard XII with an average score of 87% (best of 4 academic subjects, excluding Physical Education)"
+      },
+      "AMERICAN": {
+       "notesEn": "Three AP scores of 5,5,5, or two APs at 5,5 plus SAT 1350 (min 700 RW, 650 M), ACT 30, an Honours course at A+ or a dual enrolment course at A. Schools without AP: Honours courses considered.",
+       "notesAr": "ثلاث درجات AP بواقع 5،5،5، أو اختباران AP بدرجة 5،5 مع SAT بدرجة 1350 (700 للقراءة والكتابة و650 للرياضيات على الأقل) أو ACT بدرجة 30 أو مقرر شرف بدرجة A+ أو مقرر تسجيل مزدوج بدرجة A. المدارس التي لا تقدم AP: تقبل مقررات الشرف.",
+       "subjects": [],
+       "source": "s5",
+       "quote": "A*AA | Three AP test scores of: 5,5,5"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7,
+        "minComponent": 6.5,
+        "waiverNoteEn": "Durham Direct Entry Band A.",
+        "waiverNoteAr": "مستوى القبول المباشر Band A في دورهام.",
+        "source": "s7",
+        "quote": "Non UKVI/SELT IELTS | 7.0 with no component under 6.5"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 5,
+        "minComponent": 4.5,
+        "waiverNoteEn": "New TOEFL scale (tests from 21 January 2026).",
+        "waiverNoteAr": "مقياس TOEFL الجديد (للاختبارات منذ 21 يناير 2026).",
+        "source": "s7",
+        "quote": "Tests taken from 21 Jan 2026 5 with no component under 4.5"
+       }
+      ],
+      "tests": [
+       {
+        "test": "LNAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "No minimum score for the multiple-choice part; the essay is also assessed. Must be taken in the year of application.",
+        "noteAr": "لا يوجد حد أدنى لجزء الاختيار من متعدد؛ ويقيم المقال أيضا. يجب أداؤه في سنة التقديم.",
+        "source": "s5",
+        "quote": "Applicants are required to take the LNAT for entry (find more information below)."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English language: Durham Direct Entry Band A (IELTS values are on the band page).",
+        "noteAr": "اللغة الإنجليزية: مستوى القبول المباشر Band A في جامعة دورهام (درجات IELTS في صفحة المستوى).",
+        "source": "s4",
+        "quote": "Law School Study level | Language level | Undergraduate | BAND A"
+       }
+      ],
+      "source": "s5"
+     },
+     "previous": {
+      "asOf": "2025-11-12",
+      "curricula": {
+       "IB": {
+        "minimumPoints": 38,
+        "notesEn": "Previously 38 points with 666 at Higher Level; now 37 with 766.",
+        "notesAr": "سابقا 38 نقطة مع 666 في المستوى العالي؛ والآن 37 مع 766.",
+        "source": "s5",
+        "quote": "IB Diploma score - 38 with 666 in higher level subjects.",
+        "wayback": true
+       }
+      },
+      "general": {
+       "english": [],
+       "tests": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "key": "edinburgh",
+   "website": "https://www.ed.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ucas.com/events/2027-entry-deadline-for-all-undergraduate-courses-except-those-with-a-15-october-deadline-475546",
+     "title": "2027 entry deadline for all undergraduate courses, except those with a 15 October deadline | UCAS",
+     "retrievedAt": "2026-09-29T23:52:05.747Z",
+     "hash": "42e7cce7af0b177d9fe63405d6ee7ddb14c615f2fce64e6ee97f45478ed862fa"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.ucas.com/events/2027-entry-deadline-for-the-universities-of-oxford-and-cambridge-and-most-courses-in-medicine-475536",
+     "title": "2027 entry deadline for the universities of Oxford and Cambridge, and most courses in medicine, veterinary medicine/science, and dentistry | UCAS",
+     "retrievedAt": "2026-09-29T23:52:48.839Z",
+     "hash": "125518b79ea6c03dff6513acf5144845b0afab760706976f07eff2864102f901"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.ed.ac.uk/studying/international/country/middle-east/united-arab-emirates",
+     "title": "United Arab Emirates | Undergraduate entry requirements by region | The University of Edinburgh",
+     "retrievedAt": "2026-09-29T23:48:46.860Z",
+     "hash": "13ef164dc53c07e36f3d13c17b8bb5523716e903e10514c55b0f021533584aed"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.ed.ac.uk/studying/international/country/asia/south-asia/india",
+     "title": "India | Undergraduate entry requirements by region | The University of Edinburgh",
+     "retrievedAt": "2026-09-29T23:48:50.858Z",
+     "hash": "169595eb221287af7ef02652f53a21acca9dc30f764331d973d7f3cc704362e2"
+    },
+    {
+     "id": "s5",
+     "url": "https://study.ed.ac.uk/programmes/undergraduate/388-artificial-intelligence/entry-requirements",
+     "title": "Artificial Intelligence BSc (Hons) entry requirements | The University of Edinburgh",
+     "retrievedAt": "2026-09-29T23:52:36.186Z",
+     "hash": "b764064f5754721946685ba3852ee12cea6b7d8539d2620c1906e5f6569e2328"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.ed.ac.uk/studying/international/country/americas/united-states-of-america",
+     "title": "United States of America | Undergraduate entry requirements by region | The University of Edinburgh",
+     "retrievedAt": "2026-09-29T23:52:02.573Z",
+     "hash": "4dc0ae9122c388ef3cffec5304a82f0db39d07c1dd9af31494c27996cffaa106"
+    },
+    {
+     "id": "s7",
+     "url": "https://study.ed.ac.uk/programmes/undergraduate/57-computer-science/entry-requirements",
+     "title": "Computer Science BSc (Hons) entry requirements | The University of Edinburgh",
+     "retrievedAt": "2026-09-29T23:53:16.888Z",
+     "hash": "7c8ef6947a05c6dfcaccd10ac497986e2ee183ce7935c42634f6216a516f4d4b"
+    },
+    {
+     "id": "s8",
+     "url": "https://study.ed.ac.uk/programmes/undergraduate/354-mbchb-medicine-6-year-programme/entry-requirements",
+     "title": "MBChB Medicine (6-year programme) MBChB entry requirements | The University of Edinburgh",
+     "retrievedAt": "2026-09-29T23:53:36.536Z",
+     "hash": "0f02184c2d11197e1d0901c9b0baa99d65dc9f52ca7e0c8651a7d69f7c309713"
+    },
+    {
+     "id": "s9",
+     "url": "https://study.ed.ac.uk/programmes/undergraduate/354-mbchb-medicine-6-year-programme",
+     "title": "MBChB Medicine (6-year programme) MBChB - Undergraduate programmes | The University of Edinburgh",
+     "retrievedAt": "2026-09-29T23:48:46.931Z",
+     "hash": "c17bb7438006ea4c36f8af4dc4dbc3c81deff6430dab84755330300afdba3a8d",
+     "waybackTimestamp": "20250925105018",
+     "waybackHash": "60f7fa1b833a438ab5a960b3e096ad7528c73779b9844a63edde0c50153afaf6"
+    },
+    {
+     "id": "s10",
+     "url": "https://science-engineering.ed.ac.uk/studying/undergraduate/applying/entrancerequirements/entry-requirements-for-usa-qualifications",
+     "title": "Applying with USA qualifications | College of Science & Engineering | College of Science and Engineering",
+     "retrievedAt": "2026-09-30T07:34:38.578Z",
+     "hash": "197c4254bb75de637ab9656179a0dbbdc9bf56d3c57419fc5342b194eeb509e6",
+     "waybackTimestamp": "20251017012845",
+     "waybackHash": "3b910cf89cb6492ad3b9f8924d8b8157db7e99d06f09ce3722d052271498aa9e"
+    }
+   ],
+   "english": [
+    {
+     "test": "OTHER",
+     "minOverall": 85,
+     "minComponent": null,
+     "waiverNoteEn": "85% in Standard XII CBSE or CISCE removes the need for an English test.",
+     "waiverNoteAr": "الحصول على 85% في الصف الثاني عشر من CBSE أو CISCE يعفي من اختبار اللغة الإنجليزية.",
+     "source": "s4",
+     "quote": "We do not require students to take an English language test in IELTS/TOEFL/Pearson etc, if they achieve the minimum 85% from their Standard XII CBSE or CISCE examinations."
+    }
+   ],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_EQUAL_CONSIDERATION",
+     "date": "2027-01-13",
+     "labelEn": "UCAS equal consideration deadline (most courses)",
+     "labelAr": "الموعد النهائي للنظر المتساوي عبر UCAS (معظم البرامج)",
+     "source": "s1",
+     "quote": "Applications for all 2027 entry undergraduate courses, except those with a 15 October deadline, should arrive at UCAS by 18:00 (UK time) on 13 January 2027."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_OXBRIDGE_MEDICINE",
+     "date": "2026-10-15",
+     "labelEn": "UCAS deadline for Oxford, Cambridge and most medicine courses",
+     "labelAr": "الموعد النهائي عبر UCAS لجامعتي أكسفورد وكامبريدج ومعظم برامج الطب",
+     "source": "s2",
+     "quote": "15 October 2026"
+    }
+   ],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "The Tawjihiyya/Thanawiya usually requires a foundation year; College of Science and Engineering applicants may be eligible for the internal admissions test.",
+     "notesAr": "يتطلب التوجيهي/الثانوية العامة عادة سنة تأسيسية؛ وقد يكون المتقدمون لكلية العلوم والهندسة مؤهلين لاختبار القبول الداخلي.",
+     "source": "s3",
+     "quote": "Applicants with the Tawjihiyya/Thanawiya General School Certificate will usually be required to complete a foundation year or, if applying to programmes within the College of Science and Engineering, may be eligible for the internal admissions test."
+    }
+   },
+   "programs": [
+    {
+     "key": "edinburgh-ai",
+     "status": "EXISTS",
+     "nameEn": "Artificial Intelligence BSc (Hons)",
+     "nameAr": "بكالوريوس العلوم (مع مرتبة الشرف) في الذكاء الاصطناعي",
+     "degree": "BSc",
+     "durationYears": 4,
+     "url": "https://study.ed.ac.uk/programmes/undergraduate/388-artificial-intelligence",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAB",
+       "notesEn": "Range of grades most applicants needed: A*A*A* to AAB. Widening access minimum ABB.",
+       "notesAr": "نطاق الدرجات التي احتاجها معظم المتقدمين: من A*A*A* إلى AAB. الحد الأدنى لبرنامج توسيع المشاركة ABB.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s5",
+         "quote": "Mathematics at A"
+        }
+       ],
+       "source": "s5",
+       "quote": "from A*A*A* to AAB in one set of exams"
+      },
+      "IB": {
+       "minimumPoints": 34,
+       "notesEn": "Range 43 points (777 at HL) to 34 points (665 at HL).",
+       "notesAr": "النطاق من 43 نقطة (777 في المستوى العالي) إلى 34 نقطة (665 في المستوى العالي).",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s5",
+         "quote": "Mathematics (Analysis and approaches only) at 6"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "english_language"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": "5",
+         "source": "s5",
+         "quote": "You must also have the following at SL: English at 5"
+        }
+       ],
+       "source": "s5",
+       "quote": "from 43 points with 777 at HL to 34 points with 665 at HL"
+      },
+      "AMERICAN": {
+       "notesEn": "Three standardised tests in different subjects, e.g. three APs at 4+, or SAT 1290+ (650 RW, 620 M) or ACT 27 with two APs at 4+. Without AP: GPA 3.3 plus ACT or SAT.",
+       "notesAr": "ثلاثة اختبارات معيارية في مواد مختلفة، مثل ثلاثة اختبارات AP بدرجة 4 فأكثر، أو SAT بدرجة 1290 فأكثر (650 للقراءة والكتابة و620 للرياضيات) أو ACT بدرجة 27 مع اختباري AP بدرجة 4 فأكثر. دون AP: معدل 3.3 مع ACT أو SAT.",
+       "source": "s6",
+       "quote": "Three AP scores at grade 4+",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "4",
+         "source": "s10",
+         "quote": "Required subjects for programmes in the School of Informatics: AP calculus at 4. For Computer Science and Mathematics: Calculus AP at 5. For Computer Science and Physics: Calculus AP at 4 and Physics."
+        }
+       ]
+      },
+      "CBSE": {
+       "minimumPercent": 80,
+       "notesEn": "Five Class XII subjects, 80% average; 85% in Mathematics because Mathematics at A is required. Only CBSE and CISCE boards; Applied Mathematics not accepted.",
+       "notesAr": "خمس مواد في الصف الثاني عشر بمتوسط 80%؛ و85% في الرياضيات لأن الرياضيات مطلوبة بدرجة A. يقبل مجلسا CBSE وCISCE فقط؛ ولا تقبل الرياضيات التطبيقية.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "source": "s4",
+         "quote": "Award of Certificate with five subjects at Class XII, with an overall average of 80% or above and minimum 80% in all required subjects (or 85% where we require a grade A at SQA Higher). Grade XII CBSE Applied Mathematics is not accepted to meet a Mathematics subject requirement."
+        }
+       ],
+       "source": "s4",
+       "quote": "Award of Certificate with five subjects at Class XII, with an overall average of 80% or above and minimum 80% in all required subjects (or 85% where we require a grade A at SQA Higher). Grade XII CBSE Applied Mathematics is not accepted to meet a Mathematics subject requirement."
+      },
+      "ISC": {
+       "minimumPercent": 80,
+       "notesEn": "Five Class XII subjects, 80% average; 85% in Mathematics because Mathematics at A is required. Only CBSE and CISCE boards; Applied Mathematics not accepted.",
+       "notesAr": "خمس مواد في الصف الثاني عشر بمتوسط 80%؛ و85% في الرياضيات لأن الرياضيات مطلوبة بدرجة A. يقبل مجلسا CBSE وCISCE فقط؛ ولا تقبل الرياضيات التطبيقية.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "source": "s4",
+         "quote": "Award of Certificate with five subjects at Class XII, with an overall average of 80% or above and minimum 80% in all required subjects (or 85% where we require a grade A at SQA Higher). Grade XII CBSE Applied Mathematics is not accepted to meet a Mathematics subject requirement."
+        }
+       ],
+       "source": "s4",
+       "quote": "Award of Certificate with five subjects at Class XII, with an overall average of 80% or above and minimum 80% in all required subjects (or 85% where we require a grade A at SQA Higher). Grade XII CBSE Applied Mathematics is not accepted to meet a Mathematics subject requirement."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 5.5,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s5",
+        "quote": "IELTS Academic: total 6.5 with at least 5.5 in each component.We do not accept IELTS One Skill Retake to meet our English language requirements."
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 4.5,
+        "minComponent": 4,
+        "waiverNoteEn": "New TOEFL scale (tests from 21 January 2026).",
+        "waiverNoteAr": "مقياس TOEFL الجديد (للاختبارات منذ 21 يناير 2026).",
+        "source": "s5",
+        "quote": "TOEFL-iBT (including Home Edition) from 21 January 2026: total 4.5 with at least 4.0 in each component. We do not accept TOEFL MyBest Score to meet our English language requirements."
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s5"
+     },
+     "previous": null
+    },
+    {
+     "key": "edinburgh-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc (Hons)",
+     "nameAr": "بكالوريوس العلوم (مع مرتبة الشرف) في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": 4,
+     "url": "https://study.ed.ac.uk/programmes/undergraduate/57-computer-science",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAB",
+       "notesEn": "Range of grades most applicants needed: A*A*A* to AAB. Widening access minimum ABB.",
+       "notesAr": "نطاق الدرجات التي احتاجها معظم المتقدمين: من A*A*A* إلى AAB. الحد الأدنى لبرنامج توسيع المشاركة ABB.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s7",
+         "quote": "Mathematics at A"
+        }
+       ],
+       "source": "s7",
+       "quote": "from A*A*A* to AAB in one set of exams"
+      },
+      "IB": {
+       "minimumPoints": 34,
+       "notesEn": "Range 43 points (777 at HL) to 34 points (665 at HL).",
+       "notesAr": "النطاق من 43 نقطة (777 في المستوى العالي) إلى 34 نقطة (665 في المستوى العالي).",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s7",
+         "quote": "Mathematics (Analysis and approaches only) at 6"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "english_language"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": "5",
+         "source": "s7",
+         "quote": "You must also have the following at SL: English at 5"
+        }
+       ],
+       "source": "s7",
+       "quote": "from 43 points with 777 at HL to 34 points with 665 at HL"
+      },
+      "AMERICAN": {
+       "notesEn": "Three standardised tests in different subjects, e.g. three APs at 4+, or SAT 1290+ (650 RW, 620 M) or ACT 27 with two APs at 4+. Without AP: GPA 3.3 plus ACT or SAT.",
+       "notesAr": "ثلاثة اختبارات معيارية في مواد مختلفة، مثل ثلاثة اختبارات AP بدرجة 4 فأكثر، أو SAT بدرجة 1290 فأكثر (650 للقراءة والكتابة و620 للرياضيات) أو ACT بدرجة 27 مع اختباري AP بدرجة 4 فأكثر. دون AP: معدل 3.3 مع ACT أو SAT.",
+       "source": "s6",
+       "quote": "Three AP scores at grade 4+",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "4",
+         "source": "s10",
+         "quote": "Required subjects for programmes in the School of Informatics: AP calculus at 4. For Computer Science and Mathematics: Calculus AP at 5. For Computer Science and Physics: Calculus AP at 4 and Physics."
+        }
+       ]
+      },
+      "CBSE": {
+       "minimumPercent": 80,
+       "notesEn": "Five Class XII subjects, 80% average; 85% in Mathematics because Mathematics at A is required. Only CBSE and CISCE boards; Applied Mathematics not accepted.",
+       "notesAr": "خمس مواد في الصف الثاني عشر بمتوسط 80%؛ و85% في الرياضيات لأن الرياضيات مطلوبة بدرجة A. يقبل مجلسا CBSE وCISCE فقط؛ ولا تقبل الرياضيات التطبيقية.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "source": "s4",
+         "quote": "Award of Certificate with five subjects at Class XII, with an overall average of 80% or above and minimum 80% in all required subjects (or 85% where we require a grade A at SQA Higher). Grade XII CBSE Applied Mathematics is not accepted to meet a Mathematics subject requirement."
+        }
+       ],
+       "source": "s4",
+       "quote": "Award of Certificate with five subjects at Class XII, with an overall average of 80% or above and minimum 80% in all required subjects (or 85% where we require a grade A at SQA Higher). Grade XII CBSE Applied Mathematics is not accepted to meet a Mathematics subject requirement."
+      },
+      "ISC": {
+       "minimumPercent": 80,
+       "notesEn": "Five Class XII subjects, 80% average; 85% in Mathematics because Mathematics at A is required. Only CBSE and CISCE boards; Applied Mathematics not accepted.",
+       "notesAr": "خمس مواد في الصف الثاني عشر بمتوسط 80%؛ و85% في الرياضيات لأن الرياضيات مطلوبة بدرجة A. يقبل مجلسا CBSE وCISCE فقط؛ ولا تقبل الرياضيات التطبيقية.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "source": "s4",
+         "quote": "Award of Certificate with five subjects at Class XII, with an overall average of 80% or above and minimum 80% in all required subjects (or 85% where we require a grade A at SQA Higher). Grade XII CBSE Applied Mathematics is not accepted to meet a Mathematics subject requirement."
+        }
+       ],
+       "source": "s4",
+       "quote": "Award of Certificate with five subjects at Class XII, with an overall average of 80% or above and minimum 80% in all required subjects (or 85% where we require a grade A at SQA Higher). Grade XII CBSE Applied Mathematics is not accepted to meet a Mathematics subject requirement."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 5.5,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s7",
+        "quote": "IELTS Academic: total 6.5 with at least 5.5 in each component.We do not accept IELTS One Skill Retake to meet our English language requirements."
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 4.5,
+        "minComponent": 4,
+        "waiverNoteEn": "New TOEFL scale (tests from 21 January 2026).",
+        "waiverNoteAr": "مقياس TOEFL الجديد (للاختبارات منذ 21 يناير 2026).",
+        "source": "s7",
+        "quote": "TOEFL-iBT (including Home Edition) from 21 January 2026: total 4.5 with at least 4.0 in each component. We do not accept TOEFL MyBest Score to meet our English language requirements."
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s7"
+     },
+     "previous": null
+    },
+    {
+     "key": "edinburgh-med",
+     "status": "EXISTS",
+     "nameEn": "MBChB Medicine (6-year programme)",
+     "nameAr": "بكالوريوس الطب والجراحة (برنامج مدته 6 سنوات)",
+     "degree": "MBChB",
+     "durationYears": 6,
+     "url": "https://study.ed.ac.uk/programmes/undergraduate/354-mbchb-medicine-6-year-programme",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "notesEn": "All grades must be obtained at the first attempt. GCSE Biology, Chemistry and English at A or 7 also required.",
+       "notesAr": "يجب الحصول على جميع الدرجات من المحاولة الأولى. ويشترط أيضا الأحياء والكيمياء والإنجليزية في GCSE بدرجة A أو 7.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s8",
+         "quote": "The grades you use to meet our entry requirements must include the following at A level: Chemistry"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "mathematics",
+          "further_mathematics",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s8",
+         "quote": "one from Biology/Human Biology, Mathematics/Further Mathematics or Physics"
+        }
+       ],
+       "source": "s8",
+       "quote": "AAA in one sitting"
+      },
+      "IB": {
+       "minimumPoints": 38,
+       "subjects": [
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "mathematics",
+          "physics"
+         ],
+         "minimumLevel": "HIGHER",
+         "source": "s8",
+         "quote": "one from Biology, Mathematics or Physics."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": "6",
+         "source": "s8",
+         "quote": "Mathematics: Analysis and approaches or Mathematics: Applications and interpretation at 6"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "english_language"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": "6",
+         "source": "s8",
+         "quote": "English at 6 (English ab initio is not accepted)"
+        }
+       ],
+       "notesEn": "Chemistry and one of Biology, Mathematics or Physics at HL.",
+       "notesAr": "الكيمياء وواحدة من الأحياء أو الرياضيات أو الفيزياء في المستوى العالي.",
+       "source": "s8",
+       "quote": "38 points with 666 at HL"
+      },
+      "AMERICAN": {
+       "notesEn": "Chemistry and two of Biology, Physics, Math/Calculus.",
+       "notesAr": "الكيمياء واثنتان من الأحياء والفيزياء والرياضيات/التفاضل والتكامل.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s6",
+         "quote": "Required subjects include Chemistry, and two subjects from Biology, Physics, Math/Calculus. (Please note AP Math or AP Calculus can meet one required subject.)"
+        },
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "biology",
+          "physics",
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s6",
+         "quote": "Required subjects include Chemistry, and two subjects from Biology, Physics, Math/Calculus. (Please note AP Math or AP Calculus can meet one required subject.)"
+        }
+       ],
+       "source": "s6",
+       "quote": "At least three AP test scores at grade 5"
+      },
+      "CBSE": {
+       "minimumPercent": 85,
+       "notesEn": "85% or higher in English, Chemistry plus two from Biology, Mathematics or Physics.",
+       "notesAr": "85% أو أكثر في الإنجليزية والكيمياء واثنتين من الأحياء أو الرياضيات أو الفيزياء.",
+       "source": "s4",
+       "quote": "For Medicine, CBSE All India Senior School Certificate Examination (SSC) or CISCE Indian School Certificate (ISC) Standard XII with five subjects at Class XII, with an overall average of 85% and grades of 85% or higher in English, Chemistry plus two from Biology, Mathematics or Physics."
+      },
+      "ISC": {
+       "minimumPercent": 85,
+       "notesEn": "Same rule as CBSE.",
+       "notesAr": "نفس شرط CBSE.",
+       "source": "s4",
+       "quote": "For Medicine, CBSE All India Senior School Certificate Examination (SSC) or CISCE Indian School Certificate (ISC) Standard XII with five subjects at Class XII, with an overall average of 85% and grades of 85% or higher in English, Chemistry plus two from Biology, Mathematics or Physics."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7.5,
+        "minComponent": 7.5,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s8",
+        "quote": "IELTS Academic: total 7.5 with at least 7.5 in each component. We do not accept IELTS One Skill Retake to meet our English language requirements."
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 5.5,
+        "minComponent": 5.5,
+        "waiverNoteEn": "New TOEFL scale (tests from 21 January 2026).",
+        "waiverNoteAr": "مقياس TOEFL الجديد (للاختبارات منذ 21 يناير 2026).",
+        "source": "s8",
+        "quote": "TOEFL-iBT (including Home Edition) from 21 January 2026: total 5.5 with at least 5.5 in each component. We do not accept TOEFL MyBest Score to meet our English language requirements."
+       }
+      ],
+      "tests": [
+       {
+        "test": "UCAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "A minimum UCAT score applies; Band 4 in Situational Judgement is not considered.",
+        "noteAr": "يشترط حد أدنى في UCAT؛ ولا ينظر في طلبات الحاصلين على النطاق 4 في قسم الحكم الظرفي.",
+        "source": "s8",
+        "quote": "You must sit the University Clinical Aptitude Test (UCAT) within the same year of submitting a UCAS application. We require that you meet a minimum UCAT score as part of our entry requirements unless you are a Plus Flag widening access applicant."
+       }
+      ],
+      "additional": [],
+      "source": "s9"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "exeter",
+   "website": "https://www.exeter.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ucas.com/events/2027-entry-deadline-for-all-undergraduate-courses-except-those-with-a-15-october-deadline-475546",
+     "title": "2027 entry deadline for all undergraduate courses, except those with a 15 October deadline | UCAS",
+     "retrievedAt": "2026-09-29T23:52:05.747Z",
+     "hash": "42e7cce7af0b177d9fe63405d6ee7ddb14c615f2fce64e6ee97f45478ed862fa"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.exeter.ac.uk/international-students/united-arab-emirates/",
+     "title": "Students from the United Arab Emirates at the University of Exeter",
+     "retrievedAt": "2026-09-29T23:53:23.866Z",
+     "hash": "8220f6e3a6e5c7e70276a13b18d55b62a937173f4b17dc5630ef61cdfeb92ec3"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.exeter.ac.uk/undergraduate-degrees/bsc-computer-science/",
+     "title": "BSc Computer Science | BCS Accredited Degree | University of Exeter",
+     "retrievedAt": "2026-09-29T23:48:45.102Z",
+     "hash": "82354b4e3fcb165e84edaff801cf447e455b2a82a197eb7812f7377d0d4319f3",
+     "waybackTimestamp": "20260113175556",
+     "waybackHash": "4ed79ea8aa94b9703b601c6155fcbddccd453fa4e814f3ef077a6826e37a4235"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.exeter.ac.uk/international-students/usa/",
+     "title": "Students from the USA at the University of Exeter",
+     "retrievedAt": "2026-09-29T23:53:41.155Z",
+     "hash": "7d93ca9acc4df5122eecc667a2197aec85e9cf4d0fafbe5e45a93ffae97393ca"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.exeter.ac.uk/international-students/india/",
+     "title": "Students from India at the University of Exeter",
+     "retrievedAt": "2026-09-29T23:49:08.380Z",
+     "hash": "ed82f6f05d8bfb784b53ea335a884c687f6ffd6ddb07414483f2a5ee27e740ca"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.exeter.ac.uk/undergraduate-degrees/bsc-business-and-management/",
+     "title": "BSc Business and Management | University of Exeter",
+     "retrievedAt": "2026-09-29T23:52:26.462Z",
+     "hash": "7a0b3bb02da5bf1e3f1aa53a85d008e7ec6529b782d4d2b7af43e802a8f98a08",
+     "waybackTimestamp": "20260113175735",
+     "waybackHash": "893ab48ae73455381ead70610fe5f4e45036e4801cebfb807442476dd91f4424"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.exeter.ac.uk/study/englishlanguagerequirements/profile-b1/",
+     "title": "Profile B1 | Study | University of Exeter",
+     "retrievedAt": "2026-09-30T07:34:21.290Z",
+     "hash": "1f541f9029f5d077f80bacc484f8c9b8dfdf5cbcb7d29f5135afe44d8eec2a7d",
+     "waybackTimestamp": "20251014224614",
+     "waybackHash": "5175ba745ee973492197a071f2949e0e6be600f98d32ea8cbfe221ff706353e0"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_EQUAL_CONSIDERATION",
+     "date": "2027-01-13",
+     "labelEn": "UCAS equal consideration deadline (most courses)",
+     "labelAr": "الموعد النهائي للنظر المتساوي عبر UCAS (معظم البرامج)",
+     "source": "s1",
+     "quote": "Applications for all 2027 entry undergraduate courses, except those with a 15 October deadline, should arrive at UCAS by 18:00 (UK time) on 13 January 2027."
+    }
+   ],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "Not sufficient for direct entry; holders can take a recognised foundation programme (for example the International Study Centre International Foundation at Exeter).",
+     "notesAr": "غير كافية للقبول المباشر؛ يمكن لحامليها الالتحاق ببرنامج تأسيسي معترف به (مثل البرنامج التأسيسي الدولي في مركز الدراسات الدولية بإكستر).",
+     "source": "s2",
+     "quote": "The Al-Thanawayaa or Tawjihyah General Secondary Education Certificate is not sufficient for direct entry to our undergraduate programmes."
+    }
+   },
+   "programs": [
+    {
+     "key": "exeter-cs",
+     "status": "EXISTS",
+     "nameEn": "BSc Computer Science",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.exeter.ac.uk/undergraduate-degrees/bsc-computer-science/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAB",
+       "notesEn": "Typical offer range AAA to AAB; contextual ABB-BBB.",
+       "notesAr": "نطاق العرض المعتاد من AAA إلى AAB؛ والعرض السياقي ABB-BBB.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "B",
+         "source": "s3",
+         "quote": "GCE AL Maths grade B"
+        }
+       ],
+       "source": "s3",
+       "quote": "A levels: AAA - AAB"
+      },
+      "IB": {
+       "minimumPoints": 34,
+       "notesEn": "Typical offer range 36 (666 HL) to 34 (665 HL).",
+       "notesAr": "نطاق العرض المعتاد من 36 (666 في المستوى العالي) إلى 34 (665 في المستوى العالي).",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "5",
+         "source": "s3",
+         "quote": "HL 5 in Mathematics (Analysis and approaches or Applications and interpretations) |"
+        }
+       ],
+       "source": "s3",
+       "quote": "IB: 36/666-34/665"
+      },
+      "AMERICAN": {
+       "notesEn": "High school diploma plus three advanced classes, AP tests or college-level credits (A = AP 5, B = AP 4), or ACT/SAT per the equivalency table, with subject requirements met by AP or college-level credit.",
+       "notesAr": "شهادة الثانوية مع ثلاثة صفوف متقدمة أو اختبارات AP أو ساعات جامعية (A تعادل AP 5 وB تعادل AP 4)، أو ACT/SAT حسب جدول المعادلة، مع استيفاء شروط المواد عبر AP أو ساعات جامعية.",
+       "source": "s4",
+       "quote": "AAB | 30 | 1370"
+      },
+      "CBSE": {
+       "minimumPercent": 80,
+       "notesEn": "Minimum aggregate for ICSE/CBSE Standard XII and other listed boards; subject requirements still apply.",
+       "notesAr": "الحد الأدنى للمجموع في الصف الثاني عشر لمجالس ICSE/CBSE والمجالس المدرجة؛ مع استيفاء شروط المواد.",
+       "source": "s5",
+       "quote": "For these we require minimum aggregate scores of 80%, or 70% for the West Bengal Board Standard XII. Other regional board standard XII exams can be considered on an individual basis, but we usually require an aggregate score of at least 85%."
+      },
+      "ISC": {
+       "minimumPercent": 80,
+       "notesEn": "Minimum aggregate for ICSE/CBSE Standard XII and other listed boards; subject requirements still apply.",
+       "notesAr": "الحد الأدنى للمجموع في الصف الثاني عشر لمجالس ICSE/CBSE والمجالس المدرجة؛ مع استيفاء شروط المواد.",
+       "source": "s5",
+       "quote": "For these we require minimum aggregate scores of 80%, or 70% for the West Bengal Board Standard XII. Other regional board standard XII exams can be considered on an individual basis, but we usually require an aggregate score of at least 85%."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 5.5,
+        "waiverNoteEn": "Exeter Profile B1.",
+        "waiverNoteAr": "الملف B1 في جامعة إكستر.",
+        "source": "s7",
+        "quote": "IELTS Academic, IELTS Academic Online and IELTS One Skill Retake | 6.5 overall and no less than 5.5 in any section"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 4.5,
+        "minComponent": 3.5,
+        "waiverNoteEn": "New TOEFL scale (tests from 21 January 2026).",
+        "waiverNoteAr": "مقياس TOEFL الجديد (للاختبارات منذ 21 يناير 2026).",
+        "source": "s7",
+        "quote": "TOEFL iBT, TOEFL iBT Home Edition, TOEFL iBT Paper Edition and TOEFL MyBest scores - tests taken from 21st January 2026 | 4.5 overall and no less than 3.5 in any section"
+       },
+       {
+        "test": "PTE",
+        "minOverall": 67,
+        "minComponent": 59,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s7",
+        "quote": "Pearson Test of English (Academic) PTE | 67 with no less than 59 in all communicative skills"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English language: Exeter Profile B1 (test scores listed on the Profile B1 page).",
+        "noteAr": "اللغة الإنجليزية: الملف B1 في جامعة إكستر (درجات الاختبارات في صفحة الملف B1).",
+        "source": "s3",
+        "quote": "International students need to show they have the required level of English language to study this course. The required test scores for this course fall under Profile B1. Please visit our English language requirements page to view the required test scores and equivalencies from your country."
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    },
+    {
+     "key": "exeter-bus",
+     "status": "REPLACED",
+     "nameEn": "BSc Business and Management",
+     "nameAr": "بكالوريوس العلوم في الأعمال والإدارة",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.exeter.ac.uk/undergraduate-degrees/bsc-business-and-management/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAB",
+       "notesEn": "Contextual offer BBB. GCSE Mathematics grade B or 5 and English Language C or 4 required.",
+       "notesAr": "العرض السياقي BBB. يشترط GCSE في الرياضيات بدرجة B أو 5 وفي اللغة الإنجليزية بدرجة C أو 4.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "FOUNDATION",
+         "minimumGrade": "5",
+         "source": "s6",
+         "quote": "Grade B or 5 in GCSE Mathematics (or: GCE A-Level/AS Mathematics or Further Mathematics or Pure Mathematics or Core Mathematics)"
+        }
+       ],
+       "source": "s6",
+       "quote": "A-Level: AAB"
+      },
+      "IB": {
+       "minimumPoints": 34,
+       "source": "s6",
+       "quote": "IB: 34/665"
+      },
+      "AMERICAN": {
+       "notesEn": "High school diploma plus three advanced classes, AP tests or college-level credits (A = AP 5, B = AP 4), or ACT/SAT per the equivalency table, with subject requirements met by AP or college-level credit.",
+       "notesAr": "شهادة الثانوية مع ثلاثة صفوف متقدمة أو اختبارات AP أو ساعات جامعية (A تعادل AP 5 وB تعادل AP 4)، أو ACT/SAT حسب جدول المعادلة، مع استيفاء شروط المواد عبر AP أو ساعات جامعية.",
+       "source": "s4",
+       "quote": "AAB | 30 | 1370"
+      },
+      "CBSE": {
+       "minimumPercent": 80,
+       "notesEn": "Minimum aggregate for ICSE/CBSE Standard XII and other listed boards; subject requirements still apply.",
+       "notesAr": "الحد الأدنى للمجموع في الصف الثاني عشر لمجالس ICSE/CBSE والمجالس المدرجة؛ مع استيفاء شروط المواد.",
+       "source": "s5",
+       "quote": "For these we require minimum aggregate scores of 80%, or 70% for the West Bengal Board Standard XII. Other regional board standard XII exams can be considered on an individual basis, but we usually require an aggregate score of at least 85%."
+      },
+      "ISC": {
+       "minimumPercent": 80,
+       "notesEn": "Minimum aggregate for ICSE/CBSE Standard XII and other listed boards; subject requirements still apply.",
+       "notesAr": "الحد الأدنى للمجموع في الصف الثاني عشر لمجالس ICSE/CBSE والمجالس المدرجة؛ مع استيفاء شروط المواد.",
+       "source": "s5",
+       "quote": "For these we require minimum aggregate scores of 80%, or 70% for the West Bengal Board Standard XII. Other regional board standard XII exams can be considered on an individual basis, but we usually require an aggregate score of at least 85%."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 5.5,
+        "waiverNoteEn": "Exeter Profile B1.",
+        "waiverNoteAr": "الملف B1 في جامعة إكستر.",
+        "source": "s7",
+        "quote": "IELTS Academic, IELTS Academic Online and IELTS One Skill Retake | 6.5 overall and no less than 5.5 in any section"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 4.5,
+        "minComponent": 3.5,
+        "waiverNoteEn": "New TOEFL scale (tests from 21 January 2026).",
+        "waiverNoteAr": "مقياس TOEFL الجديد (للاختبارات منذ 21 يناير 2026).",
+        "source": "s7",
+        "quote": "TOEFL iBT, TOEFL iBT Home Edition, TOEFL iBT Paper Edition and TOEFL MyBest scores - tests taken from 21st January 2026 | 4.5 overall and no less than 3.5 in any section"
+       },
+       {
+        "test": "PTE",
+        "minOverall": 67,
+        "minComponent": 59,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s7",
+        "quote": "Pearson Test of English (Academic) PTE | 67 with no less than 59 in all communicative skills"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English language: Exeter Profile B1 (test scores listed on the Profile B1 page).",
+        "noteAr": "اللغة الإنجليزية: الملف B1 في جامعة إكستر (درجات الاختبارات في صفحة الملف B1).",
+        "source": "s6",
+        "quote": "International students need to show they have the required level of English language to study this course. The required test scores for this course fall under Profile B1. Please visit our English language requirements page to view the required test scores and equivalencies from your country."
+       }
+      ],
+      "source": "s6"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "imperial_college_london",
+   "website": "https://www.imperial.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.imperial.ac.uk/study/apply/undergraduate/process/deadlines/",
+     "title": "Deadlines | Study | Imperial College London",
+     "retrievedAt": "2026-09-30T07:34:12.659Z",
+     "hash": "182756d427dc03034d6617d7a1accf17d22a69bd0adad45a33c811554c9e7c62"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.imperial.ac.uk/study/courses/undergraduate/2027/computing-artificial-intelligence-meng/",
+     "title": "Computing (Artificial Intelligence and Machine Learning) MEng | Study | Imperial College London",
+     "retrievedAt": "2026-09-30T07:34:08.905Z",
+     "hash": "7f01b7c4fc8dc7c01c3dba3d98a5aba3c1382ae2e588986f696fd4ac40af6968"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.imperial.ac.uk/study/apply/undergraduate/entry-requirements/accepted-qualifications/",
+     "title": "Accepted qualifications | Study | Imperial College London",
+     "retrievedAt": "2026-09-30T07:34:24.592Z",
+     "hash": "359afc14069b55178da4b294b2dcbae9eae50b4f591c718c5223381cbad8ba16",
+     "waybackTimestamp": "20250922053837",
+     "waybackHash": "973c8f618b0a4de28ace5ff83b862c772916466eba5cb6c89828c07271ef44e7"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.imperial.ac.uk/study/apply/english-language/",
+     "title": "English language requirements | Study | Imperial College London",
+     "retrievedAt": "2026-09-30T07:34:20.543Z",
+     "hash": "2e8560034fb294291b2cfd9387d9364d16455d523a426f15b4f94718b0440e4d"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.imperial.ac.uk/study/courses/undergraduate/2027/electrical-electronic-engineering-meng/",
+     "title": "Electrical and Electronic Engineering MEng | Study | Imperial College London",
+     "retrievedAt": "2026-09-30T07:38:50.741Z",
+     "hash": "b55342c6aff999b2f3f5020832aa01cd8d382c395903dbc526eebf7f84e1096f"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.imperial.ac.uk/study/courses/undergraduate/2027/mechanical-engineering/",
+     "title": "Mechanical Engineering MEng | Study | Imperial College London",
+     "retrievedAt": "2026-09-30T07:35:26.787Z",
+     "hash": "fa64180edbbe4b845522e6a6b552273ac8e9b8ab7836cc17ceb577e5e2cb5b4f"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_EQUAL_CONSIDERATION",
+     "date": "2027-01-13",
+     "labelEn": "UCAS equal consideration deadline",
+     "labelAr": "الموعد النهائي للنظر المتساوي عبر UCAS",
+     "source": "s1",
+     "quote": "13 January 2027 (18.00 UK time) - Equal consideration deadline"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_OXBRIDGE_MEDICINE",
+     "date": "2026-10-15",
+     "labelEn": "UCAS deadline for MBBS Medicine",
+     "labelAr": "الموعد النهائي عبر UCAS لبرنامج الطب MBBS",
+     "source": "s1",
+     "quote": "15 October 2026 (18.00 UK time) - Deadline for MBBS Medicine and Graduate Entry Medicine"
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "imperial-college-london-ai",
+     "status": "REPLACED",
+     "nameEn": "Computing (Artificial Intelligence and Machine Learning) MEng",
+     "nameAr": "الحوسبة (الذكاء الاصطناعي وتعلم الآلة)، ماجستير متكامل في الهندسة",
+     "degree": "MEng",
+     "durationYears": 4,
+     "url": "https://www.imperial.ac.uk/study/courses/undergraduate/2027/computing-artificial-intelligence-meng/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AAA",
+       "notesEn": "Minimum entry standard A*A*A (three A-levels) or A*AAA (four A-levels).",
+       "notesAr": "الحد الأدنى A*A*A (ثلاث مواد A-level) أو A*AAA (أربع مواد).",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A*",
+         "source": "s2",
+         "quote": "A* in Mathematics"
+        }
+       ],
+       "source": "s2",
+       "quote": "Minimum entry standard A*A*A - A*AAA"
+      },
+      "IB": {
+       "minimumPoints": 41,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "7",
+         "source": "s2",
+         "quote": "7 in Mathematics at higher level"
+        }
+       ],
+       "source": "s2",
+       "quote": "41 points (International Baccalaureate)"
+      },
+      "AMERICAN": {
+       "notesEn": "Five AP scores of 5 (or three with a high school diploma plus SAT 1480 or ACT 33).",
+       "notesAr": "خمس درجات AP بدرجة 5 (أو ثلاث مع شهادة الثانوية ودرجة SAT بواقع 1480 أو ACT بواقع 33).",
+       "source": "s2",
+       "quote": "Our minimum entry standard is: EITHER 5, 5, 5, 5, 5 to include Calculus BC OR 5, 5, 5 to include Calculus BC Award of acceptable school leaving qualification (e.g., US High School Diploma) Either 1480 in SAT or 33 in ACT."
+      },
+      "CBSE": {
+       "minimumPercent": 90,
+       "notesEn": "CISCE ISC or CBSE AISSE Class XII: 90% overall across five subjects and 90% in relevant subjects.",
+       "notesAr": "الصف الثاني عشر من CISCE ISC أو CBSE AISSE: 90% إجمالا في خمس مواد و90% في المواد ذات الصلة.",
+       "source": "s3",
+       "quote": "CISCE - ISC (Council for Indian School Certificate Examination - Indian School Certificate) Class XII CBSE - AISSE (Central Board of Secondary Education - All India Senior School Examination) Class XII | 90% overall across five subjects with a score of 90% in relevant subjects"
+      },
+      "ISC": {
+       "minimumPercent": 90,
+       "notesEn": "CISCE ISC or CBSE AISSE Class XII: 90% overall across five subjects and 90% in relevant subjects.",
+       "notesAr": "الصف الثاني عشر من CISCE ISC أو CBSE AISSE: 90% إجمالا في خمس مواد و90% في المواد ذات الصلة.",
+       "source": "s3",
+       "quote": "CISCE - ISC (Council for Indian School Certificate Examination - Indian School Certificate) Class XII CBSE - AISSE (Central Board of Secondary Education - All India Senior School Examination) Class XII | 90% overall across five subjects with a score of 90% in relevant subjects"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": "Imperial standard English level.",
+        "waiverNoteAr": "المستوى القياسي للغة الإنجليزية في إمبريال.",
+        "source": "s4",
+        "quote": "IELTS - Academic (Test-Centre/UKVI SELT/Online) Standard | Higher | 6.5 overall (minimum 6.0 in all elements)"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 4.5,
+        "minComponent": 4.5,
+        "waiverNoteEn": "Standard level, TOEFL tests from 21 January 2026.",
+        "waiverNoteAr": "المستوى القياسي، لاختبارات TOEFL منذ 21 يناير 2026.",
+        "source": "s4",
+        "quote": "4.5 (minimum 4.5 in all elements) |"
+       }
+      ],
+      "tests": [
+       {
+        "test": "TMUA",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "TMUA required, plus interview.",
+        "noteAr": "يشترط اختبار TMUA مع مقابلة.",
+        "source": "s2",
+        "quote": "You must sit the Test for Mathematics for University Admission (TMUA) as part of the application process for this course."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Interview is part of selection.",
+        "noteAr": "المقابلة جزء من الاختيار.",
+        "source": "s2",
+        "quote": "Admissions test (TMUA) and interview"
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "imperial-college-london-ee",
+     "status": "EXISTS",
+     "nameEn": "Electrical and Electronic Engineering MEng",
+     "nameAr": "الهندسة الكهربائية والإلكترونية، ماجستير متكامل في الهندسة",
+     "degree": "MEng",
+     "durationYears": 4,
+     "url": "https://www.imperial.ac.uk/study/courses/undergraduate/2027/electrical-electronic-engineering-meng/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AAA",
+       "notesEn": "Minimum entry standard A*A*A (three A-levels) or A*AAA (four A-levels).",
+       "notesAr": "الحد الأدنى A*A*A (ثلاث مواد A-level) أو A*AAA (أربع مواد).",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A*",
+         "source": "s5",
+         "quote": "A* in Mathematics"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s5",
+         "quote": "A*/A in Physics (A* is required if applying with three A-levels. At least an A is required if applying with four A-levels)"
+        }
+       ],
+       "source": "s5",
+       "quote": "Minimum entry standard A*A*A or A*AAA (A-level)"
+      },
+      "IB": {
+       "minimumPoints": 40,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "7",
+         "source": "s5",
+         "quote": "7 in Mathematics at higher level"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "7",
+         "source": "s5",
+         "quote": "7 in Physics at higher level"
+        }
+       ],
+       "source": "s5",
+       "quote": "40 points (International Baccalaureate)"
+      },
+      "AMERICAN": {
+       "notesEn": "Five AP scores of 5 (or three with a high school diploma plus SAT 1480 or ACT 33).",
+       "notesAr": "خمس درجات AP بدرجة 5 (أو ثلاث مع شهادة الثانوية ودرجة SAT بواقع 1480 أو ACT بواقع 33).",
+       "source": "s5",
+       "quote": "Our minimum entry standard is: EITHER 5, 5, 5, 5, 5 overall, to include Calculus BC, Physics C (Mechanics) and Physics C (Electricity and Magnetism) and two further relevant subjects OR 5, 5, 5 to include Calculus BC, Physics C (Mechanics) or Physics C (Electricity and Magnetism) Award of acceptable school leaving qualification (e.g., US High School Diploma) Either 1480 in SAT or 33 in ACT."
+      },
+      "CBSE": {
+       "minimumPercent": 90,
+       "notesEn": "CISCE ISC or CBSE AISSE Class XII: 90% overall across five subjects and 90% in relevant subjects.",
+       "notesAr": "الصف الثاني عشر من CISCE ISC أو CBSE AISSE: 90% إجمالا في خمس مواد و90% في المواد ذات الصلة.",
+       "source": "s3",
+       "quote": "CISCE - ISC (Council for Indian School Certificate Examination - Indian School Certificate) Class XII CBSE - AISSE (Central Board of Secondary Education - All India Senior School Examination) Class XII | 90% overall across five subjects with a score of 90% in relevant subjects"
+      },
+      "ISC": {
+       "minimumPercent": 90,
+       "notesEn": "CISCE ISC or CBSE AISSE Class XII: 90% overall across five subjects and 90% in relevant subjects.",
+       "notesAr": "الصف الثاني عشر من CISCE ISC أو CBSE AISSE: 90% إجمالا في خمس مواد و90% في المواد ذات الصلة.",
+       "source": "s3",
+       "quote": "CISCE - ISC (Council for Indian School Certificate Examination - Indian School Certificate) Class XII CBSE - AISSE (Central Board of Secondary Education - All India Senior School Examination) Class XII | 90% overall across five subjects with a score of 90% in relevant subjects"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7,
+        "minComponent": 6.5,
+        "waiverNoteEn": "Imperial higher English level.",
+        "waiverNoteAr": "المستوى الأعلى للغة الإنجليزية في إمبريال.",
+        "source": "s4",
+        "quote": "IELTS - Academic (Test-Centre/UKVI SELT/Online) Standard | Higher | 6.5 overall (minimum 6.0 in all elements) | 7.0 overall (minimum 6.5 in all elements)"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 5,
+        "minComponent": 5,
+        "waiverNoteEn": "Higher level, TOEFL tests from 21 January 2026.",
+        "waiverNoteAr": "المستوى الأعلى، لاختبارات TOEFL منذ 21 يناير 2026.",
+        "source": "s4",
+        "quote": "5.0 (minimum 5.0 in all elements) |"
+       }
+      ],
+      "tests": [
+       {
+        "test": "ESAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "ESAT required, plus interview.",
+        "noteAr": "يشترط اختبار ESAT مع مقابلة.",
+        "source": "s5",
+        "quote": "You must sit the Engineering and Science Admissions Test (ESAT) as part of the application process for this course."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Interview is part of selection.",
+        "noteAr": "المقابلة جزء من الاختيار.",
+        "source": "s5",
+        "quote": "Admissions test (ESAT) and interview"
+       }
+      ],
+      "source": "s5"
+     },
+     "previous": null
+    },
+    {
+     "key": "imperial-mechanical-engineering-meng",
+     "status": "EXISTS",
+     "nameEn": "Mechanical Engineering MEng",
+     "nameAr": "الهندسة الميكانيكية، ماجستير متكامل في الهندسة",
+     "degree": "MEng",
+     "durationYears": 4,
+     "url": "https://www.imperial.ac.uk/study/courses/undergraduate/2027/mechanical-engineering/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AAA",
+       "notesEn": "Minimum entry standard A*A*A (three A-levels) or A*AAA (four A-levels).",
+       "notesAr": "الحد الأدنى A*A*A (ثلاث مواد A-level) أو A*AAA (أربع مواد).",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A*",
+         "source": "s6",
+         "quote": "A* in Mathematics"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s6",
+         "quote": "A/A* in Physics (A* is required if applying with three A-levels. At least an A is required if applying with four A-levels)"
+        }
+       ],
+       "source": "s6",
+       "quote": "Minimum entry standard A*A*A or A*AAA (A-level)"
+      },
+      "IB": {
+       "minimumPoints": 40,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s6",
+         "quote": "6 in Mathematics at higher level"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s6",
+         "quote": "6 in Physics at higher level"
+        }
+       ],
+       "source": "s6",
+       "quote": "40 points (International Baccalaureate)"
+      },
+      "AMERICAN": {
+       "notesEn": "Five AP scores of 5 (or three with a high school diploma plus SAT 1480 or ACT 33).",
+       "notesAr": "خمس درجات AP بدرجة 5 (أو ثلاث مع شهادة الثانوية ودرجة SAT بواقع 1480 أو ACT بواقع 33).",
+       "source": "s6",
+       "quote": "Our minimum entry standard is: EITHER 5, 5, 5, 5, 5 overall, to include Calculus BC and Physics C (Mechanics) OR 5, 5, 5 to include Calculus BC and Physics C (Mechanics) Award of acceptable school leaving qualification (e.g., US High School Diploma) Either 1480 in SAT or 33 in ACT."
+      },
+      "CBSE": {
+       "minimumPercent": 90,
+       "notesEn": "CISCE ISC or CBSE AISSE Class XII: 90% overall across five subjects and 90% in relevant subjects.",
+       "notesAr": "الصف الثاني عشر من CISCE ISC أو CBSE AISSE: 90% إجمالا في خمس مواد و90% في المواد ذات الصلة.",
+       "source": "s3",
+       "quote": "CISCE - ISC (Council for Indian School Certificate Examination - Indian School Certificate) Class XII CBSE - AISSE (Central Board of Secondary Education - All India Senior School Examination) Class XII | 90% overall across five subjects with a score of 90% in relevant subjects"
+      },
+      "ISC": {
+       "minimumPercent": 90,
+       "notesEn": "CISCE ISC or CBSE AISSE Class XII: 90% overall across five subjects and 90% in relevant subjects.",
+       "notesAr": "الصف الثاني عشر من CISCE ISC أو CBSE AISSE: 90% إجمالا في خمس مواد و90% في المواد ذات الصلة.",
+       "source": "s3",
+       "quote": "CISCE - ISC (Council for Indian School Certificate Examination - Indian School Certificate) Class XII CBSE - AISSE (Central Board of Secondary Education - All India Senior School Examination) Class XII | 90% overall across five subjects with a score of 90% in relevant subjects"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": "Imperial standard English level.",
+        "waiverNoteAr": "المستوى القياسي للغة الإنجليزية في إمبريال.",
+        "source": "s4",
+        "quote": "IELTS - Academic (Test-Centre/UKVI SELT/Online) Standard | Higher | 6.5 overall (minimum 6.0 in all elements)"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 4.5,
+        "minComponent": 4.5,
+        "waiverNoteEn": "Standard level, TOEFL tests from 21 January 2026.",
+        "waiverNoteAr": "المستوى القياسي، لاختبارات TOEFL منذ 21 يناير 2026.",
+        "source": "s4",
+        "quote": "4.5 (minimum 4.5 in all elements) |"
+       }
+      ],
+      "tests": [
+       {
+        "test": "ESAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "ESAT required, plus interview.",
+        "noteAr": "يشترط اختبار ESAT مع مقابلة.",
+        "source": "s6",
+        "quote": "You must sit the Engineering and Science Admissions Test (ESAT) as part of the application process for this course."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Interview is part of selection.",
+        "noteAr": "المقابلة جزء من الاختيار.",
+        "source": "s6",
+        "quote": "Admissions test (ESAT) and interview"
+       }
+      ],
+      "source": "s6"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "kings_college_london",
+   "website": "https://www.kcl.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.kcl.ac.uk/study/undergraduate/courses/artificial-intelligence-bsc/entry-requirements",
+     "title": "Artificial Intelligence - Entry Requirements - Artificial Intelligence BSc | King's College London",
+     "retrievedAt": "2026-09-30T07:34:11.477Z",
+     "hash": "dcf26b64d75af8d1a9bcdb1f3488cb24a735c04b70cff4c19f2007a0cbfa41b0"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.kcl.ac.uk/study/undergraduate/courses/medicine-mbbs/entry-requirements",
+     "title": "Medicine - Entry Requirements - Medicine MBBS | King's College London",
+     "retrievedAt": "2026-09-30T07:35:34.037Z",
+     "hash": "a2e014978a7f059639d3f993855a0719daf36ad302cbe3401f3d964e964c6529"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.kcl.ac.uk/study/undergraduate/how-to-apply/english-language-requirements",
+     "title": "Undergraduate English language entry requirements | King's College London",
+     "retrievedAt": "2026-09-30T07:34:16.259Z",
+     "hash": "b250c17c1417d8004e27f35eab8953cf9801fab43fdacbe96981962bbd203a85"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.kcl.ac.uk/study/undergraduate/courses/law-llb/entry-requirements",
+     "title": "Law LLB - Entry Requirements - Law LLB | King's College London",
+     "retrievedAt": "2026-09-30T07:34:34.785Z",
+     "hash": "d6943448a34bf75d7d61882661e72f0e7be2a3be15f2ca763b79222345e7ffc2"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.kcl.ac.uk/study/undergraduate/how-to-apply/entry-requirements",
+     "title": "Undergraduate entry requirements | King's College London",
+     "retrievedAt": "2026-09-30T07:33:57.013Z",
+     "hash": "912931a502ca0f9c6ac7bb9b8ffccdd82baedf254b6eb478381678adcb071f97",
+     "waybackTimestamp": "20250914082718",
+     "waybackHash": "2cc186bdb082a4ef8779e0e31fdd25a86c5913dfa2e74d3a4ee3caa1169ab0c8"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.kcl.ac.uk/study/undergraduate/courses/dentistry-bds/entry-requirements",
+     "title": "Dentistry - Entry Requirements - Dentistry BDS | King's College London",
+     "retrievedAt": "2026-09-30T07:39:07.386Z",
+     "hash": "4f483a0b45020538d38af6d536fe3903733d166f06b2172bb9a7888aca686cbe"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_EQUAL_CONSIDERATION",
+     "date": "2027-01-13",
+     "labelEn": "UCAS deadline (most courses)",
+     "labelAr": "الموعد النهائي عبر UCAS (معظم البرامج)",
+     "source": "s1",
+     "quote": "Application deadline: 13 January 2027"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_OXBRIDGE_MEDICINE",
+     "date": "2026-10-15",
+     "labelEn": "UCAS deadline for Medicine and Dentistry",
+     "labelAr": "الموعد النهائي عبر UCAS للطب وطب الأسنان",
+     "source": "s2",
+     "quote": "Application deadline: 15 October 2026"
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "kcl-law-llb",
+     "status": "EXISTS",
+     "nameEn": "Law LLB",
+     "nameAr": "بكالوريوس القانون (LLB)",
+     "degree": "LLB",
+     "durationYears": 3,
+     "url": "https://www.kcl.ac.uk/study/undergraduate/courses/law-llb",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "subjects": [],
+       "source": "s4",
+       "quote": "Required grades: A*AA"
+      },
+      "IB": {
+       "minimumPoints": 38,
+       "subjects": [],
+       "source": "s4",
+       "quote": "38 points overall or an aggregate score of 19 from three Higher Levels."
+      },
+      "AMERICAN": {
+       "notesEn": "Route 1 examples: three APs and the ACT; one AP, two Honors classes and the SAT. Route 2: APs only (five minimum). Course-specific grades are not stated on the pages fetched.",
+       "notesAr": "أمثلة المسار 1: ثلاثة اختبارات AP مع ACT؛ أو اختبار AP وصفا شرف مع SAT. المسار 2: اختبارات AP فقط (خمسة كحد أدنى). لم تذكر الدرجات الخاصة بكل برنامج في الصفحات التي جلبت.",
+       "source": "s5",
+       "quote": "Applicants with US high school qualifications can meet our entry requirements through a combination of APs, Honors or Dual Enrolment Classes*, SATs and ACTs listed below."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7,
+        "minComponent": 6.5,
+        "waiverNoteEn": "KCL English band B.",
+        "waiverNoteAr": "مستوى اللغة الإنجليزية B في كينجز كوليدج.",
+        "source": "s3",
+        "quote": "7.0 overall with a minimum of 6.5 in each skill"
+       }
+      ],
+      "tests": [
+       {
+        "test": "LNAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "LNAT must be taken between 1 September and 31 December of the application cycle.",
+        "noteAr": "يجب أداء اختبار LNAT بين 1 سبتمبر و31 ديسمبر من دورة التقديم.",
+        "source": "s4",
+        "quote": "All applicants are required to take the National Admissions Test for Law (LNAT) by 31 December."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English band named on the course entry requirements page.",
+        "noteAr": "مستوى اللغة الإنجليزية المذكور في صفحة شروط القبول للبرنامج.",
+        "source": "s4",
+        "quote": "English language band: B"
+       }
+      ],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "kings-college-london-ai",
+     "status": "EXISTS",
+     "nameEn": "Artificial Intelligence BSc",
+     "nameAr": "بكالوريوس العلوم في الذكاء الاصطناعي",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.kcl.ac.uk/study/undergraduate/courses/artificial-intelligence-bsc",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*A*A",
+       "subjects": [
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "mathematics",
+          "further_mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s1",
+         "quote": "Must contain grade A in Mathematics or Further Mathematics."
+        }
+       ],
+       "source": "s1",
+       "quote": "Required grades: A*A*A"
+      },
+      "IB": {
+       "minimumPoints": 39,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s1",
+         "quote": "Must include grade 6 in Higher Level Mathematics: Analysis & Approaches."
+        }
+       ],
+       "source": "s1",
+       "quote": "39 points overall or an aggregate score of 20 from three Higher Levels."
+      },
+      "AMERICAN": {
+       "notesEn": "Route 1 examples: three APs and the ACT; one AP, two Honors classes and the SAT. Route 2: APs only (five minimum). Course-specific grades are not stated on the pages fetched.",
+       "notesAr": "أمثلة المسار 1: ثلاثة اختبارات AP مع ACT؛ أو اختبار AP وصفا شرف مع SAT. المسار 2: اختبارات AP فقط (خمسة كحد أدنى). لم تذكر الدرجات الخاصة بكل برنامج في الصفحات التي جلبت.",
+       "source": "s5",
+       "quote": "Applicants with US high school qualifications can meet our entry requirements through a combination of APs, Honors or Dual Enrolment Classes*, SATs and ACTs listed below."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": "KCL English band D.",
+        "waiverNoteAr": "مستوى اللغة الإنجليزية D في كينجز كوليدج.",
+        "source": "s3",
+        "quote": "6.5 overall with a minimum of 6.0 in each skill"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English band named on the course entry requirements page.",
+        "noteAr": "مستوى اللغة الإنجليزية المذكور في صفحة شروط القبول للبرنامج.",
+        "source": "s1",
+        "quote": "English language band: D"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "kings-college-london-dent",
+     "status": "EXISTS",
+     "nameEn": "Dentistry BDS",
+     "nameAr": "بكالوريوس جراحة الأسنان (BDS)",
+     "degree": "BDS",
+     "durationYears": 5,
+     "url": "https://www.kcl.ac.uk/study/undergraduate/courses/dentistry-bds",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "subjects": [
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s6",
+         "quote": "Must include grade A in Biology or Chemistry, in addition to grade A in one of Biology, Chemistry, Physics, Mathematics or Psychology."
+        }
+       ],
+       "source": "s6",
+       "quote": "Required grades: A*AA"
+      },
+      "IB": {
+       "minimumPoints": 38,
+       "subjects": [
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "chemistry",
+          "biology"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s6",
+         "quote": "Must include grade 6 Higher Level in Chemistry or Biology, in addition to grade 6 Higher Level in one of Biology, Chemistry, Mathematics (Analysis & Approaches or Applications & Interpretation), Physics or Psychology."
+        }
+       ],
+       "source": "s6",
+       "quote": "38 points overall or an aggregate score of 19 from three Higher Levels"
+      },
+      "AMERICAN": {
+       "notesEn": "Route 1 examples: three APs and the ACT; one AP, two Honors classes and the SAT. Route 2: APs only (five minimum). Course-specific grades are not stated on the pages fetched.",
+       "notesAr": "أمثلة المسار 1: ثلاثة اختبارات AP مع ACT؛ أو اختبار AP وصفا شرف مع SAT. المسار 2: اختبارات AP فقط (خمسة كحد أدنى). لم تذكر الدرجات الخاصة بكل برنامج في الصفحات التي جلبت.",
+       "source": "s5",
+       "quote": "Applicants with US high school qualifications can meet our entry requirements through a combination of APs, Honors or Dual Enrolment Classes*, SATs and ACTs listed below."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7,
+        "minComponent": 6.5,
+        "waiverNoteEn": "KCL English band B.",
+        "waiverNoteAr": "مستوى اللغة الإنجليزية B في كينجز كوليدج.",
+        "source": "s3",
+        "quote": "7.0 overall with a minimum of 6.5 in each skill"
+       }
+      ],
+      "tests": [
+       {
+        "test": "UCAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "No fixed UCAT threshold.",
+        "noteAr": "لا يوجد حد ثابت لدرجة UCAT.",
+        "source": "s6",
+        "quote": "All applicants are required to sit the UCAT (previously known as UKCAT), prior to applying to this programme, and the UCAT must be taken the same year you apply in order to be valid."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Interviews December to March.",
+        "noteAr": "المقابلات من ديسمبر إلى مارس.",
+        "source": "s6",
+        "quote": "The interview period generally runs from December to March, and we aim to send out invites via King's Apply with at least two weeks notice of an interview date."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Must be 18 by 1 January of the first year.",
+        "noteAr": "يجب بلوغ 18 عاما بحلول 1 يناير من السنة الأولى.",
+        "source": "s6",
+        "quote": "King’s is only able to accept applicants who will be 18 years of age on 1st January on the first year of the Dentistry programmes. This is due to a minimum age requirement for placements. Applicants who will not be 18 by the 1st January of the first year of the degree, should submit an application the following year."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English band named on the course entry requirements page.",
+        "noteAr": "مستوى اللغة الإنجليزية المذكور في صفحة شروط القبول للبرنامج.",
+        "source": "s6",
+        "quote": "English language band: B"
+       }
+      ],
+      "source": "s6"
+     },
+     "previous": null
+    },
+    {
+     "key": "kings-college-london-med",
+     "status": "REPLACED",
+     "nameEn": "Medicine MBBS",
+     "nameAr": "بكالوريوس الطب والجراحة (MBBS)",
+     "degree": "MBBS",
+     "durationYears": 5,
+     "url": "https://www.kcl.ac.uk/study/undergraduate/courses/medicine-mbbs",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s2",
+         "quote": "Must include grade A in Biology and Chemistry."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s2",
+         "quote": "Must include grade A in Biology and Chemistry."
+        }
+       ],
+       "source": "s2",
+       "quote": "Required grades: A*AA"
+      },
+      "IB": {
+       "minimumPoints": 38,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s2",
+         "quote": "Must include grade 6 in Higher Level Biology and Higher Level Chemistry."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s2",
+         "quote": "Must include grade 6 in Higher Level Biology and Higher Level Chemistry."
+        }
+       ],
+       "source": "s2",
+       "quote": "38 points overall or an aggregate score of 19 from three Higher Levels."
+      },
+      "AMERICAN": {
+       "notesEn": "Route 1 examples: three APs and the ACT; one AP, two Honors classes and the SAT. Route 2: APs only (five minimum). Course-specific grades are not stated on the pages fetched.",
+       "notesAr": "أمثلة المسار 1: ثلاثة اختبارات AP مع ACT؛ أو اختبار AP وصفا شرف مع SAT. المسار 2: اختبارات AP فقط (خمسة كحد أدنى). لم تذكر الدرجات الخاصة بكل برنامج في الصفحات التي جلبت.",
+       "source": "s5",
+       "quote": "Applicants with US high school qualifications can meet our entry requirements through a combination of APs, Honors or Dual Enrolment Classes*, SATs and ACTs listed below."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7,
+        "minComponent": 6.5,
+        "waiverNoteEn": "KCL English band B.",
+        "waiverNoteAr": "مستوى اللغة الإنجليزية B في كينجز كوليدج.",
+        "source": "s3",
+        "quote": "7.0 overall with a minimum of 6.5 in each skill"
+       }
+      ],
+      "tests": [
+       {
+        "test": "UCAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "No fixed UCAT threshold.",
+        "noteAr": "لا يوجد حد ثابت لدرجة UCAT.",
+        "source": "s2",
+        "quote": "All applicants are required to sit the University Clinical Aptitude Test (UCAT), previously known as UKCAT, prior to applying to this programme. Please note the UCAT must be taken the same year you apply in order to be valid. Please refer to the UCAT website for details on registration and test dates."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Interviews November to May; no offer without interview.",
+        "noteAr": "المقابلات من نوفمبر إلى مايو؛ لا عروض دون مقابلة.",
+        "source": "s2",
+        "quote": "No offers are made without an interview."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English band named on the course entry requirements page.",
+        "noteAr": "مستوى اللغة الإنجليزية المذكور في صفحة شروط القبول للبرنامج.",
+        "source": "s2",
+        "quote": "English language band: B"
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "leeds",
+   "website": "https://www.leeds.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ucas.com/events/2027-entry-deadline-for-all-undergraduate-courses-except-those-with-a-15-october-deadline-475546",
+     "title": "2027 entry deadline for all undergraduate courses, except those with a 15 October deadline | UCAS",
+     "retrievedAt": "2026-09-29T23:52:05.747Z",
+     "hash": "42e7cce7af0b177d9fe63405d6ee7ddb14c615f2fce64e6ee97f45478ed862fa"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.ucas.com/events/2027-entry-deadline-for-the-universities-of-oxford-and-cambridge-and-most-courses-in-medicine-475536",
+     "title": "2027 entry deadline for the universities of Oxford and Cambridge, and most courses in medicine, veterinary medicine/science, and dentistry | UCAS",
+     "retrievedAt": "2026-09-29T23:52:48.839Z",
+     "hash": "125518b79ea6c03dff6513acf5144845b0afab760706976f07eff2864102f901"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.leeds.ac.uk/international-entry-requirements",
+     "title": "Entry requirements | University of Leeds",
+     "retrievedAt": "2026-09-30T07:33:50.498Z",
+     "hash": "707af22fd59226bbbaaf8495b9b9ea279369ca7c72d2384a31948d0ea0059b1c"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.leeds.ac.uk/mbchb",
+     "title": "Medicine and Surgery MBChB | University of Leeds",
+     "retrievedAt": "2026-09-30T07:34:26.730Z",
+     "hash": "4405d87c2187bc7c63bdc3354d7b5b4e0f93ed58a78bc375a9ac7ac7f5d45a9b"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6,
+     "minComponent": 5.5,
+     "waiverNoteEn": "University minimum for undergraduate study; some courses require more.",
+     "waiverNoteAr": "الحد الأدنى للجامعة للدراسة الجامعية؛ تتطلب بعض البرامج أكثر.",
+     "source": "s3",
+     "quote": "IELTS Academic or IELTS for UKVI (Academic): 6.0 overall with no less than 5.5 in each component."
+    }
+   ],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_EQUAL_CONSIDERATION",
+     "date": "2027-01-13",
+     "labelEn": "UCAS equal consideration deadline (most courses)",
+     "labelAr": "الموعد النهائي للنظر المتساوي عبر UCAS (معظم البرامج)",
+     "source": "s1",
+     "quote": "Applications for all 2027 entry undergraduate courses, except those with a 15 October deadline, should arrive at UCAS by 18:00 (UK time) on 13 January 2027."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_OXBRIDGE_MEDICINE",
+     "date": "2026-10-15",
+     "labelEn": "UCAS deadline for Oxford, Cambridge and most medicine courses",
+     "labelAr": "الموعد النهائي عبر UCAS لجامعتي أكسفورد وكامبريدج ومعظم برامج الطب",
+     "source": "s2",
+     "quote": "15 October 2026"
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "leeds-med",
+     "status": "EXISTS",
+     "nameEn": "Medicine and Surgery MBChB",
+     "nameAr": "بكالوريوس الطب والجراحة (MBChB)",
+     "degree": "MBChB",
+     "durationYears": 5,
+     "url": "https://www.leeds.ac.uk/mbchb",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "notesEn": "A* cannot compensate for a B in another subject. At least 6 GCSEs at grade 6 including Maths, English Language, Biology and Chemistry or Dual Science.",
+       "notesAr": "لا تعوض درجة A* عن درجة B في مادة أخرى. يشترط 6 مواد GCSE على الأقل بدرجة 6 منها الرياضيات واللغة الإنجليزية والأحياء والكيمياء أو العلوم المزدوجة.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s4",
+         "quote": "A-level: AAA including Chemistry and Biology."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s4",
+         "quote": "A-level: AAA including Chemistry and Biology."
+        }
+       ],
+       "source": "s4",
+       "quote": "A-level: AAA including Chemistry and Biology."
+      },
+      "IB": {
+       "minimumPoints": 36,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s4",
+         "quote": "Overall score of 36 points with a mark of 6 in 3 Higher Level subjects which must include Chemistry and Biology. If English and Maths are not offered at GCSE, these subjects must be offered with a mark of at least 5 at Standard level."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s4",
+         "quote": "Overall score of 36 points with a mark of 6 in 3 Higher Level subjects which must include Chemistry and Biology. If English and Maths are not offered at GCSE, these subjects must be offered with a mark of at least 5 at Standard level."
+        }
+       ],
+       "source": "s4",
+       "quote": "Overall score of 36 points with a mark of 6 in 3 Higher Level subjects which must include Chemistry and Biology. If English and Maths are not offered at GCSE, these subjects must be offered with a mark of at least 5 at Standard level."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7.5,
+        "minComponent": null,
+        "waiverNoteEn": "Minimum 7.5 in Speaking.",
+        "waiverNoteAr": "الحد الأدنى 7.5 في مهارة التحدث.",
+        "source": "s4",
+        "quote": "IELTS 7.5 overall, with no less than 7.5 in Spoken English. For other English qualifications, read English language equivalent qualifications."
+       }
+      ],
+      "tests": [
+       {
+        "test": "UCAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "UCAT in the year of application; BMAT or GAMSAT not accepted instead.",
+        "noteAr": "اختبار UCAT في سنة التقديم؛ لا يقبل BMAT أو GAMSAT بديلا.",
+        "source": "s4",
+        "quote": "All applicants for the MBChB course are required to take UCAT. This test must be taken in the year of application. We do not accept other aptitude tests instead, e.g. BMAT or GAMSAT."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "International applicants: 15 October UCAS deadline applies.",
+        "noteAr": "المتقدمون الدوليون: يسري موعد UCAS في 15 أكتوبر.",
+        "source": "s4",
+        "quote": "Applications from international students are subject to the same deadlines as UK applicants, therefore the School of Medicine will not consider any applications submitted after the 15th October deadline."
+       }
+      ],
+      "source": "s4"
      },
      "previous": null
     }

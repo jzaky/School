@@ -1,6 +1,6 @@
 {
  "batch": "cawide",
- "assembledAt": "2026-09-30T02:36:28.553Z",
+ "assembledAt": "2026-09-30T08:00:44.286Z",
  "universities": [
   {
    "key": "anu",
@@ -85,9 +85,62 @@
      "title": "Bachelor of Economics - ANU",
      "retrievedAt": "2026-09-29T23:58:19.652Z",
      "hash": "a331b21fd6870c820ce5e08e590a14641747f6bec9a6b751e722deda1f04bd93"
+    },
+    {
+     "id": "s12",
+     "url": "https://policies.anu.edu.au/ppl/document/ANUP_000408",
+     "title": "ANU Policy Library - Policy - English language admission requirements and post-admission support",
+     "retrievedAt": "2026-09-30T07:36:44.521Z",
+     "hash": "3daddf846d312a2418bb214d89a8262eae76d5cc3182b0175e92da19fd55cff9"
     }
    ],
-   "english": [],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": "IELTS Academic taken at a test centre; online results are not accepted.",
+     "waiverNoteAr": "اختبار IELTS الأكاديمي في مركز اختبار معتمد، ولا تُقبل نتائج الاختبار عبر الإنترنت.",
+     "source": "s12",
+     "quote": "All of the following: Overall score: 6.5 Reading: 6.0 Writing: 6.0 Listening: 6.0 Speaking: 6.0"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 81,
+     "minComponent": 16,
+     "waiverNoteEn": "For study from 1 January 2027 (TOEFL iBT Australia): Reading 16, Writing 19, Listening 16, Speaking 19.",
+     "waiverNoteAr": "للدراسة اعتبارا من 1 يناير 2027 (TOEFL iBT Australia): القراءة 16، الكتابة 19، الاستماع 16، التحدث 19.",
+     "source": "s12",
+     "quote": "For study commencing on or after 1 January 2027: All of the following: Overall score: 81 Reading: 16 Writing: 19 Listening: 16 Speaking: 19"
+    },
+    {
+     "test": "CAMBRIDGE",
+     "minOverall": 169,
+     "minComponent": 163,
+     "waiverNoteEn": "C1 Advanced, for study from 1 January 2027.",
+     "waiverNoteAr": "شهادة C1 Advanced للدراسة اعتبارا من 1 يناير 2027.",
+     "source": "s12",
+     "quote": "For study commencing on or after 1 January 2027: All of the following: Overall score: 169 Reading: 163 Writing: 170 Listening: 163 Speaking: 179"
+    },
+    {
+     "test": "PTE",
+     "minOverall": 64,
+     "minComponent": 60,
+     "waiverNoteEn": "PTE Academic, for study from 1 January 2027.",
+     "waiverNoteAr": "اختبار PTE الأكاديمي للدراسة اعتبارا من 1 يناير 2027.",
+     "source": "s12",
+     "quote": "For study commencing on or after 1 January 2027: All of the following: Overall score: 64 Communicative Skills: Reading: 60 Writing: 60 Listening: 60 Speaking: 60"
+    },
+    {
+     "test": "LANGUAGECERT",
+     "minOverall": 67,
+     "minComponent": 57,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s12",
+     "quote": "LanguageCert Academic | All of the following: Overall score: 67 Reading: 60 Writing: 64 Listening: 57 Speaking: 70"
+    }
+   ],
    "tests": [
     {
      "test": "SAT",
@@ -1128,6 +1181,2643 @@
        }
       ],
       "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "unsw",
+   "website": "https://www.unsw.edu.au",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-computer-science",
+     "title": "Bachelor of Science (Computer Science) | UNSW Sydney",
+     "retrievedAt": "2026-09-30T07:32:11.031Z",
+     "hash": "dfd5c4bdd77599dcbe661cc757a14e7b034f7e3af36602c99a1f3d3fc39c0c77",
+     "waybackTimestamp": "20250912075220",
+     "waybackHash": "5fa0898656f436b1c771ffb8d9ba4ddefa76304b31add30c13bbad58aa3fa7f8"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-medical-studies-doctor-of-medicine",
+     "title": "Bachelor of Medical Studies / Doctor of Medicine",
+     "retrievedAt": "2026-09-30T07:32:17.107Z",
+     "hash": "688f296b2f58c9c90d84027e5cb14e719773df0242e0f717a8e038829d608ba5"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.unsw.edu.au/study/how-to-apply/english-language-requirements",
+     "title": "English language requirements | UNSW Sydney",
+     "retrievedAt": "2026-09-30T07:36:52.672Z",
+     "hash": "9bafcaac18b0df89f84a5036486aaaae29e2c454d32014e710ba2b13ad44b526",
+     "waybackTimestamp": "20250824103912",
+     "waybackHash": "05297a16d2856845f15ec0a5abf3e833ce48a55f078f9daebd9ab5eca4e7407f"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.unsw.edu.au/study/how-to-apply/international/entry-requirements",
+     "title": "Entry requirements | International students | UNSW Sydney",
+     "retrievedAt": "2026-09-30T07:32:11.122Z",
+     "hash": "63ae77ccd9a56778d11ce0284c9c88564c85c6a4f9f60cbb8909056cdc649626",
+     "waybackTimestamp": "20250913141749",
+     "waybackHash": "511d9a7b9653d9ebeea0f63ab198e0946dc2e8bf463212f3672f5c887ba2db62"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "International applicants apply directly (or through a UNSW agent); direct-entry scores are on each degree page.",
+     "noteAr": "يتقدم الطلاب الدوليون مباشرة (أو عبر وكيل معتمد لدى الجامعة)، وتظهر درجات القبول المباشر في صفحة كل برنامج.",
+     "source": "s4",
+     "quote": "International direct entry scores are listed on each degree page."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "unsw-ai",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Science (Computer Science), Artificial Intelligence major",
+     "nameAr": "بكالوريوس العلوم (علوم الحاسوب)، تخصص الذكاء الاصطناعي",
+     "degree": "BSc (Computer Science)",
+     "durationYears": 3,
+     "url": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-computer-science",
+     "curricula": {
+      "BRITISH": {
+       "subjects": [],
+       "notesEn": "A Level entry score from the best two, three or four A2 subjects (A*=6, A=5, B=4, C=3, D=2, E=1). International direct entry score 12.",
+       "notesAr": "درجة القبول في A Level من أفضل مادتين أو ثلاث أو أربع مواد A2 (A*=6، A=5، B=4، C=3، D=2، E=1). درجة القبول المباشر للطلاب الدوليين 12.",
+       "source": "s1",
+       "quote": "Great Britain General Certificate of Education (GCE A levels) | 12.0 All applicants must present a minimum of two Advanced Level (A2) subjects."
+      },
+      "IB": {
+       "minimumPoints": 34,
+       "subjects": [],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s1",
+       "quote": "International Baccalaureate Diploma (IB) | 34.0 Entry criteria is based on scores required for entry into UNSW in 2026"
+      },
+      "AMERICAN": {
+       "subjects": [],
+       "notesEn": "SAT 1240 with evidence of completing senior secondary studies.",
+       "notesAr": "درجة SAT تبلغ 1240 مع ما يثبت إتمام الدراسة الثانوية.",
+       "source": "s1",
+       "quote": "Scholastic Aptitude Test (SAT) (after 2016) | 1240.0 Scholastic Aptitude Test (SAT) based on the total of evidence-based reading and writing and mathematical test scores."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": "Engineering faculty programmes (Computer Science).",
+        "waiverNoteAr": "برامج كلية الهندسة (ومنها علوم الحاسوب).",
+        "source": "s3",
+        "quote": "Engineering | 6.5 overall (min 6.0 in each subtest) |"
+       }
+      ],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "OPTIONAL",
+        "minScore": 1240,
+        "noteEn": "One accepted route for US-system applicants.",
+        "noteAr": "أحد المسارات المقبولة لطلاب النظام الأمريكي.",
+        "source": "s1",
+        "quote": "Scholastic Aptitude Test (SAT) (after 2016) | 1240.0"
+       }
+      ],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "unsw-cs",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science (Computer Science)",
+     "nameAr": "بكالوريوس العلوم (علوم الحاسوب)",
+     "degree": "BSc (Computer Science)",
+     "durationYears": 3,
+     "url": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-computer-science",
+     "curricula": {
+      "BRITISH": {
+       "subjects": [],
+       "notesEn": "A Level entry score from the best two, three or four A2 subjects (A*=6, A=5, B=4, C=3, D=2, E=1). International direct entry score 12.",
+       "notesAr": "درجة القبول في A Level من أفضل مادتين أو ثلاث أو أربع مواد A2 (A*=6، A=5، B=4، C=3، D=2، E=1). درجة القبول المباشر للطلاب الدوليين 12.",
+       "source": "s1",
+       "quote": "Great Britain General Certificate of Education (GCE A levels) | 12.0 All applicants must present a minimum of two Advanced Level (A2) subjects."
+      },
+      "IB": {
+       "minimumPoints": 34,
+       "subjects": [],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s1",
+       "quote": "International Baccalaureate Diploma (IB) | 34.0 Entry criteria is based on scores required for entry into UNSW in 2026"
+      },
+      "AMERICAN": {
+       "subjects": [],
+       "notesEn": "SAT 1240 with evidence of completing senior secondary studies.",
+       "notesAr": "درجة SAT تبلغ 1240 مع ما يثبت إتمام الدراسة الثانوية.",
+       "source": "s1",
+       "quote": "Scholastic Aptitude Test (SAT) (after 2016) | 1240.0 Scholastic Aptitude Test (SAT) based on the total of evidence-based reading and writing and mathematical test scores."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": "Engineering faculty programmes (Computer Science).",
+        "waiverNoteAr": "برامج كلية الهندسة (ومنها علوم الحاسوب).",
+        "source": "s3",
+        "quote": "Engineering | 6.5 overall (min 6.0 in each subtest) |"
+       }
+      ],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "OPTIONAL",
+        "minScore": 1240,
+        "noteEn": "One accepted route for US-system applicants.",
+        "noteAr": "أحد المسارات المقبولة لطلاب النظام الأمريكي.",
+        "source": "s1",
+        "quote": "Scholastic Aptitude Test (SAT) (after 2016) | 1240.0"
+       }
+      ],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "unsw-med",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Medical Studies / Doctor of Medicine",
+     "nameAr": "بكالوريوس الدراسات الطبية / دكتور في الطب",
+     "degree": "BMed/MD",
+     "durationYears": 6,
+     "url": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-medical-studies-doctor-of-medicine",
+     "curricula": {
+      "BRITISH": {
+       "subjects": [],
+       "notesEn": "A Level entry score from the best two, three or four A2 subjects (A*=6, A=5, B=4, C=3, D=2, E=1). Score 17 plus ISAT and interview.",
+       "notesAr": "درجة القبول في A Level من أفضل مادتين أو ثلاث أو أربع مواد A2 (A*=6، A=5، B=4، C=3، D=2، E=1). الدرجة 17 مع اختبار ISAT ومقابلة.",
+       "source": "s2",
+       "quote": "Great Britain General Certificate of Education (GCE A levels) | 17 + ISAT + Interview"
+      },
+      "IB": {
+       "minimumPoints": 40,
+       "subjects": [],
+       "notesEn": "Plus ISAT and interview.",
+       "notesAr": "مع اختبار ISAT ومقابلة.",
+       "source": "s2",
+       "quote": "International Baccalaureate Diploma (IB) | 40 + ISAT + Interview"
+      },
+      "AMERICAN": {
+       "subjects": [],
+       "notesEn": "SAT 1370 plus ISAT and interview.",
+       "notesAr": "درجة SAT تبلغ 1370 مع اختبار ISAT ومقابلة.",
+       "source": "s2",
+       "quote": "Scholastic Aptitude Test (SAT) (after 2016) | 1370 + ISAT + Interview"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7,
+        "minComponent": 6,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s3",
+        "quote": "The following programs require 7.0 overall (min 6.0 in each subtest) Bachelor of Medical Studies (BMed)/Doctor of Medicine (MD) including double degree"
+       }
+      ],
+      "tests": [
+       {
+        "test": "ISAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "International applicants sit the ISAT (domestic: UCAT ANZ).",
+        "noteAr": "يؤدي المتقدمون الدوليون اختبار ISAT (والمحليون اختبار UCAT ANZ).",
+        "source": "s2",
+        "quote": "All applicants must complete an external test (UCAT ANZ or ISAT) and also complete an interview."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Interview required for all applicants.",
+        "noteAr": "المقابلة مطلوبة لجميع المتقدمين.",
+        "source": "s2",
+        "quote": "All applicants must complete an external test (UCAT ANZ or ISAT) and also complete an interview."
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "uq",
+   "website": "https://www.uq.edu.au",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://study.uq.edu.au/admissions/english-language-requirements",
+     "title": "English language requirements at UQ",
+     "retrievedAt": "2026-09-30T07:32:46.690Z",
+     "hash": "07dbb63b26fd19151b2a6c97c2facba12a08aea671b2d8f4c7bd24b0dad99b4e",
+     "waybackTimestamp": "20251012144110",
+     "waybackHash": "dac80f2bd95530539151c3cadd991899c4033b652fa26486d79f15313fca03c9"
+    },
+    {
+     "id": "s2",
+     "url": "https://study.uq.edu.au/admissions/undergraduate/review-entry-requirements",
+     "title": "Review entry requirements - Study - The University of Queensland",
+     "retrievedAt": "2026-09-30T07:32:38.197Z",
+     "hash": "8a8a608c8a7ef253a3f0a1d440341cee14dfa575fdd465cb6277b2de7532abc8",
+     "waybackTimestamp": "20250918075602",
+     "waybackHash": "03a9187cde98a6a083e9d0569ae6a445884b712b4e4147e33565e26358fff309"
+    },
+    {
+     "id": "s3",
+     "url": "https://study.uq.edu.au/study-options/programs/bachelor-medical-science-doctor-medicine-2578",
+     "title": "Bachelor of Medical Science / Doctor of Medicine - Study - The University of Queensland",
+     "retrievedAt": "2026-09-30T07:32:16.858Z",
+     "hash": "e7ba6ef324ffb03f41ff305e9ff5ac57dbfdbefe2d1d99c908b982f0aca22c0a"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": "Most programmes; some programmes require more.",
+     "waiverNoteAr": "لمعظم البرامج، وتشترط بعض البرامج مستوى أعلى.",
+     "source": "s1",
+     "quote": "To be eligible for entry to most UQ programs, you need to meet our minimum English language requirements (overall IELTS of 6.5 and 6.0 in all sub-bands or equivalent, including IELTS One Skill Retake)."
+    }
+   ],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": false,
+     "noteEn": "Each programme publishes an ATAR and an IB entry score as a guide based on the previous year.",
+     "noteAr": "ينشر كل برنامج درجة ATAR ودرجة البكالوريا الدولية كدليل استرشادي مبني على العام السابق.",
+     "source": "s2",
+     "quote": "Each program lists 2 equivalent entry score thresholds: ATAR/selection rank and International Baccalaureate (IB) score. The published scores are a guide based on the previous year."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "uq-cs",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Computer Science",
+     "nameAr": "بكالوريوس علوم الحاسوب",
+     "degree": "BCompSc",
+     "durationYears": null,
+     "url": "https://study.uq.edu.au/study-options/programs/bachelor-computer-science-2559/artificial-intelligence-artinc2559?year=2026",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "uq-med",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Medical Science / Doctor of Medicine",
+     "nameAr": "بكالوريوس العلوم الطبية / دكتور في الطب",
+     "degree": "BMedSc/MD",
+     "durationYears": 6,
+     "url": "https://study.uq.edu.au/study-options/programs/bachelor-medical-science-doctor-medicine-2578",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "Two years of pre-medicine followed directly by the 4-year MD. International entry scores were not shown on the fetched page.",
+        "noteAr": "سنتان من الدراسة التمهيدية للطب يليهما مباشرة برنامج دكتور في الطب لمدة 4 سنوات. لم تظهر درجات القبول للطلاب الدوليين في الصفحة التي جُلبت.",
+        "source": "s3",
+        "quote": "The Bachelor of Medical Science/Doctor of Medicine is a vertical dual degree which enables you to complete 2 years of tailored pre-medicine study before progressing directly into the 4-year Doctor of Medicine (MD) program."
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "usyd",
+   "website": "https://www.sydney.edu.au",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.sydney.edu.au/courses/courses/uc/bachelor-of-advanced-computing.html",
+     "title": "Bachelor of Advanced Computing - The University of Sydney",
+     "retrievedAt": "2026-09-30T07:32:26.371Z",
+     "hash": "5f43dfc8f8ca18c84abe25364694ce028cdc3ebcc4761b2fef3afb90084d5c64"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.sydney.edu.au/courses/courses/uc/bachelor-of-arts-and-bachelor-of-laws.html",
+     "title": "Bachelor of Arts and Bachelor of Laws - The University of Sydney",
+     "retrievedAt": "2026-09-30T07:32:10.279Z",
+     "hash": "542c161be0fe6a5d7e489e6149a75a7bb2861890d11f5f4f369f22c0dca8ead0"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.sydney.edu.au/study/applying/how-to-apply/undergraduate/recognised-qualifications.html",
+     "title": "Recognised qualifications - The University of Sydney",
+     "retrievedAt": "2026-09-30T07:32:16.038Z",
+     "hash": "bc981e9461910660f571edf5b72c583f6ed03d1745c33dbe09f46c3d18ac19ab"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.sydney.edu.au/study/applying/how-to-apply/international-students/english-language-requirements.html",
+     "title": "English language requirements - The University of Sydney",
+     "retrievedAt": "2026-09-30T07:32:30.379Z",
+     "hash": "4f5eb09c4e36c11531c35566ebaa78130b317865c50e3eb508aa68a776f11156"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": "Standard requirement; some courses differ.",
+     "waiverNoteAr": "المتطلب القياسي، وقد تختلف بعض البرامج.",
+     "source": "s4",
+     "quote": "The University's standard English language proficiency requirement is set at an IELTS overall score of 6.5 with no band below 6.0; however, some faculties and courses have different requirements."
+    }
+   ],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "US-system applicants are assessed on SAT or ACT together with a completed high school qualification.",
+     "noteAr": "يُقيَّم طلاب النظام الأمريكي بدرجة SAT أو ACT مع إتمام شهادة الثانوية.",
+     "source": "s3",
+     "quote": "Scholastic Aptitude Test (SAT) examination or American College Test (ACT) with completion of a secondary education (high school) qualification."
+    }
+   ],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {
+    "IB": {
+     "accepted": true,
+     "subjects": [],
+     "notesEn": "A completed IB Diploma is converted into an ATAR-equivalent Combined Rank.",
+     "notesAr": "يُحوَّل دبلوم البكالوريا الدولية المكتمل إلى رتبة مكافئة لـ ATAR تُسمى Combined Rank.",
+     "source": "s3",
+     "quote": "Admission is based on the overall scores for a completed IB diploma. When you apply, this score is converted into an ATAR equivalent called Combined Rank."
+    },
+    "CBSE": {
+     "accepted": true,
+     "subjects": [],
+     "notesEn": "Listed as a recognised qualification.",
+     "notesAr": "مدرجة ضمن المؤهلات المعترف بها.",
+     "source": "s3",
+     "quote": "All India Senior School Certificate (CBSE)"
+    },
+    "ISC": {
+     "accepted": true,
+     "subjects": [],
+     "notesEn": "Listed as a recognised qualification.",
+     "notesAr": "مدرجة ضمن المؤهلات المعترف بها.",
+     "source": "s3",
+     "quote": "Indian School Certificate (CISCE)"
+    }
+   },
+   "programs": [
+    {
+     "key": "usyd-cs",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Advanced Computing (Computer Science major)",
+     "nameAr": "بكالوريوس الحوسبة المتقدمة (تخصص علوم الحاسوب)",
+     "degree": "BAdvComp",
+     "durationYears": 4,
+     "url": "https://www.sydney.edu.au/courses/courses/uc/bachelor-of-advanced-computing.html",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "Computer Science is a major within the 4-year Bachelor of Advanced Computing; the entry score for 2027 was not yet published on the fetched page.",
+        "noteAr": "علوم الحاسوب تخصص ضمن بكالوريوس الحوسبة المتقدمة لمدة 4 سنوات، ولم تكن درجة القبول لعام 2027 منشورة بعد في الصفحة التي جُلبت.",
+        "source": "s1",
+        "quote": "Bachelor of Advanced Computing (Computer Science major)"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "usyd-law",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Arts and Bachelor of Laws",
+     "nameAr": "بكالوريوس الآداب وبكالوريوس القانون",
+     "degree": "BA/LLB",
+     "durationYears": 5,
+     "url": "https://www.sydney.edu.au/courses/courses/uc/bachelor-of-arts-and-bachelor-of-laws.html",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "Sydney teaches undergraduate law as a combined degree (for example Arts and Laws, 5 years full-time).",
+        "noteAr": "تُدرّس جامعة سيدني القانون في المرحلة الجامعية الأولى ضمن درجة مزدوجة (مثل الآداب والقانون، 5 سنوات بدوام كامل).",
+        "source": "s2",
+        "quote": "Our highly regarded Bachelor of Arts and Bachelor of Laws combined degree program will challenge the way you see the world."
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "mcgill",
+   "website": "https://www.mcgill.ca",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.mcgill.ca/undergraduate-admissions/program/computer-science-faculty-science",
+     "title": "Computer Science (Faculty of Science) | Undergraduate Admissions - McGill University",
+     "retrievedAt": "2026-09-30T07:32:31.570Z",
+     "hash": "8147a9d53373966dca143989fdb83c5f5f28c0bfd425fb452d8f19bdfa393970"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.mcgill.ca/undergraduate-admissions/program/electrical-engineering-faculty-engineering",
+     "title": "Electrical Engineering (Faculty of Engineering) | Undergraduate Admissions - McGill University",
+     "retrievedAt": "2026-09-30T07:32:24.451Z",
+     "hash": "1a78956c24e454f9cd13a334ac09781f75aa3b9523b2d86604885a511e23cd71"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.mcgill.ca/undergraduate-admissions/apply/requirements/international/advanced-levels",
+     "title": "Advanced Levels, and equivalent | Undergraduate Admissions - McGill University",
+     "retrievedAt": "2026-09-30T07:32:24.128Z",
+     "hash": "b7eef33f602ec7243cf9fcf62da2670dcc90207c7836b42b1dbc8df6085fe726"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.mcgill.ca/undergraduate-admissions/apply/requirements/international/ib",
+     "title": "International Baccalaureate Diploma | Undergraduate Admissions - McGill University",
+     "retrievedAt": "2026-09-30T07:32:45.819Z",
+     "hash": "6cbf42d5247f9b8415b5ed1209bf273e6b7dcc3b2ea73731bcf2f8acc49cdf53",
+     "waybackTimestamp": "20251116223455",
+     "waybackHash": "08ec92a3e7df8a2e9276a48e86ade408812a1d7d14895bc3b7966b4f6e2853b7"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.mcgill.ca/undergraduate-admissions/apply/requirements/international/india",
+     "title": "India Senior School Certificates | Undergraduate Admissions - McGill University",
+     "retrievedAt": "2026-09-30T07:37:48.284Z",
+     "hash": "f5d86923db68c6175802cd35df33540a77f873e5055cc795c6e7d5c4583cbbbe",
+     "waybackTimestamp": "20250811200654",
+     "waybackHash": "21966a2df1e611c7febd2358181353218bec1729c2addfcb8e8ddfdb56986f11"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.mcgill.ca/undergraduate-admissions/apply/requirements/international/other",
+     "title": "Other international high schools | Undergraduate Admissions - McGill University",
+     "retrievedAt": "2026-09-30T07:32:55.340Z",
+     "hash": "fac0ebe0aea3ddaac347dcc1ac64ce7d86ee8ce05c5e551e740bc7f82d653f93"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.mcgill.ca/undergraduate-admissions/apply/requirements/us",
+     "title": "Requirements for U.S. applicants | Undergraduate Admissions - McGill University",
+     "retrievedAt": "2026-09-30T07:32:44.997Z",
+     "hash": "50bc6a6a015576128470865361c80662bf7d4778a7c2f9ceeab459b15d110b2c"
+    },
+    {
+     "id": "s8",
+     "url": "https://www.mcgill.ca/undergraduate-admissions/apply/requirements/us/faq2027",
+     "title": "FAQs: U.S. high school applicants (Fall 2027) | Undergraduate Admissions - McGill University",
+     "retrievedAt": "2026-09-30T07:32:28.910Z",
+     "hash": "1d3c840c2362cbf3cb61c81ea91cac35183902e2a724c69cd040c357bccfde30"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-01-15",
+     "labelEn": "Application deadline (high schools outside Canada and the US)",
+     "labelAr": "الموعد النهائي للتقديم (للمدارس خارج كندا والولايات المتحدة)",
+     "source": "s6",
+     "quote": "Application for admission | January 15"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2027-03-01",
+     "labelEn": "Supporting documents deadline",
+     "labelAr": "الموعد النهائي لتقديم المستندات الداعمة",
+     "source": "s6",
+     "quote": "Supporting documents | March 1"
+    }
+   ],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": true,
+     "subjects": [],
+     "notesEn": "Listed among accepted international credentials; no minimum average is published.",
+     "notesAr": "مدرجة ضمن الشهادات الدولية المقبولة، ولا يوجد معدل أدنى منشور.",
+     "source": "s6",
+     "quote": "United Arab Emirates | Shahadat Al-Thanawiya Al-Amma (Secondary School Leaving Certificate)"
+    },
+    "JORDAN_TAWJIHI": {
+     "accepted": true,
+     "subjects": [],
+     "notesEn": "Listed among accepted international credentials; no minimum average is published.",
+     "notesAr": "مدرجة ضمن الشهادات الدولية المقبولة، ولا يوجد معدل أدنى منشور.",
+     "source": "s6",
+     "quote": "Jordan | Tawjihi (General Secondary Ed. Cert.)"
+    },
+    "BRITISH": {
+     "accepted": true,
+     "subjects": [],
+     "notesEn": "Minimum three A-Levels in three different subjects (or two A-Levels and two AS); Maths and Further Maths count as one subject.",
+     "notesAr": "ثلاث مواد A Level على الأقل في ثلاث مواد مختلفة (أو مادتان A Level ومادتان AS)، وتُعدّ الرياضيات والرياضيات الإضافية مادة واحدة.",
+     "source": "s3",
+     "quote": "The minimum requirements are three A-Levels (or equivalent), in three different subjects*, or two A-level and two AS subjects, in three different subjects."
+    }
+   },
+   "programs": [
+    {
+     "key": "mcgill-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science (Faculty of Science) BSc",
+     "nameAr": "علوم الحاسوب (كلية العلوم) بكالوريوس العلوم",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.mcgill.ca/undergraduate-admissions/program/computer-science-faculty-science",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "ABB",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s3",
+         "quote": "Minimum of three A-Levels in three different subjects, including A-Level Math and at least one A-Level in biology, chemistry, or physics;"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "chemistry",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s3",
+         "quote": "Minimum of three A-Levels in three different subjects, including A-Level Math and at least one A-Level in biology, chemistry, or physics;"
+        }
+       ],
+       "notesEn": "Typical range of the lowest grades admitted (guideline only, not a guarantee): A*AA to ABB (Faculty of Science, Physical, Environmental, Math and Computer Sciences group).",
+       "notesAr": "النطاق المعتاد لأدنى الدرجات المقبولة (للاسترشاد فقط ولا يضمن القبول): من A*AA إلى ABB (كلية العلوم، مجموعة العلوم الفيزيائية والبيئية والرياضيات والحاسوب).",
+       "source": "s3",
+       "quote": "Physical, Environmental, Math and Computer Sciences Group | Predicted/Final A-Levels: A*AA - ABB"
+      },
+      "IB": {
+       "minimumPoints": 35,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": null,
+         "noteEn": "SL Math AI is not accepted.",
+         "noteAr": "لا تُقبل الرياضيات AI بالمستوى القياسي.",
+         "source": "s4",
+         "quote": "Mathematics and two of Biology, Chemistry or Physics, at Higher or Standard Level; at least one math/science at HL"
+        },
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "biology",
+          "chemistry",
+          "physics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s4",
+         "quote": "Mathematics and two of Biology, Chemistry or Physics, at Higher or Standard Level; at least one math/science at HL"
+        }
+       ],
+       "notesEn": "Out of 42 subject points (35 to 38 typical); each math and science 5 to 6 with at least one 6, or 6 in SL Math AA.",
+       "notesAr": "من أصل 42 نقطة للمواد (المعتاد 35 إلى 38)، مع 5 إلى 6 في كل مادة رياضيات وعلوم وواحدة منها على الأقل 6، أو 6 في الرياضيات AA بالمستوى القياسي.",
+       "source": "s4",
+       "quote": "Physical, Environmental, Math and Computer Sciences Group | Predicted/Final (out of 42): 35 to 38 subject points"
+      },
+      "AMERICAN": {
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "precalculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s7",
+         "quote": "Courses must include: Pre-calculus; two of biology, chemistry or physics"
+        },
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "biology",
+          "chemistry",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s7",
+         "quote": "Courses must include: Pre-calculus; two of biology, chemistry or physics"
+        }
+       ],
+       "notesEn": "Typical range B+ to A- unweighted average in grades 11 and 12, A- in each prerequisite math and science.",
+       "notesAr": "النطاق المعتاد متوسط غير مرجح من B+ إلى A- في الصفين 11 و12، مع A- في كل مادة رياضيات وعلوم مطلوبة.",
+       "source": "s7",
+       "quote": "Physical, Environmental, Math and Computer Sciences Group | B+ to A- average (unweighted) in each of grades 11 and 12"
+      },
+      "CBSE": {
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s5",
+         "quote": "Subjects must include mathematics, and two of biology, chemistry or physics in Class 11 and 12."
+        },
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "biology",
+          "chemistry",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s5",
+         "quote": "Subjects must include mathematics, and two of biology, chemistry or physics in Class 11 and 12."
+        }
+       ],
+       "notesEn": "No minimum percentage is published; subject prerequisites apply.",
+       "notesAr": "لا توجد نسبة دنيا منشورة، وتنطبق شروط المواد المطلوبة.",
+       "source": "s5",
+       "quote": "Subjects must include mathematics, and two of biology, chemistry or physics in Class 11 and 12."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "OPTIONAL",
+        "minScore": null,
+        "noteEn": "Test-optional for Fall 2027 (SAT or ACT).",
+        "noteAr": "الاختبارات اختيارية لخريف 2027 (SAT أو ACT).",
+        "source": "s8",
+        "quote": "While submitting SAT or ACT scores is optional for Fall 2027 applicants, doing so provides us with additional information early in the review process."
+       },
+       {
+        "test": "ACT",
+        "policy": "OPTIONAL",
+        "minScore": null,
+        "noteEn": "Test-optional for Fall 2027.",
+        "noteAr": "اختياري لخريف 2027.",
+        "source": "s8",
+        "quote": "While submitting SAT or ACT scores is optional for Fall 2027 applicants, doing so provides us with additional information early in the review process."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Apply to the Faculty of Science, Physical, Earth, Math and Computer Sciences group.",
+        "noteAr": "يُقدَّم الطلب إلى كلية العلوم، مجموعة العلوم الفيزيائية وعلوم الأرض والرياضيات والحاسوب.",
+        "source": "s1",
+        "quote": "For this program, you'll need to apply to the Faculty of Science in the Physical, Earth, Math & Computer Sciences group."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "mcgill-ee",
+     "status": "EXISTS",
+     "nameEn": "Electrical Engineering (Faculty of Engineering) BEng",
+     "nameAr": "الهندسة الكهربائية (كلية الهندسة) بكالوريوس الهندسة",
+     "degree": "BEng",
+     "durationYears": null,
+     "url": "https://www.mcgill.ca/undergraduate-admissions/program/electrical-engineering-faculty-engineering",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAB",
+       "subjects": [
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "mathematics",
+          "chemistry",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s3",
+         "quote": "Minimum of three A-Levels in three different subjects, including at least two of A-Level Math, chemistry, or physics"
+        }
+       ],
+       "notesEn": "Typical range of the lowest grades admitted (guideline only, not a guarantee): A*AA to AAB.",
+       "notesAr": "النطاق المعتاد لأدنى الدرجات المقبولة (للاسترشاد فقط ولا يضمن القبول): من A*AA إلى AAB.",
+       "source": "s3",
+       "quote": "Electrical Engineering | Predicted/Final A-Levels: A*AA - AAB"
+      },
+      "IB": {
+       "minimumPoints": 35,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics",
+          "chemistry",
+          "physics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": null,
+         "noteEn": "Maths, Chemistry and Physics, at least one at HL; SL Math AI not accepted.",
+         "noteAr": "الرياضيات والكيمياء والفيزياء، إحداها على الأقل بالمستوى العالي، ولا تُقبل الرياضيات AI بالمستوى القياسي.",
+         "source": "s4",
+         "quote": "Mathematics, Chemistry and Physics at Higher or Standard Level (at least one math/science at Higher Level)"
+        }
+       ],
+       "notesEn": "Out of 42 subject points (35 to 38 typical).",
+       "notesAr": "من أصل 42 نقطة للمواد (المعتاد 35 إلى 38).",
+       "source": "s4",
+       "quote": "Electrical Engineering | Predicted/Final (out of 42): 35 to 38 subject points Each math & science: 5 to 6 (6 in each SL math & science)"
+      },
+      "AMERICAN": {
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "precalculus",
+          "chemistry",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s7",
+         "quote": "Courses must include: Pre-calculus; chemistry and physics"
+        }
+       ],
+       "notesEn": "Typical range A- to A unweighted average; ACT 30-31 or SAT EBRW 700-720 and Math 700-720 if submitted.",
+       "notesAr": "النطاق المعتاد متوسط غير مرجح من A- إلى A؛ وACT من 30 إلى 31 أو SAT بدرجة 700 إلى 720 في كل قسم عند تقديمه.",
+       "source": "s7",
+       "quote": "Electrical Engineering | A- to A average (unweighted) in each of grades 11 and 12 A- in each prerequisite math and science ACT 30-31; or"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "OPTIONAL",
+        "minScore": null,
+        "noteEn": "Test-optional for Fall 2027 (SAT or ACT).",
+        "noteAr": "الاختبارات اختيارية لخريف 2027 (SAT أو ACT).",
+        "source": "s8",
+        "quote": "While submitting SAT or ACT scores is optional for Fall 2027 applicants, doing so provides us with additional information early in the review process."
+       },
+       {
+        "test": "ACT",
+        "policy": "OPTIONAL",
+        "minScore": null,
+        "noteEn": "Test-optional for Fall 2027.",
+        "noteAr": "اختياري لخريف 2027.",
+        "source": "s8",
+        "quote": "While submitting SAT or ACT scores is optional for Fall 2027 applicants, doing so provides us with additional information early in the review process."
+       }
+      ],
+      "additional": [],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "mcmaster",
+   "website": "https://www.mcmaster.ca",
+   "applyVia": "OUAC",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://future.mcmaster.ca/apply/curriculum-requirements/",
+     "title": "Common International Admission Requirements - Future Students",
+     "retrievedAt": "2026-09-30T07:32:40.382Z",
+     "hash": "1e1c1a294830c4eb12ee4c4fa785714a854420edbcdb61f04d728c61919ff862"
+    },
+    {
+     "id": "s2",
+     "url": "https://future.mcmaster.ca/apply/requirements/english-proficiency/",
+     "title": "English Proficiency - Future Students",
+     "retrievedAt": "2026-09-30T07:32:39.937Z",
+     "hash": "4dfbd29fdebac29b90ac4f8d98608d3bc3947ad8697c8f604b5f37665c15584e"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s2",
+     "quote": "6.5 overall with a minimum of 6.0 in each of the four components (Reading, Writing, Speaking, Listening); results valid for 2 years"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 4.5,
+     "minComponent": 4,
+     "waiverNoteEn": "TOEFL iBT on the 1 to 6 scale; Listening 4.5.",
+     "waiverNoteAr": "اختبار TOEFL iBT على مقياس 1 إلى 6، مع 4.5 في الاستماع.",
+     "source": "s2",
+     "quote": "IBT: 4.5 overall with a minimum score of 4.0 in the Reading, Writing, Speaking components and a 4.5 Listening. Valid for 2 years"
+    }
+   ],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "OPTIONAL",
+     "minScore": null,
+     "noteEn": "SAT or ACT optional for US-curriculum applicants.",
+     "noteAr": "اختبار SAT أو ACT اختياري لطلاب المنهج الأمريكي.",
+     "source": "s1",
+     "quote": "SAT or ACT results are optional. If submitted, they will be considered only if they strengthen the student’s application."
+    }
+   ],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {
+    "AMERICAN": {
+     "accepted": true,
+     "minimumPercent": 80,
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "english_language"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": null,
+       "noteEn": null,
+       "noteAr": null,
+       "source": "s1",
+       "quote": "Grade 12 English or English Literature is required for all programs."
+      }
+     ],
+     "notesEn": "80% average (unweighted, including required subjects) for eligibility; most programmes need well above 80%.",
+     "notesAr": "معدل 80% (غير مرجح، ويشمل المواد المطلوبة) للأهلية، وتتطلب معظم البرامج معدلا أعلى بكثير.",
+     "source": "s1",
+     "quote": "A minimum average of 80% (including all required subjects) is required for application eligibility."
+    },
+    "BRITISH": {
+     "accepted": true,
+     "subjects": [],
+     "notesEn": "Five subjects: three distinct A2 subjects plus two GCSE/IGCSE/O Levels; programme-specific A-Levels vary.",
+     "notesAr": "خمس مواد: ثلاث مواد A2 مختلفة ومادتان GCSE/IGCSE/O Level، وتختلف مواد A Level المطلوبة حسب البرنامج.",
+     "source": "s1",
+     "quote": "A minimum of five subjects is required, including three distinct GCE Advanced Level (A2) or International A-Level subjects and two GCSE, IGCSE, or O Level subjects."
+    },
+    "CBSE": {
+     "accepted": true,
+     "subjects": [],
+     "notesEn": "Five Class XII subjects including the programme prerequisites; minimum average varies by programme (predicted grades used).",
+     "notesAr": "خمس مواد من الصف الثاني عشر تشمل المتطلبات المسبقة للبرنامج، ويختلف المعدل الأدنى حسب البرنامج (تُستخدم الدرجات المتوقعة).",
+     "source": "s1",
+     "quote": "Five Class XII subjects including all prerequisite subject(s) for selected program. Average is calculated on Class XII predicted grades. Minimum average required for admission consideration varies by program."
+    },
+    "ISC": {
+     "accepted": true,
+     "subjects": [],
+     "notesEn": "Five Class XII subjects including the programme prerequisites.",
+     "notesAr": "خمس مواد من الصف الثاني عشر تشمل المتطلبات المسبقة للبرنامج.",
+     "source": "s1",
+     "quote": "Five Class XII subjects including all prerequisite subject(s) for the selected program."
+    }
+   },
+   "programs": [
+    {
+     "key": "mcmaster-biomed",
+     "status": "REPLACED",
+     "nameEn": "Honours Health Sciences BHSc",
+     "nameAr": "العلوم الصحية مع مرتبة الشرف (بكالوريوس العلوم الصحية)",
+     "degree": "BHSc",
+     "durationYears": null,
+     "url": "https://future.mcmaster.ca/admissions/health-sciences/",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "mcmaster-eng",
+     "status": "REPLACED",
+     "nameEn": "Engineering BEng",
+     "nameAr": "الهندسة (بكالوريوس الهندسة)",
+     "degree": "BEng",
+     "durationYears": null,
+     "url": "https://future.mcmaster.ca/admissions/engineering/",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "ubc",
+   "website": "https://www.ubc.ca",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://you.ubc.ca/programs/computer-science-vancouver-bsc/",
+     "title": "Computer Science at UBC's Vancouver campus | UBC Undergraduate Programs and Admissions",
+     "retrievedAt": "2026-09-30T07:37:55.706Z",
+     "hash": "9328a5d3b4004e8b21fd6fb34f9f54fa52df6f48e9a118c2d30aada205d60be8"
+    },
+    {
+     "id": "s2",
+     "url": "https://you.ubc.ca/programs/mechanical-engineering-vancouver/",
+     "title": "Mechanical Engineering",
+     "retrievedAt": "2026-09-30T07:33:03.908Z",
+     "hash": "204b7cab4925317e830972cbffbf1b74066a8d4539cfbf5ed27b6690fa06d325"
+    },
+    {
+     "id": "s3",
+     "url": "https://you.ubc.ca/applying-ubc/requirements/english-language-competency/",
+     "title": "English language competency | UBC | Undergraduate Programs and Admissions",
+     "retrievedAt": "2026-09-30T07:32:34.142Z",
+     "hash": "82274ca49cd6c6ef1ff19458a30932ea78109091bf3039b79b8f3d7db9600a9b"
+    },
+    {
+     "id": "s4",
+     "url": "https://you.ubc.ca/applying-ubc/dates-deadlines/",
+     "title": "Dates and deadlines | UBC | Undergraduate Programs and Admissions",
+     "retrievedAt": "2026-09-30T07:32:31.676Z",
+     "hash": "7d9f18a422c7108796980249dbc45c2a6cf277a4fdd251bf442386dfdecf1777"
+    },
+    {
+     "id": "s5",
+     "url": "https://you.ubc.ca/engineering/",
+     "title": "Bachelor of Applied Science (Engineering) | UBC | Undergraduate Programs and Admissions",
+     "retrievedAt": "2026-09-30T07:32:48.381Z",
+     "hash": "9dd7ca7d3ed3da4f7511112cc1e0c06e2e788d04516576aa8cf53b663ee3ba7e",
+     "waybackTimestamp": "20251018104048",
+     "waybackHash": "179bf7bfb2e7c06f9d89b8c571abfa53820cda108eb50ede9b38a4556c5b21f7"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": "IELTS One Skill Retake is not accepted.",
+     "waiverNoteAr": "لا يُقبل IELTS One Skill Retake.",
+     "source": "s3",
+     "quote": "International English Language Testing System (Academic) | 6.5, with no part less than 6.0 |"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 90,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s3",
+     "quote": "Internet based test (1-120): Overall score: 90"
+    },
+    {
+     "test": "PTE",
+     "minOverall": 65,
+     "minComponent": 60,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s3",
+     "quote": "Pearson Test of English (Academic) | Overall: 65 Reading: 60 Listening: 60 Writing: 60 Speaking: 60 |"
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 125,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s3",
+     "quote": "Duolingo English Test | Overall: 125"
+    }
+   ],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-01-15",
+     "labelEn": "Application deadline for September 2027",
+     "labelAr": "الموعد النهائي للتقديم للقبول في سبتمبر 2027",
+     "source": "s4",
+     "quote": "January 15, 2027 (11:59 p.m. PST) | Applications due Deadline to apply for Winter Session (September 2027 to April 2028)."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "SCHOLARSHIP",
+     "date": "2026-11-15",
+     "labelEn": "International Scholars Program: apply and submit award application",
+     "labelAr": "برنامج المنح الدولية: التقديم وإرسال طلب المنحة",
+     "source": "s4",
+     "quote": "November 15, 2026 (11:59 p.m. PST) | Scholarships and awards International applicants: Deadline to apply to UBC and submit an award application if you’re an international student and you wish to be considered for the UBC International Scholars Program awards."
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "ubc-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc (Vancouver)",
+     "nameAr": "علوم الحاسوب، بكالوريوس العلوم (حرم فانكوفر)",
+     "degree": "BSc",
+     "durationYears": 4,
+     "url": "https://you.ubc.ca/programs/computer-science-vancouver-bsc/",
+     "curricula": {
+      "IB": {
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s1",
+         "quote": "IB Math Analysis and Approaches SL or HL, or IB Math Applications and Interpretations HL (IB Math Applications and Interpretations SL, or IB Math Studies, are not acceptable)"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "chemistry",
+          "physics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s1",
+         "quote": "One of IB Biology, IB Chemistry, or IB Physics"
+        }
+       ],
+       "notesEn": "UBC does not publish a minimum IB score; grades needed vary by degree and year.",
+       "notesAr": "لا تنشر الجامعة حدا أدنى لدرجة البكالوريا الدولية، وتختلف الدرجات المطلوبة حسب البرنامج والعام.",
+       "source": "s1",
+       "quote": "Completed IB Diploma, including at least three Higher Level courses."
+      }
+     },
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "ubc-eng",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Applied Science (Engineering)",
+     "nameAr": "بكالوريوس العلوم التطبيقية (الهندسة)",
+     "degree": "BASc",
+     "durationYears": 4,
+     "url": "https://you.ubc.ca/engineering/",
+     "curricula": {
+      "IB": {
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "IB Math Analysis and Approaches SL or HL, or IB Math Applications and Interpretations HL. (IB Math Applications and Interpretations SL, or IB Math Studies, are not acceptable.)"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "Degree-specific requirements: Applied Science (Engineering) IB Math Analysis and Approaches SL or HL, or IB Math Applications and Interpretations HL. (IB Math Applications and Interpretations SL, or IB Math Studies, are not acceptable.) IB Chemistry IB Physics"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "IB Chemistry IB Physics Academically strong candidates missing either IB Chemistry or IB Physics may be evaluated on a case-by-case basis"
+        }
+       ],
+       "notesEn": "UBC does not publish a minimum IB score; grades needed vary by degree and year.",
+       "notesAr": "لا تنشر الجامعة حدا أدنى لدرجة البكالوريا الدولية، وتختلف الدرجات المطلوبة حسب البرنامج والعام.",
+       "source": "s2",
+       "quote": "Completed IB Diploma, including at least three Higher Level courses."
+      }
+     },
+     "general": null,
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "university_of_alberta",
+   "website": "https://www.ualberta.ca",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ualberta.ca/en/undergraduate-programs/bachelor-of-science-with-major-computing-science.html",
+     "title": "Computing Science | Undergraduate Programs",
+     "retrievedAt": "2026-09-30T07:37:13.349Z",
+     "hash": "7685a0435cc630081ab86464d25f15e0a16195e9ecf1f415fc9cc13e47262629",
+     "waybackTimestamp": "20250810222017",
+     "waybackHash": "81b6fc453fe7dce84673d0fa79b9109b65f40d119a48f25fb01c7683f0c62932"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.ualberta.ca/en/undergraduate-programs/bachelor-of-science-in-mechatronics-and-robotics-engineering.html",
+     "title": "Mechatronics and Robotics Engineering | Undergraduate Programs",
+     "retrievedAt": "2026-09-30T07:32:53.766Z",
+     "hash": "159284b8a1f2beaacc7a9e1e938bff2aa19e5d34db0a19d7c4fb614ca82d72aa"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.ualberta.ca/en/admissions/how-to-apply/international-admission-requirements/international-curricula/index.html",
+     "title": "International Curricula | Undergraduate Admissions + Programs",
+     "retrievedAt": "2026-09-30T07:32:32.259Z",
+     "hash": "8c83139c6d17d062889cbdb6dc9b88e503bfb4d05d324b26c1500cbe7b355f3b"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.ualberta.ca/en/admissions/how-to-apply/international-admission-requirements/international-curricula/india.html",
+     "title": "India | Undergraduate Admissions + Programs",
+     "retrievedAt": "2026-09-30T07:32:40.896Z",
+     "hash": "1727055540f1d7d4ce7daaf1ed6fcdbf3aaf021e86a55e32eb1e144e64fb5f7e"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.ualberta.ca/en/admissions/how-to-apply/international-admission-requirements/international-curricula/united-states.html",
+     "title": "United States of America | Undergraduate Admissions + Programs",
+     "retrievedAt": "2026-09-30T07:32:37.092Z",
+     "hash": "a007fef90b2919a677e0059fe60f62c021fe82da6f4da99fdf368c1edd363a37",
+     "waybackTimestamp": "20260104115359",
+     "waybackHash": "072ad60ffc476eacbc9791b76b9c6dde980c1fd58cf3e62c9ad30fdb469ed368"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.ualberta.ca/en/admissions/how-to-apply/ib-students/index.html",
+     "title": "IB Students | Undergraduate Admissions + Programs",
+     "retrievedAt": "2026-09-30T07:38:01.366Z",
+     "hash": "3d1dc6e19a2dc857a0f218fc832ad71ab2d7502686b78e8f819b04d4f4871a1d"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.ualberta.ca/en/admissions/how-to-apply/admission-requirements/language-requirements/index.html",
+     "title": "Language Requirements | Undergraduate Admissions + Programs",
+     "retrievedAt": "2026-09-30T07:33:11.870Z",
+     "hash": "8c64cc7730ccd3c512dec90d57fd5133ac1840f147a5434d6b807f4ad9f73793",
+     "waybackTimestamp": "20250909092059",
+     "waybackHash": "b153e82f7dc267a22e03c8295b111eaba250e1b06e7cab5e5fec74f06bc9e81d"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": "IELTS One Skill Retake is not accepted.",
+     "waiverNoteAr": "لا يُقبل IELTS One Skill Retake.",
+     "source": "s7",
+     "quote": "A score of at least 6.5 on the IELTS Academic (International English Language Testing System) with no band less than 6.0."
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 90,
+     "minComponent": 21,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s7",
+     "quote": "Total score of 90 with no section less than 21"
+    }
+   ],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "OPTIONAL",
+     "minScore": null,
+     "noteEn": "Test-optional for US-curriculum applicants; scores may help with subject deficiencies.",
+     "noteAr": "الاختبارات اختيارية لطلاب المنهج الأمريكي، وقد تفيد الدرجات في تعويض نقص في المواد.",
+     "source": "s5",
+     "quote": "SAT/ACT Test Optional SAT or ACT scores are not required."
+    }
+   ],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-03-01",
+     "labelEn": "Fall 2027 application deadline (international)",
+     "labelAr": "الموعد النهائي للتقديم لخريف 2027 (للطلاب الدوليين)",
+     "source": "s1",
+     "quote": "Fall application Domestic: March 1, 2027 International: March 1, 2027"
+    }
+   ],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": true,
+     "subjects": [],
+     "notesEn": "Accepted: submit the Secondary School Certificate with final marks. No minimum average is published here.",
+     "notesAr": "مقبولة: تُقدَّم شهادة الثانوية العامة مع الدرجات النهائية، ولا يوجد معدل أدنى منشور هنا.",
+     "source": "s3",
+     "quote": "United Arab Emirates Secondary School Certificate (Shahadat Aal-Tthanawiya-Al-A’ama) including final marks"
+    },
+    "JORDAN_TAWJIHI": {
+     "accepted": true,
+     "subjects": [],
+     "notesEn": "Accepted with final marks.",
+     "notesAr": "مقبولة مع الدرجات النهائية.",
+     "source": "s3",
+     "quote": "Jordan General Secondary Education Certificate (Tawjihiya) including final marks"
+    },
+    "CBSE": {
+     "accepted": true,
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": null,
+       "noteEn": null,
+       "noteAr": null,
+       "source": "s4",
+       "quote": "Mathematics is required for Engineering, Business, and Science based programs."
+      }
+     ],
+     "notesEn": "Five subjects; 75%+ on final Class XII exams also meets the English requirement.",
+     "notesAr": "خمس مواد، والحصول على 75% فأكثر في امتحانات الصف الثاني عشر النهائية يستوفي متطلب اللغة الإنجليزية أيضا.",
+     "source": "s4",
+     "quote": "Students in CBSE or CISCE schools, who present 75%+ on their official and final Class XII exams, meet U of A English Language Proficiency (ELP) requirements."
+    },
+    "ISC": {
+     "accepted": true,
+     "subjects": [],
+     "notesEn": "75%+ on final Class XII exams meets the English requirement.",
+     "notesAr": "الحصول على 75% فأكثر في امتحانات الصف الثاني عشر النهائية يستوفي متطلب اللغة الإنجليزية.",
+     "source": "s4",
+     "quote": "Students in CBSE or CISCE schools, who present 75%+ on their official and final Class XII exams, meet U of A English Language Proficiency (ELP) requirements."
+    },
+    "IB": {
+     "accepted": true,
+     "minimumPoints": 30,
+     "subjects": [],
+     "notesEn": "No grade below 4; previous competitive scores 30 to 37 depending on programme. Offers can be based on predicted grades.",
+     "notesAr": "لا تقل أي درجة عن 4، وتراوحت الدرجات التنافسية السابقة بين 30 و37 حسب البرنامج، ويمكن منح القبول بناء على الدرجات المتوقعة.",
+     "source": "s6",
+     "quote": "Present a competitive diploma score with no grade less than 4. Previous competitive scores range from 30-37 points depending on your program."
+    }
+   },
+   "programs": [
+    {
+     "key": "university-of-alberta-cs",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science with Major in Computing Science",
+     "nameAr": "بكالوريوس العلوم بتخصص رئيسي في علوم الحوسبة",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.ualberta.ca/en/undergraduate-programs/bachelor-of-science-with-major-computing-science.html",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "university-of-alberta-eng",
+     "status": "REPLACED",
+     "nameEn": "Engineering (qualifying first year), Bachelor of Science in Engineering",
+     "nameAr": "الهندسة (السنة الأولى التأهيلية)، بكالوريوس العلوم في الهندسة",
+     "degree": "BSc (Eng)",
+     "durationYears": null,
+     "url": "https://www.ualberta.ca/en/undergraduate-programs/bachelor-of-science-in-mechatronics-and-robotics-engineering.html",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "High school applicants apply to the common qualifying first year of Engineering and choose a discipline (such as mechatronics, electrical or civil) after year one.",
+        "noteAr": "يتقدم طلاب الثانوية إلى السنة الأولى التأهيلية المشتركة في الهندسة، ثم يختارون التخصص (مثل الميكاترونكس أو الكهرباء أو المدنية) بعد السنة الأولى.",
+        "source": "s2",
+        "quote": "Please note: If you are applying directly from high school, you must apply to the foundational/qualifying first year of Engineering."
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "university_of_toronto",
+   "website": "https://www.utoronto.ca",
+   "applyVia": "OUAC",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://future.utoronto.ca/program/computer-science",
+     "title": "Computer Science | Future Students. University of Toronto",
+     "retrievedAt": "2026-09-30T07:32:55.914Z",
+     "hash": "3be8c3a65fcbf45c5b40ca3c6c41489953574cff189c42191fd583bba2066f9a"
+    },
+    {
+     "id": "s2",
+     "url": "https://future.utoronto.ca/business-commerce-management",
+     "title": "Business, Commerce & Management | Future Students. University of Toronto",
+     "retrievedAt": "2026-09-30T07:32:47.453Z",
+     "hash": "9ae71709cc1e17d3fab61b5a7b7a1b3c8b42ba53511e7347a701d011c1208369"
+    },
+    {
+     "id": "s3",
+     "url": "https://discover.engineering.utoronto.ca/programs/engineering-programs/general-first-year/academics-ece/",
+     "title": "academics-ece",
+     "retrievedAt": "2026-09-30T07:32:31.543Z",
+     "hash": "24a53bfd618250734e49116bb73e7bfd1bb503ce3d8c714cd73232f46355c725"
+    },
+    {
+     "id": "s4",
+     "url": "https://discover.engineering.utoronto.ca/admission-requirements/international-applicants/",
+     "title": "Out of Country High School Applicants - Future Engineering Undergraduates",
+     "retrievedAt": "2026-09-30T07:37:22.235Z",
+     "hash": "bbce4d24fe202984afdc9aade4e21662add44485751583a3025d15659dc8fb46",
+     "waybackTimestamp": "20191214024056",
+     "waybackHash": "bdb657def34fef23cae8bb1698af9752219d43c00fd8e783b3e825b47b3d51c7"
+    },
+    {
+     "id": "s5",
+     "url": "https://discover.engineering.utoronto.ca/how-to-apply/important-deadlines/",
+     "title": "Important Deadlines - Future Engineering Undergraduates",
+     "retrievedAt": "2026-09-30T07:33:01.274Z",
+     "hash": "4f1efa8cc71686daf224a3e2997097760be6a8642f864932f923902f8a997d86"
+    },
+    {
+     "id": "s6",
+     "url": "https://future.utoronto.ca/english-language-requirements",
+     "title": "English Language Requirements | Future Students. University of Toronto",
+     "retrievedAt": "2026-09-30T07:32:56.331Z",
+     "hash": "46908602b0eb889891960a5ec85d494fd966bdb0b2c0cb0b84b63a784414253d",
+     "waybackTimestamp": "20250907010557",
+     "waybackHash": "7e3f591afd4370366e418dd2b3ab3a9ecc34416ab6e02b9901e873a106d615b7"
+    },
+    {
+     "id": "s7",
+     "url": "https://future.utoronto.ca/requirements-international-high-schools",
+     "title": "Admission Requirements International High School Students | Future Students. University of Toronto",
+     "retrievedAt": "2026-09-30T07:32:38.809Z",
+     "hash": "4fead11e12c7bef61777c20cb37a6f565649a4821140027a97608a9c429650a3",
+     "waybackTimestamp": "20250913160832",
+     "waybackHash": "4f8c8697c3e21d168dd1a9c6445e617e014633f2a51a25b7f1a4f0ffe6b27579"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": "IELTS One Skill Retake not accepted.",
+     "waiverNoteAr": "لا يُقبل IELTS One Skill Retake.",
+     "source": "s6",
+     "quote": "The minimum requirement is an overall band of 6.5, with no band below 6.0."
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 120,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s6",
+     "quote": "The minimum requirement for tests completed on or after July 1st, 2024 is an overall score of 120 with a score of 120 in Production."
+    },
+    {
+     "test": "CAMBRIDGE",
+     "minOverall": 180,
+     "minComponent": 170,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s6",
+     "quote": "A minimum overall score of 180, with at least 170 in each component."
+    }
+   ],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "A senior (Grade 12) English course is required for all applicants.",
+     "noteAr": "يُشترط على جميع المتقدمين تقديم مادة لغة إنجليزية من الصف الثاني عشر.",
+     "source": "s7",
+     "quote": "All applicants are required to present a senior/Grade 12 English course for admission consideration."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "PRIORITY",
+     "date": "2026-11-07",
+     "labelEn": "Engineering early consideration: apply through OUAC",
+     "labelAr": "الدراسة المبكرة للهندسة: التقديم عبر OUAC",
+     "source": "s5",
+     "quote": "Non-Ontario Secondary School Applicants Early Consideration | November 7 | Apply for U of T Engineering through the Ontario Universities’ Application Centre."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-01-15",
+     "labelEn": "Engineering regular deadline: apply through OUAC",
+     "labelAr": "الموعد العادي للهندسة: التقديم عبر OUAC",
+     "source": "s5",
+     "quote": "Regular Consideration | January 15 | Apply for U of T Engineering through the Ontario Universities’ Application Centre."
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "university-of-toronto-bus",
+     "status": "EXISTS",
+     "nameEn": "Rotman Commerce BCom",
+     "nameAr": "روتمان للتجارة، بكالوريوس التجارة",
+     "degree": "BCom",
+     "durationYears": null,
+     "url": "https://future.utoronto.ca/business-commerce-management",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "university-of-toronto-ce",
+     "status": "EXISTS",
+     "nameEn": "Computer Engineering BASc",
+     "nameAr": "هندسة الحاسوب، بكالوريوس العلوم التطبيقية",
+     "degree": "BASc",
+     "durationYears": null,
+     "url": "https://discover.engineering.utoronto.ca/programs/engineering-programs/general-first-year/academics-ece/",
+     "curricula": {
+      "BRITISH": {
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s4",
+         "quote": "Advanced Level Mathematics"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s4",
+         "quote": "Advanced Level Physics"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "FOUNDATION",
+         "minimumGrade": null,
+         "noteEn": "Minimum O-Level; A or AS Level strongly recommended.",
+         "noteAr": "على الأقل بمستوى O-Level، ويوصى بشدة بمستوى A أو AS.",
+         "source": "s4",
+         "quote": "IGCSE/GCE/O-Level Chemistry, however Advanced Level Chemistry or AS-Level Chemistry are strongly recommended."
+        }
+       ],
+       "notesEn": "Grades of B or higher recommended; a C or below in any prerequisite is not considered. Chemistry at least at O-Level (AS/A-Level strongly recommended).",
+       "notesAr": "يوصى بدرجات B فأعلى، ولا يُنظر في الطلب إذا كانت الدرجة C أو أقل في أي مادة مطلوبة. الكيمياء على الأقل بمستوى O-Level (ويوصى بشدة بمستوى AS أو A Level).",
+       "source": "s4",
+       "quote": "GCE: Candidates completing the GCE/British pattern system must present at least three Advanced Level subjects including: Advanced Level Mathematics Advanced Level Physics"
+      },
+      "IB": {
+       "minimumPoints": 30,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": null,
+         "noteEn": "Analysis and Approaches HL strongly recommended.",
+         "noteAr": "يوصى بشدة بمادة التحليل والمقاربات بالمستوى العالي.",
+         "source": "s4",
+         "quote": "Mathematics - one of the following: Analysis and Approaches HL* Analysis and Approaches SL Applications and Interpretations HL"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry",
+          "physics",
+          "english_language"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s4",
+         "quote": "Applications and Interpretations HL Chemistry Physics English * Mathematics: Analysis and Approaches HL is strongly recommended."
+        }
+       ],
+       "notesEn": "Minimum 30 excluding TOK and EE bonus points; most programmes require higher.",
+       "notesAr": "الحد الأدنى 30 دون احتساب نقاط نظرية المعرفة والبحث الموسع، وتتطلب معظم البرامج درجات أعلى.",
+       "source": "s4",
+       "quote": "Although most programs require higher scores, applicants must have a minimum predicted score of at least 30 (excluding ToK and EE points) with a minimum score of 4 in prerequisite subjects, in order to be considered for admission."
+      },
+      "AMERICAN": {
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "precalculus",
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s4",
+         "quote": "Pre-Calculus and one of the following Calculus: AP Calculus AB or AP Calculus BC or Calculus 12"
+        }
+       ],
+       "notesEn": "SAT or ACT expected (explain if not taken); Pre-Calculus plus AP Calculus AB/BC or Calculus 12, and AP Physics.",
+       "notesAr": "يُتوقع تقديم SAT أو ACT (مع تقديم توضيح عند عدم أدائه)، مع ما قبل التفاضل والتكامل وAP Calculus AB/BC أو Calculus 12، وفيزياء AP.",
+       "source": "s4",
+       "quote": "Candidates completing the U.S. patterned curriculum must be completing Grade 12 at an accredited high school, present ACT or SAT and at least a full year (or two terms) of the following subject requirements:"
+      },
+      "CBSE": {
+       "subjects": [],
+       "notesEn": "No minimum percentage published; math, physics, chemistry and English prerequisites.",
+       "notesAr": "لا توجد نسبة دنيا منشورة، والمواد المطلوبة الرياضيات والفيزياء والكيمياء واللغة الإنجليزية.",
+       "source": "s4",
+       "quote": "Candidates are required to complete a certification with excellent results in the grade 12 prerequisite requirements, with one of the following boards: All India Senior School Certificate awarded by CBSE or"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "SAT or ACT expected for US-curriculum applicants; if not taken, an explanation must be uploaded.",
+        "noteAr": "يُتوقع تقديم SAT أو ACT لطلاب المنهج الأمريكي، وإذا لم يُؤدَّ يجب رفع توضيح للسبب.",
+        "source": "s4",
+        "quote": "Applicants to Engineering are required to fully disclose any or all test scores if taken. If you did not sit for the SAT or ACT, you will need to briefly explain why"
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Engineering Supplemental Application required.",
+        "noteAr": "يلزم تقديم الطلب التكميلي لكلية الهندسة.",
+        "source": "s4",
+        "quote": "We carefully consider each application based on a review of your overall academic record and activities outside the classroom which you will report when you complete the Engineering Supplemental Application."
+       }
+      ],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "uoft-computer-science-bsc",
+     "status": "EXISTS",
+     "nameEn": "Computer Science HBSc (St. George)",
+     "nameAr": "علوم الحاسوب، بكالوريوس العلوم مع مرتبة الشرف (سانت جورج)",
+     "degree": "HBSc",
+     "durationYears": null,
+     "url": "https://future.utoronto.ca/program/computer-science",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "western",
+   "website": "https://www.uwo.ca",
+   "applyVia": "OUAC",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://welcome.uwo.ca/what-can-i-study/undergraduate-programs/ivey-business.html",
+     "title": "Ivey Business Administration (HBA) | Western University | London, Ontario, Canada",
+     "retrievedAt": "2026-09-30T07:38:06.695Z",
+     "hash": "f6de25ba4225104f95d4efc58f594b6b981f80b046621a2bee88501824704ba9",
+     "waybackTimestamp": "20251010115758",
+     "waybackHash": "1fa9a98bbf8b7e9789da24721b850158ea5b8cf29655b8de0c486cd28aca548e"
+    },
+    {
+     "id": "s2",
+     "url": "https://welcome.uwo.ca/what-can-i-study/undergraduate-programs/computer-science.html",
+     "title": "Computer Science | Western University | London, Ontario, Canada",
+     "retrievedAt": "2026-09-30T07:33:07.477Z",
+     "hash": "b6174c6d5d63d039c2853c63bd8a05e586b2ab175dc91f00dae512339267a8a6",
+     "waybackTimestamp": "20250802032834",
+     "waybackHash": "b2971abe3bba787197a2e5a81f50002e54e568014a0f6d2d708dd2206e04157a"
+    },
+    {
+     "id": "s3",
+     "url": "https://welcome.uwo.ca/next-steps/requirements/international-high-school/united-arab-emirates.html",
+     "title": "United Arab Emirates | Western University",
+     "retrievedAt": "2026-09-30T07:32:56.160Z",
+     "hash": "2c415d1782e460311432324969fbe8f8f903401040bdc01c4bd823c5cec92d58"
+    },
+    {
+     "id": "s4",
+     "url": "https://welcome.uwo.ca/next-steps/requirements/international-baccalaureate.html",
+     "title": "International Baccalaureate | Western University | London, Ontario, Canada",
+     "retrievedAt": "2026-09-30T07:32:44.585Z",
+     "hash": "8dc377542e6295200b8f5d574b3103505aba626a5a27379f4bc08c45aaa3e9e0",
+     "waybackTimestamp": "20250910144904",
+     "waybackHash": "227e868491a179e819b7594d8e782cc3fa338f818d5d8180bd8919c59b236bb5"
+    },
+    {
+     "id": "s5",
+     "url": "https://welcome.uwo.ca/next-steps/requirements/english-language-proficiency.html",
+     "title": "English Language Proficiency | Western University | London, Ontario, Canada",
+     "retrievedAt": "2026-09-30T07:37:42.086Z",
+     "hash": "83aab0fff17cab320a210fad028bb20b6b03b2fce268d9b858289477de819583"
+    },
+    {
+     "id": "s6",
+     "url": "https://welcome.uwo.ca/next-steps/apply/admission-deadlines.html",
+     "title": "Note Your Deadlines | Western University | London, Ontario, Canada",
+     "retrievedAt": "2026-09-30T07:33:05.997Z",
+     "hash": "debd25c2ff99f19f3114e8522644effdb1399637aad3121fc6778678c9c687ae"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s5",
+     "quote": "A minimum overall band score of 6.5 A minimum of 6.0 in each section"
+    }
+   ],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-01-15",
+     "labelEn": "OUAC application deadline for equal consideration",
+     "labelAr": "الموعد النهائي لتقديم طلب OUAC للنظر المتساوي",
+     "source": "s6",
+     "quote": "Deadline to submit OUAC application for equal consideration to full-time undergraduate studies | January 15"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2027-01-15",
+     "labelEn": "Ivey AEO application deadline",
+     "labelAr": "الموعد النهائي لطلب القبول المتقدم المبكر في آيفي (AEO)",
+     "source": "s6",
+     "quote": "Ivey AEO application deadline | January 15"
+    }
+   ],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": true,
+     "subjects": [],
+     "notesEn": "General Secondary School Certificate listing all subjects and grades; programme-specific senior-level courses apply.",
+     "notesAr": "شهادة الثانوية العامة مع جميع المواد والدرجات، وتنطبق مواد المرحلة العليا المطلوبة لكل برنامج.",
+     "source": "s3",
+     "quote": "Shahadat Al-Thanawaya Al-Aama (General Secondary School Certificate) - شهادة الثانوية العامة"
+    },
+    "IB": {
+     "accepted": true,
+     "minimumPoints": 27,
+     "subjects": [],
+     "notesEn": "Complete IB Diploma, six subjects (three HL), minimum 27 including EE and TOK, no mark below 4.",
+     "notesAr": "دبلوم بكالوريا دولية مكتمل بست مواد (ثلاث منها بالمستوى العالي)، وبحد أدنى 27 نقطة تشمل البحث الموسع ونظرية المعرفة، ودون أي درجة أقل من 4.",
+     "source": "s4",
+     "quote": "A minimum total grade of 27 (including the Extended Essay and TOK) No mark less than 4 on any course"
+    }
+   },
+   "programs": [
+    {
+     "key": "western-bus",
+     "status": "REPLACED",
+     "nameEn": "Ivey Business Administration (HBA)",
+     "nameAr": "إدارة الأعمال في كلية آيفي (HBA)",
+     "degree": "HBA",
+     "durationYears": null,
+     "url": "https://welcome.uwo.ca/what-can-i-study/undergraduate-programs/ivey-business.html",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "2+2 structure: two years in another Western programme, then HBA business years 3 and 4. High school students apply for Advanced Entry Opportunity (AEO) status.",
+        "noteAr": "هيكل 2+2: سنتان في برنامج آخر في الجامعة ثم سنتا إدارة الأعمال الثالثة والرابعة. يتقدم طلاب الثانوية للحصول على صفة القبول المتقدم المبكر (AEO).",
+        "source": "s1",
+        "quote": "Ivey gives you the freedom to explore your passions with the 2+2 structure. You can study anything you want for your first two years, from Science to Music."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "western-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc",
+     "nameAr": "علوم الحاسوب، بكالوريوس العلوم",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://welcome.uwo.ca/what-can-i-study/undergraduate-programs/computer-science.html",
+     "curricula": {
+      "UAE_MOE": {
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s3",
+         "quote": "Computer Science Required Courses Math Science (Any)"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "science"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s3",
+         "quote": "Computer Science Required Courses Math Science (Any)"
+        }
+       ],
+       "notesEn": "UAE Secondary School Certificate accepted; senior-level Math and a Science required.",
+       "notesAr": "تُقبل شهادة الثانوية العامة الإماراتية، مع اشتراط الرياضيات ومادة علوم من المرحلة الثانوية العليا.",
+       "source": "s3",
+       "quote": "Computer Science Required Courses Math Science (Any)"
+      },
+      "IB": {
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s4",
+         "quote": "Computer Science Required Courses HL or SL: IB Math (Any) IB Science (Any)"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "science"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s4",
+         "quote": "Computer Science Required Courses HL or SL: IB Math (Any) IB Science (Any)"
+        }
+       ],
+       "notesEn": "Complete IB Diploma with at least 27 points and no mark below 4.",
+       "notesAr": "دبلوم بكالوريا دولية مكتمل بمجموع 27 نقطة على الأقل ودون أي درجة أقل من 4.",
+       "source": "s4",
+       "quote": "Computer Science Required Courses HL or SL: IB Math (Any) IB Science (Any)"
+      }
+     },
+     "general": null,
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "rcsi",
+   "website": "https://www.rcsi.com",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.rcsi.com/dublin/undergraduate/medicine/entry-requirements",
+     "title": "Undergraduate Medicine Course at RCSI Dublin - Entry requirements - RCSI University",
+     "retrievedAt": "2026-09-30T07:33:08.142Z",
+     "hash": "9f379923d8f05a7cc7f575fd1fc2adb9e79ba7731d83c5eb332ecca543e9e77c"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.rcsi.com/dublin/undergraduate/pharmacy/entry-requirements",
+     "title": "Undergraduate Pharmacy course at RCSI Dublin - Entry requirements - RCSI University",
+     "retrievedAt": "2026-09-30T07:32:52.763Z",
+     "hash": "c1348724e332273b92d47f7e78dc7b23ba01a0c16971ce36f56a0b7c69055971",
+     "waybackTimestamp": "20250916141224",
+     "waybackHash": "6b8544f85c484b5c5b647508b10de788b1cfef027881b9823e2e989e0ada7985"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": "Not needed initially for applicants presenting programmes taught entirely in English, such as IB or A Levels.",
+     "waiverNoteAr": "لا يُطلب في البداية من المتقدمين بمناهج تُدرّس بالكامل بالإنجليزية مثل البكالوريا الدولية أو A Level.",
+     "source": "s1",
+     "quote": "Applicants whose first language is not English must present a minimum overall average IELTS score of 6.5 with no individual band (reading, writing, listening and speaking) lower than 6.0, taken in a single sitting."
+    }
+   ],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Non-EU applicants (except North America via Atlantic Bridge) apply directly to RCSI; Irish/EU applicants use the CAO.",
+     "noteAr": "يتقدم الطلاب من خارج الاتحاد الأوروبي (باستثناء أمريكا الشمالية عبر Atlantic Bridge) مباشرة إلى الكلية، بينما يستخدم الطلاب الأيرلنديون والأوروبيون نظام CAO.",
+     "source": "s2",
+     "quote": "All other Non-EU applicants apply directly through the RCSI website."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-01-15",
+     "labelEn": "Medicine (non-EU) application deadline",
+     "labelAr": "الموعد النهائي للتقديم لبرنامج الطب (لغير مواطني الاتحاد الأوروبي)",
+     "source": "s1",
+     "quote": "Applicants will be required to register for the Casper SJT prior to the 15 January 2027 application deadline."
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "rcsi-med",
+     "status": "EXISTS",
+     "nameEn": "Medicine MB BCh BAO (Hons)",
+     "nameAr": "الطب، بكالوريوس الطب والجراحة والتوليد (مع مرتبة الشرف)",
+     "degree": "MB BCh BAO",
+     "durationYears": 5,
+     "url": "https://www.rcsi.com/dublin/undergraduate/medicine/entry-requirements",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAB",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s1",
+         "quote": "with minimum grades of AAB, to include Chemistry, one additional laboratory science subject (Biology or Physics)"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s1",
+         "quote": "with minimum grades of AAB, to include Chemistry, one additional laboratory science subject (Biology or Physics)"
+        }
+       ],
+       "notesEn": "Non-EU five-year track. AAB without the subject mix may qualify for the six-year track (with a Foundation Year).",
+       "notesAr": "المسار الخماسي لغير مواطني الاتحاد الأوروبي. وقد يؤهل الحصول على AAB دون المواد المطلوبة للمسار السداسي (مع سنة تأسيسية).",
+       "source": "s1",
+       "quote": "Applicants must present a minimum of three A Level subjects* with minimum grades of AAB, to include Chemistry, one additional laboratory science subject (Biology or Physics), plus one other from the following group: Biology, Physics, Mathematics or Psychology."
+      },
+      "IB": {
+       "minimumPoints": 38,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "5",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s1",
+         "quote": "which must include Chemistry at Higher Level (with a minimum score of 5)"
+        }
+       ],
+       "notesEn": "Five-year track; Chemistry HL 5 plus Biology or Physics or Maths at HL.",
+       "notesAr": "المسار الخماسي، مع الكيمياء بالمستوى العالي بدرجة 5 والأحياء أو الفيزياء أو الرياضيات بالمستوى العالي.",
+       "source": "s1",
+       "quote": "Applicants must present a minimum score of 38 IB Diploma points (inclusive of bonus points). The IB Diploma must comprise a minimum of six subjects* (three subjects at Higher Level and three subjects at Standard Level), which must include Chemistry at Higher Level (with a minimum score of 5)"
+      },
+      "CBSE": {
+       "minimumPercent": 90,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry",
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "75",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s1",
+         "quote": "to include minimum scores of 75% in Chemistry, Biology and either Physics or Mathematics."
+        }
+       ],
+       "notesEn": "Five-year track 90%; six-year track (Foundation Year) 80%. CBSE or CISCE certificate.",
+       "notesAr": "المسار الخماسي 90%، والمسار السداسي (مع سنة تأسيسية) 80%. شهادة CBSE أو CISCE.",
+       "source": "s1",
+       "quote": "Applicants must achieve a minimum average score of 90% or above across five subjects in Grade 12, to include minimum scores of 75% in Chemistry, Biology and either Physics or Mathematics."
+      },
+      "ISC": {
+       "minimumPercent": 90,
+       "subjects": [],
+       "notesEn": "Same rule as CBSE (CISCE certificate).",
+       "notesAr": "القاعدة نفسها المطبقة على CBSE (شهادة CISCE).",
+       "source": "s1",
+       "quote": "Applicants must achieve a minimum average score of 90% or above across five subjects in Grade 12, to include minimum scores of 75% in Chemistry, Biology and either Physics or Mathematics."
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.5,
+       "subjects": [],
+       "notesEn": "Six-year track; three AP exams (5, 5, 4) may qualify for the five-year track.",
+       "notesAr": "المسار السداسي، وقد تؤهل ثلاثة اختبارات AP بدرجات 5 و5 و4 للمسار الخماسي.",
+       "source": "s1",
+       "quote": "US High School Diploma: Applicants must present a minimum overall cGPA of 3.5, including minimum GPA of 3.0 in Biology, Chemistry and either Physics, Mathematics or Calculus."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "OTHER",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "Casper situational judgement test required for non-EU applicants (HPAT not required).",
+        "noteAr": "يُشترط على المتقدمين من خارج الاتحاد الأوروبي أداء اختبار Casper للحكم الظرفي (ولا يُشترط اختبار HPAT).",
+        "source": "s1",
+        "quote": "Non-EU applicants, who are privately funded, are required to take the Casper Situational Judgement Test (SJT) in the year of admission to the Medicine programme."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "Five-year track, or six years with a Foundation Year depending on qualifications.",
+        "noteAr": "مسار من خمس سنوات، أو ست سنوات مع سنة تأسيسية حسب المؤهلات.",
+        "source": "s1",
+        "quote": "The Medicine course is run over a five-year period. Some students, however, will have to complete a six-year programme by undertaking a foundation year at the beginning of their studies."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "rcsi-pharm",
+     "status": "EXISTS",
+     "nameEn": "Pharmacy BSc (Hons) MPharm",
+     "nameAr": "الصيدلة، بكالوريوس العلوم (مع مرتبة الشرف) وماجستير الصيدلة",
+     "degree": "BSc/MPharm",
+     "durationYears": 5,
+     "url": "https://www.rcsi.com/dublin/undergraduate/pharmacy/entry-requirements",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "ABB",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "with minimum grades of ABB to include Chemistry and one of the following: Mathematics, Biology, Physics or Psychology."
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s2",
+       "quote": "Applicants must present a minimum of three A Level subjects* with minimum grades of ABB to include Chemistry and one of the following: Mathematics, Biology, Physics or Psychology."
+      },
+      "IB": {
+       "minimumPoints": 35,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "5",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "which must include Chemistry at Higher Level (with a minimum score of 5)"
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s2",
+       "quote": "Applicants must present a minimum score of 35 IB Diploma points (inclusive of bonus points)."
+      },
+      "CBSE": {
+       "minimumPercent": 85,
+       "subjects": [],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s2",
+       "quote": "Applicants must achieve an average of 85% or above in four subjects in Grade 12, to include minimum scores of 75% Chemistry, Biology and either Physics or Mathematics."
+      },
+      "ISC": {
+       "minimumPercent": 85,
+       "subjects": [],
+       "notesEn": "CBSE or CISCE certificate.",
+       "notesAr": "شهادة CBSE أو CISCE.",
+       "source": "s2",
+       "quote": "Applicants must achieve an average of 85% or above in four subjects in Grade 12, to include minimum scores of 75% Chemistry, Biology and either Physics or Mathematics."
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.5,
+       "subjects": [],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s2",
+       "quote": "American High School Diploma: Applicants must present a minimum overall GPA of 3.5 in Grade 12, including minimum GPA of 3.0 in Chemistry, Biology and either Physics, Mathematics or Calculus."
+      }
+     },
+     "general": null,
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "trinity_college_dublin",
+   "website": "https://www.tcd.ie",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.tcd.ie/courses/undergraduate/courses/computer-science/",
+     "title": "Computer Science - Courses | Trinity College Dublin",
+     "retrievedAt": "2026-09-30T07:32:42.414Z",
+     "hash": "26aed4b12a3a50c1e85895aacafed0f97b8d200dd05c063ae8250ad9a03b58fe",
+     "waybackTimestamp": "20251006172207",
+     "waybackHash": "7bf13251856fd03b1022ba85fdd3e3eada9b1143b01902365bcb078d31c0b967"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "tcd-computer-science-ba",
+     "status": "EXISTS",
+     "nameEn": "Computer Science B.A. (Moderatorship), optional M.C.S.",
+     "nameAr": "علوم الحاسوب، بكالوريوس الآداب (مع مرتبة الشرف)، مع خيار ماجستير علوم الحاسوب",
+     "degree": "BA (Mod)",
+     "durationYears": 4,
+     "url": "https://www.tcd.ie/courses/undergraduate/courses/computer-science/",
+     "curricula": {
+      "BRITISH": {
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "C",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s1",
+         "quote": "Advanced GCE (A-Level): Grade C Mathematics"
+        }
+       ],
+       "notesEn": "Minimum subject requirement only; no overall grade offer is published for non-EU applicants on this page.",
+       "notesAr": "هذا حد أدنى لمتطلبات المواد فقط، ولا تنشر الصفحة عرضا بالدرجات الإجمالية للمتقدمين من خارج الاتحاد الأوروبي.",
+       "source": "s1",
+       "quote": "Advanced GCE (A-Level): Grade C Mathematics"
+      },
+      "IB": {
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "5",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s1",
+         "quote": "International Baccalaureate: HL Grade 5 Mathematics"
+        }
+       ],
+       "notesEn": "Minimum subject requirement only.",
+       "notesAr": "حد أدنى لمتطلبات المواد فقط.",
+       "source": "s1",
+       "quote": "International Baccalaureate: HL Grade 5 Mathematics"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "4-year B.A. (Mod.), with an optional fifth year for the Master in Computer Science (M.C.S.).",
+        "noteAr": "بكالوريوس لمدة 4 سنوات مع سنة خامسة اختيارية لماجستير علوم الحاسوب.",
+        "source": "s1",
+        "quote": "B.A. (Moderatorship) Honours Bachelor Degree (NFQ Level 8) / Optional: M.C.S. in Computer Science (NFQ Level 9) 4 Years Full-Time"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English Band B (standard entry) required.",
+        "noteAr": "يُشترط استيفاء متطلبات اللغة الإنجليزية من الفئة B (القبول القياسي).",
+        "source": "s1",
+        "quote": "Applicants to this course are required to meet Band B (Standard Entry) English language requirements."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "EU applicants use the CAO; non-EU applicants apply directly to Trinity.",
+        "noteAr": "يتقدم مواطنو الاتحاد الأوروبي عبر CAO، بينما يتقدم غيرهم مباشرة إلى الكلية.",
+        "source": "s1",
+        "quote": "EU Applicants Read the information about how to apply, then apply directly to CAO. Non-EU Applicants"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "ucd",
+   "website": "https://www.ucd.ie",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ucd.ie/global/study-at-ucd/undergraduate/entryrequirements/cambridgealevel/",
+     "title": "Cambridge A Level - UCD Global",
+     "retrievedAt": "2026-09-30T07:33:09.639Z",
+     "hash": "5196a7abe03a397b47d4aef7ddac508d0a271c0f77cfab0bfdbb0c910ff59966"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.ucd.ie/global/study-at-ucd/undergraduate/entryrequirements/internationalbaccalaureatediploma/",
+     "title": "International Baccalaureate Diploma - UCD Global",
+     "retrievedAt": "2026-09-30T07:33:17.241Z",
+     "hash": "163541f1f9ebe661abf68d33990e39d8177a03c128268e6d39f6b6249b498eca"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.ucd.ie/global/study-at-ucd/undergraduate/entryrequirements/india/",
+     "title": "India - UCD Global",
+     "retrievedAt": "2026-09-30T07:33:31.877Z",
+     "hash": "1e5842fc019dfea643a1d010e4765d1eda8880dd79f74b3120e3ee2ffbe6590d"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.ucd.ie/global/study-at-ucd/undergraduate/entryrequirements/uscurriculum/",
+     "title": "US Curriculum - UCD Global",
+     "retrievedAt": "2026-09-30T07:33:14.572Z",
+     "hash": "9f9eb78e30b16ded4e643e8830b226b9b4bc69dbe6725c3ce9f4135b8cc9a3e2",
+     "waybackTimestamp": "20250910203614",
+     "waybackHash": "6c009adaef061a43f2ba4b3f2a54657bd859dfb0bf0208ca0eb9d8cc5aedea5f"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.ucd.ie/global/study-at-ucd/undergraduate/entryrequirements/unitedarabemirates/",
+     "title": "United Arab Emirates - UCD Global",
+     "retrievedAt": "2026-09-30T07:33:10.666Z",
+     "hash": "e4269625f0eb92f9b13dbe2182307679a6a9d5fd4eb26e441fe65d1b39616383",
+     "waybackTimestamp": "20251109235418",
+     "waybackHash": "ef1726ad9fcd33c33858c301553dfa3d7e58475f8416fc752f6f7aeb4f7dd5f7"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.ucd.ie/medicine/studywithus/undergraduate/medicine/",
+     "title": "Medicine - UCD School of Medicine",
+     "retrievedAt": "2026-09-30T07:33:04.430Z",
+     "hash": "5b714b7167e978c1fb7c31deb89824626f1b052511d1e2d8421f29cb4aeced74",
+     "waybackTimestamp": "20250818221831",
+     "waybackHash": "feecaaa7fa2ca1b1a32f732fab905f57ecb7635104e28504bcf218657c562335"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-01-31",
+     "labelEn": "Medicine (non-EU) application deadline",
+     "labelAr": "الموعد النهائي للتقديم لبرنامج الطب (لغير مواطني الاتحاد الأوروبي)",
+     "source": "s6",
+     "quote": "Please note, applications for entry to the Medicine programme open from October to 31st January each year for the September intake."
+    }
+   ],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": false,
+     "subjects": [],
+     "notesEn": "Not accepted on its own for direct entry: the UAE certificate needs 2 years of a bachelor's degree or the UCD International Foundation Year.",
+     "notesAr": "لا تُقبل وحدها للقبول المباشر: تحتاج الشهادة الإماراتية إلى سنتين من درجة البكالوريوس أو السنة التأسيسية الدولية في الجامعة.",
+     "source": "s5",
+     "quote": "Tawjihiyah (General Secondary Education Certificate) شهادة الثانوية العامة + 2 years of a Bachelor's degree Or UCD International Foundation Year Programme."
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "minimumGPA": 3.2,
+     "subjects": [],
+     "notesEn": "General minimum; programmes set higher requirements.",
+     "notesAr": "حد أدنى عام، وتشترط البرامج متطلبات أعلى.",
+     "source": "s4",
+     "quote": "Cumulative GPA 3.2 out of 4.0 unweighted."
+    }
+   },
+   "programs": [
+    {
+     "key": "ucd-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc (CSSA, international entry)",
+     "nameAr": "علوم الحاسوب، بكالوريوس العلوم (رمز القبول الدولي CSSA)",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.ucd.ie/myucd/courses/science/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAC",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "D",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s1",
+         "quote": "CSSA | Computer Science | AAC / ABBC / ABB + E AS Level | D in A Level |"
+        }
+       ],
+       "notesEn": "2027 entry: AAC, or ABBC, or ABB plus E at AS Level; Maths D at A Level.",
+       "notesAr": "لعام 2027: AAC أو ABBC أو ABB مع E في مستوى AS؛ والرياضيات بدرجة D في A Level.",
+       "source": "s1",
+       "quote": "CSSA | Computer Science | AAC / ABBC / ABB + E AS Level | D in A Level |"
+      },
+      "IB": {
+       "minimumPoints": 33,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": "6",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "CSSA | Computer Science | IB 33 | Standard 6 |"
+        }
+       ],
+       "notesEn": "2027 entry; Maths at Standard Level 6.",
+       "notesAr": "لعام 2027؛ الرياضيات بالمستوى القياسي بدرجة 6.",
+       "source": "s2",
+       "quote": "CSSA | Computer Science | IB 33 | Standard 6 |"
+      },
+      "CBSE": {
+       "minimumPercent": 80,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "80",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s3",
+         "quote": "CSSA | Computer Science | 80% Average | XII 80% or X 85% |"
+        }
+       ],
+       "notesEn": "Maths: Class XII 80% or Class X 85%.",
+       "notesAr": "الرياضيات: 80% في الصف الثاني عشر أو 85% في الصف العاشر.",
+       "source": "s3",
+       "quote": "CSSA | Computer Science | 80% Average | XII 80% or X 85% |"
+      },
+      "ISC": {
+       "minimumPercent": 80,
+       "subjects": [],
+       "notesEn": "Same table applies to CBSE and CISCE.",
+       "notesAr": "ينطبق الجدول نفسه على CBSE وCISCE.",
+       "source": "s3",
+       "quote": "CSSA | Computer Science | 80% Average | XII 80% or X 85% |"
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.5,
+       "subjects": [],
+       "notesEn": "GPA 3.5 plus SAT 1200 or ACT 25 plus one AP score of 3+; Maths: SAT Math 600, ACT Math 26, AP Calc/Stats 3.",
+       "notesAr": "معدل 3.5 مع SAT بدرجة 1200 أو ACT بدرجة 25 ودرجة 3 فأكثر في اختبار AP واحد؛ والرياضيات: 600 في قسم الرياضيات في SAT أو 26 في ACT أو 3 في AP Calculus/Statistics.",
+       "source": "s4",
+       "quote": "CSSA | Computer Science | N/A | 3.5 / 4.0 CGPA and 1200 SAT or 25 ACT and One AP Score 3 or Better |"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": 1200,
+        "noteEn": "Or ACT 25 (Computer Science).",
+        "noteAr": "أو ACT بدرجة 25 (علوم الحاسوب).",
+        "source": "s4",
+        "quote": "3.5 / 4.0 CGPA and 1200 SAT or 25 ACT and One AP Score 3 or Better"
+       },
+       {
+        "test": "ACT",
+        "policy": "REQUIRED",
+        "minScore": 25,
+        "noteEn": "Alternative to SAT.",
+        "noteAr": "بديل عن SAT.",
+        "source": "s4",
+        "quote": "3.5 / 4.0 CGPA and 1200 SAT or 25 ACT and One AP Score 3 or Better"
+       }
+      ],
+      "additional": [],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "ucd-med",
+     "status": "REPLACED",
+     "nameEn": "Medicine (Undergraduate Entry) MB BCh BAO",
+     "nameAr": "الطب (القبول للمرحلة الجامعية الأولى)، بكالوريوس الطب والجراحة والتوليد",
+     "degree": "MB BCh BAO",
+     "durationYears": null,
+     "url": "https://www.ucd.ie/medicine/studywithus/undergraduate/medicine/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*A*A",
+       "subjects": [],
+       "notesEn": "2027 entry: A*A*A (or A*AAD, or A*AA plus D at AS) plus interview; Maths and a lab science at least E.",
+       "notesAr": "لعام 2027: A*A*A (أو A*AAD أو A*AA مع D في AS) مع مقابلة؛ والرياضيات ومادة علمية مخبرية بدرجة E على الأقل.",
+       "source": "s1",
+       "quote": "MDS2 | Medicine | A*A*A / A*AAD / A*AA + D AS Level + Interview Successful applicants often present with a stronger academic background | E in A Level | E in A Level |"
+      },
+      "IB": {
+       "minimumPoints": 39,
+       "subjects": [],
+       "notesEn": "Plus interview; Maths and a lab science at Standard Level 4.",
+       "notesAr": "مع مقابلة؛ والرياضيات ومادة علمية مخبرية بالمستوى القياسي بدرجة 4.",
+       "source": "s2",
+       "quote": "MDS2 | Medicine | IB 39 + Interview Successful applicants often present with a stronger academic background | Standard 4 | Standard 4 |"
+      },
+      "CBSE": {
+       "minimumPercent": 90,
+       "subjects": [],
+       "notesEn": "90% plus SAT 1200 (or equivalent) plus interview.",
+       "notesAr": "90% مع SAT بدرجة 1200 (أو ما يعادلها) ومقابلة.",
+       "source": "s3",
+       "quote": "MDS2 | Medicine | 90% + SAT 1200 or equivalent + Interview"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Interview required.",
+        "noteAr": "المقابلة مطلوبة.",
+        "source": "s2",
+        "quote": "MDS2 | Medicine | IB 39 + Interview"
+       },
+       {
+        "kind": "REFERENCE",
+        "required": true,
+        "noteEn": "Two reference letters and a short personal statement.",
+        "noteAr": "خطابا توصية وبيان شخصي قصير.",
+        "source": "s6",
+        "quote": "Non-EU Applicants will be required to apply directly to UCD International Admissions and will be required to present their relevant School Leaving Examination results (e.g. ACT, SAT, etc), two letters of reference and a short personal statement."
+       }
+      ],
+      "source": "s6"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "waterloo",
+   "website": "https://uwaterloo.ca",
+   "applyVia": "OUAC",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://uwaterloo.ca/future-students/programs/computer-science",
+     "title": "Computer Science degree | Undergraduate Programs | University of Waterloo",
+     "retrievedAt": "2026-09-30T07:33:09.960Z",
+     "hash": "719c1dc1c7a9ab9de7d7a507cea49ab99df5bb3737a8336f45272f39ccd3306c",
+     "waybackTimestamp": "20250907135815",
+     "waybackHash": "6e49de8391ffd441aeb28e64754dbfc38fcca23a56fb59b161d8668a151e1fb8"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "waterloo-computer-science-bcs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BCS",
+     "nameAr": "علوم الحاسوب، بكالوريوس علوم الحاسوب",
+     "degree": "BCS",
+     "durationYears": null,
+     "url": "https://uwaterloo.ca/future-students/programs/computer-science",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "Faculty of Mathematics; awarded as a BCS or BMath in Computer Science; co-op or regular.",
+        "noteAr": "كلية الرياضيات؛ تُمنح درجة بكالوريوس علوم الحاسوب أو بكالوريوس الرياضيات في علوم الحاسوب، بنظام التعليم التعاوني أو النظام العادي.",
+        "source": "s1",
+        "quote": "Bachelor of Computer Science in Computer Science or Bachelor of Mathematics in Computer Science"
+       }
+      ],
       "source": "s1"
      },
      "previous": null

@@ -1,6 +1,6 @@
 {
  "batch": "uk2",
- "assembledAt": "2026-09-30T02:36:28.956Z",
+ "assembledAt": "2026-09-30T08:00:44.862Z",
  "universities": [
   {
    "key": "manchester",
@@ -1614,6 +1614,1333 @@
        }
       ],
       "source": "s5"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "qmul",
+   "website": "https://www.qmul.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.qmul.ac.uk/undergraduate/coursefinder/courses/2027/computer-science/",
+     "title": "Computer Science - Queen Mary University of London",
+     "retrievedAt": "2026-09-29T23:52:53.200Z",
+     "hash": "09bb69d18c98fa8e832811f4f341d60eab9b0872a4c580712e4fa71ce74a30e2"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.qmul.ac.uk/undergraduate/coursefinder/courses/2027/dentistry/",
+     "title": "Dentistry - Queen Mary University of London",
+     "retrievedAt": "2026-09-29T23:53:05.376Z",
+     "hash": "a64a987ede9a086cb37a7c2a5ee94cc567328d17be3db4cac13c64c55d154879"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.qmul.ac.uk/fmd/study/undergraduate/courses/a200/entry-requirements/",
+     "title": "Entry requirements - Faculty of Medicine and Dentistry",
+     "retrievedAt": "2026-09-29T23:53:34.343Z",
+     "hash": "f05915b93a3770e1f95aa21bce9efaaf4454acc92e2ffed18148db46d658c717",
+     "waybackTimestamp": "20250925185624",
+     "waybackHash": "e6ef15c308ae6bfdd11e987674d8a3413b9c39f4bad6b42a5174042f920bae7c"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.qmul.ac.uk/international-students/regions/middle-east/entry-requirements/uae/",
+     "title": "Entry requirements for United Arab Emirates",
+     "retrievedAt": "2026-09-29T23:54:22.569Z",
+     "hash": "0746f36129ff1ffb66475c234e151be54651d52253461dc5d55b8850ac338750"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.qmul.ac.uk/international-students/regions/south-asia/entry-requirements/india/",
+     "title": "India - Queen Mary University of London",
+     "retrievedAt": "2026-09-29T23:50:15.445Z",
+     "hash": "9a28663fc5d730ae8c5431391f1907c987cd3978156c19b1ead7de448c2851a4"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.qmul.ac.uk/international-students/regions/north-america-and-caribbean/entry-requirements/usa/",
+     "title": "USA - Queen Mary University of London",
+     "retrievedAt": "2026-09-29T23:49:11.684Z",
+     "hash": "cf06bad59fda9ee9663d8475146243c52769d9856639542b81f71684ebb91e8f"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.qmul.ac.uk/fmd/study/undergraduate/courses/a200/applying-fees--funding/",
+     "title": "Applying, fees & funding - Faculty of Medicine and Dentistry",
+     "retrievedAt": "2026-09-29T23:49:43.664Z",
+     "hash": "752ab2d98a0b7c7934d5eb34e9332719dea3914804e654deffc39511c02e4ed7"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_OXBRIDGE_MEDICINE",
+     "date": "2026-10-15",
+     "labelEn": "Dentistry UCAS deadline",
+     "labelAr": "الموعد النهائي لطب الأسنان عبر UCAS",
+     "source": "s7",
+     "quote": "All potential applicants must apply via UCAS prior to 15 October deadline."
+    }
+   ],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "The UAE Thanawia is considered for entry to a Queen Mary foundation course, not direct degree entry; A-levels or the IB are considered for direct entry.",
+     "notesAr": "تُقبل الثانوية العامة الإماراتية للالتحاق بالبرنامج التأسيسي في كوين ماري وليس للقبول المباشر في البكالوريوس؛ ويُنظر في A-level أو البكالوريا الدولية للقبول المباشر.",
+     "source": "s4",
+     "quote": "The following qualifications from the United Arab Emirates will be considered for entry onto a Queen Mary Foundation course: Thanawia",
+     "subjects": []
+    },
+    "CBSE": {
+     "accepted": true,
+     "minimumPercent": 70,
+     "notesEn": "National Board (CBSE/ISC) equivalents: A*AA 90%, AAA 85%, AAB 80%, ABB 75%, BBB 70%. 60 to 80% may be considered for the International Foundation Year.",
+     "notesAr": "معادلات المجلس الوطني (CBSE/ISC): ‏A*AA ‏90%، AAA ‏85%، AAB ‏80%، ABB ‏75%، BBB ‏70%. ويمكن النظر في نسب بين 60 و80% للسنة التأسيسية الدولية.",
+     "source": "s5",
+     "quote": "| AAB | 80% | 75% | 85% | ABB | 75% | 70% | 80% | BBB | 70% | 65% | 75% |",
+     "subjects": []
+    },
+    "ISC": {
+     "accepted": true,
+     "minimumPercent": 70,
+     "notesEn": "Same National Board scale as CBSE: A*AA 90%, AAA 85%, down to BBB 70%.",
+     "notesAr": "السلم نفسه للمجلس الوطني كما في CBSE: ‏A*AA ‏90%، AAA ‏85%، وصولا إلى BBB ‏70%.",
+     "source": "s5",
+     "quote": "| AAB | 80% | 75% | 85% | ABB | 75% | 70% | 80% | BBB | 70% | 65% | 75% |",
+     "subjects": []
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "minimumGPA": 3.3,
+     "notesEn": "US High School Diploma with GPA 3.3 plus three AP exams; AP scores rise with the course offer (for example 5,5,5 for AAA).",
+     "notesAr": "شهادة الثانوية الأمريكية بمعدل 3.3 مع ثلاثة اختبارات AP؛ وترتفع درجات AP مع عرض البرنامج (مثلا 5،5،5 لعرض AAA).",
+     "source": "s6",
+     "quote": "BBB | Completion of the HSD with GPA 3.3 AND a combination of 3 AP examinations at scores of 4 or better in different subjects. (4,4,4) |",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "qmul-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc (Hons)",
+     "nameAr": "بكالوريوس العلوم (مع مرتبة الشرف) في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.qmul.ac.uk/undergraduate/coursefinder/courses/2027/computer-science/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "subjects": [
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "mathematics",
+          "computer_science",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s1",
+         "quote": "A-Level | Grades AAA at A-Level. This must include one of A-Level Mathematics, Computer Science, or Physics. |"
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s1",
+       "quote": "A-Level | Grades AAA at A-Level. This must include one of A-Level Mathematics, Computer Science, or Physics. |"
+      },
+      "IB": {
+       "minimumPoints": 36,
+       "subjects": [
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "mathematics",
+          "computer_science",
+          "physics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s1",
+         "quote": "IB | International Baccalaureate Diploma with a minimum of 36 points overall, including 6,6,6 from three Higher Level subjects. This must include either Mathematics, Computer Science, or Physics at Higher Level."
+        }
+       ],
+       "notesEn": "6,6,6 from three Higher Level subjects.",
+       "notesAr": "6،6،6 في ثلاث مواد بالمستوى العالي.",
+       "source": "s1",
+       "quote": "IB | International Baccalaureate Diploma with a minimum of 36 points overall, including 6,6,6 from three Higher Level subjects. This must include either Mathematics, Computer Science, or Physics at Higher Level."
+      },
+      "CBSE": {
+       "minimumPercent": 85,
+       "subjects": [],
+       "notesEn": "85% is the National Board equivalent of AAA.",
+       "notesAr": "نسبة 85% تعادل عرض AAA لطلاب المجلس الوطني.",
+       "source": "s5",
+       "quote": "| National Board (CBSE/ISC) | West Bengal Council of Higher Education | Other boards | A*AA | 90% | 85% | 95% | AAA | 85% | 80% | 90% |"
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.3,
+       "subjects": [],
+       "notesEn": "AAA equivalent: GPA 3.3 with three APs at 5,5,5 (or four APs at 5,5,4,4).",
+       "notesAr": "ما يعادل AAA: معدل 3.3 مع ثلاثة اختبارات AP بدرجات 5،5،5 (أو أربعة بدرجات 5،5،4،4).",
+       "source": "s6",
+       "quote": "AAA | Completion of the HSD with GPA 3.3 AND 3 or 4 AP examinations at scores of 5,5,5 or if students apply with 4 APs, scores of 5,5,4,4 |"
+      }
+     },
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": "FOUNDATION",
+        "minimumGrade": "5",
+        "source": "s1",
+        "quote": "GCSE | Both GCSE English at grade C or 4 and Maths at grade B or 5 (or an acceptable equivalent will be required. |"
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "qmul-dent",
+     "status": "EXISTS",
+     "nameEn": "Dentistry BDS",
+     "nameAr": "بكالوريوس جراحة الأسنان (BDS)",
+     "degree": "BDS",
+     "durationYears": 5,
+     "url": "https://www.qmul.ac.uk/undergraduate/coursefinder/courses/2027/dentistry/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "subjects": [
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s2",
+         "quote": "Must include Biology or Chemistry, and a second science (Chemistry, Biology, Physics or Mathematics)"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "chemistry",
+          "biology",
+          "physics",
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s2",
+         "quote": "Must include Biology or Chemistry, and a second science (Chemistry, Biology, Physics or Mathematics)"
+        }
+       ],
+       "notesEn": "Results must be achieved in one sitting over no more than two years.",
+       "notesAr": "يجب تحقيق النتائج في دورة واحدة خلال فترة دراسة لا تتجاوز سنتين.",
+       "source": "s2",
+       "quote": "A*AA (results must be achieved in one sitting over a study period of no longer than two years)"
+      },
+      "IB": {
+       "minimumPoints": 37,
+       "subjects": [
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "chemistry",
+          "biology"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": null,
+         "source": "s2",
+         "quote": "37 points overall and three Higher Level subjects at 666 including Chemistry or Biology plus one further science subject from (Chemistry, Biology, Physics or Maths)."
+        }
+       ],
+       "source": "s2",
+       "quote": "37 points overall and three Higher Level subjects at 666 including Chemistry or Biology plus one further science subject from (Chemistry, Biology, Physics or Maths)."
+      },
+      "CBSE": {
+       "minimumPercent": 90,
+       "subjects": [],
+       "notesEn": "Standard XII average of all subjects, including Chemistry or Biology plus one further science; Standard X 85% in Biology, Chemistry, English and Maths.",
+       "notesAr": "متوسط جميع مواد الصف الثاني عشر، مع الكيمياء أو الأحياء ومادة علمية أخرى؛ و85% في الأحياء والكيمياء والإنجليزية والرياضيات في الصف العاشر.",
+       "source": "s3",
+       "quote": "National Board (CBSE/ISC) | West Bengal Council of Higher Education | Other boards | A*AA | 90% | 85% | 95% |"
+      },
+      "ISC": {
+       "minimumPercent": 90,
+       "subjects": [],
+       "notesEn": "Same as CBSE (National Board).",
+       "notesAr": "مثل CBSE (المجلس الوطني).",
+       "source": "s3",
+       "quote": "National Board (CBSE/ISC) | West Bengal Council of Higher Education | Other boards | A*AA | 90% | 85% | 95% |"
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.3,
+       "subjects": [
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "chemistry",
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "5",
+         "source": "s3",
+         "quote": "A GPA of 3.3 or higher in the US High School Diploma and at least 3 Advanced Placement (AP) examinations with grades 5,5,5 including Chemistry or Biology plus one further science subject (Chemistry, Biology, Maths or Physics)."
+        }
+       ],
+       "source": "s3",
+       "quote": "A GPA of 3.3 or higher in the US High School Diploma and at least 3 Advanced Placement (AP) examinations with grades 5,5,5 including Chemistry or Biology plus one further science subject (Chemistry, Biology, Maths or Physics)."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7,
+        "minComponent": 6,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s3",
+        "quote": "IELTS score of 7.0 overall with 6.0 in all components."
+       }
+      ],
+      "tests": [
+       {
+        "test": "UCAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "UCAT at the fourth decile or above with SJT Band 1 to 3.",
+        "noteAr": "درجة UCAT في العُشير الرابع أو أعلى مع فئة 1 إلى 3 في اختبار الحكم الظرفي.",
+        "source": "s2",
+        "quote": "Fourth decile or above, SJT Bands 1- 3."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Applicants are shortlisted for interview on a weighted score.",
+        "noteAr": "يُختار المتقدمون للمقابلة بناء على درجة مرجحة.",
+        "source": "s3",
+        "quote": "Applicants will be selected for interview on the basis of a weighted score compared to other applicants who apply in the same year, and may be comprised of UCAT score, UCAS tariff of qualifications predicted or achieved, or weighted scoring of degree for graduates."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Must be 18 or over by the start of the course.",
+        "noteAr": "يجب أن يكون عمر المتقدم 18 عاما أو أكثر عند بدء البرنامج.",
+        "source": "s3",
+        "quote": "All students for our undergraduate medical and dental degree programmes must be 18 years old or over by the start of the course (mid September)."
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "sheffield",
+   "website": "https://www.sheffield.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://sheffield.ac.uk/undergraduate/courses/2027/aerospace-engineering-beng",
+     "title": "Aerospace Engineering BEng | Undergraduate study | The University of Sheffield",
+     "retrievedAt": "2026-09-29T23:49:36.358Z",
+     "hash": "8d7b81890983ba8ecf36f107dc7bcd0f6c0c3a6eae4144c9bae2d0171865a6d9"
+    },
+    {
+     "id": "s2",
+     "url": "https://sheffield.ac.uk/undergraduate/courses/2027/computer-science-artificial-intelligence-bsc",
+     "title": "Computer Science (Artificial Intelligence) BSc | Undergraduate study | The University of Sheffield",
+     "retrievedAt": "2026-09-29T23:49:31.777Z",
+     "hash": "ebced5f1cfffbb43ade6149328a71b9d9e1593a2e7d63d56d7f818f026dbeb68"
+    },
+    {
+     "id": "s3",
+     "url": "https://sheffield.ac.uk/international/entry-requirements/india",
+     "title": "Entry requirements for students from India | International students | The University of Sheffield",
+     "retrievedAt": "2026-09-29T23:49:50.255Z",
+     "hash": "a8b5aad44e18011fd02b0c3eff870daa60d7b65080f655fb8d42e4a72e713d30"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.sheffield.ac.uk/international/countries/north-america/usa/entry",
+     "title": "Entry requirements for students from the USA | International students | The University of Sheffield",
+     "retrievedAt": "2026-09-29T23:53:13.473Z",
+     "hash": "5afb00eb3818a3ee72a7d516dd4b10a0d7758f6f8026cacaa3a76b0e5fbc2266"
+    },
+    {
+     "id": "s5",
+     "url": "https://sheffield.ac.uk/undergraduate/apply/english-language",
+     "title": "English language requirements for undergraduates | Undergraduate study | The University of Sheffield",
+     "retrievedAt": "2026-09-29T23:49:53.653Z",
+     "hash": "64c268664e2e84876ff8cd41d62ff2d96b184a86e452a00ee615b545411302ec"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {
+    "CBSE": {
+     "accepted": true,
+     "minimumPercent": 75,
+     "notesEn": "Aggregate of at least 75% with 75 to 80% in four key subjects; some departments ask for more.",
+     "notesAr": "معدل إجمالي لا يقل عن 75% مع 75 إلى 80% في أربع مواد رئيسية؛ وقد تطلب بعض الأقسام أكثر.",
+     "source": "s3",
+     "quote": "Applicants with a minimum aggregate of 75% and 75-80% in four key subjects at Standard XII will typically be considered for direct admission to undergraduate degree programmes.",
+     "subjects": []
+    },
+    "ISC": {
+     "accepted": true,
+     "minimumPercent": 75,
+     "notesEn": "Aggregate of at least 75% with 75 to 80% in four key subjects.",
+     "notesAr": "معدل إجمالي لا يقل عن 75% مع 75 إلى 80% في أربع مواد رئيسية.",
+     "source": "s3",
+     "quote": "Applicants with a minimum aggregate of 75% and 75-80% in four key subjects at Standard XII will typically be considered for direct admission to undergraduate degree programmes.",
+     "subjects": []
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "minimumGPA": 3,
+     "notesEn": "High School Diploma with GPA 3.0+ plus 3 AP exams in relevant subjects (AP 5 = A-level A, 4 = B, 3 = C).",
+     "notesAr": "شهادة الثانوية بمعدل 3.0 فأكثر مع 3 اختبارات AP في مواد ذات صلة (AP ‏5 = A، و4 = B، و3 = C في A-level).",
+     "source": "s4",
+     "quote": "A High School Diploma with a GPA of 3.0+",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "sheffield-aero",
+     "status": "EXISTS",
+     "nameEn": "Aerospace Engineering BEng",
+     "nameAr": "بكالوريوس الهندسة في هندسة الطيران والفضاء",
+     "degree": "BEng",
+     "durationYears": 3,
+     "url": "https://sheffield.ac.uk/undergraduate/courses/2027/aerospace-engineering-beng",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s1",
+         "quote": "The A Level entry requirements for this course are: A*AA including Maths and a science"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "chemistry",
+          "further_mathematics",
+          "physics",
+          "statistics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s1",
+         "quote": "Science subjects include Biology/Human Biology, Chemistry, Further Maths, Physics or Statistics"
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s1",
+       "quote": "The A Level entry requirements for this course are: A*AA including Maths and a science"
+      },
+      "IB": {
+       "minimumPoints": 38,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s1",
+         "quote": "38, with 6 in Higher Level Maths and a science"
+        }
+       ],
+       "notesEn": "6 in Higher Level Maths and a science.",
+       "notesAr": "6 في الرياضيات ومادة علمية بالمستوى العالي.",
+       "source": "s1",
+       "quote": "International Baccalaureate 38, with 6 in Higher Level Maths and a science"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "For this course we require: GCSE English Language at grade 4/C; IELTS grade of 6.5 with a minimum of 6.0 in each component; or an alternative acceptable English language qualification"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 88,
+        "minComponent": null,
+        "waiverNoteEn": "Standard band (IELTS 6.5 equivalent): minimum 19 Listening, 20 Reading, 22 Speaking, 19 Writing.",
+        "waiverNoteAr": "المستوى القياسي (ما يعادل IELTS 6.5): حد أدنى 19 في الاستماع و20 في القراءة و22 في المحادثة و19 في الكتابة.",
+        "source": "s5",
+        "quote": "Overall score of 88 with a minimum of 19 in Listening, 20 in Reading, 22 in Speaking and 19 in Writing"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "sheffield-ai",
+     "status": "REPLACED",
+     "nameEn": "Computer Science (Artificial Intelligence) BSc",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب (الذكاء الاصطناعي)",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://sheffield.ac.uk/undergraduate/courses/2027/computer-science-artificial-intelligence-bsc",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s2",
+         "quote": "AAA, including Maths; AAB, including A in Maths and B in Computer Science"
+        }
+       ],
+       "notesEn": "AAA including Maths, or AAB including A in Maths and B in Computer Science.",
+       "notesAr": "AAA تشمل الرياضيات، أو AAB تشمل A في الرياضيات وB في علوم الحاسوب.",
+       "source": "s2",
+       "quote": "AAA, including Maths; AAB, including A in Maths and B in Computer Science"
+      },
+      "IB": {
+       "minimumPoints": 36,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s2",
+         "quote": "36, with 6 in Higher Level Maths; 34, with 6 in Higher Level Maths and 5 in Higher Level Computer Science"
+        }
+       ],
+       "notesEn": "34 points if also 5 in Higher Level Computer Science.",
+       "notesAr": "34 نقطة إذا حصل الطالب أيضا على 5 في علوم الحاسوب بالمستوى العالي.",
+       "source": "s2",
+       "quote": "36, with 6 in Higher Level Maths; 34, with 6 in Higher Level Maths and 5 in Higher Level Computer Science"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s2",
+        "quote": "For this course we require: GCSE English Language at grade 4/C; IELTS grade of 6.5 with a minimum of 6.0 in each component; or an alternative acceptable English language qualification"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 88,
+        "minComponent": null,
+        "waiverNoteEn": "Standard band (IELTS 6.5 equivalent): minimum 19 Listening, 20 Reading, 22 Speaking, 19 Writing.",
+        "waiverNoteAr": "المستوى القياسي (ما يعادل IELTS 6.5): حد أدنى 19 في الاستماع و20 في القراءة و22 في المحادثة و19 في الكتابة.",
+        "source": "s5",
+        "quote": "Overall score of 88 with a minimum of 19 in Listening, 20 in Reading, 22 in Speaking and 19 in Writing"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "southampton",
+   "website": "https://www.southampton.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.southampton.ac.uk/courses/artificial-intelligence-degree-beng",
+     "title": "BEng Artificial Intelligence | University of Southampton",
+     "retrievedAt": "2026-09-30T07:39:44.441Z",
+     "hash": "aab4e2242e61475592485152f1670047ebda47e2974a497c969006c7718fdb90"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.southampton.ac.uk/courses/computer-science-degree-bsc",
+     "title": "Computer Science (Hons) | BSc | University of Southampton",
+     "retrievedAt": "2026-09-30T07:34:24.178Z",
+     "hash": "fe1b6db9cbf1d3d998237c229828fc2643f50d80b639a46bf0925c41dd252c7e",
+     "waybackTimestamp": "20250915163729",
+     "waybackHash": "3d274a51880d6048d384cfd5d83074b5f14f2baaa132d09e8885f0d080887482"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.southampton.ac.uk/courses/electrical-electronic-engineering-degree-beng",
+     "title": "Electrical & Electronic Engineering | University of Southampton",
+     "retrievedAt": "2026-09-30T07:33:56.400Z",
+     "hash": "6872947dc8ec81447d52924fcc288f2191f262e8475b32ca32fac13b4d1ed733",
+     "waybackTimestamp": "20250915152036",
+     "waybackHash": "57c42d05fe287bf6a8dae73cee89c51ad40e03e54acbac5b3b0b0f32fbebd821"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.southampton.ac.uk/international/entry-qualification-equivalencies/united-arab-emirates",
+     "title": "Entry qualification equivalencies: United Arab Emirates | University of Southampton",
+     "retrievedAt": "2026-09-30T07:33:56.748Z",
+     "hash": "4a99a390e322eb01af2f024d5da38a3d76e791582b0a02355b2c5b9d37f5f13f"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.southampton.ac.uk/international/entry-qualification-equivalencies/india",
+     "title": "Entry qualification equivalencies: India | University of Southampton",
+     "retrievedAt": "2026-09-30T07:34:49.996Z",
+     "hash": "7ff0853e1aabfac49a754c0fac2eb14f9a7f91c8631a9326a62a623a12c9e601"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "The UAE General Secondary Certificate (Al Thanawiya Al Aama) is listed for foundation year entry (85% overall, 85% in maths and physics for the engineering foundation), not direct degree entry.",
+     "notesAr": "تُدرج شهادة الثانوية العامة الإماراتية للالتحاق بالسنة التأسيسية (85% معدل عام و85% في الرياضيات والفيزياء للتأسيسي الهندسي)، وليس للقبول المباشر في البكالوريوس.",
+     "source": "s4",
+     "quote": "To apply for it, you need: a General Secondary Certificate (Al Thanawiya Al Aama) an overall average of 85% at least 85% in maths and physics",
+     "subjects": []
+    },
+    "CBSE": {
+     "accepted": true,
+     "minimumPercent": 75,
+     "notesEn": "At least 75% in Standard 12 from CBSE, CISCE or listed metro state boards, plus the course's subject requirements.",
+     "notesAr": "75% على الأقل في الصف الثاني عشر من CBSE أو CISCE أو مجالس الولايات المدرجة، مع متطلبات مواد البرنامج.",
+     "source": "s5",
+     "quote": "You'll need a Higher Secondary Certificate (HSC) /Standard 12, with a grade of at least 75% from:",
+     "subjects": []
+    },
+    "ISC": {
+     "accepted": true,
+     "minimumPercent": 75,
+     "notesEn": "At least 75% in Standard 12 (CISCE), plus subject requirements.",
+     "notesAr": "75% على الأقل في الصف الثاني عشر (CISCE)، مع متطلبات المواد.",
+     "source": "s5",
+     "quote": "You'll need a Higher Secondary Certificate (HSC) /Standard 12, with a grade of at least 75% from:",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "southampton-ai",
+     "status": "REPLACED",
+     "nameEn": "Artificial Intelligence BEng",
+     "nameAr": "بكالوريوس الهندسة في الذكاء الاصطناعي",
+     "degree": "BEng",
+     "durationYears": 3,
+     "url": "https://www.southampton.ac.uk/courses/artificial-intelligence-degree-beng",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAB",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s1",
+         "quote": "A-levels AAB including mathematics (minimum grade A)."
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s1",
+       "quote": "A-levels AAB including mathematics (minimum grade A)."
+      },
+      "IB": {
+       "minimumPoints": 34,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s1",
+         "quote": "Pass, with 34 points overall, with 17 points required at Higher Level including 6 at Higher Level in Mathematics (Analysis and Approaches) or 7 at Higher Level in Mathematics (Applications and Interpretation)",
+         "noteEn": "6 in Analysis and Approaches or 7 in Applications and Interpretation.",
+         "noteAr": "6 في التحليل والمقاربات أو 7 في التطبيقات والتفسير."
+        }
+       ],
+       "source": "s1",
+       "quote": "Pass, with 34 points overall, with 17 points required at Higher Level including 6 at Higher Level in Mathematics (Analysis and Approaches) or 7 at Higher Level in Mathematics (Applications and Interpretation)"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "IELTS score requirements overall score 6.5 reading 6.0 writing 6.0 speaking 6.0 listening 6.0"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Southampton offers Artificial Intelligence as a BEng (not a BSc).",
+        "noteAr": "تقدم ساوثهامبتون تخصص الذكاء الاصطناعي بدرجة بكالوريوس الهندسة وليس بكالوريوس العلوم.",
+        "source": "s1",
+        "quote": "Artificial Intelligence (BEng)"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "southampton-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.southampton.ac.uk/courses/computer-science-degree-bsc",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAB",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s2",
+         "quote": "A-levels AAB including mathematics (minimum grade A)."
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s2",
+       "quote": "A-levels AAB including mathematics (minimum grade A)."
+      },
+      "IB": {
+       "minimumPoints": 34,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s2",
+         "quote": "Pass, with 34 points overall, with 17 points required at Higher Level including 6 at Higher Level in Mathematics (Analysis and Approaches) or 7 at Higher Level in Mathematics (Applications and Interpretation)",
+         "noteEn": "6 in Analysis and Approaches or 7 in Applications and Interpretation.",
+         "noteAr": "6 في التحليل والمقاربات أو 7 في التطبيقات والتفسير."
+        }
+       ],
+       "source": "s2",
+       "quote": "Pass, with 34 points overall, with 17 points required at Higher Level including 6 at Higher Level in Mathematics (Analysis and Approaches) or 7 at Higher Level in Mathematics (Applications and Interpretation)"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s2",
+        "quote": "IELTS score requirements overall score 6.5 reading 6.0 writing 6.0 speaking 6.0 listening 6.0"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "southampton-ee",
+     "status": "EXISTS",
+     "nameEn": "Electrical and Electronic Engineering BEng",
+     "nameAr": "بكالوريوس الهندسة في الهندسة الكهربائية والإلكترونية",
+     "degree": "BEng",
+     "durationYears": 3,
+     "url": "https://www.southampton.ac.uk/courses/electrical-electronic-engineering-degree-beng",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s3",
+         "quote": "AAA including mathematics and either physics, further mathematics, electronics or computer science"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "physics",
+          "further_mathematics",
+          "electronics",
+          "computer_science"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s3",
+         "quote": "AAA including mathematics and either physics, further mathematics, electronics or computer science"
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s3",
+       "quote": "AAA including mathematics and either physics, further mathematics, electronics or computer science"
+      },
+      "IB": {
+       "minimumPoints": 36,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s3",
+         "quote": "Pass, with 36 points overall with 18 points required at Higher Level including 6 at Higher Level in Mathematics (Analysis and Approaches) or 7 at Higher Level in Mathematics (Applications and Interpretation), and 6 at Higher Level in either Physics or Computer Science."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "physics",
+          "computer_science"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s3",
+         "quote": "Pass, with 36 points overall with 18 points required at Higher Level including 6 at Higher Level in Mathematics (Analysis and Approaches) or 7 at Higher Level in Mathematics (Applications and Interpretation), and 6 at Higher Level in either Physics or Computer Science."
+        }
+       ],
+       "source": "s3",
+       "quote": "Pass, with 36 points overall with 18 points required at Higher Level including 6 at Higher Level in Mathematics (Analysis and Approaches) or 7 at Higher Level in Mathematics (Applications and Interpretation), and 6 at Higher Level in either Physics or Computer Science."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s3",
+        "quote": "IELTS score requirements overall score 6.5 reading 6.0 writing 6.0 speaking 6.0 listening 6.0"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s3"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "st_andrews",
+   "website": "https://www.st-andrews.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.st-andrews.ac.uk/subjects/computer-science/computer-science-bsc/",
+     "title": "Computer Science BSc - Subjects - University of St Andrews",
+     "retrievedAt": "2026-09-30T07:34:18.851Z",
+     "hash": "966886811f4f70cd03340d77e06c7292084e7e5c58462975d217be9fa4017ff4",
+     "waybackTimestamp": "20251018082519",
+     "waybackHash": "d729c268999a87461c4280a4d21ba42af9ae0eb9a1393f3b122c4ba1180bacb3"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.st-andrews.ac.uk/subjects/medicine/medicine-bsc-a100/partner-medical-schools/",
+     "title": "Partner medical schools - Subjects - University of St Andrews",
+     "retrievedAt": "2026-09-30T07:34:46.226Z",
+     "hash": "8defaea29aa8cde750d6682a239bc0340eb1382a8c0c4c2ccfaf2fd167085df7"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.st-andrews.ac.uk/subjects/medicine/entry-requirements/academic-requirements/international-qualifications/",
+     "title": "Medicine international qualifications - University of St Andrews",
+     "retrievedAt": "2026-09-30T07:40:17.242Z",
+     "hash": "78a69152b95583e2736a5e910a7891523c1ab8c988a6bde45fe75d0f7280d043"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.st-andrews.ac.uk/subjects/medicine/entry-requirements/ucat/",
+     "title": "UCAT - Subjects - University of St Andrews",
+     "retrievedAt": "2026-09-30T07:35:22.960Z",
+     "hash": "fe2158daa9845243aa52fbe645e616cffb185cd456d803dfc241fc55c31e16eb"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.st-andrews.ac.uk/subjects/entry/united-arab-emirates/",
+     "title": "United Arab Emirates - Subjects - University of St Andrews",
+     "retrievedAt": "2026-09-30T07:34:46.383Z",
+     "hash": "ac5e131914b5e995e3c0961ee003137705dfa9b041a7ec86a4f101015687f10e",
+     "waybackTimestamp": "20250930065132",
+     "waybackHash": "50a91ef9922cc016caee15eae077bfd198a37bba52e9e5dabce35f1f11ae52c8"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.st-andrews.ac.uk/subjects/entry/language-requirements/undergraduate/high-school/",
+     "title": "High school - Subjects - University of St Andrews",
+     "retrievedAt": "2026-09-30T07:36:41.096Z",
+     "hash": "85a4a5f5d9580e24983eee46ea2bee1defe2bec03b699c0d5dc2259378bcf533"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.st-andrews.ac.uk/subjects/medicine/medicine-mbchb-scotcom/",
+     "title": "Medicine MBChB ScotCOM - Subjects - University of St Andrews",
+     "retrievedAt": "2026-09-30T07:34:28.386Z",
+     "hash": "d738097c89794e6add7d97bd335af0ffd1c86b5329dd3151d46c31e1b4b6163c"
+    },
+    {
+     "id": "s8",
+     "url": "https://www.st-andrews.ac.uk/study/india/",
+     "title": "India - Study at St Andrews - University of St Andrews",
+     "retrievedAt": "2026-09-30T07:34:20.454Z",
+     "hash": "8c5e37c4ff105e420ea21e382c018742b5a35529a87fa57984334c4d303647fc"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "English can be met with CBSE or CISCE Year 12 English at 80% (from an English-medium school).",
+     "noteAr": "يمكن استيفاء شرط اللغة الإنجليزية بدرجة 80% في مادة الإنجليزية للصف الثاني عشر من CBSE أو CISCE (من مدرسة تدرّس بالإنجليزية).",
+     "source": "s6",
+     "quote": "Indian CBSE – Year 12 English: 80%"
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2026-11-30",
+     "labelEn": "Recommended date for applicants from India (competitive application)",
+     "labelAr": "الموعد الموصى به لمتقدمي الهند (لطلب تنافسي)",
+     "source": "s8",
+     "quote": "To make a competitive application we recommend that applicants from India submit applications by 30 November for entry the following year."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_OXBRIDGE_MEDICINE",
+     "date": "2026-10-15",
+     "labelEn": "Medicine UCAS deadline",
+     "labelAr": "الموعد النهائي للطب عبر UCAS",
+     "source": "s7",
+     "quote": "Application deadline: Thursday 15 October 2026"
+    }
+   ],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "A national school leaving certificate alone is not enough; applicants also need a foundation certificate, US-curriculum tests, Standard XII, IB or A-levels.",
+     "notesAr": "لا تكفي شهادة الثانوية الوطنية وحدها؛ إذ يحتاج المتقدمون أيضا إلى شهادة تأسيسية أو اختبارات المنهج الأمريكي أو الصف الثاني عشر الهندي أو البكالوريا الدولية أو A-level.",
+     "source": "s5",
+     "quote": "If you have graduated from a high school with a national school leaving certificate, we would also expect you to have one of the following:",
+     "subjects": []
+    },
+    "CBSE": {
+     "accepted": true,
+     "minimumPercent": 90,
+     "notesEn": "Average of 90% (90% in prerequisite subjects), or A1-A2 for Central Board exams.",
+     "notesAr": "متوسط 90% (و90% في المواد المطلوبة)، أو A1-A2 لامتحانات المجالس المركزية.",
+     "source": "s5",
+     "quote": "Indian School Certificate, Intermediate Certificate, Higher School Certificate, Higher Secondary Certificate, All India Senior School Certificate and Pre-University course (awarded on completion of Standard XII): candidates are expected to obtain a minimum average of 90% (with 90% or higher in any prerequisite subjects) in Standard XII examinations, or A1-A2 if you are taking examinations used by Central Boards.",
+     "subjects": []
+    },
+    "ISC": {
+     "accepted": true,
+     "minimumPercent": 90,
+     "notesEn": "Average of 90% with 90% in prerequisite subjects.",
+     "notesAr": "متوسط 90% مع 90% في المواد المطلوبة.",
+     "source": "s5",
+     "quote": "Indian School Certificate, Intermediate Certificate, Higher School Certificate, Higher Secondary Certificate, All India Senior School Certificate and Pre-University course (awarded on completion of Standard XII): candidates are expected to obtain a minimum average of 90% (with 90% or higher in any prerequisite subjects) in Standard XII examinations, or A1-A2 if you are taking examinations used by Central Boards.",
+     "subjects": []
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "notesEn": "School transcript with A to B+ grades plus one form of standardised testing: three APs at 4+ (5 in required subjects), ACT 28+ or SAT 1320.",
+     "notesAr": "كشف درجات مدرسي بتقديرات من A إلى B+ مع اختبار معياري واحد: ثلاثة اختبارات AP بدرجة 4 فأكثر (5 في المواد المطلوبة)، أو ACT ‏28 فأكثر أو SAT ‏1320.",
+     "source": "s5",
+     "quote": "AP: Three subjects with scores of 4+ and 5 in required subjects.",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "st-andrews-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc (Hons)",
+     "nameAr": "بكالوريوس العلوم (مع مرتبة الشرف) في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": 4,
+     "url": "https://www.st-andrews.ac.uk/subjects/computer-science/computer-science-bsc/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s1",
+         "quote": "AAA, including A in Mathematics and a pass in one of the following:"
+        }
+       ],
+       "notesEn": "Plus a pass in one of Biology, Chemistry, Computing Science, Further Mathematics, Geology, Geography, Physics or Psychology. Minimum entry grades ABB.",
+       "notesAr": "مع النجاح في إحدى المواد: الأحياء أو الكيمياء أو علوم الحاسوب أو الرياضيات الإضافية أو الجيولوجيا أو الجغرافيا أو الفيزياء أو علم النفس. الحد الأدنى للدخول ABB.",
+       "source": "s1",
+       "quote": "GCE A-Levels Standard entry grades: AAA, including A in Mathematics and a pass in one of the following:"
+      },
+      "IB": {
+       "minimumPoints": 38,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s1",
+         "quote": "38 (HL 6,6,6), including HL6 in Mathematics and SL5 in one of the following subjects:"
+        }
+       ],
+       "notesEn": "HL 6,6,6 with SL 5 in a listed science; minimum entry 36 (HL 6,5,5).",
+       "notesAr": "6،6،6 في المستوى العالي مع 5 في مادة علمية مدرجة بالمستوى القياسي؛ الحد الأدنى للدخول 36 (6،5،5).",
+       "source": "s1",
+       "quote": "38 (HL 6,6,6), including HL6 in Mathematics and SL5 in one of the following subjects:"
+      },
+      "CBSE": {
+       "minimumPercent": 90,
+       "subjects": [],
+       "notesEn": "University-wide Standard XII guidance from the UAE page.",
+       "notesAr": "إرشادات عامة للجامعة بشأن الصف الثاني عشر من صفحة الإمارات.",
+       "source": "s5",
+       "quote": "Indian School Certificate, Intermediate Certificate, Higher School Certificate, Higher Secondary Certificate, All India Senior School Certificate and Pre-University course (awarded on completion of Standard XII): candidates are expected to obtain a minimum average of 90% (with 90% or higher in any prerequisite subjects) in Standard XII examinations, or A1-A2 if you are taking examinations used by Central Boards."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Four-year Scottish honours degree.",
+        "noteAr": "درجة شرف اسكتلندية مدتها أربع سنوات.",
+        "source": "s1",
+        "quote": "Four years full time"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "st-andrews-med",
+     "status": "REPLACED",
+     "nameEn": "Medicine BSc (Hons) A100",
+     "nameAr": "بكالوريوس العلوم (مع مرتبة الشرف) في الطب A100",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.st-andrews.ac.uk/subjects/medicine/medicine-bsc-a100/partner-medical-schools/",
+     "curricula": {
+      "IB": {
+       "minimumPoints": 38,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": null,
+         "source": "s3",
+         "quote": "These grades must include HL in Chemistry and one of Biology, Mathematics or Physics."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "mathematics",
+          "physics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": null,
+         "source": "s3",
+         "quote": "These grades must include HL in Chemistry and one of Biology, Mathematics or Physics."
+        }
+       ],
+       "notesEn": "HL 6,6,6 plus SL 6,6,6.",
+       "notesAr": "6،6،6 في المستوى العالي و6،6،6 في المستوى القياسي.",
+       "source": "s3",
+       "quote": "Standard entry grades: 38 points (HL 6,6,6 plus SL 6,6,6)"
+      },
+      "CBSE": {
+       "minimumPercent": 90,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "90",
+         "source": "s3",
+         "quote": "Higher Secondary School Certificates awarded on completion of standard XII 90% overall with 90% in four out of five subjects to include Chemistry and two of Biology, Physics, Maths."
+        }
+       ],
+       "notesEn": "90% overall with 90% in four of five subjects including Chemistry and two of Biology, Physics, Maths.",
+       "notesAr": "90% معدل عام مع 90% في أربع من خمس مواد تشمل الكيمياء ومادتين من الأحياء والفيزياء والرياضيات.",
+       "source": "s3",
+       "quote": "Higher Secondary School Certificates awarded on completion of standard XII 90% overall with 90% in four out of five subjects to include Chemistry and two of Biology, Physics, Maths."
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.5,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "5",
+         "source": "s3",
+         "quote": "Minimum test scores of at least three AP exams at 5, to be taken in one sitting, to include Chemistry and one of Biology, Mathematics or Physics."
+        }
+       ],
+       "notesEn": "GPA 3.5 plus three APs at 5 in one sitting, including Chemistry and one of Biology, Mathematics or Physics.",
+       "notesAr": "معدل 3.5 مع ثلاثة اختبارات AP بدرجة 5 في دورة واحدة، تشمل الكيمياء وإحدى مواد الأحياء أو الرياضيات أو الفيزياء.",
+       "source": "s3",
+       "quote": "USA High School Diploma with college prep-level classes or honours classes in science subjects with a GPA of at least 3.5 on 4.0 scale (a minimum profile of A- or higher) and"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "UCAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s4",
+        "quote": "All candidates applying to Medicine (A100, A10C, A990) at St Andrews, including international students, are required to sit the University Clinical Aptitude Test (UCAT)."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Overseas students complete the final three years (MBChB) at Manchester Medical School.",
+        "noteAr": "يكمل الطلاب الدوليون السنوات الثلاث الأخيرة (MBChB) في كلية الطب بجامعة مانشستر.",
+        "source": "s2",
+        "quote": "Applicants who are overseas for fee purposes will progress to Manchester Medical School for the final three years of the programme; there are no places for overseas students at any of the other partner medical schools."
+       },
+       {
+        "kind": "NOT_ACCEPTED",
+        "required": true,
+        "noteEn": "The five-year ScotCOM MBChB is closed to overseas-fee applicants, so the A100 route is used here.",
+        "noteAr": "برنامج ScotCOM ‏MBChB ذو السنوات الخمس غير متاح للمتقدمين برسوم دولية، لذا يُعتمد مسار A100 هنا.",
+        "source": "s7",
+        "quote": "Those who are classed as overseas for fee purposes are not eligible to apply for this course."
+       },
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "About 650 applicants are interviewed, ranked by UCAT global score.",
+        "noteAr": "تُجرى مقابلات لنحو 650 متقدما يُرتَّبون حسب الدرجة الكلية في UCAT.",
+        "source": "s4",
+        "quote": "Those ranked in the top 650 or so will be given an interview."
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "ucl",
+   "website": "https://www.ucl.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ucl.ac.uk/prospective-students/undergraduate/degrees/psychology-bsc",
+     "title": "Psychology BSc | UCL",
+     "retrievedAt": "2026-01-24T00:00:00Z",
+     "hash": "6cabc1201e769a4e90ae1c8dd1044c5f8f078895efae8ef55ca7b5aaaa519e3a",
+     "via": "archive:20260124014440",
+     "waybackTimestamp": "20250818014440",
+     "waybackHash": "716d43748c45e94e489b23735030a52869b55bdefe750bdb25fd5c1c883d4045"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "ucl-psychology-bsc",
+     "status": "EXISTS",
+     "nameEn": "Psychology BSc",
+     "nameAr": "بكالوريوس العلوم في علم النفس",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.ucl.ac.uk/prospective-students/undergraduate/degrees/psychology-bsc",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "subjects": [
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "biology",
+          "chemistry",
+          "mathematics",
+          "physics",
+          "psychology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s1",
+         "quote": "To include A*A from two of the following subjects: Biology, Chemistry, Mathematics, Physics and Psychology."
+        }
+       ],
+       "notesEn": "Archived copy of the official page (January 2026, for 2026 entry); confirm for 2027.",
+       "notesAr": "نسخة مؤرشفة من الصفحة الرسمية (يناير 2026، للقبول في 2026)؛ يلزم التأكد لعام 2027.",
+       "source": "s1",
+       "quote": "Grades A*AA Subjects To include A*A from two of the following subjects"
+      },
+      "IB": {
+       "minimumPoints": 39,
+       "subjects": [
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "biology",
+          "chemistry",
+          "mathematics",
+          "physics",
+          "psychology"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s1",
+         "quote": "A total of 19 points in three higher level subjects to include grade 7 and 6 in two subjects from Biology, Chemistry, Mathematics, Physics or Psychology, with no higher level score below 5."
+        }
+       ],
+       "notesEn": "19 points in three HL subjects, including 7 and 6 in two of Biology, Chemistry, Mathematics, Physics or Psychology.",
+       "notesAr": "19 نقطة في ثلاث مواد بالمستوى العالي، تشمل 7 و6 في مادتين من الأحياء أو الكيمياء أو الرياضيات أو الفيزياء أو علم النفس.",
+       "source": "s1",
+       "quote": "Points 39 Subjects A total of 19 points"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English language requirement is UCL Level 3.",
+        "noteAr": "متطلب اللغة الإنجليزية هو المستوى 3 لدى UCL.",
+        "source": "s1",
+        "quote": "The English language level for this programme is: Level 3"
+       }
+      ],
+      "source": "s1"
      },
      "previous": null
     }

@@ -1,6 +1,6 @@
 {
  "batch": "uae",
- "assembledAt": "2026-09-30T02:36:28.674Z",
+ "assembledAt": "2026-09-30T08:00:44.487Z",
  "universities": [
   {
    "key": "abu_dhabi_university",
@@ -1154,6 +1154,1918 @@
      "previous": null
     }
    ]
+  },
+  {
+   "key": "birmingham_dubai",
+   "website": "https://www.birmingham.ac.uk/dubai",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.birmingham.ac.uk/dubai/study/apply/entry-requirements",
+     "title": "Entry requirements at our Dubai campus - University of Birmingham Dubai",
+     "retrievedAt": "2026-09-30T07:33:15.017Z",
+     "hash": "36cd50ca3ab69d6fb389bd98de0d2da848dfa5b087ba46cd91fa27ab682cb652",
+     "waybackTimestamp": "20251013215738",
+     "waybackHash": "14479bddb897fc5c65fe569966ec8eeae12782baddf0e8756afd4d1e8933475b"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.birmingham.ac.uk/dubai/study/apply/faqs",
+     "title": "Application FAQs for our Dubai campus - University of Birmingham Dubai",
+     "retrievedAt": "2026-09-30T07:33:04.206Z",
+     "hash": "02af7101ae8126fbb62a12033d72d323d66edb71fc87560643db7cdbe9efcd51"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.birmingham.ac.uk/dubai/study/undergraduate/subjects/business-and-finance-courses/business-management-bsc",
+     "title": "Business Management BSc (Dubai) - University of Birmingham Dubai",
+     "retrievedAt": "2026-09-30T07:38:46.259Z",
+     "hash": "50fb9a53093b24d09af391a7626e774502776ac0d13f3c225a87f8b52c0f4b6f",
+     "waybackTimestamp": "20250804104931",
+     "waybackHash": "ab14bccb73ffbba1212ed579faecd40be69b53af8528a5dfe2ebe5822eb7aae6"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.birmingham.ac.uk/dubai/study/undergraduate/subjects/computer-science-courses/computer-science-bsc",
+     "title": "Computer Science BSc (Dubai) - University of Birmingham Dubai",
+     "retrievedAt": "2026-09-30T07:33:34.741Z",
+     "hash": "5109b1660309a6a2426280108706a450819af276b959b5136ce4ebb8685b601d",
+     "waybackTimestamp": "20250906064355",
+     "waybackHash": "19aeb2c0d442299313dddb89d058690296cd1c39d7ebfc41f8f9e187d5bd00cb"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.birmingham.ac.uk/dubai/study/undergraduate/subjects/computer-science-courses/artificial-intelligence-and-computer-science-bsc",
+     "title": "Artificial Intelligence (AI) and Computer Science BSc (Dubai) - University of Birmingham Dubai",
+     "retrievedAt": "2026-09-30T07:33:26.524Z",
+     "hash": "ad4d1dc7a7228eea7c5e5de8b2957e2382357b89ea8b8665a0f3fe468481ddce",
+     "waybackTimestamp": "20250929040830",
+     "waybackHash": "8b3fdd7676de4a23a58c3471b8fdc5ffa554873e56b5aa5e777cb51496f36e26"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "FOUNDATION_REQUIRED",
+     "required": false,
+     "noteEn": "A foundation year may be required, for example after 12 rather than 13 years of schooling.",
+     "noteAr": "قد تُشترط سنة تأسيسية، مثلا لمن أتم 12 سنة دراسية بدلا من 13.",
+     "source": "s2",
+     "quote": "Our four-year programmes include an integrated foundation year, which may be required depending on your previous education (for example, if you have completed 12 years of study instead of 13)."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Apply directly to the University, not through UCAS.",
+     "noteAr": "يتم التقديم مباشرة إلى الجامعة وليس عبر UCAS.",
+     "source": "s2",
+     "quote": "You do not need to apply via UCAS for our Dubai campus. Applications are made directly with the University and therefore do not count towards one of your five choices."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": true,
+     "minimumPercent": 85,
+     "notesEn": "Listed as the requirement for the integrated foundation courses (four-year programmes that include a foundation year), not for direct first-year entry.",
+     "notesAr": "هذا هو الشرط المدرج للالتحاق بالبرامج التأسيسية المدمجة (برامج مدتها أربع سنوات تشمل سنة تأسيسية)، وليس للالتحاق المباشر بالسنة الأولى.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "UAE | Average of 85% in Tawjihiyya. Including 85% in Mathematics for Engineering and Physical Sciences."
+    },
+    "CBSE": {
+     "accepted": true,
+     "minimumPercent": 65,
+     "notesEn": "Listed as the requirement for the integrated foundation courses (four-year programmes that include a foundation year), not for direct first-year entry.",
+     "notesAr": "هذا هو الشرط المدرج للالتحاق بالبرامج التأسيسية المدمجة (برامج مدتها أربع سنوات تشمل سنة تأسيسية)، وليس للالتحاق المباشر بالسنة الأولى.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "India | Standard XII Higher Secondary Certificate: ICSE, CBSE, and West Bengal: 65% average"
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "minimumGPA": 3,
+     "notesEn": "Listed as the requirement for the integrated foundation courses (four-year programmes that include a foundation year), not for direct first-year entry.",
+     "notesAr": "هذا هو الشرط المدرج للالتحاق بالبرامج التأسيسية المدمجة (برامج مدتها أربع سنوات تشمل سنة تأسيسية)، وليس للالتحاق المباشر بالسنة الأولى.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "USA | High School Graduation Diploma with grade B/GPA 3.0 average."
+    },
+    "SABIS": {
+     "accepted": true,
+     "minimumPercent": 85,
+     "notesEn": "Listed as the requirement for the integrated foundation courses (four-year programmes that include a foundation year), not for direct first-year entry.",
+     "notesAr": "هذا هو الشرط المدرج للالتحاق بالبرامج التأسيسية المدمجة (برامج مدتها أربع سنوات تشمل سنة تأسيسية)، وليس للالتحاق المباشر بالسنة الأولى.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "SABIS | Average of 85%. Including Mathematics for Engineering and Physical Sciences."
+    }
+   },
+   "programs": [
+    {
+     "key": "birmingham-dubai-ai",
+     "status": "EXISTS",
+     "nameEn": "Artificial Intelligence (AI) and Computer Science (Dubai) BSc",
+     "nameAr": "بكالوريوس العلوم في الذكاء الاصطناعي وعلوم الحاسوب (دبي)",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.birmingham.ac.uk/dubai/study/undergraduate/subjects/computer-science-courses/artificial-intelligence-and-computer-science-bsc",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "ABB",
+       "notesEn": "Typical offer A*AA to ABB; three A levels; General Studies and Critical Thinking not accepted.",
+       "notesAr": "العرض المعتاد من A*AA إلى ABB؛ ثلاث مواد A level؛ لا تُقبل مادتا الدراسات العامة والتفكير النقدي.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s5",
+         "quote": "A*AA - ABB A Level Mathematics grade A."
+        }
+       ],
+       "source": "s5",
+       "quote": "A*AA - ABB A Level Mathematics grade A."
+      },
+      "IB": {
+       "minimumPoints": 32,
+       "notesEn": "6,6,6 to 6,5,5 at Higher Level.",
+       "notesAr": "من 6,6,6 إلى 6,5,5 في المستوى العالي.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s5",
+         "quote": "6,6,6 - 6,5,5 at Higher Level to include 6 in Mathematics with a minimum of 32 points overall."
+        }
+       ],
+       "source": "s5",
+       "quote": "6,6,6 - 6,5,5 at Higher Level to include 6 in Mathematics with a minimum of 32 points overall."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6,
+        "minComponent": 5.5,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "IELTS | Group A: 6.0 overall, with no less than 5.5 in any band"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 80,
+        "minComponent": 19,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "TOEFL | Group A: 80 overall, with no less than 19 in reading, 19 in listening, 21 in speaking and 19 in writing"
+       },
+       {
+        "test": "PTE",
+        "minOverall": 64,
+        "minComponent": 59,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "Pearson Test of English (PTE Academic) | Group A: 64 overall, with no less than 59 in all four skills"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "birmingham-dubai-bus",
+     "status": "REPLACED",
+     "nameEn": "Business Management (Dubai) BSc",
+     "nameAr": "بكالوريوس العلوم في إدارة الأعمال (دبي)",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.birmingham.ac.uk/dubai/study/undergraduate/subjects/business-and-finance-courses/business-management-bsc",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "BBB",
+       "notesEn": "Typical offer AAB to BBB; General Studies not accepted as one of three A levels.",
+       "notesAr": "العرض المعتاد من AAB إلى BBB؛ لا تُقبل مادة الدراسات العامة ضمن المواد الثلاث.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "FOUNDATION",
+         "minimumGrade": "B",
+         "noteEn": "GCSE Mathematics grade 5/B.",
+         "noteAr": "الرياضيات في GCSE بدرجة 5/B.",
+         "source": "s3",
+         "quote": "3 A Levels. Typical offer AAB-BBB. GCSE Mathematics at grade 5/B and English at grade 6/B required."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "english_language"
+         ],
+         "minimumLevel": "FOUNDATION",
+         "minimumGrade": "B",
+         "noteEn": "GCSE English grade 6/B.",
+         "noteAr": "اللغة الإنجليزية في GCSE بدرجة 6/B.",
+         "source": "s3",
+         "quote": "3 A Levels. Typical offer AAB-BBB. GCSE Mathematics at grade 5/B and English at grade 6/B required."
+        }
+       ],
+       "source": "s3",
+       "quote": "3 A Levels. Typical offer AAB-BBB. GCSE Mathematics at grade 5/B and English at grade 6/B required."
+      },
+      "IB": {
+       "minimumPoints": 32,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": "5",
+         "source": "s3",
+         "quote": "6,6,5 at Higher Level with a minimum of 32 points overall and SL/ HL Mathematics at 5."
+        }
+       ],
+       "source": "s3",
+       "quote": "6,6,5 at Higher Level with a minimum of 32 points overall and SL/ HL Mathematics at 5."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": "6.5 in writing and speaking, 6.0 in reading and listening.",
+        "waiverNoteAr": "6.5 في الكتابة والمحادثة و6.0 في القراءة والاستماع.",
+        "source": "s1",
+        "quote": "Group BBS UG: 6.5 overall, with no less than 6.5 in writing and speaking and 6.0 in reading and listening"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 88,
+        "minComponent": 20,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "Group BBS UG: 88 overall, with no less than 21 in reading, 20 in listening, 22 in speaking and 22 in writing"
+       },
+       {
+        "test": "PTE",
+        "minOverall": 67,
+        "minComponent": 64,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "Group BBS UG: 67 overall, with no less than 67 in writing and speaking and 64 in reading and listening"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "birmingham-dubai-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science (Dubai) BSc",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب (دبي)",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.birmingham.ac.uk/dubai/study/undergraduate/subjects/computer-science-courses/computer-science-bsc",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "ABB",
+       "notesEn": "Typical offer A*AA to ABB; three A levels; General Studies and Critical Thinking not accepted.",
+       "notesAr": "العرض المعتاد من A*AA إلى ABB؛ ثلاث مواد A level؛ لا تُقبل مادتا الدراسات العامة والتفكير النقدي.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s4",
+         "quote": "A*AA - ABB A Level Mathematics grade A."
+        }
+       ],
+       "source": "s4",
+       "quote": "A*AA - ABB A Level Mathematics grade A."
+      },
+      "IB": {
+       "minimumPoints": 32,
+       "notesEn": "6,6,6 to 6,5,5 at Higher Level.",
+       "notesAr": "من 6,6,6 إلى 6,5,5 في المستوى العالي.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s4",
+         "quote": "6,6,6 - 6,5,5 at Higher Level to include 6 in Mathematics with a minimum of 32 points overall."
+        }
+       ],
+       "source": "s4",
+       "quote": "6,6,6 - 6,5,5 at Higher Level to include 6 in Mathematics with a minimum of 32 points overall."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6,
+        "minComponent": 5.5,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "IELTS | Group A: 6.0 overall, with no less than 5.5 in any band"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 80,
+        "minComponent": 19,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "TOEFL | Group A: 80 overall, with no less than 19 in reading, 19 in listening, 21 in speaking and 19 in writing"
+       },
+       {
+        "test": "PTE",
+        "minOverall": 64,
+        "minComponent": 59,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "Pearson Test of English (PTE Academic) | Group A: 64 overall, with no less than 59 in all four skills"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "heriot_watt_dubai",
+   "website": "https://www.hw.ac.uk/dubai",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.hw.ac.uk/dubai/study/apply/english-language-requirements",
+     "title": "English language requirements | Heriot-Watt University",
+     "retrievedAt": "2026-09-30T07:33:23.047Z",
+     "hash": "189ac2ebe153b6948ccdc3a5a9699d6b408d4bdfe8088e59cfd5cc79ff77e5da",
+     "waybackTimestamp": "20250808052236",
+     "waybackHash": "759ccef8a9f53e2926731b5a24038d00259c9b37d510289de03447b1425b37ee"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.hw.ac.uk/dubai/study/apply/high-school-results",
+     "title": "Congratulations on your high school results | Heriot-Watt University",
+     "retrievedAt": "2026-09-30T07:33:37.025Z",
+     "hash": "984be5dd3234aebf88cd39cd1e4880ca2543f8a116203249ca36b826a0c5a683"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.hw.ac.uk/dubai/study/undergraduate/bachelor-business-administration",
+     "title": "BBA (Hons) Bachelor of Business Administration | Heriot-Watt University",
+     "retrievedAt": "2026-09-30T07:38:00.572Z",
+     "hash": "81e5298690be83ffbf6e81d4d88da090ab94d9e3caa9b3668143d46925fcd6f3",
+     "waybackTimestamp": "20251109152207",
+     "waybackHash": "37a557933350f7f7ee026d8b9ec693df2492a96bbea71fbbf3b152b0fa3466de"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.hw.ac.uk/dubai/study/undergraduate/computer-science",
+     "title": "BSc (Hons) Computer Science | Heriot-Watt University",
+     "retrievedAt": "2026-09-30T07:33:41.633Z",
+     "hash": "980e3ea650a55a6887d8ed5b45bab8b11e70db6a00ed2da787fcaefa283ae2ae",
+     "waybackTimestamp": "20251109152730",
+     "waybackHash": "d066bd2f92fcc7b84ae07cd2d496ba88421ce010f030a98f7e7625ef3d56a2b7"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.hw.ac.uk/dubai/study/undergraduate/mechanical-engineering",
+     "title": "BEng (Hons) Mechanical Engineering | Heriot-Watt University",
+     "retrievedAt": "2026-09-30T07:33:19.498Z",
+     "hash": "a0010078f21fb61e8678ba12e69ff008e2a18a662b698d7b5308c42fb3719fe4",
+     "waybackTimestamp": "20251109155450",
+     "waybackHash": "ff55a9337d60afa357698b8a004bc8a1559f26b49191fbecdb1cf76a3208ce31"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.hw.ac.uk/dubai/study/apply/international-entry-requirements",
+     "title": "International entry requirements | Heriot-Watt University",
+     "retrievedAt": "2026-09-30T07:33:26.428Z",
+     "hash": "10ae6bb83d534b598ac87ad9da1d91ea0344844cdf0fa4a710d3e0a1da858e7f",
+     "waybackTimestamp": "20250909201206",
+     "waybackHash": "85837ae42faf24734cae4fac2f2a2be22094fad703c72b7dda4dc649e8bb5f0a"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6,
+     "minComponent": 5.5,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "IELTS Academic (Including IELTS Academic Online) | 5.5 (with no band below 5.0) | 6.0 (with no band below 5.5) |"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 72,
+     "minComponent": 17,
+     "waiverNoteEn": "For tests taken from 21 January 2026 (new scale): overall 4 with no score lower than 4.",
+     "waiverNoteAr": "للاختبارات المأخوذة منذ 21 يناير 2026 (المقياس الجديد): 4 إجمالا دون أي درجة أقل من 4.",
+     "source": "s1",
+     "quote": "TOEFL iBT (Tests taken prior to 21 January 2026) | 70 (Reading 12, Listening 12, Speaking 13, Writing 15) | 72 (Reading 18, Listening 17, Speaking 19, Writing 17) |"
+    },
+    {
+     "test": "PTE",
+     "minOverall": 50,
+     "minComponent": 51,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "PTE Academic | 44-49 | 50-57 with 51 in each component |"
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 120,
+     "minComponent": 110,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "Duolingo | 100 overall with 95 in each component | 120 overall with 110 in each component |"
+    },
+    {
+     "test": "LANGUAGECERT",
+     "minOverall": 65,
+     "minComponent": 60,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "LanguageCert Academic SELT | 55 overall with no component below 50 | 65 overall with no component below 60 |"
+    },
+    {
+     "test": "CAMBRIDGE",
+     "minOverall": 169,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "Cambridge C1 Advanced / CAE | 162-168 | 169-175 |"
+    }
+   ],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": false,
+     "noteEn": "CBSE, ISC, IB and UK board students may enter Year 1 or, with strong results, Year 2.",
+     "noteAr": "يمكن لطلبة CBSE وISC والبكالوريا الدولية والمناهج البريطانية الالتحاق بالسنة الأولى أو بالسنة الثانية حسب النتائج.",
+     "source": "s2",
+     "quote": "CBSE, ISC, IB and UK board students are eligible for direct entry into year 1 or advanced entry into year 2 depending on performance and chosen programme."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "heriot-watt-dubai-bus",
+     "status": "EXISTS",
+     "nameEn": "BBA (Hons) Bachelor of Business Administration",
+     "nameAr": "بكالوريوس إدارة الأعمال (مع مرتبة الشرف)",
+     "degree": "BBA",
+     "durationYears": null,
+     "url": "https://www.hw.ac.uk/dubai/study/undergraduate/bachelor-business-administration",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "CCD",
+       "subjects": [],
+       "source": "s3",
+       "quote": "GCE A-Level - CCD (or BBBB at AS Level)"
+      },
+      "CBSE": {
+       "accepted": true,
+       "minimumPercent": 65,
+       "subjects": [],
+       "source": "s3",
+       "quote": "CBSE/Other Indian Boards - 65%"
+      },
+      "ISC": {
+       "accepted": true,
+       "minimumPercent": 65,
+       "notesEn": "Listed as CBSE/Other Indian Boards.",
+       "notesAr": "مدرج ضمن CBSE والمجالس الهندية الأخرى.",
+       "subjects": [],
+       "source": "s3",
+       "quote": "CBSE/Other Indian Boards - 65%"
+      },
+      "AMERICAN": {
+       "accepted": true,
+       "minimumPercent": 70,
+       "notesEn": "70% plus SAT I 1000 (500 English and 500 Math).",
+       "notesAr": "70% مع SAT بمجموع 1000 (500 إنجليزي و500 رياضيات).",
+       "subjects": [],
+       "source": "s3",
+       "quote": "American High School Diploma/SABIS - 70% + SAT I - 1000 (500 English + 500 Math)"
+      },
+      "SABIS": {
+       "accepted": true,
+       "minimumPercent": 70,
+       "notesEn": "70% plus SAT I 1000 (500 English and 500 Math).",
+       "notesAr": "70% مع SAT بمجموع 1000 (500 إنجليزي و500 رياضيات).",
+       "subjects": [],
+       "source": "s3",
+       "quote": "American High School Diploma/SABIS - 70% + SAT I - 1000 (500 English + 500 Math)"
+      },
+      "UAE_MOE": {
+       "accepted": true,
+       "minimumPercent": 75,
+       "stream": "ADVANCED|ELITE",
+       "notesEn": "Elite/Advanced stream 75%; Tawjihiyya (general) 80%.",
+       "notesAr": "مسار النخبة أو المتقدم 75%؛ الثانوية العامة 80%.",
+       "subjects": [],
+       "source": "s3",
+       "quote": "Tawjihiyya - 80% or Elite/Advance - 75%"
+      },
+      "IB": {
+       "minimumPoints": 24,
+       "subjects": [],
+       "source": "s3",
+       "quote": "International Baccalaureate Diploma Programme - 24 points (3 HL and 3 SL)"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": 1000,
+        "noteEn": "For American High School Diploma and SABIS applicants: SAT I 1000 (500 English, 500 Math).",
+        "noteAr": "لطلبة الدبلوم الأمريكي وسابيس: SAT بمجموع 1000 (500 إنجليزي و500 رياضيات).",
+        "source": "s3",
+        "quote": "American High School Diploma/SABIS - 70% + SAT I - 1000 (500 English + 500 Math)"
+       }
+      ],
+      "additional": [],
+      "source": "s3"
+     },
+     "previous": null
+    },
+    {
+     "key": "heriot-watt-dubai-cs",
+     "status": "EXISTS",
+     "nameEn": "BSc (Hons) Computer Science",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب (مع مرتبة الشرف)",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.hw.ac.uk/dubai/study/undergraduate/computer-science",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "CCC",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "Mathematics is mandatory.",
+         "noteAr": "الرياضيات مادة إلزامية.",
+         "source": "s4",
+         "quote": "GCE A-Level - CCC (or AABB at AS-Level), Including mandatory subject Math"
+        }
+       ],
+       "source": "s4",
+       "quote": "GCE A-Level - CCC (or AABB at AS-Level), Including mandatory subject Math"
+      },
+      "CBSE": {
+       "accepted": true,
+       "minimumPercent": 65,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "Mathematics is mandatory.",
+         "noteAr": "الرياضيات مادة إلزامية.",
+         "source": "s4",
+         "quote": "CBSE/Other Indian Boards - 65%, Including mandatory subject Math"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "60",
+         "source": "s6",
+         "quote": "We require 65% overall in year 12 CBSE/ICSE and other state board examinations with minimum 60% in Mathematics."
+        }
+       ],
+       "source": "s4",
+       "quote": "CBSE/Other Indian Boards - 65%, Including mandatory subject Math"
+      },
+      "ISC": {
+       "accepted": true,
+       "minimumPercent": 65,
+       "notesEn": "Listed as CBSE/Other Indian Boards.",
+       "notesAr": "مدرج ضمن CBSE والمجالس الهندية الأخرى.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "Mathematics is mandatory.",
+         "noteAr": "الرياضيات مادة إلزامية.",
+         "source": "s4",
+         "quote": "CBSE/Other Indian Boards - 65%, Including mandatory subject Math"
+        }
+       ],
+       "source": "s4",
+       "quote": "CBSE/Other Indian Boards - 65%, Including mandatory subject Math"
+      },
+      "AMERICAN": {
+       "accepted": true,
+       "minimumPercent": 70,
+       "notesEn": "70% plus SAT I 1000 (500 English and 500 Math).",
+       "notesAr": "70% مع SAT بمجموع 1000 (500 إنجليزي و500 رياضيات).",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "Mathematics is mandatory.",
+         "noteAr": "الرياضيات مادة إلزامية.",
+         "source": "s4",
+         "quote": "American High School Diploma/SABIS - 70%, Including mandatory subject Math + SAT I - 1000 (500 English and 500 Math)"
+        }
+       ],
+       "source": "s4",
+       "quote": "American High School Diploma/SABIS - 70%, Including mandatory subject Math + SAT I - 1000 (500 English and 500 Math)"
+      },
+      "SABIS": {
+       "accepted": true,
+       "minimumPercent": 70,
+       "notesEn": "70% plus SAT I 1000 (500 English and 500 Math).",
+       "notesAr": "70% مع SAT بمجموع 1000 (500 إنجليزي و500 رياضيات).",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "Mathematics is mandatory.",
+         "noteAr": "الرياضيات مادة إلزامية.",
+         "source": "s4",
+         "quote": "American High School Diploma/SABIS - 70%, Including mandatory subject Math + SAT I - 1000 (500 English and 500 Math)"
+        }
+       ],
+       "source": "s4",
+       "quote": "American High School Diploma/SABIS - 70%, Including mandatory subject Math + SAT I - 1000 (500 English and 500 Math)"
+      },
+      "UAE_MOE": {
+       "accepted": true,
+       "minimumPercent": 75,
+       "stream": "ADVANCED|ELITE",
+       "notesEn": "Elite/Advanced stream 75%; Tawjihiyya (general) 80%.",
+       "notesAr": "مسار النخبة أو المتقدم 75%؛ الثانوية العامة 80%.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "Mathematics is mandatory.",
+         "noteAr": "الرياضيات مادة إلزامية.",
+         "source": "s4",
+         "quote": "Tawjihiyya - 80% or Elite/Advance - 75%, Including mandatory subject Math"
+        }
+       ],
+       "source": "s4",
+       "quote": "Tawjihiyya - 80% or Elite/Advance - 75%, Including mandatory subject Math"
+      },
+      "IB": {
+       "minimumPoints": 24,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "noteEn": "Mathematics is mandatory.",
+         "noteAr": "الرياضيات مادة إلزامية.",
+         "source": "s4",
+         "quote": "International Baccalaureate Diploma Programme - 24 points (3 HL, Including mandatory subject Math and 3 SL)"
+        }
+       ],
+       "source": "s4",
+       "quote": "International Baccalaureate Diploma Programme - 24 points (3 HL, Including mandatory subject Math and 3 SL)"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": 1000,
+        "noteEn": "For American High School Diploma and SABIS applicants: SAT I 1000 (500 English, 500 Math).",
+        "noteAr": "لطلبة الدبلوم الأمريكي وسابيس: SAT بمجموع 1000 (500 إنجليزي و500 رياضيات).",
+        "source": "s4",
+        "quote": "American High School Diploma/SABIS - 70%, Including mandatory subject Math + SAT I - 1000 (500 English and 500 Math)"
+       }
+      ],
+      "additional": [],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "heriot-watt-dubai-me",
+     "status": "EXISTS",
+     "nameEn": "BEng (Hons) Mechanical Engineering",
+     "nameAr": "بكالوريوس الهندسة الميكانيكية (مع مرتبة الشرف)",
+     "degree": "BEng",
+     "durationYears": null,
+     "url": "https://www.hw.ac.uk/dubai/study/undergraduate/mechanical-engineering",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "CCC",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "Mathematics and Physics are mandatory.",
+         "noteAr": "الرياضيات والفيزياء مادتان إلزاميتان.",
+         "source": "s5",
+         "quote": "GCE A-Level - CCC (or AABB at AS-Level), including mandatory subjects Math and Physics"
+        }
+       ],
+       "source": "s5",
+       "quote": "GCE A-Level - CCC (or AABB at AS-Level), including mandatory subjects Math and Physics"
+      },
+      "CBSE": {
+       "accepted": true,
+       "minimumPercent": 65,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "Mathematics and Physics are mandatory.",
+         "noteAr": "الرياضيات والفيزياء مادتان إلزاميتان.",
+         "source": "s5",
+         "quote": "CBSE/Other Indian Boards - 65%, including mandatory subjects Math and Physics"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "60",
+         "source": "s6",
+         "quote": "We require 65% overall in year 12 CBSE/ICSE and other state board examinations with minimum 60% in Mathematics and Physics/Chemistry."
+        }
+       ],
+       "source": "s5",
+       "quote": "CBSE/Other Indian Boards - 65%, including mandatory subjects Math and Physics"
+      },
+      "ISC": {
+       "accepted": true,
+       "minimumPercent": 65,
+       "notesEn": "Listed as CBSE/Other Indian Boards.",
+       "notesAr": "مدرج ضمن CBSE والمجالس الهندية الأخرى.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "Mathematics and Physics are mandatory.",
+         "noteAr": "الرياضيات والفيزياء مادتان إلزاميتان.",
+         "source": "s5",
+         "quote": "CBSE/Other Indian Boards - 65%, including mandatory subjects Math and Physics"
+        }
+       ],
+       "source": "s5",
+       "quote": "CBSE/Other Indian Boards - 65%, including mandatory subjects Math and Physics"
+      },
+      "AMERICAN": {
+       "accepted": true,
+       "minimumPercent": 70,
+       "notesEn": "70% plus SAT I 1000 (500 English and 500 Math).",
+       "notesAr": "70% مع SAT بمجموع 1000 (500 إنجليزي و500 رياضيات).",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "Mathematics and Physics are mandatory.",
+         "noteAr": "الرياضيات والفيزياء مادتان إلزاميتان.",
+         "source": "s5",
+         "quote": "American High School Diploma/SABIS - 70%, including mandatory subjects Math and Physics + SAT I - 1000 (500 English and 500 Math)"
+        }
+       ],
+       "source": "s5",
+       "quote": "American High School Diploma/SABIS - 70%, including mandatory subjects Math and Physics + SAT I - 1000 (500 English and 500 Math)"
+      },
+      "SABIS": {
+       "accepted": true,
+       "minimumPercent": 70,
+       "notesEn": "70% plus SAT I 1000 (500 English and 500 Math).",
+       "notesAr": "70% مع SAT بمجموع 1000 (500 إنجليزي و500 رياضيات).",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "Mathematics and Physics are mandatory.",
+         "noteAr": "الرياضيات والفيزياء مادتان إلزاميتان.",
+         "source": "s5",
+         "quote": "American High School Diploma/SABIS - 70%, including mandatory subjects Math and Physics + SAT I - 1000 (500 English and 500 Math)"
+        }
+       ],
+       "source": "s5",
+       "quote": "American High School Diploma/SABIS - 70%, including mandatory subjects Math and Physics + SAT I - 1000 (500 English and 500 Math)"
+      },
+      "UAE_MOE": {
+       "accepted": true,
+       "minimumPercent": 75,
+       "stream": "ADVANCED|ELITE",
+       "notesEn": "Elite/Advanced stream 75%; Tawjihiyya (general) 80%.",
+       "notesAr": "مسار النخبة أو المتقدم 75%؛ الثانوية العامة 80%.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "Mathematics and Physics are mandatory.",
+         "noteAr": "الرياضيات والفيزياء مادتان إلزاميتان.",
+         "source": "s5",
+         "quote": "Tawjihiyya - 80% or Elite/Advance - 75%, including mandatory subjects Math and Physics"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "80",
+         "source": "s6",
+         "quote": "We require an average of a minimum of 80% in High School Diploma High School Diploma (Tawjihiya) or 75% in Elite/Advance, including 80% in Mathematics and Physics/Chemistry."
+        }
+       ],
+       "source": "s5",
+       "quote": "Tawjihiyya - 80% or Elite/Advance - 75%, including mandatory subjects Math and Physics"
+      },
+      "IB": {
+       "minimumPoints": 24,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics",
+          "physics"
+         ],
+         "minimumLevel": "HIGHER",
+         "noteEn": "Mathematics and Physics are mandatory.",
+         "noteAr": "الرياضيات والفيزياء مادتان إلزاميتان.",
+         "source": "s5",
+         "quote": "International Baccalaureate Diploma Programme - 24 points (3 HL, including mandatory subjects Math and Physics and 3 SL)"
+        }
+       ],
+       "source": "s5",
+       "quote": "International Baccalaureate Diploma Programme - 24 points (3 HL, including mandatory subjects Math and Physics and 3 SL)"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": 1000,
+        "noteEn": "For American High School Diploma and SABIS applicants: SAT I 1000 (500 English, 500 Math).",
+        "noteAr": "لطلبة الدبلوم الأمريكي وسابيس: SAT بمجموع 1000 (500 إنجليزي و500 رياضيات).",
+        "source": "s5",
+        "quote": "American High School Diploma/SABIS - 70%, including mandatory subjects Math and Physics + SAT I - 1000 (500 English and 500 Math)"
+       }
+      ],
+      "additional": [],
+      "source": "s5"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "khalifa_university",
+   "website": "https://www.ku.ac.ae",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ku.ac.ae/admissions/undergraduate-admissions/undergraduate-admissions-types",
+     "title": "Khalifa University",
+     "retrievedAt": "2024-03-03T00:00:00Z",
+     "hash": "27ab5afb9a3c20dbec6b4bde4ac3f427b4e9b9b84d32845877849a15e9c8cc05",
+     "via": "archive:20240303231305"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.ku.ac.ae/admissions/admission-faqs",
+     "title": "Get Complete information on Khalifa university admissions FAQS",
+     "retrievedAt": "2026-09-30T07:33:31.639Z",
+     "hash": "259082a81a9f7c94a45d34311a7a809c3db2b8af42a665795ff84025f9c0c32e"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.ku.ac.ae/admissions/undergraduate-admissions/undergraduate-admissions-procedure",
+     "title": "Khalifa University – Undergraduate Admission Procedure",
+     "retrievedAt": "2026-09-30T07:33:19.957Z",
+     "hash": "998247c3fc4d844e49f01b43e80675c5301a85205aa16aa64f295329959cd60e"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6,
+     "minComponent": null,
+     "waiverNoteEn": "Conditional admission with IELTS 5.5 or EmSAT English 1250 and the Preparatory Program.",
+     "waiverNoteAr": "قبول مشروط بدرجة IELTS 5.5 أو EmSAT إنجليزي 1250 مع البرنامج التحضيري.",
+     "source": "s1",
+     "quote": "An academic IELTS minimum score of 6.0 (out of 9)."
+    },
+    {
+     "test": "EMSAT_ENGLISH",
+     "minOverall": 1400,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "An EmSAT English minimum score of 1400"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 79,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "A TOEFL minimum score of 79 on the Internet Based Test (IBT)."
+    }
+   ],
+   "tests": [
+    {
+     "test": "EMSAT_MATH",
+     "policy": "OPTIONAL",
+     "minScore": null,
+     "noteEn": "EmSAT is not mandatory; valid scores are considered. The admission types page lists EmSAT Math 1250 for full admission.",
+     "noteAr": "اختبار EmSAT غير إلزامي وتُحتسب الدرجات السارية. تذكر صفحة أنواع القبول EmSAT رياضيات 1250 للقبول الكامل.",
+     "source": "s2",
+     "quote": "No, EmSAT is not mandatory. However, valid EmSAT scores (not older than 18 months) will still be considered if they meet KU's admission criteria."
+    },
+    {
+     "test": "SAT",
+     "policy": "OPTIONAL",
+     "minScore": 700,
+     "noteEn": "SAT Math 700 or higher may be considered.",
+     "noteAr": "قد تُقبل درجة SAT رياضيات 700 أو أعلى.",
+     "source": "s2",
+     "quote": "Yes. SAT Math scores of 700 or higher may be considered, especially for international applicants or UAE students who studied outside the national system."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "INTERVIEW",
+     "required": true,
+     "noteEn": "Personal interview for all eligible applicants.",
+     "noteAr": "مقابلة شخصية لجميع المتقدمين المؤهلين.",
+     "source": "s3",
+     "quote": "All eligible applicants are invited to conduct a personal interview."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "UAE nationals and children of UAE mothers apply through the national NAPO portal; others apply directly to KU.",
+     "noteAr": "يتقدم المواطنون وأبناء المواطنات عبر بوابة القبول الوطنية NAPO، ويتقدم غيرهم مباشرة إلى الجامعة.",
+     "source": "s2",
+     "quote": "UAE Nationals and children of UAE mothers graduating from Grade 12 this year should apply through the Ministry of Education (NAPO) portal"
+    },
+    {
+     "kind": "NOT_ACCEPTED",
+     "required": true,
+     "noteEn": "Applied Stream students are not eligible.",
+     "noteAr": "طلبة المسار التطبيقي غير مؤهلين.",
+     "source": "s2",
+     "quote": "Please note that students from the Applied Stream are not eligible."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": []
+  },
+  {
+   "key": "middlesex_dubai",
+   "website": "https://www.mdx.ac.ae",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.mdx.ac.ae/courses/course-list/course-detail/bsc-honours-cyber-security-and-digital-forensics",
+     "title": "BSc Honours Cyber Security and Digital Forensics",
+     "retrievedAt": "2026-09-30T07:33:41.997Z",
+     "hash": "36f25498b1ed5aa52886e9ec7797dd40788f399c6ac6218e5d51ce4abbcbc857",
+     "waybackTimestamp": "20250809031641",
+     "waybackHash": "b36d5ac2a6b8a1bdc32c36a317572bc2266adf3461dd5fa5f280ddf2543de162"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6,
+     "minComponent": 5.5,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "IELTS Academic | 6.0 (minimum 5.5 in each band) |"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 4,
+     "minComponent": 4,
+     "waiverNoteEn": "Score on the new TOEFL iBT 1 to 6 scale.",
+     "waiverNoteAr": "الدرجة وفق مقياس TOEFL iBT الجديد من 1 إلى 6.",
+     "source": "s1",
+     "quote": "TOEFL Internet-based | Overall 4, with 4 in all components |"
+    },
+    {
+     "test": "PTE",
+     "minOverall": 59,
+     "minComponent": 59,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "Pearson PTE Academic | 59 (with 59 in all components) |"
+    }
+   ],
+   "tests": [],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "middlesex-dubai-cyber",
+     "status": "EXISTS",
+     "nameEn": "BSc Honours Cyber Security and Digital Forensics",
+     "nameAr": "بكالوريوس العلوم (مع مرتبة الشرف) في الأمن السيبراني والأدلة الجنائية الرقمية",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.mdx.ac.ae/courses/course-list/course-detail/bsc-honours-cyber-security-and-digital-forensics",
+     "curricula": {
+      "CBSE": {
+       "accepted": true,
+       "minimumPercent": 65,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "70",
+         "source": "s1",
+         "quote": "minimum grade of 65% overall with 70% in Grade 12 Mathematics"
+        }
+       ],
+       "source": "s1",
+       "quote": "Indian Secondary School Certificates issued by the CBSE/ISC boards/NIOS/All State Boards may be considered: minimum grade of 65% overall with 70% in Grade 12 Mathematics"
+      },
+      "ISC": {
+       "accepted": true,
+       "minimumPercent": 65,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "70",
+         "source": "s1",
+         "quote": "minimum grade of 65% overall with 70% in Grade 12 Mathematics"
+        }
+       ],
+       "source": "s1",
+       "quote": "Indian Secondary School Certificates issued by the CBSE/ISC boards/NIOS/All State Boards may be considered: minimum grade of 65% overall with 70% in Grade 12 Mathematics"
+      },
+      "BRITISH": {
+       "gradeProfile": "BBC",
+       "notesEn": "Two A levels at A*A* or three at BBC.",
+       "notesAr": "مادتان بدرجة A*A* أو ثلاث مواد بدرجة BBC.",
+       "subjects": [],
+       "source": "s1",
+       "quote": "Minimum Two or Three with grades A*A* / BBC"
+      },
+      "IB": {
+       "minimumPoints": 24,
+       "notesEn": "Full IB Diploma with 24 to 28 points.",
+       "notesAr": "دبلوم البكالوريا الدولية الكامل بمجموع 24 إلى 28 نقطة.",
+       "subjects": [],
+       "source": "s1",
+       "quote": "You must have passed the full IB Diploma with 24 - 28 Points"
+      },
+      "AMERICAN": {
+       "accepted": true,
+       "minimumGPA": 2.8,
+       "notesEn": "Also SAT 1100 (at least 550 per section), ACT 23, or two AP exams; otherwise the Foundation Programme.",
+       "notesAr": "يُشترط أيضا SAT بمجموع 1100 (550 على الأقل لكل قسم) أو ACT بدرجة 23 أو اختباران AP؛ وإلا فالبرنامج التأسيسي.",
+       "subjects": [],
+       "source": "s1",
+       "quote": "For students coming from the American Schooling System, direct entry into Year 1 of the undergraduate programme is possible with a minimum GPA of 2.8."
+      },
+      "UAE_MOE": {
+       "accepted": false,
+       "notesEn": "Not accepted for direct entry: UAE Tawjihiyya graduates must first complete the International Foundation Programme (IFP).",
+       "notesAr": "لا يُقبل للالتحاق المباشر: يجب على خريجي الثانوية العامة الإماراتية إتمام البرنامج التأسيسي الدولي أولا.",
+       "subjects": [],
+       "source": "s1",
+       "quote": "Students applying for direct entry into Year 1 of an undergraduate programme from the UAE schooling system must have successfully completed the Tawjihiyya (Secondary School Certificate) plus successful completion of the Middlesex Univeristy International Foundation Programme (IFP)."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": 1100,
+        "noteEn": "American-curriculum applicants: SAT 1100 (550 per section), or ACT 23, or two AP exams.",
+        "noteAr": "لطلبة المنهج الأمريكي: SAT بمجموع 1100 (550 لكل قسم) أو ACT بدرجة 23 أو اختباران AP.",
+        "source": "s1",
+        "quote": "Additionally, students must have SAT scores of 1100 at least 550 in each section or an ACT composite score of 23 or alternatively, two AP exams with scores of 3 GPA and above."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "FOUNDATION_REQUIRED",
+        "required": false,
+        "noteEn": "GCSE-only students join the International Foundation Programme first.",
+        "noteAr": "يلتحق حملة GCSE فقط بالبرنامج التأسيسي الدولي أولا.",
+        "source": "s1",
+        "quote": "Students who have completed their GCSEs are eligible to join our International Foundation Programme"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "nyu_abu_dhabi",
+   "website": "https://nyuad.nyu.edu",
+   "applyVia": "COMMON_APP",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://nyuad.nyu.edu/en/academics/undergraduate/majors-and-minors/economics-major.html",
+     "title": "Economics Major - NYU Abu Dhabi",
+     "retrievedAt": "2026-09-30T07:38:17.692Z",
+     "hash": "b9358ba69bfe9a188cd4964d2e571e2e12c594149324efee54a33e69887a928d",
+     "waybackTimestamp": "20251114053829",
+     "waybackHash": "ae7914844ea4d3028485a20286f066c02bbb48d83f2a52d03828b16c6c2765f1"
+    },
+    {
+     "id": "s2",
+     "url": "https://nyuad.nyu.edu/en/academics/undergraduate/majors-and-minors/computer-science-major.html",
+     "title": "Computer Science Major - NYU Abu Dhabi",
+     "retrievedAt": "2026-09-30T07:34:05.046Z",
+     "hash": "1e72c8c4c65a04dffabcf393f7dffa0f77bd77e7916ac9a0b6d4c333fe581f67"
+    },
+    {
+     "id": "s3",
+     "url": "https://nyuad.nyu.edu/en/apply/undergraduate/apply/entry-requirements.html",
+     "title": "Entry Requirements - NYU Abu Dhabi",
+     "retrievedAt": "2026-09-30T07:33:35.149Z",
+     "hash": "8d409a5af43a1558ff0083c948b84a7199d3f3ece25cdf56d0666e177f732a09",
+     "waybackTimestamp": "20250913021538",
+     "waybackHash": "aa9f9d9c492f8984365f96c10aeb8ee8d67f33eaafe55e8d7e5be08cedbb6daf"
+    },
+    {
+     "id": "s4",
+     "url": "https://nyuad.nyu.edu/en/apply/undergraduate/apply/key-dates-and-deadlines.html",
+     "title": "Key Dates and Deadlines - NYU Abu Dhabi",
+     "retrievedAt": "2026-09-30T07:33:47.931Z",
+     "hash": "bdaa5f61073b35874bde37ad2f909af610701bd485d24eaa80c85105c3410ef3"
+    },
+    {
+     "id": "s5",
+     "url": "https://nyuad.nyu.edu/en/academics/undergraduate/majors-and-minors/computer-engineering-major.html",
+     "title": "Computer Engineering Major - NYU Abu Dhabi",
+     "retrievedAt": "2026-09-30T07:33:30.094Z",
+     "hash": "4921fc7f7e35dbaf7f158d01a6b1042b7275d4f30eaf10f556442416d1c9e6f5",
+     "waybackTimestamp": "20250716204334",
+     "waybackHash": "70ff1500bc1f7980bf3aacc9a6bf1c706e3148362436ca371fe893445040865d"
+    },
+    {
+     "id": "s6",
+     "url": "https://nyuad.nyu.edu/en/academics/undergraduate/majors-and-minors/electrical-engineering-major.html",
+     "title": "Electrical Engineering Major - NYU Abu Dhabi",
+     "retrievedAt": "2026-09-30T07:33:42.557Z",
+     "hash": "968ce2f3a5e74229e9cb6334854068f03c3088302cd3d5a0987c6f67e693e95e",
+     "waybackTimestamp": "20251011232730",
+     "waybackHash": "3e32a07aa33291cc5d57660a1cb7f6c6cc102bf7bc5e37214afc88d5b06d3549"
+    }
+   ],
+   "english": [],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "OPTIONAL",
+     "minScore": null,
+     "noteEn": "Test-optional through the 2027-2028 cycle.",
+     "noteAr": "الاختبارات اختيارية حتى دورة القبول 2027-2028.",
+     "source": "s3",
+     "quote": "NYU will remain test-optional through the 2027-2028 application cycle. Applicants are not required to submit standardized test scores as part of their application."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "English proficiency test required for non-native speakers unless taught fully in English for the last three years.",
+     "noteAr": "يُشترط اختبار إتقان اللغة الإنجليزية لغير الناطقين بها ما لم يدرسوا باللغة الإنجليزية بالكامل خلال السنوات الثلاث الأخيرة.",
+     "source": "s3",
+     "quote": "An English Language Proficiency test is required for students whose native language is not English, unless they have been studying in a curriculum where English is the sole language of instruction for all courses for three years prior to applying."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Must be 17 by 1 August of the year of enrolment.",
+     "noteAr": "يجب أن يبلغ الطالب 17 عاما بحلول 1 أغسطس من سنة الالتحاق.",
+     "source": "s3",
+     "quote": "Students must be 17 years old by August 1 of the year they plan to enroll in order to be eligible to attend NYU Abu Dhabi."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "EARLY_DECISION",
+     "date": "2026-11-01",
+     "labelEn": "Early Decision I",
+     "labelAr": "القرار المبكر الأول",
+     "source": "s4",
+     "quote": "Early Decision I | November 1 | December 15 |"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "EARLY_DECISION_II",
+     "date": "2027-01-01",
+     "labelEn": "Early Decision II",
+     "labelAr": "القرار المبكر الثاني",
+     "source": "s4",
+     "quote": "Early Decision II | January 1 | February 15 |"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "REGULAR_DECISION",
+     "date": "2027-01-05",
+     "labelEn": "Regular Decision",
+     "labelAr": "القرار العادي",
+     "source": "s4",
+     "quote": "Regular Decision | January 5 | April 1 |"
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "nyu-abu-dhabi-ce",
+     "status": "EXISTS",
+     "nameEn": "Computer Engineering BS",
+     "nameAr": "بكالوريوس العلوم في هندسة الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://nyuad.nyu.edu/en/academics/undergraduate/majors-and-minors/computer-engineering-major.html",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "nyu-abu-dhabi-econ",
+     "status": "EXISTS",
+     "nameEn": "Economics Major",
+     "nameAr": "تخصص الاقتصاد",
+     "degree": null,
+     "durationYears": null,
+     "url": "https://nyuad.nyu.edu/en/academics/undergraduate/majors-and-minors/economics-major.html",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "calculus"
+        ],
+        "noteEn": "The programme requires at least one semester of calculus; a strong foundation in algebra, pre-calculus or calculus is encouraged.",
+        "noteAr": "يتطلب البرنامج فصلا دراسيا واحدا على الأقل في التفاضل والتكامل؛ ويُنصح بأساس قوي في الجبر أو ما قبل التفاضل أو التفاضل.",
+        "source": "s1",
+        "quote": "This program requires quantitative coursework, including at least one semester of calculus."
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "nyu-abu-dhabi-ee",
+     "status": "EXISTS",
+     "nameEn": "Electrical Engineering BS",
+     "nameAr": "بكالوريوس العلوم في الهندسة الكهربائية",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://nyuad.nyu.edu/en/academics/undergraduate/majors-and-minors/electrical-engineering-major.html",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "nyuad-computer-science-bs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science Major",
+     "nameAr": "تخصص علوم الحاسوب",
+     "degree": null,
+     "durationYears": null,
+     "url": "https://nyuad.nyu.edu/en/academics/undergraduate/majors-and-minors/computer-science-major.html",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "calculus"
+        ],
+        "noteEn": "The programme requires at least one semester of calculus; a strong foundation in algebra, pre-calculus or calculus is encouraged.",
+        "noteAr": "يتطلب البرنامج فصلا دراسيا واحدا على الأقل في التفاضل والتكامل؛ ويُنصح بأساس قوي في الجبر أو ما قبل التفاضل أو التفاضل.",
+        "source": "s2",
+        "quote": "This program requires quantitative coursework, including at least one semester of calculus."
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "sorbonne_abu_dhabi",
+   "website": "https://www.sorbonne.ae",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.sorbonne.ae/programme/bachelor-in-economics-and-management",
+     "title": "Bachelor in Economics and Management",
+     "retrievedAt": "2026-09-30T07:34:00.629Z",
+     "hash": "55031131a168c3b54d817a46725908a1bbb22b7d21526b04a2cb9fb8297816ea"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.sorbonne.ae/programme/bachelor-in-law",
+     "title": "Bachelor in Law",
+     "retrievedAt": "2026-09-30T07:33:48.184Z",
+     "hash": "9955444470664cf1f566907597dbdc2558956693ac219f0c37ce5458422f47ae",
+     "waybackTimestamp": "20250905181930",
+     "waybackHash": "6888a7b94da53d5b0a61b44a96fa99b7263349eb817a886c46afcab28f166a33"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "sorbonne-abu-dhabi-econ",
+     "status": "REPLACED",
+     "nameEn": "Bachelor in Economics and Management",
+     "nameAr": "بكالوريوس في الاقتصاد والإدارة",
+     "degree": null,
+     "durationYears": 3,
+     "url": "https://www.sorbonne.ae/programme/bachelor-in-economics-and-management",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Taught in French.",
+        "noteAr": "يُدرَّس البرنامج باللغة الفرنسية.",
+        "source": "s1",
+        "quote": "Courses are taught in French and meet the standards of excellence and rigour specific to the French education system."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "sorbonne-abu-dhabi-law",
+     "status": "EXISTS",
+     "nameEn": "Bachelor in Law",
+     "nameAr": "بكالوريوس في القانون",
+     "degree": null,
+     "durationYears": 3,
+     "url": "https://www.sorbonne.ae/programme/bachelor-in-law",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Three-year programme taught in French; degree awarded by Universite Paris Cite.",
+        "noteAr": "برنامج مدته ثلاث سنوات يُدرَّس بالفرنسية، وتمنح الشهادة جامعة باريس سيتيه.",
+        "source": "s2",
+        "quote": "The programme is an exclusive three-year programme taught in French"
+       },
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "Non-French speakers may take the first year over two years.",
+        "noteAr": "يمكن لغير الناطقين بالفرنسية إتمام السنة الأولى على مدى سنتين.",
+        "source": "s2",
+        "quote": "Non French speaking students can benefit from the \"longer system\" which allows them to complete the first year over two years."
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "uae_university",
+   "website": "https://www.uaeu.ac.ae",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+     "title": "Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T07:33:50.455Z",
+     "hash": "aa9d98298d1c15a4628329e33c1537c249242df2771adfb2471995f00b2d2b23"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.uaeu.ac.ae/en/academics/intrests/computing.shtml",
+     "title": "Computing",
+     "retrievedAt": "2026-09-30T07:33:58.768Z",
+     "hash": "2708e77a1b690802c1ffe830137a726c321d8337893af048570d0a1be0ca97e4",
+     "waybackTimestamp": "20250926094641",
+     "waybackHash": "82df868b42a83c9ad7cdcbb2f0103199974a87b01f2d436062ad901ee60031e3"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 5.5,
+     "minComponent": null,
+     "waiverNoteEn": "Or 90% in the English subject of the MOE Grade 12 certificate. IELTS Indicator, TOEFL Home Edition and Duolingo are not accepted.",
+     "waiverNoteAr": "أو 90% في مادة اللغة الإنجليزية في شهادة الصف الثاني عشر لوزارة التربية. لا يُقبل IELTS Indicator ولا TOEFL Home Edition ولا Duolingo.",
+     "source": "s1",
+     "quote": "(Academic) IELTS | (Local) TOEFL ITP | TOEFL iBT | 5.5 | 525 | 70 |"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 70,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "(Academic) IELTS | (Local) TOEFL ITP | TOEFL iBT | 5.5 | 525 | 70 |"
+    }
+   ],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "MOE equivalency certificate required for non-MOE high school certificates.",
+     "noteAr": "شهادة معادلة من وزارة التربية لشهادات الثانوية غير التابعة لمنهج الوزارة.",
+     "source": "s1",
+     "quote": "Obtaining equivalency certificate issued by the Ministry of Education in the UAE, for all High School Certificates that does not follow the MOE curriculum."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "uae-university-bus",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Business Administration",
+     "nameAr": "بكالوريوس إدارة الأعمال",
+     "degree": "BBA",
+     "durationYears": null,
+     "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-business-administration.shtml",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumGrade": "80",
+        "noteEn": "Mathematics at HS 80% or equivalent (SAT Math, AP, IB HL or A-level).",
+        "noteAr": "الرياضيات بنسبة 80% في الثانوية أو ما يعادلها (SAT أو AP أو IB HL أو A-level).",
+        "source": "s1",
+        "quote": "Math: HS 80% or its equivalent: SAT Math: 555 points AP Math: 3 points IB- HL Math: 4 points GCE A-Level: C grade"
+       }
+      ],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "OPTIONAL",
+        "minScore": 555,
+        "noteEn": "SAT Math 555 is one accepted equivalent for the mathematics requirement.",
+        "noteAr": "درجة SAT رياضيات 555 إحدى المعادلات المقبولة لمتطلب الرياضيات.",
+        "source": "s1",
+        "quote": "Math: HS 80% or its equivalent: SAT Math: 555 points AP Math: 3 points IB- HL Math: 4 points GCE A-Level: C grade"
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "International students: high school average of 85% or its equivalent (competitive; priority to higher results).",
+        "noteAr": "للطلبة الدوليين: معدل ثانوية عامة 85% أو ما يعادله (القبول تنافسي والأولوية للمعدلات الأعلى).",
+        "source": "s1",
+        "quote": "College of Business and Economics High School Average | English Language Proficiency Requirement | Mathematics Requirement | Science Requirement | Other College-Specific Requirements | 85% or its equivalent"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "uae-university-cs",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Computer Science",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumGrade": "90",
+        "noteEn": "Mathematics at HS 90% or equivalent (SAT Math, AP, IB HL or A-level).",
+        "noteAr": "الرياضيات بنسبة 90% في الثانوية أو ما يعادلها (SAT أو AP أو IB HL أو A-level).",
+        "source": "s1",
+        "quote": "Math: HS 90% or its equivalent: SAT Math: 590 points AP Math: 4 points IB- HL Math: 5 points GCE A-Level: B grade"
+       },
+       {
+        "type": "ONE_OF",
+        "keys": [
+         "physics",
+         "computer_science"
+        ],
+        "minimumGrade": "90",
+        "source": "s1",
+        "quote": "One of the Science Subjects (Physics or Computer Science): HS 90% or its equivalent:"
+       }
+      ],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "OPTIONAL",
+        "minScore": 590,
+        "noteEn": "SAT Math 590 is one accepted equivalent for the mathematics requirement.",
+        "noteAr": "درجة SAT رياضيات 590 إحدى المعادلات المقبولة لمتطلب الرياضيات.",
+        "source": "s1",
+        "quote": "Math: HS 90% or its equivalent: SAT Math: 590 points AP Math: 4 points IB- HL Math: 5 points GCE A-Level: B grade"
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "International students: high school average of 90% or its equivalent (competitive; priority to higher results).",
+        "noteAr": "للطلبة الدوليين: معدل ثانوية عامة 90% أو ما يعادله (القبول تنافسي والأولوية للمعدلات الأعلى).",
+        "source": "s1",
+        "quote": "College of Computing and Artificial Intelligence High School Average | English Language Proficiency Requirement | Mathematics Requirement | Science Requirement | Other College-Specific Requirements | 90% or its equivalent"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "uae-university-ee",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Electrical Engineering",
+     "nameAr": "بكالوريوس العلوم في الهندسة الكهربائية",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-electrical-engineering.shtml",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumGrade": "90",
+        "noteEn": "Mathematics at HS 90% or equivalent (SAT Math, AP, IB HL or A-level).",
+        "noteAr": "الرياضيات بنسبة 90% في الثانوية أو ما يعادلها (SAT أو AP أو IB HL أو A-level).",
+        "source": "s1",
+        "quote": "Math: HS 90% or its equivalent: SAT Math: 590 points AP Math: 4 points IB- HL Math: 5 points GCE A-Level: B grade"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "physics"
+        ],
+        "minimumGrade": "90",
+        "source": "s1",
+        "quote": "Physics plus one Science Subject (Chemistry or Biology): HS 90% or its equivalent:"
+       },
+       {
+        "type": "ONE_OF",
+        "keys": [
+         "chemistry",
+         "biology"
+        ],
+        "minimumGrade": "90",
+        "source": "s1",
+        "quote": "Physics plus one Science Subject (Chemistry or Biology): HS 90% or its equivalent:"
+       }
+      ],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "OPTIONAL",
+        "minScore": 590,
+        "noteEn": "SAT Math 590 is one accepted equivalent for the mathematics requirement.",
+        "noteAr": "درجة SAT رياضيات 590 إحدى المعادلات المقبولة لمتطلب الرياضيات.",
+        "source": "s1",
+        "quote": "Math: HS 90% or its equivalent: SAT Math: 590 points AP Math: 4 points IB- HL Math: 5 points GCE A-Level: B grade"
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "International students: high school average of 90% or its equivalent (competitive; priority to higher results).",
+        "noteAr": "للطلبة الدوليين: معدل ثانوية عامة 90% أو ما يعادله (القبول تنافسي والأولوية للمعدلات الأعلى).",
+        "source": "s1",
+        "quote": "College of Engineering High School Average | English Language Proficiency Requirement | Mathematics Requirement | Science Requirement | Other College-Specific Requirements | 90% or its equivalent"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "uae-university-law",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Law",
+     "nameAr": "بكالوريوس القانون",
+     "degree": "LLB",
+     "durationYears": null,
+     "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-law.shtml",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumGrade": "80",
+        "noteEn": "Mathematics at HS 80% or equivalent (SAT Math, AP, IB HL or A-level).",
+        "noteAr": "الرياضيات بنسبة 80% في الثانوية أو ما يعادلها (SAT أو AP أو IB HL أو A-level).",
+        "source": "s1",
+        "quote": "Math: HS 80% or its equivalent: SAT Math: 555 points AP Math: 3 points IB- HL Math: 4 points GCE A-Level: C grade"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "arabic"
+        ],
+        "minimumGrade": "90",
+        "noteEn": "Arabic 90% or Al Ain Arabic Language Test score 6.0.",
+        "noteAr": "اللغة العربية 90% أو درجة 6.0 في اختبار العين للغة العربية.",
+        "source": "s1",
+        "quote": "Arabic: HS 90% or its equivalent: Al Ain Arabic Language Test: score of 6.0"
+       }
+      ],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "OPTIONAL",
+        "minScore": 555,
+        "noteEn": "SAT Math 555 is one accepted equivalent for the mathematics requirement.",
+        "noteAr": "درجة SAT رياضيات 555 إحدى المعادلات المقبولة لمتطلب الرياضيات.",
+        "source": "s1",
+        "quote": "Math: HS 80% or its equivalent: SAT Math: 555 points AP Math: 3 points IB- HL Math: 4 points GCE A-Level: C grade"
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "International students: high school average of 85% or its equivalent (competitive; priority to higher results).",
+        "noteAr": "للطلبة الدوليين: معدل ثانوية عامة 85% أو ما يعادله (القبول تنافسي والأولوية للمعدلات الأعلى).",
+        "source": "s1",
+        "quote": "College of Law High School Average | English Language Proficiency Requirement | Mathematics Requirement | Science Requirement | Other College-Specific Requirements | 85% or its equivalent"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "uaeu-medicine-md",
+     "status": "EXISTS",
+     "nameEn": "Doctor of Medicine",
+     "nameAr": "دكتور في الطب",
+     "degree": "MD",
+     "durationYears": null,
+     "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/doctor-of-medicine.shtml",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "NOT_ACCEPTED",
+        "required": true,
+        "noteEn": "Limited to UAE nationals, children of Emirati mothers and students with secured tuition funding; single Fall intake.",
+        "noteAr": "يقتصر على المواطنين وأبناء المواطنات والطلبة الذين يضمنون تمويل الرسوم؛ مع قبول واحد في فصل الخريف.",
+        "source": "s1",
+        "quote": "Admission to the Doctor of Medicine (MD) program at the College of Medicine and Health Sciences is limited to UAE nationals and children of Emirati mothers, and students who have secured funding to cover the tuition fees throughout their studies at the university."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "zayed_university",
+   "website": "https://www.zu.ac.ae",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.zu.ac.ae/main/ar/admission/undergraduate-programs/_hidden/uae-nationals.aspx",
+     "title": "الطلبة الإماراتيون",
+     "retrievedAt": "2026-09-30T07:33:54.438Z",
+     "hash": "bcafeb2eed85ec35fd1c5c6ec06c97086b262e91a65b5b8dd5a9ef2f81c16383"
+    }
+   ],
+   "english": [
+    {
+     "test": "EMSAT_ENGLISH",
+     "minOverall": 1250,
+     "minComponent": null,
+     "waiverNoteEn": "Conditional admission with EmSAT English 1100; the English requirement must then be met within a year.",
+     "waiverNoteAr": "قبول مشروط بدرجة 1100 في EmSAT الإنجليزي، على أن يُستوفى متطلب اللغة خلال عام.",
+     "source": "s1",
+     "quote": "تحقيق درجة 1250 في اختبار الامسات لمادة الانجليزية أو 5.5 في اختبار الآيلتس أو 71 في اختبار التوفل IBT"
+    },
+    {
+     "test": "IELTS",
+     "minOverall": 5.5,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "تحقيق درجة 1250 في اختبار الامسات لمادة الانجليزية أو 5.5 في اختبار الآيلتس أو 71 في اختبار التوفل IBT"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 71,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "تحقيق درجة 1250 في اختبار الامسات لمادة الانجليزية أو 5.5 في اختبار الآيلتس أو 71 في اختبار التوفل IBT"
+    }
+   ],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Private and non-UAE curricula need a UAE Ministry equivalency letter.",
+     "noteAr": "يجب على طلبة المناهج الخاصة والمناهج من خارج الدولة تقديم خطاب معادلة من الوزارة.",
+     "source": "s1",
+     "quote": "يجب على الطالب تقديم نسخة من خطاب المعادلة الصادرة عن وزارة التعليم بدولة الإمارات."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "High school certificate must be no more than ten years old.",
+     "noteAr": "يجب ألا يتجاوز عمر شهادة الثانوية العامة عشر سنوات.",
+     "source": "s1",
+     "quote": "يجب ان لا تتعدى شهادة الثانوية العامة عشر سنوات منذ تخرج الطالب"
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": []
   }
  ]
 }

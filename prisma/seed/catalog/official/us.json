@@ -1,6 +1,6 @@
 {
  "batch": "us",
- "assembledAt": "2026-09-30T02:36:29.052Z",
+ "assembledAt": "2026-09-30T08:00:44.985Z",
  "universities": [
   {
    "key": "carnegie_mellon",
@@ -1141,6 +1141,20 @@
      "title": "Undergraduate Admissions | School of Electrical and Computer Engineering",
      "retrievedAt": "2026-09-29T23:53:32.233Z",
      "hash": "52b5487bfc3dbdf6fe87f1b528db7995c23f0ee5918b7e1ead40dfe2dc49ee5a"
+    },
+    {
+     "id": "s3",
+     "url": "https://catalog.gatech.edu/programs/computer-science-bs/",
+     "title": "Bachelor of Science in Computer Science | Georgia Tech Catalog",
+     "retrievedAt": "2026-09-30T07:34:50.270Z",
+     "hash": "c6da450ba7fbd84d0f240bd9abc1a8f40dc153df6ad2a123b2af48793451d38d"
+    },
+    {
+     "id": "s4",
+     "url": "https://catalog.gatech.edu/programs/mechanical-engineering-bs/",
+     "title": "Bachelor of Science in Mechanical Engineering | Georgia Tech Catalog",
+     "retrievedAt": "2026-09-30T07:40:11.282Z",
+     "hash": "0dc4c039b466cf875645f4adc3ab255c5738eb5d932dccb6a77295c4ea401a10"
     }
    ],
    "english": [],
@@ -1175,8 +1189,2230 @@
       "source": "s2"
      },
      "previous": null
+    },
+    {
+     "key": "georgia-tech-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BS",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://catalog.gatech.edu/programs/computer-science-bs/",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "georgia-tech-me",
+     "status": "EXISTS",
+     "nameEn": "Mechanical Engineering BS",
+     "nameAr": "بكالوريوس العلوم في الهندسة الميكانيكية",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://catalog.gatech.edu/programs/mechanical-engineering-bs/",
+     "curricula": {},
+     "general": null,
+     "previous": null
     }
    ]
+  },
+  {
+   "key": "harvard",
+   "website": "https://www.harvard.edu",
+   "applyVia": "COMMON_APP",
+   "sources": [
+    {
+     "id": "h1",
+     "url": "https://college.harvard.edu/academics/liberal-arts-sciences/concentrations",
+     "title": "Concentrations | Harvard College",
+     "retrievedAt": "2026-09-30T07:34:53.586Z",
+     "hash": "49e6df611749cac8b8029f7f2dbb8f409084b4cdd87f38d24a2b9b86eceb2382"
+    },
+    {
+     "id": "h2",
+     "url": "https://college.harvard.edu/resources/faq/which-standardized-tests-does-harvard-require",
+     "title": "Which standardized tests does Harvard require? | Harvard College",
+     "retrievedAt": "2026-09-30T07:36:04.986Z",
+     "hash": "992733501b603f5995a3800cba416b02fff8efabbef500ee3674fa63e005e7fe"
+    },
+    {
+     "id": "h3",
+     "url": "https://college.harvard.edu/resources/faq/i-am-another-country-i-speak-english-proficiently-do-i-still-need-take-toefl",
+     "title": "Do I still need to take the TOEFL? | Harvard College",
+     "retrievedAt": "2026-09-30T07:34:42.779Z",
+     "hash": "fb01701bee70308cf6553cb7183cfb35fd842d534869b0d822b0d5b58ea0b348"
+    },
+    {
+     "id": "h4",
+     "url": "https://college.harvard.edu/resources/faq/are-there-secondary-school-course-requirements-admission",
+     "title": "Are there secondary school course requirements for admission? | Harvard College",
+     "retrievedAt": "2026-09-30T07:34:20.861Z",
+     "hash": "2776a786b5d286a1253a2e3562100e2e25716dc57c914982d4165f22ce6c5961",
+     "waybackTimestamp": "20250916113025",
+     "waybackHash": "525f9068c9a707c847f78b871e663933e2e01e39a463eff3fdc0e0a3faf8e11e"
+    },
+    {
+     "id": "h5",
+     "url": "https://college.harvard.edu/admissions/apply/first-year-applicants",
+     "title": "First-Year Applicants | Harvard College",
+     "retrievedAt": "2026-09-30T07:35:32.937Z",
+     "hash": "d4174748d87110bcc399ad2afeefc38e67a4350a9244ab6be2ab618c055320dc"
+    }
+   ],
+   "english": [],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "SAT or ACT required (either one). Only in exceptional cases, when neither is accessible, AP, IB, GCSE/A-level or national exam results can meet the requirement.",
+     "noteAr": "يشترط تقديم SAT أو ACT (أحدهما). وفي حالات استثنائية فقط، عند تعذر الوصول إليهما، يمكن أن تحل محلهما نتائج AP أو البكالوريا الدولية أو GCSE/A-level أو الامتحانات الوطنية.",
+     "source": "h2",
+     "quote": "Harvard requires the SAT or ACT to meet its standardized testing requirement."
+    },
+    {
+     "test": "ACT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "SAT or ACT required (either one). Only in exceptional cases, when neither is accessible, AP, IB, GCSE/A-level or national exam results can meet the requirement.",
+     "noteAr": "يشترط تقديم SAT أو ACT (أحدهما). وفي حالات استثنائية فقط، عند تعذر الوصول إليهما، يمكن أن تحل محلهما نتائج AP أو البكالوريا الدولية أو GCSE/A-level أو الامتحانات الوطنية.",
+     "source": "h2",
+     "quote": "Harvard requires the SAT or ACT to meet its standardized testing requirement."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": false,
+     "noteEn": "No English test (TOEFL) is required for first-year applicants.",
+     "noteAr": "لا يشترط اختبار لغة إنجليزية (TOEFL) للمتقدمين للسنة الأولى.",
+     "source": "h3",
+     "quote": "Only applicants to the Visiting Undergraduate Students program are required to submit the TOEFL. It is not a requirement for first-year and transfer applicants."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "RESTRICTIVE_EARLY_ACTION",
+     "date": "2026-11-01",
+     "labelEn": "Restrictive Early Action",
+     "labelAr": "الإجراء المبكر المقيد",
+     "source": "h5",
+     "quote": "Restrictive Early Action candidates apply by November 1 and receive notification by mid-December."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "REGULAR_DECISION",
+     "date": "2027-01-01",
+     "labelEn": "Regular Decision",
+     "labelAr": "القرار العادي",
+     "source": "h5",
+     "quote": "Regular Decision candidates apply by January 1 and receive notification by the end of March."
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "harvard-cs",
+     "status": "REPLACED",
+     "nameEn": "Computer Science BA",
+     "nameAr": "بكالوريوس الآداب في علوم الحاسوب",
+     "degree": "BA",
+     "durationYears": null,
+     "url": "https://college.harvard.edu/academics/liberal-arts-sciences/concentrations",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "english_language"
+        ],
+        "noteEn": "Four years of English with extensive writing practice",
+        "noteAr": "أربع سنوات من اللغة الإنجليزية مع تدريب مكثف على الكتابة",
+        "source": "h4",
+        "quote": "An ideal four-year preparatory program includes four years of English, with extensive practice in writing; four years of math*; four years of science: biology, chemistry, physics, and an advanced course in one of these subjects; three years of history, including American and European history; and four years of one foreign language."
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "mathematics"
+        ],
+        "noteEn": "Four years of mathematics (calculus is not required)",
+        "noteAr": "أربع سنوات من الرياضيات (التفاضل والتكامل غير مطلوب)",
+        "source": "h4",
+        "quote": "An ideal four-year preparatory program includes four years of English, with extensive practice in writing; four years of math*; four years of science: biology, chemistry, physics, and an advanced course in one of these subjects; three years of history, including American and European history; and four years of one foreign language."
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "biology",
+         "chemistry",
+         "physics"
+        ],
+        "noteEn": "Four years of science: biology, chemistry, physics and one advanced course",
+        "noteAr": "أربع سنوات من العلوم: الأحياء والكيمياء والفيزياء ومقرر متقدم في إحداها",
+        "source": "h4",
+        "quote": "An ideal four-year preparatory program includes four years of English, with extensive practice in writing; four years of math*; four years of science: biology, chemistry, physics, and an advanced course in one of these subjects; three years of history, including American and European history; and four years of one foreign language."
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "history"
+        ],
+        "noteEn": "Three years of history",
+        "noteAr": "ثلاث سنوات من التاريخ",
+        "source": "h4",
+        "quote": "An ideal four-year preparatory program includes four years of English, with extensive practice in writing; four years of math*; four years of science: biology, chemistry, physics, and an advanced course in one of these subjects; three years of history, including American and European history; and four years of one foreign language."
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "second_language"
+        ],
+        "noteEn": "Four years of one foreign language",
+        "noteAr": "أربع سنوات من لغة أجنبية واحدة",
+        "source": "h4",
+        "quote": "An ideal four-year preparatory program includes four years of English, with extensive practice in writing; four years of math*; four years of science: biology, chemistry, physics, and an advanced course in one of these subjects; three years of history, including American and European history; and four years of one foreign language."
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Harvard lists Computer Science as a B.A. concentration in Engineering & Applied Sciences; there is no BS.",
+        "noteAr": "تدرج هارفارد علوم الحاسوب كتخصص بكالوريوس آداب ضمن الهندسة والعلوم التطبيقية، ولا يوجد بكالوريوس علوم.",
+        "source": "h1",
+        "quote": "Computer Science B.A. Engineering & Applied Sciences"
+       },
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "Calculus is not required for admission.",
+        "noteAr": "التفاضل والتكامل ليس شرطا للقبول.",
+        "source": "h4",
+        "quote": "Specifically, calculus is not a requirement for admission to Harvard."
+       }
+      ],
+      "source": "h4"
+     },
+     "previous": null
+    },
+    {
+     "key": "harvard-econ",
+     "status": "REPLACED",
+     "nameEn": "Economics BA",
+     "nameAr": "بكالوريوس الآداب في الاقتصاد",
+     "degree": "BA",
+     "durationYears": null,
+     "url": "https://college.harvard.edu/academics/liberal-arts-sciences/concentrations",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "english_language"
+        ],
+        "noteEn": "Four years of English with extensive writing practice",
+        "noteAr": "أربع سنوات من اللغة الإنجليزية مع تدريب مكثف على الكتابة",
+        "source": "h4",
+        "quote": "An ideal four-year preparatory program includes four years of English, with extensive practice in writing; four years of math*; four years of science: biology, chemistry, physics, and an advanced course in one of these subjects; three years of history, including American and European history; and four years of one foreign language."
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "mathematics"
+        ],
+        "noteEn": "Four years of mathematics (calculus is not required)",
+        "noteAr": "أربع سنوات من الرياضيات (التفاضل والتكامل غير مطلوب)",
+        "source": "h4",
+        "quote": "An ideal four-year preparatory program includes four years of English, with extensive practice in writing; four years of math*; four years of science: biology, chemistry, physics, and an advanced course in one of these subjects; three years of history, including American and European history; and four years of one foreign language."
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "biology",
+         "chemistry",
+         "physics"
+        ],
+        "noteEn": "Four years of science: biology, chemistry, physics and one advanced course",
+        "noteAr": "أربع سنوات من العلوم: الأحياء والكيمياء والفيزياء ومقرر متقدم في إحداها",
+        "source": "h4",
+        "quote": "An ideal four-year preparatory program includes four years of English, with extensive practice in writing; four years of math*; four years of science: biology, chemistry, physics, and an advanced course in one of these subjects; three years of history, including American and European history; and four years of one foreign language."
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "history"
+        ],
+        "noteEn": "Three years of history",
+        "noteAr": "ثلاث سنوات من التاريخ",
+        "source": "h4",
+        "quote": "An ideal four-year preparatory program includes four years of English, with extensive practice in writing; four years of math*; four years of science: biology, chemistry, physics, and an advanced course in one of these subjects; three years of history, including American and European history; and four years of one foreign language."
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "second_language"
+        ],
+        "noteEn": "Four years of one foreign language",
+        "noteAr": "أربع سنوات من لغة أجنبية واحدة",
+        "source": "h4",
+        "quote": "An ideal four-year preparatory program includes four years of English, with extensive practice in writing; four years of math*; four years of science: biology, chemistry, physics, and an advanced course in one of these subjects; three years of history, including American and European history; and four years of one foreign language."
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Harvard lists Economics as a B.A. concentration in the Social Sciences; there is no BS.",
+        "noteAr": "تدرج هارفارد الاقتصاد كتخصص بكالوريوس آداب ضمن العلوم الاجتماعية، ولا يوجد بكالوريوس علوم.",
+        "source": "h1",
+        "quote": "Economics B.A. Social Sciences"
+       },
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "Calculus is not required for admission.",
+        "noteAr": "التفاضل والتكامل ليس شرطا للقبول.",
+        "source": "h4",
+        "quote": "Specifically, calculus is not a requirement for admission to Harvard."
+       }
+      ],
+      "source": "h4"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "johns_hopkins",
+   "website": "https://www.jhu.edu",
+   "applyVia": "COMMON_APP",
+   "sources": [
+    {
+     "id": "j1",
+     "url": "https://e-catalogue.jhu.edu/engineering/full-time-residential-programs/degree-programs/biomedical-engineering/biomedical-engineering-bachelor-science/",
+     "title": "Biomedical Engineering, Bachelor of Science | Johns Hopkins University Academic Catalogue",
+     "retrievedAt": "2026-09-30T07:35:41.583Z",
+     "hash": "6fbbae6647dd8c1364efa71a0a905619f6c473c1b0680274d913021a57510137"
+    },
+    {
+     "id": "j2",
+     "url": "https://e-catalogue.jhu.edu/engineering/full-time-residential-programs/degree-programs/computer-science/computer-science-bs/",
+     "title": "Computer Science, Bachelor of Science | Johns Hopkins University Academic Catalogue",
+     "retrievedAt": "2026-09-30T07:35:18.855Z",
+     "hash": "37b288b10a7d4fe6c839d4c821557b726bb5f644fac7bcd6d591e9a24e2e84d7"
+    },
+    {
+     "id": "j3",
+     "url": "https://apply.jhu.edu/how-to-apply/application-deadlines-requirements/",
+     "title": "Application Deadlines & Requirements | Johns Hopkins University Admissions",
+     "retrievedAt": "2026-09-30T07:40:25.544Z",
+     "hash": "36676870c230c5551795871a448165d3460d6efa1a4f86d3a414ec1b8caa57a2"
+    },
+    {
+     "id": "j4",
+     "url": "https://apply.jhu.edu/how-to-apply/application-deadlines-requirements/standardized-testing/",
+     "title": "Standardized Testing | Johns Hopkins University Admissions",
+     "retrievedAt": "2026-09-30T07:36:45.708Z",
+     "hash": "8e752745f273932119095986cf430bb25baf73614e0c897a15c2c4638e69d540"
+    }
+   ],
+   "english": [
+    {
+     "test": "TOEFL",
+     "minOverall": 5,
+     "minComponent": null,
+     "waiverNoteEn": "Recommended, not required, if your primary language is not English or you have not attended an English-language school for the last three years. This is the typical competitive level.",
+     "waiverNoteAr": "موصى به وغير إلزامي إذا لم تكن الإنجليزية لغتك الأساسية أو لم تدرس في مدرسة تدرس بالإنجليزية خلال السنوات الثلاث الماضية. وهذا هو المستوى التنافسي المعتاد.",
+     "source": "j4",
+     "quote": "TOEFL (iBT)- A minimum of 5 total with preferred sub-scores of 5.5 (Reading), 5.5 (Listening), 5 (Writing), and 5 (Speaking)"
+    },
+    {
+     "test": "IELTS",
+     "minOverall": 7,
+     "minComponent": 7,
+     "waiverNoteEn": "Recommended, not required, if your primary language is not English or you have not attended an English-language school for the last three years. This is the typical competitive level.",
+     "waiverNoteAr": "موصى به وغير إلزامي إذا لم تكن الإنجليزية لغتك الأساسية أو لم تدرس في مدرسة تدرس بالإنجليزية خلال السنوات الثلاث الماضية. وهذا هو المستوى التنافسي المعتاد.",
+     "source": "j4",
+     "quote": "IELTS- A score of 7.0 or higher on each band"
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 120,
+     "minComponent": null,
+     "waiverNoteEn": "Recommended, not required, if your primary language is not English or you have not attended an English-language school for the last three years. This is the typical competitive level.",
+     "waiverNoteAr": "موصى به وغير إلزامي إذا لم تكن الإنجليزية لغتك الأساسية أو لم تدرس في مدرسة تدرس بالإنجليزية خلال السنوات الثلاث الماضية. وهذا هو المستوى التنافسي المعتاد.",
+     "source": "j4",
+     "quote": "DET- A composite score of 120 or higher with preferred sub-scores of 125 (Literacy), 120 (Conversation), 135 (Comprehension), and 105 (Production)"
+    },
+    {
+     "test": "CAMBRIDGE",
+     "minOverall": 185,
+     "minComponent": null,
+     "waiverNoteEn": "Recommended, not required, if your primary language is not English or you have not attended an English-language school for the last three years. This is the typical competitive level.",
+     "waiverNoteAr": "موصى به وغير إلزامي إذا لم تكن الإنجليزية لغتك الأساسية أو لم تدرس في مدرسة تدرس بالإنجليزية خلال السنوات الثلاث الماضية. وهذا هو المستوى التنافسي المعتاد.",
+     "source": "j4",
+     "quote": "Cambridge English Exam- C1 Advanced or C2 Proficiency with a Cambridge English score of 185 or higher"
+    }
+   ],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "SAT or ACT required (either one); scores are superscored.",
+     "noteAr": "يشترط تقديم SAT أو ACT (أحدهما)، ويؤخذ بأعلى درجات الأقسام.",
+     "source": "j4",
+     "quote": "Johns Hopkins University requires first-year applicants to submit SAT (Math and Evidence-Based Reading and Writing sections) or ACT (Math, Reading, and English sections) scores to be considered for admission."
+    },
+    {
+     "test": "ACT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "SAT or ACT required (either one); scores are superscored.",
+     "noteAr": "يشترط تقديم SAT أو ACT (أحدهما)، ويؤخذ بأعلى درجات الأقسام.",
+     "source": "j4",
+     "quote": "Johns Hopkins University requires first-year applicants to submit SAT (Math and Evidence-Based Reading and Writing sections) or ACT (Math, Reading, and English sections) scores to be considered for admission."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "PERSONAL_STATEMENT",
+     "required": true,
+     "noteEn": "Common App personal statement plus the Hopkins supplemental essay.",
+     "noteAr": "البيان الشخصي في التطبيق المشترك إضافة إلى المقال التكميلي لجامعة جونز هوبكنز.",
+     "source": "j3",
+     "quote": "The Hopkins supplement, which includes our supplemental essay"
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "EARLY_DECISION",
+     "date": "2026-11-01",
+     "labelEn": "Early Decision I",
+     "labelAr": "القرار المبكر الأول",
+     "source": "j3",
+     "quote": "Early Decision I | Early Decision II | Regular Decision | Transfer | Application Deadline | November 1, 2026 | January 2, 2027 | January 2, 2027 | March 1, 2027 |"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "EARLY_DECISION_II",
+     "date": "2027-01-02",
+     "labelEn": "Early Decision II",
+     "labelAr": "القرار المبكر الثاني",
+     "source": "j3",
+     "quote": "Early Decision I | Early Decision II | Regular Decision | Transfer | Application Deadline | November 1, 2026 | January 2, 2027 | January 2, 2027 | March 1, 2027 |"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "REGULAR_DECISION",
+     "date": "2027-01-02",
+     "labelEn": "Regular Decision",
+     "labelAr": "القرار العادي",
+     "source": "j3",
+     "quote": "Early Decision I | Early Decision II | Regular Decision | Transfer | Application Deadline | November 1, 2026 | January 2, 2027 | January 2, 2027 | March 1, 2027 |"
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "johns-hopkins-bme",
+     "status": "EXISTS",
+     "nameEn": "Biomedical Engineering BS",
+     "nameAr": "بكالوريوس العلوم في الهندسة الطبية الحيوية",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://e-catalogue.jhu.edu/engineering/full-time-residential-programs/degree-programs/biomedical-engineering/biomedical-engineering-bachelor-science/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "List BME as first-choice major; admission to the BME major is limited and separate from admission to the university.",
+        "noteAr": "اختر الهندسة الطبية الحيوية كتخصص أول؛ القبول في هذا التخصص محدود ومنفصل عن القبول في الجامعة.",
+        "source": "j3",
+        "quote": "Students are admitted to BME based on evaluation of credentials and space available. It is possible to be admitted to the university without acceptance to the BME major."
+       }
+      ],
+      "source": "j3"
+     },
+     "previous": null
+    },
+    {
+     "key": "johns-hopkins-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BS",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://e-catalogue.jhu.edu/engineering/full-time-residential-programs/degree-programs/computer-science/computer-science-bs/",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "mit",
+   "website": "https://www.mit.edu",
+   "applyVia": "MIT_APP",
+   "sources": [
+    {
+     "id": "m1",
+     "url": "https://www.eecs.mit.edu/academics/undergraduate-programs/curriculum/6-4-artificial-intelligence-and-decision-making/",
+     "title": "6-4: Artificial Intelligence and Decision Making - MIT EECS",
+     "retrievedAt": "2026-09-30T07:35:19.632Z",
+     "hash": "2b37db2cf6a5418b9cffd257a5fa454ddb9085bf5718afd85cbe7c6833e34dcf"
+    },
+    {
+     "id": "m2",
+     "url": "https://catalog.mit.edu/degree-charts/computer-science-engineering-course-6-3/",
+     "title": "Computer Science and Engineering (Course 6-3) | MIT Course Catalog",
+     "retrievedAt": "2026-09-30T07:40:43.385Z",
+     "hash": "dc63506d802906d51ed631a1839eb5d4ad1419b0e471a176b62eb1f6f4265455"
+    },
+    {
+     "id": "m3",
+     "url": "https://catalog.mit.edu/degree-charts/electrical-engineering-computing-course-6-5/",
+     "title": "Electrical Engineering with Computing (Course 6-5) | MIT Course Catalog",
+     "retrievedAt": "2026-09-30T07:35:41.254Z",
+     "hash": "df408c8d56d76c50b62ac2cf81bb1a74aa8165b6bc2ad73d84c0ec707c235ef4"
+    },
+    {
+     "id": "m4",
+     "url": "https://catalog.mit.edu/degree-charts/mechanical-engineering-course-2/",
+     "title": "Mechanical Engineering (Course 2) | MIT Course Catalog",
+     "retrievedAt": "2026-09-30T07:34:46.402Z",
+     "hash": "9f14933852861a88380790c7b0258e0de6676cd51767b81f0fcc09e54c69594f"
+    },
+    {
+     "id": "m5",
+     "url": "https://mitadmissions.org/apply/firstyear/deadlines-requirements/",
+     "title": "Deadlines & requirements | MIT Admissions",
+     "retrievedAt": "2026-09-30T07:35:56.803Z",
+     "hash": "833b54257b6bd9d6fe2073c49fc0ecd1d769969fccd24363f2f11b6a42e62979"
+    },
+    {
+     "id": "m6",
+     "url": "https://mitadmissions.org/apply/firstyear/tests-scores/",
+     "title": "Tests & scores | MIT Admissions",
+     "retrievedAt": "2026-09-30T07:37:10.840Z",
+     "hash": "d6238ac8922b29b50ae34530ef9d5d6203ee61a4eeb77104035647ac602f735b"
+    },
+    {
+     "id": "m7",
+     "url": "https://mitadmissions.org/apply/firstyear/international/",
+     "title": "International applicants | MIT Admissions",
+     "retrievedAt": "2026-09-30T07:35:19.399Z",
+     "hash": "1ff437ca63aa1b1073001efd02c0fc8d9d124ab09a2fc7014a6236e0d743c1d1"
+    },
+    {
+     "id": "m8",
+     "url": "https://mitadmissions.org/apply/prepare/foundations/",
+     "title": "Foundations | MIT Admissions",
+     "retrievedAt": "2026-09-30T07:35:37.124Z",
+     "hash": "d20922c248a8fd098898c8df21a79dcf774dce8858c71baba69267b15deddc06"
+    },
+    {
+     "id": "m9",
+     "url": "https://catalog.mit.edu/schools/mit-schwarzman-college-computing/electrical-engineering-computer-science/",
+     "title": "Electrical Engineering and Computer Science | MIT Course Catalog",
+     "retrievedAt": "2026-09-30T07:34:26.966Z",
+     "hash": "2eb2df0580878c1569044e5869cd73e72320410b02ea6044d7f91fa0ee059ed1"
+    }
+   ],
+   "english": [
+    {
+     "test": "TOEFL",
+     "minOverall": 90,
+     "minComponent": null,
+     "waiverNoteEn": "TOEFL taken before 21 January 2026; 100 recommended. Strongly recommended (not strictly required) if you have used English for fewer than five years or do not speak English at home or in school.",
+     "waiverNoteAr": "اختبار TOEFL قبل 21 يناير 2026، ويوصى بدرجة 100. موصى به بشدة (وليس إلزاميا تماما) إذا كنت تستخدم الإنجليزية منذ أقل من خمس سنوات أو لا تتحدثها في المنزل أو المدرسة.",
+     "source": "m6",
+     "quote": "TOEFL (Taken before 1/21/26) | Minimum: 90 | Recommended: 100 |"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 5,
+     "minComponent": null,
+     "waiverNoteEn": "TOEFL taken on or after 21 January 2026 (1 to 6 scale); 5.5 recommended. Strongly recommended (not strictly required) if you have used English for fewer than five years or do not speak English at home or in school.",
+     "waiverNoteAr": "اختبار TOEFL في 21 يناير 2026 أو بعده (مقياس من 1 إلى 6)، ويوصى بدرجة 5.5. موصى به بشدة (وليس إلزاميا تماما) إذا كنت تستخدم الإنجليزية منذ أقل من خمس سنوات أو لا تتحدثها في المنزل أو المدرسة.",
+     "source": "m6",
+     "quote": "Minimum: 5 | Recommended: 5.5 |"
+    },
+    {
+     "test": "IELTS",
+     "minOverall": 7,
+     "minComponent": null,
+     "waiverNoteEn": "7.5 recommended. Strongly recommended (not strictly required) if you have used English for fewer than five years or do not speak English at home or in school.",
+     "waiverNoteAr": "يوصى بدرجة 7.5. موصى به بشدة (وليس إلزاميا تماما) إذا كنت تستخدم الإنجليزية منذ أقل من خمس سنوات أو لا تتحدثها في المنزل أو المدرسة.",
+     "source": "m6",
+     "quote": "IELTS | Minimum: 7 | Recommended: 7.5 |"
+    },
+    {
+     "test": "PTE",
+     "minOverall": 65,
+     "minComponent": null,
+     "waiverNoteEn": "70 recommended. Strongly recommended (not strictly required) if you have used English for fewer than five years or do not speak English at home or in school.",
+     "waiverNoteAr": "يوصى بدرجة 70. موصى به بشدة (وليس إلزاميا تماما) إذا كنت تستخدم الإنجليزية منذ أقل من خمس سنوات أو لا تتحدثها في المنزل أو المدرسة.",
+     "source": "m6",
+     "quote": "Pearson Test of English (PTE) Academic | Minimum: 65 | Recommended: 70 |"
+    },
+    {
+     "test": "CAMBRIDGE",
+     "minOverall": 185,
+     "minComponent": null,
+     "waiverNoteEn": "190 recommended. Strongly recommended (not strictly required) if you have used English for fewer than five years or do not speak English at home or in school.",
+     "waiverNoteAr": "يوصى بدرجة 190. موصى به بشدة (وليس إلزاميا تماما) إذا كنت تستخدم الإنجليزية منذ أقل من خمس سنوات أو لا تتحدثها في المنزل أو المدرسة.",
+     "source": "m6",
+     "quote": "Cambridge English Qualifications (C1 Advanced or C2 Proficiency) | Minimum: 185 | Recommended: 190 |"
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 120,
+     "minComponent": null,
+     "waiverNoteEn": "125 recommended. Strongly recommended (not strictly required) if you have used English for fewer than five years or do not speak English at home or in school.",
+     "waiverNoteAr": "يوصى بدرجة 125. موصى به بشدة (وليس إلزاميا تماما) إذا كنت تستخدم الإنجليزية منذ أقل من خمس سنوات أو لا تتحدثها في المنزل أو المدرسة.",
+     "source": "m6",
+     "quote": "Duolingo English Test (DET) | Minimum: 120 | Recommended: 125 |"
+    }
+   ],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "SAT or ACT required (either one); no cutoff scores.",
+     "noteAr": "يشترط تقديم SAT أو ACT (أحدهما)، ولا توجد درجات حد أدنى.",
+     "source": "m5",
+     "quote": "Standardized tests: We require the SAT or ACT. Applicants must take required tests before November 30 for EA, and before December 31 for RA."
+    },
+    {
+     "test": "ACT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "SAT or ACT required (either one); no cutoff scores.",
+     "noteAr": "يشترط تقديم SAT أو ACT (أحدهما)، ولا توجد درجات حد أدنى.",
+     "source": "m5",
+     "quote": "Standardized tests: We require the SAT or ACT. Applicants must take required tests before November 30 for EA, and before December 31 for RA."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "REFERENCE",
+     "required": true,
+     "noteEn": "Two teacher recommendations: one math or science, one humanities, social science or language.",
+     "noteAr": "توصيتان من معلمين: إحداهما من معلم رياضيات أو علوم، والأخرى من معلم علوم إنسانية أو اجتماعية أو لغة.",
+     "source": "m5",
+     "quote": "We require two letters of recommendation from teachers, which you can request through the application. We recommend one letter from a math or science teacher, and one from a humanities, social science, or language teacher."
+    },
+    {
+     "kind": "OTHER",
+     "required": false,
+     "noteEn": "No specific high school courses are required.",
+     "noteAr": "لا توجد مقررات ثانوية إلزامية محددة.",
+     "source": "m7",
+     "quote": "We do not have any required high school classes for domestic or international applicants."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "EARLY_ACTION",
+     "date": "2026-11-01",
+     "labelEn": "Early Action",
+     "labelAr": "القبول المبكر",
+     "source": "m5",
+     "quote": "Early Action (EA) applications are due November 1 and admission decisions are released in mid-December."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "REGULAR_DECISION",
+     "date": "2027-01-04",
+     "labelEn": "Regular Action",
+     "labelAr": "القبول العادي",
+     "source": "m5",
+     "quote": "Regular Action (RA) applications are due January 4 and admission decisions are released in mid-March."
+    }
+   ],
+   "curriculumRules": {
+    "IB": {
+     "accepted": true,
+     "notesEn": "Accepted; send external exam results with the transcript. No minimum points published.",
+     "notesAr": "مقبولة؛ ترسل نتائج الامتحانات الخارجية مع كشف الدرجات. لا يوجد حد أدنى منشور للنقاط.",
+     "source": "m7",
+     "quote": "Your high school transcript should include three years of grades and the results of any external examinations such as the International Baccalaureate, A Levels, French Baccalaureate, or CBSE,",
+     "subjects": []
+    },
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "A Levels accepted; send results with the transcript. No grade profile published.",
+     "notesAr": "شهادات A Level مقبولة؛ ترسل النتائج مع كشف الدرجات. لا يوجد ملف درجات منشور.",
+     "source": "m7",
+     "quote": "Your high school transcript should include three years of grades and the results of any external examinations such as the International Baccalaureate, A Levels, French Baccalaureate, or CBSE,",
+     "subjects": []
+    },
+    "CBSE": {
+     "accepted": true,
+     "notesEn": "CBSE accepted; send exam results with the transcript. No minimum percentage published.",
+     "notesAr": "منهج CBSE مقبول؛ ترسل نتائج الامتحانات مع كشف الدرجات. لا توجد نسبة دنيا منشورة.",
+     "source": "m7",
+     "quote": "Your high school transcript should include three years of grades and the results of any external examinations such as the International Baccalaureate, A Levels, French Baccalaureate, or CBSE,",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "mit-ai",
+     "status": "EXISTS",
+     "nameEn": "Artificial Intelligence and Decision Making BS",
+     "nameAr": "بكالوريوس العلوم في الذكاء الاصطناعي واتخاذ القرار",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://www.eecs.mit.edu/academics/undergraduate-programs/curriculum/6-4-artificial-intelligence-and-decision-making/",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "mathematics",
+         "calculus"
+        ],
+        "noteEn": "Mathematics including calculus",
+        "noteAr": "الرياضيات بما فيها التفاضل والتكامل",
+        "source": "m8",
+        "quote": "Math, including calculus"
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "physics",
+         "chemistry",
+         "biology"
+        ],
+        "noteEn": "Science, including physics, chemistry and/or biology",
+        "noteAr": "العلوم، بما فيها الفيزياء والكيمياء و/أو الأحياء",
+        "source": "m8",
+        "quote": "Science, including physics, chemistry, and/or biology"
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Course 6-4 leads to the Bachelor of Science in Artificial Intelligence and Decision Making.",
+        "noteAr": "يؤدي البرنامج 6-4 إلى بكالوريوس العلوم في الذكاء الاصطناعي واتخاذ القرار.",
+        "source": "m9",
+        "quote": "The 6-4 program leads to the Bachelor of Science in Artificial Intelligence and Decision Making"
+       }
+      ],
+      "source": "m8"
+     },
+     "previous": null
+    },
+    {
+     "key": "mit-computer-science-sb",
+     "status": "EXISTS",
+     "nameEn": "Computer Science and Engineering BS",
+     "nameAr": "بكالوريوس العلوم في علوم وهندسة الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://catalog.mit.edu/degree-charts/computer-science-engineering-course-6-3/",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "mathematics",
+         "calculus"
+        ],
+        "noteEn": "Mathematics including calculus",
+        "noteAr": "الرياضيات بما فيها التفاضل والتكامل",
+        "source": "m8",
+        "quote": "Math, including calculus"
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "physics",
+         "chemistry",
+         "biology"
+        ],
+        "noteEn": "Science, including physics, chemistry and/or biology",
+        "noteAr": "العلوم، بما فيها الفيزياء والكيمياء و/أو الأحياء",
+        "source": "m8",
+        "quote": "Science, including physics, chemistry, and/or biology"
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [],
+      "source": "m8"
+     },
+     "previous": null
+    },
+    {
+     "key": "mit-ee",
+     "status": "REPLACED",
+     "nameEn": "Electrical Engineering with Computing BS",
+     "nameAr": "بكالوريوس العلوم في الهندسة الكهربائية مع الحوسبة",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://catalog.mit.edu/degree-charts/electrical-engineering-computing-course-6-5/",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "mathematics",
+         "calculus"
+        ],
+        "noteEn": "Mathematics including calculus",
+        "noteAr": "الرياضيات بما فيها التفاضل والتكامل",
+        "source": "m8",
+        "quote": "Math, including calculus"
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "physics",
+         "chemistry",
+         "biology"
+        ],
+        "noteEn": "Science, including physics, chemistry and/or biology",
+        "noteAr": "العلوم، بما فيها الفيزياء والكيمياء و/أو الأحياء",
+        "source": "m8",
+        "quote": "Science, including physics, chemistry, and/or biology"
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [],
+      "source": "m8"
+     },
+     "previous": null
+    },
+    {
+     "key": "mit-me",
+     "status": "EXISTS",
+     "nameEn": "Mechanical Engineering BS",
+     "nameAr": "بكالوريوس العلوم في الهندسة الميكانيكية",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://catalog.mit.edu/degree-charts/mechanical-engineering-course-2/",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "mathematics",
+         "calculus"
+        ],
+        "noteEn": "Mathematics including calculus",
+        "noteAr": "الرياضيات بما فيها التفاضل والتكامل",
+        "source": "m8",
+        "quote": "Math, including calculus"
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "physics",
+         "chemistry",
+         "biology"
+        ],
+        "noteEn": "Science, including physics, chemistry and/or biology",
+        "noteAr": "العلوم، بما فيها الفيزياء والكيمياء و/أو الأحياء",
+        "source": "m8",
+        "quote": "Science, including physics, chemistry, and/or biology"
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [],
+      "source": "m8"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "northeastern",
+   "website": "https://www.northeastern.edu",
+   "applyVia": "COMMON_APP",
+   "sources": [
+    {
+     "id": "n1",
+     "url": "https://admissions.northeastern.edu/major/computer-science/",
+     "title": "Computer Science | Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T07:35:52.886Z",
+     "hash": "f039f8884f089e6989e4784aff1ad9d9628511e96f5a6bb64fd7df5a41f3a4d3"
+    },
+    {
+     "id": "n2",
+     "url": "https://admissions.northeastern.edu/major/cybersecurity/",
+     "title": "Cybersecurity | Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T07:36:54.642Z",
+     "hash": "d0240d4190f53307277a79f58fe526142329db7061b9add706f0586de190b23b",
+     "waybackTimestamp": "20251110134403",
+     "waybackHash": "ab6c9006ac3135ca08ebd75653cd5de9232a0ba5775fc6b64436e41f9d4ad5fc"
+    },
+    {
+     "id": "n3",
+     "url": "https://admissions.northeastern.edu/application-information/first-year-applicants/",
+     "title": "First-Year Applicants | Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T07:35:01.803Z",
+     "hash": "f972e9b95724b7f1e41d3d39e706109bcb115f783340edb578950dd70649d2e7"
+    },
+    {
+     "id": "n4",
+     "url": "https://admissions.northeastern.edu/application-information/international-applicants/",
+     "title": "International Applicants | Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T07:35:57.106Z",
+     "hash": "b47e8231b797b7afc3d89c677c2a90e31eddf4a60b14eb1f6ad68195de268ec0"
+    }
+   ],
+   "english": [],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "OPTIONAL",
+     "minScore": null,
+     "noteEn": "Test optional; the better of SAT or ACT is considered if submitted.",
+     "noteAr": "الاختبارات اختيارية؛ وإذا قدمت يؤخذ بالأفضل بين SAT وACT.",
+     "source": "n3",
+     "quote": "Northeastern University is test-optional and does not require applicants to submit standardized testing to be considered for admission."
+    },
+    {
+     "test": "ACT",
+     "policy": "OPTIONAL",
+     "minScore": null,
+     "noteEn": "Test optional; the better of SAT or ACT is considered if submitted.",
+     "noteAr": "الاختبارات اختيارية؛ وإذا قدمت يؤخذ بالأفضل بين SAT وACT.",
+     "source": "n3",
+     "quote": "Northeastern University is test-optional and does not require applicants to submit standardized testing to be considered for admission."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "REFERENCE",
+     "required": true,
+     "noteEn": "One teacher and one school counselor recommendation.",
+     "noteAr": "توصية من معلم وتوصية من المرشد المدرسي.",
+     "source": "n3",
+     "quote": "We require one teacher recommendation and one school counselor recommendation."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Non-native English speakers must submit an approved English test (Duolingo, IELTS, PTE, TOEFL or Cambridge) or request a waiver.",
+     "noteAr": "يجب على غير الناطقين بالإنجليزية تقديم نتيجة اختبار لغة معتمد (Duolingo أو IELTS أو PTE أو TOEFL أو Cambridge) أو طلب إعفاء.",
+     "source": "n3",
+     "quote": "Non-native English-speaking applicants must continue to submit official results from an approved English Language Test or request a waiver through the Application Status Check."
+    },
+    {
+     "kind": "OTHER",
+     "required": false,
+     "noteEn": "No minimum English scores. Middle 50% of admitted students: IELTS 7.5 to 8.0, Duolingo 130 to 140, TOEFL iBT 102 to 110 (old scale) or 5.0 to 5.5 (new scale), PTE 79 to 86.",
+     "noteAr": "لا توجد حدود دنيا لدرجات اللغة الإنجليزية. نطاق الـ50% الوسطى للمقبولين: IELTS من 7.5 إلى 8.0، وDuolingo من 130 إلى 140، وTOEFL iBT من 102 إلى 110 (المقياس القديم) أو من 5.0 إلى 5.5 (المقياس الجديد)، وPTE من 79 إلى 86.",
+     "source": "n4",
+     "quote": "Northeastern does not have minimum score requirements. Instead, we publish the middle 50% range for admitted students"
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "northeastern-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BS",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://admissions.northeastern.edu/major/computer-science/",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "northeastern-cyber",
+     "status": "EXISTS",
+     "nameEn": "Cybersecurity BS",
+     "nameAr": "بكالوريوس العلوم في الأمن السيبراني",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://admissions.northeastern.edu/major/cybersecurity/",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "purdue",
+   "website": "https://www.purdue.edu",
+   "applyVia": "COMMON_APP",
+   "sources": [
+    {
+     "id": "p1",
+     "url": "https://admissions.purdue.edu/majors/aeronautical-astronautical-engineering/",
+     "title": "Aeronautical and astronautical engineering major - Purdue University",
+     "retrievedAt": "2026-09-30T07:35:23.216Z",
+     "hash": "b1bc53d49a88f2187494fc19dee56be3d55a9ef7926ae4a88a25d47ff3b0d305"
+    },
+    {
+     "id": "p2",
+     "url": "https://admissions.purdue.edu/majors/computer-science/",
+     "title": "Computer Science major - Purdue University",
+     "retrievedAt": "2026-09-30T07:35:51.758Z",
+     "hash": "7bc3d6795535f6031b6b9962d98fc15b480d57cede6d5e8dc5382e8c7dfad378"
+    },
+    {
+     "id": "p3",
+     "url": "https://admissions.purdue.edu/become-student/course-requirements/",
+     "title": "Purdue University - High School Course Requirements - Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T07:40:43.893Z",
+     "hash": "d21c3e4d0f58ae5e8284393c8cf96508e41777c8a48289da09de0bf6f6e1957d",
+     "waybackTimestamp": "20251002023411",
+     "waybackHash": "ac8589df785c0b5cb09de4ff9f3c09861f7b2487427a049b3bcc68ce3a5a8611"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "PRIORITY",
+     "date": "2026-11-01",
+     "labelEn": "Priority deadline (First-Year Engineering)",
+     "labelAr": "الموعد ذو الأولوية (السنة الأولى في الهندسة)",
+     "source": "p1",
+     "quote": "The priority application deadline for first-year engineering is Nov. 1."
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "purdue-aero",
+     "status": "REPLACED",
+     "nameEn": "Aeronautical and Astronautical Engineering BS",
+     "nameAr": "بكالوريوس العلوم في هندسة الطيران والملاحة الفضائية",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://admissions.purdue.edu/majors/aeronautical-astronautical-engineering/",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "english_language"
+        ],
+        "noteEn": "4 years of English",
+        "noteAr": "4 سنوات من اللغة الإنجليزية",
+        "source": "p3",
+        "quote": "English | 4 Years"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "noteEn": "4 years of mathematics",
+        "noteAr": "4 سنوات من الرياضيات",
+        "source": "p3",
+        "quote": "Math | 4 Years"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "science"
+        ],
+        "noteEn": "3 years of lab science",
+        "noteAr": "3 سنوات من العلوم المخبرية",
+        "source": "p3",
+        "quote": "Lab Sciences | 3 Years"
+       },
+       {
+        "type": "PREFERRED",
+        "keys": [
+         "chemistry"
+        ],
+        "noteEn": "Chemistry is expected for engineering applicants",
+        "noteAr": "يتوقع دراسة الكيمياء للمتقدمين إلى الهندسة",
+        "source": "p3",
+        "quote": "For engineering applicants, chemistry is expected."
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "calculus"
+        ],
+        "noteEn": "Calculus, if available at your school",
+        "noteAr": "التفاضل والتكامل إن كان متاحا في مدرستك",
+        "source": "p1",
+        "quote": "Calculus (if available at high school)"
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "physics"
+        ],
+        "noteEn": "Physics, if available at your school",
+        "noteAr": "الفيزياء إن كانت متاحة في مدرستك",
+        "source": "p1",
+        "quote": "Physics (if available at high school)"
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Apply to First-Year Engineering; students move into the specialty major in the second year.",
+        "noteAr": "يتقدم الطالب إلى برنامج السنة الأولى في الهندسة، ثم ينتقل إلى التخصص في السنة الثانية.",
+        "source": "p1",
+        "quote": "To study aeronautical and astronautical engineering at Purdue, you will apply to the first-year engineering program."
+       }
+      ],
+      "source": "p3"
+     },
+     "previous": null
+    },
+    {
+     "key": "purdue-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BS",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://admissions.purdue.edu/majors/computer-science/",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "english_language"
+        ],
+        "noteEn": "4 years of English",
+        "noteAr": "4 سنوات من اللغة الإنجليزية",
+        "source": "p3",
+        "quote": "English | 4 Years"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "noteEn": "4 years of mathematics",
+        "noteAr": "4 سنوات من الرياضيات",
+        "source": "p3",
+        "quote": "Math | 4 Years"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "science"
+        ],
+        "noteEn": "3 years of lab science",
+        "noteAr": "3 سنوات من العلوم المخبرية",
+        "source": "p3",
+        "quote": "Lab Sciences | 3 Years"
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [],
+      "source": "p3"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "stanford",
+   "website": "https://www.stanford.edu",
+   "applyVia": "COMMON_APP",
+   "sources": [
+    {
+     "id": "st1",
+     "url": "https://admission.stanford.edu/apply/first-year/testing.html",
+     "title": "Standardized Testing : Stanford University",
+     "retrievedAt": "2026-09-30T07:35:19.558Z",
+     "hash": "2e99f93e3189d9d6a48ae860a16a5eaa0dc514f3a2c9ec0741042a126c6bfb9d"
+    },
+    {
+     "id": "st2",
+     "url": "https://admission.stanford.edu/apply/first-year/prepare.html",
+     "title": "Preparing for Stanford Academics : Stanford University",
+     "retrievedAt": "2026-09-30T07:35:56.243Z",
+     "hash": "ae1893e8eb6f513ff80337fcbaf54aa558da6fa413f33325971de9fc9fbbfa99"
+    },
+    {
+     "id": "st3",
+     "url": "https://admission.stanford.edu/apply/international/index.html",
+     "title": "International Applicants : Stanford University",
+     "retrievedAt": "2026-09-30T07:36:14.831Z",
+     "hash": "e71f8eca6c70c4e62a37bfd3bb14dc3c3795d6649a866604aa3582404b0bfee4"
+    },
+    {
+     "id": "st4",
+     "url": "https://admission.stanford.edu/apply/first-year/index.html",
+     "title": "First-Year Applicants : Stanford University",
+     "retrievedAt": "2026-09-30T07:41:15.344Z",
+     "hash": "4faa288f0a5acea95ce5127c1954d28832f793b91ac43e6053060ef002bd11ca"
+    }
+   ],
+   "english": [],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "ACT or SAT required (either one); no minimum scores. English tests cannot replace them.",
+     "noteAr": "يشترط تقديم ACT أو SAT (أحدهما)، ولا توجد درجات دنيا، ولا تغني عنهما اختبارات اللغة الإنجليزية.",
+     "source": "st1",
+     "quote": "ACT or SAT scores are required."
+    },
+    {
+     "test": "ACT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "ACT or SAT required (either one); no minimum scores. English tests cannot replace them.",
+     "noteAr": "يشترط تقديم ACT أو SAT (أحدهما)، ولا توجد درجات دنيا، ولا تغني عنهما اختبارات اللغة الإنجليزية.",
+     "source": "st1",
+     "quote": "ACT or SAT scores are required."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": false,
+     "noteEn": "No English proficiency exam is required; scores may be self-reported.",
+     "noteAr": "لا يشترط أي اختبار للكفاءة في اللغة الإنجليزية، ويمكن الإبلاغ الذاتي عن الدرجات.",
+     "source": "st3",
+     "quote": "No, we do not require any English proficiency exams."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "RESTRICTIVE_EARLY_ACTION",
+     "date": "2026-11-01",
+     "labelEn": "Restrictive Early Action",
+     "labelAr": "الإجراء المبكر المقيد",
+     "source": "st4",
+     "quote": "Standard Application Deadline - November 1 Common Application Deadline: November 1"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "REGULAR_DECISION",
+     "date": "2027-01-05",
+     "labelEn": "Regular Decision",
+     "labelAr": "القرار العادي",
+     "source": "st4",
+     "quote": "Standard Application Deadline - January 5 Common Application Deadline: January 5"
+    }
+   ],
+   "curriculumRules": {
+    "IB": {
+     "accepted": true,
+     "notesEn": "Predicted IB marks (including TOK/essay bonus points) must be sent by a school official. No minimum published.",
+     "notesAr": "يجب أن يرسل مسؤول مدرسي العلامات المتوقعة للبكالوريا الدولية (بما فيها نقاط نظرية المعرفة والمقال). لا يوجد حد أدنى منشور.",
+     "source": "st1",
+     "quote": "Students currently enrolled in an IB Diploma program outside the U.S. are required to have a school official send us their predicted IB marks (including TOK/essay bonus points).",
+     "subjects": []
+    },
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "GCSE results and predicted A-levels are required; applicants usually take at least three full A-levels. No grade profile published.",
+     "notesAr": "تطلب نتائج GCSE والدرجات المتوقعة في A-level؛ ويدرس المتقدمون عادة ثلاث مواد A-level كاملة على الأقل. لا يوجد ملف درجات منشور.",
+     "source": "st1",
+     "quote": "Generally, students applying to Stanford from the British education system will have taken at least three full A-Level courses (though they may not yet have taken the final examinations).",
+     "subjects": []
+    },
+    "UAE_MOE": {
+     "accepted": true,
+     "notesEn": "No preferred curriculum; national curricula are accepted. No minimum published.",
+     "notesAr": "لا يوجد منهج مفضل، والمناهج الوطنية مقبولة. لا يوجد حد أدنى منشور.",
+     "source": "st3",
+     "quote": "We do not have a preference for a specific curriculum (A-Level, IB, AP, National, etc.).",
+     "subjects": []
+    },
+    "CBSE": {
+     "accepted": true,
+     "notesEn": "No preferred curriculum; national curricula are accepted. No minimum published.",
+     "notesAr": "لا يوجد منهج مفضل، والمناهج الوطنية مقبولة. لا يوجد حد أدنى منشور.",
+     "source": "st3",
+     "quote": "We do not have a preference for a specific curriculum (A-Level, IB, AP, National, etc.).",
+     "subjects": []
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "notesEn": "Recommended (not required) curriculum; no set of required courses.",
+     "notesAr": "منهج موصى به وليس إلزاميا، ولا توجد مقررات مطلوبة محددة.",
+     "source": "st2",
+     "quote": "We do not have a set of required courses for admission to Stanford.",
+     "subjects": [
+      {
+       "type": "RECOMMENDED",
+       "keys": [
+        "english_language"
+       ],
+       "noteEn": "Four years of English",
+       "noteAr": "أربع سنوات من اللغة الإنجليزية",
+       "source": "st2",
+       "quote": "English: four years, with an emphasis on writing and literature."
+      },
+      {
+       "type": "RECOMMENDED",
+       "keys": [
+        "mathematics",
+        "calculus"
+       ],
+       "noteEn": "Four years of mathematics including calculus",
+       "noteAr": "أربع سنوات من الرياضيات بما فيها التفاضل والتكامل",
+       "source": "st2",
+       "quote": "Mathematics: four years of rigorous mathematics, including calculus."
+      },
+      {
+       "type": "RECOMMENDED",
+       "keys": [
+        "science"
+       ],
+       "noteEn": "At least three years of science",
+       "noteAr": "ثلاث سنوات على الأقل من العلوم",
+       "source": "st2",
+       "quote": "Science: minimum three years in courses like biology, chemistry, physics, computer science, human anatomy, and environmental science."
+      },
+      {
+       "type": "RECOMMENDED",
+       "keys": [
+        "history",
+        "social_studies"
+       ],
+       "noteEn": "At least three years of history or social studies",
+       "noteAr": "ثلاث سنوات على الأقل من التاريخ أو الدراسات الاجتماعية",
+       "source": "st2",
+       "quote": "History/Social Studies: minimum three years."
+      },
+      {
+       "type": "RECOMMENDED",
+       "keys": [
+        "second_language"
+       ],
+       "noteEn": "At least three years of one world language",
+       "noteAr": "ثلاث سنوات على الأقل من لغة أجنبية واحدة",
+       "source": "st2",
+       "quote": "World Language: minimum three years of the same language."
+      }
+     ]
+    }
+   },
+   "programs": []
+  },
+  {
+   "key": "uc_berkeley",
+   "website": "https://www.berkeley.edu",
+   "applyVia": "UC_APP",
+   "sources": [
+    {
+     "id": "b1",
+     "url": "https://admissions.berkeley.edu/apply-to-berkeley/dates-deadlines/",
+     "title": "Dates and Deadlines - Office of Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T07:34:43.380Z",
+     "hash": "d9fb03baabfdf244c507cfcbd04f666f07f50c014385c09c8e5a396c43d04263"
+    },
+    {
+     "id": "b2",
+     "url": "https://admissions.berkeley.edu/apply-to-berkeley/first-year-applicants-uc-berkeley/freshmen-requirements/",
+     "title": "First-Year Requirements - Office of Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T07:36:31.426Z",
+     "hash": "57f79564fd9dba285084da7d41af39364987ddb10a1429f1f626dc233c5812a5"
+    },
+    {
+     "id": "b3",
+     "url": "https://admissions.berkeley.edu/apply-to-berkeley/international-students/requirements-for-international-students/",
+     "title": "Requirements for International Students - Office of Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T07:37:23.289Z",
+     "hash": "a604efbd2a5bb0c898bba014f1b44c8522a78e47500823b9d7776a613bdf6af0"
+    },
+    {
+     "id": "b4",
+     "url": "https://admissions.berkeley.edu/apply-to-berkeley/first-year-applicants-uc-berkeley/first-year-policy-changes/",
+     "title": "First-Year Policies - Office of Undergraduate Admissions",
+     "retrievedAt": "2026-09-30T07:35:46.758Z",
+     "hash": "b615a65c1aee4c2f5ce02d6cd3f94004e5817cff22b13c32d478c4d3be22535f"
+    }
+   ],
+   "english": [
+    {
+     "test": "TOEFL",
+     "minOverall": 90,
+     "minComponent": null,
+     "waiverNoteEn": "90 on the old scale or 4.5 on the new scale. Not needed with 3 or more years of English as the language of instruction.",
+     "waiverNoteAr": "90 على المقياس القديم أو 4.5 على المقياس الجديد. لا يلزم إذا كانت الإنجليزية لغة التدريس لمدة 3 سنوات أو أكثر.",
+     "source": "b3",
+     "quote": "Test of English as a Foreign Language (TOEFL) with a minimum score of 90/4.5 or better"
+    },
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": null,
+     "waiverNoteEn": "Not needed with 3 or more years of English as the language of instruction.",
+     "waiverNoteAr": "لا يلزم إذا كانت الإنجليزية لغة التدريس لمدة 3 سنوات أو أكثر.",
+     "source": "b3",
+     "quote": "International English Language testing System (IELTS) with a minimum score of 6.5"
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 115,
+     "minComponent": null,
+     "waiverNoteEn": "Not needed with 3 or more years of English as the language of instruction.",
+     "waiverNoteAr": "لا يلزم إذا كانت الإنجليزية لغة التدريس لمدة 3 سنوات أو أكثر.",
+     "source": "b3",
+     "quote": "DuoLingo English Test (DET) with a minimum score of 115"
+    }
+   ],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "BLIND",
+     "minScore": null,
+     "noteEn": "Test-free: SAT/ACT are not used in admission.",
+     "noteAr": "لا تستخدم درجات SAT/ACT في القبول.",
+     "source": "b4",
+     "quote": "UC Berkeley is test-free, which means we will not use SAT/ACT test scores in any part of our application process."
+    },
+    {
+     "test": "ACT",
+     "policy": "BLIND",
+     "minScore": null,
+     "noteEn": "Test-free: SAT/ACT are not used in admission.",
+     "noteAr": "لا تستخدم درجات SAT/ACT في القبول.",
+     "source": "b4",
+     "quote": "UC Berkeley is test-free, which means we will not use SAT/ACT test scores in any part of our application process."
+    }
+   ],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2026-11-30",
+     "labelEn": "UC application deadline",
+     "labelAr": "الموعد النهائي لطلب جامعة كاليفورنيا",
+     "source": "b1",
+     "quote": "All applications must be submitted by November 30."
+    }
+   ],
+   "curriculumRules": {
+    "AMERICAN": {
+     "accepted": true,
+     "minimumGPA": 3.4,
+     "notesEn": "Minimum: A-G subject requirements and a 3.4 GPA in A-G courses in grades 10 and 11 for non-residents (3.0 for California residents). Meeting the minimum is often not competitive.",
+     "notesAr": "الحد الأدنى: متطلبات مواد A-G ومعدل 3.4 في مقررات A-G للصفين العاشر والحادي عشر لغير المقيمين (3.0 لمقيمي كاليفورنيا). وتحقيق الحد الأدنى غالبا لا يكفي للمنافسة.",
+     "source": "b2",
+     "quote": "Have a 3.0 GPA in A-G courses taken in the 10th and 11th grade years. (3.4 GPA for non-residents)",
+     "subjects": []
+    },
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "IGCSE/O-levels alone are not enough; complete the two-year A-level programme with at least three academic exams.",
+     "notesAr": "لا تكفي شهادات IGCSE أو O-level وحدها؛ يجب إكمال برنامج A-level لمدة سنتين بثلاثة امتحانات أكاديمية على الأقل.",
+     "source": "b3",
+     "quote": "Students who have only completed the IGCSE or O-level exams have not yet met the requirements for admission at UC Berkeley. The university requires further study, either completion of the two-year A-level program with a minimum of three academic exams, the IB diploma program, or another similar academic curriculum.",
+     "subjects": []
+    },
+    "IB": {
+     "accepted": true,
+     "notesEn": "The IB Diploma programme is accepted. No minimum points published.",
+     "notesAr": "برنامج دبلوم البكالوريا الدولية مقبول. لا يوجد حد أدنى منشور للنقاط.",
+     "source": "b3",
+     "quote": "Students who have only completed the IGCSE or O-level exams have not yet met the requirements for admission at UC Berkeley. The university requires further study, either completion of the two-year A-level program with a minimum of three academic exams, the IB diploma program, or another similar academic curriculum.",
+     "subjects": []
+    }
+   },
+   "programs": []
+  },
+  {
+   "key": "ucla",
+   "website": "https://www.ucla.edu",
+   "applyVia": "UC_APP",
+   "sources": [
+    {
+     "id": "u1",
+     "url": "https://admission.ucla.edu/apply/first-year/first-year-requirements",
+     "title": "First-Year Requirements | UCLA Undergraduate Admission",
+     "retrievedAt": "2026-09-30T07:37:18.405Z",
+     "hash": "1407b0d032dbf40bfcbbec33b0c2b36159831abd002031ab4e8e29429c0adad5"
+    },
+    {
+     "id": "u2",
+     "url": "https://admission.ucla.edu/apply/international-applicants",
+     "title": "International Applicants | UCLA Undergraduate Admission",
+     "retrievedAt": "2026-09-30T07:35:22.626Z",
+     "hash": "666d858e9efc0cc556af88f35ffdd599d7583b2fd205de4aede0865aa4899e8f"
+    },
+    {
+     "id": "u3",
+     "url": "https://admission.ucla.edu/apply/first-year",
+     "title": "First-Year Applicants | UCLA Undergraduate Admission",
+     "retrievedAt": "2026-09-30T07:37:25.384Z",
+     "hash": "01fa00c0533c2f4245a6e239a21288f213bcc8ffb9abeb01b811d980ea4028eb"
+    },
+    {
+     "id": "u4",
+     "url": "https://admission.ucla.edu/apply/majors",
+     "title": "Majors | UCLA Undergraduate Admission",
+     "retrievedAt": "2026-09-30T07:36:11.924Z",
+     "hash": "4c77ad32dc1f3c222c4e295213cfae0e29afe8e9ae1c1216ce5ddb811d972fd2"
+    }
+   ],
+   "english": [
+    {
+     "test": "TOEFL",
+     "minOverall": 5,
+     "minComponent": 5,
+     "waiverNoteEn": "New TOEFL scale (from 21 January 2026), sub-scores 5 or higher. Competitive level, not a strict minimum. Not needed if all secondary education was in English.",
+     "waiverNoteAr": "مقياس TOEFL الجديد (من 21 يناير 2026) مع درجات فرعية 5 أو أعلى. مستوى تنافسي وليس حدا أدنى صارما. ولا يلزم إذا كان التعليم الثانوي كله باللغة الإنجليزية.",
+     "source": "u2",
+     "quote": "We look for competitive English proficiency scores, including a TOEFL iBT score of 5 or higher (with sub-scores of 5 or higher) on the revised scale (effective January 21, 2026), or above 100 (with sub-scores above 24) on the previous 120-point scale, as well as 7.5 or above on the IELTS or 135 or higher on the Duolingo English Test (DET)."
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 100,
+     "minComponent": 24,
+     "waiverNoteEn": "Old 120-point TOEFL scale: above 100 with sub-scores above 24. Competitive level, not a strict minimum. Not needed if all secondary education was in English.",
+     "waiverNoteAr": "مقياس TOEFL القديم من 120 نقطة: أعلى من 100 مع درجات فرعية أعلى من 24. مستوى تنافسي وليس حدا أدنى صارما. ولا يلزم إذا كان التعليم الثانوي كله باللغة الإنجليزية.",
+     "source": "u2",
+     "quote": "We look for competitive English proficiency scores, including a TOEFL iBT score of 5 or higher (with sub-scores of 5 or higher) on the revised scale (effective January 21, 2026), or above 100 (with sub-scores above 24) on the previous 120-point scale, as well as 7.5 or above on the IELTS or 135 or higher on the Duolingo English Test (DET)."
+    },
+    {
+     "test": "IELTS",
+     "minOverall": 7.5,
+     "minComponent": null,
+     "waiverNoteEn": "Competitive level, not a strict minimum. Not needed if all secondary education was in English.",
+     "waiverNoteAr": "مستوى تنافسي وليس حدا أدنى صارما. ولا يلزم إذا كان التعليم الثانوي كله باللغة الإنجليزية.",
+     "source": "u2",
+     "quote": "We look for competitive English proficiency scores, including a TOEFL iBT score of 5 or higher (with sub-scores of 5 or higher) on the revised scale (effective January 21, 2026), or above 100 (with sub-scores above 24) on the previous 120-point scale, as well as 7.5 or above on the IELTS or 135 or higher on the Duolingo English Test (DET)."
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 135,
+     "minComponent": null,
+     "waiverNoteEn": "Competitive level, not a strict minimum. Not needed if all secondary education was in English.",
+     "waiverNoteAr": "مستوى تنافسي وليس حدا أدنى صارما. ولا يلزم إذا كان التعليم الثانوي كله باللغة الإنجليزية.",
+     "source": "u2",
+     "quote": "We look for competitive English proficiency scores, including a TOEFL iBT score of 5 or higher (with sub-scores of 5 or higher) on the revised scale (effective January 21, 2026), or above 100 (with sub-scores above 24) on the previous 120-point scale, as well as 7.5 or above on the IELTS or 135 or higher on the Duolingo English Test (DET)."
+    }
+   ],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "BLIND",
+     "minScore": null,
+     "noteEn": "SAT/ACT not considered for admission.",
+     "noteAr": "لا تؤخذ درجات SAT/ACT في الاعتبار للقبول.",
+     "source": "u1",
+     "quote": "UCLA will not consider SAT or ACT scores for admission or scholarship purposes."
+    },
+    {
+     "test": "ACT",
+     "policy": "BLIND",
+     "minScore": null,
+     "noteEn": "SAT/ACT not considered for admission.",
+     "noteAr": "لا تؤخذ درجات SAT/ACT في الاعتبار للقبول.",
+     "source": "u1",
+     "quote": "UCLA will not consider SAT or ACT scores for admission or scholarship purposes."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": false,
+     "noteEn": "No recommendation letters are accepted; transcripts are only collected after admission.",
+     "noteAr": "لا تقبل رسائل التوصية، ولا تطلب كشوف الدرجات إلا بعد القبول.",
+     "source": "u1",
+     "quote": "We do not require or accept letters of recommendation in our process and we do not collect transcripts at the point of application."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2026-11-30",
+     "labelEn": "UC application filing period ends",
+     "labelAr": "نهاية فترة تقديم طلب جامعة كاليفورنيا",
+     "source": "u3",
+     "quote": "October 1 - November 30"
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "ucla-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BS",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://admission.ucla.edu/apply/majors",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "english_language"
+        ],
+        "noteEn": "4 years of English",
+        "noteAr": "4 سنوات من اللغة الإنجليزية",
+        "source": "u1",
+        "quote": "4 years of college-preparatory English"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "noteEn": "3 years of mathematics (4 recommended)",
+        "noteAr": "3 سنوات من الرياضيات (ويوصى بأربع)",
+        "source": "u1",
+        "quote": "3 years of mathematics (4 years recommended)"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "science"
+        ],
+        "noteEn": "2 years of lab science (3 recommended)",
+        "noteAr": "سنتان من العلوم المخبرية (ويوصى بثلاث)",
+        "source": "u1",
+        "quote": "2 years of laboratory science (3 years recommended)"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "second_language"
+        ],
+        "noteEn": "2 years of a language other than English (3 recommended)",
+        "noteAr": "سنتان من لغة غير الإنجليزية (ويوصى بثلاث)",
+        "source": "u1",
+        "quote": "2 years of language other than English (3 years recommended)"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "history",
+         "social_studies"
+        ],
+        "noteEn": "2 years of history/social science",
+        "noteAr": "سنتان من التاريخ والعلوم الاجتماعية",
+        "source": "u1",
+        "quote": "2 years history/social science"
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Listed as Computer Science (B.S.) in UCLA's majors list.",
+        "noteAr": "مدرج في قائمة تخصصات UCLA باسم علوم الحاسوب (بكالوريوس علوم).",
+        "source": "u4",
+        "quote": "Computer Science (B.S.)"
+       }
+      ],
+      "source": "u1"
+     },
+     "previous": null
+    },
+    {
+     "key": "ucla-psy",
+     "status": "EXISTS",
+     "nameEn": "Psychology BA",
+     "nameAr": "بكالوريوس الآداب في علم النفس",
+     "degree": "BA",
+     "durationYears": null,
+     "url": "https://admission.ucla.edu/apply/majors",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "english_language"
+        ],
+        "noteEn": "4 years of English",
+        "noteAr": "4 سنوات من اللغة الإنجليزية",
+        "source": "u1",
+        "quote": "4 years of college-preparatory English"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "noteEn": "3 years of mathematics (4 recommended)",
+        "noteAr": "3 سنوات من الرياضيات (ويوصى بأربع)",
+        "source": "u1",
+        "quote": "3 years of mathematics (4 years recommended)"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "science"
+        ],
+        "noteEn": "2 years of lab science (3 recommended)",
+        "noteAr": "سنتان من العلوم المخبرية (ويوصى بثلاث)",
+        "source": "u1",
+        "quote": "2 years of laboratory science (3 years recommended)"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "second_language"
+        ],
+        "noteEn": "2 years of a language other than English (3 recommended)",
+        "noteAr": "سنتان من لغة غير الإنجليزية (ويوصى بثلاث)",
+        "source": "u1",
+        "quote": "2 years of language other than English (3 years recommended)"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "history",
+         "social_studies"
+        ],
+        "noteEn": "2 years of history/social science",
+        "noteAr": "سنتان من التاريخ والعلوم الاجتماعية",
+        "source": "u1",
+        "quote": "2 years history/social science"
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Listed as Psychology (B.A.) in UCLA's majors list.",
+        "noteAr": "مدرج في قائمة تخصصات UCLA باسم علم النفس (بكالوريوس آداب).",
+        "source": "u4",
+        "quote": "Psychology (B.A.)"
+       }
+      ],
+      "source": "u1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "uiuc",
+   "website": "https://illinois.edu",
+   "applyVia": "COMMON_APP",
+   "sources": [
+    {
+     "id": "i1",
+     "url": "https://www.admissions.illinois.edu/first-year-requirements/",
+     "title": "First-Year Requirements | Undergraduate Admissions | Illinois",
+     "retrievedAt": "2026-09-30T07:34:47.279Z",
+     "hash": "fc0005e0e10104d485135013a2f419c32c77cf8d39cfe2808948e14b665f450a"
+    },
+    {
+     "id": "i2",
+     "url": "https://www.admissions.illinois.edu/international-requirements/",
+     "title": "International Requirements | Undergraduate Admissions | Illinois",
+     "retrievedAt": "2026-09-30T07:36:48.713Z",
+     "hash": "3eedc6bd71ea59f3364535477e9affb3e291c5cca2a77f9b909c118ed481e15d"
+    },
+    {
+     "id": "i3",
+     "url": "https://www.admissions.illinois.edu/first-year-dates/",
+     "title": "First-Year Dates & Deadlines | Undergraduate Admissions | Illinois",
+     "retrievedAt": "2026-09-30T07:36:12.551Z",
+     "hash": "5ec138defb1401b4f8b1553ff591558a765bba26cb3b882f036465c54ea07e18"
+    },
+    {
+     "id": "i4",
+     "url": "https://www.admissions.illinois.edu/first-year-apply-faq/",
+     "title": "First-Year Application FAQ | Undergraduate Admissions | Illinois",
+     "retrievedAt": "2026-09-30T07:41:11.757Z",
+     "hash": "046abcf5dfa5136419c08dc50ef053b7d2fa60e86dd049d6b941785bc7767227"
+    }
+   ],
+   "english": [],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "OPTIONAL",
+     "minScore": null,
+     "noteEn": "Test optional for all majors, including for international students.",
+     "noteAr": "الاختبارات اختيارية لجميع التخصصات، بما في ذلك للطلاب الدوليين.",
+     "source": "i4",
+     "quote": "Yes, ACT/SAT scores are optional for all first-year applicants, including international students, homeschooled students, and recruited student-athletes."
+    },
+    {
+     "test": "ACT",
+     "policy": "OPTIONAL",
+     "minScore": null,
+     "noteEn": "Test optional for all majors, including for international students.",
+     "noteAr": "الاختبارات اختيارية لجميع التخصصات، بما في ذلك للطلاب الدوليين.",
+     "source": "i4",
+     "quote": "Yes, ACT/SAT scores are optional for all first-year applicants, including international students, homeschooled students, and recruited student-athletes."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Students who did not complete grades 10 to 12 in an approved English-speaking country (the UAE is not one) must submit TOEFL, IELTS or Duolingo (or SAT/ACT). No minimum score is published on this page.",
+     "noteAr": "يجب على من لم يكمل الصفوف من 10 إلى 12 في بلد ناطق بالإنجليزية معتمد (والإمارات ليست منها) تقديم TOEFL أو IELTS أو Duolingo (أو SAT/ACT). ولا تنشر هذه الصفحة حدا أدنى للدرجات.",
+     "source": "i2",
+     "quote": "If you did not complete Grades 10-12 in an approved English-speaking country, you must submit one of the following test scores:"
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "EARLY_ACTION",
+     "date": "2026-11-01",
+     "labelEn": "Early Action",
+     "labelAr": "القبول المبكر",
+     "source": "i3",
+     "quote": "Early Action Deadline Nov 1 Apply early for top consideration. Non-binding."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "REGULAR_DECISION",
+     "date": "2027-01-05",
+     "labelEn": "Regular Decision",
+     "labelAr": "القرار العادي",
+     "source": "i3",
+     "quote": "Regular Deadline Jan 5 Standard timeline for full consideration."
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "uiuc-ce",
+     "status": "EXISTS",
+     "nameEn": "Computer Engineering BS",
+     "nameAr": "بكالوريوس العلوم في هندسة الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://grainger.illinois.edu/academics/undergraduate/majors-and-minors/computer-engineering",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "english_language"
+        ],
+        "noteEn": "4 years of English",
+        "noteAr": "4 سنوات من اللغة الإنجليزية",
+        "source": "i1",
+        "quote": "English 4 years required"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "noteEn": "At least 3.5 years of math including trigonometry or higher (all Grainger Engineering majors)",
+        "noteAr": "3.5 سنوات على الأقل من الرياضيات تشمل حساب المثلثات أو ما فوقه (جميع تخصصات كلية غرينجر للهندسة)",
+        "source": "i1",
+        "quote": "At least 3.5 years of math, including trigonometry or higher, are required for admission to the following: All Computer Science + X majors All Gies College of Business majors All Grainger College of Engineering majors"
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [],
+      "source": "i1"
+     },
+     "previous": null
+    },
+    {
+     "key": "uiuc-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BS",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://grainger.illinois.edu/academics/undergraduate/majors-and-minors/computer-science",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "english_language"
+        ],
+        "noteEn": "4 years of English",
+        "noteAr": "4 سنوات من اللغة الإنجليزية",
+        "source": "i1",
+        "quote": "English 4 years required"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "noteEn": "At least 3.5 years of math including trigonometry or higher (all Grainger Engineering majors)",
+        "noteAr": "3.5 سنوات على الأقل من الرياضيات تشمل حساب المثلثات أو ما فوقه (جميع تخصصات كلية غرينجر للهندسة)",
+        "source": "i1",
+        "quote": "At least 3.5 years of math, including trigonometry or higher, are required for admission to the following: All Computer Science + X majors All Gies College of Business majors All Grainger College of Engineering majors"
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [],
+      "source": "i1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "ut_austin",
+   "website": "https://www.utexas.edu",
+   "applyVia": "COMMON_APP",
+   "sources": [
+    {
+     "id": "t1",
+     "url": "https://admissions.utexas.edu/apply/application-materials/high-school-prerequisites/",
+     "title": "High School Prerequisites - University of Texas Admissions",
+     "retrievedAt": "2026-09-30T07:41:28.440Z",
+     "hash": "fe548d45f2e75c70eeea7706cb17ecb84f145c5d63935f79f9c514ef90894f45"
+    },
+    {
+     "id": "t2",
+     "url": "https://admissions.utexas.edu/apply/freshman/",
+     "title": "Freshman - University of Texas Admissions",
+     "retrievedAt": "2026-09-30T07:37:29.494Z",
+     "hash": "159a688cea7ba8f7727eba7fd2015ab5c4b5ab6f7169b194e2c5623d4c5e6db3"
+    }
+   ],
+   "english": [],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "At least one official SAT or ACT score required (CLT also accepted).",
+     "noteAr": "يشترط تقديم درجة رسمية واحدة على الأقل في SAT أو ACT (ويقبل CLT أيضا).",
+     "source": "t2",
+     "quote": "Send at least one official SAT or ACT score directly from the testing agency*."
+    },
+    {
+     "test": "ACT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "At least one official SAT or ACT score required (CLT also accepted).",
+     "noteAr": "يشترط تقديم درجة رسمية واحدة على الأقل في SAT أو ACT (ويقبل CLT أيضا).",
+     "source": "t2",
+     "quote": "Send at least one official SAT or ACT score directly from the testing agency*."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Engineering and Computer Science applicants must show calculus readiness (for example SAT Math 620+, ACT Math 26+, AP Calculus 3+ or IB HL Mathematics 4+).",
+     "noteAr": "يجب على المتقدمين للهندسة وعلوم الحاسوب إثبات الجاهزية للتفاضل والتكامل (مثل SAT رياضيات 620 فأكثر، أو ACT رياضيات 26 فأكثر، أو AP Calculus بدرجة 3 فأكثر، أو رياضيات IB HL بدرجة 4 فأكثر).",
+     "source": "t1",
+     "quote": "Freshman applicants must demonstrate calculus readiness to apply to the following majors: All majors in the Cockrell School of Engineering"
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "EARLY_ACTION",
+     "date": "2026-10-15",
+     "labelEn": "Early Action",
+     "labelAr": "القبول المبكر",
+     "source": "t2",
+     "quote": "Early Action Deadline to Apply October 15"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "REGULAR_DECISION",
+     "date": "2026-12-01",
+     "labelEn": "Regular Decision",
+     "labelAr": "القرار العادي",
+     "source": "t2",
+     "quote": "Regular Deadline To Apply December 1"
+    }
+   ],
+   "curriculumRules": {
+    "AMERICAN": {
+     "accepted": true,
+     "notesEn": "High school prerequisites (Texas credits).",
+     "notesAr": "المتطلبات الثانوية المسبقة (وحدات تكساس).",
+     "source": "t1",
+     "quote": "Students who do not meet the required coursework may be instructed to submit additional information or may be required to complete coursework related to their deficiency before enrolling at the University.",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "english_language"
+       ],
+       "noteEn": "4 credits of language arts",
+       "noteAr": "4 وحدات من فنون اللغة",
+       "source": "t1",
+       "quote": "Language Arts (4 Credits Required)"
+      },
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics"
+       ],
+       "noteEn": "3 credits of mathematics required, 4 strongly recommended",
+       "noteAr": "3 وحدات رياضيات إلزامية، ويوصى بشدة بأربع",
+       "source": "t1",
+       "quote": "Mathematics (4 Credits Strongly Recommended, 3 Credits Required)"
+      },
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "science"
+       ],
+       "noteEn": "2 credits of science required, 4 strongly recommended",
+       "noteAr": "وحدتان من العلوم إلزاميتان، ويوصى بشدة بأربع",
+       "source": "t1",
+       "quote": "Science (4 Credits Strongly Recommended, 2 Credits Required)"
+      },
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "social_studies"
+       ],
+       "noteEn": "3 credits of social studies required",
+       "noteAr": "3 وحدات من الدراسات الاجتماعية إلزامية",
+       "source": "t1",
+       "quote": "Social Studies (4 Credits Recommended, 3 Credits Required)"
+      },
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "second_language"
+       ],
+       "noteEn": "2 credits of one foreign language",
+       "noteAr": "وحدتان من لغة أجنبية واحدة",
+       "source": "t1",
+       "quote": "Foreign Language (2 Credits Required)"
+      }
+     ]
+    }
+   },
+   "programs": []
+  },
+  {
+   "key": "uw_seattle",
+   "website": "https://www.washington.edu",
+   "applyVia": "COMMON_APP",
+   "sources": [
+    {
+     "id": "w1",
+     "url": "https://admit.washington.edu/apply/dates-deadlines/",
+     "title": "Dates and deadlines - Office of Admissions",
+     "retrievedAt": "2026-09-30T07:36:17.626Z",
+     "hash": "a70264925196bd34ddca27b692a5d0fee95a902cac9e7758c057028529540675"
+    },
+    {
+     "id": "w2",
+     "url": "https://admit.washington.edu/apply/first-year/how-to-apply/english-proficiency/",
+     "title": "English proficiency - Office of Admissions",
+     "retrievedAt": "2026-09-30T07:41:19.614Z",
+     "hash": "c2ce9b399f20468d7a4d4b6c23449e6b94811e1baeffcb8734b1dc5927946340"
+    },
+    {
+     "id": "w3",
+     "url": "https://admit.washington.edu/apply/first-year/how-to-apply/test-scores/",
+     "title": "Test scores - Office of Admissions",
+     "retrievedAt": "2026-09-30T07:37:14.932Z",
+     "hash": "3578c984cb5af960b8a2de4f971c5f2993771f60b28e64f0ef03a1473f05460c"
+    },
+    {
+     "id": "w4",
+     "url": "https://admit.washington.edu/apply/first-year/cadr/",
+     "title": "College Academic Distribution Requirement (CADRs) - Office of Admissions",
+     "retrievedAt": "2026-09-30T07:38:02.625Z",
+     "hash": "6abd838dfe951fc65403b9a2f786f87c093f748c0bc5d9aebb51aeb6188cff3a"
+    },
+    {
+     "id": "w5",
+     "url": "https://admit.washington.edu/apply/admission-to-majors/",
+     "title": "Admission to majors - Office of Admissions",
+     "retrievedAt": "2026-09-30T07:35:55.355Z",
+     "hash": "c3e70831143351a41513cbcdc6081265b5924eaad7ae65c9fc55c0fb2ed1952b"
+    }
+   ],
+   "english": [
+    {
+     "test": "TOEFL",
+     "minOverall": 76,
+     "minComponent": null,
+     "waiverNoteEn": "TOEFL iBT taken before 21 January 2026. Required for international applicants; exempt if primary and secondary education was in Australia, Canada (English-speaking provinces), the UK, Ireland, New Zealand or the US.",
+     "waiverNoteAr": "اختبار TOEFL iBT قبل 21 يناير 2026. مطلوب للمتقدمين الدوليين؛ ويعفى من تلقى تعليمه الابتدائي والثانوي في أستراليا أو كندا (المقاطعات الناطقة بالإنجليزية) أو المملكة المتحدة أو أيرلندا أو نيوزيلندا أو الولايات المتحدة.",
+     "source": "w2",
+     "quote": "TOEFL (iBT) (prior to Jan. 21, 2026) | TOEFL (iBT) (effective Jan. 21, 2026) | IELTS | Duolingo (DET) | Minimum score required | 76 | 4.0 | 6.0 | 110 |"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 4,
+     "minComponent": null,
+     "waiverNoteEn": "TOEFL iBT from 21 January 2026 (new scale). Required for international applicants; exempt if primary and secondary education was in Australia, Canada (English-speaking provinces), the UK, Ireland, New Zealand or the US.",
+     "waiverNoteAr": "اختبار TOEFL iBT اعتبارا من 21 يناير 2026 (المقياس الجديد). مطلوب للمتقدمين الدوليين؛ ويعفى من تلقى تعليمه الابتدائي والثانوي في أستراليا أو كندا (المقاطعات الناطقة بالإنجليزية) أو المملكة المتحدة أو أيرلندا أو نيوزيلندا أو الولايات المتحدة.",
+     "source": "w2",
+     "quote": "TOEFL (iBT) (prior to Jan. 21, 2026) | TOEFL (iBT) (effective Jan. 21, 2026) | IELTS | Duolingo (DET) | Minimum score required | 76 | 4.0 | 6.0 | 110 |"
+    },
+    {
+     "test": "IELTS",
+     "minOverall": 6,
+     "minComponent": null,
+     "waiverNoteEn": "Required for international applicants; exempt if primary and secondary education was in Australia, Canada (English-speaking provinces), the UK, Ireland, New Zealand or the US.",
+     "waiverNoteAr": "مطلوب للمتقدمين الدوليين؛ ويعفى من تلقى تعليمه الابتدائي والثانوي في أستراليا أو كندا (المقاطعات الناطقة بالإنجليزية) أو المملكة المتحدة أو أيرلندا أو نيوزيلندا أو الولايات المتحدة.",
+     "source": "w2",
+     "quote": "TOEFL (iBT) (prior to Jan. 21, 2026) | TOEFL (iBT) (effective Jan. 21, 2026) | IELTS | Duolingo (DET) | Minimum score required | 76 | 4.0 | 6.0 | 110 |"
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 110,
+     "minComponent": null,
+     "waiverNoteEn": "Required for international applicants; exempt if primary and secondary education was in Australia, Canada (English-speaking provinces), the UK, Ireland, New Zealand or the US.",
+     "waiverNoteAr": "مطلوب للمتقدمين الدوليين؛ ويعفى من تلقى تعليمه الابتدائي والثانوي في أستراليا أو كندا (المقاطعات الناطقة بالإنجليزية) أو المملكة المتحدة أو أيرلندا أو نيوزيلندا أو الولايات المتحدة.",
+     "source": "w2",
+     "quote": "TOEFL (iBT) (prior to Jan. 21, 2026) | TOEFL (iBT) (effective Jan. 21, 2026) | IELTS | Duolingo (DET) | Minimum score required | 76 | 4.0 | 6.0 | 110 |"
+    }
+   ],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "NOT_CONSIDERED",
+     "minScore": null,
+     "noteEn": "SAT/ACT not required; reviewers do not see scores.",
+     "noteAr": "لا يشترط SAT/ACT، ولا يطلع المراجعون على الدرجات.",
+     "source": "w3",
+     "quote": "In fact, when reading your application, the reviewers will not see your test scores, if provided."
+    },
+    {
+     "test": "ACT",
+     "policy": "NOT_CONSIDERED",
+     "minScore": null,
+     "noteEn": "SAT/ACT not required; reviewers do not see scores.",
+     "noteAr": "لا يشترط SAT/ACT، ولا يطلع المراجعون على الدرجات.",
+     "source": "w3",
+     "quote": "In fact, when reading your application, the reviewers will not see your test scores, if provided."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "List computer science or computer engineering as first-choice major to be considered for direct admission to the Allen School.",
+     "noteAr": "اختر علوم الحاسوب أو هندسة الحاسوب كتخصص أول للنظر في القبول المباشر في مدرسة ألين.",
+     "source": "w5",
+     "quote": "Most students earning computer science or computer engineering degrees from the UW will be admitted directly to the Allen School of Computer Science & Engineering as a first-year student."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2026-11-15",
+     "labelEn": "Application deadline",
+     "labelAr": "الموعد النهائي للتقديم",
+     "source": "w1",
+     "quote": "November 15: Application deadline for summer and autumn quarters"
+    }
+   ],
+   "curriculumRules": {
+    "AMERICAN": {
+     "accepted": true,
+     "notesEn": "College Academic Distribution Requirements (CADRs), in high school credits (years).",
+     "notesAr": "متطلبات التوزيع الأكاديمي الجامعي (CADRs) بوحدات المرحلة الثانوية (سنوات).",
+     "source": "w4",
+     "quote": "English | 4 | Mathematics | 3 | Social sciences/social studies | 3 | World languages | 2 | Science, including 2 years of lab science | 3* | Senior year math-based quantitative course | 1 |",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "english_language"
+       ],
+       "noteEn": "4 credits of English",
+       "noteAr": "4 وحدات من اللغة الإنجليزية",
+       "source": "w4",
+       "quote": "English | 4 | Mathematics | 3 | Social sciences/social studies | 3 | World languages | 2 | Science, including 2 years of lab science | 3* | Senior year math-based quantitative course | 1 |"
+      },
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics"
+       ],
+       "noteEn": "3 credits of mathematics plus a senior-year math-based quantitative course",
+       "noteAr": "3 وحدات من الرياضيات إضافة إلى مقرر كمي قائم على الرياضيات في السنة الأخيرة",
+       "source": "w4",
+       "quote": "English | 4 | Mathematics | 3 | Social sciences/social studies | 3 | World languages | 2 | Science, including 2 years of lab science | 3* | Senior year math-based quantitative course | 1 |"
+      },
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "social_studies"
+       ],
+       "noteEn": "3 credits of social studies",
+       "noteAr": "3 وحدات من الدراسات الاجتماعية",
+       "source": "w4",
+       "quote": "English | 4 | Mathematics | 3 | Social sciences/social studies | 3 | World languages | 2 | Science, including 2 years of lab science | 3* | Senior year math-based quantitative course | 1 |"
+      },
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "second_language"
+       ],
+       "noteEn": "2 credits of a world language",
+       "noteAr": "وحدتان من لغة أجنبية",
+       "source": "w4",
+       "quote": "English | 4 | Mathematics | 3 | Social sciences/social studies | 3 | World languages | 2 | Science, including 2 years of lab science | 3* | Senior year math-based quantitative course | 1 |"
+      },
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "science"
+       ],
+       "noteEn": "3 credits of science including 2 years of lab science",
+       "noteAr": "3 وحدات من العلوم منها سنتان من العلوم المخبرية",
+       "source": "w4",
+       "quote": "English | 4 | Mathematics | 3 | Social sciences/social studies | 3 | World languages | 2 | Science, including 2 years of lab science | 3* | Senior year math-based quantitative course | 1 |"
+      }
+     ]
+    }
+   },
+   "programs": []
   }
  ]
 }
