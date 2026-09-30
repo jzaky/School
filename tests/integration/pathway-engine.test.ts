@@ -43,7 +43,7 @@ beforeAll(async () => {
   }
   await owner.studentTestScore.create({ data: { orgId, studentId: studentA, kind: "IELTS", score: 7.5 } });
   await owner.schoolCourse.create({ data: { orgId, courseId: byCode.get("AL_FURTHER_MATH")!.id, gradeLevels: [11, 12] } });
-  programId = (await owner.universityProgram.findFirstOrThrow({ where: { orgId: null, key: "ucl-computer-science-bsc" } })).id;
+  programId = (await owner.universityProgram.findFirstOrThrow({ where: { orgId: null, key: "bristol-cs" } })).id;
 });
 
 afterAll(async () => {

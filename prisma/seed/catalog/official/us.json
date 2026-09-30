@@ -1,0 +1,1182 @@
+{
+ "batch": "us",
+ "assembledAt": "2026-09-30T02:36:29.052Z",
+ "universities": [
+  {
+   "key": "carnegie_mellon",
+   "website": "https://www.cmu.edu",
+   "applyVia": "COMMON_APP",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.cs.cmu.edu/bs-in-artificial-intelligence/",
+     "title": "B.S. in Artificial Intelligence",
+     "retrievedAt": "2026-09-29T23:50:20.606Z",
+     "hash": "8106fb024988fbd6e537f7e50f58f1a22623a128d8852d9b3c3cc41f0e2bad25"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.cmu.edu/admission/majors-programs/school-of-computer-science/artificial-intelligence",
+     "title": "Artificial Intelligence - Undergraduate Admission - Carnegie Mellon University",
+     "retrievedAt": "2026-09-29T23:49:16.907Z",
+     "hash": "71c00872219e3654155504385212600cf196fa25e41673819efcddd6eeaadda7"
+    },
+    {
+     "id": "s3",
+     "url": "https://coursecatalog.web.cmu.edu/schools-colleges/schoolofcomputerscience/undergraduatecomputerscience/",
+     "title": "Computer Science Program < Carnegie Mellon University",
+     "retrievedAt": "2026-09-29T23:49:53.773Z",
+     "hash": "83823139fc34b28b0f167ca6ca5b4535006847a468c211654130b3975291b0ed"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.cmu.edu/admission/majors-programs/school-of-computer-science/computer-science",
+     "title": "Computer Science - Undergraduate Admission - Carnegie Mellon University",
+     "retrievedAt": "2026-09-29T23:49:29.802Z",
+     "hash": "a73524b07668fd4519f9109dde6cee27d49e7a6aa0e2c81c442fd7091b7f8635"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.ece.cmu.edu/academics/bs-in-ece/index.html",
+     "title": "BS in ECE - Electrical and Computer Engineering - College of Engineering - Carnegie Mellon University",
+     "retrievedAt": "2026-09-29T23:49:45.873Z",
+     "hash": "bf4877bd0bb1f585c5daad1835a51ca0bb2724ef0affed63bdba6e8e920d9665",
+     "waybackTimestamp": "20250905015042",
+     "waybackHash": "589e6d17821aec07b95b8b4fe1f11582e8f65fc5eb99336bc4d5c6593801aa9f"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.cmu.edu/admission/admission/undergraduate-admission-requirements",
+     "title": "Undergraduate Admission Requirements - Undergraduate Admission - Carnegie Mellon University",
+     "retrievedAt": "2026-09-29T23:54:56.920Z",
+     "hash": "5120382eb04860ee492da45011da22145dda1d0aa7a7a4ddcfba3a61d95b337b"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.cmu.edu/admission/admission/international-applicants",
+     "title": "International Applicants - Undergraduate Admission - Carnegie Mellon University",
+     "retrievedAt": "2026-09-29T23:49:54.690Z",
+     "hash": "2f4ee37f4b2730b3f3364076801240ebafd6ebbd93ecc9d2f7db923b9c37ebd7"
+    },
+    {
+     "id": "s8",
+     "url": "https://www.cmu.edu/admission/admission/application-plans-deadlines",
+     "title": "Application Plans & Deadlines - Undergraduate Admission - Carnegie Mellon University",
+     "retrievedAt": "2026-09-29T23:53:18.257Z",
+     "hash": "0b4327af47dd82a0462524ba1aa969235cbc39db798b7dce4a9178fe29b12191"
+    },
+    {
+     "id": "s9",
+     "url": "https://www.cmu.edu/admission/admission/academic-requirements-college-level-work",
+     "title": "Academic Requirements & College-Level Work - Undergraduate Admission - Carnegie Mellon University",
+     "retrievedAt": "2026-09-29T23:53:50.114Z",
+     "hash": "88d0780052eaddcbeee68cd26a2c9ba315da1d74330dd5f7162f844419b5c0f6"
+    },
+    {
+     "id": "s10",
+     "url": "https://www.cmu.edu/admission/admission/standardized-testing",
+     "title": "Standardized Testing - Undergraduate Admission - Carnegie Mellon University",
+     "retrievedAt": "2026-09-29T23:53:20.546Z",
+     "hash": "3a58922e2f6c47a824b64eaab41846e3087f05f93b9794053db51287ec1d0981",
+     "waybackTimestamp": "20250910060527",
+     "waybackHash": "1bfdc7998df7066d53adca2ff1e25d33ca439d61dac635423e346d4083d2235d"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 7.5,
+     "minComponent": null,
+     "waiverNoteEn": "Required only if English is not your native language. Scores must be no more than two years old.",
+     "waiverNoteAr": "مطلوب فقط إذا لم تكن الإنجليزية لغتك الأم. ويجب ألا يزيد عمر النتيجة على سنتين.",
+     "source": "s7",
+     "quote": "We require at least a 7.5 overall band score on either the paper-based or computer-delivered Academic Examination and give consideration to those with subscores of 7.5 and above."
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 102,
+     "minComponent": null,
+     "waiverNoteEn": "Applies to TOEFL iBT exams taken before 21 January 2026. Required only if English is not your native language.",
+     "waiverNoteAr": "ينطبق على اختبارات TOEFL iBT التي أجريت قبل 21 يناير 2026. مطلوب فقط إذا لم تكن الإنجليزية لغتك الأم.",
+     "source": "s7",
+     "quote": "For exams taken before Jan. 21, 2026: We require at least a 102 overall score and give consideration to those with subscores of 25 and above in each section."
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 5,
+     "minComponent": null,
+     "waiverNoteEn": "Applies to TOEFL iBT exams taken on or after 21 January 2026 (new 1 to 6 scale). Required only if English is not your native language.",
+     "waiverNoteAr": "ينطبق على اختبارات TOEFL iBT التي أجريت في 21 يناير 2026 أو بعده (المقياس الجديد من 1 إلى 6). مطلوب فقط إذا لم تكن الإنجليزية لغتك الأم.",
+     "source": "s7",
+     "quote": "For exams taken on or after Jan. 21, 2026: We require at least a 5 in the overall score and give consideration to those with subscores of 5 and above in each section."
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 135,
+     "minComponent": null,
+     "waiverNoteEn": "Required only if English is not your native language. Scores must be no more than two years old.",
+     "waiverNoteAr": "مطلوب فقط إذا لم تكن الإنجليزية لغتك الأم. ويجب ألا يزيد عمر النتيجة على سنتين.",
+     "source": "s7",
+     "quote": "We require at least a 135 overall score and give consideration to those with the following integrated subscores and above:"
+    },
+    {
+     "test": "CAMBRIDGE",
+     "minOverall": 191,
+     "minComponent": null,
+     "waiverNoteEn": "Required only if English is not your native language. Scores must be no more than two years old.",
+     "waiverNoteAr": "مطلوب فقط إذا لم تكن الإنجليزية لغتك الأم. ويجب ألا يزيد عمر النتيجة على سنتين.",
+     "source": "s7",
+     "quote": "We require at least a 191 overall score and give consideration to those with subscores of 191 and above."
+    }
+   ],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "PERSONAL_STATEMENT",
+     "required": true,
+     "noteEn": "Common Application essay plus the Carnegie Mellon writing supplement (three short-answer questions).",
+     "noteAr": "مقال التطبيق المشترك إضافة إلى الملحق الكتابي لجامعة كارنيغي ميلون (ثلاثة أسئلة بإجابات قصيرة).",
+     "source": "s6",
+     "quote": "Common Application Essay Common Application Writing Supplement This includes three short-answer questions"
+    },
+    {
+     "kind": "REFERENCE",
+     "required": true,
+     "noteEn": "Secondary school counselor evaluation and one teacher recommendation.",
+     "noteAr": "تقييم من المرشد المدرسي وتوصية من معلم.",
+     "source": "s6",
+     "quote": "Secondary School Counselor Evaluation Teacher Recommendation"
+    },
+    {
+     "kind": "INTERVIEW",
+     "required": false,
+     "noteEn": "InitialView or Vericant interviews are recommended, not required, for nonnative English speakers.",
+     "noteAr": "يوصى بمقابلات InitialView أو Vericant لغير الناطقين بالإنجليزية، وهي غير إلزامية.",
+     "source": "s7",
+     "quote": "InitialView or Vericant interviews are recommended for nonnative English speakers but aren't required."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "EARLY_DECISION",
+     "date": "2026-11-02",
+     "labelEn": "Early Decision",
+     "labelAr": "القرار المبكر",
+     "source": "s8",
+     "quote": "Early Decision Timeline Deadline: November 2 Notified by: December 15"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "REGULAR_DECISION",
+     "date": "2027-01-04",
+     "labelEn": "Regular Decision",
+     "labelAr": "القرار العادي",
+     "source": "s8",
+     "quote": "Regular Decision Timeline Deadline: January 4"
+    }
+   ],
+   "curriculumRules": {
+    "IB": {
+     "accepted": true,
+     "notesEn": "IB candidates send expected (predicted) results with the application. No minimum points are published.",
+     "notesAr": "يرسل طلاب البكالوريا الدولية نتائجهم المتوقعة مع الطلب. لا يوجد حد أدنى منشور للنقاط.",
+     "source": "s7",
+     "quote": "If you are preparing for the International Baccalaureate or the General Certificate of Education (GCE) A-level examinations, please send your expected exam results.",
+     "subjects": []
+    },
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "A-level candidates send expected (predicted) results with the application. No grade profile is published.",
+     "notesAr": "يرسل طلاب المستوى المتقدم A-level نتائجهم المتوقعة مع الطلب. لا يوجد ملف درجات منشور.",
+     "source": "s7",
+     "quote": "If you are preparing for the International Baccalaureate or the General Certificate of Education (GCE) A-level examinations, please send your expected exam results.",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "carnegie-mellon-ai",
+     "status": "EXISTS",
+     "nameEn": "Artificial Intelligence BS",
+     "nameAr": "بكالوريوس العلوم في الذكاء الاصطناعي",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://www.cs.cmu.edu/bs-in-artificial-intelligence/",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "english_language"
+        ],
+        "noteEn": "4 years of English",
+        "noteAr": "4 سنوات من اللغة الإنجليزية",
+        "source": "s2",
+        "quote": "High School Course Requirements 4 years English 4 years Mathematics* 1 year Physics 2 years Chemistry, Biology or Computer Science 2 years Foreign Language 3 electives"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "noteEn": "4 years of mathematics, preferably including calculus",
+        "noteAr": "4 سنوات من الرياضيات، ويفضل أن تشمل التفاضل والتكامل",
+        "source": "s2",
+        "quote": "High School Course Requirements 4 years English 4 years Mathematics* 1 year Physics 2 years Chemistry, Biology or Computer Science 2 years Foreign Language 3 electives"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "physics"
+        ],
+        "noteEn": "1 year of physics",
+        "noteAr": "سنة واحدة من الفيزياء",
+        "source": "s2",
+        "quote": "High School Course Requirements 4 years English 4 years Mathematics* 1 year Physics 2 years Chemistry, Biology or Computer Science 2 years Foreign Language 3 electives"
+       },
+       {
+        "type": "ONE_OF",
+        "keys": [
+         "chemistry",
+         "biology",
+         "computer_science"
+        ],
+        "noteEn": "2 years of chemistry, biology or computer science",
+        "noteAr": "سنتان من الكيمياء أو الأحياء أو علوم الحاسوب",
+        "source": "s2",
+        "quote": "High School Course Requirements 4 years English 4 years Mathematics* 1 year Physics 2 years Chemistry, Biology or Computer Science 2 years Foreign Language 3 electives"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "second_language"
+        ],
+        "noteEn": "2 years of a foreign language",
+        "noteAr": "سنتان من لغة أجنبية",
+        "source": "s2",
+        "quote": "High School Course Requirements 4 years English 4 years Mathematics* 1 year Physics 2 years Chemistry, Biology or Computer Science 2 years Foreign Language 3 electives"
+       }
+      ],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "The School of Computer Science requires an SAT or an ACT score (either one).",
+        "noteAr": "تشترط كلية علوم الحاسوب تقديم درجة SAT أو ACT (أحدهما).",
+        "source": "s10",
+        "quote": "The School of Computer Science requires an SAT or an ACT score."
+       },
+       {
+        "test": "ACT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "The School of Computer Science requires an SAT or an ACT score (either one).",
+        "noteAr": "تشترط كلية علوم الحاسوب تقديم درجة SAT أو ACT (أحدهما).",
+        "source": "s10",
+        "quote": "The School of Computer Science requires an SAT or an ACT score."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Apply to the School of Computer Science; the AI major is declared in the spring of the first year.",
+        "noteAr": "يتقدم الطالب إلى كلية علوم الحاسوب، ويختار تخصص الذكاء الاصطناعي في فصل الربيع من السنة الأولى.",
+        "source": "s1",
+        "quote": "If you’re applying to CMU, you first need to be accepted into the School of Computer Science. Once you’re at CMU and enrolled in SCS, you can declare a BSAI major in the spring of your first year."
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "cmu-computer-science-bs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BS",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://www.cmu.edu/admission/majors-programs/school-of-computer-science/computer-science",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "english_language"
+        ],
+        "noteEn": "4 years of English",
+        "noteAr": "4 سنوات من اللغة الإنجليزية",
+        "source": "s4",
+        "quote": "High School Course Requirements 4 years English 4 years Mathematics* 1 year Physics 2 years Chemistry, Biology or Computer Science 2 years Foreign Language 3 electives"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "noteEn": "4 years of mathematics, preferably including calculus",
+        "noteAr": "4 سنوات من الرياضيات، ويفضل أن تشمل التفاضل والتكامل",
+        "source": "s4",
+        "quote": "High School Course Requirements 4 years English 4 years Mathematics* 1 year Physics 2 years Chemistry, Biology or Computer Science 2 years Foreign Language 3 electives"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "physics"
+        ],
+        "noteEn": "1 year of physics",
+        "noteAr": "سنة واحدة من الفيزياء",
+        "source": "s4",
+        "quote": "High School Course Requirements 4 years English 4 years Mathematics* 1 year Physics 2 years Chemistry, Biology or Computer Science 2 years Foreign Language 3 electives"
+       },
+       {
+        "type": "ONE_OF",
+        "keys": [
+         "chemistry",
+         "biology",
+         "computer_science"
+        ],
+        "noteEn": "2 years of chemistry, biology or computer science",
+        "noteAr": "سنتان من الكيمياء أو الأحياء أو علوم الحاسوب",
+        "source": "s4",
+        "quote": "High School Course Requirements 4 years English 4 years Mathematics* 1 year Physics 2 years Chemistry, Biology or Computer Science 2 years Foreign Language 3 electives"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "second_language"
+        ],
+        "noteEn": "2 years of a foreign language",
+        "noteAr": "سنتان من لغة أجنبية",
+        "source": "s4",
+        "quote": "High School Course Requirements 4 years English 4 years Mathematics* 1 year Physics 2 years Chemistry, Biology or Computer Science 2 years Foreign Language 3 electives"
+       }
+      ],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "The School of Computer Science requires an SAT or an ACT score (either one).",
+        "noteAr": "تشترط كلية علوم الحاسوب تقديم درجة SAT أو ACT (أحدهما).",
+        "source": "s10",
+        "quote": "The School of Computer Science requires an SAT or an ACT score."
+       },
+       {
+        "test": "ACT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "The School of Computer Science requires an SAT or an ACT score (either one).",
+        "noteAr": "تشترط كلية علوم الحاسوب تقديم درجة SAT أو ACT (أحدهما).",
+        "source": "s10",
+        "quote": "The School of Computer Science requires an SAT or an ACT score."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Students apply to and are admitted directly into the School of Computer Science.",
+        "noteAr": "يتقدم الطلاب إلى كلية علوم الحاسوب ويقبلون فيها مباشرة.",
+        "source": "s3",
+        "quote": "Students apply to, and are directly admitted into, the School of Computer Science."
+       }
+      ],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "carnegie-mellon-ce",
+     "status": "REPLACED",
+     "nameEn": "Electrical and Computer Engineering BS",
+     "nameAr": "بكالوريوس العلوم في الهندسة الكهربائية وهندسة الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://www.ece.cmu.edu/academics/bs-in-ece/index.html",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "english_language"
+        ],
+        "noteEn": "4 years of English",
+        "noteAr": "4 سنوات من اللغة الإنجليزية",
+        "source": "s9",
+        "quote": "College of Engineering 4 years English 4 years Mathematics* 1 year Chemistry 1 year Physics 1 year Biology 2 years Foreign Language 3 Electives"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "noteEn": "4 years of mathematics, preferably including calculus",
+        "noteAr": "4 سنوات من الرياضيات، ويفضل أن تشمل التفاضل والتكامل",
+        "source": "s9",
+        "quote": "College of Engineering 4 years English 4 years Mathematics* 1 year Chemistry 1 year Physics 1 year Biology 2 years Foreign Language 3 Electives"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "chemistry"
+        ],
+        "noteEn": "1 year of chemistry",
+        "noteAr": "سنة واحدة من الكيمياء",
+        "source": "s9",
+        "quote": "College of Engineering 4 years English 4 years Mathematics* 1 year Chemistry 1 year Physics 1 year Biology 2 years Foreign Language 3 Electives"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "physics"
+        ],
+        "noteEn": "1 year of physics",
+        "noteAr": "سنة واحدة من الفيزياء",
+        "source": "s9",
+        "quote": "College of Engineering 4 years English 4 years Mathematics* 1 year Chemistry 1 year Physics 1 year Biology 2 years Foreign Language 3 Electives"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "biology"
+        ],
+        "noteEn": "1 year of biology",
+        "noteAr": "سنة واحدة من الأحياء",
+        "source": "s9",
+        "quote": "College of Engineering 4 years English 4 years Mathematics* 1 year Chemistry 1 year Physics 1 year Biology 2 years Foreign Language 3 Electives"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "second_language"
+        ],
+        "noteEn": "2 years of a foreign language",
+        "noteAr": "سنتان من لغة أجنبية",
+        "source": "s9",
+        "quote": "College of Engineering 4 years English 4 years Mathematics* 1 year Chemistry 1 year Physics 1 year Biology 2 years Foreign Language 3 Electives"
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "College of Engineering is test flexible: scores are required, but the applicant chooses among SAT, ACT, IB (predicted or actual), AP, Cambridge A-level (predicted or actual) or French Baccalaureate.",
+        "noteAr": "تتبع كلية الهندسة سياسة الاختبارات المرنة: تقديم الدرجات إلزامي، لكن المتقدم يختار بين SAT أو ACT أو البكالوريا الدولية (متوقعة أو فعلية) أو AP أو A-level من كامبريدج (متوقعة أو فعلية) أو البكالوريا الفرنسية.",
+        "source": "s10",
+        "quote": "Test flexible means that students are required to submit test scores in order to complete their application, however, they may choose which type of test(s) they prefer to submit."
+       }
+      ],
+      "source": "s9"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "columbia",
+   "website": "https://www.columbia.edu",
+   "applyVia": "COMMON_APP",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://bulletin.columbia.edu/columbia-engineering/academic-departments-programs/computer-science/undergraduate-programs/computer-science-bs/",
+     "title": "Computer Science (BS) < Columbia Engineering Academic Catalog | Columbia University",
+     "retrievedAt": "2026-09-29T23:54:45.644Z",
+     "hash": "771d8e6af7acd5f6e24d61a9380b519f796937f7852ab574fe45a4e8f6690b21"
+    },
+    {
+     "id": "s2",
+     "url": "https://bulletin.columbia.edu/columbia-engineering/academic-departments-programs/electrical-engineering/undergraduate-programs/electrical-engineering-bs/",
+     "title": "Electrical Engineering (BS) < Columbia Engineering Academic Catalog | Columbia University",
+     "retrievedAt": "2026-09-29T23:49:27.048Z",
+     "hash": "409bfd7923398189bd0f574fddcf6d72dfb567c262ab62f65f707496c1249f23",
+     "waybackTimestamp": "20250808085635",
+     "waybackHash": "2fb3e7d55471934afde89a671ad812f2bcfbb0465ada0aa21c12cfe2f1f6c93f"
+    },
+    {
+     "id": "s3",
+     "url": "https://undergrad.admissions.columbia.edu/testing-policy-update",
+     "title": "Testing Policy Update | Columbia Undergraduate Admissions",
+     "retrievedAt": "2026-06-13T00:00:00Z",
+     "hash": "7b0317c06e4054130fcf9bac4bbea1aff49320d1af3b6194494028a85fdb00d5",
+     "via": "archive:20260613062904"
+    },
+    {
+     "id": "s4",
+     "url": "https://undergrad.admissions.columbia.edu/apply/firstyear",
+     "title": "First-Year Applicants | Columbia Undergraduate Admissions",
+     "retrievedAt": "2026-03-17T00:00:00Z",
+     "hash": "d6555459c0ec455496d06b1face539169bd192a69ee1ae4551b1aeb16a672749",
+     "via": "archive:20260317103106"
+    },
+    {
+     "id": "s5",
+     "url": "https://undergrad.admissions.columbia.edu/apply/international",
+     "title": "International Applicants | Columbia Undergraduate Admissions",
+     "retrievedAt": "2025-09-08T00:00:00Z",
+     "hash": "110c5880b8cd018279202b6b9b3518f939f84c19045dafdbe25d5e2052a10185",
+     "via": "archive:20250908022154"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.engineering.columbia.edu/electrical-engineering-bs",
+     "title": "Electrical Engineering, BS | Columbia Engineering",
+     "retrievedAt": "2026-09-30T00:00:44.553Z",
+     "hash": "bfc984e6964bb155736c9698d47e363de32f597b9fc76497c88ebd66b287a4e5",
+     "waybackTimestamp": "20250612224202",
+     "waybackHash": "7b88465bf05b10fd55bed0ec20f2e1a23d00f5cd61885465ec401cb47edca66d"
+    }
+   ],
+   "english": [],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "OPTIONAL",
+     "minScore": null,
+     "noteEn": "Test optional for the 2026-2027 cycle (fall 2027 entry). SAT or ACT becomes required from the 2027-2028 cycle (fall 2028 entry).",
+     "noteAr": "الاختبارات اختيارية لدورة 2026-2027 (القبول في خريف 2027). ويصبح تقديم SAT أو ACT إلزاميا اعتبارا من دورة 2027-2028 (القبول في خريف 2028).",
+     "source": "s3",
+     "quote": "Columbia College and Columbia Engineering will remain test optional for the upcoming 2026-2027 admissions cycle."
+    },
+    {
+     "test": "ACT",
+     "policy": "OPTIONAL",
+     "minScore": null,
+     "noteEn": "Test optional for the 2026-2027 cycle (fall 2027 entry). SAT or ACT becomes required from the 2027-2028 cycle (fall 2028 entry).",
+     "noteAr": "الاختبارات اختيارية لدورة 2026-2027 (القبول في خريف 2027). ويصبح تقديم SAT أو ACT إلزاميا اعتبارا من دورة 2027-2028 (القبول في خريف 2028).",
+     "source": "s3",
+     "quote": "Columbia College and Columbia Engineering will remain test optional for the upcoming 2026-2027 admissions cycle."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "REFERENCE",
+     "required": true,
+     "noteEn": "Two teacher recommendations from academic subjects; for Columbia Engineering one must come from a math or science teacher.",
+     "noteAr": "توصيتان من معلمين في مواد أكاديمية، ويجب أن تكون إحداهما من معلم رياضيات أو علوم للمتقدمين إلى كلية الهندسة.",
+     "source": "s4",
+     "quote": "Columbia requires two teacher recommendations. These recommendations must come from teachers who taught you in academic disciplines. For applicants to Columbia Engineering, one of the teacher recommendations must come from a math or science teacher."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Applicants must be comfortable with rapid and idiomatic spoken English (see the English Proficiency Requirements page).",
+     "noteAr": "يجب أن يكون المتقدم متمكنا من الإنجليزية المحكية السريعة والاصطلاحية (راجع صفحة متطلبات الكفاءة في اللغة الإنجليزية).",
+     "source": "s5",
+     "quote": "To be considered for admission to Columbia, you must be comfortable with rapid and idiomatic spoken English."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "EARLY_DECISION",
+     "date": "2026-11-01",
+     "labelEn": "Early Decision",
+     "labelAr": "القرار المبكر",
+     "source": "s4",
+     "quote": "November 1 | Early Decision and QuestBridge National College Match application deadline"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "REGULAR_DECISION",
+     "date": "2027-01-01",
+     "labelEn": "Regular Decision",
+     "labelAr": "القرار العادي",
+     "source": "s4",
+     "quote": "January 1 | Regular Decision application deadline"
+    }
+   ],
+   "curriculumRules": {
+    "IB": {
+     "accepted": true,
+     "notesEn": "Accepted; reviewed in the context of the curriculum. No minimum points published.",
+     "notesAr": "مقبولة، وتقيم في سياق المنهج. لا يوجد حد أدنى منشور للنقاط.",
+     "source": "s5",
+     "quote": "Columbia accepts all secondary school curricula (e.g., International Baccalaureate, Cambridge A Levels, National School curricula, etc.), and applications are reviewed within the context of your curriculum.",
+     "subjects": []
+    },
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "Cambridge A Levels accepted; reviewed in the context of the curriculum. No grade profile published.",
+     "notesAr": "شهادات A Level من كامبريدج مقبولة، وتقيم في سياق المنهج. لا يوجد ملف درجات منشور.",
+     "source": "s5",
+     "quote": "Columbia accepts all secondary school curricula (e.g., International Baccalaureate, Cambridge A Levels, National School curricula, etc.), and applications are reviewed within the context of your curriculum.",
+     "subjects": []
+    },
+    "UAE_MOE": {
+     "accepted": true,
+     "notesEn": "National school curricula are accepted and reviewed in context. No minimum percentage published.",
+     "notesAr": "المناهج الوطنية مقبولة وتقيم في سياقها. لا توجد نسبة دنيا منشورة.",
+     "source": "s5",
+     "quote": "Columbia accepts all secondary school curricula (e.g., International Baccalaureate, Cambridge A Levels, National School curricula, etc.), and applications are reviewed within the context of your curriculum.",
+     "subjects": []
+    },
+    "CBSE": {
+     "accepted": true,
+     "notesEn": "National school curricula are accepted and reviewed in context. No minimum percentage published.",
+     "notesAr": "المناهج الوطنية مقبولة وتقيم في سياقها. لا توجد نسبة دنيا منشورة.",
+     "source": "s5",
+     "quote": "Columbia accepts all secondary school curricula (e.g., International Baccalaureate, Cambridge A Levels, National School curricula, etc.), and applications are reviewed within the context of your curriculum.",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "columbia-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BS",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://bulletin.columbia.edu/columbia-engineering/academic-departments-programs/computer-science/undergraduate-programs/computer-science-bs/",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "mathematics",
+         "calculus"
+        ],
+        "noteEn": "Four years of mathematics through calculus (strongly advised)",
+        "noteAr": "أربع سنوات من الرياضيات حتى التفاضل والتكامل (موصى بها بشدة)",
+        "source": "s4",
+        "quote": "Four years of mathematics through calculus-unless you have already completed what is available at your school"
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "physics",
+         "chemistry"
+        ],
+        "noteEn": "Four years of laboratory science including one year each of chemistry and physics",
+        "noteAr": "أربع سنوات من العلوم المخبرية تشمل سنة من الكيمياء وسنة من الفيزياء",
+        "source": "s4",
+        "quote": "Four years of laboratory science, including one year of chemistry and one year of physics-preferably in the last two years of secondary school"
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "english_literature"
+        ],
+        "noteEn": "Four years of English literature and composition",
+        "noteAr": "أربع سنوات من الأدب الإنجليزي والكتابة",
+        "source": "s4",
+        "quote": "Four years of English literature and composition"
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "second_language"
+        ],
+        "noteEn": "Two to three years of a world language",
+        "noteAr": "سنتان إلى ثلاث سنوات من لغة أجنبية",
+        "source": "s4",
+        "quote": "Two to three years of a world language (ancient or modern) taken during high school"
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "columbia-ee",
+     "status": "EXISTS",
+     "nameEn": "Electrical Engineering BS",
+     "nameAr": "بكالوريوس العلوم في الهندسة الكهربائية",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://bulletin.columbia.edu/columbia-engineering/academic-departments-programs/electrical-engineering/undergraduate-programs/electrical-engineering-bs/",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "mathematics",
+         "calculus"
+        ],
+        "noteEn": "Four years of mathematics through calculus (strongly advised)",
+        "noteAr": "أربع سنوات من الرياضيات حتى التفاضل والتكامل (موصى بها بشدة)",
+        "source": "s4",
+        "quote": "Four years of mathematics through calculus-unless you have already completed what is available at your school"
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "physics",
+         "chemistry"
+        ],
+        "noteEn": "Four years of laboratory science including one year each of chemistry and physics",
+        "noteAr": "أربع سنوات من العلوم المخبرية تشمل سنة من الكيمياء وسنة من الفيزياء",
+        "source": "s4",
+        "quote": "Four years of laboratory science, including one year of chemistry and one year of physics-preferably in the last two years of secondary school"
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "english_literature"
+        ],
+        "noteEn": "Four years of English literature and composition",
+        "noteAr": "أربع سنوات من الأدب الإنجليزي والكتابة",
+        "source": "s4",
+        "quote": "Four years of English literature and composition"
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "second_language"
+        ],
+        "noteEn": "Two to three years of a world language",
+        "noteAr": "سنتان إلى ثلاث سنوات من لغة أجنبية",
+        "source": "s4",
+        "quote": "Two to three years of a world language (ancient or modern) taken during high school"
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [],
+      "source": "s4"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "cornell",
+   "website": "https://www.cornell.edu",
+   "applyVia": "COMMON_APP",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.duffield.cornell.edu/ece/degree/electrical-computer-engineering-bs-requirements/",
+     "title": "B.S. in Electrical and Computer Engineering | School of Electrical and Computer Engineering | Cornell Duffield Engineering",
+     "retrievedAt": "2026-09-29T23:53:23.142Z",
+     "hash": "3704b3f29594c110dcb449d8d93d2d7d9ed0b9db4cd03455de0b7fab489a7fb8"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.cs.cornell.edu/bachelor-science-computer-science",
+     "title": "Bachelors of Computer Science (BS) | Cornell Bowers",
+     "retrievedAt": "2026-09-29T23:55:02.387Z",
+     "hash": "9f9b0a84c71ad435e495e2eb6c515dbb6265a6d7d80da2122167dc87ef8c487b"
+    },
+    {
+     "id": "s3",
+     "url": "https://bowers.cornell.edu/bachelor-science-computer-science/apply",
+     "title": "Bachelors of Computer Science (BS) | Cornell Bowers",
+     "retrievedAt": "2026-09-29T23:55:02.195Z",
+     "hash": "2f65f3e3e5c82908df8b1f7ee25425d957b65d7238cdba88cfabff821765ccac"
+    },
+    {
+     "id": "s4",
+     "url": "https://admissions.cornell.edu/policies/standardized-testing-policy",
+     "title": "Standardized Testing Policy | Undergraduate Admissions",
+     "retrievedAt": "2026-09-29T23:50:54.865Z",
+     "hash": "2df9b01862a7f46a9eb9c24252a8d76da53f1f1cfeaf2674f8b283a13a8d1c06",
+     "waybackTimestamp": "20251001202641",
+     "waybackHash": "e03348a7d42fe68b83fcf40c5a98ff8d378de35b6198da4adbf7cb0ac8873d89"
+    },
+    {
+     "id": "s5",
+     "url": "https://admissions.cornell.edu/first-year-duffield-engineering-applicants",
+     "title": "First-Year Duffield Engineering Applicants | Undergraduate Admissions",
+     "retrievedAt": "2026-09-29T23:49:46.158Z",
+     "hash": "1575b986dde647756112f6fef98a73c98e71d1dddd0048f649e77a80a33dea9a"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.duffield.cornell.edu/admissions/how-to-prepare-in-high-school/",
+     "title": "How to Prepare in High School | Cornell Duffield Engineering",
+     "retrievedAt": "2026-09-29T23:49:38.384Z",
+     "hash": "f64b8883db6e6215a634d10a4903e96d57104284bdf90d0a50879a56e6a6eee2"
+    },
+    {
+     "id": "s7",
+     "url": "https://admissions.cornell.edu/how-to-apply/first-year-applicants",
+     "title": "First-Year Applicants | Undergraduate Admissions",
+     "retrievedAt": "2026-09-29T23:50:15.743Z",
+     "hash": "8aedeea2055a144ed38496397cf04c36e0d4ff70e0fcaa19afc913a9aa57b7dd"
+    },
+    {
+     "id": "s8",
+     "url": "https://faq.enrollment.cornell.edu/kb/article/199-when-is-the-application-deadline/",
+     "title": "When is the application deadline? - Frequently Asked Questions",
+     "retrievedAt": "2026-09-29T23:49:56.803Z",
+     "hash": "d1ec98290ad6c7236b04cd26d5398d934d8fe5c4d474fd64d8bfc132f04fe1f9"
+    }
+   ],
+   "english": [
+    {
+     "test": "TOEFL",
+     "minOverall": 100,
+     "minComponent": null,
+     "waiverNoteEn": "Applies to TOEFL exams taken before January 2026. Not needed if English is your native language or English has been the primary language of instruction for the past four years.",
+     "waiverNoteAr": "ينطبق على اختبارات TOEFL التي أجريت قبل يناير 2026. لا يلزم إذا كانت الإنجليزية لغتك الأم أو كانت لغة التدريس الرئيسية خلال السنوات الأربع الماضية.",
+     "source": "s4",
+     "quote": "TOEFL exams taken prior to January 2026: minimum score of 100"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 5,
+     "minComponent": null,
+     "waiverNoteEn": "Applies to TOEFL exams taken January 2026 or later (new scale); 5.5 is recommended. Not needed if English is your native language or English has been the primary language of instruction for the past four years.",
+     "waiverNoteAr": "ينطبق على اختبارات TOEFL التي أجريت في يناير 2026 أو بعده (المقياس الجديد)، ويوصى بدرجة 5.5. لا يلزم إذا كانت الإنجليزية لغتك الأم أو كانت لغة التدريس الرئيسية خلال السنوات الأربع الماضية.",
+     "source": "s4",
+     "quote": "TOEFL exams taken January 2026 or later: minimum score of 5.0, recommended score of 5.5"
+    },
+    {
+     "test": "IELTS",
+     "minOverall": 7.5,
+     "minComponent": null,
+     "waiverNoteEn": "Not needed if English is your native language or English has been the primary language of instruction for the past four years.",
+     "waiverNoteAr": "لا يلزم إذا كانت الإنجليزية لغتك الأم أو كانت لغة التدريس الرئيسية خلال السنوات الأربع الماضية.",
+     "source": "s4",
+     "quote": "IELTS, minimum score of 7.5"
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 130,
+     "minComponent": null,
+     "waiverNoteEn": "Not needed if English is your native language or English has been the primary language of instruction for the past four years.",
+     "waiverNoteAr": "لا يلزم إذا كانت الإنجليزية لغتك الأم أو كانت لغة التدريس الرئيسية خلال السنوات الأربع الماضية.",
+     "source": "s4",
+     "quote": "Duolingo English Test, minimum score of 130"
+    },
+    {
+     "test": "CAMBRIDGE",
+     "minOverall": 191,
+     "minComponent": null,
+     "waiverNoteEn": "Not needed if English is your native language or English has been the primary language of instruction for the past four years.",
+     "waiverNoteAr": "لا يلزم إذا كانت الإنجليزية لغتك الأم أو كانت لغة التدريس الرئيسية خلال السنوات الأربع الماضية.",
+     "source": "s4",
+     "quote": "Cambridge C1 Advanced or C2 Proficiency, minimum score of 191"
+    }
+   ],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "SAT or ACT required for first-year applicants (either one); scores may be self-reported.",
+     "noteAr": "يشترط تقديم SAT أو ACT (أحدهما) للمتقدمين للسنة الأولى، ويمكن الإبلاغ الذاتي عن الدرجات.",
+     "source": "s4",
+     "quote": "First-year applicants are required to submit the SAT or ACT scores when applying to Cornell."
+    },
+    {
+     "test": "ACT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "SAT or ACT required for first-year applicants (either one); the ACT science section is not required.",
+     "noteAr": "يشترط تقديم SAT أو ACT (أحدهما) للمتقدمين للسنة الأولى، ولا يشترط قسم العلوم في ACT.",
+     "source": "s4",
+     "quote": "First-year applicants are required to submit the SAT or ACT scores when applying to Cornell."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "REFERENCE",
+     "required": true,
+     "noteEn": "Two teacher recommendations are required, plus a counselor recommendation.",
+     "noteAr": "يشترط تقديم توصيتين من معلمين إضافة إلى توصية من المرشد المدرسي.",
+     "source": "s7",
+     "quote": "You're required to submit two teacher recommendations, which should highlight your academic strengths and contributions in the classroom."
+    },
+    {
+     "kind": "PERSONAL_STATEMENT",
+     "required": true,
+     "noteEn": "Cornell University supplement with college-specific essays, as part of the Common Application.",
+     "noteAr": "ملحق جامعة كورنيل الذي يتضمن مقالات خاصة بكل كلية، ضمن التطبيق المشترك.",
+     "source": "s7",
+     "quote": "As part of your Common Application, you'll be asked to fill out the Cornell University supplement, which includes the college- or school-specific essay(s) you'll need to answer."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "EARLY_DECISION",
+     "date": "2026-11-01",
+     "labelEn": "Early Decision",
+     "labelAr": "القرار المبكر",
+     "source": "s8",
+     "quote": "The first-year early decision application deadline is November 1."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "REGULAR_DECISION",
+     "date": "2027-01-02",
+     "labelEn": "Regular Decision",
+     "labelAr": "القرار العادي",
+     "source": "s8",
+     "quote": "The first-year regular decision application deadline is January 2."
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "cornell-ce",
+     "status": "REPLACED",
+     "nameEn": "Electrical and Computer Engineering BS",
+     "nameAr": "بكالوريوس العلوم في الهندسة الكهربائية وهندسة الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://www.duffield.cornell.edu/ece/degree/electrical-computer-engineering-bs-requirements/",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics",
+         "calculus"
+        ],
+        "noteEn": "4 units (years) of mathematics, including calculus",
+        "noteAr": "4 وحدات (سنوات) من الرياضيات، منها التفاضل والتكامل",
+        "source": "s5",
+        "quote": "4 units of mathematics, including one of calculus 1 unit of physics 1 unit of chemistry"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "physics"
+        ],
+        "noteEn": "1 unit (year) of physics",
+        "noteAr": "وحدة (سنة) واحدة من الفيزياء",
+        "source": "s5",
+        "quote": "4 units of mathematics, including one of calculus 1 unit of physics 1 unit of chemistry"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "chemistry"
+        ],
+        "noteEn": "1 unit (year) of chemistry",
+        "noteAr": "وحدة (سنة) واحدة من الكيمياء",
+        "source": "s5",
+        "quote": "4 units of mathematics, including one of calculus 1 unit of physics 1 unit of chemistry"
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "computer_science"
+        ],
+        "noteEn": "1 unit of computer science (recommended, not required)",
+        "noteAr": "وحدة واحدة من علوم الحاسوب (موصى بها وغير إلزامية)",
+        "source": "s5",
+        "quote": "The following courses are recommended but not required. 1 unit of computer science 1 unit of biology"
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "biology"
+        ],
+        "noteEn": "1 unit of biology (recommended, not required)",
+        "noteAr": "وحدة واحدة من الأحياء (موصى بها وغير إلزامية)",
+        "source": "s5",
+        "quote": "The following courses are recommended but not required. 1 unit of computer science 1 unit of biology"
+       }
+      ],
+      "english": [],
+      "tests": [
+       {
+        "test": "AP",
+        "policy": "RECOMMENDED",
+        "minScore": null,
+        "noteEn": "AP and IB scores are encouraged but not required for admission.",
+        "noteAr": "يشجع تقديم درجات AP والبكالوريا الدولية لكنها غير مطلوبة للقبول.",
+        "source": "s6",
+        "quote": "The submission of AP and IB scores are encouraged, but are not a required part of the application for admission."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Admission is to Cornell Duffield Engineering; students affiliate with the ECE major later, in good academic standing.",
+        "noteAr": "يكون القبول في كلية دافيلد للهندسة في كورنيل، ثم ينضم الطالب إلى تخصص الهندسة الكهربائية وهندسة الحاسوب لاحقا إذا كان وضعه الأكاديمي جيدا.",
+        "source": "s1",
+        "quote": "A Duffield Engineering undergraduate who meets the eligibility requirements below can affiliate with the Electrical and Computer Engineering major."
+       },
+       {
+        "kind": "REFERENCE",
+        "required": false,
+        "noteEn": "International or ESL applicants are strongly encouraged to have the second teacher recommendation address their English proficiency.",
+        "noteAr": "يشجع المتقدمون الدوليون أو من يدرسون الإنجليزية كلغة ثانية بشدة على أن تتناول توصية المعلم الثانية كفاءتهم في اللغة الإنجليزية.",
+        "source": "s5",
+        "quote": "*If you are an international or ESL student, we strongly encourage that your second recommendation be from a teacher who can directly address your English proficiency."
+       }
+      ],
+      "source": "s5"
+     },
+     "previous": null
+    },
+    {
+     "key": "cornell-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BS",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://www.cs.cornell.edu/bachelor-science-computer-science",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics",
+         "calculus"
+        ],
+        "noteEn": "4 units (years) of mathematics, including calculus",
+        "noteAr": "4 وحدات (سنوات) من الرياضيات، منها التفاضل والتكامل",
+        "source": "s5",
+        "quote": "4 units of mathematics, including one of calculus 1 unit of physics 1 unit of chemistry"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "physics"
+        ],
+        "noteEn": "1 unit (year) of physics",
+        "noteAr": "وحدة (سنة) واحدة من الفيزياء",
+        "source": "s5",
+        "quote": "4 units of mathematics, including one of calculus 1 unit of physics 1 unit of chemistry"
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "chemistry"
+        ],
+        "noteEn": "1 unit (year) of chemistry",
+        "noteAr": "وحدة (سنة) واحدة من الكيمياء",
+        "source": "s5",
+        "quote": "4 units of mathematics, including one of calculus 1 unit of physics 1 unit of chemistry"
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "computer_science"
+        ],
+        "noteEn": "1 unit of computer science (recommended, not required)",
+        "noteAr": "وحدة واحدة من علوم الحاسوب (موصى بها وغير إلزامية)",
+        "source": "s5",
+        "quote": "The following courses are recommended but not required. 1 unit of computer science 1 unit of biology"
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "biology"
+        ],
+        "noteEn": "1 unit of biology (recommended, not required)",
+        "noteAr": "وحدة واحدة من الأحياء (موصى بها وغير إلزامية)",
+        "source": "s5",
+        "quote": "The following courses are recommended but not required. 1 unit of computer science 1 unit of biology"
+       }
+      ],
+      "english": [],
+      "tests": [
+       {
+        "test": "AP",
+        "policy": "RECOMMENDED",
+        "minScore": null,
+        "noteEn": "AP and IB scores are encouraged but not required for admission.",
+        "noteAr": "يشجع تقديم درجات AP والبكالوريا الدولية لكنها غير مطلوبة للقبول.",
+        "source": "s6",
+        "quote": "The submission of AP and IB scores are encouraged, but are not a required part of the application for admission."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Admission is to Cornell Duffield Engineering, not directly to the major; students affiliate with the major after first-year prerequisites.",
+        "noteAr": "يكون القبول في كلية دافيلد للهندسة في كورنيل وليس في التخصص مباشرة، ثم ينضم الطالب إلى التخصص بعد إكمال المتطلبات المسبقة.",
+        "source": "s3",
+        "quote": "While you’ll indicate your interest in CS on the common app, admission is to Duffield Engineering itself and not directly to the major."
+       },
+       {
+        "kind": "REFERENCE",
+        "required": false,
+        "noteEn": "International or ESL applicants are strongly encouraged to have the second teacher recommendation address their English proficiency.",
+        "noteAr": "يشجع المتقدمون الدوليون أو من يدرسون الإنجليزية كلغة ثانية بشدة على أن تتناول توصية المعلم الثانية كفاءتهم في اللغة الإنجليزية.",
+        "source": "s5",
+        "quote": "*If you are an international or ESL student, we strongly encourage that your second recommendation be from a teacher who can directly address your English proficiency."
+       }
+      ],
+      "source": "s5"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "georgia_tech",
+   "website": "https://www.gatech.edu",
+   "applyVia": "COMMON_APP",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://ece.gatech.edu/computer-engineering-degree",
+     "title": "Computer Engineering Degree | School of Electrical and Computer Engineering",
+     "retrievedAt": "2026-09-29T23:53:32.824Z",
+     "hash": "af2a4858e909215e7e54347beb4e813adeb28bed72dfe520c86c04f2c995eed6"
+    },
+    {
+     "id": "s2",
+     "url": "https://ece.gatech.edu/future-students/undergraduate-admissions",
+     "title": "Undergraduate Admissions | School of Electrical and Computer Engineering",
+     "retrievedAt": "2026-09-29T23:53:32.233Z",
+     "hash": "52b5487bfc3dbdf6fe87f1b528db7995c23f0ee5918b7e1ead40dfe2dc49ee5a"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "georgia-tech-ce",
+     "status": "EXISTS",
+     "nameEn": "Computer Engineering BS",
+     "nameAr": "بكالوريوس العلوم في هندسة الحاسوب",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://ece.gatech.edu/computer-engineering-degree",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Admission to ECE programmes is handled centrally by the Georgia Tech Office of Undergraduate Admission.",
+        "noteAr": "يتولى مكتب القبول الجامعي في جورجيا تك القبول في برامج الهندسة الكهربائية وهندسة الحاسوب مركزيا.",
+        "source": "s2",
+        "quote": "All ECE undergraduate admissions are handled centrally by the Georgia Tech Office of Undergraduate Admission, so head there to learn more about applying to our undergraduate programs."
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
+  }
+ ]
+}

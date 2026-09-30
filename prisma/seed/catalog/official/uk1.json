@@ -1,0 +1,2089 @@
+{
+ "batch": "uk1",
+ "assembledAt": "2026-09-30T02:36:28.814Z",
+ "universities": [
+  {
+   "key": "bath",
+   "website": "https://www.bath.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ucas.com/events/2027-entry-deadline-for-all-undergraduate-courses-except-those-with-a-15-october-deadline-475546",
+     "title": "2027 entry deadline for all undergraduate courses, except those with a 15 October deadline | UCAS",
+     "retrievedAt": "2026-09-29T23:52:05.747Z",
+     "hash": "42e7cce7af0b177d9fe63405d6ee7ddb14c615f2fce64e6ee97f45478ed862fa"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.bath.ac.uk/courses/undergraduate-2027/computer-science/bsc-computer-science/",
+     "title": "Computer Science BSc (Hons)",
+     "retrievedAt": "2026-09-29T23:48:14.598Z",
+     "hash": "5ccc6ef5e7f6144197048bb4fbd0b3729c8c5b4ba0dae8dd06dfa1a79db1fc76",
+     "waybackTimestamp": "20260226212454",
+     "waybackHash": "48a176cd9e7f39dfd0e7ba2a9adad6cbad02279fc34c0bc3cb7b319ffbd2d6cb"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.bath.ac.uk/courses/undergraduate-2027/mechanical-engineering/beng-mechanical-engineering/",
+     "title": "Mechanical Engineering BEng (Hons)",
+     "retrievedAt": "2026-09-29T23:48:10.236Z",
+     "hash": "4c12533f9445918abd5c9e5e9128865a8b7c200c8b92c99781c4bbcb3953a54e"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": false,
+     "noteEn": "Most offers are made in February and March, after the January UCAS deadline.",
+     "noteAr": "تصدر معظم العروض في فبراير ومارس بعد موعد UCAS في يناير.",
+     "source": "s2",
+     "quote": "We take our responsibility to be fair to all applicants seriously, and as a result many decisions need to wait until we have assessed all applications received by the UCAS equal consideration deadline in January."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_EQUAL_CONSIDERATION",
+     "date": "2027-01-13",
+     "labelEn": "UCAS equal consideration deadline (most courses)",
+     "labelAr": "الموعد النهائي للنظر المتساوي عبر UCAS (معظم البرامج)",
+     "source": "s1",
+     "quote": "Applications for all 2027 entry undergraduate courses, except those with a 15 October deadline, should arrive at UCAS by 18:00 (UK time) on 13 January 2027."
+    }
+   ],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "Emirati Secondary School Certificate (Tawjihiyya): Not accepted for direct entry on its own; A levels, the IB Diploma or a recognised foundation course is needed first.",
+     "notesAr": "شهادة الثانوية العامة الإماراتية (التوجيهي): لا تقبل وحدها للقبول المباشر؛ يلزم أولا الحصول على A levels أو دبلوم البكالوريا الدولية أو برنامج تأسيسي معترف به.",
+     "source": "s2",
+     "quote": "Unfortunately we are unable to accept students onto our degrees on the basis of this qualification alone. You will need to take an additional course before applying to us. This could be A levels, the International Baccalaureate Diploma or a recognised foundation course. Please contact us for further advice."
+    },
+    "JORDAN_TAWJIHI": {
+     "accepted": false,
+     "notesEn": "Jordanian Tawjihi: Not accepted for direct entry on its own; A levels, the IB Diploma or a recognised foundation course is needed first.",
+     "notesAr": "التوجيهي الأردني: لا تقبل وحدها للقبول المباشر؛ يلزم أولا الحصول على A levels أو دبلوم البكالوريا الدولية أو برنامج تأسيسي معترف به.",
+     "source": "s2",
+     "quote": "Unfortunately we are unable to accept students onto our degrees on the basis of this qualification alone. You will need to take an additional course before applying to us. This could be A levels, the International Baccalaureate Diploma or a recognised foundation course. Please contact us for further advice."
+    }
+   },
+   "programs": [
+    {
+     "key": "bath-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc (Hons)",
+     "nameAr": "بكالوريوس العلوم (مع مرتبة الشرف) في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.bath.ac.uk/courses/undergraduate-2027/computer-science/bsc-computer-science/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*A*A",
+       "notesEn": "Contextual offer AAA or A*AB. Further Mathematics or Computer Science preferred.",
+       "notesAr": "العرض السياقي AAA أو A*AB. يفضل دراسة الرياضيات الإضافية أو علوم الحاسوب.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s2",
+         "quote": "A*A*A in three A levels including A in Mathematics."
+        }
+       ],
+       "source": "s2",
+       "quote": "A*A*A in three A levels including A in Mathematics."
+      },
+      "IB": {
+       "minimumPoints": 36,
+       "notesEn": "Standard Level Mathematics: Applications and Interpretations is not accepted.",
+       "notesAr": "لا تقبل مادة الرياضيات: التطبيقات والتفسير بالمستوى العادي.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s2",
+         "quote": "36 points overall and 7, 7, 6 in three Higher Level subjects including 6 in either HL Mathematics."
+        }
+       ],
+       "source": "s2",
+       "quote": "36 points overall and 7, 7, 6 in three Higher Level subjects including 6 in either HL Mathematics."
+      },
+      "AMERICAN": {
+       "notesEn": "Three AP tests at 5 including Calculus BC; Calculus AB, AP Seminar and AP Research do not count. SAT or ACT scores are considered if taken.",
+       "notesAr": "ثلاثة اختبارات AP بدرجة 5 منها Calculus BC؛ لا تحتسب Calculus AB وAP Seminar وAP Research. تؤخذ درجات SAT أو ACT في الاعتبار إن وجدت.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "5",
+         "source": "s2",
+         "quote": "5, 5, 5 in three Advanced Placement Tests including Calculus BC."
+        }
+       ],
+       "source": "s2",
+       "quote": "5, 5, 5 in three Advanced Placement Tests including Calculus BC."
+      },
+      "CBSE": {
+       "minimumPercent": 85,
+       "notesEn": "Must study Mathematics, not Applied Mathematics. Physical Education does not count.",
+       "notesAr": "يجب دراسة الرياضيات وليس الرياضيات التطبيقية. لا تحتسب التربية البدنية.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "source": "s2",
+         "quote": "An average of 85% across four subjects with 85% in Mathematics."
+        }
+       ],
+       "source": "s2",
+       "quote": "An average of 85% across four subjects with 85% in Mathematics."
+      },
+      "ISC": {
+       "minimumPercent": 85,
+       "notesEn": "Requirements stated for the CBSE and CISCE boards.",
+       "notesAr": "الشروط محددة لمجلسي CBSE وCISCE.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "source": "s2",
+         "quote": "An average of 85% across four subjects with 85% in Mathematics."
+        }
+       ],
+       "source": "s2",
+       "quote": "An average of 85% across four subjects with 85% in Mathematics."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": "Not needed if GCSE English Language or Literature grade 4 or C is met (English category C).",
+        "waiverNoteAr": "لا يلزم إذا تحقق شرط اللغة الإنجليزية في GCSE بدرجة 4 أو C (الفئة C).",
+        "source": "s2",
+        "quote": "IELTS: 6.5 overall with no less than 6.0 in all components"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 4.5,
+        "minComponent": 4,
+        "waiverNoteEn": "New TOEFL iBT scale for tests taken after 21 January 2026 (older tests: 90 overall, 21 per component).",
+        "waiverNoteAr": "مقياس TOEFL iBT الجديد للاختبارات بعد 21 يناير 2026 (الاختبارات الأقدم: 90 إجمالا و21 لكل مهارة).",
+        "source": "s2",
+        "quote": "TOEFL iBT (taken after 21 January 2026) 4.5 overall with a minimum 4.0 in all components"
+       },
+       {
+        "test": "PTE",
+        "minOverall": 62,
+        "minComponent": 59,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s2",
+        "quote": "The Pearson Test of English Academic (PTE Academic): 62 with no less than 59 in any element"
+       },
+       {
+        "test": "DUOLINGO",
+        "minOverall": 120,
+        "minComponent": null,
+        "waiverNoteEn": "Sub scores also required: Speaking 110, Writing 110, Reading 110, Listening 105.",
+        "waiverNoteAr": "يشترط أيضا: التحدث 110، الكتابة 110، القراءة 110، الاستماع 105.",
+        "source": "s2",
+        "quote": "Duolingo (taken after 1 July 2024): 120 overall with sub scores of Speaking 110, Writing 110, Reading 110, Listening 105"
+       },
+       {
+        "test": "LANGUAGECERT",
+        "minOverall": 70,
+        "minComponent": 65,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s2",
+        "quote": "LanguageCert Academic SELT or LanguageCert Academic (Test Centre or Online): 70 overall, with no less than 65 in each component"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "PERSONAL_STATEMENT",
+        "required": true,
+        "noteEn": "Assessed on the UCAS personal statement only; it must be relevant to this subject.",
+        "noteAr": "يقيم الطلب على البيان الشخصي المقدم عبر UCAS فقط، ويجب أن يكون متعلقا بهذا التخصص.",
+        "source": "s2",
+        "quote": "We will not usually consider alternative or supplementary personal statements for this course- your application will be assessed based on the personal statement you submit through UCAS only."
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "bath-me",
+     "status": "EXISTS",
+     "nameEn": "Mechanical Engineering BEng (Hons)",
+     "nameAr": "بكالوريوس الهندسة (مع مرتبة الشرف) في الهندسة الميكانيكية",
+     "degree": "BEng",
+     "durationYears": 3,
+     "url": "https://www.bath.ac.uk/courses/undergraduate-2027/mechanical-engineering/beng-mechanical-engineering/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*A*A",
+       "notesEn": "Contextual offer AAA or A*AB.",
+       "notesAr": "العرض السياقي AAA أو A*AB.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A*",
+         "source": "s3",
+         "quote": "A*A*A in three A levels including A* in Mathematics and A in Physics"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s3",
+         "quote": "A*A*A in three A levels including A* in Mathematics and A in Physics"
+        }
+       ],
+       "source": "s3",
+       "quote": "A*A*A in three A levels including A* in Mathematics and A in Physics"
+      },
+      "IB": {
+       "minimumPoints": 36,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "7",
+         "source": "s3",
+         "quote": "36 points overall and 7, 7, 6 in three Higher Level subjects including 6 in Physics and 7 in either HL Mathematics."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s3",
+         "quote": "36 points overall and 7, 7, 6 in three Higher Level subjects including 6 in Physics and 7 in either HL Mathematics."
+        }
+       ],
+       "source": "s3",
+       "quote": "36 points overall and 7, 7, 6 in three Higher Level subjects including 6 in Physics and 7 in either HL Mathematics."
+      },
+      "AMERICAN": {
+       "notesEn": "Alternatively 5, 5, 5 including Calculus BC and two of Physics 2, Physics C: Electricity and Magnetism, Physics C: Mechanics.",
+       "notesAr": "أو 5، 5، 5 تشمل Calculus BC واثنتين من Physics 2 وPhysics C: الكهرباء والمغناطيسية وPhysics C: الميكانيكا.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "5",
+         "source": "s3",
+         "quote": "5, 5, 5 in three Advanced Placement Tests including Calculus BC and Physics 1"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "5",
+         "source": "s3",
+         "quote": "5, 5, 5 in three Advanced Placement Tests including Calculus BC and Physics 1"
+        }
+       ],
+       "source": "s3",
+       "quote": "5, 5, 5 in three Advanced Placement Tests including Calculus BC and Physics 1"
+      },
+      "CBSE": {
+       "minimumPercent": 85,
+       "notesEn": "Must study Mathematics, not Applied Mathematics.",
+       "notesAr": "يجب دراسة الرياضيات وليس الرياضيات التطبيقية.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "source": "s3",
+         "quote": "An average of 85% across four subjects with 85% in Mathematics and 85% in Physics."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "source": "s3",
+         "quote": "An average of 85% across four subjects with 85% in Mathematics and 85% in Physics."
+        }
+       ],
+       "source": "s3",
+       "quote": "An average of 85% across four subjects with 85% in Mathematics and 85% in Physics."
+      },
+      "ISC": {
+       "minimumPercent": 85,
+       "notesEn": "Requirements stated for the CBSE and CISCE boards.",
+       "notesAr": "الشروط محددة لمجلسي CBSE وCISCE.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "source": "s3",
+         "quote": "An average of 85% across four subjects with 85% in Mathematics and 85% in Physics."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "source": "s3",
+         "quote": "An average of 85% across four subjects with 85% in Mathematics and 85% in Physics."
+        }
+       ],
+       "source": "s3",
+       "quote": "An average of 85% across four subjects with 85% in Mathematics and 85% in Physics."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": "Not needed if GCSE English Language or Literature grade 4 or C is met (English category C).",
+        "waiverNoteAr": "لا يلزم إذا تحقق شرط اللغة الإنجليزية في GCSE بدرجة 4 أو C (الفئة C).",
+        "source": "s3",
+        "quote": "IELTS: 6.5 overall with no less than 6.0 in all components"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 4.5,
+        "minComponent": 4,
+        "waiverNoteEn": "New TOEFL iBT scale for tests taken after 21 January 2026 (older tests: 90 overall, 21 per component).",
+        "waiverNoteAr": "مقياس TOEFL iBT الجديد للاختبارات بعد 21 يناير 2026 (الاختبارات الأقدم: 90 إجمالا و21 لكل مهارة).",
+        "source": "s3",
+        "quote": "TOEFL iBT (taken after 21 January 2026) 4.5 overall with a minimum 4.0 in all components"
+       },
+       {
+        "test": "PTE",
+        "minOverall": 62,
+        "minComponent": 59,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s3",
+        "quote": "The Pearson Test of English Academic (PTE Academic): 62 with no less than 59 in any element"
+       },
+       {
+        "test": "DUOLINGO",
+        "minOverall": 120,
+        "minComponent": null,
+        "waiverNoteEn": "Sub scores also required: Speaking 110, Writing 110, Reading 110, Listening 105.",
+        "waiverNoteAr": "يشترط أيضا: التحدث 110، الكتابة 110، القراءة 110، الاستماع 105.",
+        "source": "s3",
+        "quote": "Duolingo (taken after 1 July 2024): 120 overall with sub scores of Speaking 110, Writing 110, Reading 110, Listening 105"
+       },
+       {
+        "test": "LANGUAGECERT",
+        "minOverall": 70,
+        "minComponent": 65,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s3",
+        "quote": "LanguageCert Academic SELT or LanguageCert Academic (Test Centre or Online): 70 overall, with no less than 65 in each component"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "PERSONAL_STATEMENT",
+        "required": true,
+        "noteEn": "Assessed on the UCAS personal statement only; it must be relevant to this subject.",
+        "noteAr": "يقيم الطلب على البيان الشخصي المقدم عبر UCAS فقط، ويجب أن يكون متعلقا بهذا التخصص.",
+        "source": "s3",
+        "quote": "We will not usually consider alternative or supplementary personal statements for this course- your application will be assessed based on the personal statement you submit through UCAS only."
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "birmingham",
+   "website": "https://www.birmingham.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ucas.com/events/2027-entry-deadline-for-all-undergraduate-courses-except-those-with-a-15-october-deadline-475546",
+     "title": "2027 entry deadline for all undergraduate courses, except those with a 15 October deadline | UCAS",
+     "retrievedAt": "2026-09-29T23:52:05.747Z",
+     "hash": "42e7cce7af0b177d9fe63405d6ee7ddb14c615f2fce64e6ee97f45478ed862fa"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.ucas.com/events/2027-entry-deadline-for-the-universities-of-oxford-and-cambridge-and-most-courses-in-medicine-475536",
+     "title": "2027 entry deadline for the universities of Oxford and Cambridge, and most courses in medicine, veterinary medicine/science, and dentistry | UCAS",
+     "retrievedAt": "2026-09-29T23:52:48.839Z",
+     "hash": "125518b79ea6c03dff6513acf5144845b0afab760706976f07eff2864102f901"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.birmingham.ac.uk/international/students/country/uae",
+     "title": "UAE",
+     "retrievedAt": "2026-09-29T23:48:03.657Z",
+     "hash": "92aa6315de4aa1c0f318195a4e626b83944829e4ab6493d043f38d49b35d9322",
+     "waybackTimestamp": "20250803142152",
+     "waybackHash": "1ca2eff78231c9ef14d87cb91d0418d68f3086e59f67e50e7f0ef36ad8ae493e"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.birmingham.ac.uk/study/undergraduate/subjects/computer-science-courses/artificial-intelligence-ai-computer-science-bsc",
+     "title": "Artificial Intelligence (AI) and Computer Science BSc - University of Birmingham",
+     "retrievedAt": "2026-09-29T23:48:39.015Z",
+     "hash": "b3e396859d2bbd32c21120943f6a39e672a90129a54499a8ef4df96693195508",
+     "waybackTimestamp": "20250926143021",
+     "waybackHash": "ed1f43c297463db1edca42328045d9e80fc5d81501344fbd4d324beb0da35b1e"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.birmingham.ac.uk/international/students/country/usa",
+     "title": "Welcoming American students to Birmingham - University of Birmingham",
+     "retrievedAt": "2026-09-29T23:48:13.548Z",
+     "hash": "441a2879d3efe290436ac4b2d29ee6bcc9bd2a1f8c97b4917ded480543be38b7"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.birmingham.ac.uk/international/students/country/india",
+     "title": "Welcoming Indian students to Birmingham - University of Birmingham",
+     "retrievedAt": "2026-09-29T23:48:18.382Z",
+     "hash": "aab732a59391d9f2bd8af70923b532d14bd32ea79eaffe3509997a7fff8f3a71"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.birmingham.ac.uk/study/undergraduate/apply/entry-requirements/international-entry-requirements",
+     "title": "International entry requirements - University of Birmingham",
+     "retrievedAt": "2026-09-29T23:48:08.673Z",
+     "hash": "f5ff3df1c2a6e9fcc98108ebe9b705b9bc16ebf76e084fb5335bd96179353152"
+    },
+    {
+     "id": "s8",
+     "url": "https://www.birmingham.ac.uk/study/undergraduate/subjects/computer-science-courses/computer-science-bsc",
+     "title": "Computer Science BSc - University of Birmingham",
+     "retrievedAt": "2026-09-29T23:52:07.821Z",
+     "hash": "2a77c396f920022951ca654421a82dea49b89939ef89209cd60faeb0165cf848",
+     "waybackTimestamp": "20250830104455",
+     "waybackHash": "760cd98d43cca8ed8ecb1e0df55d52b464d2063c95b565da5d887b1bab6528bb"
+    },
+    {
+     "id": "s9",
+     "url": "https://www.birmingham.ac.uk/study/undergraduate/subjects/medicine-courses/medicine-and-surgery-mbchb",
+     "title": "Medicine and Surgery MBChB - University of Birmingham",
+     "retrievedAt": "2026-09-29T23:52:10.118Z",
+     "hash": "661f7a5c2c3c59fdc7157d6899a34cbe83cdcdcd3aefe83ec7519f32f20b714f",
+     "waybackTimestamp": "20250911025558",
+     "waybackHash": "811f2fce3572379642925c8a9ca8bcbf7f3c6e421c59e3f2ea6dbd86df20c5ae"
+    },
+    {
+     "id": "s10",
+     "url": "https://www.birmingham.ac.uk/about/college-of-medicine-and-health/birmingham-medical-school/applying-to-medicine/entry-requirements-medicine-and-surgery-five-year",
+     "title": "Entry Requirements - Medicine and Surgery (five-year) - University of Birmingham",
+     "retrievedAt": "2026-09-29T23:52:53.366Z",
+     "hash": "05ec7d706a0615744a98f8539dcf4a43d1738ed32e6f74f2a6bb2e5cb6f67f7c"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "FOUNDATION_REQUIRED",
+     "required": false,
+     "noteEn": "Tawjihiyya holders with 85% or above are considered for the Birmingham International Academy foundation route (85% in Mathematics for the Engineering and Physical Sciences Pathway).",
+     "noteAr": "يُنظر في حملة التوجيهي بمعدل 85% فأكثر للمسار التأسيسي في أكاديمية برمنغهام الدولية (85% في الرياضيات لمسار الهندسة والعلوم الفيزيائية).",
+     "source": "s3",
+     "quote": "Holders of the Tawjihiyya with an overall average of 85% or above will be considered for entry. This should include at least 85% in Mathematics for our Engineering and Physical Sciences Pathway."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_EQUAL_CONSIDERATION",
+     "date": "2027-01-13",
+     "labelEn": "UCAS equal consideration deadline (most courses)",
+     "labelAr": "الموعد النهائي للنظر المتساوي عبر UCAS (معظم البرامج)",
+     "source": "s1",
+     "quote": "Applications for all 2027 entry undergraduate courses, except those with a 15 October deadline, should arrive at UCAS by 18:00 (UK time) on 13 January 2027."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_OXBRIDGE_MEDICINE",
+     "date": "2026-10-15",
+     "labelEn": "UCAS deadline for Oxford, Cambridge and most medicine courses",
+     "labelAr": "الموعد النهائي عبر UCAS لجامعتي أكسفورد وكامبريدج ومعظم برامج الطب",
+     "source": "s2",
+     "quote": "15 October 2026"
+    }
+   ],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "The Emirati Tawjihiyya is not usually accepted for direct entry; a foundation programme is needed. A levels or the IB are accepted.",
+     "notesAr": "لا تقبل شهادة التوجيهي الإماراتية عادة للقبول المباشر؛ يلزم برنامج تأسيسي. تقبل A levels والبكالوريا الدولية.",
+     "source": "s3",
+     "quote": "Holders of the Tawjihiyya are not usually eligible for direct entry onto our undergraduate courses without completion of a suitable foundation programme, such as one of our foundation pathways."
+    },
+    "JORDAN_TAWJIHI": {
+     "accepted": false,
+     "notesEn": "Stated on the UAE page for the Tawjihiyya: not usually accepted for direct entry; a foundation programme is needed.",
+     "notesAr": "مذكور في صفحة الإمارات بشأن التوجيهي: لا يقبل عادة للقبول المباشر؛ يلزم برنامج تأسيسي.",
+     "source": "s3",
+     "quote": "Holders of the Tawjihiyya are not usually eligible for direct entry onto our undergraduate courses without completion of a suitable foundation programme, such as one of our foundation pathways."
+    }
+   },
+   "programs": [
+    {
+     "key": "birmingham-ai",
+     "status": "REPLACED",
+     "nameEn": "Artificial Intelligence (AI) and Computer Science BSc",
+     "nameAr": "بكالوريوس العلوم في الذكاء الاصطناعي وعلوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.birmingham.ac.uk/study/undergraduate/subjects/computer-science-courses/artificial-intelligence-ai-computer-science-bsc",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s4",
+         "quote": "A*AA to include A-level Mathematics grade A."
+        }
+       ],
+       "source": "s4",
+       "quote": "A*AA to include A-level Mathematics grade A."
+      },
+      "IB": {
+       "minimumPoints": 32,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s4",
+         "quote": "7,6,6 at Higher Level to include 6 in Mathematics, with a minimum of 32 points overall. We also require 5 in Standard Level English."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "english_language"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": "5",
+         "source": "s4",
+         "quote": "7,6,6 at Higher Level to include 6 in Mathematics, with a minimum of 32 points overall. We also require 5 in Standard Level English."
+        }
+       ],
+       "source": "s4",
+       "quote": "7,6,6 at Higher Level to include 6 in Mathematics, with a minimum of 32 points overall. We also require 5 in Standard Level English."
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.2,
+       "notesEn": "Plus three subject tests (AP exams, IB HL, Honours or college-level classes); ACT 28+ or SAT 1350+ can replace one test but not a required subject. For A* use AP 5, for A use AP 5.",
+       "notesAr": "بالإضافة إلى ثلاثة اختبارات مواد (اختبارات AP أو مستوى عال في IB أو صفوف الشرف أو صفوف جامعية)؛ يمكن أن يحل ACT بدرجة 28 فأكثر أو SAT بدرجة 1350 فأكثر محل اختبار واحد لكن ليس محل مادة مطلوبة. درجة A* تعادل AP 5 ودرجة A تعادل AP 5.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "AP Calculus BC (Calculus AB not accepted) where A-level Mathematics is required.",
+         "noteAr": "يشترط AP Calculus BC (لا يقبل Calculus AB) عند اشتراط رياضيات A-level.",
+         "source": "s5",
+         "quote": "For subjects requiring A-level Mathematics applicants must present with AP Calculus BC or International Baccalaureate HL Mathematics. (We do not accept AP Calculus AB to fulfil this requirement). Please check the individual course pages for our typical A-level requirements and see below for the corresponding scores."
+        }
+       ],
+       "source": "s5",
+       "quote": "1. A minimum score of 3.2/4.0 GPA on the High School Diploma (HSD) (non-weighted)"
+      },
+      "CBSE": {
+       "minimumPercent": 90,
+       "notesEn": "Standard XII equivalent of A*AA. Mathematics grade A = 85%.",
+       "notesAr": "ما يعادل A*AA في الصف الثاني عشر. درجة A في الرياضيات تعادل 85%.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "source": "s6",
+         "quote": "AAA = 85% ISC, CBSE, Maharashtra or 80% West Bengal or 90% Other State boards"
+        }
+       ],
+       "source": "s6",
+       "quote": "A*AA = 90% ISC, CBSE, Maharashtra or 85% West Bengal or 95% Other State boards"
+      },
+      "ISC": {
+       "minimumPercent": 90,
+       "notesEn": "Standard XII equivalent of A*AA. Mathematics grade A = 85%.",
+       "notesAr": "ما يعادل A*AA في الصف الثاني عشر. درجة A في الرياضيات تعادل 85%.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "source": "s6",
+         "quote": "AAA = 85% ISC, CBSE, Maharashtra or 80% West Bengal or 90% Other State boards"
+        }
+       ],
+       "source": "s6",
+       "quote": "A*AA = 90% ISC, CBSE, Maharashtra or 85% West Bengal or 95% Other State boards"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6,
+        "minComponent": 5.5,
+        "waiverNoteEn": "Group A (Computer Science).",
+        "waiverNoteAr": "المجموعة A (علوم الحاسوب).",
+        "source": "s7",
+        "quote": "6.0 overall with no less than 5.5 in any band."
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 4.5,
+        "minComponent": 4,
+        "waiverNoteEn": "Group A, new TOEFL scale.",
+        "waiverNoteAr": "المجموعة A، مقياس TOEFL الجديد.",
+        "source": "s7",
+        "quote": "Tests taken from January 2026: 4.5 Overall with no less than 4 in each skill"
+       },
+       {
+        "test": "PTE",
+        "minOverall": 64,
+        "minComponent": 59,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s7",
+        "quote": "PTE 64 with no less than 59 in all four skills."
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "birmingham-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.birmingham.ac.uk/study/undergraduate/subjects/computer-science-courses/computer-science-bsc",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s8",
+         "quote": "A*AA to include A-level Mathematics grade A."
+        }
+       ],
+       "source": "s8",
+       "quote": "A*AA to include A-level Mathematics grade A."
+      },
+      "IB": {
+       "minimumPoints": 32,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s8",
+         "quote": "7,6,6 at Higher Level to include 6 in Mathematics, with a minimum of 32 points overall. We also require 5 in Standard Level English."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "english_language"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": "5",
+         "source": "s8",
+         "quote": "7,6,6 at Higher Level to include 6 in Mathematics, with a minimum of 32 points overall. We also require 5 in Standard Level English."
+        }
+       ],
+       "source": "s8",
+       "quote": "7,6,6 at Higher Level to include 6 in Mathematics, with a minimum of 32 points overall. We also require 5 in Standard Level English."
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.2,
+       "notesEn": "Plus three subject tests (AP exams, IB HL, Honours or college-level classes); ACT 28+ or SAT 1350+ can replace one test but not a required subject. For A* use AP 5, for A use AP 5.",
+       "notesAr": "بالإضافة إلى ثلاثة اختبارات مواد (اختبارات AP أو مستوى عال في IB أو صفوف الشرف أو صفوف جامعية)؛ يمكن أن يحل ACT بدرجة 28 فأكثر أو SAT بدرجة 1350 فأكثر محل اختبار واحد لكن ليس محل مادة مطلوبة. درجة A* تعادل AP 5 ودرجة A تعادل AP 5.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "AP Calculus BC (Calculus AB not accepted) where A-level Mathematics is required.",
+         "noteAr": "يشترط AP Calculus BC (لا يقبل Calculus AB) عند اشتراط رياضيات A-level.",
+         "source": "s5",
+         "quote": "For subjects requiring A-level Mathematics applicants must present with AP Calculus BC or International Baccalaureate HL Mathematics. (We do not accept AP Calculus AB to fulfil this requirement). Please check the individual course pages for our typical A-level requirements and see below for the corresponding scores."
+        }
+       ],
+       "source": "s5",
+       "quote": "1. A minimum score of 3.2/4.0 GPA on the High School Diploma (HSD) (non-weighted)"
+      },
+      "CBSE": {
+       "minimumPercent": 90,
+       "notesEn": "Standard XII equivalent of A*AA. Mathematics grade A = 85%.",
+       "notesAr": "ما يعادل A*AA في الصف الثاني عشر. درجة A في الرياضيات تعادل 85%.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "source": "s6",
+         "quote": "AAA = 85% ISC, CBSE, Maharashtra or 80% West Bengal or 90% Other State boards"
+        }
+       ],
+       "source": "s6",
+       "quote": "A*AA = 90% ISC, CBSE, Maharashtra or 85% West Bengal or 95% Other State boards"
+      },
+      "ISC": {
+       "minimumPercent": 90,
+       "notesEn": "Standard XII equivalent of A*AA. Mathematics grade A = 85%.",
+       "notesAr": "ما يعادل A*AA في الصف الثاني عشر. درجة A في الرياضيات تعادل 85%.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "source": "s6",
+         "quote": "AAA = 85% ISC, CBSE, Maharashtra or 80% West Bengal or 90% Other State boards"
+        }
+       ],
+       "source": "s6",
+       "quote": "A*AA = 90% ISC, CBSE, Maharashtra or 85% West Bengal or 95% Other State boards"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6,
+        "minComponent": 5.5,
+        "waiverNoteEn": "Group A (Computer Science).",
+        "waiverNoteAr": "المجموعة A (علوم الحاسوب).",
+        "source": "s7",
+        "quote": "6.0 overall with no less than 5.5 in any band."
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 4.5,
+        "minComponent": 4,
+        "waiverNoteEn": "Group A, new TOEFL scale.",
+        "waiverNoteAr": "المجموعة A، مقياس TOEFL الجديد.",
+        "source": "s7",
+        "quote": "Tests taken from January 2026: 4.5 Overall with no less than 4 in each skill"
+       },
+       {
+        "test": "PTE",
+        "minOverall": 64,
+        "minComponent": 59,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s7",
+        "quote": "PTE 64 with no less than 59 in all four skills."
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s8"
+     },
+     "previous": null
+    },
+    {
+     "key": "birmingham-med",
+     "status": "EXISTS",
+     "nameEn": "Medicine and Surgery MBChB",
+     "nameAr": "بكالوريوس الطب والجراحة (MBChB)",
+     "degree": "MBChB",
+     "durationYears": 5,
+     "url": "https://www.birmingham.ac.uk/study/undergraduate/subjects/medicine-courses/medicine-and-surgery-mbchb",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "notesEn": "Must be predicted at least AAB. GCSEs are scored for selection.",
+       "notesAr": "يجب ألا تقل الدرجات المتوقعة عن AAB. تحتسب نتائج GCSE في الاختيار.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s9",
+         "quote": "AAA with predicted AAB including Chemistry, and a second science from Biology/Human Biology, Physics or Maths"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "physics",
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s9",
+         "quote": "AAA with predicted AAB including Chemistry, and a second science from Biology/Human Biology, Physics or Maths"
+        }
+       ],
+       "source": "s9",
+       "quote": "AAA with predicted AAB including Chemistry, and a second science from Biology/Human Biology, Physics or Maths"
+      },
+      "IB": {
+       "minimumPoints": 32,
+       "notesEn": "IB thresholds must be achieved at the first sitting.",
+       "notesAr": "يجب تحقيق الحد الأدنى في البكالوريا الدولية من المحاولة الأولى.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s9",
+         "quote": "6,6,6 at Higher Level including Chemistry and a second science from Biology/Physics/Maths. Minimum of 32 points."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "physics",
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s9",
+         "quote": "6,6,6 at Higher Level including Chemistry and a second science from Biology/Physics/Maths. Minimum of 32 points."
+        }
+       ],
+       "source": "s9",
+       "quote": "6,6,6 at Higher Level including Chemistry and a second science from Biology/Physics/Maths. Minimum of 32 points."
+      },
+      "AMERICAN": {
+       "notesEn": "Three of IB HL, AP tests, Honours or college-level classes including Chemistry and a second science; ACT 29+ or SAT 1380+ may replace one.",
+       "notesAr": "ثلاثة من: مستوى عال في IB أو اختبارات AP أو صفوف الشرف أو الصفوف الجامعية، منها الكيمياء وعلم ثان؛ يمكن أن يحل ACT بدرجة 29 فأكثر أو SAT بدرجة 1380 فأكثر محل واحد منها.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s10",
+         "quote": "United States: Any three from the list below to include Chemistry and a second science from Biology/Physics/Maths (see the USA country page for required grades). ACT with a score of 29 or above, or SAT-R 1380 or above may be used to replace one of the below."
+        }
+       ],
+       "source": "s10",
+       "quote": "United States: Any three from the list below to include Chemistry and a second science from Biology/Physics/Maths (see the USA country page for required grades). ACT with a score of 29 or above, or SAT-R 1380 or above may be used to replace one of the below."
+      },
+      "CBSE": {
+       "minimumPercent": 85,
+       "notesEn": "Chemistry and a second science from Biology/Physics/Maths, with 85% in one of these; Standard X: 85% in Biology, Chemistry, English and Mathematics.",
+       "notesAr": "الكيمياء وعلم ثان من الأحياء أو الفيزياء أو الرياضيات مع 85% في أحدها؛ وفي الصف العاشر 85% في الأحياء والكيمياء والإنجليزية والرياضيات.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s10",
+         "quote": "India (ISC, CBSE, Maharashtra Boards): Standard XII: Overall score 85%, including Chemistry and a second science from Biology/Physics/Maths with 85% in one of these (minimum requirements). Standard X: 85% in Biology, Chemistry, English and Mathematics (minimum requirements)"
+        }
+       ],
+       "source": "s10",
+       "quote": "India (ISC, CBSE, Maharashtra Boards): Standard XII: Overall score 85%, including Chemistry and a second science from Biology/Physics/Maths with 85% in one of these (minimum requirements). Standard X: 85% in Biology, Chemistry, English and Mathematics (minimum requirements)"
+      },
+      "ISC": {
+       "minimumPercent": 85,
+       "notesEn": "Same rule as CBSE.",
+       "notesAr": "نفس شرط CBSE.",
+       "source": "s10",
+       "quote": "India (ISC, CBSE, Maharashtra Boards): Standard XII: Overall score 85%, including Chemistry and a second science from Biology/Physics/Maths with 85% in one of these (minimum requirements). Standard X: 85% in Biology, Chemistry, English and Mathematics (minimum requirements)"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7,
+        "minComponent": 7,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s10",
+        "quote": "IELTS - 7.0 overall with no less than 7.0 in any band"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 5,
+        "minComponent": 5,
+        "waiverNoteEn": "Group D (Medicine), new TOEFL scale.",
+        "waiverNoteAr": "المجموعة D (الطب)، مقياس TOEFL الجديد.",
+        "source": "s7",
+        "quote": "Tests taken from January 2026: 5 Overall with no less than 5 in each skill"
+       }
+      ],
+      "tests": [
+       {
+        "test": "UCAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "UCAT in the year of application.",
+        "noteAr": "اختبار UCAT في سنة التقديم.",
+        "source": "s10",
+        "quote": "Sit the University Clinical Aptitude Test (UCAT) in year of application"
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Interview for shortlisted applicants.",
+        "noteAr": "مقابلة للمرشحين المختارين.",
+        "source": "s10",
+        "quote": "Attend an interview if invited"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Must be 18 by 1 October of the year of entry.",
+        "noteAr": "يجب بلوغ 18 عاما بحلول 1 أكتوبر من سنة الالتحاق.",
+        "source": "s9",
+        "quote": "As this programme has a mandatory clinical placement, every applicant for admission to the University must have reached the age of 18 years on 1 October of the year of entry."
+       }
+      ],
+      "source": "s9"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "bristol",
+   "website": "https://www.bristol.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ucas.com/events/2027-entry-deadline-for-all-undergraduate-courses-except-those-with-a-15-october-deadline-475546",
+     "title": "2027 entry deadline for all undergraduate courses, except those with a 15 October deadline | UCAS",
+     "retrievedAt": "2026-09-29T23:52:05.747Z",
+     "hash": "42e7cce7af0b177d9fe63405d6ee7ddb14c615f2fce64e6ee97f45478ed862fa"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.ucas.com/events/2027-entry-deadline-for-the-universities-of-oxford-and-cambridge-and-most-courses-in-medicine-475536",
+     "title": "2027 entry deadline for the universities of Oxford and Cambridge, and most courses in medicine, veterinary medicine/science, and dentistry | UCAS",
+     "retrievedAt": "2026-09-29T23:52:48.839Z",
+     "hash": "125518b79ea6c03dff6513acf5144845b0afab760706976f07eff2864102f901"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.bristol.ac.uk/international/countries/india.html",
+     "title": "India | International students | University of Bristol",
+     "retrievedAt": "2026-09-29T23:53:01.777Z",
+     "hash": "2ea06206b58cf94bec7e4e0030fec82df6924857f52470437d19dd27b4cca2f1"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.bristol.ac.uk/study/undergraduate/2027/computer-science/bsc-computer-science/",
+     "title": "BSc Computer Science | Study at Bristol | University of Bristol",
+     "retrievedAt": "2026-09-29T23:48:21.245Z",
+     "hash": "68957e58ab6d06b9d63c8854de38396c82519db1797b72f033408796d06fa12b"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.bristol.ac.uk/international/countries/usa.html",
+     "title": "USA | International students | University of Bristol",
+     "retrievedAt": "2026-09-29T23:48:30.382Z",
+     "hash": "312ae5d6b95311b510f570702409b8d5cd285751c78b7c4af2ebf6e0aa0c4b56"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.bristol.ac.uk/study/undergraduate/2027/electrical-electronic-engineering/beng-electrical-and-electronic-engineering/",
+     "title": "BEng Electrical and Electronic Engineering | Study at Bristol | University of Bristol",
+     "retrievedAt": "2026-09-29T23:48:19.565Z",
+     "hash": "eb5802c19d99990e6d5db23a9ae637769a1fe881951a4c9cd40373aa809d8277"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.bristol.ac.uk/study/undergraduate/2027/medicine/mb-chb-medicine/",
+     "title": "MB ChB Medicine | Study at Bristol | University of Bristol",
+     "retrievedAt": "2026-09-29T23:51:41.015Z",
+     "hash": "23cf15cb36c0a79c5743233b4604c485e6db99f27d336cb1758a4b9739ea2276"
+    },
+    {
+     "id": "s8",
+     "url": "https://www.bristol.ac.uk/study/media/undergraduate/admissions-statements/2027/medicine.pdf",
+     "title": "PDF",
+     "retrievedAt": "2026-09-29T23:58:23.361Z",
+     "hash": "f02d4e8d5bd182d6e7ffc78ac1fe8d7abbf9dd4e75fb3199396c0d0a0dad30e0"
+    }
+   ],
+   "english": [
+    {
+     "test": "OTHER",
+     "minOverall": 70,
+     "minComponent": null,
+     "waiverNoteEn": "CBSE or CISCE English at 70-80% or above can replace a test such as IELTS.",
+     "waiverNoteAr": "يمكن أن تحل درجة 70-80% فأكثر في الإنجليزية ضمن CBSE أو CISCE محل اختبار مثل IELTS.",
+     "source": "s3",
+     "quote": "We understand that the majority of candidates from India have been taught in English throughout their education. CBSE or CISCE English at 70-80% or above can be accepted in lieu of another English test such as IELTS."
+    }
+   ],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_EQUAL_CONSIDERATION",
+     "date": "2027-01-13",
+     "labelEn": "UCAS equal consideration deadline (most courses)",
+     "labelAr": "الموعد النهائي للنظر المتساوي عبر UCAS (معظم البرامج)",
+     "source": "s1",
+     "quote": "Applications for all 2027 entry undergraduate courses, except those with a 15 October deadline, should arrive at UCAS by 18:00 (UK time) on 13 January 2027."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_OXBRIDGE_MEDICINE",
+     "date": "2026-10-15",
+     "labelEn": "UCAS deadline for Oxford, Cambridge and most medicine courses",
+     "labelAr": "الموعد النهائي عبر UCAS لجامعتي أكسفورد وكامبريدج ومعظم برامج الطب",
+     "source": "s2",
+     "quote": "15 October 2026"
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "bristol-cs",
+     "status": "EXISTS",
+     "nameEn": "BSc Computer Science",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.bristol.ac.uk/study/undergraduate/2027/computer-science/bsc-computer-science/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "notesEn": "Contextual offer AAB including A in Mathematics.",
+       "notesAr": "العرض السياقي AAB مع A في الرياضيات.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A*",
+         "source": "s4",
+         "quote": "A*AA including A* in Mathematics"
+        }
+       ],
+       "source": "s4",
+       "quote": "A*AA including A* in Mathematics"
+      },
+      "IB": {
+       "minimumPoints": 38,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "7",
+         "source": "s4",
+         "quote": "38 points overall with 18 at Higher Level, including 7 at Higher Level in Mathematics (either Analysis and Approaches or Applications and Interpretations)"
+        }
+       ],
+       "source": "s4",
+       "quote": "38 points overall with 18 at Higher Level, including 7 at Higher Level in Mathematics (either Analysis and Approaches or Applications and Interpretations)"
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.4,
+       "notesEn": "High school diploma plus three further qualifications (SAT ERW 650+ or ACT 28+, AP tests at 4 or more, AP classes, Honors or dual enrolment).",
+       "notesAr": "شهادة الثانوية مع ثلاثة مؤهلات إضافية (SAT قسم القراءة والكتابة 650 فأكثر أو ACT بدرجة 28 فأكثر، أو اختبارات AP بدرجة 4 فأكثر، أو صفوف AP أو صفوف الشرف أو التسجيل المزدوج).",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "5",
+         "source": "s5",
+         "quote": "Any course asking for maths must have specifically AP Calculus BC at grade 5."
+        }
+       ],
+       "source": "s5",
+       "quote": "For courses with A-level requirements of A*AA, a GPA of 3.4 or better is required."
+      },
+      "CBSE": {
+       "minimumPercent": 90,
+       "notesEn": "90% is the stated equivalent of A*AA (this course's A-level offer).",
+       "notesAr": "نسبة 90% هي المعادل المعلن لـ A*AA (عرض A-level لهذا البرنامج).",
+       "source": "s3",
+       "quote": "Typical offers for CBSE and CISCE range from 80% (equivalent to ABB at A-level) to 90% (equivalent to A*AA at A-level). If you would like advice relating to your specific qualification, please contact us."
+      },
+      "ISC": {
+       "minimumPercent": 90,
+       "notesEn": "CISCE: 90% is the stated equivalent of A*AA.",
+       "notesAr": "CISCE: نسبة 90% هي المعادل المعلن لـ A*AA.",
+       "source": "s3",
+       "quote": "Typical offers for CBSE and CISCE range from 80% (equivalent to ABB at A-level) to 90% (equivalent to A*AA at A-level). If you would like advice relating to your specific qualification, please contact us."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": "English profile E; GCSE English Language also accepted.",
+        "waiverNoteAr": "ملف اللغة الإنجليزية E؛ تقبل أيضا الإنجليزية في GCSE.",
+        "source": "s4",
+        "quote": "• IELTS 6.5 overall with 6.0 in all skills"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "bristol-ee",
+     "status": "EXISTS",
+     "nameEn": "BEng Electrical and Electronic Engineering",
+     "nameAr": "بكالوريوس الهندسة في الهندسة الكهربائية والإلكترونية",
+     "degree": "BEng",
+     "durationYears": 3,
+     "url": "https://www.bristol.ac.uk/study/undergraduate/2027/electrical-electronic-engineering/beng-electrical-and-electronic-engineering/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "notesEn": "Contextual offer ABB including A in Mathematics.",
+       "notesAr": "العرض السياقي ABB مع A في الرياضيات.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s6",
+         "quote": "AAA including Mathematics"
+        }
+       ],
+       "source": "s6",
+       "quote": "AAA including Mathematics"
+      },
+      "IB": {
+       "minimumPoints": 36,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s6",
+         "quote": "36 points overall with 18 at Higher Level, including 6 at Higher Level in Mathematics (either Analysis and Approaches or Applications and Interpretations)"
+        }
+       ],
+       "source": "s6",
+       "quote": "36 points overall with 18 at Higher Level, including 6 at Higher Level in Mathematics (either Analysis and Approaches or Applications and Interpretations)"
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.3,
+       "notesEn": "High school diploma plus three further qualifications (SAT ERW 650+ or ACT 28+, AP tests at 4 or more, AP classes, Honors or dual enrolment).",
+       "notesAr": "شهادة الثانوية مع ثلاثة مؤهلات إضافية (SAT قسم القراءة والكتابة 650 فأكثر أو ACT بدرجة 28 فأكثر، أو اختبارات AP بدرجة 4 فأكثر، أو صفوف AP أو صفوف الشرف أو التسجيل المزدوج).",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "5",
+         "source": "s5",
+         "quote": "Any course asking for maths must have specifically AP Calculus BC at grade 5."
+        }
+       ],
+       "source": "s5",
+       "quote": "For courses with A-level requirements of AAA, a GPA of 3.3 or better is required."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": "English profile E; GCSE English Language also accepted.",
+        "waiverNoteAr": "ملف اللغة الإنجليزية E؛ تقبل أيضا الإنجليزية في GCSE.",
+        "source": "s6",
+        "quote": "• IELTS 6.5 overall with 6.0 in all skills"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s6"
+     },
+     "previous": null
+    },
+    {
+     "key": "bristol-med",
+     "status": "EXISTS",
+     "nameEn": "MB ChB Medicine",
+     "nameAr": "بكالوريوس الطب والجراحة (MB ChB)",
+     "degree": "MBChB",
+     "durationYears": 5,
+     "url": "https://www.bristol.ac.uk/study/undergraduate/2027/medicine/mb-chb-medicine/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "notesEn": "Contextual offer ABB including A in Chemistry.",
+       "notesAr": "العرض السياقي ABB مع A في الكيمياء.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s7",
+         "quote": "AAA including Chemistry and either Biology, Physics, Mathematics or Further Mathematics. Graduates are required to obtain a 2:1 in their degree plus BBB at A-level, including Chemistry and either Biology, Physics, Mathematics or Further Mathematics."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "physics",
+          "mathematics",
+          "further_mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s7",
+         "quote": "AAA including Chemistry and either Biology, Physics, Mathematics or Further Mathematics. Graduates are required to obtain a 2:1 in their degree plus BBB at A-level, including Chemistry and either Biology, Physics, Mathematics or Further Mathematics."
+        }
+       ],
+       "source": "s7",
+       "quote": "AAA including Chemistry and either Biology, Physics, Mathematics or Further Mathematics. Graduates are required to obtain a 2:1 in their degree plus BBB at A-level, including Chemistry and either Biology, Physics, Mathematics or Further Mathematics."
+      },
+      "IB": {
+       "minimumPoints": 36,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s7",
+         "quote": "36 points overall with 18 at Higher Level, including 6, 6 at Higher Level in Chemistry and one of Biology, Physics or Mathematics (either Analysis and Approaches or Applications and Interpretations)"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "physics",
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s7",
+         "quote": "36 points overall with 18 at Higher Level, including 6, 6 at Higher Level in Chemistry and one of Biology, Physics or Mathematics (either Analysis and Approaches or Applications and Interpretations)"
+        }
+       ],
+       "source": "s7",
+       "quote": "36 points overall with 18 at Higher Level, including 6, 6 at Higher Level in Chemistry and one of Biology, Physics or Mathematics (either Analysis and Approaches or Applications and Interpretations)"
+      }
+     },
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": "FOUNDATION",
+        "minimumGrade": "7",
+        "source": "s7",
+        "quote": "Advanced numeracy requirement (7 or A in GCSE Mathematics or equivalent) and Standard literacy requirement (4 or C in GCSE English or equivalent)"
+       }
+      ],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7.5,
+        "minComponent": 7,
+        "waiverNoteEn": "English profile A; GCSE English Language also accepted.",
+        "waiverNoteAr": "ملف اللغة الإنجليزية A؛ تقبل أيضا الإنجليزية في GCSE.",
+        "source": "s7",
+        "quote": "• IELTS 7.5 overall with 7.0 in all skills"
+       }
+      ],
+      "tests": [
+       {
+        "test": "UCAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "For 2026 entry the interview threshold was 2240 (Home) and 2270 (Overseas).",
+        "noteAr": "لدخول 2026 كان حد الدعوة للمقابلة 2240 (للطلاب المحليين) و2270 (للطلاب الدوليين).",
+        "source": "s7",
+        "quote": "The University Clinical Aptitude Test (formerly UKCAT) is required. Bursaries are available to cover the cost of taking the UCAT - please see the UCAT website for details. The combined score from all subtests, with the exception of Situational Judgement, will be used to select applicants for interview."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Interviews run from November to April.",
+        "noteAr": "تجرى المقابلات من نوفمبر إلى أبريل.",
+        "source": "s7",
+        "quote": "Applicants must be available for an interview from November to April immediately following the submission of their application."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Must be 18 by 1 September of the year of entry.",
+        "noteAr": "يجب بلوغ 18 عاما بحلول 1 سبتمبر من سنة الالتحاق.",
+        "source": "s7",
+        "quote": "Applicants must be 18 years of age (or above) on 1 September of the year that they enter the undergraduate medical programme."
+       },
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "2027 admissions statement: other qualifications considered individually; international criteria on the country pages.",
+        "noteAr": "بيان القبول لعام 2027: تدرس المؤهلات الأخرى بشكل فردي؛ ومعايير الطلاب الدوليين في صفحات الدول.",
+        "source": "s8",
+        "quote": "Other qualifications will be considered on an individual basis. International applicants are"
+       }
+      ],
+      "source": "s7"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "cambridge",
+   "website": "https://www.cam.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ucas.com/events/2027-entry-deadline-for-all-undergraduate-courses-except-those-with-a-15-october-deadline-475546",
+     "title": "2027 entry deadline for all undergraduate courses, except those with a 15 October deadline | UCAS",
+     "retrievedAt": "2026-09-29T23:52:05.747Z",
+     "hash": "42e7cce7af0b177d9fe63405d6ee7ddb14c615f2fce64e6ee97f45478ed862fa"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.ucas.com/events/2027-entry-deadline-for-the-universities-of-oxford-and-cambridge-and-most-courses-in-medicine-475536",
+     "title": "2027 entry deadline for the universities of Oxford and Cambridge, and most courses in medicine, veterinary medicine/science, and dentistry | UCAS",
+     "retrievedAt": "2026-09-29T23:52:48.839Z",
+     "hash": "125518b79ea6c03dff6513acf5144845b0afab760706976f07eff2864102f901"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.undergraduate.study.cam.ac.uk/apply/before/entry-requirements",
+     "title": "Entry requirements | Undergraduate Study",
+     "retrievedAt": "2026-09-29T23:48:28.377Z",
+     "hash": "14c905dc917f67e85e6a0389d95676d1f8578149441563761934b8b0d4620c1c"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.undergraduate.study.cam.ac.uk/apply/application-dates-deadlines",
+     "title": "Application dates and deadlines for Cambridge | Undergraduate Study",
+     "retrievedAt": "2026-09-29T23:48:52.852Z",
+     "hash": "61d0b6f0befc47e8f84c8a2808cd1c9579ffc2146fe9cecb69d0297f1b4f73f0"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.undergraduate.study.cam.ac.uk/international-students/international-entry-requirements",
+     "title": "International entry requirements | Undergraduate Study",
+     "retrievedAt": "2026-09-29T23:48:30.060Z",
+     "hash": "6c5298e313f205c1d3330cd93aebbbe77e656f186bce0438c4a0c747c364b467"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.undergraduate.study.cam.ac.uk/courses/computer-science-ba-hons-meng",
+     "title": "Computer Science, BA (Hons) and MEng | Undergraduate Study",
+     "retrievedAt": "2026-09-29T23:48:20.431Z",
+     "hash": "6f9cba21bc45df2e406002eb5db11ef41dfa84fd7ade269ae93cceff4524cf37",
+     "waybackTimestamp": "20250916173409",
+     "waybackHash": "e9d31109b8bd5ac3c5a7d753bdb7898a0b0e356b580ef83d0f22142916ab0b69"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.undergraduate.study.cam.ac.uk/courses/economics-ba-hons",
+     "title": "Economics, BA (Hons) | Undergraduate Study",
+     "retrievedAt": "2026-09-29T23:48:23.431Z",
+     "hash": "41a4108989fe5814be06ee01372e2d23cba183d1dca3e7e41c4ec3ea3019c083",
+     "waybackTimestamp": "20250811033909",
+     "waybackHash": "327f7bee144814b5804ea4249396bd73df48e551191ec6e4f650c987f58a30d6"
+    },
+    {
+     "id": "s8",
+     "url": "https://www.undergraduate.study.cam.ac.uk/courses/engineering-ba-hons-meng",
+     "title": "Engineering, BA (Hons) and MEng | Undergraduate Study",
+     "retrievedAt": "2026-09-29T23:48:18.258Z",
+     "hash": "2430addab04096cc8f49663b3ff5b6439808eb58dc2b97dbd7da377f0687e5b1",
+     "waybackTimestamp": "20250915160512",
+     "waybackHash": "ad4dfbcd0b3eb18912004d3b020fce82b96e0a65751a5ed11b3124f212f712e0"
+    },
+    {
+     "id": "s9",
+     "url": "https://www.undergraduate.study.cam.ac.uk/courses/medicine-mb-bchir",
+     "title": "Medicine, MB and BChir | Undergraduate Study",
+     "retrievedAt": "2026-09-29T23:48:31.348Z",
+     "hash": "dc6bd1c43a544a1d2bffbda790356ba5c4a54bae4870f4f51df80ecc5fb3907b"
+    },
+    {
+     "id": "s10",
+     "url": "https://www.undergraduate.study.cam.ac.uk/apply/how/medicine-admission-test",
+     "title": "University Clinical Aptitude Test (UCAT) | Undergraduate Study",
+     "retrievedAt": "2026-09-29T23:53:07.174Z",
+     "hash": "0f3150a9dba56462fc2b393e4c0307bb83f50431a86270409ed3ca590c1cd05c"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 7.5,
+     "minComponent": 7,
+     "waiverNoteEn": "IELTS 6.5 (no element below 6.0) is recommended at the point of application to take part in an interview.",
+     "waiverNoteAr": "يوصى بدرجة IELTS 6.5 (دون أي مهارة أقل من 6.0) عند التقديم للمشاركة في المقابلة.",
+     "source": "s3",
+     "quote": "IELTS Academic - normally a minimum overall grade of 7.5, usually with 7.0 or above in each element"
+    },
+    {
+     "test": "CAMBRIDGE",
+     "minOverall": 200,
+     "minComponent": 185,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s3",
+     "quote": "C2 Proficiency - accepted with a minimum overall score of 200, with no element lower than 185"
+    }
+   ],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Extra Cambridge application form after the UCAS application.",
+     "noteAr": "نموذج تقديم إضافي خاص بكامبريدج بعد طلب UCAS.",
+     "source": "s4",
+     "quote": "Deadline to submit My Cambridge Application (6pm UK time). This is an extra application form that you need to complete if you want to study at Cambridge. If you’re applying for the graduate course in Medicine, you won’t need to complete My Cambridge Application."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_EQUAL_CONSIDERATION",
+     "date": "2027-01-13",
+     "labelEn": "UCAS equal consideration deadline (most courses)",
+     "labelAr": "الموعد النهائي للنظر المتساوي عبر UCAS (معظم البرامج)",
+     "source": "s1",
+     "quote": "Applications for all 2027 entry undergraduate courses, except those with a 15 October deadline, should arrive at UCAS by 18:00 (UK time) on 13 January 2027."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_OXBRIDGE_MEDICINE",
+     "date": "2026-10-15",
+     "labelEn": "UCAS deadline for Oxford, Cambridge and most medicine courses",
+     "labelAr": "الموعد النهائي عبر UCAS لجامعتي أكسفورد وكامبريدج ومعظم برامج الطب",
+     "source": "s2",
+     "quote": "15 October 2026"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2026-10-22",
+     "labelEn": "My Cambridge Application deadline (6pm UK time)",
+     "labelAr": "الموعد النهائي لنموذج My Cambridge Application (الساعة 6 مساء بتوقيت المملكة المتحدة)",
+     "source": "s4",
+     "quote": "22 October 2026"
+    }
+   ],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "The Emirati Tawjihiyya alone is not competitive; further study is strongly recommended (A levels, IB, or 5+ AP tests at score 5 with at least 95 in the Tawjihiyya).",
+     "notesAr": "شهادة التوجيهي الإماراتية وحدها غير تنافسية؛ يوصى بشدة بدراسة إضافية (A levels أو البكالوريا الدولية أو 5 اختبارات AP فأكثر بدرجة 5 مع 95 على الأقل في التوجيهي).",
+     "source": "s5",
+     "quote": "Applicants with the Tawjihiyya alone will not be competitive and are unlikely to be successful."
+    },
+    "JORDAN_TAWJIHI": {
+     "accepted": false,
+     "notesEn": "The Jordanian certificate alone is not competitive; further study (A levels, IB, or 5+ AP tests at score 5 with at least 95) is strongly recommended.",
+     "notesAr": "الشهادة الأردنية وحدها غير تنافسية؛ يوصى بشدة بدراسة إضافية (A levels أو البكالوريا الدولية أو 5 اختبارات AP فأكثر بدرجة 5 مع 95 على الأقل).",
+     "source": "s5",
+     "quote": "If you are studying for the Certificate of General Secondary Education, you are strongly recommended to undertake further study if you wish to apply to Cambridge."
+    }
+   },
+   "programs": [
+    {
+     "key": "cambridge-computer-science-ba",
+     "status": "EXISTS",
+     "nameEn": "Computer Science, BA (Hons) and MEng",
+     "nameAr": "علوم الحاسوب، بكالوريوس الآداب (مع مرتبة الشرف) والماجستير المتكامل في الهندسة",
+     "degree": "BA",
+     "durationYears": 3,
+     "url": "https://www.undergraduate.study.cam.ac.uk/courses/computer-science-ba-hons-meng",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*A*A",
+       "notesEn": "Minimum offer; many Colleges ask for A* in specific subjects.",
+       "notesAr": "الحد الأدنى للعرض؛ تطلب كليات كثيرة A* في مواد محددة.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A*",
+         "noteEn": "Mathematics required for Computer Science; Colleges usually require A*.",
+         "noteAr": "الرياضيات مطلوبة؛ تطلب الكليات عادة A*.",
+         "source": "s6",
+         "quote": "Colleges usually require A* in Mathematics and/or Further Mathematics. Colleges may also require an A*/7 in specific subjects (usually Chemistry or Physics, if taken) as part of your offer."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "further_mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "Required to AS or A level if the school offers it.",
+         "noteAr": "مطلوبة بمستوى AS أو A level إذا كانت المدرسة توفرها.",
+         "source": "s6",
+         "quote": "Further Mathematics to AS or A level if your school offers it. Check the guidance on this page"
+        }
+       ],
+       "source": "s6",
+       "quote": "A level: A*A*A"
+      },
+      "IB": {
+       "minimumPoints": 41,
+       "notesEn": "41-42 points with 776 at Higher Level.",
+       "notesAr": "41-42 نقطة مع 776 في المستوى العالي.",
+       "source": "s6",
+       "quote": "IB: 41-42 points, with 776 at Higher Level"
+      },
+      "AMERICAN": {
+       "notesEn": "A US High School Diploma alone is not suitable; 5+ AP scores of 5, a high SAT or ACT score and a high GPA. SAT: 1,500 combined (Mathematics 750+); ACT: 33.",
+       "notesAr": "شهادة الثانوية الأمريكية وحدها غير كافية؛ يلزم 5 درجات AP فأكثر بدرجة 5 ودرجة مرتفعة في SAT أو ACT ومعدل مرتفع. SAT: مجموع 1500 (الرياضيات 750 فأكثر)؛ ACT: 33.",
+       "source": "s5",
+       "quote": "a minimum of 5 Advanced Placement (AP) Scores at grade 5 in subjects related to the course applied for"
+      },
+      "CBSE": {
+       "accepted": false,
+       "notesEn": "Computer Science is not in the list of courses for which CBSE Class XII is accepted; further study is recommended (A levels, IB, or 5+ AP tests at score 5 plus A1 grades in Class XII).",
+       "notesAr": "هذا التخصص ليس ضمن قائمة التخصصات التي يقبل فيها الصف الثاني عشر من CBSE؛ يوصى بدراسة إضافية (A levels أو البكالوريا الدولية أو 5 اختبارات AP بدرجة 5 مع درجات A1 في الصف الثاني عشر).",
+       "source": "s5",
+       "quote": "Class XII qualifications issued by the Central Board of Secondary Education (CBSE) are accepted by some Colleges for the following courses:"
+      },
+      "ISC": {
+       "accepted": false,
+       "notesEn": "Class XII from boards other than CBSE (including ISC): further study is strongly recommended.",
+       "notesAr": "الصف الثاني عشر من مجالس غير CBSE (ومنها ISC): يوصى بشدة بدراسة إضافية.",
+       "source": "s5",
+       "quote": "are studying for Class XII qualifications issued by a board other than CBSE"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "TMUA",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "TMUA admissions test.",
+        "noteAr": "اختبار القبول TMUA.",
+        "source": "s6",
+        "quote": "All applicants for Computer Science are required to take the Test of Mathematics for University Admission (TMUA) at an authorised assessment centre. You must register in advance for this test."
+       },
+       {
+        "test": "ACT",
+        "policy": "REQUIRED",
+        "minScore": 33,
+        "noteEn": "Alongside AP tests; SAT alternative: 1,500 combined with Mathematics 750+.",
+        "noteAr": "إلى جانب اختبارات AP؛ بديل SAT: مجموع 1500 مع 750 فأكثر في الرياضيات.",
+        "source": "s5",
+        "quote": "If you have taken Advanced Placement examinations or equivalent qualifications alongside ACTs, you will need to have an ACT composite score of 33 out of 36 for the following courses:"
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Shortlisted applicants are interviewed.",
+        "noteAr": "تجرى مقابلات للمرشحين المختارين.",
+        "source": "s6",
+        "quote": "take part in an interview"
+       },
+       {
+        "kind": "ADMISSIONS_TEST",
+        "required": false,
+        "noteEn": "CSAT also required at Peterhouse and Trinity.",
+        "noteAr": "يشترط اختبار CSAT أيضا في كليتي بيترهاوس وترينيتي.",
+        "source": "s6",
+        "quote": "If you're applying to Peterhouse or Trinity you will also need to take the Computer Sciences Aptitude Test (CSAT)."
+       }
+      ],
+      "source": "s6"
+     },
+     "previous": null
+    },
+    {
+     "key": "cambridge-econ",
+     "status": "EXISTS",
+     "nameEn": "Economics, BA (Hons)",
+     "nameAr": "بكالوريوس الآداب (مع مرتبة الشرف) في الاقتصاد",
+     "degree": "BA",
+     "durationYears": 3,
+     "url": "https://www.undergraduate.study.cam.ac.uk/courses/economics-ba-hons",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*A*A",
+       "notesEn": "Minimum offer; many Colleges ask for A* in specific subjects.",
+       "notesAr": "الحد الأدنى للعرض؛ تطلب كليات كثيرة A* في مواد محددة.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "A level or IB Higher Level Mathematics required (IB: Analysis and Approaches).",
+         "noteAr": "يشترط الرياضيات بمستوى A level أو المستوى العالي في IB (تحليل ومقاربات).",
+         "source": "s7",
+         "quote": "If you’re studying IB, we ask for Analysis and Approaches for this course. If this isn’t an option at your school, please contact your shortlisted College(s) for advice."
+        }
+       ],
+       "source": "s7",
+       "quote": "A level: A*A*A"
+      },
+      "IB": {
+       "minimumPoints": 41,
+       "notesEn": "41-42 points with 776 at Higher Level.",
+       "notesAr": "41-42 نقطة مع 776 في المستوى العالي.",
+       "source": "s7",
+       "quote": "IB: 41-42 points, with 776 at Higher Level"
+      },
+      "AMERICAN": {
+       "notesEn": "A US High School Diploma alone is not suitable; 5+ AP scores of 5, a high SAT or ACT score and a high GPA. SAT: 1,500 combined (Mathematics 750+); ACT: 33.",
+       "notesAr": "شهادة الثانوية الأمريكية وحدها غير كافية؛ يلزم 5 درجات AP فأكثر بدرجة 5 ودرجة مرتفعة في SAT أو ACT ومعدل مرتفع. SAT: مجموع 1500 (الرياضيات 750 فأكثر)؛ ACT: 33.",
+       "source": "s5",
+       "quote": "a minimum of 5 Advanced Placement (AP) Scores at grade 5 in subjects related to the course applied for"
+      },
+      "CBSE": {
+       "accepted": false,
+       "notesEn": "Economics is not in the list of courses for which CBSE Class XII is accepted; further study is recommended (A levels, IB, or 5+ AP tests at score 5 plus A1 grades in Class XII).",
+       "notesAr": "هذا التخصص ليس ضمن قائمة التخصصات التي يقبل فيها الصف الثاني عشر من CBSE؛ يوصى بدراسة إضافية (A levels أو البكالوريا الدولية أو 5 اختبارات AP بدرجة 5 مع درجات A1 في الصف الثاني عشر).",
+       "source": "s5",
+       "quote": "Class XII qualifications issued by the Central Board of Secondary Education (CBSE) are accepted by some Colleges for the following courses:"
+      },
+      "ISC": {
+       "accepted": false,
+       "notesEn": "Class XII from boards other than CBSE (including ISC): further study is strongly recommended.",
+       "notesAr": "الصف الثاني عشر من مجالس غير CBSE (ومنها ISC): يوصى بشدة بدراسة إضافية.",
+       "source": "s5",
+       "quote": "are studying for Class XII qualifications issued by a board other than CBSE"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "TMUA",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "TMUA admissions test.",
+        "noteAr": "اختبار القبول TMUA.",
+        "source": "s7",
+        "quote": "All applicants for Economics are required to take the Test of Mathematics for University Admission (TMUA) at an authorised assessment centre. You must register in advance for this test."
+       },
+       {
+        "test": "ACT",
+        "policy": "REQUIRED",
+        "minScore": 33,
+        "noteEn": "Alongside AP tests; SAT alternative: 1,500 combined with Mathematics 750+.",
+        "noteAr": "إلى جانب اختبارات AP؛ بديل SAT: مجموع 1500 مع 750 فأكثر في الرياضيات.",
+        "source": "s5",
+        "quote": "If you have taken Advanced Placement examinations or equivalent qualifications alongside ACTs, you will need to have an ACT composite score of 33 out of 36 for the following courses:"
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Shortlisted applicants are interviewed.",
+        "noteAr": "تجرى مقابلات للمرشحين المختارين.",
+        "source": "s7",
+        "quote": "take part in an interview"
+       }
+      ],
+      "source": "s7"
+     },
+     "previous": null
+    },
+    {
+     "key": "cambridge-eng",
+     "status": "EXISTS",
+     "nameEn": "Engineering, BA (Hons) and MEng",
+     "nameAr": "الهندسة، بكالوريوس الآداب (مع مرتبة الشرف) والماجستير المتكامل في الهندسة",
+     "degree": "MEng",
+     "durationYears": 4,
+     "url": "https://www.undergraduate.study.cam.ac.uk/courses/engineering-ba-hons-meng",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*A*A",
+       "notesEn": "Minimum offer; many Colleges ask for A* in specific subjects.",
+       "notesAr": "الحد الأدنى للعرض؛ تطلب كليات كثيرة A* في مواد محددة.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A*",
+         "noteEn": "Mathematics required for Engineering; Colleges usually require A*.",
+         "noteAr": "الرياضيات مطلوبة؛ تطلب الكليات عادة A*.",
+         "source": "s8",
+         "quote": "Colleges usually require A* in Mathematics and/or Further Mathematics, and will often ask for A*/7 in Physics or another science subject. Please review the webpages of your shortlisted College(s) before applying."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "further_mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "Required to AS or A level if the school offers it.",
+         "noteAr": "مطلوبة بمستوى AS أو A level إذا كانت المدرسة توفرها.",
+         "source": "s8",
+         "quote": "Further Mathematics to AS or A level if your school offers it. Check the guidance on this page"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "Physics required at A level or IB Higher Level.",
+         "noteAr": "الفيزياء مطلوبة بمستوى A level أو المستوى العالي في IB.",
+         "source": "s8",
+         "quote": "Colleges usually require A* in Mathematics and/or Further Mathematics, and will often ask for A*/7 in Physics or another science subject. Please review the webpages of your shortlisted College(s) before applying."
+        }
+       ],
+       "source": "s8",
+       "quote": "A level: A*A*A"
+      },
+      "IB": {
+       "minimumPoints": 41,
+       "notesEn": "41-42 points with 776 at Higher Level.",
+       "notesAr": "41-42 نقطة مع 776 في المستوى العالي.",
+       "source": "s8",
+       "quote": "IB: 41-42 points, with 776 at Higher Level"
+      },
+      "AMERICAN": {
+       "notesEn": "A US High School Diploma alone is not suitable; 5+ AP scores of 5, a high SAT or ACT score and a high GPA. SAT: 1,500 combined (Mathematics 750+); ACT: 33.",
+       "notesAr": "شهادة الثانوية الأمريكية وحدها غير كافية؛ يلزم 5 درجات AP فأكثر بدرجة 5 ودرجة مرتفعة في SAT أو ACT ومعدل مرتفع. SAT: مجموع 1500 (الرياضيات 750 فأكثر)؛ ACT: 33.",
+       "source": "s5",
+       "quote": "a minimum of 5 Advanced Placement (AP) Scores at grade 5 in subjects related to the course applied for"
+      },
+      "CBSE": {
+       "accepted": false,
+       "notesEn": "Engineering is not in the list of courses for which CBSE Class XII is accepted; further study is recommended (A levels, IB, or 5+ AP tests at score 5 plus A1 grades in Class XII).",
+       "notesAr": "هذا التخصص ليس ضمن قائمة التخصصات التي يقبل فيها الصف الثاني عشر من CBSE؛ يوصى بدراسة إضافية (A levels أو البكالوريا الدولية أو 5 اختبارات AP بدرجة 5 مع درجات A1 في الصف الثاني عشر).",
+       "source": "s5",
+       "quote": "Class XII qualifications issued by the Central Board of Secondary Education (CBSE) are accepted by some Colleges for the following courses:"
+      },
+      "ISC": {
+       "accepted": false,
+       "notesEn": "Class XII from boards other than CBSE (including ISC): further study is strongly recommended.",
+       "notesAr": "الصف الثاني عشر من مجالس غير CBSE (ومنها ISC): يوصى بشدة بدراسة إضافية.",
+       "source": "s5",
+       "quote": "are studying for Class XII qualifications issued by a board other than CBSE"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "ESAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "ESAT admissions test.",
+        "noteAr": "اختبار القبول ESAT.",
+        "source": "s8",
+        "quote": "All applicants for Engineering are required to take the Engineering and Science Admissions Test (ESAT). You will need to complete Mathematics 1, Mathematics 2 and Physics. You must register in advance and take the test at an authorised assessment centre."
+       },
+       {
+        "test": "ACT",
+        "policy": "REQUIRED",
+        "minScore": 33,
+        "noteEn": "Alongside AP tests; SAT alternative: 1,500 combined with Mathematics 750+.",
+        "noteAr": "إلى جانب اختبارات AP؛ بديل SAT: مجموع 1500 مع 750 فأكثر في الرياضيات.",
+        "source": "s5",
+        "quote": "If you have taken Advanced Placement examinations or equivalent qualifications alongside ACTs, you will need to have an ACT composite score of 33 out of 36 for the following courses:"
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Shortlisted applicants are interviewed.",
+        "noteAr": "تجرى مقابلات للمرشحين المختارين.",
+        "source": "s8",
+        "quote": "take part in an interview"
+       }
+      ],
+      "source": "s8"
+     },
+     "previous": null
+    },
+    {
+     "key": "cambridge-med",
+     "status": "EXISTS",
+     "nameEn": "Medicine, MB and BChir",
+     "nameAr": "الطب، بكالوريوس الطب وبكالوريوس الجراحة (MB BChir)",
+     "degree": "MB BChir",
+     "durationYears": 6,
+     "url": "https://www.undergraduate.study.cam.ac.uk/courses/medicine-mb-bchir",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*A*A",
+       "notesEn": "Minimum offer; many Colleges ask for A* in specific subjects.",
+       "notesAr": "الحد الأدنى للعرض؛ تطلب كليات كثيرة A* في مواد محددة.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A*",
+         "source": "s9",
+         "quote": "Colleges usually require A* in Chemistry. They may sometimes ask for higher grades or an A* in a particular subject. Check College websites for details."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "mathematics",
+          "biology",
+          "physics",
+          "further_mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "noteEn": "One or two further science or mathematics subjects, depending on the College.",
+         "noteAr": "مادة أو مادتان إضافيتان من العلوم أو الرياضيات حسب الكلية.",
+         "source": "s9",
+         "quote": "one or two other science or mathematics subject from:"
+        }
+       ],
+       "source": "s9",
+       "quote": "A level: A*A*A"
+      },
+      "IB": {
+       "minimumPoints": 41,
+       "notesEn": "41-42 points with 776 at Higher Level.",
+       "notesAr": "41-42 نقطة مع 776 في المستوى العالي.",
+       "source": "s9",
+       "quote": "IB: 41-42 points, with 776 at Higher Level"
+      },
+      "AMERICAN": {
+       "notesEn": "A US High School Diploma alone is not suitable; 5+ AP scores of 5, a high SAT or ACT score and a high GPA. SAT: 1,500 combined (Mathematics 750+); ACT: 33.",
+       "notesAr": "شهادة الثانوية الأمريكية وحدها غير كافية؛ يلزم 5 درجات AP فأكثر بدرجة 5 ودرجة مرتفعة في SAT أو ACT ومعدل مرتفع. SAT: مجموع 1500 (الرياضيات 750 فأكثر)؛ ACT: 33.",
+       "source": "s5",
+       "quote": "a minimum of 5 Advanced Placement (AP) Scores at grade 5 in subjects related to the course applied for"
+      },
+      "CBSE": {
+       "accepted": false,
+       "notesEn": "Medicine is not in the list of courses for which CBSE Class XII is accepted; further study is recommended (A levels, IB, or 5+ AP tests at score 5 plus A1 grades in Class XII).",
+       "notesAr": "هذا التخصص ليس ضمن قائمة التخصصات التي يقبل فيها الصف الثاني عشر من CBSE؛ يوصى بدراسة إضافية (A levels أو البكالوريا الدولية أو 5 اختبارات AP بدرجة 5 مع درجات A1 في الصف الثاني عشر).",
+       "source": "s5",
+       "quote": "Class XII qualifications issued by the Central Board of Secondary Education (CBSE) are accepted by some Colleges for the following courses:"
+      },
+      "ISC": {
+       "accepted": false,
+       "notesEn": "Class XII from boards other than CBSE (including ISC): further study is strongly recommended.",
+       "notesAr": "الصف الثاني عشر من مجالس غير CBSE (ومنها ISC): يوصى بشدة بدراسة إضافية.",
+       "source": "s5",
+       "quote": "are studying for Class XII qualifications issued by a board other than CBSE"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "UCAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "UCAT required for Medicine (A100).",
+        "noteAr": "اختبار UCAT مطلوب لدراسة الطب (A100).",
+        "source": "s10",
+        "quote": "You must be registered for the UCAT by 16 September and you must have taken the test by 24 September 2026."
+       },
+       {
+        "test": "ACT",
+        "policy": "REQUIRED",
+        "minScore": 33,
+        "noteEn": "Alongside AP tests; SAT alternative: 1,500 combined with Mathematics 750+.",
+        "noteAr": "إلى جانب اختبارات AP؛ بديل SAT: مجموع 1500 مع 750 فأكثر في الرياضيات.",
+        "source": "s5",
+        "quote": "If you have taken Advanced Placement examinations or equivalent qualifications alongside ACTs, you will need to have an ACT composite score of 33 out of 36 for the following courses:"
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Shortlisted applicants are interviewed.",
+        "noteAr": "تجرى مقابلات للمرشحين المختارين.",
+        "source": "s9",
+        "quote": "take part in an interview"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Must be 18 by 1 November of the first year.",
+        "noteAr": "يجب بلوغ 18 عاما بحلول 1 نوفمبر من السنة الأولى.",
+        "source": "s9",
+        "quote": "will not be 18 years old on 1 November of year 1. This is due to national restrictions"
+       },
+       {
+        "kind": "WORK_EXPERIENCE",
+        "required": false,
+        "noteEn": "Work experience in health or social care strongly recommended.",
+        "noteAr": "يوصى بشدة بخبرة عملية في الرعاية الصحية أو الاجتماعية.",
+        "source": "s9",
+        "quote": "that you get some work experience before you apply. This can be paid or voluntary, in a health or social care organisation"
+       }
+      ],
+      "source": "s9"
+     },
+     "previous": null
+    }
+   ]
+  }
+ ]
+}

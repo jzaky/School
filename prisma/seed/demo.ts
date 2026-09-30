@@ -23,7 +23,6 @@ import { seedCalendar } from "./academics/calendar";
 import { seedPathways } from "./academics/pathways";
 import { seedApplications } from "./academics/applications";
 import { seedCurriculum } from "./academics/curriculum";
-import { seedPipelineDemo } from "./catalog/pipeline-demo";
 import { seedPathwayEngine } from "./academics/pathway-engine";
 import { seedTranscripts } from "./academics/transcripts";
 import { seedGlobalCatalog } from "./catalog";
@@ -740,7 +739,8 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   await seedCurriculum(world);
   await seedAccess(world);
   // Requirement pipeline examples (after the global catalog seed; programs are looked up at runtime).
-  if (isDemoTenant) await seedPipelineDemo(db, { now, orgId, log });
+  // The catalog review and change monitor show real data only: changes found between archived and
+  // current official pages (see prisma/seed/catalog/official.ts). No example drafts or changes are seeded.
 
   log(`demo seed finished in ${Date.now() - started}ms`);
   return { orgId, ms: Date.now() - started };

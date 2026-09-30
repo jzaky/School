@@ -48,7 +48,7 @@ export async function seedGlobalApplicationDeadlines(db: PrismaClient, now = new
 }
 
 export async function seedApplications(w: SeedWorld) {
-  await seedGlobalApplicationDeadlines(w.db, w.now, w.log);
+  // Global deadlines come only from official pages (prisma/seed/catalog/official.ts).
   await seedApplicationsFor(w.db, w.orgId, w.now, w.log);
 }
 

@@ -1,0 +1,1623 @@
+{
+ "batch": "uk2",
+ "assembledAt": "2026-09-30T02:36:28.956Z",
+ "universities": [
+  {
+   "key": "manchester",
+   "website": "https://www.manchester.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.manchester.ac.uk/study/undergraduate/courses/2027/03519/bsc-management/",
+     "title": "BSc Management (2027 entry) | The University of Manchester",
+     "retrievedAt": "2026-09-29T23:48:40.243Z",
+     "hash": "0221f3d06f4916f32a1f7f69aa3f1d8e05a4efc72be5f1d5773dd95a69acc186"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.alliancembs.manchester.ac.uk/study/undergraduate/entry-requirements/international-entry-requirements/",
+     "title": "Undergraduate International Entry Requirements | Alliance MBS",
+     "retrievedAt": "2026-09-29T23:48:42.516Z",
+     "hash": "5414260c8ff5c53341f856c5b89160d4948b74e065850d3ccc009a5fbeaabc1e"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.alliancembs.manchester.ac.uk/study/undergraduate/entry-requirements/language-requirements/",
+     "title": "Undergraduate Language Requirements | Alliance MBS",
+     "retrievedAt": "2026-09-29T23:48:45.693Z",
+     "hash": "015ea5e33d691b233632eee2084a5a95e8ac844b014125009490789e43016884",
+     "waybackTimestamp": "20251007030931",
+     "waybackHash": "ca86b1b435a620e27398642a0a1cdb3445d06f658275f66c2df9dd8d355d4de7"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.manchester.ac.uk/study/undergraduate/courses/2027/00560/bsc-computer-science/",
+     "title": "BSc Computer Science (2027 entry) | The University of Manchester",
+     "retrievedAt": "2026-09-29T23:48:55.638Z",
+     "hash": "3da7e1d4077d73cde1bfd636620ca2ee89204bddf33839bc16408abecef3ee10"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.cs.manchester.ac.uk/study/international-students/country-specific-information/",
+     "title": "Country-specific information - Department of Computer Science - The University of Manchester",
+     "retrievedAt": "2026-09-29T23:48:54.240Z",
+     "hash": "718b1046b95b6ac6e996fc984a87b35697aaa7099fea88b26bf254428754e003"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.manchester.ac.uk/study/undergraduate/courses/2027/03363/beng-electrical-and-electronic-engineering/",
+     "title": "BEng Electrical and Electronic Engineering (2027 entry) | The University of Manchester",
+     "retrievedAt": "2026-09-29T23:52:05.983Z",
+     "hash": "706246b5ef6527bae5a5c0e7764b91da1e3cce9275222a981642d5b9ebbac5f2"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.manchester.ac.uk/study/undergraduate/courses/2027/01428/mbchb-medicine/",
+     "title": "MBChB Medicine (2027 entry) | The University of Manchester",
+     "retrievedAt": "2026-09-29T23:52:36.170Z",
+     "hash": "f04473f72fc87cc8cadf60ed868966581d1f51a9b21aaddbe72f9cdf66b562de"
+    },
+    {
+     "id": "s8",
+     "url": "https://www.bmh.manchester.ac.uk/study/medicine/apply/",
+     "title": "Application process: Medicine | The University of Manchester",
+     "retrievedAt": "2026-09-29T23:49:26.634Z",
+     "hash": "d1350f1ef4afb3353cf1fdd95530b566d8295eb34ede06fcd394768c661954e8",
+     "waybackTimestamp": "20251207164136",
+     "waybackHash": "85033c63f491bb7c2e4a189248245fffc860faae5e71a4eda960727cb9b758c3"
+    },
+    {
+     "id": "s9",
+     "url": "https://www.bmh.manchester.ac.uk/study/medicine/apply/ucat/",
+     "title": "University Clinical Aptitude Test (UCAT) | Medicine MBChB | University of Manchester",
+     "retrievedAt": "2026-09-29T23:52:50.483Z",
+     "hash": "e6b63e04cf3759c1719c52d604df3890fa690048d85797a53031397bdafcc2a5",
+     "waybackTimestamp": "20251113075619",
+     "waybackHash": "39e0a5161c0a318663940b4bc4438110ad3e2b782d79c18e5a98d831d496c2a0"
+    },
+    {
+     "id": "s10",
+     "url": "https://www.manchester.ac.uk/study/undergraduate/courses/2027/01695/mpharm-pharmacy/",
+     "title": "MPharm Pharmacy (2027 entry) | The University of Manchester",
+     "retrievedAt": "2026-09-29T23:53:03.432Z",
+     "hash": "a475a2393ed9e1afe02494e8f7f6d76ef06b08e8fafede77cbbf561e0b1c905a"
+    },
+    {
+     "id": "s11",
+     "url": "https://www.manchester.ac.uk/study/international/country-specific-information/united-arab-emirates/entry-requirements/",
+     "title": "Entry requirements | Information for students from United Arab Emirates | The University of Manchester",
+     "retrievedAt": "2026-09-29T23:49:14.433Z",
+     "hash": "784e6d7be2f7c46b061081ee773b800fafe403e5de8bf889d112b7b7561f6883"
+    },
+    {
+     "id": "s12",
+     "url": "https://www.manchester.ac.uk/study/international/country-specific-information/india/entry-requirements/",
+     "title": "Information for students from India | The University of Manchester",
+     "retrievedAt": "2026-09-29T23:53:48.080Z",
+     "hash": "1cc6b76e47daf5ab3e2c9354d0eae69bfb30afe4d6f5dc7c57707893a7541a90"
+    },
+    {
+     "id": "s13",
+     "url": "https://www.manchester.ac.uk/study/international/country-specific-information/usa/entry-requirements/",
+     "title": "Information for students from the US | The University of Manchester",
+     "retrievedAt": "2026-09-29T23:49:58.070Z",
+     "hash": "29d9c38afea722f16c368c15735b542a9cf5a9ab1c51d83e83017e1a3c618287"
+    },
+    {
+     "id": "s14",
+     "url": "https://www.manchester.ac.uk/study/international/admissions/undergraduate-application-process/undergraduate-entry-requirements/",
+     "title": "Undergraduate entry requirements | International | The University of Manchester",
+     "retrievedAt": "2026-09-29T23:48:37.887Z",
+     "hash": "c916a547201f341d9063c4604dec6ef87ca3061e3f476137172c67d5bf3d4791",
+     "waybackTimestamp": "20250810030438",
+     "waybackHash": "64201bd2e96b0f3623b01ee36cdab43fabf4f2d2ba5734fabf658324e268be65"
+    },
+    {
+     "id": "s15",
+     "url": "https://www.manchester.ac.uk/study/undergraduate/applying/",
+     "title": "Applying for undergraduate study at The University of Manchester",
+     "retrievedAt": "2026-09-29T23:48:52.923Z",
+     "hash": "20d3aba3d8c8ff99109706e4d1f6a26da006e8b26cb3db431c10945cc95bf316"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6,
+     "minComponent": null,
+     "waiverNoteEn": "Varies by course from IELTS 6.0 to 7.0; each course page states its own requirement.",
+     "waiverNoteAr": "يتراوح المطلوب بين 6.0 و7.0 في IELTS حسب البرنامج، وتحدد صفحة كل برنامج متطلبه.",
+     "source": "s14",
+     "quote": "These vary by course and department but are usually the equivalent of IELTS 6.0–7.0 (or 5.5 for foundation courses)."
+    }
+   ],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_OXBRIDGE_MEDICINE",
+     "date": "2026-10-15",
+     "labelEn": "Medicine and Dentistry UCAS deadline",
+     "labelAr": "الموعد النهائي لطلبات الطب وطب الأسنان عبر UCAS",
+     "source": "s15",
+     "quote": "15 October 2026 (18:00 UK time) Medicine and Dentistry deadline for 2027 entry"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_EQUAL_CONSIDERATION",
+     "date": "2027-01-13",
+     "labelEn": "UCAS equal consideration deadline",
+     "labelAr": "الموعد النهائي للنظر المتساوي عبر UCAS",
+     "source": "s15",
+     "quote": "13 January 2027 Equal consideration deadline"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-06-30",
+     "labelEn": "Final application deadline (later applications go to Clearing)",
+     "labelAr": "الموعد النهائي الأخير للتقديم (الطلبات اللاحقة تدخل مرحلة Clearing)",
+     "source": "s15",
+     "quote": "30 June 2027 Application deadline for 2027"
+    }
+   ],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "The UAE secondary certificate (Al-Thanawaya Al-Aama) is not accepted for direct entry; students must complete an approved international foundation course.",
+     "notesAr": "لا تُقبل شهادة الثانوية العامة الإماراتية للقبول المباشر، ويجب على الطلاب إكمال برنامج تأسيسي دولي معتمد.",
+     "source": "s11",
+     "quote": "Due to differences in the UK and UAE education systems, students with the Al-Thanawaya Al-Aama will be required to follow an approved international foundation course.",
+     "subjects": []
+    },
+    "CBSE": {
+     "accepted": true,
+     "minimumPercent": 80,
+     "notesEn": "Direct entry usually needs 80 to 95% overall depending on the programme; subject requirements vary.",
+     "notesAr": "يتطلب القبول المباشر عادة معدلا عاما بين 80 و95% حسب البرنامج، وتختلف متطلبات المواد.",
+     "source": "s12",
+     "quote": "Students completing Higher Secondary School Certificates at the end of CBSE/ISC Standard XII will usually be considered for direct entry to the first year of undergraduate courses provided they have achieved a minimum of 80-95% overall.",
+     "subjects": []
+    },
+    "ISC": {
+     "accepted": true,
+     "minimumPercent": 80,
+     "notesEn": "Direct entry usually needs 80 to 95% overall depending on the programme; subject requirements vary.",
+     "notesAr": "يتطلب القبول المباشر عادة معدلا عاما بين 80 و95% حسب البرنامج، وتختلف متطلبات المواد.",
+     "source": "s12",
+     "quote": "Students completing Higher Secondary School Certificates at the end of CBSE/ISC Standard XII will usually be considered for direct entry to the first year of undergraduate courses provided they have achieved a minimum of 80-95% overall.",
+     "subjects": []
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "minimumGPA": 3,
+     "notesEn": "US High School Diploma with a GPA of 3.0 plus three AP tests or dual enrolment classes in separate subjects (including any subject requirements).",
+     "notesAr": "شهادة الثانوية الأمريكية بمعدل 3.0 مع ثلاثة اختبارات AP أو مقررات جامعية بالتسجيل المزدوج في مواد مختلفة (بما فيها المواد المطلوبة).",
+     "source": "s13",
+     "quote": "Our A-level requirements can typically be met through a combination of: three AP tests or dual enrolment/college level classes taken during high school in separate subjects (including any subject requirements), plus completion of the High School Diploma (for which we do require a specific GPA of 3.0).",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "manchester-bus",
+     "status": "REPLACED",
+     "nameEn": "BSc Management",
+     "nameAr": "بكالوريوس العلوم في الإدارة",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.manchester.ac.uk/study/undergraduate/courses/2027/03519/bsc-management/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "subjects": [],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s1",
+       "quote": "Typical A-level offer AAA"
+      },
+      "IB": {
+       "minimumPoints": 36,
+       "subjects": [],
+       "notesEn": "6,6,6 in Higher Level subjects.",
+       "notesAr": "6،6،6 في مواد المستوى العالي.",
+       "source": "s1",
+       "quote": "36 points overall. 6,6,6 in Higher Level subjects"
+      },
+      "CBSE": {
+       "minimumPercent": 85,
+       "subjects": [],
+       "notesEn": "No lower than 80% in any subject and an average of at least 85% including English; Standard X Maths at 70% or Maths in Standard XII.",
+       "notesAr": "لا تقل أي مادة عن 80% ومعدل لا يقل عن 85% يشمل اللغة الإنجليزية، مع 70% في رياضيات الصف العاشر أو دراسة الرياضيات في الصف الثاني عشر.",
+       "source": "s2",
+       "quote": "We require no lower than 80% in any subject, with a minimum average of 85% which must include English."
+      },
+      "ISC": {
+       "minimumPercent": 85,
+       "subjects": [],
+       "notesEn": "CISCE Standard XII: no lower than 80% in any subject and an average of at least 85% including English.",
+       "notesAr": "الصف الثاني عشر من CISCE: لا تقل أي مادة عن 80% ومعدل لا يقل عن 85% يشمل اللغة الإنجليزية.",
+       "source": "s2",
+       "quote": "We require no lower than 80% in any subject, with a minimum average of 85% which must include English."
+      },
+      "AMERICAN": {
+       "minimumGPA": 3,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "B",
+         "source": "s2",
+         "quote": "USA High School Graduation Diploma with an overall GPA of 3.0 including grade B in Mathematics and English Language. PLUS three APs with scores 5, 5, 5."
+        }
+       ],
+       "notesEn": "Plus three AP exams at 5, 5, 5.",
+       "notesAr": "بالإضافة إلى ثلاثة اختبارات AP بدرجات 5 و5 و5.",
+       "source": "s2",
+       "quote": "USA High School Graduation Diploma with an overall GPA of 3.0 including grade B in Mathematics and English Language. PLUS three APs with scores 5, 5, 5."
+      },
+      "UAE_MOE": {
+       "accepted": false,
+       "notesEn": "From the UAE, Alliance MBS needs A-levels, the IB or a recognised international foundation year.",
+       "notesAr": "من الإمارات، تشترط كلية أليانس مانشستر للأعمال شهادة A-level أو البكالوريا الدولية أو سنة تأسيسية دولية معترف بها.",
+       "source": "s2",
+       "quote": "You will need acceptable qualifications such as A-levels or the International Baccalaureate, or you will need to complete a recognised international foundation year course.",
+       "subjects": []
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s3",
+        "quote": "International English Language Testing System (IELTS) 6.5 overall with no less than 6 in any individual component."
+       },
+       {
+        "test": "PTE",
+        "minOverall": 70,
+        "minComponent": 65,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s3",
+        "quote": "70 overall with no less than 65 in any individual component."
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "manchester-cs",
+     "status": "EXISTS",
+     "nameEn": "BSc Computer Science",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.manchester.ac.uk/study/undergraduate/courses/2027/00560/bsc-computer-science/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A*",
+         "source": "s4",
+         "quote": "A*AA including A* in Mathematics, and a minimum of one science subject from the following list: Computer Science, Further Mathematics, Biology, Chemistry, or Physics."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "computer_science",
+          "further_mathematics",
+          "biology",
+          "chemistry",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s4",
+         "quote": "A*AA including A* in Mathematics, and a minimum of one science subject from the following list: Computer Science, Further Mathematics, Biology, Chemistry, or Physics."
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s4",
+       "quote": "A*AA including A* in Mathematics, and a minimum of one science subject from the following list: Computer Science, Further Mathematics, Biology, Chemistry, or Physics."
+      },
+      "IB": {
+       "minimumPoints": 37,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "7",
+         "source": "s4",
+         "quote": "37 points overall with 7,6,6 in Higher Level subjects, including 7 in Mathematics: Analysis and Approaches.",
+         "noteEn": "Mathematics: Analysis and Approaches only.",
+         "noteAr": "الرياضيات: التحليل والمقاربات فقط."
+        }
+       ],
+       "notesEn": "At least one science subject at Higher Level (Computer Science, Physics, Chemistry or Biology).",
+       "notesAr": "مادة علمية واحدة على الأقل بالمستوى العالي (علوم الحاسوب أو الفيزياء أو الكيمياء أو الأحياء).",
+       "source": "s4",
+       "quote": "37 points overall with 7,6,6 in Higher Level subjects, including 7 in Mathematics: Analysis and Approaches."
+      },
+      "CBSE": {
+       "minimumPercent": 90,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "90",
+         "source": "s5",
+         "quote": "An average of 90%, including 90% in Mathematics (not Applied Maths) and 85% in Physics or Computer Science (not Informatics Practices)"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "physics",
+          "computer_science"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "source": "s5",
+         "quote": "An average of 90%, including 90% in Mathematics (not Applied Maths) and 85% in Physics or Computer Science (not Informatics Practices)"
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s5",
+       "quote": "An average of 90%, including 90% in Mathematics (not Applied Maths) and 85% in Physics or Computer Science (not Informatics Practices)"
+      },
+      "ISC": {
+       "minimumPercent": 90,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "90",
+         "source": "s5",
+         "quote": "An average of 90%, including 90% in Mathematics (not Applied Maths) and 85% in Physics or Computer Science (not Informatics Practices)"
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s5",
+       "quote": "An average of 90%, including 90% in Mathematics (not Applied Maths) and 85% in Physics or Computer Science (not Informatics Practices)"
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.3,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "5",
+         "source": "s5",
+         "quote": "Grade 5 in AP Calculus BC or Calculus AB (subscore not accepted)"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "physics",
+          "computer_science"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "5",
+         "source": "s5",
+         "quote": "Grade 5 in AP Physics or Computer Science"
+        }
+       ],
+       "notesEn": "US High School Graduation Diploma with GPA 3.3, AP Calculus 5, AP Physics or Computer Science 5, and two further APs at 5 and 4.",
+       "notesAr": "شهادة الثانوية الأمريكية بمعدل 3.3 مع درجة 5 في AP Calculus و5 في AP الفيزياء أو علوم الحاسوب، واختباري AP إضافيين بدرجتي 5 و4.",
+       "source": "s5",
+       "quote": "Overall GPA of 3.3"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6.5,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s4",
+        "quote": "IELTS 6.5 overall, with no subskill below 6.5"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 90,
+        "minComponent": 22,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s4",
+        "quote": "TOEFL iBT 90 overall, with no subskill below 22"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Only one offer can be held in the Department of Computer Science for Year 1 entry; apply to one course only.",
+        "noteAr": "يمكن الاحتفاظ بعرض واحد فقط في قسم علوم الحاسوب للسنة الأولى؛ قدّم لبرنامج واحد فقط.",
+        "source": "s4",
+        "quote": "It is only possible to hold an offer for one course in the Department of Computer Science (for Year 1 entry)."
+       }
+      ],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "manchester-ee",
+     "status": "EXISTS",
+     "nameEn": "BEng Electrical and Electronic Engineering",
+     "nameAr": "بكالوريوس الهندسة في الهندسة الكهربائية والإلكترونية",
+     "degree": "BEng",
+     "durationYears": 3,
+     "url": "https://www.manchester.ac.uk/study/undergraduate/courses/2027/03363/beng-electrical-and-electronic-engineering/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s6",
+         "quote": "AAA including Mathematics and either Physics, Electronics, Further Mathematics, Chemistry or Computer Science."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "physics",
+          "electronics",
+          "further_mathematics",
+          "chemistry",
+          "computer_science"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s6",
+         "quote": "AAA including Mathematics and either Physics, Electronics, Further Mathematics, Chemistry or Computer Science."
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s6",
+       "quote": "AAA including Mathematics and either Physics, Electronics, Further Mathematics, Chemistry or Computer Science."
+      },
+      "IB": {
+       "minimumPoints": 37,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "7",
+         "source": "s6",
+         "quote": "37 points overall with 7,6,6 in Higher Level subjects, including 7 in Higher Level Mathematics and 6 in Higher Level Physics or Chemistry."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "physics",
+          "chemistry"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s6",
+         "quote": "37 points overall with 7,6,6 in Higher Level subjects, including 7 in Higher Level Mathematics and 6 in Higher Level Physics or Chemistry."
+        }
+       ],
+       "source": "s6",
+       "quote": "37 points overall with 7,6,6 in Higher Level subjects, including 7 in Higher Level Mathematics and 6 in Higher Level Physics or Chemistry."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [],
+      "source": "s6"
+     },
+     "previous": null
+    },
+    {
+     "key": "manchester-medicine-mbchb",
+     "status": "EXISTS",
+     "nameEn": "MBChB Medicine",
+     "nameAr": "بكالوريوس الطب والجراحة (MBChB)",
+     "degree": "MBChB",
+     "durationYears": 5,
+     "url": "https://www.manchester.ac.uk/study/undergraduate/courses/2027/01428/mbchb-medicine/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "subjects": [
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s7",
+         "quote": "Biology/Human Biology or Chemistry; and"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "chemistry",
+          "biology",
+          "physics",
+          "psychology",
+          "mathematics",
+          "further_mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s7",
+         "quote": "One of the following subjects from Chemistry; Biology/Human Biology; Physics; Psychology; Mathematics or Further Mathematics."
+        }
+       ],
+       "notesEn": "AAA including Biology or Chemistry plus a second science from the listed subjects.",
+       "notesAr": "AAA تشمل الأحياء أو الكيمياء إضافة إلى مادة علمية ثانية من القائمة.",
+       "source": "s7",
+       "quote": "A-level AAA, including"
+      },
+      "IB": {
+       "minimumPoints": 36,
+       "subjects": [
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "chemistry",
+          "biology"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": null,
+         "source": "s7",
+         "quote": "Major subjects must include Chemistry or Biology, plus another science (one from Chemistry, Biology, Physics, Psychology or Mathematics) and one further subject at Higher Level."
+        }
+       ],
+       "notesEn": "6,6,6 at Higher Level; Maths and English Language at GCSE grade B (6) if not in the Diploma.",
+       "notesAr": "6،6،6 في المستوى العالي؛ الرياضيات واللغة الإنجليزية بدرجة B (6) في GCSE إذا لم تكونا ضمن الدبلوم.",
+       "source": "s7",
+       "quote": "36 points overall. 6,6,6, in Higher Level subjects."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7,
+        "minComponent": 6.5,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s7",
+        "quote": "International English Language Testing Service (IELTS): A minimum average score of 7.0 and with not less than 6.5 in any one component taken at the same sitting;"
+       },
+       {
+        "test": "PTE",
+        "minOverall": 65,
+        "minComponent": 65,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s7",
+        "quote": "Pearson Test of English (PTE) Academic: An overall score of 65 with no less than 65 in each of the communicative skills domains taken at the same sitting;"
+       },
+       {
+        "test": "CAMBRIDGE",
+        "minOverall": 185,
+        "minComponent": 185,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s7",
+        "quote": "Cambridge English: Advanced (CAE), or Cambridge English: Proficiency (CPE): An overall score of 185 with no less than 185 in each of the scoring domains taken at the same sitting;"
+       }
+      ],
+      "tests": [
+       {
+        "test": "UCAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "Applicants with SJT Band 3 or 4 are not considered; the UCAT threshold is set each year.",
+        "noteAr": "لا يُنظر في المتقدمين الحاصلين على الفئة 3 أو 4 في اختبار الحكم الظرفي، ويُحدَّد الحد الأدنى لـ UCAT سنويا.",
+        "source": "s7",
+        "quote": "Applicants are required to sit the University Clinical Aptitude Test (UCAT) in the year they wish to make their application."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "No offers are made without interview.",
+        "noteAr": "لا تُقدَّم أي عروض دون مقابلة.",
+        "source": "s7",
+        "quote": "We do not make any offers without interview."
+       },
+       {
+        "kind": "WORK_EXPERIENCE",
+        "required": true,
+        "noteEn": "Relevant work experience is required before applying.",
+        "noteAr": "يُشترط اكتساب خبرة عملية ذات صلة قبل التقديم.",
+        "source": "s7",
+        "quote": "We require applicants to undertake some relevant work experience prior to application in order that they can gain some insight into what the role of a doctor involves."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "International applicants should email ug.medicine@manchester.ac.uk to check requirements for their country before applying.",
+        "noteAr": "على المتقدمين الدوليين مراسلة ug.medicine@manchester.ac.uk للتحقق من متطلبات بلدهم قبل التقديم.",
+        "source": "s7",
+        "quote": "Please contact us at ug.medicine@manchester.ac.uk to check specific requirements for your country before you apply for the Medicine course."
+       }
+      ],
+      "source": "s7"
+     },
+     "previous": null
+    },
+    {
+     "key": "manchester-pharm",
+     "status": "EXISTS",
+     "nameEn": "MPharm Pharmacy",
+     "nameAr": "ماجستير الصيدلة (MPharm)",
+     "degree": "MPharm",
+     "durationYears": 4,
+     "url": "https://www.manchester.ac.uk/study/undergraduate/courses/2027/01695/mpharm-pharmacy/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAB",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s10",
+         "quote": "AAB including Chemistry, either Mathematics or Biology, and one further rigorous academic subject."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "mathematics",
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s10",
+         "quote": "AAB including Chemistry, either Mathematics or Biology, and one further rigorous academic subject."
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s10",
+       "quote": "AAB including Chemistry, either Mathematics or Biology, and one further rigorous academic subject."
+      },
+      "IB": {
+       "minimumPoints": 35,
+       "subjects": [],
+       "notesEn": "6,6,5 at Higher Level including Higher Level Chemistry, with Biology or Mathematics at Higher Level and the other at Standard Level.",
+       "notesAr": "6،6،5 في المستوى العالي تشمل الكيمياء بالمستوى العالي، مع الأحياء أو الرياضيات بالمستوى العالي والأخرى بالمستوى القياسي.",
+       "source": "s10",
+       "quote": "35 points overall."
+      },
+      "AMERICAN": {
+       "subjects": [],
+       "notesEn": "Advanced Placement tests at 5, 5, 4 in specific subjects.",
+       "notesAr": "اختبارات AP بدرجات 5 و5 و4 في مواد محددة.",
+       "source": "s10",
+       "quote": "Advanced Placement Tests 554 (specific subjects required)."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7,
+        "minComponent": 6.5,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s10",
+        "quote": "IELTS Academic or IELTS UKVI grade 7 (with no component less than 6.5) or;"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Interviews are part of selection and are held on Microsoft Teams.",
+        "noteAr": "المقابلات جزء من الاختيار وتُعقد عبر Microsoft Teams.",
+        "source": "s10",
+        "quote": "You will be required to attend a Microsoft Teams interview."
+       }
+      ],
+      "source": "s10"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "nottingham",
+   "website": "https://www.nottingham.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-BSc-Hons.html",
+     "title": "Computer Science BSc (Hons) | University of Nottingham",
+     "retrievedAt": "2026-09-29T23:48:53.863Z",
+     "hash": "8c0a15944ca930e6a432f1baf158e2c473d67962768ebe264f8b597a5ff3c3d8"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Pharmacy-MPharm.html",
+     "title": "Pharmacy MPharm (Hons) | University of Nottingham",
+     "retrievedAt": "2026-09-29T23:48:56.635Z",
+     "hash": "e805246bbc5e72b27836b851bcc17659c2cdb1a0b83a3041cb5ebe6a5dd7c4de",
+     "waybackTimestamp": "20260214052337",
+     "waybackHash": "8a2452cd236af0b451d4d36f81e7ac6229bb600f5656667c8d50c434dec50a05"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.nottingham.ac.uk/studywithus/international-applicants/country-info/countryinformation/uae.aspx",
+     "title": "United Arab Emirates - The University of Nottingham",
+     "retrievedAt": "2026-09-29T23:49:05.330Z",
+     "hash": "fe33418d58692085d97099257c55145e71f8151d622f6b585b34bf9fa31ecfa8",
+     "waybackTimestamp": "20250625053651",
+     "waybackHash": "87933ef1ec3271f277c6ca19d87cdc0e2fac4ce80c1b4423744df3864ed9097d"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.nottingham.ac.uk/studywithus/international-applicants/country-info/countryinformation/india.aspx",
+     "title": "India - The University of Nottingham",
+     "retrievedAt": "2026-09-29T23:52:14.350Z",
+     "hash": "e22cee9f459a3f95d52442059a768196897fcfd96b2e2d629c82b39e86fdce43"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.nottingham.ac.uk/studywithus/international-applicants/country-info/countryinformation/usa.aspx",
+     "title": "United States of America - The University of Nottingham",
+     "retrievedAt": "2026-09-29T23:49:09.372Z",
+     "hash": "df18994c291de8be1ab1143efcee1a6a46927515f60165a575f6010d81b25ac7"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.nottingham.ac.uk/studywithus/ugstudy/applying.html",
+     "title": "Applying for undergraduate study",
+     "retrievedAt": "2026-09-29T23:53:26.948Z",
+     "hash": "bde035e21b633c3dfcc85314fdc52a4b40257ef358273bee0b218489cc24e3f9"
+    }
+   ],
+   "english": [],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "NOT_CONSIDERED",
+     "minScore": null,
+     "noteEn": "Standardised tests are not generally required for US applicants (except medicine).",
+     "noteAr": "لا تُشترط الاختبارات المعيارية عادة لمتقدمي المنهج الأمريكي (باستثناء الطب).",
+     "source": "s5",
+     "quote": "We do not generally require any standardised tests, but medical applicants are required to take the UKCAT test."
+    }
+   ],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_OXBRIDGE_MEDICINE",
+     "date": "2026-10-15",
+     "labelEn": "Medicine and Veterinary Medicine deadline",
+     "labelAr": "الموعد النهائي للطب والطب البيطري",
+     "source": "s6",
+     "quote": "Applications for Medicine and Veterinary Medicine must be submitted by 15 October 2026."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_EQUAL_CONSIDERATION",
+     "date": "2027-01-13",
+     "labelEn": "UCAS deadline for other courses",
+     "labelAr": "الموعد النهائي عبر UCAS لبقية البرامج",
+     "source": "s6",
+     "quote": "Applications for other courses must be submitted by 13 January 2027."
+    }
+   ],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "Applicants from the Emirati high school system (Tawjihiya) must complete a foundation course before undergraduate entry.",
+     "notesAr": "يجب على المتقدمين من نظام الثانوية الإماراتي (التوجيهية) إكمال برنامج تأسيسي قبل الالتحاق بالبكالوريوس.",
+     "source": "s3",
+     "quote": "If you are applying from the Emirati High School system or Tawjahiya (Secondary School Leaving Certificate) you must complete a foundation course for entry to our undergraduate programmes.",
+     "subjects": []
+    },
+    "CBSE": {
+     "accepted": true,
+     "minimumPercent": 75,
+     "notesEn": "Based on the average of the four best subjects. The percentage rises with the course's A-level offer: A*AA 93%, AAA 90%, AAB 87%, ABB 84%, BBB 80%, BBC 78%, BCC 75%.",
+     "notesAr": "يُحتسب متوسط أفضل أربع مواد. ترتفع النسبة مع عرض A-level للبرنامج: A*AA ‏93%، AAA ‏90%، AAB ‏87%، ABB ‏84%، BBB ‏80%، BBC ‏78%، BCC ‏75%.",
+     "source": "s4",
+     "quote": "IHSC XII (CBSE or CISCE Boards) | 93% | 90% | 87% | 84% | 80% | 78% | 75% |",
+     "subjects": []
+    },
+    "ISC": {
+     "accepted": true,
+     "minimumPercent": 75,
+     "notesEn": "CISCE board uses the same scale as CBSE: A*AA 93%, AAA 90%, down to BCC 75%.",
+     "notesAr": "يستخدم مجلس CISCE السلم نفسه المستخدم لـ CBSE: ‏A*AA ‏93%، AAA ‏90%، وصولا إلى BCC ‏75%.",
+     "source": "s4",
+     "quote": "IHSC XII (CBSE or CISCE Boards) | 93% | 90% | 87% | 84% | 80% | 78% | 75% |",
+     "subjects": []
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "notesEn": "Minimum of three approved AP exams from 5,5,5 to 4,4,4 depending on the course (or Honors / dual enrolment classes). A US diploma without APs or SAT IIs usually needs a foundation course.",
+     "notesAr": "ثلاثة اختبارات AP معتمدة على الأقل بدرجات بين 5،5،5 و4،4،4 حسب البرنامج (أو مقررات Honors أو التسجيل المزدوج). وتتطلب الشهادة الأمريكية دون AP أو SAT II عادة برنامجا تأسيسيا.",
+     "source": "s5",
+     "quote": "3 approved AP Exams ranging between 5, 5, 5 to 4, 4, 4",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "nottingham-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc (Hons)",
+     "nameAr": "بكالوريوس العلوم (مع مرتبة الشرف) في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-BSc-Hons.html",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "subjects": [
+        {
+         "type": "PREFERRED",
+         "keys": [
+          "computer_science"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s1",
+         "quote": "A*AA / A*A*B (AAA / A*AB including computer science at grade A)",
+         "noteEn": "With A-level Computer Science at grade A the offer drops to AAA or A*AB.",
+         "noteAr": "مع الحصول على A في علوم الحاسوب بمستوى A-level ينخفض العرض إلى AAA أو A*AB."
+        }
+       ],
+       "notesEn": "A*AA or A*A*B; AAA or A*AB when including Computer Science at grade A. GCSE Maths grade 5 (B) required.",
+       "notesAr": "A*AA أو A*A*B؛ أو AAA أو A*AB عند تضمين علوم الحاسوب بدرجة A. يُشترط الحصول على الدرجة 5 (B) في رياضيات GCSE.",
+       "source": "s1",
+       "quote": "A*AA / A*A*B (AAA / A*AB including computer science at grade A)"
+      },
+      "IB": {
+       "minimumPoints": 36,
+       "subjects": [],
+       "notesEn": "36 points or 766 in 3 HL certificates; 34 points with HL Computer Science at 6.",
+       "notesAr": "36 نقطة أو 766 في ثلاث شهادات بالمستوى العالي؛ 34 نقطة مع علوم الحاسوب بالمستوى العالي بدرجة 6.",
+       "source": "s1",
+       "quote": "IBDP 36 points overall or 766 in 3 Higher Level Certificates."
+      },
+      "CBSE": {
+       "minimumPercent": 93,
+       "subjects": [],
+       "notesEn": "93% is the CBSE/CISCE equivalent of A*AA on the India page.",
+       "notesAr": "نسبة 93% هي ما يعادل A*AA لطلاب CBSE/CISCE وفق صفحة الهند.",
+       "source": "s4",
+       "quote": "IHSC XII (CBSE or CISCE Boards) | 93% | 90% | 87% | 84% | 80% | 78% | 75% |"
+      }
+     },
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": "FOUNDATION",
+        "minimumGrade": "5",
+        "source": "s1",
+        "quote": "GCSE maths at grade B (5) and GCSE English at grade C (4)"
+       }
+      ],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "IELTS 6.5 (no less than 6.0 in any element)"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "nottingham-pharm",
+     "status": "EXISTS",
+     "nameEn": "Pharmacy MPharm (Hons)",
+     "nameAr": "ماجستير الصيدلة (MPharm) مع مرتبة الشرف",
+     "degree": "MPharm",
+     "durationYears": 4,
+     "url": "https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Pharmacy-MPharm.html",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s2",
+         "quote": "AAA including chemistry and at least one further science A level from biology, maths, further maths or physics"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "mathematics",
+          "further_mathematics",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s2",
+         "quote": "AAA including chemistry and at least one further science A level from biology, maths, further maths or physics"
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s2",
+       "quote": "AAA including chemistry and at least one further science A level from biology, maths, further maths or physics"
+      },
+      "IB": {
+       "minimumPoints": 34,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s2",
+         "quote": "IB Diploma 34 points overall with 6,6, in chemistry and a second science subject, or IB Higher Level Certificates 6,6,6 including chemistry and a second science subject."
+        }
+       ],
+       "notesEn": "6 in Chemistry and 6 in a second science.",
+       "notesAr": "6 في الكيمياء و6 في مادة علمية ثانية.",
+       "source": "s2",
+       "quote": "IB Diploma 34 points overall with 6,6, in chemistry and a second science subject, or IB Higher Level Certificates 6,6,6 including chemistry and a second science subject."
+      },
+      "CBSE": {
+       "minimumPercent": 90,
+       "subjects": [],
+       "notesEn": "90% is the CBSE/CISCE equivalent of AAA on the India page.",
+       "notesAr": "نسبة 90% هي ما يعادل AAA لطلاب CBSE/CISCE وفق صفحة الهند.",
+       "source": "s4",
+       "quote": "IHSC XII (CBSE or CISCE Boards) | 93% | 90% | 87% | 84% | 80% | 78% | 75% |"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 7,
+        "minComponent": 6,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s2",
+        "quote": "IELTS 7.0 (no less than 6.0 in each element)"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Shortlisted applicants attend a multi-mini interview (MMI).",
+        "noteAr": "يخضع المرشحون المختارون لمقابلات قصيرة متعددة (MMI).",
+        "source": "s2",
+        "quote": "We use a multi-mini interview (MMI) format."
+       },
+       {
+        "kind": "PERSONAL_STATEMENT",
+        "required": true,
+        "noteEn": "Personal statement must have a clear pharmacy focus.",
+        "noteAr": "يجب أن يركز البيان الشخصي بوضوح على الصيدلة.",
+        "source": "s2",
+        "quote": "All applications must include a personal statement and it should have a clear pharmacy focus."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Must be at least 18 by the end of the calendar year of entry.",
+        "noteAr": "يجب ألا يقل العمر عن 18 عاما بنهاية السنة الميلادية للالتحاق.",
+        "source": "s2",
+        "quote": "You must be at least 18 years old by the end of the calendar year you start your MPharm degree to meet the requirements of the placements within your course."
+       },
+       {
+        "kind": "HEALTH_CHECK",
+        "required": true,
+        "noteEn": "Health and good character checks; vaccinations required.",
+        "noteAr": "فحوص صحية وفحص حسن السيرة، مع لقاحات مطلوبة.",
+        "source": "s2",
+        "quote": "The vaccinations required for the MPharm are Varicella, BCG (Tuberculosis), Hepatitis B and MMR."
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "oxford",
+   "website": "https://www.ox.ac.uk",
+   "applyVia": "UCAS",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/computer-science",
+     "title": "Computer Science | Oxford University",
+     "retrievedAt": "2026-08-24T00:00:00Z",
+     "hash": "276d8532b20425ad2241f1937c11e5bb296ec1c734032ea50976b0cbb38ccbb9",
+     "via": "archive:20260824112832"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.cs.ox.ac.uk/admissions/undergraduate/why_oxford/offers.html",
+     "title": "Department of Computer Science, University of Oxford: offers",
+     "retrievedAt": "2026-09-29T23:49:26.256Z",
+     "hash": "2ea7651e2ed2330d8c1c9c54f5a68aa04a697e59e22870202d97d225a13c702b"
+    },
+    {
+     "id": "s3",
+     "url": "https://eng.ox.ac.uk/study/undergraduate/applications/entry-requirements",
+     "title": "Engineering Science at the University of Oxford: entry requirements",
+     "retrievedAt": "2026-09-29T23:50:05.066Z",
+     "hash": "760dc787bb0a7ac315c6980089c425d9f979dc2db26399c0a532dde50ff1dd1b"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/law-jurisprudence",
+     "title": "Law (Jurisprudence) | Oxford University",
+     "retrievedAt": "2026-08-12T00:00:00Z",
+     "hash": "3a3662d8877b5124d5e063e9fad39dc99bd3d068d4e429367cbd1c2bdcdbb6b1",
+     "via": "archive:20260812092744",
+     "waybackTimestamp": "20251112162218",
+     "waybackHash": "4c5f82f6197dc6fdb6ad3aee0233e8f54fcaac7e57b1f2a8aeaf3b68a5ee2fb5"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine",
+     "title": "Medicine | Oxford University",
+     "retrievedAt": "2026-05-13T00:00:00Z",
+     "hash": "8394d814a285ac3e847f9ae02603d6842c3cfbba7a75fe41b54f6b78a6e2517b",
+     "via": "archive:20260513161440",
+     "waybackTimestamp": "20250824064515",
+     "waybackHash": "febf487a282a8968fbb9b44168017fcadfb3e86b683236c2fe54eb226ac840cb"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.ox.ac.uk/admissions/undergraduate/applying-to-oxford/for-international-students/international-qualifications?wssl=1",
+     "title": "International qualifications | University of Oxford",
+     "retrievedAt": "2025-03-24T00:00:00Z",
+     "hash": "8b00e400f6175ab7d61df9e615010ac172696424a156e98c294c61fbf1a3fe47",
+     "via": "archive:20250324100554"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas",
+     "title": "English language and visa requirements | Oxford University",
+     "retrievedAt": "2026-09-30T00:00:44.332Z",
+     "hash": "51c35ace493ffd855a786994d299e6b79a60122126d87bb75d230d3a146ba13a"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 7.5,
+     "minComponent": 7,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s7",
+     "quote": "| 7.5 | Minimum 7.0 per component |"
+    },
+    {
+     "test": "CAMBRIDGE",
+     "minOverall": 191,
+     "minComponent": 185,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s7",
+     "quote": "C1 Advanced (formerly known as Cambridge English: Advanced or CAE) | 191 | Minimum 185 per component |"
+    },
+    {
+     "test": "OXFORD_TEST",
+     "minOverall": 165,
+     "minComponent": 155,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s7",
+     "quote": "Oxford Test of English (Advanced) | 165 | Minimum 155 per component |"
+    }
+   ],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "TOEFL tests taken from 21 January 2026 are not accepted while the new TOEFL format is under review.",
+     "noteAr": "لا تُقبل اختبارات TOEFL المؤداة اعتبارا من 21 يناير 2026 أثناء مراجعة الصيغة الجديدة للاختبار.",
+     "source": "s7",
+     "quote": "NB. TOEFL tests taken from 21 January 2026 are not accepted and do not meet the English language condition."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "UCAS_OXBRIDGE_MEDICINE",
+     "date": "2026-10-15",
+     "labelEn": "Oxford UCAS deadline (all courses), 6pm UK time",
+     "labelAr": "الموعد النهائي لجامعة أكسفورد عبر UCAS (جميع البرامج)، الساعة 6 مساء بتوقيت المملكة المتحدة",
+     "source": "s1",
+     "quote": "You must submit your application by the strict deadline of 6pm (BST) on 15 October."
+    }
+   ],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "The UAE Tawjihiyya (General Secondary Education Certificate) is not accepted by Oxford.",
+     "notesAr": "لا تقبل جامعة أكسفورد شهادة الثانوية العامة الإماراتية (التوجيهية).",
+     "source": "s6",
+     "quote": "UAE Status | Qualification | Not accepted | Tawjihiyya (General Secondary Education Certificate/GSEC) |",
+     "subjects": []
+    },
+    "JORDAN_TAWJIHI": {
+     "accepted": false,
+     "notesEn": "The Jordanian Tawjihi is not accepted by Oxford.",
+     "notesAr": "لا تقبل جامعة أكسفورد شهادة التوجيهي الأردنية.",
+     "source": "s6",
+     "quote": "Not accepted | Tawjihi (General Secondary Education Certificate) |",
+     "subjects": []
+    },
+    "CBSE": {
+     "accepted": true,
+     "notesEn": "CBSE is graded by letters: A1 A1 A1 A2 A2 for A*AA courses, A1 A1 A1 A1 A2 for A*A*A courses, A1 A1 A2 A2 A2 for AAA courses, with A1 in relevant subjects. State boards are not accepted.",
+     "notesAr": "تُقيَّم CBSE بالحروف: A1 A1 A1 A2 A2 لبرامج A*AA، وA1 A1 A1 A1 A2 لبرامج A*A*A، وA1 A1 A2 A2 A2 لبرامج AAA، مع A1 في المواد ذات الصلة. لا تُقبل شهادات مجالس الولايات.",
+     "source": "s6",
+     "quote": "Year XII qualification, studied with either the CBSE (All-India SSC) or CISCE (ISC) boards, with the following grades:",
+     "subjects": []
+    },
+    "ISC": {
+     "accepted": true,
+     "minimumPercent": 90,
+     "notesEn": "Overall 90% or more; the number of subjects needed at 95% rises with the course offer (two for AAA, three for A*AA, four for A*A*A), others at 85%.",
+     "notesAr": "معدل عام 90% أو أكثر؛ ويزداد عدد المواد المطلوبة بنسبة 95% حسب عرض البرنامج (مادتان لـ AAA، وثلاث لـ A*AA، وأربع لـ A*A*A)، والباقي 85%.",
+     "source": "s6",
+     "quote": "• For CISCE board: Overall grade of 90% or more, with grades of at least 95% or above in two subjects (including any relevant to the course applied for) and 85% or above in the other three subjects.",
+     "subjects": []
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "notesEn": "For A*AA courses: four APs at 5, or three APs at 5 plus ACT 32+ or SAT 1470+. For A*A*A courses: ACT 33+ or SAT 1480+.",
+     "notesAr": "لبرامج A*AA: أربعة اختبارات AP بدرجة 5، أو ثلاثة بدرجة 5 مع ACT ‏32 فأكثر أو SAT ‏1470 فأكثر. لبرامج A*A*A: ‏ACT ‏33 فأكثر أو SAT ‏1480 فأكثر.",
+     "source": "s6",
+     "quote": "Three APs at grade 5 (including any subjects required for the course you are applying to) plus a score of 32 or above in the ACT or 1470 or above (out of 1600) in the SAT.",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "oxford-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BA",
+     "nameAr": "بكالوريوس الآداب في علوم الحاسوب",
+     "degree": "BA",
+     "durationYears": 3,
+     "url": "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/computer-science",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s1",
+         "quote": "Required | Candidates are expected to have Mathematics to A-level (A* or A grade), Advanced Higher (A grade), Higher Level in the IB (score 7) or another equivalent. |"
+        },
+        {
+         "type": "RECOMMENDED",
+         "keys": [
+          "further_mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s1",
+         "quote": "Further Mathematics A-level is highly recommended.*"
+        }
+       ],
+       "notesEn": "A*AA including A*A in Maths and Further Maths if available. Four-year option leads to MCompSci.",
+       "notesAr": "A*AA تشمل A*A في الرياضيات والرياضيات الإضافية إن توفرت. يؤدي الخيار ذو السنوات الأربع إلى درجة MCompSci.",
+       "source": "s1",
+       "quote": "A-levels | A*AA, including A*A in Maths and Further Maths if available (in any order) |"
+      },
+      "IB": {
+       "minimumPoints": 39,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "7",
+         "source": "s1",
+         "quote": "International Baccalaureate (IB) | 39 (including core points) with 766 at HL (the 7 must be in HL Mathematics) |"
+        }
+       ],
+       "source": "s1",
+       "quote": "International Baccalaureate (IB) | 39 (including core points) with 766 at HL (the 7 must be in HL Mathematics) |"
+      },
+      "AMERICAN": {
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "5",
+         "source": "s2",
+         "quote": "Either four APs at grade 5 including Calculus BC and two other maths or science subjects."
+        }
+       ],
+       "notesEn": "Four APs at 5 including Calculus BC, or three APs at 5 plus ACT 32+ or SAT 1470+ with at least 770 in Maths.",
+       "notesAr": "أربعة اختبارات AP بدرجة 5 تشمل Calculus BC، أو ثلاثة بدرجة 5 مع ACT ‏32 فأكثر أو SAT ‏1470 فأكثر مع 770 على الأقل في الرياضيات.",
+       "source": "s2",
+       "quote": "Either four APs at grade 5 including Calculus BC and two other maths or science subjects."
+      },
+      "ISC": {
+       "minimumPercent": 90,
+       "subjects": [],
+       "notesEn": "For A*AA courses: overall 90% or more with 95% in three subjects (including relevant ones) and 85% in the other two.",
+       "notesAr": "لبرامج A*AA: معدل عام 90% أو أكثر مع 95% في ثلاث مواد (منها المواد ذات الصلة) و85% في المادتين الأخريين.",
+       "source": "s6",
+       "quote": "• For CISCE board: Overall grade of 90% or more, with grades of at least 95% or above in three subjects (including any relevant to the course applied for) and 85% or above in the other two subjects."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "TMUA",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "Test dates 12 to 16 October 2026.",
+        "noteAr": "مواعيد الاختبار من 12 إلى 16 أكتوبر 2026.",
+        "source": "s1",
+        "quote": "All applicants must take the Test of Mathematics for University Admission (TMUA) as part of their application."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Degree awarded is BA (3 years) or MCompSci (4 years).",
+        "noteAr": "الدرجة الممنوحة هي بكالوريوس الآداب (3 سنوات) أو MCompSci (4 سنوات).",
+        "source": "s1",
+        "quote": "Computer Science can be studied for three years (BA) or four years, leading to an award of Master of Computer Science (MCompSci)."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "oxford-eng",
+     "status": "EXISTS",
+     "nameEn": "Engineering Science MEng",
+     "nameAr": "ماجستير الهندسة في علوم الهندسة",
+     "degree": "MEng",
+     "durationYears": null,
+     "url": "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/engineering-science",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*A*A",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s3",
+         "quote": "A*A*A, including Mathematics and Physics."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "source": "s3",
+         "quote": "A*A*A, including Mathematics and Physics."
+        }
+       ],
+       "notesEn": "The A* grades must be in Mathematics, Physics or Further Mathematics.",
+       "notesAr": "يجب أن تكون درجتا A* في الرياضيات أو الفيزياء أو الرياضيات الإضافية.",
+       "source": "s3",
+       "quote": "A*A*A, including Mathematics and Physics."
+      },
+      "IB": {
+       "minimumPoints": 40,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "7",
+         "source": "s3",
+         "quote": "40 (including core points) with 776 at HL (with 7s in HL Mathematics and Physics)"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "7",
+         "source": "s3",
+         "quote": "40 (including core points) with 776 at HL (with 7s in HL Mathematics and Physics)"
+        }
+       ],
+       "source": "s3",
+       "quote": "40 (including core points) with 776 at HL (with 7s in HL Mathematics and Physics)"
+      },
+      "AMERICAN": {
+       "subjects": [],
+       "notesEn": "For A*A*A courses: four APs at 5, or three APs at 5 plus ACT 33+ or SAT 1480+ (including required subjects).",
+       "notesAr": "لبرامج A*A*A: أربعة اختبارات AP بدرجة 5، أو ثلاثة بدرجة 5 مع ACT ‏33 فأكثر أو SAT ‏1480 فأكثر (بما فيها المواد المطلوبة).",
+       "source": "s6",
+       "quote": "Three APs at grade 5 (including any subjects required for the course you are applying to) plus a score of 33 or above in the ACT or 1480 or above (out of 1600) in the SAT."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "ESAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s3",
+        "quote": "All candidates must also take the Engineering and Science Admissions Test (ESAT) as part of their application."
+       }
+      ],
+      "additional": [],
+      "source": "s3"
+     },
+     "previous": null
+    },
+    {
+     "key": "oxford-law",
+     "status": "EXISTS",
+     "nameEn": "Law (Jurisprudence) BA",
+     "nameAr": "بكالوريوس الآداب في القانون (فقه القانون)",
+     "degree": "BA",
+     "durationYears": 3,
+     "url": "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/law-jurisprudence",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "subjects": [],
+       "notesEn": "No required subjects; an essay subject can help.",
+       "notesAr": "لا توجد مواد إلزامية؛ وقد تفيد مادة تعتمد على كتابة المقالات.",
+       "source": "s4",
+       "quote": "A-levels | AAA |"
+      },
+      "IB": {
+       "minimumPoints": 38,
+       "subjects": [],
+       "notesEn": "666 at Higher Level.",
+       "notesAr": "666 في المستوى العالي.",
+       "source": "s4",
+       "quote": "International Baccalaureate (IB) | 38 (including core points) with 666 at HL |"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "LNAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "LNAT window 1 September to 15 October 2026; register by 15 September 2026.",
+        "noteAr": "فترة اختبار LNAT من 1 سبتمبر إلى 15 أكتوبر 2026، والتسجيل حتى 15 سبتمبر 2026.",
+        "source": "s4",
+        "quote": "All applicants must take the Law National Admissions Test (LNAT) as part of their application."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Oxford awards a BA, stated as equivalent to an LLB.",
+        "noteAr": "تمنح أكسفورد درجة بكالوريوس الآداب، وهي معادلة لدرجة LLB.",
+        "source": "s4",
+        "quote": "Degree awarded: BA equivalent to LLB"
+       }
+      ],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "oxford-medicine-bmbch",
+     "status": "EXISTS",
+     "nameEn": "Medicine BA / BM BCh",
+     "nameAr": "الطب (بكالوريوس الطب والجراحة BM BCh)",
+     "degree": "BMBCh",
+     "durationYears": 6,
+     "url": "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s5",
+         "quote": "Applicants are required to achieve at least a grade A in both Chemistry and at least one of Biology, Physics, Mathematics or Further Mathematics."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "physics",
+          "mathematics",
+          "further_mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s5",
+         "quote": "Applicants are required to achieve at least a grade A in both Chemistry and at least one of Biology, Physics, Mathematics or Further Mathematics."
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s5",
+       "quote": "A-levels | A*AA in three A-levels (excluding Critical Thinking and Thinking Skills) taken in the same academic year."
+      },
+      "IB": {
+       "minimumPoints": 39,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": null,
+         "source": "s5",
+         "quote": "Applicants are required to take Chemistry and at least one of Biology, Physics or Mathematics to Higher Level."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "physics",
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": null,
+         "source": "s5",
+         "quote": "Applicants are required to take Chemistry and at least one of Biology, Physics or Mathematics to Higher Level."
+        }
+       ],
+       "notesEn": "766 at Higher Level.",
+       "notesAr": "766 في المستوى العالي.",
+       "source": "s5",
+       "quote": "International Baccalaureate (IB) | 39 (including core points) with 766 at HL."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "UCAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s5",
+        "quote": "All applicants must take the University Clinical Aptitude Test (UCAT) as part of their application."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Degree awarded is a BA after three years and the BM BCh after six years.",
+        "noteAr": "تُمنح درجة بكالوريوس الآداب بعد ثلاث سنوات ودرجة BM BCh بعد ست سنوات.",
+        "source": "s5",
+        "quote": "Degree awarded: BA / BM BCh"
+       }
+      ],
+      "source": "s5"
+     },
+     "previous": null
+    }
+   ]
+  }
+ ]
+}

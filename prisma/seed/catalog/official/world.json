@@ -1,0 +1,911 @@
+{
+ "batch": "world",
+ "assembledAt": "2026-09-30T02:36:29.172Z",
+ "universities": [
+  {
+   "key": "epfl",
+   "website": "https://www.epfl.ch",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.epfl.ch/education/bachelor/programs/computer-science/",
+     "title": "Computer Science - Bachelor - EPFL",
+     "retrievedAt": "2026-09-29T23:54:00.310Z",
+     "hash": "5ce2f1b4e28e6e1311a15a162fbdea162ef4737fc1d430a5c5cabdb22eca09e4"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.epfl.ch/education/admission/admission-2/bachelor-admission-criteria-and-application/",
+     "title": "Bachelor/CMS admission criteria & application - EPFL",
+     "retrievedAt": "2026-09-29T23:50:41.558Z",
+     "hash": "8a24a053ed9c46ecddfae1d0f36434232ad09baf756c53d18101bf5c4edcd7ac"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.epfl.ch/education/admission/admission-2/bachelor-admission-criteria-and-application/how-to-apply/",
+     "title": "How to apply? - Admission - EPFL",
+     "retrievedAt": "2026-09-29T23:51:00.568Z",
+     "hash": "6b748d0f6dff0e40b22319ed8b5995500167d694bb4c9456c9b957e996bc8ef7"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.epfl.ch/education/admission/admission-2/bachelor-admission-criteria-and-application/admission-examination/",
+     "title": "Entrance examination - Admission - EPFL",
+     "retrievedAt": "2026-09-29T23:49:44.550Z",
+     "hash": "032f6d2e5c460f44642a761af77f1d088bc64ba1944eeec25f758945f2bbb76c"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.epfl.ch/education/admission/wp-content/uploads/2019/01/Conditions-CMS.pdf",
+     "title": "Conditions to apply for admission to the Cours de mathematiques speciales at EPFL (valid for 2026)",
+     "retrievedAt": "2026-09-29T23:58:33.040Z",
+     "hash": "57c8e7552c9b8e81034ab3136c7cacd222105c6e4585d9793166d71bf24a228a"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Taught in French: level B2 in French is required (C1 highly recommended); applicants who did not study French at school must attest their level when applying.",
+     "noteAr": "الدراسة باللغة الفرنسية: يُشترط مستوى B2 في الفرنسية (ويُنصح بشدة بمستوى C1)، وعلى من لم يدرس الفرنسية في المدرسة إثبات مستواه عند التقديم.",
+     "source": "s2",
+     "quote": "EPFL considers that level B2 in French (according to the Common European Framework of Reference for Languages) is required to follow its Bachelor’s programs."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "First-year places are capped at 3000 from 2025 for at least four years; EU/EFTA/UK and IB holders are ranked by their overall result.",
+     "noteAr": "عدد المقاعد في السنة الأولى محدود بـ 3000 منذ 2025 لمدة أربع سنوات على الأقل، ويُرتَّب حاملو شهادات الاتحاد الأوروبي والمملكة المتحدة والبكالوريا الدولية حسب نتائجهم الإجمالية.",
+     "source": "s2",
+     "quote": "From the beginning of the school year in 2025 and for at least four years, EPFL introduces a limitation on the number of students in the first year of the Bachelor’s programs (3000)."
+    },
+    {
+     "kind": "FOUNDATION_REQUIRED",
+     "required": true,
+     "noteEn": "Certificates from countries outside the EU, EFTA and UK (for example UAE, India, USA, Jordan) lead at best to the one-year CMS foundation year, not directly to year 1.",
+     "noteAr": "الشهادات من دول خارج الاتحاد الأوروبي ورابطة التجارة الحرة الأوروبية والمملكة المتحدة (مثل الإمارات والهند والولايات المتحدة والأردن) تؤهل في أحسن الأحوال للسنة التحضيرية CMS وليس للسنة الأولى مباشرة.",
+     "source": "s2",
+     "quote": "Applicants holding an upper secondary school certificate from a country that is not a member of EU, EFTA, nor UK can be accepted, following the evaluation of their application and within the places available, in the Cours de mathématiques spéciales (foundation year), provided that their title fulfils all of the following conditions:"
+    },
+    {
+     "kind": "ADMISSIONS_TEST",
+     "required": false,
+     "noteEn": "Alternative route: the EPFL entrance exam, open to holders of non-EU/EFTA/UK certificates without conditions or capacity limit.",
+     "noteAr": "طريق بديل: امتحان القبول في الجامعة، وهو متاح لحاملي الشهادات من خارج الاتحاد الأوروبي ورابطة التجارة الحرة الأوروبية والمملكة المتحدة دون شروط أو حد للمقاعد.",
+     "source": "s2",
+     "quote": "They may also register for our entrance exam (no condition nor capacity limitation)."
+    },
+    {
+     "kind": "NOT_ACCEPTED",
+     "required": true,
+     "noteEn": "International A-levels (CIE, Edexcel, OxfordAQA, LRN) without state accreditation only give access through the entrance exam; state-accredited international A-levels follow the non-EU/EFTA/UK (CMS) rules.",
+     "noteAr": "شهادات المستوى المتقدم الدولية (CIE وEdexcel وOxfordAQA وLRN) غير المعتمدة من دولة لا تتيح القبول إلا عبر امتحان القبول، أما المعتمدة من دولة فتخضع لقواعد السنة التحضيرية.",
+     "source": "s2",
+     "quote": "Applicants holding international Advanced Levels (CIE, Edexcel, OxfordAQA, LRN) without any state accreditation and/or Pre-Us (CIE, LRN) can only be accepted through the entrance exam."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-04-30",
+     "labelEn": "Application deadline (September start)",
+     "labelAr": "آخر موعد للتقديم (بدء الدراسة في سبتمبر)",
+     "source": "s3",
+     "quote": "Applications can be submitted from mid-November to the 30th of April to start your studies at EPFL the following September."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2027-07-10",
+     "labelEn": "Upload of final school results",
+     "labelAr": "رفع النتائج المدرسية النهائية",
+     "source": "s3",
+     "quote": "Uploading form to be completed and submitted on July 10 at the latest (September 30 exceptionally for school certificates and diplomas delivered after July 10)"
+    }
+   ],
+   "curriculumRules": {
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "UK-issued A-levels only. International A-levels (CIE, Edexcel, OxfordAQA, LRN) as usually taken in the UAE are treated differently: without state accreditation they give access only via the entrance exam.",
+     "notesAr": "ينطبق ذلك على شهادات المستوى المتقدم الصادرة في المملكة المتحدة فقط. أما الشهادات الدولية (CIE وEdexcel وOxfordAQA وLRN) الشائعة في الإمارات فتُعامل بشكل مختلف، وبدون اعتماد حكومي لا تتيح القبول إلا عبر امتحان القبول.",
+     "source": "s2",
+     "quote": "Applicants holding British Advanced Levels and/or Scottish Advanced Highers are accepted in the first year of the Bachelor’s programs, within the places available (see above), provided that their title fulfils all of the following conditions:",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": "A",
+       "source": "s2",
+       "quote": "the grades in mathematics and physics, as well as in chemistry, biology, or computer science, are at least A and/or 1"
+      },
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "physics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": "A",
+       "source": "s2",
+       "quote": "the grades in mathematics and physics, as well as in chemistry, biology, or computer science, are at least A and/or 1"
+      },
+      {
+       "type": "ONE_OF",
+       "keys": [
+        "chemistry",
+        "biology",
+        "computer_science"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": "A",
+       "source": "s2",
+       "quote": "the grades in mathematics and physics, as well as in chemistry, biology, or computer science, are at least A and/or 1"
+      }
+     ]
+    },
+    "IB": {
+     "accepted": true,
+     "minimumPoints": 38,
+     "notesEn": "38 of 42 points excluding bonus points; Mathematics AA or AI both accepted.",
+     "notesAr": "38 نقطة من 42 دون احتساب النقاط الإضافية، وتُقبل مادتا الرياضيات: التحليل والمقاربات، والتطبيقات والتفسير.",
+     "source": "s2",
+     "quote": "the total number of points scored is at least 38 out of 42 (excluding bonus points) and the grades in mathematics and physics are at least 6 out of 7",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics"
+       ],
+       "minimumLevel": "HIGHER",
+       "minimumGrade": "6",
+       "source": "s2",
+       "quote": "the total number of points scored is at least 38 out of 42 (excluding bonus points) and the grades in mathematics and physics are at least 6 out of 7"
+      },
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "physics"
+       ],
+       "minimumLevel": "HIGHER",
+       "minimumGrade": "6",
+       "source": "s2",
+       "quote": "the total number of points scored is at least 38 out of 42 (excluding bonus points) and the grades in mathematics and physics are at least 6 out of 7"
+      },
+      {
+       "type": "ONE_OF",
+       "keys": [
+        "chemistry",
+        "biology",
+        "computer_science"
+       ],
+       "minimumLevel": "HIGHER",
+       "source": "s2",
+       "quote": "the following subjects were studied and examined within the Diploma Programme (DP) at the higher level (HL): 1) mathematics, 2) physics, and 3) chemistry, biology, or computer science"
+      }
+     ]
+    },
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "No direct entry to year 1. The UAE is listed in EPFL's CMS country document (valid for 2026): a UAE secondary school certificate in a scientific stream can lead to the one-year CMS foundation year if at least six of seven required subject areas are on the final transcript, maths and physics are taken at the highest level, and maths, physics and the overall average are all at least 80% of the maximum. Otherwise the route is the entrance exam.",
+     "notesAr": "لا يوجد قبول مباشر في السنة الأولى. الإمارات مدرجة في وثيقة الدول الخاصة بالسنة التحضيرية (سارية لعام 2026): يمكن لشهادة الثانوية الإماراتية في المسار العلمي أن تؤهل للسنة التحضيرية CMS إذا تضمن كشف الدرجات النهائي ستا على الأقل من سبع مجالات مطلوبة، ودُرست الرياضيات والفيزياء بأعلى مستوى، وبلغت درجات الرياضيات والفيزياء والمعدل العام 80% على الأقل من الدرجة القصوى. وإلا فالطريق هو امتحان القبول.",
+     "source": "s5",
+     "quote": "United Arab Emirates Upper secondary school-leaving certificate in a scientific stream including the subjects 1)",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics",
+        "physics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": "80",
+       "noteEn": "Final grades in mathematics and physics of at least 80% of the maximum grade, studied at the highest level offered.",
+       "noteAr": "درجات نهائية في الرياضيات والفيزياء لا تقل عن 80% من الدرجة القصوى، مع دراستهما بأعلى مستوى متاح.",
+       "source": "s2",
+       "quote": "the final grades in mathematics and physics are at least 80% of the maximum grade"
+      }
+     ]
+    },
+    "CBSE": {
+     "accepted": false,
+     "notesEn": "Not accepted for year 1 or the CMS foundation year: India does not appear in EPFL's CMS country document (valid for 2026), so Indian certificates (CBSE, ISC) can only be accepted through the entrance exam.",
+     "notesAr": "غير مقبولة للسنة الأولى ولا للسنة التحضيرية CMS: الهند غير مدرجة في وثيقة الدول الخاصة بالسنة التحضيرية (سارية لعام 2026)، لذا لا تُقبل الشهادات الهندية (CBSE وISC) إلا عبر امتحان القبول.",
+     "source": "s2",
+     "quote": "Holders of an upper secondary school certificate from a country that is not a member of EU, EFTA, nor UK and does not appear in that document can only be accepted through the entrance exam.",
+     "subjects": []
+    },
+    "AMERICAN": {
+     "accepted": false,
+     "notesEn": "No direct entry to year 1. A US High School Diploma can lead to the one-year CMS foundation year only if at least six of the seven required subject areas were taken as Advanced Placements, including mathematics and physics, with AP scores of at least 4. Otherwise the route is the entrance exam.",
+     "notesAr": "لا يوجد قبول مباشر في السنة الأولى. يمكن لشهادة الثانوية الأمريكية أن تؤهل للسنة التحضيرية CMS فقط إذا دُرست ست على الأقل من المجالات السبعة المطلوبة كمواد Advanced Placement، ومنها الرياضيات والفيزياء، بدرجات لا تقل عن 4. وإلا فالطريق هو امتحان القبول.",
+     "source": "s5",
+     "quote": "United States High School Diploma including the subjects 1) mathematics, 2) physics, 3) English, 4)",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics",
+        "physics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": "4",
+       "noteEn": "Taken as Advanced Placements with scores of at least 4.",
+       "noteAr": "تُدرس كمواد Advanced Placement بدرجة لا تقل عن 4.",
+       "source": "s5",
+       "quote": "mathematics and physics. The grades of the Advanced Placements are at least 4."
+      }
+     ]
+    },
+    "JORDAN_TAWJIHI": {
+     "accepted": false,
+     "notesEn": "Not accepted for year 1 or the CMS foundation year: Jordan does not appear in EPFL's CMS country document (valid for 2026), so the Tawjihi can only be accepted through the entrance exam.",
+     "notesAr": "غير مقبولة للسنة الأولى ولا للسنة التحضيرية CMS: الأردن غير مدرج في وثيقة الدول الخاصة بالسنة التحضيرية (سارية لعام 2026)، لذا لا يُقبل التوجيهي إلا عبر امتحان القبول.",
+     "source": "s2",
+     "quote": "Holders of an upper secondary school certificate from a country that is not a member of EU, EFTA, nor UK and does not appear in that document can only be accepted through the entrance exam.",
+     "subjects": []
+    },
+    "ISC": {
+     "accepted": false,
+     "notesEn": "Not accepted for year 1 or the CMS foundation year: India does not appear in EPFL's CMS country document (valid for 2026), so Indian certificates (CBSE, ISC) can only be accepted through the entrance exam.",
+     "notesAr": "غير مقبولة للسنة الأولى ولا للسنة التحضيرية CMS: الهند غير مدرجة في وثيقة الدول الخاصة بالسنة التحضيرية (سارية لعام 2026)، لذا لا تُقبل الشهادات الهندية (CBSE وISC) إلا عبر امتحان القبول.",
+     "source": "s2",
+     "quote": "Holders of an upper secondary school certificate from a country that is not a member of EU, EFTA, nor UK and does not appear in that document can only be accepted through the entrance exam.",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "epfl-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.epfl.ch/education/bachelor/programs/computer-science/",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "eth_zurich",
+   "website": "https://ethz.ch",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://ethz.ch/en/studies/bachelor/bachelors-degree-programmes/engineering-sciences/computer-science.html",
+     "title": "Bachelor Computer Science | ETH Zurich",
+     "retrievedAt": "2026-09-29T23:49:55.873Z",
+     "hash": "8cc1fc2afaa2c1bebb75f81c89750d6cd821e14c0801db0785f0894009735499"
+    },
+    {
+     "id": "s2",
+     "url": "https://ethz.ch/en/studies/bachelor/bachelors-degree-programmes/engineering-sciences/electrical-engineering-and-information-technology.html",
+     "title": "Bachelor Electrical Engineering and Information Technology | ETH Zurich",
+     "retrievedAt": "2026-09-29T23:50:24.981Z",
+     "hash": "047d4eb532c411ed69510defdc7f47df1706d0363c6d97fdf04439793d9313fc"
+    },
+    {
+     "id": "s3",
+     "url": "https://ee.ethz.ch/studies/bachelor.html",
+     "title": "Bachelor's Programme - D-ITET | ETH Zurich",
+     "retrievedAt": "2026-09-29T23:53:47.719Z",
+     "hash": "243ebaaf7cdcacec38a228746778c6f1557b7ffe512b75696981a8fad0dca9a7"
+    },
+    {
+     "id": "s4",
+     "url": "https://ethz.ch/en/studies/bachelor/application/non-swiss-matriculation-certificate/admission-prerequisites.html",
+     "title": "Admission prerequisites | ETH Zurich",
+     "retrievedAt": "2026-09-29T23:50:46.819Z",
+     "hash": "7c2dc16608a054ae6828757e5f58765d956095b5807f372cf5ffbca6f4b078d4"
+    },
+    {
+     "id": "s5",
+     "url": "https://ethz.ch/en/studies/bachelor/application/non-swiss-matriculation-certificate/language-requirements.html",
+     "title": "Language requirements | ETH Zurich",
+     "retrievedAt": "2026-09-29T23:49:49.782Z",
+     "hash": "1b039637031f37e7a3f53073bfb0c937ca427b8f013c7f71391866e51d6924d3"
+    },
+    {
+     "id": "s6",
+     "url": "https://ethz.ch/en/studies/bachelor/application/non-swiss-matriculation-certificate/how-to-apply.html",
+     "title": "Application process | ETH Zurich",
+     "retrievedAt": "2026-09-29T23:49:49.776Z",
+     "hash": "035291e04c49bfb6950c15506fccffaf601d23b56ee880f0ab3910cf5d2e7d9e"
+    },
+    {
+     "id": "s7",
+     "url": "https://ethz.ch/en/studies/bachelor/application/non-swiss-matriculation-certificate.html",
+     "title": "Application with non-Swiss matriculation certificates | ETH Zurich",
+     "retrievedAt": "2026-09-29T23:55:20.688Z",
+     "hash": "e92c3e0aedf016e5612b821ec123e523a5eda25b5289c888dffe7a18405b5ee9"
+    },
+    {
+     "id": "s8",
+     "url": "https://ethz.ch/content/dam/ethz/main/education/admission/bachelor/andere-qual/ETH-ZulassungsbedingungenHS2026_EN.pdf",
+     "title": "Admission requirements ETH Zurich Academic Year 2026/27 (country list)",
+     "retrievedAt": "2026-09-29T23:58:59.590Z",
+     "hash": "58ab68d7b43d7f340309922010373e16b78b641c85d8ad1f76deb25556b99d84"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Taught in German: a German C1 certificate (for example Goethe C1 with 80 points, TestDaF 5 in three sections and 4 in one, DSH-3) must be submitted by 31 March.",
+     "noteAr": "الدراسة باللغة الألمانية: يجب تقديم شهادة ألمانية بمستوى C1 (مثل Goethe C1 بـ 80 نقطة، أو TestDaF بدرجة 5 في ثلاثة أقسام و4 في قسم، أو DSH-3) بحلول 31 مارس.",
+     "source": "s5",
+     "quote": "The German C1 language certificate must be submitted by the application deadline (=31 March) at the latest."
+    },
+    {
+     "kind": "ADMISSIONS_TEST",
+     "required": false,
+     "noteEn": "Depending on the country and certificate, admission may be exam-free or conditional on a reduced (4 subjects) or comprehensive (8 subjects) ETH entrance examination.",
+     "noteAr": "حسب البلد والشهادة، قد يكون القبول دون امتحان أو مشروطا باجتياز امتحان قبول مختصر (4 مواد) أو شامل (8 مواد).",
+     "source": "s7",
+     "quote": "It is possible, however, that certain applicants must pass an ETH Zurich entrance examination before they may commence their studies."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Country- and certificate-specific rules (including UAE, India, USA and IB) are published in ETH's country list and on swissuniversities.",
+     "noteAr": "تُنشر القواعد الخاصة بكل بلد وشهادة (بما فيها الإمارات والهند والولايات المتحدة والبكالوريا الدولية) في قائمة الدول لدى الجامعة وعلى موقع swissuniversities.",
+     "source": "s4",
+     "quote": "Up-to-date information on admission requirements (country- and certificate-specific) are published on the website of external page swissuniversities."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "ETH plans changes to entry requirements for all Bachelor's programmes from autumn 2028 (not relevant for autumn 2027 entry).",
+     "noteAr": "تخطط الجامعة لتغيير شروط القبول لجميع برامج البكالوريوس اعتبارا من خريف 2028 (لا يؤثر ذلك على القبول لخريف 2027).",
+     "source": "s4",
+     "quote": "ETH Zurich is planning changes to the entry requirements for all Bachelor’s degree programmes from the autumn semester 2028 onwards."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-03-31",
+     "labelEn": "Application period 1 December to 31 March (non-Swiss certificates)",
+     "labelAr": "فترة التقديم من 1 ديسمبر إلى 31 مارس (الشهادات غير السويسرية)",
+     "source": "s6",
+     "quote": "from 1 December to 31 March, 23:59 Central European Time"
+    }
+   ],
+   "curriculumRules": {
+    "IB": {
+     "accepted": true,
+     "minimumPoints": 38,
+     "notesEn": "Exam-free admission with 38 of 42 points (no bonus points) and the required HL/SL subjects; otherwise a reduced entrance examination. Country list for 2026/27.",
+     "notesAr": "قبول دون امتحان بـ 38 نقطة من 42 (دون النقاط الإضافية) مع المواد المطلوبة في المستويين العالي والعادي، وإلا فيلزم امتحان قبول مختصر. قائمة الدول لعام 2026/27.",
+     "source": "s8",
+     "quote": "Baccalaureate − 38 out of 42 points (without bonus points);",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics"
+       ],
+       "minimumLevel": "HIGHER",
+       "source": "s8",
+       "quote": "− At Higher Level (HL): a) Mathematics: applications and interpretation or"
+      },
+      {
+       "type": "ONE_OF",
+       "keys": [
+        "physics",
+        "chemistry",
+        "biology"
+       ],
+       "minimumLevel": "HIGHER",
+       "source": "s8",
+       "quote": "Mathematics: analysis and approaches, b) physics or chemistry or biology, c) 1"
+      }
+     ]
+    },
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "Exam-free admission with three A-levels (mathematics; physics, chemistry or biology; a language) at grade A each, plus at least four further AS/(I)GCSE subjects from the listed areas; otherwise a reduced entrance examination. International A Level (IAL) with IGCSE is on the list of recognised certificates. Country list for 2026/27.",
+     "notesAr": "قبول دون امتحان بثلاث مواد في المستوى المتقدم (الرياضيات، والفيزياء أو الكيمياء أو الأحياء، ولغة) بتقدير A في كل منها، إضافة إلى أربع مواد أخرى على الأقل من المستوى AS أو IGCSE من المجالات المحددة، وإلا فيلزم امتحان قبول مختصر. شهادة المستوى المتقدم الدولية IAL مع IGCSE مدرجة ضمن الشهادات المعترف بها. قائمة الدول لعام 2026/27.",
+     "source": "s8",
+     "quote": "England, Wales and Northern Ireland: (I)GCE with three Advanced Levels or",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": "A",
+       "source": "s8",
+       "quote": "minimum grade A in each A-Level, respectively D 3 in each Cambridge Pre-U"
+      },
+      {
+       "type": "ONE_OF",
+       "keys": [
+        "physics",
+        "chemistry",
+        "biology"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": "A",
+       "source": "s8",
+       "quote": "minimum grade A in each A-Level, respectively D 3 in each Cambridge Pre-U"
+      }
+     ]
+    },
+    "AMERICAN": {
+     "accepted": false,
+     "notesEn": "No exam-free admission. A US High School Diploma with at least three AP exams scoring 3 or more (mathematics; biology, physics or chemistry; one language), plus four listed subjects in the last three years, gives admission via the reduced entrance examination; otherwise the comprehensive entrance examination. Country list for 2026/27.",
+     "notesAr": "لا يوجد قبول دون امتحان. شهادة الثانوية الأمريكية مع ثلاثة اختبارات AP على الأقل بدرجة 3 أو أكثر (الرياضيات، والأحياء أو الفيزياء أو الكيمياء، ولغة)، إضافة إلى أربع مواد محددة في السنوات الثلاث الأخيرة، تؤهل للقبول عبر امتحان القبول المختصر، وإلا فيلزم الامتحان الشامل. قائمة الدول لعام 2026/27.",
+     "source": "s8",
+     "quote": "Upper secondary school-leaving certificate + Reduced Entrance Examination ETHZ USA if High School Diploma is accompanied by at least three Advanced Placement Tests, each one with a minimum score of 3 in: 1. mathematics; 2. biology or physics or chemistry; 3. one language.",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": "3",
+       "source": "s8",
+       "quote": "Tests, each one with a minimum score of 3 in: 1. mathematics; 2. biology or physics"
+      }
+     ]
+    },
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "No exam-free admission. The UAE secondary school certificate needs, in addition, a certificate of university admission to the desired subject from a recognised UAE university, and then the reduced entrance examination; otherwise the comprehensive entrance examination. Country list for 2026/27.",
+     "notesAr": "لا يوجد قبول دون امتحان. تحتاج شهادة الثانوية الإماراتية أيضا إلى شهادة قبول في التخصص المطلوب من جامعة إماراتية معترف بها، ثم اجتياز امتحان القبول المختصر، وإلا فيلزم الامتحان الشامل. قائمة الدول لعام 2026/27.",
+     "source": "s8",
+     "quote": "Upper secondary school-leaving certificate + certificate of university admission in United Arab Emirates the desired academic subject provided by a recognised university in the United Arab Emirates + Reduced Entrance Examination ETHZ.",
+     "subjects": []
+    },
+    "JORDAN_TAWJIHI": {
+     "accepted": false,
+     "notesEn": "No exam-free admission. The Tawjihi (scientific stream) needs a certificate of university admission to the desired subject from a recognised Jordanian university, and then the reduced entrance examination; otherwise the comprehensive entrance examination. Country list for 2026/27.",
+     "notesAr": "لا يوجد قبول دون امتحان. يحتاج التوجيهي (الفرع العلمي) إلى شهادة قبول في التخصص المطلوب من جامعة أردنية معترف بها، ثم اجتياز امتحان القبول المختصر، وإلا فيلزم الامتحان الشامل. قائمة الدول لعام 2026/27.",
+     "source": "s8",
+     "quote": "Upper secondary school-leaving certificate in a scientific stream + certificate of Jordan university admission in the desired academic subject provided by a recognised Jordanian university + Reduced Entrance Examination ETHZ.",
+     "subjects": []
+    },
+    "CBSE": {
+     "accepted": false,
+     "notesEn": "No exam-free admission. Indian certificates (All India Senior School Certificate, Indian School Certificate) need a certificate of university admission to the desired subject from a recognised Indian university, and then the reduced entrance examination; otherwise the comprehensive entrance examination. Country list for 2026/27.",
+     "notesAr": "لا يوجد قبول دون امتحان. تحتاج الشهادات الهندية (CBSE وISC) إلى شهادة قبول في التخصص المطلوب من جامعة هندية معترف بها، ثم اجتياز امتحان القبول المختصر، وإلا فيلزم الامتحان الشامل. قائمة الدول لعام 2026/27.",
+     "source": "s8",
+     "quote": "Upper secondary school-leaving certificate + certificate of university admission in India the desired academic subject provided by a recognised Indian university + Reduced Entrance Examination ETHZ.",
+     "subjects": []
+    },
+    "ISC": {
+     "accepted": false,
+     "notesEn": "No exam-free admission. Indian certificates (All India Senior School Certificate, Indian School Certificate) need a certificate of university admission to the desired subject from a recognised Indian university, and then the reduced entrance examination; otherwise the comprehensive entrance examination. Country list for 2026/27.",
+     "notesAr": "لا يوجد قبول دون امتحان. تحتاج الشهادات الهندية (CBSE وISC) إلى شهادة قبول في التخصص المطلوب من جامعة هندية معترف بها، ثم اجتياز امتحان القبول المختصر، وإلا فيلزم الامتحان الشامل. قائمة الدول لعام 2026/27.",
+     "source": "s8",
+     "quote": "Upper secondary school-leaving certificate + certificate of university admission in India the desired academic subject provided by a recognised Indian university + Reduced Entrance Examination ETHZ.",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "eth-zurich-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://ethz.ch/en/studies/bachelor/bachelors-degree-programmes/engineering-sciences/computer-science.html",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "eth-zurich-ee",
+     "status": "EXISTS",
+     "nameEn": "Electrical Engineering and Information Technology BSc",
+     "nameAr": "بكالوريوس العلوم في الهندسة الكهربائية وتقنية المعلومات",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://ethz.ch/en/studies/bachelor/bachelors-degree-programmes/engineering-sciences/electrical-engineering-and-information-technology.html",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Three-year full-time programme, 180 ECTS, taught in German.",
+        "noteAr": "برنامج بدوام كامل مدته ثلاث سنوات بواقع 180 وحدة ECTS، ولغة التدريس الألمانية.",
+        "source": "s3",
+        "quote": "The standard duration of the Bachelor's programme is three years (full-time)."
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "kit",
+   "website": "https://www.kit.edu",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.sle.kit.edu/english/vorstudium/bachelor-informatics.php",
+     "title": "KIT - Study programs - Informatics Bachelor of Science",
+     "retrievedAt": "2026-09-29T23:50:07.701Z",
+     "hash": "aaeee755892d69694541a6e52247d890bcb4e676c1fd2f7d576f6d6426613152"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.informatik.kit.edu/english/1436.php",
+     "title": "KIT Department of Informatics - Application",
+     "retrievedAt": "2026-09-29T23:50:06.720Z",
+     "hash": "de764e3d4a8a68895da310b0ce8c9a1440db5000daac34f5dd8851e26767a7e2"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.intl.kit.edu/istudies/3167.php",
+     "title": "KIT - INTL - Application for Bachelor Studies",
+     "retrievedAt": "2026-09-29T23:53:53.225Z",
+     "hash": "71aa5a1f9c16fbdca1e1042141145dba08a7b5c27576bc67ea28cc1c09f08d80"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Non-EU applicants apply through the KIT International Students Office via KIT's own application portal (not uni-assist). At application, German at B1 is enough, but DSH-2 or an equivalent is needed for enrolment.",
+     "noteAr": "يتقدم المتقدمون من خارج الاتحاد الأوروبي عبر مكتب الطلاب الدوليين في البوابة الخاصة بالجامعة (وليس عبر uni-assist). يكفي مستوى B1 في الألمانية عند التقديم، لكن يلزم DSH-2 أو ما يعادله عند التسجيل.",
+     "source": "s3",
+     "quote": "Proof of German skills: Proof of level B1 (GER) through language certificates B1 (GER)."
+    },
+    {
+     "kind": "OTHER",
+     "required": false,
+     "noteEn": "Some school certificates give direct university access in Germany; many others also need a university entrance exam, a year of university study at home or the German assessment test (Feststellungsprufung after a Studienkolleg year). Check the DAAD admission database.",
+     "noteAr": "بعض الشهادات المدرسية تمنح حق الالتحاق المباشر بالجامعات الألمانية، لكن كثيرا منها يتطلب أيضا امتحان قبول جامعي أو سنة دراسة جامعية في البلد الأصلي أو اختبار التقييم الألماني بعد سنة في الكلية التحضيرية. راجع قاعدة بيانات DAAD.",
+     "source": "s3",
+     "quote": "However, in many cases, a university entrance exam and /or a successful year of study at a university in the home country and / or the German assessment test must be proven with valid documents in addition to the school-leaving certificate to start a bachelor’s program in Germany."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-07-15",
+     "labelEn": "Application deadline, winter semester (portal opens 15 May)",
+     "labelAr": "آخر موعد للتقديم للفصل الشتوي (تفتح البوابة في 15 مايو)",
+     "source": "s3",
+     "quote": "Application deadline winter semester: 15th July"
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "kit-cs",
+     "status": "EXISTS",
+     "nameEn": "Informatics BSc",
+     "nameAr": "بكالوريوس العلوم في المعلوماتية",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.sle.kit.edu/english/vorstudium/bachelor-informatics.php",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Taught in German; German at CEFR C1 (DSH-2, TestDaF 4 in all parts, DSD II or Goethe C1) is required.",
+        "noteAr": "الدراسة باللغة الألمانية، ويُشترط مستوى C1 (DSH-2 أو TestDaF بمستوى 4 في جميع الأقسام أو DSD II أو Goethe C1).",
+        "source": "s1",
+        "quote": "Your German language skills must correspond to at least level C1 of the Common European Framework of Reference for Languages (CEFR)."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "A certificate of participation in the KIT Informatics Self-Test for study orientation must be submitted with the application.",
+        "noteAr": "يجب إرفاق شهادة المشاركة في الاختبار الذاتي للمعلوماتية الخاص بالجامعة لتوجيه الدراسة مع الطلب.",
+        "source": "s2",
+        "quote": "For the application for the Bachelor's program of Informatics, a certificate of participation in the KIT Informatics Self-Test for Study Orientation has to be submitted."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Limited capacity: 443 first-semester places; start in winter term only.",
+        "noteAr": "المقاعد محدودة: 443 مقعدا للفصل الأول، والبدء في الفصل الشتوي فقط.",
+        "source": "s1",
+        "quote": "First semester: yes / 443 study places"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "lmu_munich",
+   "website": "https://www.lmu.de",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ifi.lmu.de/studium/studiengaenge/bachelor/bachelor_informatik/index.html",
+     "title": "Informatik Bachelor - Institut fur Informatik - LMU Munchen",
+     "retrievedAt": "2026-09-29T23:55:36.048Z",
+     "hash": "91417ff4387b6d09ce07a4de90e55e36a4db9ad1fdc8f4b4e2c331be75651f3f"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.lmu.de/de/studium/studienangebot/alle-studienfaecher-und-studiengaenge/informatik-bachelor-mit-nebenfach-60-ects-bachelor-hauptfach-2916.html",
+     "title": "Informatik Bachelor mit Nebenfach 60 ECTS - LMU Munchen",
+     "retrievedAt": "2026-09-29T23:51:13.462Z",
+     "hash": "b4f65ceb4d3fc724125ae4de2da7c4900cead51e9a3174a6239ecfd02ea2333c"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.lmu.de/en/study/degree-students/applications-for-admission/where-do-i-apply/",
+     "title": "Where do I apply - LMU Munich",
+     "retrievedAt": "2026-09-29T23:50:01.044Z",
+     "hash": "7d6bf13c5cc29ef30e4874956291bc15d1c7489e47583b6c96f78f85ddbbfd8b"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.lmu.de/en/study/degree-students/prerequisites/german-proficiency/index.html",
+     "title": "German proficiency - LMU Munich",
+     "retrievedAt": "2026-09-29T23:50:17.686Z",
+     "hash": "36bd8bfb96891c81b00d65bca872514b1a630b4996ac0e48cc767b89103ebde0"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.lmu.de/en/study/degree-students/dates-and-deadlines/",
+     "title": "Dates and deadlines - LMU Munich",
+     "retrievedAt": "2026-09-29T23:53:36.523Z",
+     "hash": "a1fa77d491cea21b986461134b410aeda91220490718eeebef0db6ca0de1ea28"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.lmu.de/en/study/degree-students/prerequisites/",
+     "title": "Prerequisites - LMU Munich",
+     "retrievedAt": "2026-09-29T23:49:53.781Z",
+     "hash": "adb0f7a4fc18bed8eeacd3ed168ad6cda60a1b4d472d6106e270f010ca89e924"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.lmu.de/en/study/degree-students/applications-for-admission/",
+     "title": "Applications for admission - LMU Munich",
+     "retrievedAt": "2026-09-29T23:49:55.175Z",
+     "hash": "dcfede3a736a169a282f94321d82271b6ff0038893563c897018fd7602253451"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "International applicants apply to the LMU International Office (online portal MoveIN), not via uni-assist.",
+     "noteAr": "يتقدم الطلاب الدوليون إلى المكتب الدولي في الجامعة (بوابة MoveIN الإلكترونية) وليس عبر uni-assist.",
+     "source": "s3",
+     "quote": "In general, international applicants apply and register via the International Office."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Non-EU applicants to restricted-admission programmes (Informatik is locally restricted) must submit a German certificate (DSH-2, TestDaF 4 in all sections or telc C1 Hochschule) by the application deadline.",
+     "noteAr": "على المتقدمين من خارج الاتحاد الأوروبي لبرامج القبول المقيد (المعلوماتية مقيدة محليا) تقديم شهادة لغة ألمانية (DSH-2 أو TestDaF بمستوى 4 في جميع الأقسام أو telc C1 Hochschule) قبل الموعد النهائي.",
+     "source": "s4",
+     "quote": "You must submit one of the above certificates by the closing date for applications (15 July / 15 January). We cannot accept late submissions!"
+    },
+    {
+     "kind": "FOUNDATION_REQUIRED",
+     "required": false,
+     "noteEn": "If a school certificate is not equivalent to the German Abitur, the route is a one-year preparatory course (Studienkolleg) with a final exam; B2 German is needed to start it.",
+     "noteAr": "إذا لم تكن الشهادة المدرسية معادلة لشهادة الأبيتور الألمانية فالطريق هو سنة تحضيرية (Studienkolleg) تنتهي بامتحان، ويلزم مستوى B2 في الألمانية لبدئها.",
+     "source": "s6",
+     "quote": "If your school leaving qualification is not deemed equivalent to the German Abitur, you can qualify for university entrance by completing a recognized one year (minimum) preparatory course and passing the final examination."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-07-15",
+     "labelEn": "Application deadline, winter semester",
+     "labelAr": "آخر موعد للتقديم للفصل الشتوي",
+     "source": "s5",
+     "quote": "Application deadlines for the summer semester must be made by 15 January and for the winter semester by 15 July each year."
+    }
+   ],
+   "curriculumRules": {
+    "AMERICAN": {
+     "notesEn": "US high school applicants (without a bachelor's degree) must email their certificates to the International Office before the deadline so the Bavarian recognition office can issue a recognition letter; equivalence is assessed individually.",
+     "notesAr": "على المتقدمين بشهادة الثانوية الأمريكية (دون درجة بكالوريوس) إرسال شهاداتهم بالبريد الإلكتروني إلى المكتب الدولي قبل الموعد النهائي لإصدار خطاب اعتراف من مكتب الاعتراف في بافاريا، ويُقيَّم التعادل بشكل فردي.",
+     "source": "s7",
+     "quote": "Applicants from the USA (unless they already hold a bachelor's degree) and applicants from Afghanistan should send an e-mail to zulassung.international@lmu.de in good time before the application deadline, enclosing their certificates, CV and the desired LMU degree program, in order to prepare for the issuing of a recognition letter the Zeugnisanerkennungsstelle für den Freistaat Bayern.",
+     "subjects": []
+    }
+   },
+   "programs": [
+    {
+     "key": "lmu-munich-cs",
+     "status": "EXISTS",
+     "nameEn": "Informatik (Computer Science) BSc",
+     "nameAr": "بكالوريوس العلوم في المعلوماتية (علوم الحاسوب)",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.ifi.lmu.de/studium/studiengaenge/bachelor/bachelor_informatik/index.html",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Six semesters, taught in German, in three variants: with a 60 ECTS minor, with a 30 ECTS minor, or with an integrated application subject (180 ECTS).",
+        "noteAr": "ستة فصول دراسية باللغة الألمانية، في ثلاثة أشكال: مع تخصص فرعي بـ 60 وحدة ECTS، أو بـ 30 وحدة، أو مع مجال تطبيقي مدمج (180 وحدة).",
+        "source": "s1",
+        "quote": "Der Bachelor Informatik ist auf 6 Semester angelegt und wird in drei Varianten angeboten:"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Local admission restriction (numerus clausus).",
+        "noteAr": "قبول مقيد محليا (حد أدنى للمعدل).",
+        "source": "s2",
+        "quote": "Örtliche Zulassungsbeschränkung bis 6. Fachsemester"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "rwth_aachen",
+   "website": "https://www.rwth-aachen.de",
+   "applyVia": "UNI_ASSIST",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.rwth-aachen.de/cms/root/studium/vor-dem-studium/studiengaenge/liste-aktuelle-studiengaenge/studiengangbeschreibung/~bnzs/informatik-b-sc-/?lidx=1",
+     "title": "Computer Science B.Sc. | RWTH Aachen University",
+     "retrievedAt": "2026-09-29T23:54:11.361Z",
+     "hash": "6da3f558116f11d2c99bfeb4e5dd8e65b9db007e9aa63207b8db53a1f7a552e1"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.informatik.rwth-aachen.de/cms/informatik/studium/vor-dem-studium/bewerbungsinfos/~npqh/bachelor-informatik/?lidx=1",
+     "title": "Bachelor Computer Science | Faculty of Computer Science | RWTH Aachen University",
+     "retrievedAt": "2026-09-29T23:54:34.403Z",
+     "hash": "3763f1e4766db001e3bb9754fe7b35bef92741fc6ed7e999091189c2cb87ff0d"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.rwth-aachen.de/cms/root/studium/vor-dem-studium/studiengaenge/liste-aktuelle-studiengaenge/studiengangbeschreibung/~bnev/maschinenbau-b-sc-/?mobile=1&lidx=1",
+     "title": "Mechanical Engineering B.Sc. | RWTH Aachen University",
+     "retrievedAt": "2026-09-29T23:50:57.108Z",
+     "hash": "594619c111c255081b4c4e553e42b3bb9218a2d974dd3a9e149a13294d5730a8"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Requires the Abitur or an equivalent recognised university entrance qualification (HZB).",
+     "noteAr": "يُشترط الحصول على شهادة الأبيتور أو مؤهل معترف به يعادلها للالتحاق بالجامعة.",
+     "source": "s1",
+     "quote": "General higher education entrance qualification (Abitur), subject specific university entrance qualification, or an equally recognized university entrance qualification (HZB)"
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Participation in an RWTH online self assessment is mandatory; proof is needed at enrolment, not at application.",
+     "noteAr": "المشاركة في التقييم الذاتي الإلكتروني للجامعة إلزامية، ويُطلب الإثبات عند التسجيل لا عند التقديم.",
+     "source": "s1",
+     "quote": "You need to submit proof that you have taken the self assessment when you enroll. It is not required at the time of application."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "rwth-aachen-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science BSc",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.rwth-aachen.de/cms/root/studium/vor-dem-studium/studiengaenge/liste-aktuelle-studiengaenge/studiengangbeschreibung/~bnzs/informatik-b-sc-/?lidx=1",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Taught partly in German and partly in English: proof of German and of English at CEFR B2 is required before starting.",
+        "noteAr": "يُدرَّس جزئيا بالألمانية وجزئيا بالإنجليزية: يلزم إثبات إتقان الألمانية والإنجليزية بمستوى B2 قبل بدء الدراسة.",
+        "source": "s1",
+        "quote": "The courses in this degree program are offered partly in German and partly in English."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "First-semester entry in winter semester only; application due date 15 July.",
+        "noteAr": "الالتحاق بالفصل الأول في الفصل الشتوي فقط، وآخر موعد للتقديم 15 يوليو.",
+        "source": "s2",
+        "quote": "You'll have to apply for the first Course Semester (only possible for Winter semesters, due date 15.7.; all informations and step-by-step guide)."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "rwth-aachen-me",
+     "status": "EXISTS",
+     "nameEn": "Mechanical Engineering BSc",
+     "nameAr": "بكالوريوس العلوم في الهندسة الميكانيكية",
+     "degree": "BSc",
+     "durationYears": 3.5,
+     "url": "https://www.rwth-aachen.de/cms/root/studium/vor-dem-studium/studiengaenge/liste-aktuelle-studiengaenge/studiengangbeschreibung/~bnev/maschinenbau-b-sc-/?mobile=1&lidx=1",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "WORK_EXPERIENCE",
+        "required": true,
+        "noteEn": "A six-week pre-study industry placement is required (16 weeks of industry placement in total).",
+        "noteAr": "يلزم تدريب عملي في الصناعة لمدة ستة أسابيع قبل الدراسة (16 أسبوعا من التدريب الصناعي إجمالا).",
+        "source": "s3",
+        "quote": "A six week industry placement must be completed in accordance with the exam regulations."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Taught in German; proof of German proficiency is required at enrolment. Seven semesters, 210 ECTS.",
+        "noteAr": "الدراسة باللغة الألمانية، ويلزم إثبات إتقانها عند التسجيل. سبعة فصول دراسية بواقع 210 وحدات ECTS.",
+        "source": "s3",
+        "quote": "Proficiency in GermanFurther Information: You must provide documentation of your language skills for the language of instruction at the time of enrollment."
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    }
+   ]
+  }
+ ]
+}

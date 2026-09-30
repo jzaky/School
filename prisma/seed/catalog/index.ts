@@ -6,7 +6,7 @@
 // Requirement rows are versioned: when the seeded example for a programme and curriculum changes,
 // a new version is created and the old one closed. Rows a person has VERIFIED or REVIEWED are never
 // replaced by seed data.
-import type { Prisma, PrismaClient, SchoolCurriculum } from "@prisma/client";
+import { Prisma as PrismaNS, type Prisma, type PrismaClient } from "@prisma/client";
 import { stableStringify } from "@/server/pathway-engine/hash";
 import { importInstitutions } from "@/server/pathways/scorecard";
 import { snapshotInstitutions, universityStore } from "@/server/pathways/us-data";
@@ -15,7 +15,9 @@ import { CANONICAL_SUBJECTS } from "./subjects";
 import { CAREER_FIELDS, FIELDS_OF_STUDY } from "./fields";
 import { CURRICULUM_COURSES } from "./courses";
 import { GLOBAL_UNIVERSITIES } from "./universities";
-import { buildPrograms, legacyFields, type RowSeed } from "./programs";
+import { buildPrograms } from "./programs";
+import { indexOfficial, seedOfficialRequirements } from "./official";
+import { OFFICIAL_BATCHES } from "./official/index";
 
 type Tx = Prisma.TransactionClient;
 export type CatalogCounts = Record<string, { created: number; updated: number }>;
@@ -142,42 +144,20 @@ async function seedCourses(tx: Tx, counts: CatalogCounts) {
   if (createMaps.length) bump(counts, "mappings", "created", (await tx.curriculumCourseMapping.createMany({ data: createMaps })).count);
 }
 
-/** Canonical form of a requirement row and its lines, for change detection. */
-function rowFingerprint(r: {
-  curriculum: SchoolCurriculum | null;
-  minimumGPA: number | null;
-  minimumPercent: number | null;
-  minimumPoints: number | null;
-  gradeProfile: string | null;
-  stream: string | null;
-  notesEn: string | null;
-  notesAr: string | null;
-  evidenceLocator: string | null;
-  subjects: Array<{ type: string; canonicalSubjectKeys?: string[]; keys?: string[]; minimumLevel: string | null; minimumGrade: string | null; noteEn?: string | null; noteAr?: string | null }>;
-  languages: Array<{ test: string; minOverall: number; minComponent: number | null; waiverNoteEn: string | null }>;
-  tests: Array<{ test: string; policy: string; minScore: number | null; noteEn: string | null }>;
-  additional: Array<{ kind: string; required: boolean; noteEn: string | null; noteAr: string | null }>;
-}) {
-  const sorted = <T>(xs: T[]) => xs.map((x) => stableStringify(x)).sort();
-  return stableStringify({
-    c: r.curriculum,
-    g: r.minimumGPA,
-    p: r.minimumPercent,
-    pt: r.minimumPoints,
-    gp: r.gradeProfile,
-    s: r.stream,
-    ne: r.notesEn,
-    na: r.notesAr,
-    l: r.evidenceLocator,
-    subjects: sorted(r.subjects.map((s) => ({ t: s.type, k: s.canonicalSubjectKeys ?? s.keys, lv: s.minimumLevel, gr: s.minimumGrade, ne: s.noteEn ?? null, na: s.noteAr ?? null }))),
-    languages: sorted(r.languages.map((l) => ({ t: l.test, o: l.minOverall, c: l.minComponent, w: l.waiverNoteEn }))),
-    tests: sorted(r.tests.map((t) => ({ t: t.test, p: t.policy, m: t.minScore, n: t.noteEn }))),
-    additional: sorted(r.additional.map((a) => ({ k: a.kind, r: a.required, ne: a.noteEn, na: a.noteAr }))),
-  });
-}
-
 async function seedUniversitiesAndPrograms(tx: Tx, counts: CatalogCounts, now: Date) {
-  const programs = buildPrograms();
+  // Programme names, awards, lengths and pages come from the official research where it exists;
+  // programmes a university does not offer are removed.
+  const official = indexOfficial(OFFICIAL_BATCHES);
+  const dropped = new Set<string>();
+  const programs = buildPrograms().flatMap((p) => {
+    const o = official.programs.get(p.key)?.program;
+    if (!o) return [p];
+    if (o.status === "DROP") {
+      dropped.add(p.key);
+      return [];
+    }
+    return [{ ...p, name: { en: o.nameEn ?? p.name.en, ar: o.nameAr ?? p.name.ar }, degree: o.degree ?? p.degree, durationYears: o.durationYears ?? p.durationYears, sourceUrl: o.url ?? p.sourceUrl }];
+  });
   const namesByUni = new Map<string, string[]>();
   for (const p of programs) namesByUni.set(p.uni, [...(namesByUni.get(p.uni) ?? []), p.name.en]);
 
@@ -223,7 +203,8 @@ async function seedUniversitiesAndPrograms(tx: Tx, counts: CatalogCounts, now: D
   for (const p of programs) {
     const u = uniMeta.get(p.uni)!;
     const universityId = unis.get(p.uni)!.id;
-    const legacy = legacyFields(p, u);
+    // The older requirement fields held example data; requirements now live in ProgramRequirement rows only.
+    const legacy = { requiredSubjects: [] as string[], recommendedSubjects: [] as string[], requirements: {} as Record<string, unknown>, englishReq: null as Prisma.InputJsonValue | null };
     const data = {
       universityId,
       nameEn: p.name.en,
@@ -238,7 +219,7 @@ async function seedUniversitiesAndPrograms(tx: Tx, counts: CatalogCounts, now: D
       notesEn: p.notes?.en ?? null,
       notesAr: p.notes?.ar ?? null,
       sourceUrl: p.sourceUrl,
-      indicative: true,
+      indicative: !official.programs.has(p.key),
       degreeType: p.degreeType,
       level: "UNDERGRADUATE",
       fieldKeys: p.fieldKeys,
@@ -256,7 +237,7 @@ async function seedUniversitiesAndPrograms(tx: Tx, counts: CatalogCounts, now: D
       programId.set(p.key, e.id);
       const cur = Object.fromEntries(Object.keys(data).map((k) => [k, (e as Record<string, unknown>)[k]]));
       if (!eq(cur, data)) {
-        await tx.universityProgram.update({ where: { id: e.id }, data: { ...data, requirements: data.requirements as Prisma.InputJsonValue, englishReq: (data.englishReq ?? undefined) as Prisma.InputJsonValue | undefined } });
+        await tx.universityProgram.update({ where: { id: e.id }, data: { ...data, requirements: data.requirements as Prisma.InputJsonValue, englishReq: data.englishReq === null ? PrismaNS.DbNull : (data.englishReq as Prisma.InputJsonValue) } });
         bump(counts, "programs", "updated");
       }
     }
@@ -275,87 +256,28 @@ async function seedUniversitiesAndPrograms(tx: Tx, counts: CatalogCounts, now: D
   const old = intakes.filter((i) => i.isCurrent && i.intakeYear < years[0]).map((i) => i.id);
   if (old.length) await tx.programIntake.updateMany({ where: { id: { in: old } }, data: { isCurrent: false } });
 
-  // Sources: one official page per programme. (Earlier seeds used another sourceType name.)
-  await tx.requirementSource.updateMany({ where: { orgId: null, sourceType: "OFFICIAL_ADMISSIONS" }, data: { sourceType: "OFFICIAL_UNIVERSITY" } });
-  const sources = await tx.requirementSource.findMany({ where: { orgId: null, programId: { in: ids } } });
-  const sourceBy = new Map(sources.map((s) => [`${s.programId}|${s.url}`, s.id]));
-  const createSources: Prisma.RequirementSourceCreateManyInput[] = [];
-  for (const p of programs) {
-    const pid = programId.get(p.key)!;
-    const k = `${pid}|${p.sourceUrl}`;
-    if (!sourceBy.has(k)) {
-      const sid = id();
-      createSources.push({ id: sid, orgId: null, universityId: unis.get(p.uni)!.id, programId: pid, url: p.sourceUrl, title: `${p.name.en}: entry requirements`, sourceType: "OFFICIAL_UNIVERSITY", status: "PENDING" });
-      sourceBy.set(k, sid);
+  // Programmes the research showed a university does not offer.
+  if (dropped.size) {
+    const gone = await tx.universityProgram.findMany({ where: { orgId: null, key: { in: [...dropped] } }, select: { id: true } });
+    const goneIds = gone.map((g) => g.id);
+    if (goneIds.length) {
+      await tx.programRequirement.deleteMany({ where: { programId: { in: goneIds } } });
+      await tx.requirementSource.deleteMany({ where: { programId: { in: goneIds } } });
+      await tx.programIntake.deleteMany({ where: { programId: { in: goneIds } } });
+      await tx.applicationDeadline.deleteMany({ where: { programId: { in: goneIds } } });
+      await tx.requirementMatch.deleteMany({ where: { programId: { in: goneIds } } });
+      await tx.shortlistEntry.updateMany({ where: { programId: { in: goneIds } }, data: { programId: null } });
+      await tx.application.updateMany({ where: { programId: { in: goneIds } }, data: { programId: null } });
+      for (const g of goneIds) await tx.$executeRaw`UPDATE "StudentCoursePlan" SET "targetProgramIds" = array_remove("targetProgramIds", ${g})`;
+      await tx.universityProgram.deleteMany({ where: { id: { in: goneIds } } });
+      bump(counts, "programs", "updated", goneIds.length);
     }
   }
-  if (createSources.length) bump(counts, "sources", "created", (await tx.requirementSource.createMany({ data: createSources })).count);
-
-  // Requirement rows, versioned.
-  const current = await tx.programRequirement.findMany({ where: { orgId: null, programId: { in: ids }, isCurrent: true }, include: { subjects: true, languages: true, tests: true, additional: true } });
-  const curBy = new Map(current.map((r) => [`${r.programId}|${r.curriculum ?? "GENERAL"}`, r]));
-  const newRows: Prisma.ProgramRequirementCreateManyInput[] = [];
-  const subj: Prisma.SubjectRequirementCreateManyInput[] = [];
-  const langs: Prisma.LanguageRequirementCreateManyInput[] = [];
-  const tests: Prisma.TestRequirementCreateManyInput[] = [];
-  const adds: Prisma.AdditionalRequirementCreateManyInput[] = [];
-  const close: string[] = [];
-  const wanted = new Set<string>();
-  const addRow = (pid: string, r: RowSeed, version: number, sourceId: string | null) => {
-    const rid = id();
-    newRows.push({
-      id: rid,
-      orgId: null,
-      programId: pid,
-      intakeYear: years[0],
-      curriculum: r.curriculum,
-      version,
-      isCurrent: true,
-      effectiveFrom: now,
-      confidence: "EXAMPLE",
-      sourceId,
-      minimumGPA: r.minimumGPA,
-      minimumPercent: r.minimumPercent,
-      minimumPoints: r.minimumPoints,
-      gradeProfile: r.gradeProfile,
-      stream: r.stream,
-      notesEn: r.notesEn,
-      notesAr: r.notesAr,
-      evidenceLocator: r.evidenceLocator,
-    });
-    for (const s of r.subjects) subj.push({ orgId: null, programRequirementId: rid, type: s.type, canonicalSubjectKeys: s.keys, minimumLevel: s.minimumLevel, minimumGrade: s.minimumGrade, alternatives: [], noteEn: s.noteEn ?? null, noteAr: s.noteAr ?? null });
-    for (const l of r.languages) langs.push({ orgId: null, programRequirementId: rid, test: l.test, minOverall: l.minOverall, minComponent: l.minComponent, waiverNoteEn: l.waiverNoteEn });
-    for (const t of r.tests) tests.push({ orgId: null, programRequirementId: rid, test: t.test, policy: t.policy, minScore: t.minScore, noteEn: t.noteEn });
-    for (const a of r.additional) adds.push({ orgId: null, programRequirementId: rid, kind: a.kind, required: a.required, noteEn: a.noteEn, noteAr: a.noteAr });
-  };
-  for (const p of programs) {
-    const pid = programId.get(p.key)!;
-    const sourceId = sourceBy.get(`${pid}|${p.sourceUrl}`) ?? null;
-    for (const r of p.rows) {
-      const k = `${pid}|${r.curriculum ?? "GENERAL"}`;
-      wanted.add(k);
-      const e = curBy.get(k);
-      if (!e) {
-        addRow(pid, r, 1, sourceId);
-        continue;
-      }
-      if (e.confidence !== "EXAMPLE") continue; // A person checked this one: keep it.
-      if (rowFingerprint(e) === rowFingerprint(r)) continue;
-      close.push(e.id);
-      addRow(pid, r, e.version + 1, sourceId);
-    }
-  }
-  // Seeded example rows for curricula the catalog no longer lists are closed.
-  for (const [k, e] of curBy) if (!wanted.has(k) && e.confidence === "EXAMPLE") close.push(e.id);
-  if (close.length) {
-    await tx.programRequirement.updateMany({ where: { id: { in: close } }, data: { isCurrent: false, effectiveTo: now } });
-    bump(counts, "requirements", "updated", close.length);
-  }
-  if (newRows.length) {
-    bump(counts, "requirements", "created", (await tx.programRequirement.createMany({ data: newRows })).count);
-    if (subj.length) await tx.subjectRequirement.createMany({ data: subj });
-    if (langs.length) await tx.languageRequirement.createMany({ data: langs });
-    if (tests.length) await tx.testRequirement.createMany({ data: tests });
-    if (adds.length) await tx.additionalRequirement.createMany({ data: adds });
-  }
+  // Official requirements, sources, deadlines and real changes.
+  const universityIdByKey = new Map([...unis.entries()].map(([k, v]) => [k, v.id]));
+  const countryByUniversity = new Map(GLOBAL_UNIVERSITIES.map((u) => [u.key, u.countryCode]));
+  const r = await seedOfficialRequirements(tx, { batches: OFFICIAL_BATCHES, programIdByKey: programId, universityIdByKey, countryByUniversity, intakeYear: years[0], now });
+  if (r.rows || r.removedExample) bump(counts, "requirements", "created", r.rows);
+  if (r.changes) bump(counts, "changes", "created", r.changes);
+  if (r.deadlines) bump(counts, "deadlines", "created", r.deadlines);
 }

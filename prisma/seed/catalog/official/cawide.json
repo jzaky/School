@@ -1,0 +1,1138 @@
+{
+ "batch": "cawide",
+ "assembledAt": "2026-09-30T02:36:28.553Z",
+ "universities": [
+  {
+   "key": "anu",
+   "website": "https://www.anu.edu.au",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://programsandcourses.anu.edu.au/program/bcomp",
+     "title": "Bachelor of Computing - ANU",
+     "retrievedAt": "2026-09-29T23:47:03.828Z",
+     "hash": "ee858d4aad78be095d9da834d18175b284070254ef3e7585e7bfe3f2ad1d34d5",
+     "waybackTimestamp": "20250906065657",
+     "waybackHash": "970cc1c1c71e425e962d39fcc524ddc08634bed27e8537c7ab2ec9addb3cc5a9"
+    },
+    {
+     "id": "s2",
+     "url": "https://study.anu.edu.au/apply/international-applications",
+     "title": "International undergraduate & postgraduate | The Australian National University",
+     "retrievedAt": "2026-09-29T23:47:02.985Z",
+     "hash": "208dfe1f351a01e29b50601c5939b008d9d9d1e5ff5f655170acb04a345544db"
+    },
+    {
+     "id": "s3",
+     "url": "https://study.anu.edu.au/apply/international-applications/assessment",
+     "title": "Assessment | The Australian National University",
+     "retrievedAt": "2026-09-29T23:47:02.357Z",
+     "hash": "6a37acd8232d65e842306f5dca530d6fe603b358e2769b364ff2aa5e8c6dd1e5"
+    },
+    {
+     "id": "s4",
+     "url": "https://study.anu.edu.au/apply/international-applications/indicative-entry-requirement/gce-levels",
+     "title": "GCE A Levels | The Australian National University",
+     "retrievedAt": "2026-09-29T23:47:04.207Z",
+     "hash": "bad2880b777a80dde0041f99c774802872b826bc8ba577d209a315f7d3e92d55"
+    },
+    {
+     "id": "s5",
+     "url": "https://study.anu.edu.au/apply/undergraduate-program-indicative-entry-requirements/international-baccalaureate-applications",
+     "title": "International Baccalaureate - for applications for admission effective from semester 1, 2027 | The Australian National University",
+     "retrievedAt": "2026-09-29T23:47:01.360Z",
+     "hash": "f1710282b9ca86dd9326ebba80f1eeffd4c5fd0d6f1167e7b37e01fb87825819"
+    },
+    {
+     "id": "s6",
+     "url": "https://study.anu.edu.au/apply/international-applications/indicative-entry-requirement/india-all-india-senior-school",
+     "title": "India - All India Senior School Certificate (AISSC, CBSE) | The Australian National University",
+     "retrievedAt": "2026-09-29T23:47:01.724Z",
+     "hash": "284146aada9b0529e3acd203dde94a9e540b00239f455589aaf40f4723660d81"
+    },
+    {
+     "id": "s7",
+     "url": "https://study.anu.edu.au/apply/international-applications/indicative-entry-requirement/indian-school-certificate-isc",
+     "title": "Indian School Certificate (ISC) | The Australian National University",
+     "retrievedAt": "2026-09-29T23:50:31.592Z",
+     "hash": "b655387e06aef710a7545413231305b1457598697225f3c7790a0f5ed004a8bf"
+    },
+    {
+     "id": "s8",
+     "url": "https://study.anu.edu.au/apply/undergraduate-program-indicative-entry-requirements/usa-scholastic-aptitude-test-sat",
+     "title": "USA Scholastic Aptitude Test (SAT) | The Australian National University",
+     "retrievedAt": "2026-09-29T23:47:03.086Z",
+     "hash": "567d0a010a0ab33efe40f9d8c6a0a5bd8a162c18db20e875bfd7fe5f31536b92"
+    },
+    {
+     "id": "s9",
+     "url": "https://study.anu.edu.au/apply/international-applications/indicative-entry-requirement/usa-american-college-test-act",
+     "title": "USA American College Test (ACT) | The Australian National University",
+     "retrievedAt": "2026-09-29T23:50:44.462Z",
+     "hash": "61976b4071f9e0dbc3ff8888aec28b6d0bb7554dd1569c1de3f8ad2ac32531a9"
+    },
+    {
+     "id": "s10",
+     "url": "https://study.anu.edu.au/apply/english-language-requirements",
+     "title": "English language requirements | The Australian National University",
+     "retrievedAt": "2026-09-29T23:47:04.587Z",
+     "hash": "7e6f507caeb3134bc55c7ebab9d65cf3ffe4bb7e2671f0c0f893051bbbcdafd2"
+    },
+    {
+     "id": "s11",
+     "url": "https://programsandcourses.anu.edu.au/program/becon",
+     "title": "Bachelor of Economics - ANU",
+     "retrievedAt": "2026-09-29T23:58:19.652Z",
+     "hash": "a331b21fd6870c820ce5e08e590a14641747f6bec9a6b751e722deda1f04bd93"
+    }
+   ],
+   "english": [],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "US High School Diploma applicants are assessed with SAT or ACT scores. The score needed depends on the programme's entrance rank.",
+     "noteAr": "يُقيَّم حاملو شهادة الثانوية الأمريكية بدرجات SAT أو ACT، وتعتمد الدرجة المطلوبة على رتبة القبول الخاصة بالبرنامج.",
+     "source": "s8",
+     "quote": "Acceptable qualifications alongside the SAT include but are not limited to: USA High School Diploma"
+    },
+    {
+     "test": "ACT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "ACT is accepted with a US High School Diploma as an alternative to the SAT.",
+     "noteAr": "يُقبل اختبار ACT مع شهادة الثانوية الأمريكية بديلا عن SAT.",
+     "source": "s9",
+     "quote": "Applicants must present evidence of completion Year 11 and/or Year 12 with either: US high school diploma"
+    },
+    {
+     "test": "AP",
+     "policy": "OPTIONAL",
+     "minScore": null,
+     "noteEn": "AP subjects are not compulsory but may make applicants eligible for adjustments.",
+     "noteAr": "مواد AP ليست إلزامية، لكنها قد تؤهل المتقدم للحصول على تعديلات في الرتبة.",
+     "source": "s8",
+     "quote": "Completion of Advanced Placement (AP) subjects is not compulsory. However, applicants who have completed AP subjects may be eligible for adjustments and are encouraged to submit their results through the online channel linked below."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "International students taking the IB Diploma (or Australian Year 12 or NCEA) apply through UAC International instead of directly to ANU.",
+     "noteAr": "يتقدم الطلاب الدوليون الحاصلون على دبلوم البكالوريا الدولية (أو شهادة الصف الثاني عشر الأسترالية أو NCEA) عبر مركز القبول الجامعي UAC بدلا من التقديم المباشر إلى الجامعة.",
+     "source": "s2",
+     "quote": "You apply via Universities Admissions Centre (UAC) International if you are an International student who is undertaking: Australian Year 12 inside or outside of Australia An International Baccalaureate Diploma OR"
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Predicted A Level, IB or HKDSE results can only be used for a Semester 2 (July) start. For Semester 1 (February) final results are needed.",
+     "noteAr": "لا يمكن استخدام النتائج المتوقعة لشهادات A Level أو البكالوريا الدولية أو HKDSE إلا للالتحاق في الفصل الثاني (يوليو). أما الفصل الأول (فبراير) فيتطلب النتائج النهائية.",
+     "source": "s3",
+     "quote": "You can be assessed on predicted results for commencement in the semester 2 (July) only."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Direct applications cost AUD 150 each.",
+     "noteAr": "رسوم كل طلب تقديم مباشر 150 دولارا أستراليا.",
+     "source": "s2",
+     "quote": "You must pay an application fee of AUD$150 upon submission of each application you make to the University."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2026-12-15",
+     "labelEn": "Semester 1, 2027 applications close",
+     "labelAr": "إغلاق باب التقديم للفصل الأول 2027",
+     "source": "s2",
+     "quote": "Applications are now open and will close on the 15 December 2026."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2027-01-15",
+     "labelEn": "Semester 1 offer acceptance deadline (applicants overseas)",
+     "labelAr": "الموعد النهائي لقبول العرض للفصل الأول (للمتقدمين من خارج أستراليا)",
+     "source": "s3",
+     "quote": "The standard acceptance deadline for Semester 1 is 15 January if you are overseas, and 31 January if you are in Australia at the time of accepting your offer."
+    }
+   ],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "anu-cs",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Computing BComp",
+     "nameAr": "بكالوريوس الحوسبة",
+     "degree": "BComp",
+     "durationYears": 3,
+     "url": "https://programsandcourses.anu.edu.au/program/bcomp",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": null,
+       "subjects": [],
+       "notesEn": "ANU selection rank 80 for this degree. The A Level indicative score for rank 80 is 13 from the best 3 subjects or 14 from the best 4 (A*=6, A=5, B=4, C=3, D=2, E=1).",
+       "notesAr": "رتبة القبول المطلوبة لهذا البرنامج 80. الدرجة الاسترشادية في A Level للرتبة 80 هي 13 من أفضل 3 مواد أو 14 من أفضل 4 مواد (A*=6، A=5، B=4، C=3، D=2، E=1).",
+       "source": "s4",
+       "quote": "80 | 13 | 14 |"
+      },
+      "IB": {
+       "minimumPoints": 31,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": null,
+         "noteEn": "Mathematics: Analysis and Approaches SL or HL, or Mathematics: Applications and Interpretation HL.",
+         "noteAr": "الرياضيات: التحليل والمقاربات بالمستوى القياسي أو العالي، أو الرياضيات: التطبيقات والتفسير بالمستوى العالي.",
+         "source": "s1",
+         "quote": "IB: Mathematics: Applications and Interpretations HL/Mathematics: Analysis and Approaches SL or HL"
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s1",
+       "quote": "International Baccalaureate: 31"
+      },
+      "CBSE": {
+       "subjects": [],
+       "notesEn": "Indicative score 14.0 for ANU rank 80, calculated from English or Hindi plus the best 4 externally examined subjects on a grade-point scale (A1=4 to D2=0.5), not a percentage.",
+       "notesAr": "الدرجة الاسترشادية 14.0 للرتبة 80، وتُحسب من اللغة الإنجليزية أو الهندية وأفضل 4 مواد ممتحنة خارجيا وفق مقياس نقاط الدرجات (A1=4 حتى D2=0.5)، وليست نسبة مئوية.",
+       "source": "s6",
+       "quote": "80 | 14.0 |"
+      },
+      "ISC": {
+       "minimumPercent": 84,
+       "subjects": [],
+       "notesEn": "Average of English and the best 3 externally examined subjects; 84 corresponds to ANU rank 80.",
+       "notesAr": "متوسط درجات اللغة الإنجليزية وأفضل 3 مواد ممتحنة خارجيا، وتقابل الدرجة 84 رتبة القبول 80.",
+       "source": "s7",
+       "quote": "80 | 84 |"
+      },
+      "AMERICAN": {
+       "subjects": [],
+       "notesEn": "US High School Diploma with SAT 1170 or ACT 23 indicative for ANU rank 80.",
+       "notesAr": "شهادة الثانوية الأمريكية مع درجة SAT استرشادية 1170 أو ACT بدرجة 23 للرتبة 80.",
+       "source": "s8",
+       "quote": "80 | 1170 |"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": 1170,
+        "noteEn": "Indicative SAT for rank 80 (US diploma applicants).",
+        "noteAr": "درجة SAT الاسترشادية للرتبة 80 (لحملة الشهادة الأمريكية).",
+        "source": "s8",
+        "quote": "80 | 1170 |"
+       },
+       {
+        "test": "ACT",
+        "policy": "REQUIRED",
+        "minScore": 23,
+        "noteEn": "Indicative ACT for rank 80 (alternative to SAT).",
+        "noteAr": "درجة ACT الاسترشادية للرتبة 80 (بديلا عن SAT).",
+        "source": "s9",
+        "quote": "80 | 23 |"
+       }
+      ],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": {
+      "asOf": "2025-09-06",
+      "curricula": {
+       "IB": {
+        "minimumPoints": 30,
+        "subjects": [],
+        "notesEn": null,
+        "notesAr": null,
+        "source": "s1",
+        "quote": "International Baccalaureate: 30",
+        "wayback": true
+       }
+      },
+      "general": {
+       "english": [],
+       "tests": []
+      }
+     }
+    },
+    {
+     "key": "anu-econ",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Economics BEc",
+     "nameAr": "بكالوريوس الاقتصاد",
+     "degree": "BEc",
+     "durationYears": 3,
+     "url": "https://programsandcourses.anu.edu.au/program/becon",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": null,
+       "subjects": [],
+       "notesEn": "ANU selection rank 80 for this degree. The A Level indicative score for rank 80 is 13 from the best 3 subjects or 14 from the best 4 (A*=6, A=5, B=4, C=3, D=2, E=1).",
+       "notesAr": "رتبة القبول المطلوبة لهذا البرنامج 80. الدرجة الاسترشادية في A Level للرتبة 80 هي 13 من أفضل 3 مواد أو 14 من أفضل 4 مواد (A*=6، A=5، B=4، C=3، D=2، E=1).",
+       "source": "s4",
+       "quote": "80 | 13 | 14 |"
+      },
+      "IB": {
+       "minimumPoints": 31,
+       "subjects": [],
+       "notesEn": "No formal prerequisites; mathematics is assumed knowledge.",
+       "notesAr": "لا توجد متطلبات مسبقة رسمية، ويُفترض إلمام الطالب بالرياضيات.",
+       "source": "s11",
+       "quote": "International Baccalaureate: 31"
+      },
+      "CBSE": {
+       "subjects": [],
+       "notesEn": "Indicative score 14.0 for ANU rank 80, calculated from English or Hindi plus the best 4 externally examined subjects on a grade-point scale (A1=4 to D2=0.5), not a percentage.",
+       "notesAr": "الدرجة الاسترشادية 14.0 للرتبة 80، وتُحسب من اللغة الإنجليزية أو الهندية وأفضل 4 مواد ممتحنة خارجيا وفق مقياس نقاط الدرجات (A1=4 حتى D2=0.5)، وليست نسبة مئوية.",
+       "source": "s6",
+       "quote": "80 | 14.0 |"
+      },
+      "ISC": {
+       "minimumPercent": 84,
+       "subjects": [],
+       "notesEn": "Average of English and the best 3 externally examined subjects; 84 corresponds to ANU rank 80.",
+       "notesAr": "متوسط درجات اللغة الإنجليزية وأفضل 3 مواد ممتحنة خارجيا، وتقابل الدرجة 84 رتبة القبول 80.",
+       "source": "s7",
+       "quote": "80 | 84 |"
+      },
+      "AMERICAN": {
+       "subjects": [],
+       "notesEn": "US High School Diploma with SAT 1170 or ACT 23 indicative for ANU rank 80.",
+       "notesAr": "شهادة الثانوية الأمريكية مع درجة SAT استرشادية 1170 أو ACT بدرجة 23 للرتبة 80.",
+       "source": "s8",
+       "quote": "80 | 1170 |"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": 1170,
+        "noteEn": "Indicative SAT for rank 80 (US diploma applicants).",
+        "noteAr": "درجة SAT الاسترشادية للرتبة 80 (لحملة الشهادة الأمريكية).",
+        "source": "s8",
+        "quote": "80 | 1170 |"
+       },
+       {
+        "test": "ACT",
+        "policy": "REQUIRED",
+        "minScore": 23,
+        "noteEn": "Indicative ACT for rank 80 (alternative to SAT).",
+        "noteAr": "درجة ACT الاسترشادية للرتبة 80 (بديلا عن SAT).",
+        "source": "s9",
+        "quote": "80 | 23 |"
+       }
+      ],
+      "additional": [],
+      "source": "s11"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "monash",
+   "website": "https://www.monash.edu",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.monash.edu/admissions/entry-requirements/aptitude-tests",
+     "title": "Admission and aptitude tests - Admissions",
+     "retrievedAt": "2026-09-29T23:58:47.205Z",
+     "hash": "773eaa3337609f0c13c8c07f800bddaaebcedb2824cb0693d3d4e8cbfbfeaa12",
+     "waybackTimestamp": "20251021012354",
+     "waybackHash": "374e6aa02f823f4e639f3a5a0423864c110bc0cb6bb8ebe56450458b166e9476"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.monash.edu/admissions/entry-requirements/english-language",
+     "title": "English language requirements - Admissions",
+     "retrievedAt": "2026-07-23T00:00:00Z",
+     "hash": "429297e557cab22a424c24ca645bc8bc743d4caecad855cb6a23924af082c40a",
+     "via": "archive:20260723192404",
+     "waybackTimestamp": "20250810230508",
+     "waybackHash": "0b78a78f2da1d64f8980eea10f78fc38f2d592342d855bbb1c3ffe8592c2ae7a"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.monash.edu/study/courses/find-a-course/pharmacy-p6007",
+     "title": "Pharmacy - P6007 - Study at Monash",
+     "retrievedAt": "2026-09-29T23:59:31.828Z",
+     "hash": "8afa6b290c0119a897fb382450598c4171baa60d2ccd1332262805ad338af0ba"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.monash.edu/pharm/future/courses/undergraduate-pharmacy-international",
+     "title": "Undergraduate Pharmacy for International Students - Faculty of Pharmacy and Pharmaceutical Sciences",
+     "retrievedAt": "2026-09-30T00:00:09.385Z",
+     "hash": "9d017b967ca71ffd375f59a2cd42aad42cf6b4a4ebea47c3a63adf31fc914d59",
+     "waybackTimestamp": "20230922051521",
+     "waybackHash": "c651af906ea98b4f0c9a305cf224d26a9d1a2222d6c4871db2fbe77e21d770d9"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": "University minimum; some courses set higher scores.",
+     "waiverNoteAr": "هذا هو الحد الأدنى للجامعة، وقد تشترط بعض البرامج درجات أعلى.",
+     "source": "s2",
+     "quote": "IELTS Online (Academic) | 6.5 | Reading: 6.0 Listening: 6.0 Writing: 6.0 Speaking: 6.0 |"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 79,
+     "minComponent": null,
+     "waiverNoteEn": "Section minimums: Reading 13, Listening 12, Writing 21, Speaking 18.",
+     "waiverNoteAr": "الحد الأدنى للأقسام: القراءة 13، الاستماع 12، الكتابة 21، التحدث 18.",
+     "source": "s2",
+     "quote": "| 79 | Reading: 13 Listening: 12 Writing: 21 Speaking: 18 |"
+    },
+    {
+     "test": "PTE",
+     "minOverall": 58,
+     "minComponent": 50,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s2",
+     "quote": "Pearson Test of English (Academic) UKVI | 58 | No PTE communicative skills score below 50 |"
+    },
+    {
+     "test": "CAMBRIDGE",
+     "minOverall": 176,
+     "minComponent": 169,
+     "waiverNoteEn": "C1 Advanced or C2 Proficiency.",
+     "waiverNoteAr": "شهادة C1 Advanced أو C2 Proficiency.",
+     "source": "s2",
+     "quote": "C1 Advanced (Cambridge Certificate in Advanced English) | 176 | Reading: 169 Listening: 169 Writing: 169 Speaking: 169 |"
+    }
+   ],
+   "tests": [],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {},
+   "programs": [
+    {
+     "key": "monash-cs",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Computer Science BCompSc",
+     "nameAr": "بكالوريوس علوم الحاسوب",
+     "degree": "BCompSc",
+     "durationYears": 3,
+     "url": "https://www.monash.edu/study/courses/find-a-course/computer-science-c2001",
+     "curricula": {},
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "monash-med",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Medical Science and Doctor of Medicine (Direct entry) BMedSc/MD",
+     "nameAr": "بكالوريوس العلوم الطبية ودكتور في الطب (القبول المباشر)",
+     "degree": "BMedSc/MD",
+     "durationYears": 5,
+     "url": "https://www.monash.edu/study/courses/find-a-course/medical-science-and-medicine-direct-entry-m6011",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "ISAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "International applicants to medicine must sit the International Student Admissions Test (ISAT); domestic applicants sit the UCAT.",
+        "noteAr": "يجب على المتقدمين الدوليين لدراسة الطب أداء اختبار القبول للطلاب الدوليين ISAT، بينما يؤدي المتقدمون المحليون اختبار UCAT.",
+        "source": "s1",
+        "quote": "international applicants must complete the International Students Admissions Test (ISAT)."
+       }
+      ],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "monash-pharm",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Pharmacy (Honours) and Doctor of Pharmacy",
+     "nameAr": "بكالوريوس الصيدلة (مع مرتبة الشرف) ودكتور في الصيدلة",
+     "degree": "BPharm(Hons)/PharmD",
+     "durationYears": 5,
+     "url": "https://www.monash.edu/study/courses/find-a-course/pharmacy-p6007",
+     "curricula": {
+      "BRITISH": {
+       "subjects": [],
+       "notesEn": "Monash A Level entry score 12 for 2027 (best 3 A Levels, or allowed A and AS combinations; A* and A = 5, B = 4, C = 3, D = 2, E = 1, with up to 1 bonus point for an A*).",
+       "notesAr": "درجة القبول في A Level لعام 2027 هي 12 (أفضل 3 مواد A Level أو التركيبات المسموح بها من مواد A وAS، حيث A* وA = 5، وB = 4، وC = 3، وD = 2، وE = 1، مع نقطة إضافية واحدة كحد أقصى لدرجة A*).",
+       "source": "s3",
+       "quote": "GCE A Level 12 International Baccalaureate Diploma Programme 33"
+      },
+      "IB": {
+       "minimumPoints": 33,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": "4",
+         "noteEn": "Mathematics: Analysis and Approaches SL 4, or Analysis and Approaches or Applications and Interpretation HL 3.",
+         "noteAr": "الرياضيات: التحليل والمقاربات بالمستوى القياسي بدرجة 4، أو التحليل والمقاربات أو التطبيقات والتفسير بالمستوى العالي بدرجة 3.",
+         "source": "s3",
+         "quote": "Mathematics: Analysis and Approaches 4 Higher Level OR Mathematics: Applications and Interpretations 3"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": "4",
+         "noteEn": "Chemistry SL 4 or HL 3.",
+         "noteAr": "الكيمياء بالمستوى القياسي بدرجة 4 أو بالمستوى العالي بدرجة 3.",
+         "source": "s3",
+         "quote": "Science VCE* Score Units 3 and 4 OR Chemistry 25 IB Diploma Programme Score Standard Level OR Chemistry 4 Higher Level OR Chemistry 3"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "english_language"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": "4",
+         "noteEn": "An English subject at SL 4 or HL 3.",
+         "noteAr": "مادة لغة إنجليزية بالمستوى القياسي بدرجة 4 أو بالمستوى العالي بدرجة 3.",
+         "source": "s3",
+         "quote": "IB Diploma Programme Score Standard Level OR English A: Literature 4 OR English A: Language and Literature 4"
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s3",
+       "quote": "International Baccalaureate Diploma Programme 33"
+      },
+      "CBSE": {
+       "minimumPercent": 83,
+       "subjects": [],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s3",
+       "quote": "All India Senior School Certificate Examination 83%"
+      },
+      "ISC": {
+       "minimumPercent": 77,
+       "subjects": [],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s3",
+       "quote": "Indian School Certificate Examination 77%"
+      },
+      "AMERICAN": {
+       "subjects": [],
+       "notesEn": "2027 entry score: SAT 1290, ACT 27 or Advanced Placement score 8.",
+       "notesAr": "درجة القبول لعام 2027: SAT بدرجة 1290، أو ACT بدرجة 27، أو درجة 8 في اختبارات AP.",
+       "source": "s3",
+       "quote": "Advanced Placement 8 ACT 27 SAT - Total score out of 1600 1290"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s3",
+        "quote": "English entry requirements (Level A) 6.5 Overall score for IELTS (Academic), with minimum band scores: Listening 6.0, Reading 6.0, Writing 6.0 and Speaking 6.0"
+       }
+      ],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "OPTIONAL",
+        "minScore": 1290,
+        "noteEn": "One of the accepted US-system scores (SAT, ACT or AP).",
+        "noteAr": "إحدى الدرجات المقبولة للنظام الأمريكي (SAT أو ACT أو AP).",
+        "source": "s3",
+        "quote": "SAT - Total score out of 1600 1290"
+       },
+       {
+        "test": "ACT",
+        "policy": "OPTIONAL",
+        "minScore": 27,
+        "noteEn": "One of the accepted US-system scores (SAT, ACT or AP).",
+        "noteAr": "إحدى الدرجات المقبولة للنظام الأمريكي (SAT أو ACT أو AP).",
+        "source": "s3",
+        "quote": "Advanced Placement 8 ACT 27"
+       }
+      ],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": false,
+        "noteEn": "From 2027 this degree replaces the Bachelor of Pharmacy (Honours)/Master of Pharmacy.",
+        "noteAr": "اعتبارا من عام 2027 يحل هذا البرنامج محل بكالوريوس الصيدلة (مع مرتبة الشرف)/ماجستير الصيدلة.",
+        "source": "s4",
+        "quote": "From 2027, Monash University will introduce the Bachelor of Pharmacy (Honours) / Doctor of Pharmacy, replacing the previous Bachelor of Pharmacy (Honours) / Master of Pharmacy*."
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "unimelb",
+   "website": "https://www.unimelb.edu.au",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://study.unimelb.edu.au/how-to-apply/undergraduate-study/recognised-vce-equivalent-qualifications/qualifications/general-international-qualifications-international-baccalaureate-ib-diploma",
+     "title": "International Baccalaureate (IB) diploma",
+     "retrievedAt": "2026-09-29T23:58:36.726Z",
+     "hash": "c6d98570b32aea9f91fd8dab638286fb529d104ca71803b1d08556adb8e01fe8"
+    },
+    {
+     "id": "s2",
+     "url": "https://study.unimelb.edu.au/how-to-apply/undergraduate-study/international-applications/entry-requirements/indicative-entry-scores-international-students/qualifications/india-all-india-senior-school-certificate-cbse-and-indian-school-certificate-isc",
+     "title": "CBSE All India Senior School Certificate (AISSC) and CISCE Indian School Certificate (ISC)",
+     "retrievedAt": "2026-09-29T23:59:41.313Z",
+     "hash": "5a764a94351bd4dc7d385f15c5c78ea66768127e8297a3f31e291709e7634c9b"
+    },
+    {
+     "id": "s3",
+     "url": "https://study.unimelb.edu.au/how-to-apply/undergraduate-study/recognised-vce-equivalent-qualifications/qualifications/united-states-high-school-diploma-and-satact",
+     "title": "High School Diploma GPA, SAT and ACT",
+     "retrievedAt": "2026-09-29T23:59:28.125Z",
+     "hash": "b5b55be451f2bdd0f9208ceb4898ca3248eea615527e6cc7d464200d6ff9c17c"
+    },
+    {
+     "id": "s4",
+     "url": "https://study.unimelb.edu.au/how-to-apply/english-language-requirements/undergraduate-english-language-requirements",
+     "title": "Undergraduate English language requirements",
+     "retrievedAt": "2026-02-16T00:00:00Z",
+     "hash": "81a508975876c5bd497f0e5415a9613a516e2340e8dcd4ba197be37f188ce81a",
+     "via": "archive:20260216093900",
+     "waybackTimestamp": "20250903134843",
+     "waybackHash": "c0efc41412faab7a550a3ad5f964b9f2065cb7909bcd8b384409127cc8c58a98"
+    },
+    {
+     "id": "s5",
+     "url": "https://study.unimelb.edu.au/how-to-apply/undergraduate-study/international-applications/entry-requirements/recognised-international-qualifications",
+     "title": "Recognised VCE-equivalent qualifications",
+     "retrievedAt": "2026-09-29T23:59:32.830Z",
+     "hash": "957ee62d44ae3a17236f6ae53ea07ca731736155622bdf27470deef3b916f975"
+    },
+    {
+     "id": "s6",
+     "url": "https://study.unimelb.edu.au/how-to-apply/undergraduate-study/international-applications/entry-requirements",
+     "title": "Entry requirements - undergraduate study - international applications",
+     "retrievedAt": "2026-02-28T00:00:00Z",
+     "hash": "93d330e800058c2f0023d578dfe4b8f14a54e5f36026f928d79452af6694be30",
+     "via": "archive:20260228102709"
+    },
+    {
+     "id": "s7",
+     "url": "https://study.unimelb.edu.au/find/courses/undergraduate/bachelor-of-commerce/entry-requirements/",
+     "title": "Bachelor of Commerce : Entry requirements - The University of Melbourne",
+     "retrievedAt": "2026-09-30T00:00:24.860Z",
+     "hash": "9cfaf12111135082947c9d0fee8b8c5ac7213b79f4b741acc6f0ef83cff876ea",
+     "waybackTimestamp": "20251018203814",
+     "waybackHash": "c53494cb7d5babf85d189e8121d3a9f8b35fdf204df7b0353ea01e8ed09b18fc"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6.5,
+     "minComponent": 6,
+     "waiverNoteEn": "Applies to Commerce and Science (English Level 1).",
+     "waiverNoteAr": "ينطبق على برنامجي التجارة والعلوم (المستوى 1 للغة الإنجليزية).",
+     "source": "s4",
+     "quote": "6.5: with writing 6.0; speaking 6.0; reading 6.0; listening 6.0"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 81,
+     "minComponent": 16,
+     "waiverNoteEn": "Writing 19, Speaking 19, Reading 16, Listening 16.",
+     "waiverNoteAr": "الكتابة 19، التحدث 19، القراءة 16، الاستماع 16.",
+     "source": "s4",
+     "quote": "81: with writing 19; speaking 19; reading 16; listening 16"
+    },
+    {
+     "test": "PTE",
+     "minOverall": 64,
+     "minComponent": 60,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s4",
+     "quote": "64: with writing 60; speaking 60; reading 60; listening 60"
+    },
+    {
+     "test": "CAMBRIDGE",
+     "minOverall": 169,
+     "minComponent": 163,
+     "waiverNoteEn": "C1 Advanced: Writing 170, Speaking 179, Reading 163, Listening 163.",
+     "waiverNoteAr": "شهادة C1 Advanced: الكتابة 170، التحدث 179، القراءة 163، الاستماع 163.",
+     "source": "s4",
+     "quote": "169: with writing 170; speaking 179; reading 163; listening 163"
+    },
+    {
+     "test": "LANGUAGECERT",
+     "minOverall": 67,
+     "minComponent": null,
+     "waiverNoteEn": "Writing 64, Speaking 70, Reading 60, Listening 57.",
+     "waiverNoteAr": "الكتابة 64، التحدث 70، القراءة 60، الاستماع 57.",
+     "source": "s4",
+     "quote": "67: with writing 64; speaking 70; reading 60; listening 57"
+    }
+   ],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "Not test-optional: US High School Diploma applicants must submit SAT, ACT or an AP exam aggregate score. No superscoring.",
+     "noteAr": "الاختبارات ليست اختيارية: يجب على حملة شهادة الثانوية الأمريكية تقديم درجة SAT أو ACT أو مجموع درجات اختبارات AP، ولا يُعتمد الدمج بين أفضل الدرجات.",
+     "source": "s3",
+     "quote": "The University is not test-optional. You must submit one of the following test scores: SAT, ACT, or an AP exam aggregate score."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": false,
+     "noteEn": "CBSE applicants meet the English requirement by passing CBSE English (ISC: passing ISC English).",
+     "noteAr": "يستوفي طلاب CBSE متطلب اللغة الإنجليزية بالنجاح في مادة اللغة الإنجليزية في CBSE (وطلاب ISC بالنجاح في مادة اللغة الإنجليزية في ISC).",
+     "source": "s4",
+     "quote": "CBSE XII (All India Senior School Certificate Examination) | Pass the English subject in the CBSE"
+    },
+    {
+     "kind": "OTHER",
+     "required": false,
+     "noteEn": "No personal statement, extracurriculars or references are needed (except portfolio or audition for Fine Arts and Music).",
+     "noteAr": "لا يُطلب بيان شخصي أو أنشطة لا صفية أو خطابات توصية (باستثناء ملف الأعمال أو تجربة الأداء لبرنامجي الفنون الجميلة والموسيقى).",
+     "source": "s3",
+     "quote": "None of the University of Melbourne undergraduate degrees (called courses in Australia) require personal statements, extracurricular activities, references or consider depth of curriculum for admission."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "International students taking the IB outside Australia or New Zealand apply directly to the University.",
+     "noteAr": "يتقدم الطلاب الدوليون الذين يدرسون البكالوريا الدولية خارج أستراليا ونيوزيلندا مباشرة إلى الجامعة.",
+     "source": "s5",
+     "quote": "An international student studying the IB outside Australia or New Zealand | Apply direct to the University of Melbourne | Apply direct to the University of Melbourne |"
+    },
+    {
+     "kind": "OTHER",
+     "required": false,
+     "noteEn": "Qualifications not listed (the UAE national curriculum is not listed) are assessed case by case.",
+     "noteAr": "تُقيَّم المؤهلات غير المدرجة (منهج الإمارات الوطني غير مدرج) كل حالة على حدة.",
+     "source": "s6",
+     "quote": "If you have completed a secondary school qualification that is not listed on our website, your eligibility for entry to an undergraduate course will be assessed on a case-by-case basis during the application process."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {
+    "BRITISH": {
+     "accepted": true,
+     "subjects": [],
+     "notesEn": "At least three A Levels, with at least a C in prerequisite subjects. Course scores are in the A Level entry score guide.",
+     "notesAr": "ثلاث مواد A Level على الأقل، مع درجة C على الأقل في المواد المطلوبة مسبقا. درجات البرامج موجودة في دليل درجات القبول لشهادة A Level.",
+     "source": "s5",
+     "quote": "A minimum of three A Levels is required, and a grade of at least C is required in prerequisite subjects unless otherwise specified."
+    }
+   },
+   "programs": [
+    {
+     "key": "unimelb-bus",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Commerce BCom",
+     "nameAr": "بكالوريوس التجارة",
+     "degree": "BCom",
+     "durationYears": 3,
+     "url": "https://study.unimelb.edu.au/find/courses/undergraduate/bachelor-of-commerce/entry-requirements/",
+     "curricula": {
+      "IB": {
+       "minimumPoints": 34,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": "4",
+         "noteEn": "Grade 4 in Applications and Interpretation HL, Analysis and Approaches SL, or Analysis and Approaches HL.",
+         "noteAr": "درجة 4 في الرياضيات: التطبيقات والتفسير بالمستوى العالي، أو التحليل والمقاربات بالمستوى القياسي أو العالي.",
+         "source": "s1",
+         "quote": "Bachelor of Commerce | 34 | English, and a minimum grade of 4 in either Applications and interpretations HL, Analysis and approaches SL, or Analysis and approaches HL |"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "english_language"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s1",
+         "quote": "Bachelor of Commerce | 34 | English, and a minimum grade of 4 in either Applications and interpretations HL, Analysis and approaches SL, or Analysis and approaches HL |"
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s1",
+       "quote": "Bachelor of Commerce | 34 | English, and a minimum grade of 4 in either Applications and interpretations HL, Analysis and approaches SL, or Analysis and approaches HL |"
+      },
+      "CBSE": {
+       "minimumPercent": 90,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "english_language"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "Commerce | 81 | 90 | English and Mathematics |"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "Commerce | 81 | 90 | English and Mathematics |"
+        }
+       ],
+       "notesEn": "Average of the best four final-year subjects. The 2027 guide score is 90; it was 81 for 2026 entry.",
+       "notesAr": "متوسط أفضل أربع مواد في السنة النهائية. الدرجة الإرشادية لعام 2027 هي 90، وكانت 81 للقبول في عام 2026.",
+       "source": "s2",
+       "quote": "Commerce | 81 | 90 | English and Mathematics |"
+      },
+      "ISC": {
+       "minimumPercent": 90,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "english_language"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "Commerce | 81 | 90 | English and Mathematics |"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "Commerce | 81 | 90 | English and Mathematics |"
+        }
+       ],
+       "notesEn": "Average of the best four final-year subjects. The 2027 guide score is 90; it was 81 for 2026 entry.",
+       "notesAr": "متوسط أفضل أربع مواد في السنة النهائية. الدرجة الإرشادية لعام 2027 هي 90، وكانت 81 للقبول في عام 2026.",
+       "source": "s2",
+       "quote": "Commerce | 81 | 90 | English and Mathematics |"
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.4,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": "AP Calculus AB or BC exam with a score of 3 or above (or approved equivalents).",
+         "noteAr": "اختبار AP Calculus AB أو BC بدرجة 3 فأكثر (أو ما يعادله من المواد المعتمدة).",
+         "source": "s3",
+         "quote": "AP Calculus AB or AP Calculus BC exam (or approved equivalents)"
+        }
+       ],
+       "notesEn": "Unweighted GPA 3.4 on a 4.0 scale, plus SAT 1270, ACT 27 or AP aggregate 17.",
+       "notesAr": "معدل تراكمي غير مرجح 3.4 من 4.0، مع SAT بدرجة 1270 أو ACT بدرجة 27 أو مجموع 17 في اختبارات AP.",
+       "source": "s3",
+       "quote": "Commerce | 3.4 | SAT: 1270 or ACT: 27 or AP exam aggregate score 17 |"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": 1270,
+        "noteEn": "Or ACT 27, or AP aggregate 17.",
+        "noteAr": "أو ACT بدرجة 27، أو مجموع 17 في اختبارات AP.",
+        "source": "s3",
+        "quote": "Commerce | 3.4 | SAT: 1270 or ACT: 27 or AP exam aggregate score 17 |"
+       },
+       {
+        "test": "ACT",
+        "policy": "REQUIRED",
+        "minScore": 27,
+        "noteEn": "Alternative to SAT or AP aggregate.",
+        "noteAr": "بديل عن SAT أو مجموع اختبارات AP.",
+        "source": "s3",
+        "quote": "Commerce | 3.4 | SAT: 1270 or ACT: 27 or AP exam aggregate score 17 |"
+       }
+      ],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "unimelb-science-bsc",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science BSc",
+     "nameAr": "بكالوريوس العلوم",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://study.unimelb.edu.au/find/courses/undergraduate/bachelor-of-science/entry-requirements/",
+     "curricula": {
+      "IB": {
+       "minimumPoints": 31,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": "4",
+         "noteEn": "Grade 4 in Applications and Interpretation HL, Analysis and Approaches SL, or Analysis and Approaches HL.",
+         "noteAr": "درجة 4 في الرياضيات: التطبيقات والتفسير بالمستوى العالي، أو التحليل والمقاربات بالمستوى القياسي أو العالي.",
+         "source": "s1",
+         "quote": "Bachelor of Science | 31 | A minimum grade of 4 in either Applications and interpretations HL, Analysis and approaches SL, or Analysis and approaches HL. A minimum grade of 4 in one of Biology, Chemistry or Physics at HL or SL |"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "chemistry",
+          "physics"
+         ],
+         "minimumLevel": "STANDARD",
+         "minimumGrade": "4",
+         "noteEn": "Grade 4 in Biology, Chemistry or Physics at HL or SL.",
+         "noteAr": "درجة 4 في الأحياء أو الكيمياء أو الفيزياء بالمستوى العالي أو القياسي.",
+         "source": "s1",
+         "quote": "Bachelor of Science | 31 | A minimum grade of 4 in either Applications and interpretations HL, Analysis and approaches SL, or Analysis and approaches HL. A minimum grade of 4 in one of Biology, Chemistry or Physics at HL or SL |"
+        }
+       ],
+       "notesEn": null,
+       "notesAr": null,
+       "source": "s1",
+       "quote": "Bachelor of Science | 31 | A minimum grade of 4 in either Applications and interpretations HL, Analysis and approaches SL, or Analysis and approaches HL. A minimum grade of 4 in one of Biology, Chemistry or Physics at HL or SL |"
+      },
+      "CBSE": {
+       "minimumPercent": 85,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "english_language"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "Science | 75 | 85 | English, Mathematics and one of Biology, Chemistry or Physics |"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "Science | 75 | 85 | English, Mathematics and one of Biology, Chemistry or Physics |"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "chemistry",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "Science | 75 | 85 | English, Mathematics and one of Biology, Chemistry or Physics |"
+        }
+       ],
+       "notesEn": "Average of the best four final-year subjects. The 2027 guide score is 85; it was 75 for 2026 entry.",
+       "notesAr": "متوسط أفضل أربع مواد في السنة النهائية. الدرجة الإرشادية لعام 2027 هي 85، وكانت 75 للقبول في عام 2026.",
+       "source": "s2",
+       "quote": "Science | 75 | 85 | English, Mathematics and one of Biology, Chemistry or Physics |"
+      },
+      "ISC": {
+       "minimumPercent": 85,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "english_language"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "Science | 75 | 85 | English, Mathematics and one of Biology, Chemistry or Physics |"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "Science | 75 | 85 | English, Mathematics and one of Biology, Chemistry or Physics |"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "chemistry",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "Science | 75 | 85 | English, Mathematics and one of Biology, Chemistry or Physics |"
+        }
+       ],
+       "notesEn": "Average of the best four final-year subjects. The 2027 guide score is 85; it was 75 for 2026 entry.",
+       "notesAr": "متوسط أفضل أربع مواد في السنة النهائية. الدرجة الإرشادية لعام 2027 هي 85، وكانت 75 للقبول في عام 2026.",
+       "source": "s2",
+       "quote": "Science | 75 | 85 | English, Mathematics and one of Biology, Chemistry or Physics |"
+      },
+      "AMERICAN": {
+       "minimumGPA": 3.2,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": "AP Calculus AB or BC exam with a score of 3 or above.",
+         "noteAr": "اختبار AP Calculus AB أو BC بدرجة 3 فأكثر.",
+         "source": "s3",
+         "quote": "AP Calculus AB or AP Calculus BC exam; and A lab science: AP Biology exam or AP Chemistry exam or one of the following Physics combinations:"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "chemistry",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": "A lab science AP exam (Biology, Chemistry or an approved Physics combination); not needed if both Calculus AB and BC are presented.",
+         "noteAr": "اختبار AP في علم مختبري (الأحياء أو الكيمياء أو تركيبة معتمدة من الفيزياء)، ولا يلزم إذا قُدّم اختبارا Calculus AB وBC معا.",
+         "source": "s3",
+         "quote": "A lab science exam is not required when both the AP Calculus AB and AP Calculus BC exams are presented."
+        }
+       ],
+       "notesEn": "Unweighted GPA 3.2 on a 4.0 scale, plus SAT 1210, ACT 25 or AP aggregate 13.",
+       "notesAr": "معدل تراكمي غير مرجح 3.2 من 4.0، مع SAT بدرجة 1210 أو ACT بدرجة 25 أو مجموع 13 في اختبارات AP.",
+       "source": "s3",
+       "quote": "Science | 3.2 | SAT: 1210 or ACT: 25 or AP exam aggregate score 13 |"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": 1210,
+        "noteEn": "Or ACT 25, or AP aggregate 13.",
+        "noteAr": "أو ACT بدرجة 25، أو مجموع 13 في اختبارات AP.",
+        "source": "s3",
+        "quote": "Science | 3.2 | SAT: 1210 or ACT: 25 or AP exam aggregate score 13 |"
+       },
+       {
+        "test": "ACT",
+        "policy": "REQUIRED",
+        "minScore": 25,
+        "noteEn": "Alternative to SAT or AP aggregate.",
+        "noteAr": "بديل عن SAT أو مجموع اختبارات AP.",
+        "source": "s3",
+        "quote": "Science | 3.2 | SAT: 1210 or ACT: 25 or AP exam aggregate score 13 |"
+       }
+      ],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  }
+ ]
+}
