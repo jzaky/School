@@ -202,7 +202,7 @@ export async function setSectionTeacherAction(input: { classId: string; teacherI
     const c = await tx.schoolClass.findFirst({ where: { orgId: ctx.orgId, id: input.classId } });
     if (!c) throw new Error("NOT_FOUND");
     if (input.teacherId) {
-      const m = await tx.membership.findFirst({ where: { orgId: ctx.orgId, id: input.teacherId, status: "ACTIVE" } });
+      const m = await tx.membership.findFirst({ where: { orgId: ctx.orgId, id: input.teacherId, status: { in: ["ACTIVE", "INVITED"] } } });
       if (!m) throw new Error("NOT_FOUND");
     }
     await tx.schoolClass.update({ where: { id: c.id }, data: { teacherMembershipId: input.teacherId } });

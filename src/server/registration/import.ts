@@ -4,7 +4,7 @@
 import type { Prisma } from "@prisma/client";
 import { tenantTx } from "@/lib/tenant-db";
 import { checkChoices } from "@/lib/registration";
-import { MAX_REG_IMPORT_ROWS, isMarked, norm, regRowNumber, studentNoOf, subjectHeaders, type RegRowError } from "@/lib/registration-csv";
+import { MAX_REG_IMPORT_ROWS, headerParts, isMarked, norm, regRowNumber, studentNoOf, subjectHeaders, type RegRowError } from "@/lib/registration-csv";
 import { audit } from "@/server/audit/audit";
 import { currentYear, offeringsFor, runAllocation, saveRegistration, type AllocationSummary, type OfferingRow } from "./service";
 
@@ -29,14 +29,14 @@ export class RegImportTooLargeError extends Error {
   }
 }
 
-export async function previewRegistrationRows(tx: Tx, orgId: string, rows: Array<Record<string, unknown>>): Promise<Preview> {
+export async function previewRegistrationRows(tx: Tx, orgId: string, rows: Array<Record<string, unknown>>, rowNumbers?: number[]): Promise<Preview> {
   if (rows.length > MAX_REG_IMPORT_ROWS) throw new RegImportTooLargeError();
   const headers = [...new Set(rows.flatMap((r) => Object.keys(r)))];
   const year = await currentYear(tx, orgId);
   const subjects = await tx.subject.findMany({ where: { orgId } });
   const subjectByKey = new Map<string, (typeof subjects)[number]>();
   for (const s of subjects) for (const k of [s.code, s.nameEn, s.nameAr]) subjectByKey.set(norm(k), s);
-  const columns = subjectHeaders(headers).map((h) => ({ header: h, subject: subjectByKey.get(norm(h)) ?? null }));
+  const columns = subjectHeaders(headers).map((h) => ({ header: h, subject: headerParts(h).map((p) => subjectByKey.get(p)).find(Boolean) ?? null }));
   const unknownHeaders = columns.filter((c) => !c.subject).map((c) => c.header);
 
   const numbers = [...new Set(rows.map(studentNoOf).filter(Boolean))];
@@ -58,7 +58,7 @@ export async function previewRegistrationRows(tx: Tx, orgId: string, rows: Array
 
   const seen = new Set<string>();
   const out: PreviewRow[] = rows.map((raw, i) => {
-    const row = regRowNumber(i);
+    const row = rowNumbers?.[i] ?? regRowNumber(i);
     const studentNo = studentNoOf(raw);
     const errors: RegRowError[] = [];
     const base: PreviewRow = { row, studentNo, studentId: null, name: null, grade: null, options: [], errors };
@@ -103,8 +103,8 @@ export async function previewRegistrationRows(tx: Tx, orgId: string, rows: Array
 
 export type RegImportResult = { importId: string; total: number; succeeded: number; failed: number; errors: RegRowError[]; allocation: AllocationSummary };
 
-export async function importRegistrationRows(orgId: string, actor: RegImportActor, fileName: string, rows: Array<Record<string, unknown>>): Promise<RegImportResult> {
-  const preview = await tenantTx(orgId, (tx) => previewRegistrationRows(tx, orgId, rows), { timeout: 60_000 });
+export async function importRegistrationRows(orgId: string, actor: RegImportActor, fileName: string, rows: Array<Record<string, unknown>>, rowNumbers?: number[]): Promise<RegImportResult> {
+  const preview = await tenantTx(orgId, (tx) => previewRegistrationRows(tx, orgId, rows, rowNumbers), { timeout: 60_000 });
   const errors: RegRowError[] = preview.rows.flatMap((r) => r.errors);
   const done: string[] = [];
   for (const r of preview.rows) {

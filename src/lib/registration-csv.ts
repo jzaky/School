@@ -15,6 +15,14 @@ export type RegRowError = { row: number; field: string; code: RegRowErrorCode };
 
 export const norm = (h: string) => h.replace(/^﻿/, "").trim().toLowerCase().replace(/\s+/g, " ");
 
+/** A header and, for bilingual headers such as "Student number / رقم الطالب", each side of it. */
+export const headerParts = (h: string) => {
+  const n = norm(h);
+  return [n, ...n.split(/\s*[/|]\s*/).filter(Boolean)];
+};
+const isStudentNoHeader = (h: string) => headerParts(h).some((p) => STUDENT_NO_HEADERS.includes(p) || STUDENT_NO_HEADERS.includes(p.replace(/_/g, " ")));
+const isInfoHeader = (h: string) => headerParts(h).some((p) => INFO_HEADERS.includes(p) || INFO_HEADERS.includes(p.replace(/_/g, " ")));
+
 export function isMarked(value: unknown): boolean {
   if (value === null || value === undefined) return false;
   return TRUE_MARKS.has(String(value).trim().toLowerCase());
@@ -24,17 +32,17 @@ export function isMarked(value: unknown): boolean {
 export const regRowNumber = (index: number) => index + 2;
 
 export function studentNoOf(row: Record<string, unknown>): string {
-  for (const [k, v] of Object.entries(row)) if (STUDENT_NO_HEADERS.includes(norm(k))) return String(v ?? "").trim();
+  for (const [k, v] of Object.entries(row)) if (isStudentNoHeader(k)) return String(v ?? "").trim();
   return "";
 }
 
 export function hasStudentNoHeader(headers: string[]) {
-  return headers.some((h) => STUDENT_NO_HEADERS.includes(norm(h)));
+  return headers.some(isStudentNoHeader);
 }
 
 /** Headers that should name a subject (everything except the student number and info columns). */
 export function subjectHeaders(headers: string[]) {
-  return headers.filter((h) => h && !STUDENT_NO_HEADERS.includes(norm(h)) && !INFO_HEADERS.includes(norm(h)));
+  return headers.filter((h) => h && !isStudentNoHeader(h) && !isInfoHeader(h));
 }
 
 /** Build a template: student number, name, grade, then one column per subject code. */
@@ -44,3 +52,11 @@ export function registrationTemplateCsv(subjectCodes: string[], sample?: Array<{
   for (const s of sample ?? []) lines.push([s.studentNo, `"${s.name.replace(/"/g, '""')}"`, String(s.grade), ...subjectCodes.map((c) => (s.marks.includes(c) ? "x" : ""))].join(","));
   return lines.join("\n") + "\n";
 }
+
+/** Column guide for the subject choices file (the subject columns are the school's option subjects). */
+export const REGISTRATION_COLUMNS = [
+  { key: "student_no", en: "Student number", ar: "رقم الطالب", required: true },
+  { key: "student_name", en: "Student name", ar: "اسم الطالب" },
+  { key: "grade", en: "Grade", ar: "الصف" },
+  { key: "subjects", en: "One column per option subject, marked x", ar: "عمود لكل مادة اختيارية، مع علامة x" },
+];

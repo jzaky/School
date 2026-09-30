@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getOptionalCtx } from "@/server/context";
 import { defaultTimetableStudent, timetableStudents, publishedSittings } from "@/server/exams/queries";
 import { renderExamTimetablePdf } from "@/server/exams/timetable-pdf";
+import { loadLogo } from "@/server/documents/letterhead";
 
 export const runtime = "nodejs";
 
@@ -31,6 +32,7 @@ export async function GET(req: Request) {
     subheading: who,
     rows: sittings.map((s) => ({ start: s.startsAt, end: s.endsAt, subjectEn: s.titleEn, subjectAr: s.titleAr, room: s.room })),
     generatedAt: new Date(),
+    logo: await loadLogo(ctx.org.logoUrl),
   });
   return new NextResponse(new Uint8Array(pdf), {
     headers: { "Content-Type": "application/pdf", "Content-Disposition": `inline; filename="exam-timetable-grade-${grade}.pdf"`, "Cache-Control": "private, no-store" },

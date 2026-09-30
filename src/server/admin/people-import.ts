@@ -66,10 +66,10 @@ async function importRow(tx: TenantTx, orgId: string, data: CleanRow): Promise<"
 }
 
 /** Validate and import raw CSV rows (objects keyed by header). Records a CsvImport and an audit event. */
-export async function importStudentRows(orgId: string, actor: ImportActor, fileName: string, rawRows: Array<Record<string, unknown>>): Promise<ImportResult> {
+export async function importStudentRows(orgId: string, actor: ImportActor, fileName: string, rawRows: Array<Record<string, unknown>>, rowNumbers?: number[]): Promise<ImportResult> {
   if (rawRows.length > MAX_IMPORT_ROWS) throw new ImportTooLargeError();
   const rows = rawRows.map(normalizeRow);
-  const { valid, errors, total } = validateRows(rows);
+  const { valid, errors, total } = validateRows(rows, rowNumbers);
   const failedRows = new Set(errors.map((e) => e.row));
   let succeeded = 0;
   let created = 0;

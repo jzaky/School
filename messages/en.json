@@ -123,7 +123,7 @@
     "templates": "Document templates",
     "compliance": "Compliance",
     "auditLog": "Audit log",
-    "import": "Import",
+    "import": "Import center",
     "sectionWork": "Work",
     "sectionSchool": "School",
     "sectionAdmin": "Administration",
@@ -1979,7 +1979,9 @@
       "TOO_MANY_ROWS": "Files are limited to 2,000 rows.",
       "LAST_ROLES_MANAGER": "At least one active person must be able to manage roles.",
       "SELF_LOCKOUT": "You cannot remove your own ability to manage roles. Ask another administrator."
-    }
+    },
+    "importCenter": "Import center",
+    "importCenterBody": "Import staff, classes and enrollments too, in the recommended order, from the import center."
   },
   "guide": {
     "title": "Try this next",
@@ -2285,6 +2287,10 @@
       "schoolSetupWizard": {
         "title": "Set up a school in minutes",
         "body": "New schools sign up and follow this checklist: profile and brand, year and holidays, curricula, modules, people and invitations. Every step stays editable."
+      },
+      "importCenter": {
+        "title": "Import a school from spreadsheets",
+        "body": "Download a template, upload staff or classes, check the preview with its row errors, then import."
       }
     }
   },
@@ -7057,7 +7063,7 @@
         "people": {
           "nav": "People",
           "title": "Add staff, students and families",
-          "body": "Import students with their guardians from a spreadsheet, or add a few people by hand to start."
+          "body": "Bring in staff, students and families, classes and subject choices from your spreadsheets, or add a few people by hand to start."
         },
         "invite": {
           "nav": "Invite and join",
@@ -7176,7 +7182,10 @@
         "openPeople": "Open people admin",
         "importTitle": "Import students and guardians",
         "importBody": "Download the template, fill it in from your student information system and upload it. We check every row before anything is saved.",
-        "noPermission": "Adding people needs the school administrator role."
+        "noPermission": "Adding people needs the school administrator role.",
+        "importCenterTitle": "Bring everyone in from spreadsheets",
+        "importCenterBody": "The import center takes you through staff, students and guardians, classes and enrollments, and subject choices, with a template, a check of every row and a report for each file.",
+        "openImportCenter": "Open the import center"
       },
       "invite": {
         "locked": "Confirm your email to unlock staff invitations and family access. Use the link we sent, or Resend on the banner above.",
@@ -7322,6 +7331,253 @@
         "PLACEHOLDER": "Only use the placeholders the message already had.",
         "NOT_FOUND": "This item no longer exists. Refresh the page.",
         "INVALID": "Please check the values and try again."
+      }
+    }
+  },
+  "imports": {
+    "title": "Import center",
+    "subtitle": "Bring your whole school in from the spreadsheets you already have. Every file is checked row by row before anything is saved.",
+    "openPeople": "Open people",
+    "stepN": "Step {n}",
+    "order": {
+      "title": "Recommended order",
+      "body": "Each step uses what the one before it created: classes need their teachers and students, and subject choices need the students. You can come back and re-import any file; matching rows are updated, not duplicated."
+    },
+    "status": {
+      "staff": "{count} staff in the directory",
+      "students": "{students} students, {guardians} guardians",
+      "classes": "{classes} classes, {enrollments} enrollments this year",
+      "registrations": "{count} students with subject choices"
+    },
+    "steps": {
+      "staff": {
+        "title": "Staff",
+        "body": "Teachers and other staff with their roles, department, job title and the subjects they teach. They appear in the staff list and in class and timetable pickers straight away, before they accept an invitation.",
+        "hint": "People are matched by email. Re-importing updates names, job titles, departments and grades, and adds new roles and subjects. It never removes a role; change roles on the People page. Roles that open safeguarding, wellbeing, medical or identity records need the Roles and access permission."
+      },
+      "students": {
+        "title": "Students and guardians",
+        "body": "One row per student with their parent or guardian. Brothers and sisters are linked to the same guardian by email.",
+        "hint": "Students are matched by student number. Emirates ID and passport numbers are stored encrypted."
+      },
+      "classes": {
+        "title": "Classes and enrollments",
+        "body": "Classes for the current academic year with their subject, teacher and room, then which students are in each class. You can list students in the classes file or send a separate enrollments file.",
+        "classesFile": "Classes file",
+        "enrollmentsFile": "Enrollments file",
+        "hint": "Classes are matched by your class code. A class that already exists with the same grade, subject and section is updated instead of copied. Adding a student moves them out of another section of the same subject.",
+        "enrollmentsHint": "One row per student and class, using the class codes from your classes file."
+      },
+      "registrations": {
+        "title": "Subject choices",
+        "body": "Which option subjects each student takes, one column per subject marked with x. Students are then placed in class sections automatically.",
+        "hint": "Core subjects are registered for everyone, so the file only needs the options.",
+        "open": "Open subject registration",
+        "noPermission": "You need the subject registration permission to import subject choices.",
+        "noOptions": "Set up option subjects on Subject registration first."
+      }
+    },
+    "kinds": {
+      "staff": "Staff",
+      "students": "Students and guardians",
+      "classes": "Classes",
+      "enrollments": "Enrollments",
+      "registrations": "Subject choices"
+    },
+    "downloadTemplate": "Download template",
+    "upload": "Upload CSV or Excel",
+    "chooseAnother": "Choose another file",
+    "columns": "Columns",
+    "required": "Required",
+    "homeroom": "Homeroom",
+    "checking": "Checking every row...",
+    "importing": "Importing. Large files can take a minute.",
+    "cancel": "Cancel",
+    "importAll": "{count, plural, one {Import # row} other {Import # rows}}",
+    "importValid": "{count, plural, one {Import # valid row} other {Import # valid rows}}",
+    "importAnother": "Import another file",
+    "atItems": "(item {items} in the list)",
+    "action": {
+      "create": "New",
+      "update": "Update",
+      "unchanged": "No change"
+    },
+    "changes": {
+      "name": "name",
+      "roles": "roles",
+      "department": "department",
+      "title": "job title",
+      "grades": "grades",
+      "subjects": "subjects",
+      "subject": "subject",
+      "grade": "grade",
+      "section": "section",
+      "homeroom": "homeroom",
+      "teacher": "teacher",
+      "room": "room",
+      "capacity": "capacity",
+      "block": "option block",
+      "students": "students",
+      "moved": "moves from another section"
+    },
+    "preview": {
+      "summary": "{total} rows: {valid} ready, {invalid} with errors.",
+      "counts": "{create} new, {update} to update, {unchanged} unchanged.",
+      "showErrors": "Show only rows with errors",
+      "showAll": "Show all rows",
+      "unknownColumns": "These columns were not recognised and will be ignored: {columns}",
+      "truncated": "Showing the first {shown} of {total} rows. All rows are imported.",
+      "changes": "Changes: {list}",
+      "row": "Row",
+      "check": "Check",
+      "col": {
+        "name": "Name",
+        "email": "Email",
+        "roles": "Roles",
+        "department": "Department and title",
+        "subjects": "Subjects and grades",
+        "studentNo": "Student number",
+        "grade": "Grade",
+        "guardian": "Guardian",
+        "class": "Class",
+        "subject": "Subject",
+        "teacher": "Teacher",
+        "room": "Room and capacity",
+        "newStudents": "Students to add",
+        "options": "Options"
+      }
+    },
+    "field": {
+      "row": "Row",
+      "name_en": "Name (English)",
+      "name_ar": "Name (Arabic)",
+      "email": "Email",
+      "roles": "Roles",
+      "department": "Department",
+      "job_title_en": "Job title (English)",
+      "job_title_ar": "Job title (Arabic)",
+      "subjects": "Subjects taught",
+      "grades": "Grades taught",
+      "class_code": "Class code",
+      "subject": "Subject",
+      "grade": "Grade",
+      "section": "Section",
+      "teacher_email": "Teacher email",
+      "room": "Room",
+      "capacity": "Capacity",
+      "homeroom": "Homeroom",
+      "option_block": "Option block",
+      "students": "Student numbers",
+      "student_no": "Student number",
+      "first_name_en": "First name (English)",
+      "last_name_en": "Last name (English)",
+      "first_name_ar": "First name (Arabic)",
+      "last_name_ar": "Last name (Arabic)",
+      "date_of_birth": "Date of birth",
+      "emirates_id": "Emirates ID",
+      "passport_no": "Passport number",
+      "guardian_first_name_en": "Guardian first name",
+      "guardian_last_name_en": "Guardian last name",
+      "guardian_first_name_ar": "Guardian first name (Arabic)",
+      "guardian_last_name_ar": "Guardian last name (Arabic)",
+      "guardian_email": "Guardian email",
+      "guardian_phone": "Guardian phone",
+      "relationship": "Relationship"
+    },
+    "error": {
+      "required": "this column is required",
+      "tooShort": "too short",
+      "tooLong": "too long (120 characters at most)",
+      "email": "not a valid email address",
+      "duplicate": "appears more than once in this file",
+      "familyRole": "parent and student roles cannot be given to staff",
+      "adminRole": "only someone who manages the school can give the school administrator role",
+      "sensitiveRole": "this role opens sensitive records; giving it needs the Roles and access permission",
+      "unknownRole": "role not found",
+      "unknownDepartment": "department not found; add it on School setup or leave the cell empty",
+      "unknownSubject": "subject not found; use a subject code or name from School setup",
+      "grade": "not a valid grade",
+      "familyAccount": "this email belongs to a parent or student account at the school",
+      "suspended": "this person is suspended; reactivate them on the People page first",
+      "pendingApproval": "this person is waiting for approval; decide on their join request first",
+      "inviteFailed": "saved, but the invitation could not be created",
+      "failed": "could not be saved",
+      "code": "use letters, numbers, spaces, dots, slashes or hyphens (40 at most)",
+      "section": "use up to 3 letters or numbers",
+      "yesNo": "write yes or no",
+      "unknownTeacher": "no staff member with this email; import them in step 1 first",
+      "capacity": "use a whole number from 1 to 200",
+      "block": "use up to 4 letters or numbers",
+      "unknownStudent": "student number not found; import students in step 2 first",
+      "inactiveStudent": "this student is not active",
+      "ambiguousClass": "several existing classes match; add a section to tell them apart",
+      "unknownClass": "class code not found this year; import the classes file first",
+      "date": "not a valid date (use YYYY-MM-DD or DD/MM/YYYY)",
+      "emiratesId": "not a valid Emirates ID (15 digits starting with 784)",
+      "passport": "not a valid passport number",
+      "relationship": "unknown relationship (mother, father, guardian, grandmother, grandfather, aunt, uncle or other)",
+      "student": "student number not found",
+      "notOffered": "this subject is not offered to the student's grade",
+      "sameBlock": "two subjects chosen from the same option block",
+      "missingBlock": "no subject chosen from this option block",
+      "prerequisite": "a prerequisite subject is missing",
+      "noOfferings": "no subjects are set up for this grade yet"
+    },
+    "warn": {
+      "gradeMismatch": "student is in a different grade (still added)",
+      "homeroomSubject": "homeroom classes have no subject; the subject is ignored",
+      "adopted": "matches an existing class, which will be updated",
+      "duplicate": "already listed above; skipped"
+    },
+    "failure": {
+      "FORBIDDEN": "You do not have permission for this import.",
+      "FORBIDDEN_INVITE": "You do not have permission to send invitations.",
+      "UNVERIFIED_SCHOOL": "Invitations unlock once the school's email is confirmed.",
+      "TOO_MANY_ROWS": "This file has too many rows. Split it into smaller files.",
+      "NO_YEAR": "Set up the current academic year first.",
+      "TYPE": "Upload a .csv or .xlsx file.",
+      "XLS_OLD": "Old Excel files (.xls) are not supported. Save the file as .xlsx or CSV and try again.",
+      "UNREADABLE": "We could not read this file. Save it again as .xlsx or CSV.",
+      "EMPTY": "The file has a header row but no data rows.",
+      "TOO_LARGE": "The file is larger than 8 MB.",
+      "NO_FILE": "Choose a file to upload.",
+      "MISSING_COLUMNS": "The file is missing these columns: {columns}. Download the template to see them all.",
+      "INVALID": "The file could not be imported. Upload it again.",
+      "generic": "Something went wrong. Please try again."
+    },
+    "invite": {
+      "label": "Send each new person an invitation email now (people who already have an open invitation are not emailed again)",
+      "noPermission": "Sending invitations needs the invite people permission.",
+      "unverified": "Confirm the school's email to unlock invitations. You can import now and invite later."
+    },
+    "result": {
+      "title": "Import finished",
+      "toast": "{succeeded} of {total} rows imported",
+      "line": "{succeeded} of {total} rows imported: {created} new, {updated} updated, {unchanged} unchanged.",
+      "failed": "{failed} rows had errors and were skipped."
+    },
+    "extra": {
+      "invited": "{count} invitations sent",
+      "alreadyInvited": "{count} already had an open invitation",
+      "enrolled": "{count} students added to classes",
+      "moved": "{count} moved from another section",
+      "qualifications": "{count} teaching subjects added to teachers",
+      "adopted": "{count} existing classes matched and updated",
+      "classes": "{count} classes",
+      "placed": "{count} students placed in sections",
+      "sections": "{count} new sections opened"
+    },
+    "history": {
+      "title": "Past imports",
+      "empty": "No imports yet",
+      "emptyBody": "Imports from this page and from People appear here with their row errors.",
+      "counts": "{succeeded} of {total} imported, {failed} with errors",
+      "showErrors": "{count, plural, one {# row error} other {# row errors}}",
+      "rowN": "Row {row}",
+      "status": {
+        "PENDING": "In progress",
+        "COMPLETED": "Completed",
+        "FAILED": "Failed"
       }
     }
   }

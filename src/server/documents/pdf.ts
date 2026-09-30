@@ -19,6 +19,44 @@ export const MUTED = "#5B6778";
 
 type Doc = PDFKit.PDFDocument;
 
+/** The school's identity on a generated document (see letterhead.ts). */
+export type Letterhead = {
+  school: { en: string; ar: string };
+  shortEn: string;
+  emirate: { en: string; ar: string };
+  address: { en: string; ar: string };
+  /** PNG or JPEG bytes of the school's logo, or null to draw the school's initial. */
+  logo: Buffer | null;
+};
+
+/** The school's logo fitted in a square, or a navy tile with the school's initial when there is no logo. */
+export function drawSchoolMark(doc: Doc, x: number, y: number, size: number, mark: { logo?: Buffer | null; name: string }) {
+  if (mark.logo) {
+    try {
+      doc.image(mark.logo, x, y, { fit: [size, size], align: "center", valign: "center" });
+      return;
+    } catch {
+      // An image pdfkit cannot read: fall back to the initial.
+    }
+  }
+  const initial = (mark.name.trim().match(/[A-Za-z0-9]/)?.[0] ?? mark.name.trim()[0] ?? "S").toUpperCase();
+  doc.roundedRect(x, y, size, size, size / 5).fill(NAVY);
+  doc.font(FONTS.bold).fontSize(size / 2).fillColor("#E9C46A").text(initial, x, y + size / 5, { width: size, align: "center", lineBreak: false });
+}
+
+/** Text that fits a width: shrinks the font down to a minimum, then falls back to initials. */
+function fitText(doc: Doc, text: string, width: number, font: string, size: number, min: number) {
+  let s = size;
+  doc.font(font);
+  while (s > min && doc.fontSize(s).widthOfString(text) > width) s -= 0.5;
+  if (doc.fontSize(s).widthOfString(text) <= width) return { text, size: s };
+  const initials = text
+    .split(/\s+/)
+    .map((w) => w[0])
+    .join("");
+  return { text: initials, size: min };
+}
+
 export const ARABIC_LETTER_RE = /[\u0621-\u064A\u066E-\u06D3\u06D5\u06FA-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFC\u064B-\u065F\u0670]/;
 const LTR_CHAR_RE = /[A-Za-z0-9\u00C0-\u024F\u0660-\u0669\u06F0-\u06F9]/;
 
@@ -111,6 +149,8 @@ export type LetterInput = {
   signerName?: { en: string; ar: string } | null;
   issuedAt: Date;
   verifyNote?: { en: string; ar: string };
+  /** The school's logo, address and short name. Without it the letter uses the school names only. */
+  letterhead?: Letterhead | null;
 };
 
 function dates(d: Date) {
@@ -131,15 +171,15 @@ export async function renderLetterPdf(input: LetterInput): Promise<Buffer> {
   const M = 56;
   const inner = W - M * 2;
 
-  // Letterhead
+  // Letterhead: the school's logo (or initial) in the middle, its names and address on each side.
+  const lh = input.letterhead;
   doc.rect(0, 0, W, 8).fill(NAVY);
   doc.rect(0, 8, W, 2).fill(GOLD);
-  doc.roundedRect(W / 2 - 20, 34, 40, 40, 8).fill(NAVY);
-  doc.font(FONTS.bold).fontSize(20).fillColor("#E9C46A").text("H", W / 2 - 20, 42, { width: 40, align: "center" });
-  drawLtr(doc, input.school.en, M, 42, inner / 2 - 30, { size: 12, font: FONTS.semibold, color: NAVY });
-  drawLtr(doc, "Al Barsha South, Dubai, United Arab Emirates", M, 60, inner / 2 - 30, { size: 8, color: MUTED });
-  drawRtl(doc, input.school.ar, W / 2 + 30, 38, inner / 2 - 30, { size: 12, font: FONTS.semibold, color: NAVY });
-  drawRtl(doc, "البرشاء جنوب، دبي، الإمارات العربية المتحدة", W / 2 + 30, 58, inner / 2 - 30, { size: 8, color: MUTED });
+  drawSchoolMark(doc, W / 2 - 24, 28, 48, { logo: lh?.logo, name: lh?.shortEn ?? input.school.en });
+  drawLtr(doc, input.school.en, M, 36, inner / 2 - 36, { size: 12, font: FONTS.semibold, color: NAVY });
+  if (lh) drawLtr(doc, lh.address.en, M, doc.y + 2, inner / 2 - 36, { size: 8, color: MUTED });
+  drawRtl(doc, input.school.ar, W / 2 + 36, 32, inner / 2 - 36, { size: 12, font: FONTS.semibold, color: NAVY });
+  if (lh) drawRtl(doc, lh.address.ar, W / 2 + 36, 54, inner / 2 - 36, { size: 8, color: MUTED });
   doc.moveTo(M, 92).lineTo(W - M, 92).lineWidth(0.6).strokeColor("#D9DEE5").stroke();
 
   // Reference and dates
@@ -184,17 +224,18 @@ export async function renderLetterPdf(input: LetterInput): Promise<Buffer> {
     if (input.signerName) drawRtl(doc, input.signerName.ar, x0, y + 36, sigW, { size: 10, font: FONTS.semibold });
     drawRtl(doc, input.signatory.ar, x0, y + (input.signerName ? 54 : 38), sigW, { size: 9, color: MUTED });
   }
-  // School seal
+  // School seal with the school's own short name and emirate.
   doc.circle(W / 2, y + 44, 30).lineWidth(1.2).strokeColor(GOLD).stroke();
   doc.circle(W / 2, y + 44, 25).lineWidth(0.5).strokeColor(GOLD).stroke();
-  doc.font(FONTS.semibold).fontSize(7).fillColor(GOLD).text("HORIZON", W / 2 - 30, y + 36, { width: 60, align: "center" });
-  doc.font(FONTS.regular).fontSize(6).fillColor(GOLD).text("DUBAI", W / 2 - 30, y + 46, { width: 60, align: "center" });
+  const seal = fitText(doc, (lh?.shortEn ?? input.school.en).toUpperCase(), 44, FONTS.semibold, 7, 4.5);
+  doc.font(FONTS.semibold).fontSize(seal.size).fillColor(GOLD).text(seal.text, W / 2 - 25, y + 36, { width: 50, align: "center", lineBreak: false });
+  if (lh) doc.font(FONTS.regular).fontSize(6).fillColor(GOLD).text(lh.emirate.en.toUpperCase(), W / 2 - 25, y + 46, { width: 50, align: "center", lineBreak: false });
 
   // Footer
   const fy = doc.page.height - 58;
   doc.moveTo(M, fy).lineTo(W - M, fy).lineWidth(0.5).strokeColor("#E5E7EB").stroke();
-  drawLtr(doc, input.verifyNote?.en ?? `Verify this document with the Registrar's Office quoting ${input.reference}. Generated by Horizon OS.`, M, fy + 10, inner / 2 - 10, { size: 7, color: MUTED });
-  drawRtl(doc, input.verifyNote?.ar ?? `للتحقق من هذا المستند يُرجى التواصل مع مكتب التسجيل وذكر الرقم ${input.reference}.`, W / 2 + 10, fy + 6, inner / 2 - 10, { size: 7, color: MUTED });
+  drawLtr(doc, input.verifyNote?.en ?? `Verify this document with the Registrar's Office of ${input.school.en} quoting ${input.reference}.`, M, fy + 10, inner / 2 - 10, { size: 7, color: MUTED });
+  drawRtl(doc, input.verifyNote?.ar ?? `للتحقق من هذا المستند يُرجى التواصل مع مكتب التسجيل في ${input.school.ar} وذكر الرقم ${input.reference}.`, W / 2 + 10, fy + 6, inner / 2 - 10, { size: 7, color: MUTED });
   doc.rect(0, doc.page.height - 6, W, 6).fill(NAVY);
 
   doc.end();

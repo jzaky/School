@@ -1,6 +1,7 @@
 // CSV import of students with guardians: headers, row normalization and validation.
 // Shared by the browser preview and the server import, so both apply the same rules.
 // Error entries carry only the row number, the field name and an error code, never the cell value.
+import { headerIndex, resolveHeader, templateCsv as bilingualTemplate, type ColumnSpec } from "./imports/headers";
 
 export const CSV_HEADERS = [
   "student_no",
@@ -78,6 +79,31 @@ export type CleanRow = {
   } | null;
 };
 
+/** Columns with their bilingual labels. The key, the English label, the Arabic label or both are accepted. */
+export const STUDENT_COLUMNS: ColumnSpec[] = [
+  { key: "student_no", en: "Student number", ar: "رقم الطالب", required: true, aliases: ["student no", "student id", "studentno", "الرقم المدرسي"] },
+  { key: "first_name_en", en: "First name (English)", ar: "الاسم الأول بالإنجليزية", required: true, aliases: ["first name", "given name"] },
+  { key: "last_name_en", en: "Last name (English)", ar: "اسم العائلة بالإنجليزية", required: true, aliases: ["last name", "family name", "surname"] },
+  { key: "first_name_ar", en: "First name (Arabic)", ar: "الاسم الأول بالعربية", aliases: ["الاسم الأول"] },
+  { key: "last_name_ar", en: "Last name (Arabic)", ar: "اسم العائلة بالعربية", aliases: ["اسم العائلة"] },
+  { key: "grade", en: "Grade", ar: "الصف", required: true, aliases: ["grade level", "year", "year group"] },
+  { key: "section", en: "Section", ar: "الشعبة", aliases: ["class section"] },
+  { key: "date_of_birth", en: "Date of birth", ar: "تاريخ الميلاد", aliases: ["dob", "birth date", "birthday"] },
+  { key: "emirates_id", en: "Emirates ID", ar: "رقم الهوية الإماراتية", aliases: ["eid", "emirates id number", "الهوية الإماراتية"] },
+  { key: "passport_no", en: "Passport number", ar: "رقم جواز السفر", aliases: ["passport", "passport no"] },
+  { key: "guardian_first_name_en", en: "Guardian first name (English)", ar: "الاسم الأول لولي الأمر بالإنجليزية", aliases: ["guardian first name", "parent first name"] },
+  { key: "guardian_last_name_en", en: "Guardian last name (English)", ar: "اسم عائلة ولي الأمر بالإنجليزية", aliases: ["guardian last name", "parent last name"] },
+  { key: "guardian_first_name_ar", en: "Guardian first name (Arabic)", ar: "الاسم الأول لولي الأمر بالعربية" },
+  { key: "guardian_last_name_ar", en: "Guardian last name (Arabic)", ar: "اسم عائلة ولي الأمر بالعربية" },
+  { key: "guardian_email", en: "Guardian email", ar: "بريد ولي الأمر", aliases: ["parent email", "guardian e-mail", "البريد الإلكتروني لولي الأمر"] },
+  { key: "guardian_phone", en: "Guardian phone", ar: "هاتف ولي الأمر", aliases: ["parent phone", "guardian mobile", "phone"] },
+  { key: "relationship", en: "Relationship", ar: "صلة القرابة", aliases: ["relation", "العلاقة"] },
+];
+const STUDENT_INDEX = headerIndex(STUDENT_COLUMNS);
+
+/** The column key for a header cell (canonical key, English, Arabic or bilingual label). */
+export const studentColumnOf = (header: string) => resolveHeader(header, STUDENT_INDEX) as CsvField | null;
+
 /** Spreadsheet row number for a data row index (row 1 is the header). */
 export const rowNumber = (index: number) => index + 2;
 
@@ -85,16 +111,19 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 /** Lower-cases and trims header names and fills every known column with a trimmed string. */
 export function normalizeRow(raw: Record<string, unknown>): CsvRow {
-  const lower: Record<string, string> = {};
-  for (const [k, v] of Object.entries(raw)) lower[k.trim().toLowerCase().replace(/\s+/g, "_")] = v === null || v === undefined ? "" : String(v).trim();
   const row = {} as CsvRow;
-  for (const h of CSV_HEADERS) row[h] = lower[h] ?? "";
+  for (const h of CSV_HEADERS) row[h] = "";
+  for (const [k, v] of Object.entries(raw)) {
+    const key = studentColumnOf(k);
+    const value = v === null || v === undefined ? "" : String(v).trim();
+    if (key && !row[key]) row[key] = value;
+  }
   return row;
 }
 
 /** Headers the file must contain. Returns the missing ones. */
 export function missingHeaders(headers: string[]): CsvField[] {
-  const have = new Set(headers.map((h) => h.trim().toLowerCase().replace(/\s+/g, "_")));
+  const have = new Set(headers.map(studentColumnOf).filter(Boolean));
   return REQUIRED_HEADERS.filter((h) => !have.has(h));
 }
 
@@ -138,8 +167,8 @@ export function isEmail(value: string) {
 }
 
 /** Validates one row. `seen` tracks student numbers already used earlier in the file. */
-export function validateRow(row: CsvRow, index: number, seen: Set<string>): { data: CleanRow | null; errors: RowError[] } {
-  const n = rowNumber(index);
+export function validateRow(row: CsvRow, index: number, seen: Set<string>, rowNo?: number): { data: CleanRow | null; errors: RowError[] } {
+  const n = rowNo ?? rowNumber(index);
   const errors: RowError[] = [];
   const err = (field: string, code: RowErrorCode) => errors.push({ row: n, field, code });
 
@@ -206,39 +235,24 @@ export function validateRow(row: CsvRow, index: number, seen: Set<string>): { da
 
 export type ValidatedRows = { valid: Array<{ row: number; data: CleanRow }>; errors: RowError[]; total: number };
 
-export function validateRows(rows: CsvRow[]): ValidatedRows {
+/** `rowNumbers` gives the spreadsheet row of each entry when the file had blank rows (default: index + 2). */
+export function validateRows(rows: CsvRow[], rowNumbers?: number[]): ValidatedRows {
   const seen = new Set<string>();
   const valid: ValidatedRows["valid"] = [];
   const errors: RowError[] = [];
   rows.forEach((r, i) => {
-    const res = validateRow(r, i, seen);
-    if (res.data) valid.push({ row: rowNumber(i), data: res.data });
+    const n = rowNumbers?.[i] ?? rowNumber(i);
+    const res = validateRow(r, i, seen, n);
+    if (res.data) valid.push({ row: n, data: res.data });
     errors.push(...res.errors);
   });
   return { valid, errors, total: rows.length };
 }
 
-/** Template with one fictional example row. */
+/** Template: bilingual header row and two fictional example rows. */
 export function templateCsv() {
-  const example: CsvRow = {
-    student_no: "HIS-30001",
-    first_name_en: "Maya",
-    last_name_en: "Haddad",
-    first_name_ar: "مايا",
-    last_name_ar: "حداد",
-    grade: "7",
-    section: "A",
-    date_of_birth: "2014-03-18",
-    emirates_id: "",
-    passport_no: "",
-    guardian_first_name_en: "Nour",
-    guardian_last_name_en: "Haddad",
-    guardian_first_name_ar: "نور",
-    guardian_last_name_ar: "حداد",
-    guardian_email: "nour.haddad@example.com",
-    guardian_phone: "+971 50 000 0000",
-    relationship: "mother",
-  };
-  const esc = (v: string) => (/[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
-  return `${CSV_HEADERS.join(",")}\n${CSV_HEADERS.map((h) => esc(example[h])).join(",")}\n`;
+  return bilingualTemplate(STUDENT_COLUMNS, [
+    { student_no: "S-10001", first_name_en: "Maya", last_name_en: "Haddad", first_name_ar: "مايا", last_name_ar: "حداد", grade: "10", section: "A", date_of_birth: "2010-03-18", guardian_first_name_en: "Nour", guardian_last_name_en: "Haddad", guardian_first_name_ar: "نور", guardian_last_name_ar: "حداد", guardian_email: "nour.haddad@example.com", guardian_phone: "+971 50 000 0000", relationship: "mother" },
+    { student_no: "S-10002", first_name_en: "Omar", last_name_en: "Saleh", first_name_ar: "عمر", last_name_ar: "صالح", grade: "10", section: "A", date_of_birth: "15/07/2010", guardian_first_name_en: "Khaled", guardian_last_name_en: "Saleh", guardian_first_name_ar: "خالد", guardian_last_name_ar: "صالح", guardian_email: "khaled.saleh@example.com", guardian_phone: "+971 55 000 0000", relationship: "father" },
+  ]);
 }

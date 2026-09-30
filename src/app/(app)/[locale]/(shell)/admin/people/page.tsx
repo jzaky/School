@@ -12,6 +12,7 @@ import { PageBody, PageHeader } from "@/components/app/page-header";
 import { EmptyState } from "@/components/app/empty-state";
 import { StatCard } from "@/components/app/stat-card";
 import { Pill, type Tone } from "@/components/app/badges";
+import { Button } from "@/components/ui/button";
 import { PeopleToolbar } from "@/components/admin/people/people-toolbar";
 import { AddStaffDialog, EditStaffDialog, MemberStatusButton } from "@/components/admin/people/staff-forms";
 import { AddStudentDialog } from "@/components/admin/people/student-forms";
@@ -65,6 +66,7 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
   const grades = gradeRows.map((g) => g.gradeLevel);
   const canAdminRole = ctx.can("school.manage");
   const canManageRoles = ctx.can("roles.manage");
+  const canImportCenter = ctx.can("admin.access");
   const memberRoleOptions = roles
     .filter((r) => audienceOfRole(r.key) === "staff")
     .map((r) => ({ id: r.id, label: pick(locale, r.nameEn, r.nameAr), description: pick(locale, r.descEn, r.descAr), sensitive: opensSensitiveRecords(r.permissions) }));
@@ -77,11 +79,21 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
         title={t("title")}
         description={t("subtitle")}
         actions={
-          tab === "staff" ? (
-            <AddStaffDialog roles={roleOptions} departments={deptOptions} canAssignAdmin={canAdminRole} />
-          ) : tab === "students" || tab === "families" ? (
-            <AddStudentDialog guardians={await guardianOptions()} />
-          ) : null
+          <>
+            {canImportCenter && (
+              <Button variant="outline" asChild>
+                <Link href="/admin/import" data-testid="open-import-center">
+                  <FileSpreadsheet className="size-4" />
+                  {t("importCenter")}
+                </Link>
+              </Button>
+            )}
+            {tab === "staff" ? (
+              <AddStaffDialog roles={roleOptions} departments={deptOptions} canAssignAdmin={canAdminRole} />
+            ) : tab === "students" || tab === "families" ? (
+              <AddStudentDialog guardians={await guardianOptions()} />
+            ) : null}
+          </>
         }
       />
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -343,6 +355,15 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
     const cols = "lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_90px_90px_90px_110px]";
     return (
       <div className="space-y-6">
+        {canImportCenter && (
+          <Link href="/admin/import" className="flex items-start gap-3 rounded-xl border border-brand/20 bg-brand-soft/40 p-4 text-sm transition-colors hover:bg-brand-soft/70">
+            <FileSpreadsheet className="mt-0.5 size-4 shrink-0 text-brand" />
+            <span>
+              <span className="block font-medium text-brand">{t("importCenter")}</span>
+              <span className="block text-muted-foreground">{t("importCenterBody")}</span>
+            </span>
+          </Link>
+        )}
         <CsvImporter />
         <section className="space-y-3">
           <h2 className="text-sm font-semibold">{t("importHistory")}</h2>

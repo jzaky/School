@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { Building2, CalendarRange, Check, CircleDashed, Clock, Contact, GraduationCap, KeyRound, Layers, Lock, MailPlus, PartyPopper, ShieldCheck, SkipForward, UserCheck, Users } from "lucide-react";
+import { Building2, CalendarRange, Check, CircleDashed, Clock, Contact, FileSpreadsheet, GraduationCap, KeyRound, Layers, Lock, MailPlus, PartyPopper, ShieldCheck, SkipForward, UserCheck, Users } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { canSetup } from "@/server/onboarding/access";
 import { schoolVerified } from "@/server/onboarding/verification";
@@ -246,10 +246,24 @@ export default async function SetupPage({ searchParams }: { searchParams: Promis
                   <Link href="/admin/people">{t("people.openPeople")}</Link>
                 </Button>
               </div>
-              <div className="space-y-2">
-                <h3 className="text-sm font-semibold">{t("people.importTitle")}</h3>
-                <p className="text-xs text-muted-foreground">{t("people.importBody")}</p>
-                <CsvImporter />
+              <div className="flex flex-col gap-3 rounded-lg border border-brand/20 bg-brand-soft/40 p-4 sm:flex-row sm:items-center sm:justify-between" data-testid="setup-import-center">
+                <div className="flex items-start gap-3">
+                  <FileSpreadsheet className="mt-0.5 size-5 shrink-0 text-brand" />
+                  <div>
+                    <h3 className="text-sm font-semibold">{t("people.importCenterTitle")}</h3>
+                    <p className="mt-0.5 max-w-xl text-xs text-muted-foreground">{t("people.importCenterBody")}</p>
+                  </div>
+                </div>
+                {ctx.can("admin.access") ? (
+                  <Button asChild className="shrink-0">
+                    <Link href="/admin/import">{t("people.openImportCenter")}</Link>
+                  </Button>
+                ) : (
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-semibold">{t("people.importTitle")}</h3>
+                    <CsvImporter />
+                  </div>
+                )}
               </div>
             </>
           ) : (

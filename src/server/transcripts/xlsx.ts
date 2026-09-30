@@ -81,10 +81,13 @@ export function readXlsx(buf: Buffer, maxRows = 200): string[][] {
   if (!sheet) throw new Error("no_sheet");
   const xml = read(buf, sheet);
   const rows: string[][] = [];
-  for (const rm of xml.matchAll(/<row\b[^>]*>([\s\S]*?)<\/row>/g)) {
+  for (const rm of xml.matchAll(/<row\b([^>]*)>([\s\S]*?)<\/row>/g)) {
+    // Excel leaves blank rows out of the XML; keep them as empty rows so row numbers match the sheet.
+    const rowNo = Number(rm[1].match(/\br="(\d+)"/)?.[1] ?? 0);
+    while (rowNo > rows.length + 1 && rows.length < maxRows) rows.push([]);
     if (rows.length >= maxRows) break;
     const row: string[] = [];
-    for (const cm of rm[1].matchAll(/<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g)) {
+    for (const cm of rm[2].matchAll(/<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g)) {
       const attrs = cm[1];
       const body = cm[2] ?? "";
       const ref = attrs.match(/\br="([A-Z]+\d+)"/)?.[1];

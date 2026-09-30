@@ -69,13 +69,11 @@
 3. Security review of the whole app before real student data.
 4. Everything-editable gaps still open (onboarding audit):
    - The marketing Logo and app title say Horizon OS (the sidebar now shows the school logo or initial).
-   - School logo is not yet printed on generated letters and PDFs.
    - Service categories cannot be renamed or added from the UI.
    - Appointment types (meeting kinds, durations, buffers, hosts) and staff availability have no admin page.
    - Data processing purposes (compliance) cannot be added or edited; retention and processors can.
    - Rooms are free text on classes and exams; there is no room list to manage.
    - Career catalog and aptitude questions are platform content with no school editor.
-   - Staff CSV import (only students with guardians import by CSV today).
    - Verification emails queued while Redis is down lose their link when the sweeper sends them later (body and href travel in the job, not the row).
 
 ## Requirement data pipeline (catalog review)
@@ -83,3 +81,8 @@
 
 ## Transcripts, school catalog and counselor dashboard (pathway engine, wave 2)
 - Built: transcript import (CSV with downloadable template, XLSX via a small built-in reader, text-based PDF via the curriculum PDF extractor, manual entry) at /career/pathways/imports; mapping review at /career/pathways/imports/[id] (code, normalized name and fuzzy matching with confidence, confirm, choose another course, keep local, idempotent commit with before/after match changes per programme and per row); course record tab at /career/pathways/[studentId]/courses and /career/pathways/courses (students) with mapping chips, edits, mapping fixes and the Grades module "Use current average" suggestion; school course catalog admin at /career/pathways/catalog; counselor dashboard at /career/pathways/dashboard from cached RequirementMatch rows with a Recompute button. Seed: prisma/seed/academics/transcripts.ts. Tests: tests/unit/transcripts.test.ts, tests/integration/transcripts.test.ts.
+
+## Import center (onboarding data import)
+- /admin/import (admin.access + people.manage; nav under Administration, linked from People and the setup wizard people step): staff, students and guardians, classes and enrollments, subject choices, each with a bilingual template, CSV/XLSX upload, per-row preview, confirm, result and a shared history. Services in src/server/imports (staff.ts, classes.ts, reuse.ts, actions.ts), parsers in src/lib/imports.
+- Invitation accept activates an existing INVITED membership and keeps the school's roles. School logo and name on letters, report cards, exam timetables and the join poster (src/server/documents/letterhead.ts).
+- Tests: tests/unit/imports.test.ts, tests/integration/imports.test.ts.

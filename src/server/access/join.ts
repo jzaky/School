@@ -137,9 +137,14 @@ export async function acceptInvite(token: string, account: AccountInput, opts: {
     if (claimed.count !== 1) throw new JoinError("ACCEPTED");
     const audience = inv.kind === "PARENT" ? "parent" : inv.kind === "STUDENT" ? "student" : "staff";
     const roles = await rolesByKeys(tx, inv.roleKeys, audience);
+    // A person the school already added (staff import, invite or "Add staff") has an INVITED membership:
+    // it is activated, never duplicated. Its current roles are what the school decided, so a role removed
+    // after the invitation was sent is not granted again by accepting it.
+    const before = await findMembership(tx, acc.userId);
     const m = await ensureMembership(tx, orgId, acc.userId, audience, "ACTIVE");
     await tx.membership.update({ where: { id: m.id }, data: { status: "ACTIVE" } });
-    await grantRoles(tx, orgId, m.id, roles.map((r) => r.id));
+    const keepSchoolRoles = before?.status === "INVITED" && before.roles.length > 0;
+    if (!keepSchoolRoles) await grantRoles(tx, orgId, m.id, roles.map((r) => r.id));
     if (inv.kind === "STAFF") await ensureStaffProfile(tx, orgId, m.id);
     if (inv.kind === "PARENT") {
       const guardianId = await ensureGuardian(tx, orgId, m.id, { email: acc.email, nameEn: acc.nameEn, nameAr: acc.nameAr });
