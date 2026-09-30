@@ -1,6 +1,6 @@
 {
  "batch": "uk2",
- "assembledAt": "2026-09-30T08:32:58.435Z",
+ "assembledAt": "2026-09-30T08:47:06.142Z",
  "universities": [
   {
    "key": "manchester",
@@ -3110,12 +3110,34 @@
      "title": "Mathematics BSc | The University of Warwick",
      "retrievedAt": "2026-09-30T08:20:08.162Z",
      "hash": "37d32b79c3902429098cf57fd58d0317560f62fd26566879fde0c0a84605d13d"
+    },
+    {
+     "id": "s8",
+     "url": "http://www2.warwick.ac.uk/study/international/countryinformation/middleeast/unitedarabemirates",
+     "title": "United Arab Emirates | The University of Warwick",
+     "retrievedAt": "2026-09-30T08:38:16.011Z",
+     "hash": "b53cf66748dad336cf2983b1fff6baee40c87664f7478bc947fc040e7deff1db"
+    },
+    {
+     "id": "s9",
+     "url": "https://warwick.ac.uk/study/international/countryinformation/northamerica/usa/",
+     "title": "USA | The University of Warwick",
+     "retrievedAt": "2026-09-30T08:38:33.591Z",
+     "hash": "4d68548ad8a9a259e3721e0c5a0e5624d67fe008bc5d3116d10d1fdbaa450414"
     }
    ],
    "english": [],
    "tests": [],
    "deadlines": [],
    "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "For undergraduate entry from the UAE, the Warwick International Foundation Programme is required; A-levels, IB, American, Indian and European curricula are considered instead.",
+     "notesAr": "للقبول في البكالوريوس من الإمارات، يُشترط البرنامج التأسيسي الدولي في وارويك؛ ويُنظر بدلا منه في مناهج A-level والبكالوريا الدولية والأمريكية والهندية والأوروبية.",
+     "source": "s8",
+     "quote": "Warwick IFP required. Alternatively A Levels, IB, American, Indian, and European curricula considered.",
+     "subjects": []
+    },
     "AMERICAN": {
      "accepted": true,
      "notesEn": "The US High School Diploma alone is not typically sufficient for direct entry; APs (typically 4 or 5) are needed, otherwise the International Foundation Programme.",
@@ -3149,6 +3171,14 @@
      "noteAr": "يتقدم طلاب الرياضيات عادة لاختبار TMUA أو STEP.",
      "source": "s1",
      "quote": "All applicants will typically be required to take TMUA or STEP, except for applicants who are eligible for a Contextual Offer"
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Applicants from the USA, or educated in the USA for at least one academic year in the past two years, may be accepted without an English language qualification.",
+     "noteAr": "قد يُقبل المتقدمون من الولايات المتحدة، أو من درسوا فيها سنة دراسية واحدة على الأقل خلال السنتين الماضيتين، دون مؤهل في اللغة الإنجليزية.",
+     "source": "s9",
+     "quote": "Applicants who are either from United States of America or have been educated in the USA for at least one academic year completed in the past two years may be accepted without an English Language qualification."
     },
     {
      "kind": "OTHER",

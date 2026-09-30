@@ -1,6 +1,6 @@
 {
  "batch": "us",
- "assembledAt": "2026-09-30T08:32:58.568Z",
+ "assembledAt": "2026-09-30T08:47:06.319Z",
  "universities": [
   {
    "key": "carnegie_mellon",
@@ -2827,6 +2827,13 @@
      "title": "Explore Majors",
      "retrievedAt": "2026-09-30T07:59:57.326Z",
      "hash": "230f4c46f90008e0aa0a4ad0f1a560e2f6563fea5910f98beac309b615fdaee0"
+    },
+    {
+     "id": "st8",
+     "url": "https://majors.stanford.edu/opportunities/data-science",
+     "title": "Data Science | Explore Majors",
+     "retrievedAt": "2026-09-30T08:38:41.035Z",
+     "hash": "323d2feb2250d082f140535d6f838a81b6858499d780594c60c8cd9e1d437988"
     }
    ],
    "english": [],
@@ -3029,6 +3036,33 @@
       "source": "st6"
      },
      "previous": null
+    },
+    {
+     "key": "stanford-ds",
+     "status": "EXISTS",
+     "nameEn": "Data Science BS",
+     "nameAr": "بكالوريوس العلوم في علوم البيانات",
+     "degree": "BS",
+     "durationYears": null,
+     "url": "https://majors.stanford.edu/opportunities/data-science",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Official degree: B.S. in Data Science (successor to Mathematical and Computational Science). Students declare the major after admission to Stanford.",
+        "noteAr": "الدرجة الرسمية: بكالوريوس العلوم في علوم البيانات (خلف تخصص العلوم الرياضية والحاسوبية). ويختار الطالب التخصص بعد القبول في ستانفورد.",
+        "source": "st8",
+        "quote": "The B.S. in Data Science is the successor to the major in Mathematical and Computational Science (MCS)."
+       }
+      ],
+      "source": "st8"
+     },
+     "previous": null
     }
    ]
   },
@@ -3071,6 +3105,13 @@
      "title": "EECS Bachelor of Science - EECS at Berkeley",
      "retrievedAt": "2026-09-30T08:00:36.834Z",
      "hash": "432e59226dead0d964de86e6378236eeed4dd4cbe6fb13832a2cafa094d7e383"
+    },
+    {
+     "id": "b6",
+     "url": "https://cdss.berkeley.edu/dsus/academics/data-science-major",
+     "title": "Data Science Major | CDSS at UC Berkeley",
+     "retrievedAt": "2026-09-30T08:38:38.425Z",
+     "hash": "fd824979a3dc6c35ed5e5984bdf270ec83ca6bbfb0a56fb327301e06f96d82bd"
     }
    ],
    "english": [
@@ -3198,6 +3239,41 @@
        }
       ],
       "source": "b5"
+     },
+     "previous": null
+    },
+    {
+     "key": "uc-berkeley-ds",
+     "status": "REPLACED",
+     "nameEn": "Data Science BA",
+     "nameAr": "بكالوريوس الآداب في علوم البيانات",
+     "degree": "BA",
+     "durationYears": null,
+     "url": "https://cdss.berkeley.edu/dsus/academics/data-science-major",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Berkeley awards a B.A. (not a BS) in Data Science, through the College of Computing, Data Science and Society.",
+        "noteAr": "تمنح بيركلي درجة بكالوريوس الآداب (وليس العلوم) في علوم البيانات عبر كلية الحوسبة وعلوم البيانات والمجتمع.",
+        "source": "b6",
+        "quote": "The Data Science B.A. degree is offered by the College of Computing, Data Science and Society."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "List Data Science on the UC application; otherwise the major must be declared later through a separate review.",
+        "noteAr": "اختر علوم البيانات في طلب جامعة كاليفورنيا، وإلا فيجب التقدم للتخصص لاحقا عبر مراجعة منفصلة.",
+        "source": "b6",
+        "quote": "If you did not list Data Science on your admission application, the process for declaring the Data Science major is determined by your year of admission to UC Berkeley."
+       }
+      ],
+      "source": "b6"
      },
      "previous": null
     }

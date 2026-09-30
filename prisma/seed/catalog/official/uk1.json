@@ -1,6 +1,6 @@
 {
  "batch": "uk1",
- "assembledAt": "2026-09-30T08:32:58.279Z",
+ "assembledAt": "2026-09-30T08:47:05.927Z",
  "universities": [
   {
    "key": "bath",
@@ -3335,6 +3335,20 @@
      "title": "Mechanical Engineering MEng | Study | Imperial College London",
      "retrievedAt": "2026-09-30T07:35:26.787Z",
      "hash": "fa64180edbbe4b845522e6a6b552273ac8e9b8ab7836cc17ceb577e5e2cb5b4f"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.imperial.ac.uk/study/courses/undergraduate/computing-beng/",
+     "title": "Computing BEng | Study | Imperial College London",
+     "retrievedAt": "2026-09-30T08:38:52.534Z",
+     "hash": "62b23df86139f6f541fd1f938ba11a5f013f8534e3eed2f9fcaa2b54b760c141"
+    },
+    {
+     "id": "s8",
+     "url": "https://www.imperial.ac.uk/study/courses/undergraduate/medicine/",
+     "title": "Medicine MBBS/BSc | Study | Imperial College London",
+     "retrievedAt": "2026-09-30T08:40:04.594Z",
+     "hash": "6e08aa47e70be066ad2cecf63536c2a73053b6225645327abbcd4d586ea8d806"
     }
    ],
    "english": [],
@@ -3738,6 +3752,210 @@
        }
       ],
       "source": "s6"
+     },
+     "previous": null
+    },
+    {
+     "key": "imperial-computing-beng",
+     "status": "EXISTS",
+     "nameEn": "Computing BEng",
+     "nameAr": "بكالوريوس الهندسة في الحوسبة",
+     "degree": "BEng",
+     "durationYears": 3,
+     "url": "https://www.imperial.ac.uk/study/courses/undergraduate/computing-beng/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AAA",
+       "notesEn": "Minimum entry standard A*A*A to A*AAA; typical offer A*A*A (three A-levels).",
+       "notesAr": "الحد الأدنى من A*A*A إلى A*AAA؛ والعرض المعتاد A*A*A (ثلاث مواد).",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A*",
+         "source": "s7",
+         "quote": "To include: A* in Mathematics"
+        }
+       ],
+       "source": "s7",
+       "quote": "Minimum entry standard A*A*A - A*AAA"
+      },
+      "IB": {
+       "minimumPoints": 41,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "7",
+         "source": "s7",
+         "quote": "7 in Mathematics at higher level"
+        }
+       ],
+       "source": "s7",
+       "quote": "41 points (International Baccalaureate)"
+      },
+      "AMERICAN": {
+       "notesEn": "Five AP scores of 5 including Calculus BC, or three (5,5,5 with Calculus BC) with a high school diploma and SAT 1480 or ACT 33.",
+       "notesAr": "خمس درجات AP بدرجة 5 منها Calculus BC، أو ثلاث (5،5،5 منها Calculus BC) مع شهادة الثانوية ودرجة SAT بواقع 1480 أو ACT بواقع 33.",
+       "source": "s7",
+       "quote": "Our minimum entry standard is: EITHER 5, 5, 5, 5, 5 to include Calculus BC OR 5, 5, 5 to include Calculus BC Award of acceptable school leaving qualification (e.g., US High School Diploma) Either 1480 in SAT or 33 in ACT."
+      },
+      "CBSE": {
+       "minimumPercent": 90,
+       "notesEn": "CISCE ISC or CBSE AISSE Class XII: 90% overall across five subjects and 90% in relevant subjects.",
+       "notesAr": "الصف الثاني عشر من CISCE ISC أو CBSE AISSE: 90% إجمالا في خمس مواد و90% في المواد ذات الصلة.",
+       "source": "s3",
+       "quote": "CISCE - ISC (Council for Indian School Certificate Examination - Indian School Certificate) Class XII CBSE - AISSE (Central Board of Secondary Education - All India Senior School Examination) Class XII | 90% overall across five subjects with a score of 90% in relevant subjects"
+      },
+      "ISC": {
+       "minimumPercent": 90,
+       "notesEn": "CISCE ISC or CBSE AISSE Class XII: 90% overall across five subjects and 90% in relevant subjects.",
+       "notesAr": "الصف الثاني عشر من CISCE ISC أو CBSE AISSE: 90% إجمالا في خمس مواد و90% في المواد ذات الصلة.",
+       "source": "s3",
+       "quote": "CISCE - ISC (Council for Indian School Certificate Examination - Indian School Certificate) Class XII CBSE - AISSE (Central Board of Secondary Education - All India Senior School Examination) Class XII | 90% overall across five subjects with a score of 90% in relevant subjects"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": "Imperial standard English level.",
+        "waiverNoteAr": "المستوى القياسي للغة الإنجليزية في إمبريال.",
+        "source": "s4",
+        "quote": "IELTS - Academic (Test-Centre/UKVI SELT/Online) Standard | Higher | 6.5 overall (minimum 6.0 in all elements)"
+       }
+      ],
+      "tests": [
+       {
+        "test": "TMUA",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "TMUA required, plus interview.",
+        "noteAr": "يشترط اختبار TMUA مع مقابلة.",
+        "source": "s7",
+        "quote": "You must sit the Test for Mathematics for University Admission (TMUA) as part of the application process for this course."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Interview is part of selection.",
+        "noteAr": "المقابلة جزء من الاختيار.",
+        "source": "s7",
+        "quote": "Admissions test (TMUA) and interview"
+       }
+      ],
+      "source": "s7"
+     },
+     "previous": null
+    },
+    {
+     "key": "imperial-college-london-med",
+     "status": "REPLACED",
+     "nameEn": "Medicine MBBS/BSc",
+     "nameAr": "الطب، بكالوريوس الطب والجراحة مع بكالوريوس العلوم (MBBS/BSc)",
+     "degree": "MBBS",
+     "durationYears": 6,
+     "url": "https://www.imperial.ac.uk/study/courses/undergraduate/medicine/",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "notesEn": "A third subject at A; all qualifications in the same sitting.",
+       "notesAr": "مادة ثالثة بدرجة A؛ وجميع المؤهلات في جلسة واحدة.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s8",
+         "quote": "A* and A in Biology and Chemistry (A* in either)"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s8",
+         "quote": "A* and A in Biology and Chemistry (A* in either)"
+        }
+       ],
+       "source": "s8",
+       "quote": "A*AA including Chemistry and Biology, with A* in one of these subjects (A-levels)"
+      },
+      "IB": {
+       "minimumPoints": 38,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s8",
+         "quote": "6 in Biology at higher level"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "6",
+         "source": "s8",
+         "quote": "6 in Chemistry at higher level"
+        }
+       ],
+       "source": "s8",
+       "quote": "38 points (International Baccalaureate)"
+      },
+      "AMERICAN": {
+       "notesEn": "APs 5,5,5,5,4 including 5 in Biology and Chemistry, or 5,5,5 including Biology and Chemistry with a high school diploma and SAT 1470 or ACT 32.",
+       "notesAr": "اختبارات AP بدرجات 5،5،5،5،4 منها 5 في الأحياء والكيمياء، أو 5،5،5 منها الأحياء والكيمياء مع شهادة الثانوية ودرجة SAT بواقع 1470 أو ACT بواقع 32.",
+       "source": "s8",
+       "quote": "Our minimum entry standard is: EITHER 5, 5, 5, 5, 4 to include 5 in Biology, 5 in Chemistry and 5 in either Calculus BC or a relevant science subject OR 5, 5, 5 to include Biology and Chemistry Award of acceptable school leaving qualification (e.g., US High School Diploma) Either 1470 in SAT or 32 in ACT."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "UCAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "UCAT used for interview shortlisting; thresholds vary by year.",
+        "noteAr": "يستخدم UCAT لاختيار المرشحين للمقابلة؛ وتختلف الحدود من عام لآخر.",
+        "source": "s8",
+        "quote": "You will need to take the University Clinical Aptitude Test (UCAT) to study this course."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Multiple Mini Interviews (MMIs) for shortlisted applicants.",
+        "noteAr": "مقابلات قصيرة متعددة (MMI) للمرشحين المختارين.",
+        "source": "s8",
+        "quote": "No offers are made without applicants attending a competitive interview."
+       }
+      ],
+      "source": "s8"
      },
      "previous": null
     }
@@ -4387,6 +4605,20 @@
      "title": "University of Glasgow - Undergraduate study - 2027 Degree programmes A‑Z - Medicine",
      "retrievedAt": "2026-09-30T08:19:39.036Z",
      "hash": "be330484dee8fb87829ac7d401c6ab8b8cf065dfa1c6058320db8709d111650d"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.gla.ac.uk/international/country/uae/",
+     "title": "University of Glasgow - International students - Your country/region - UAE",
+     "retrievedAt": "2026-09-30T08:38:28.185Z",
+     "hash": "fe5880e0b1fc79b285fa714f6c8ec85c47443c87ff9d5063ab531506253b3ad7"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.gla.ac.uk/international/country/india/",
+     "title": "University of Glasgow - International students - Your country/region - India",
+     "retrievedAt": "2026-09-30T08:38:17.311Z",
+     "hash": "dc2f6f9d5709041a61fd46bdc9499a041b353e3c3975a2b02a8b70354a78b313"
     }
    ],
    "english": [
@@ -4452,6 +4684,13 @@
      "notesAr": "تقبل شهادة CISCE للمتقدمين من الهند.",
      "source": "s1",
      "quote": "We do accept many national school qualifications, including many European, SAT & AP if applying from the USA, and CICSE or CBSE if applying from India. A range of Foundation programmes are also available via Glasgow International College."
+    },
+    "UAE_MOE": {
+     "accepted": false,
+     "notesEn": "UAE national qualifications are not accepted; A-levels, IB, a Glasgow International College foundation or another accepted qualification is required.",
+     "notesAr": "لا تقبل المؤهلات الوطنية الإماراتية؛ يلزم A-levels أو البكالوريا الدولية أو برنامج تأسيسي في كلية غلاسكو الدولية أو مؤهل مقبول آخر.",
+     "source": "s4",
+     "quote": "UAE Undergraduate entry requirements Equivalent regional qualifications for A-level requirements (these can be found on the undergraduate programme you intend to study): Country qualifications not accepted, A-levels, IB, Glasgow International College or other accepted qualification required."
     }
    },
    "programs": [
@@ -4500,6 +4739,20 @@
        ],
        "source": "s2",
        "quote": "IB standard entry requirements 38 (6,6,6)"
+      },
+      "CBSE": {
+       "minimumPercent": 75,
+       "notesEn": "Equivalent of AAB at A-level; subject requirements still apply.",
+       "notesAr": "ما يعادل AAB في A-level؛ مع استيفاء شروط المواد.",
+       "source": "s5",
+       "quote": "AAB: All India Senior Secondary School Year 12 certificate overall score 75%"
+      },
+      "ISC": {
+       "minimumPercent": 75,
+       "notesEn": "Equivalent of AAB at A-level; subject requirements still apply.",
+       "notesAr": "ما يعادل AAB في A-level؛ مع استيفاء شروط المواد.",
+       "source": "s5",
+       "quote": "AAB: Indian School Certificate Class XII (ISC) certificate overall score 75%"
       }
      },
      "general": {
@@ -4633,6 +4886,20 @@
        ],
        "source": "s3",
        "quote": "IB Standard Entry Requirements 38 (6,6,6 HL)"
+      },
+      "CBSE": {
+       "minimumPercent": 80,
+       "notesEn": "Equivalent of AAA at A-level; subject requirements still apply.",
+       "notesAr": "ما يعادل AAA في A-level؛ مع استيفاء شروط المواد.",
+       "source": "s5",
+       "quote": "AAA: All India Senior Secondary School Year 12 certificate overall score 80%"
+      },
+      "ISC": {
+       "minimumPercent": 80,
+       "notesEn": "Equivalent of AAA at A-level; subject requirements still apply.",
+       "notesAr": "ما يعادل AAA في A-level؛ مع استيفاء شروط المواد.",
+       "source": "s5",
+       "quote": "AAA: Indian School Certificate Class XII (ISC) certificate overall score 80%"
       }
      },
      "general": {
@@ -4721,9 +4988,72 @@
      "title": "Entry requirements",
      "retrievedAt": "2026-09-30T08:19:40.056Z",
      "hash": "0d02f88f1f94ffc52e6924b0ec594ea49ca74ae3f00e3b0e9f7e271c9d8dd40d"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.lse.ac.uk/study-at-lse/Undergraduate/Prospective-Students/How-to-Apply/English-language-requirements",
+     "title": "English language requirements",
+     "retrievedAt": "2026-09-30T08:38:29.115Z",
+     "hash": "b02b90523ddc31b5bdbd04e3adef0b94e0a14bd6d0a0e5585662a2a0c2393b24"
+    },
+    {
+     "id": "s8",
+     "url": "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-economics",
+     "title": "BSc Economics - LSE",
+     "retrievedAt": "2026-09-30T08:38:45.583Z",
+     "hash": "f375b0880363910af3063a81498f8876bb768da8e5b7d1202ccc1c35b30ea86a"
+    },
+    {
+     "id": "s9",
+     "url": "https://www.lse.ac.uk/study-at-lse/undergraduate/llb-bachelor-of-laws",
+     "title": "LLB Bachelor of Laws - LSE",
+     "retrievedAt": "2026-09-30T08:39:03.538Z",
+     "hash": "335baccf7fb1b58426938c972f78a4ace0af189d234a731a76240b1b5132fea0"
+    },
+    {
+     "id": "s10",
+     "url": "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-data-science",
+     "title": "BSc Data Science - LSE",
+     "retrievedAt": "2026-09-30T08:39:57.900Z",
+     "hash": "940ad900490aa4e83f87f3afb80ea11fc526927222500291f2af58daf95075d4"
+    },
+    {
+     "id": "s11",
+     "url": "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-management",
+     "title": "BSc Management - LSE",
+     "retrievedAt": "2026-09-30T08:39:20.883Z",
+     "hash": "3d14fac75c00bb3e2bca03311dda878ebecb579acb770b1d9170a029ead0cc65"
     }
    ],
-   "english": [],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 7,
+     "minComponent": 7,
+     "waiverNoteEn": "One sitting only. Not needed at the application stage.",
+     "waiverNoteAr": "في جلسة واحدة فقط. لا يلزم عند التقديم.",
+     "source": "s7",
+     "quote": "IELTS Academic (International English Language Testing Service) Including online version | 7.0 overall and 7.0 in each component"
+    },
+    {
+     "test": "PTE",
+     "minOverall": 70,
+     "minComponent": 70,
+     "waiverNoteEn": "In person only.",
+     "waiverNoteAr": "حضوريا فقط.",
+     "source": "s7",
+     "quote": "70 overall with 70 in all components (in one sitting)"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 5.5,
+     "minComponent": 5,
+     "waiverNoteEn": "Updated TOEFL scale (tests from January 2026); 5 in each skill.",
+     "waiverNoteAr": "مقياس TOEFL المحدث (للاختبارات منذ يناير 2026)؛ 5 في كل مهارة.",
+     "source": "s7",
+     "quote": "*Updated scale (tests from January 2026)* 5.5 overall, with a minimum of: 5 in Writing 5 in Reading 5 in Listening 5 in Speaking"
+    }
+   ],
    "tests": [],
    "additional": [],
    "deadlines": [
@@ -4785,7 +5115,241 @@
      "quote": "The International Baccalaureate is scored out of 45 points and the entry requirements for LSE range from 37 points overall (with three Higher level subjects at grades 6 6 6) to 39 points overall (with three Higher level subjects at grades 7 6 6)."
     }
    },
-   "programs": []
+   "programs": [
+    {
+     "key": "lse-bus",
+     "status": "REPLACED",
+     "nameEn": "BSc Management",
+     "nameAr": "بكالوريوس العلوم في الإدارة",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-management",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "AAA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s11",
+         "quote": "AAA, including an A in Mathematics"
+        }
+       ],
+       "source": "s11",
+       "quote": "A-levels AAA, including an A in Mathematics"
+      },
+      "IB": {
+       "minimumPoints": 38,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "source": "s11",
+         "quote": "38 points overall, with 766 in higher level subjects including Mathematics"
+        }
+       ],
+       "source": "s11",
+       "quote": "38 points overall, with 766 in higher level subjects including Mathematics"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [],
+      "source": "s11"
+     },
+     "previous": null
+    },
+    {
+     "key": "lse-ds",
+     "status": "EXISTS",
+     "nameEn": "BSc Data Science",
+     "nameAr": "بكالوريوس العلوم في علم البيانات",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-data-science",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A*",
+         "source": "s10",
+         "quote": "A*AA, with an A* in Mathematics"
+        },
+        {
+         "type": "RECOMMENDED",
+         "keys": [
+          "further_mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "noteEn": "Expected where offered.",
+         "noteAr": "متوقعة إذا كانت متاحة.",
+         "source": "s10",
+         "quote": "Where it's offered by your school or college, AS- or A-level Further Mathematics is expected to be taken and a grade A achieved."
+        }
+       ],
+       "source": "s10",
+       "quote": "A-levels A*AA, with an A* in Mathematics"
+      },
+      "IB": {
+       "minimumPoints": 39,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "7",
+         "source": "s10",
+         "quote": "39 points overall, including 766 in higher level subjects, with 7 in \"Mathematics: analysis and approaches\""
+        }
+       ],
+       "source": "s10",
+       "quote": "39 points overall, including 766 in higher level subjects, with 7 in \"Mathematics: analysis and approaches\""
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "TMUA",
+        "policy": "RECOMMENDED",
+        "minScore": null,
+        "noteEn": "TMUA not mandatory but can make an application more competitive.",
+        "noteAr": "اختبار TMUA غير إلزامي لكنه قد يعزز الطلب.",
+        "source": "s10",
+        "quote": "Applicants are encouraged to take the Test of Mathematics for University Admission (TMUA). The test is not mandatory, however a good performance on the test may make an application more competitive."
+       }
+      ],
+      "additional": [],
+      "source": "s10"
+     },
+     "previous": null
+    },
+    {
+     "key": "lse-economics-bsc",
+     "status": "EXISTS",
+     "nameEn": "BSc Economics",
+     "nameAr": "بكالوريوس العلوم في الاقتصاد",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-economics",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A*",
+         "source": "s8",
+         "quote": "A*AA with an A* in Mathematics"
+        }
+       ],
+       "source": "s8",
+       "quote": "A-levels A*AA with an A* in Mathematics"
+      },
+      "IB": {
+       "minimumPoints": 39,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "7",
+         "source": "s8",
+         "quote": "39 points overall. 766 in higher level subjects, with 7 in Mathematics."
+        }
+       ],
+       "source": "s8",
+       "quote": "39 points overall. 766 in higher level subjects, with 7 in Mathematics."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "TMUA",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "TMUA is mandatory.",
+        "noteAr": "اختبار TMUA إلزامي.",
+        "source": "s8",
+        "quote": "Applicants are required to take the Test of Mathematics for University Admission (TMUA). The test is mandatory."
+       }
+      ],
+      "additional": [],
+      "source": "s8"
+     },
+     "previous": null
+    },
+    {
+     "key": "lse-law",
+     "status": "EXISTS",
+     "nameEn": "LLB Bachelor of Laws",
+     "nameAr": "بكالوريوس القانون (LLB)",
+     "degree": "LLB",
+     "durationYears": 3,
+     "url": "https://www.lse.ac.uk/study-at-lse/undergraduate/llb-bachelor-of-laws",
+     "curricula": {
+      "BRITISH": {
+       "gradeProfile": "A*AA",
+       "notesEn": "Contextual offer AAB.",
+       "notesAr": "العرض السياقي AAB.",
+       "subjects": [],
+       "source": "s9",
+       "quote": "A-levels A*AA"
+      },
+      "IB": {
+       "minimumPoints": 39,
+       "subjects": [],
+       "source": "s9",
+       "quote": "39 points overall. 766 in higher level subjects"
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "LNAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "Take the LNAT between 1 September and 31 December 2026 for 2027 entry.",
+        "noteAr": "يؤدى اختبار LNAT بين 1 سبتمبر و31 ديسمبر 2026 لدخول 2027.",
+        "source": "s9",
+        "quote": "All applicants must sit the Law National Admissions Test (LNAT). For entry in September 2027 (or deferred entry in September 2028) the LNAT can be taken between 1 September 2026 and 31 December 2026."
+       }
+      ],
+      "additional": [],
+      "source": "s9"
+     },
+     "previous": null
+    }
+   ]
   }
  ]
 }

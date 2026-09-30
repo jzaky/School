@@ -1,6 +1,6 @@
 {
  "batch": "world",
- "assembledAt": "2026-09-30T08:32:58.745Z",
+ "assembledAt": "2026-09-30T08:47:06.563Z",
  "universities": [
   {
    "key": "epfl",
@@ -2183,6 +2183,13 @@
      "title": "Admission Platform - PSUT",
      "retrievedAt": "2026-09-30T08:20:27.694Z",
      "hash": "0017c8c5e7a490ae12209765149403b7328d983f1857c55109fd805c5abdaeb3"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.psut.edu.jo/en/required-documents-payment-of-fees",
+     "title": "Required Documents & Payment of Fees - PSUT",
+     "retrievedAt": "2026-09-30T08:39:06.701Z",
+     "hash": "fc60993ed92fdd5144ff8b4792a3dc36bcb50bd93aeec180446ef86425477aa9"
     }
    ],
    "english": [],
@@ -2211,6 +2218,14 @@
      "noteAr": "تغطي منصة القبول في الجامعة الطلاب الأردنيين والدوليين، وتشمل خطوة امتحان القبول والمقابلة.",
      "source": "s5",
      "quote": "This platform has been created to simplify the PSUT Admission Procedures for students including admission of Jordanian Students, and admission of International Students"
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "The secondary certificate (or equivalent, such as a UAE certificate) must be certified by the Jordanian Ministry of Education; non-Jordanians submit a certified passport copy.",
+     "noteAr": "يجب تصديق شهادة الثانوية (أو ما يعادلها مثل الشهادة الإماراتية) من وزارة التربية والتعليم الأردنية، ويقدم غير الأردنيين نسخة مصدقة من جواز السفر.",
+     "source": "s6",
+     "quote": "The original transcript of the General Secondary Certificate or its equivalent, certified by the Jordanian Ministry of Education."
     }
    ],
    "deadlines": [],
@@ -2335,6 +2350,20 @@
      "title": "Bachelor's programmes - University of Amsterdam",
      "retrievedAt": "2026-09-30T08:21:07.791Z",
      "hash": "24a809a4955a131419d91df0da092ac63974e2ee26a2c989db50659ae12d54aa"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.uva.nl/en/programmes/bachelors/artificial-intelligence/artificial-intelligence.html?origin=0UW%2FNlzHRVCfgfmL3cdmVg",
+     "title": "Bachelor's Artificial Intelligence - University of Amsterdam",
+     "retrievedAt": "2026-09-30T08:38:37.253Z",
+     "hash": "d013735aaea8798620d18da606cc54c2974d9d547a7cd8b0c419fed415e38d4a"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.uva.nl/en/programmes/bachelors/economics--business-economics/economics--business-economics.html?origin=0UW%2FNlzHRVCfgfmL3cdmVg",
+     "title": "Bachelor's Economics and Business Economics - University of Amsterdam",
+     "retrievedAt": "2026-09-30T08:38:52.042Z",
+     "hash": "c2bd4789baa9310a3730aba53b2664d240eb678bfcc1d584573c7fd6e233c243"
     }
    ],
    "english": [
@@ -2368,6 +2397,15 @@
      "labelAr": "علم النفس (عدد مقاعد محدود): التقديم لإجراءات الاختيار",
      "source": "s1",
      "quote": "This Bachelor's programme has a numerus fixus. This means that you need to apply for the selection procedure by 15 January at the latest."
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-01-15",
+     "labelEn": "Economics and Business Economics (English track, numerus fixus)",
+     "labelAr": "الاقتصاد واقتصاديات الأعمال (المسار الإنجليزي، مقاعد محدودة)",
+     "source": "s5",
+     "quote": "The application deadline for the English-language track is 15 January."
     }
    ],
    "curriculumRules": {},
@@ -2430,11 +2468,11 @@
     {
      "key": "university-of-amsterdam-ai",
      "status": "EXISTS",
-     "nameEn": "Artificial Intelligence BSc",
+     "nameEn": "Artificial Intelligence (Kunstmatige intelligentie) BSc",
      "nameAr": "بكالوريوس العلوم في الذكاء الاصطناعي",
      "degree": "BSc",
-     "durationYears": null,
-     "url": "https://www.uva.nl/en/education/bachelor-s/bachelor-s-programmes/bachelor-s-programmes.html",
+     "durationYears": 3,
+     "url": "https://www.uva.nl/en/programmes/bachelors/artificial-intelligence/artificial-intelligence.html?origin=0UW%2FNlzHRVCfgfmL3cdmVg",
      "curricula": {},
      "general": {
       "subjects": [],
@@ -2448,6 +2486,22 @@
         "noteAr": "مدرج ضمن برامج البكالوريوس في الجامعة. لم تُستخرج شروط القبول بعد.",
         "source": "s3",
         "quote": "As an Artificial Intelligence student, you study and analyse AI from different academic perspectives."
+       },
+       {
+        "kind": "NOT_ACCEPTED",
+        "required": true,
+        "noteEn": "Taught in Dutch (BSc Kunstmatige intelligentie), so Dutch proficiency is required; not an option for students without Dutch.",
+        "noteAr": "يُدرَّس بالهولندية (BSc Kunstmatige intelligentie)، لذا يلزم إتقان الهولندية، وليس خيارا لغير المتحدثين بها.",
+        "source": "s4",
+        "quote": "Language of instruction Dutch"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "180 ECTS over 36 months.",
+        "noteAr": "180 وحدة ECTS على مدى 36 شهرا.",
+        "source": "s4",
+        "quote": "Credits 180 ECTS, 36 months"
        }
       ],
       "source": "s3"
@@ -2460,8 +2514,8 @@
      "nameEn": "Economics and Business Economics BSc",
      "nameAr": "بكالوريوس العلوم في الاقتصاد واقتصاديات الأعمال",
      "degree": "BSc",
-     "durationYears": null,
-     "url": "https://www.uva.nl/en/education/bachelor-s/bachelor-s-programmes/bachelor-s-programmes.html",
+     "durationYears": 3,
+     "url": "https://www.uva.nl/en/programmes/bachelors/economics--business-economics/economics--business-economics.html?origin=0UW%2FNlzHRVCfgfmL3cdmVg",
      "curricula": {},
      "general": {
       "subjects": [],
@@ -2475,6 +2529,22 @@
         "noteAr": "بكالوريوس الاقتصاد العام في الجامعة هو الاقتصاد واقتصاديات الأعمال. لم تُستخرج شروط القبول بعد.",
         "source": "s3",
         "quote": "Economics and Business Economics is a very broad programme."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English track has a numerus fixus of 850 places with a selection procedure; apply by 15 January. A Dutch track without numerus fixus also exists.",
+        "noteAr": "للمسار الإنجليزي عدد مقاعد محدود بـ 850 مقعدا مع إجراءات اختيار، والتقديم قبل 15 يناير. ويوجد مسار هولندي دون حد للمقاعد.",
+        "source": "s5",
+        "quote": "This means only 850 places are available for first-year students."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Three years (180 ECTS), English or Dutch track.",
+        "noteAr": "ثلاث سنوات (180 وحدة ECTS)، بمسار إنجليزي أو هولندي.",
+        "source": "s5",
+        "quote": "Credits 180 ECTS, 36 months"
        }
       ],
       "source": "s3"
@@ -2533,6 +2603,13 @@
      "title": "College of Engineering undergraduate programmes (page 3) | NTU",
      "retrievedAt": "2026-09-30T08:20:55.663Z",
      "hash": "46bd100c64402aa7592af8e02dde4a649036b40f6ae9426587f812cbe625c466"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.ntu.edu.sg/engineering/coe-programmes/undergraduate/coe-programme-detail/bachelor-of-engineering-in-electrical-and-electronic-engineering-(eee)",
+     "title": "Bachelor of Engineering in Electrical and Electronic Engineering | NTU",
+     "retrievedAt": "2026-09-30T08:38:46.270Z",
+     "hash": "502e2729f3af77c0f6f9f952b7c68f972bd3d249fee8bc6b04a63588eaeafc73"
     }
    ],
    "english": [
@@ -2732,8 +2809,158 @@
      "nameAr": "بكالوريوس الهندسة في الهندسة الكهربائية والإلكترونية",
      "degree": "BEng",
      "durationYears": null,
-     "url": "https://www.ntu.edu.sg/engineering/coe-programmes/undergraduate?page=3",
-     "curricula": {},
+     "url": "https://www.ntu.edu.sg/engineering/coe-programmes/undergraduate/coe-programme-detail/bachelor-of-engineering-in-electrical-and-electronic-engineering-(eee)",
+     "curricula": {
+      "IB": {
+       "source": "s7",
+       "quote": "International Baccalaureate Diploma Pass in Higher Level Mathematics, and",
+       "notesEn": "HL Mathematics, an HL science or Computer Science, and SL Physics if Physics is not taken at HL.",
+       "notesAr": "الرياضيات بالمستوى العالي، ومادة علمية أو علوم الحاسوب بالمستوى العالي، والفيزياء بالمستوى العادي إن لم تُدرس بالمستوى العالي.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "source": "s7",
+         "quote": "Pass in Higher Level Mathematics, and"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "chemistry",
+          "computer_science",
+          "physics"
+         ],
+         "minimumLevel": "HIGHER",
+         "source": "s7",
+         "quote": "Pass in Higher Level Biology/Chemistry/Computer Science/Physics, and"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "STANDARD",
+         "source": "s7",
+         "quote": "Pass in Standard Level Physics 2 or equivalent"
+        }
+       ]
+      },
+      "UAE_MOE": {
+       "source": "s7",
+       "quote": "International and Other Qualifications Pass in Senior High School Level Mathematics, and",
+       "notesEn": "International and other qualifications: senior high school Mathematics and a science (Biology, Chemistry or Physics), plus junior high school Physics.",
+       "notesAr": "المؤهلات الدولية وغيرها: الرياضيات ومادة علمية (الأحياء أو الكيمياء أو الفيزياء) في المرحلة الثانوية، مع الفيزياء في المرحلة الإعدادية.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s7",
+         "quote": "Pass in Senior High School Level Mathematics, and"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "chemistry",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s7",
+         "quote": "Pass in Senior High School Level Biology/Chemistry/Physics, and"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "FOUNDATION",
+         "source": "s7",
+         "quote": "Pass in Junior High School Level Physics 4"
+        }
+       ]
+      },
+      "AMERICAN": {
+       "source": "s7",
+       "quote": "International and Other Qualifications Pass in Senior High School Level Mathematics, and",
+       "notesEn": "International and other qualifications: senior high school Mathematics and a science (Biology, Chemistry or Physics), plus junior high school Physics.",
+       "notesAr": "المؤهلات الدولية وغيرها: الرياضيات ومادة علمية (الأحياء أو الكيمياء أو الفيزياء) في المرحلة الثانوية، مع الفيزياء في المرحلة الإعدادية.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s7",
+         "quote": "Pass in Senior High School Level Mathematics, and"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "chemistry",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s7",
+         "quote": "Pass in Senior High School Level Biology/Chemistry/Physics, and"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "FOUNDATION",
+         "source": "s7",
+         "quote": "Pass in Junior High School Level Physics 4"
+        }
+       ]
+      },
+      "CBSE": {
+       "source": "s7",
+       "quote": "International and Other Qualifications Pass in Senior High School Level Mathematics, and",
+       "notesEn": "International and other qualifications: senior high school Mathematics and a science (Biology, Chemistry or Physics), plus junior high school Physics.",
+       "notesAr": "المؤهلات الدولية وغيرها: الرياضيات ومادة علمية (الأحياء أو الكيمياء أو الفيزياء) في المرحلة الثانوية، مع الفيزياء في المرحلة الإعدادية.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s7",
+         "quote": "Pass in Senior High School Level Mathematics, and"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "chemistry",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s7",
+         "quote": "Pass in Senior High School Level Biology/Chemistry/Physics, and"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "FOUNDATION",
+         "source": "s7",
+         "quote": "Pass in Junior High School Level Physics 4"
+        }
+       ]
+      }
+     },
      "general": {
       "subjects": [],
       "english": [],
@@ -2746,6 +2973,14 @@
         "noteAr": "تقدمه كلية الهندسة الكهربائية والإلكترونية. لم تُستخرج شروط القبول الخاصة بالبرنامج بعد.",
         "source": "s6",
         "quote": "Bachelor of Engineering in Electrical and Electronic Engineering"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Professional Bachelor of Engineering degree with an industrial attachment in Year 3.",
+        "noteAr": "درجة بكالوريوس هندسة مهنية مع تدريب صناعي في السنة الثالثة.",
+        "source": "s7",
+        "quote": "The Bachelor of Engineering programme is a professional degree programme with a broad-based and flexible curriculum that integrates theory with industrial practice."
        }
       ],
       "source": "s6"
@@ -2996,7 +3231,7 @@
   {
    "key": "yarmouk",
    "website": "https://www.yu.edu.jo",
-   "applyVia": "JORDAN_UNIFIED",
+   "applyVia": "DIRECT",
    "sources": [
     {
      "id": "s1",
@@ -3006,11 +3241,34 @@
      "hash": "52d9286ed740fe2b8ff9f1d70d8a3e0ef331e081f9bb4b5c597f416c67d418ce",
      "waybackTimestamp": "20251016235636",
      "waybackHash": "5597da0973cb4db6e1eeeded71dce0a58dd8bbe83f5b882e934b3389ed9242ee"
+    },
+    {
+     "id": "s2",
+     "url": "https://admreg.yu.edu.jo/images/regdocpdf/pdfdoc/majors.pdf",
+     "title": "Bachelor majors 2026/2027 - Yarmouk University (PDF)",
+     "retrievedAt": "2026-09-30T08:38:59.050Z",
+     "hash": "afc44e095acf1d87eb192f27d7bf1acbbf368dc67f718d15e4dcc9c4813d5b0b"
+    },
+    {
+     "id": "s3",
+     "url": "https://admreg.yu.edu.jo/index.php/st-1/howapp",
+     "title": "How to apply - Yarmouk University Admission and Registration",
+     "retrievedAt": "2026-09-30T08:39:52.397Z",
+     "hash": "c5793fd3f6da92d4e56e47d6048db786de2620edaeb7714ccc586b8aaab9d2fe"
     }
    ],
    "english": [],
    "tests": [],
-   "additional": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Non-Jordanian students apply to the International Program directly through the university (announced on its website) and must attend in person to complete admission; Jordanians use the unified or parallel routes.",
+     "noteAr": "يتقدم الطلاب غير الأردنيين إلى البرنامج الدولي مباشرة عبر الجامعة (حسب الإعلان على موقعها)، ويشترط حضورهم شخصيا لاستكمال القبول، أما الأردنيون فعبر القبول الموحد أو البرنامج الموازي.",
+     "source": "s3",
+     "quote": "يعلن عن تقديم الطلبات في الموعد المحدد على موقع الجامعة ضمن الشروط والمعدلات المحددة والشواغر المتوفرة ويتم القبول في هذا البرنامج عن طريق الجامعة مباشرة ويشترط حضور الطالب شخصيا لاستكمال اجراءات القبول"
+    }
+   ],
    "deadlines": [],
    "curriculumRules": {},
    "programs": [
@@ -3038,6 +3296,33 @@
        }
       ],
       "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "yarmouk-bus",
+     "status": "EXISTS",
+     "nameEn": "Business Administration BBA",
+     "nameAr": "بكالوريوس إدارة الأعمال",
+     "degree": "BBA",
+     "durationYears": null,
+     "url": "https://admreg.yu.edu.jo/images/regdocpdf/pdfdoc/majors.pdf",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Listed in Yarmouk's bachelor majors bulletin for 2026/2027. The same bulletin marks Business Administration as suspended in one of its tables, so confirm availability for the chosen study programme.",
+        "noteAr": "مدرج في نشرة تخصصات البكالوريوس لعام 2026/2027، لكن النشرة نفسها تشير إلى إيقاف تخصص إدارة الأعمال في أحد جداولها، لذا يجب التأكد من توفره في البرنامج المختار.",
+        "source": "s2",
+        "quote": "‫‪71‬‬ ‫‪70‬‬ ‫‪60‬‬ ‫‪30‬‬ ‫‪132‬‬ ‫‪65‬‬ ‫إدارة االعمال‬"
+       }
+      ],
+      "source": "s2"
      },
      "previous": null
     }
@@ -3522,6 +3807,27 @@
      "title": "Computer Engineering @ NUS",
      "retrievedAt": "2026-09-30T08:22:06.163Z",
      "hash": "91a0d1d6c56a12b73f11df4ef76dce40fa56b53cd5de2be5f6890ef3e30f586e"
+    },
+    {
+     "id": "s11",
+     "url": "https://www.nus.edu.sg/oam/docs/default-source/default-document-library/ibdp-sp.pdf?sfvrsn=4a0b7c43_9",
+     "title": "IB Diploma subject prerequisites (single degree) - NUS, December 2025",
+     "retrievedAt": "2026-09-30T08:38:42.668Z",
+     "hash": "2993351d583df9c3de40f6d405f1367b8fd35f4a6e73347aa87b96b2f1f11f27"
+    },
+    {
+     "id": "s12",
+     "url": "https://www.nus.edu.sg/oam/docs/default-source/international-qualifications/cat-d-sdp.pdf?sfvrsn=85c8615_11",
+     "title": "International Qualifications subject requirements (single degree) - NUS, December 2025",
+     "retrievedAt": "2026-09-30T08:38:56.575Z",
+     "hash": "7779237949c34453581438500f99694084928aa064c7f5108cd5247b00c7e6ea"
+    },
+    {
+     "id": "s13",
+     "url": "https://law.nus.edu.sg/prospective-students/",
+     "title": "Prospective Students - NUS Law",
+     "retrievedAt": "2026-09-30T08:38:31.820Z",
+     "hash": "32e651a34f53b7e36e8f90fa05b17e64b5bd5199fd9eecbd0eadb2e5729b2c8c"
     }
    ],
    "english": [],
@@ -3672,11 +3978,130 @@
      "degree": "MBBS",
      "durationYears": 5,
      "url": "https://medicine.nus.edu.sg/prospective-students/bachelor-of-medicine-and-bachelor-of-surgery-mbbs/",
-     "curricula": {},
+     "curricula": {
+      "IB": {
+       "source": "s11",
+       "quote": "Medicine * Pass in HL Chemistry; and either HL Biology or HL Physics. Yes",
+       "notesEn": "HL Chemistry plus HL Biology or HL Physics; portfolio, interviews and tests; Medicine must be ranked first or second choice.",
+       "notesAr": "الكيمياء بالمستوى العالي مع الأحياء أو الفيزياء بالمستوى العالي، مع ملف إنجازات ومقابلات واختبارات، ويجب ترتيب الطب كخيار أول أو ثانٍ.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "HIGHER",
+         "source": "s11",
+         "quote": "Medicine * Pass in HL Chemistry; and either HL Biology or HL Physics. Yes"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "physics"
+         ],
+         "minimumLevel": "HIGHER",
+         "source": "s11",
+         "quote": "Medicine * Pass in HL Chemistry; and either HL Biology or HL Physics. Yes"
+        }
+       ]
+      },
+      "UAE_MOE": {
+       "source": "s12",
+       "quote": "Year 12 or higher level pass in Chemistry and Biology or Physics.",
+       "notesEn": "International qualifications: Year 12 pass in Chemistry and in Biology or Physics; UCAT required; portfolio and interviews. Applicants still completing school when applications close are not eligible.",
+       "notesAr": "المؤهلات الدولية: النجاح في الكيمياء والأحياء أو الفيزياء للصف الثاني عشر، مع اختبار UCAT وملف إنجازات ومقابلات. ولا يحق لمن لم ينهِ الدراسة عند إغلاق التقديم التقدم.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s12",
+         "quote": "Year 12 or higher level pass in Chemistry and Biology or Physics."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s12",
+         "quote": "Year 12 or higher level pass in Chemistry and Biology or Physics."
+        }
+       ]
+      },
+      "AMERICAN": {
+       "source": "s12",
+       "quote": "Year 12 or higher level pass in Chemistry and Biology or Physics.",
+       "notesEn": "International qualifications: Year 12 pass in Chemistry and in Biology or Physics; UCAT required; portfolio and interviews. Applicants still completing school when applications close are not eligible.",
+       "notesAr": "المؤهلات الدولية: النجاح في الكيمياء والأحياء أو الفيزياء للصف الثاني عشر، مع اختبار UCAT وملف إنجازات ومقابلات. ولا يحق لمن لم ينهِ الدراسة عند إغلاق التقديم التقدم.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s12",
+         "quote": "Year 12 or higher level pass in Chemistry and Biology or Physics."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s12",
+         "quote": "Year 12 or higher level pass in Chemistry and Biology or Physics."
+        }
+       ]
+      },
+      "CBSE": {
+       "source": "s12",
+       "quote": "Year 12 or higher level pass in Chemistry and Biology or Physics.",
+       "notesEn": "International qualifications: Year 12 pass in Chemistry and in Biology or Physics; UCAT required; portfolio and interviews. Applicants still completing school when applications close are not eligible.",
+       "notesAr": "المؤهلات الدولية: النجاح في الكيمياء والأحياء أو الفيزياء للصف الثاني عشر، مع اختبار UCAT وملف إنجازات ومقابلات. ولا يحق لمن لم ينهِ الدراسة عند إغلاق التقديم التقدم.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s12",
+         "quote": "Year 12 or higher level pass in Chemistry and Biology or Physics."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "biology",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s12",
+         "quote": "Year 12 or higher level pass in Chemistry and Biology or Physics."
+        }
+       ]
+      }
+     },
      "general": {
       "subjects": [],
       "english": [],
-      "tests": [],
+      "tests": [
+       {
+        "test": "UCAT",
+        "policy": "REQUIRED",
+        "minScore": null,
+        "noteEn": "Required for international-qualification applicants; IB applicants need it when presenting predicted results.",
+        "noteAr": "مطلوب لحملة المؤهلات الدولية، ولحملة البكالوريا الدولية عند تقديم نتائج متوقعة.",
+        "source": "s12",
+        "quote": "UCAT is required."
+       }
+      ],
       "additional": [
        {
         "kind": "ADMISSIONS_TEST",
@@ -3701,6 +4126,14 @@
         "noteAr": "منهج MBBS لمدة خمس سنوات.",
         "source": "s5",
         "quote": "Our five-year MBBS curriculum is future-oriented, inter-disciplinary and inter-professional in nature."
+       },
+       {
+        "kind": "PORTFOLIO",
+        "required": true,
+        "noteEn": "A portfolio must be submitted to the NUS Medicine Admissions Portal after the university application.",
+        "noteAr": "يجب تقديم ملف إنجازات إلى بوابة قبول كلية الطب بعد طلب الالتحاق بالجامعة.",
+        "source": "s12",
+        "quote": "Students applying for Medicine need to submit a portfolio to NUS Medicine Admissions Portal after completing their"
        }
       ],
       "source": "s2"
@@ -3715,7 +4148,89 @@
      "degree": "BComp",
      "durationYears": null,
      "url": "https://www.comp.nus.edu.sg/programmes/ug/cs/",
-     "curricula": {},
+     "curricula": {
+      "IB": {
+       "source": "s11",
+       "quote": "Common Computer Pass in HL Computer Science or HL MAA or HL Physics; OR No",
+       "notesEn": "Pass in HL Computer Science, HL Maths AA or HL Physics; or a good pass in SL Maths AA or HL Maths AI. No selection test or interview.",
+       "notesAr": "النجاح في علوم الحاسوب أو الرياضيات AA أو الفيزياء بالمستوى العالي، أو نجاح جيد في الرياضيات AA بالمستوى العادي أو الرياضيات AI بالمستوى العالي. دون اختبار اختيار أو مقابلة.",
+       "subjects": [
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "computer_science",
+          "mathematics",
+          "physics"
+         ],
+         "minimumLevel": "HIGHER",
+         "source": "s11",
+         "quote": "Common Computer Pass in HL Computer Science or HL MAA or HL Physics; OR No"
+        },
+        {
+         "type": "OPTIONAL",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "source": "s11",
+         "quote": "Science Programmes Good pass in either SL MAA or HL MAI.",
+         "noteEn": "Alternative: good pass in SL Maths AA or HL Maths AI.",
+         "noteAr": "بديل: نجاح جيد في الرياضيات AA بالمستوى العادي أو الرياضيات AI بالمستوى العالي."
+        }
+       ]
+      },
+      "UAE_MOE": {
+       "source": "s12",
+       "quote": "Common Computer Year 12 or higher level pass in Mathematics No Science Programmes",
+       "notesEn": "International qualifications: Year 12 (or higher) pass in Mathematics; no selection test or interview.",
+       "notesAr": "المؤهلات الدولية: النجاح في الرياضيات للصف الثاني عشر أو أعلى، دون اختبار اختيار أو مقابلة.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s12",
+         "quote": "Common Computer Year 12 or higher level pass in Mathematics No Science Programmes"
+        }
+       ]
+      },
+      "AMERICAN": {
+       "source": "s12",
+       "quote": "Common Computer Year 12 or higher level pass in Mathematics No Science Programmes",
+       "notesEn": "International qualifications: Year 12 (or higher) pass in Mathematics; no selection test or interview.",
+       "notesAr": "المؤهلات الدولية: النجاح في الرياضيات للصف الثاني عشر أو أعلى، دون اختبار اختيار أو مقابلة.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s12",
+         "quote": "Common Computer Year 12 or higher level pass in Mathematics No Science Programmes"
+        }
+       ]
+      },
+      "CBSE": {
+       "source": "s12",
+       "quote": "Common Computer Year 12 or higher level pass in Mathematics No Science Programmes",
+       "notesEn": "International qualifications: Year 12 (or higher) pass in Mathematics; no selection test or interview.",
+       "notesAr": "المؤهلات الدولية: النجاح في الرياضيات للصف الثاني عشر أو أعلى، دون اختبار اختيار أو مقابلة.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s12",
+         "quote": "Common Computer Year 12 or higher level pass in Mathematics No Science Programmes"
+        }
+       ]
+      }
+     },
      "general": {
       "subjects": [],
       "english": [],
@@ -3742,7 +4257,89 @@
      "degree": "BComp",
      "durationYears": null,
      "url": "https://www.comp.nus.edu.sg/programmes/ug/cs/",
-     "curricula": {},
+     "curricula": {
+      "IB": {
+       "source": "s11",
+       "quote": "Common Computer Pass in HL Computer Science or HL MAA or HL Physics; OR No",
+       "notesEn": "Pass in HL Computer Science, HL Maths AA or HL Physics; or a good pass in SL Maths AA or HL Maths AI. No selection test or interview.",
+       "notesAr": "النجاح في علوم الحاسوب أو الرياضيات AA أو الفيزياء بالمستوى العالي، أو نجاح جيد في الرياضيات AA بالمستوى العادي أو الرياضيات AI بالمستوى العالي. دون اختبار اختيار أو مقابلة.",
+       "subjects": [
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "computer_science",
+          "mathematics",
+          "physics"
+         ],
+         "minimumLevel": "HIGHER",
+         "source": "s11",
+         "quote": "Common Computer Pass in HL Computer Science or HL MAA or HL Physics; OR No"
+        },
+        {
+         "type": "OPTIONAL",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "STANDARD",
+         "source": "s11",
+         "quote": "Science Programmes Good pass in either SL MAA or HL MAI.",
+         "noteEn": "Alternative: good pass in SL Maths AA or HL Maths AI.",
+         "noteAr": "بديل: نجاح جيد في الرياضيات AA بالمستوى العادي أو الرياضيات AI بالمستوى العالي."
+        }
+       ]
+      },
+      "UAE_MOE": {
+       "source": "s12",
+       "quote": "Common Computer Year 12 or higher level pass in Mathematics No Science Programmes",
+       "notesEn": "International qualifications: Year 12 (or higher) pass in Mathematics; no selection test or interview.",
+       "notesAr": "المؤهلات الدولية: النجاح في الرياضيات للصف الثاني عشر أو أعلى، دون اختبار اختيار أو مقابلة.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s12",
+         "quote": "Common Computer Year 12 or higher level pass in Mathematics No Science Programmes"
+        }
+       ]
+      },
+      "AMERICAN": {
+       "source": "s12",
+       "quote": "Common Computer Year 12 or higher level pass in Mathematics No Science Programmes",
+       "notesEn": "International qualifications: Year 12 (or higher) pass in Mathematics; no selection test or interview.",
+       "notesAr": "المؤهلات الدولية: النجاح في الرياضيات للصف الثاني عشر أو أعلى، دون اختبار اختيار أو مقابلة.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s12",
+         "quote": "Common Computer Year 12 or higher level pass in Mathematics No Science Programmes"
+        }
+       ]
+      },
+      "CBSE": {
+       "source": "s12",
+       "quote": "Common Computer Year 12 or higher level pass in Mathematics No Science Programmes",
+       "notesEn": "International qualifications: Year 12 (or higher) pass in Mathematics; no selection test or interview.",
+       "notesAr": "المؤهلات الدولية: النجاح في الرياضيات للصف الثاني عشر أو أعلى، دون اختبار اختيار أو مقابلة.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s12",
+         "quote": "Common Computer Year 12 or higher level pass in Mathematics No Science Programmes"
+        }
+       ]
+      }
+     },
      "general": {
       "subjects": [],
       "english": [],
@@ -3769,7 +4366,76 @@
      "degree": null,
      "durationYears": null,
      "url": "https://ceg.nus.edu.sg/",
-     "curricula": {},
+     "curricula": {
+      "IB": {
+       "source": "s11",
+       "quote": "Computer Engineering Pass in HL MAA. No",
+       "notesEn": "Pass in HL Maths AA; students without HL Physics take a Physics bridging course.",
+       "notesAr": "النجاح في الرياضيات AA بالمستوى العالي، ومن لم يدرس الفيزياء بالمستوى العالي يأخذ مقررا تجسيريا في الفيزياء.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "source": "s11",
+         "quote": "Computer Engineering Pass in HL MAA. No"
+        }
+       ]
+      },
+      "UAE_MOE": {
+       "source": "s12",
+       "quote": "Year 12 or higher level pass in Mathematics Computer Engineering No",
+       "notesEn": "International qualifications: Year 12 (or higher) pass in Mathematics; students without Year 12 Physics take Physics bridging courses.",
+       "notesAr": "المؤهلات الدولية: النجاح في الرياضيات للصف الثاني عشر أو أعلى، ومن لم يدرس الفيزياء في الصف الثاني عشر يأخذ مقررات تجسيرية.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s12",
+         "quote": "Year 12 or higher level pass in Mathematics Computer Engineering No"
+        }
+       ]
+      },
+      "AMERICAN": {
+       "source": "s12",
+       "quote": "Year 12 or higher level pass in Mathematics Computer Engineering No",
+       "notesEn": "International qualifications: Year 12 (or higher) pass in Mathematics; students without Year 12 Physics take Physics bridging courses.",
+       "notesAr": "المؤهلات الدولية: النجاح في الرياضيات للصف الثاني عشر أو أعلى، ومن لم يدرس الفيزياء في الصف الثاني عشر يأخذ مقررات تجسيرية.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s12",
+         "quote": "Year 12 or higher level pass in Mathematics Computer Engineering No"
+        }
+       ]
+      },
+      "CBSE": {
+       "source": "s12",
+       "quote": "Year 12 or higher level pass in Mathematics Computer Engineering No",
+       "notesEn": "International qualifications: Year 12 (or higher) pass in Mathematics; students without Year 12 Physics take Physics bridging courses.",
+       "notesAr": "المؤهلات الدولية: النجاح في الرياضيات للصف الثاني عشر أو أعلى، ومن لم يدرس الفيزياء في الصف الثاني عشر يأخذ مقررات تجسيرية.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s12",
+         "quote": "Year 12 or higher level pass in Mathematics Computer Engineering No"
+        }
+       ]
+      }
+     },
      "general": {
       "subjects": [],
       "english": [],
@@ -3785,6 +4451,60 @@
        }
       ],
       "source": "s10"
+     },
+     "previous": null
+    },
+    {
+     "key": "nus-law",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Laws LLB",
+     "nameAr": "بكالوريوس القانون",
+     "degree": "LLB",
+     "durationYears": 4,
+     "url": "https://law.nus.edu.sg/prospective-students/",
+     "curricula": {
+      "IB": {
+       "source": "s11",
+       "quote": "Law # At least a grading of 5 points in SL/HL English+; Yes",
+       "notesEn": "IB English (A or B, SL or HL) at grade 5, or SAT Reading and Writing 700 with English grade 4; interview/test; Law must be ranked in the top three choices.",
+       "notesAr": "الإنجليزية في البكالوريا الدولية بدرجة 5 (A أو B بأي مستوى)، أو 700 في قراءة وكتابة SAT مع درجة 4 في الإنجليزية، مع مقابلة أو اختبار، ويجب ترتيب القانون ضمن الخيارات الثلاثة الأولى.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "english_language"
+         ],
+         "minimumLevel": "STANDARD",
+         "source": "s11",
+         "quote": "Law # At least a grading of 5 points in SL/HL English+; Yes",
+         "minimumGrade": "5"
+        }
+       ]
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Four-year LLB programme.",
+        "noteAr": "برنامج بكالوريوس القانون لمدة أربع سنوات.",
+        "source": "s13",
+        "quote": "4-Year LLB Programme"
+       },
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "International qualifications: a high level of English proficiency; selection test and/or interview required.",
+        "noteAr": "المؤهلات الدولية: مستوى عالٍ من إتقان الإنجليزية، مع اختبار اختيار و/أو مقابلة.",
+        "source": "s12",
+        "quote": "Law2 A high level of proficiency in the English Language Yes"
+       }
+      ],
+      "source": "s13"
      },
      "previous": null
     }
@@ -3809,6 +4529,21 @@
      "retrievedAt": "2025-08-31T00:00:00Z",
      "hash": "70aac2539e6b296f37ed2692fdbde0fe034af34c9cc4560902403401c167cd64",
      "via": "archive:20250831093430"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.gju.edu.jo/content/electrical-engineering-11787",
+     "title": "Electrical Engineering | German Jordanian University",
+     "retrievedAt": "2024-08-17T00:00:00Z",
+     "hash": "f3ab132874b1c6ea17787660ed718458cec6b2fabf02a289c31b54f31807eeb5",
+     "via": "archive:20240817100008"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.gju.edu.jo/content/mechanical-and-maintenance-engineering-996",
+     "title": "Mechanical and Maintenance Engineering | German Jordanian University",
+     "retrievedAt": "2026-09-30T08:38:59.538Z",
+     "hash": "184d2ee2f3a1b0a5ed71250f4ab0473447eac68a74f7ba114bbbba78852f8ede"
     }
    ],
    "english": [],
@@ -3833,7 +4568,7 @@
      "nameAr": "بكالوريوس الهندسة الكهربائية",
      "degree": "BSc",
      "durationYears": null,
-     "url": "https://www.gju.edu.jo/gju-programs",
+     "url": "https://www.gju.edu.jo/content/electrical-engineering-11787",
      "curricula": {},
      "general": {
       "subjects": [],
@@ -3847,6 +4582,14 @@
         "noteAr": "مدرج ضمن برامج البكالوريوس في الجامعة. لم تُستخرج شروط القبول بعد.",
         "source": "s1",
         "quote": "Electrical Engineering"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "BSc in Electrical Engineering (general track or 5G and IoT track); all students spend a German Year: one semester at a German partner university plus an internship of at least 20 weeks in German industry.",
+        "noteAr": "بكالوريوس الهندسة الكهربائية (مسار عام أو مسار الجيل الخامس وإنترنت الأشياء)، ويقضي جميع الطلاب سنة ألمانية: فصلا في جامعة ألمانية شريكة وتدريبا لا يقل عن 20 أسبوعا في الصناعة الألمانية.",
+        "source": "s3",
+        "quote": "All students spend one year in Germany (German Year) during their study program, in which they study one semester in one of the German partner universities, then they do an obligatory internship of at least 20 weeks full-time in the German industry."
        }
       ],
       "source": "s1"
@@ -3860,7 +4603,7 @@
      "nameAr": "بكالوريوس الهندسة الميكانيكية والصيانة",
      "degree": "BSc",
      "durationYears": null,
-     "url": "https://www.gju.edu.jo/gju-programs",
+     "url": "https://www.gju.edu.jo/content/mechanical-and-maintenance-engineering-996",
      "curricula": {},
      "general": {
       "subjects": [],
@@ -3874,6 +4617,14 @@
         "noteAr": "مدرج ضمن برامج البكالوريوس في الجامعة. لم تُستخرج شروط القبول بعد.",
         "source": "s1",
         "quote": "Mechanical and Maintenance Engineering"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "BSc in Mechanical and Maintenance Engineering, with an Automotive and E-Mobility track since 2023/2024.",
+        "noteAr": "بكالوريوس الهندسة الميكانيكية والصيانة، مع مسار السيارات والتنقل الكهربائي منذ 2023/2024.",
+        "source": "s4",
+        "quote": "In addition to B.Sc.in Mechanical and Maintenance Engineering, the Department will start offering a track in Automotive and E-Mobility starting on the academic year 2023/2024."
        }
       ],
       "source": "s1"
@@ -4130,6 +4881,13 @@
      "title": "Application deadlines - Leiden University",
      "retrievedAt": "2026-09-30T08:20:41.899Z",
      "hash": "7192bf4d62d88ab0b9c39e37d37bde984898fb8448e90970ccc696dc8fccfef1"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.universiteitleiden.nl/en/education/study-programmes/bachelor/political-science/international-relations-and-organisations",
+     "title": "International Relations and Organisations (BSc) - Leiden University",
+     "retrievedAt": "2026-09-30T08:38:45.723Z",
+     "hash": "cc359d402857d9ac74e5349aed2a4555e4f24ad8b9f1ca1717d385b2d2d0ddcb"
     }
    ],
    "english": [],
@@ -4172,7 +4930,7 @@
      "nameEn": "International Relations and Organisations BSc",
      "nameAr": "بكالوريوس العلوم في العلاقات الدولية والمنظمات",
      "degree": "BSc",
-     "durationYears": null,
+     "durationYears": 3,
      "url": "https://www.universiteitleiden.nl/en/education/study-programmes/bachelor/political-science/international-relations-and-organisations",
      "curricula": {},
      "general": {
@@ -4187,6 +4945,14 @@
         "noteAr": "برنامج بالإنجليزية بعدد مقاعد محدود: تُطبق إجراءات اختيار وتوزيع، ولا يضمن القبول وحده الحصول على مقعد. لم تُستخرج شروط القبول الخاصة بالبرنامج بعد.",
         "source": "s1",
         "quote": "International Relations and Organisations (in English)"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English-taught three-year programme based in The Hague; early application deadline 15 January 2027.",
+        "noteAr": "برنامج بالإنجليزية لمدة ثلاث سنوات في لاهاي، وآخر موعد مبكر للتقديم 15 يناير 2027.",
+        "source": "s3",
+        "quote": "The international, English-taught 3-year programme of IRO is part of Leiden University’s Political Science curriculum and is based in The Hague, the city in which politics and international relations converge."
        }
       ],
       "source": "s1"

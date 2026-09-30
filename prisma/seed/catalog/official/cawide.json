@@ -1,6 +1,6 @@
 {
  "batch": "cawide",
- "assembledAt": "2026-09-30T08:32:57.938Z",
+ "assembledAt": "2026-09-30T08:47:05.496Z",
  "universities": [
   {
    "key": "anu",
@@ -3539,6 +3539,20 @@
      "title": "Undergraduate Admission Guide for non-EU students (Trinity College Dublin)",
      "retrievedAt": "2026-09-30T08:20:15.647Z",
      "hash": "860061b710d83d9411520c5f0c458c25b4aa4065ff2d8f78b43a6e9ac0eaba3c"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.tcd.ie/courses/undergraduate/courses/law/",
+     "title": "Law - Courses | Trinity College Dublin",
+     "retrievedAt": "2026-09-30T08:38:24.297Z",
+     "hash": "8921a84d3c7d334d705a3fb8653374d37002b0819565d858f504fc02f143b332"
+    },
+    {
+     "id": "s7",
+     "url": "https://www.tcd.ie/courses/undergraduate/courses/medicine/",
+     "title": "Medicine - Courses | Trinity College Dublin",
+     "retrievedAt": "2026-09-30T08:38:22.187Z",
+     "hash": "e8e303e68da47c241131f4175066fee04b641c15542ea7060615834bfa9cd8cf"
     }
    ],
    "english": [
@@ -3742,10 +3756,10 @@
     {
      "key": "trinity-college-dublin-law",
      "status": "EXISTS",
-     "nameEn": "Law",
-     "nameAr": "القانون",
-     "degree": null,
-     "durationYears": null,
+     "nameEn": "Law LL.B.",
+     "nameAr": "القانون، بكالوريوس القانون",
+     "degree": "LLB",
+     "durationYears": 4,
      "url": "https://www.tcd.ie/courses/undergraduate/courses/law/",
      "curricula": {
       "BRITISH": {
@@ -3793,6 +3807,14 @@
         "noteAr": "القانون في نطاق القبول التنافسي 2 دون متطلبات مواد محددة.",
         "source": "s5",
         "quote": "2 Law, Law (JH)"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English Band B (standard entry) required.",
+        "noteAr": "يُشترط استيفاء متطلبات اللغة الإنجليزية من الفئة B (القبول القياسي).",
+        "source": "s6",
+        "quote": "Applicants to this course are required to meet Band B (Standard Entry) English language requirements."
        }
       ],
       "source": "s5"
@@ -3802,15 +3824,30 @@
     {
      "key": "trinity-college-dublin-med",
      "status": "EXISTS",
-     "nameEn": "Medicine",
-     "nameAr": "الطب",
-     "degree": null,
-     "durationYears": null,
+     "nameEn": "Medicine MB BCh BAO",
+     "nameAr": "الطب، بكالوريوس الطب والجراحة والتوليد",
+     "degree": "MB BCh BAO",
+     "durationYears": 5,
      "url": "https://www.tcd.ie/courses/undergraduate/courses/medicine/",
      "curricula": {
       "BRITISH": {
        "gradeProfile": "A*A*A",
-       "subjects": [],
+       "subjects": [
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "physics",
+          "chemistry",
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": "Grade B and grade C in two of Physics, Chemistry, Biology; without Physics, GCSE Mathematics grade B or better.",
+         "noteAr": "درجة B ودرجة C في مادتين من الفيزياء والكيمياء والأحياء؛ ومن دون الفيزياء يلزم GCSE في الرياضيات بدرجة B فأعلى.",
+         "source": "s7",
+         "quote": "Advanced GCE (A Level): Grade B + and Grade C in two of Physics, Chemistry, Biology"
+        }
+       ],
        "notesEn": "Non-EU competitive admission bands (Table 1 columns: Special, Band 1, Band 2, Band 3). Medicine is in the Special band: A*A*A from 3 A-levels.",
        "notesAr": "نطاقات القبول التنافسي لغير مواطني الاتحاد الأوروبي (أعمدة الجدول 1: الخاص، النطاق 1، النطاق 2، النطاق 3). الطب في النطاق الخاص: A*A*A في 3 مواد A Level.",
        "source": "s5",
@@ -3818,7 +3855,22 @@
       },
       "IB": {
        "minimumPoints": 40,
-       "subjects": [],
+       "subjects": [
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "physics",
+          "chemistry",
+          "biology"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "5",
+         "noteEn": "HL grades 5 and 6 in two of Physics, Chemistry, Biology; without Physics, Maths SL 5 or better.",
+         "noteAr": "درجتا 5 و6 بالمستوى العالي في مادتين من الفيزياء والكيمياء والأحياء؛ ومن دون الفيزياء يلزم 5 فأعلى في الرياضيات بالمستوى القياسي.",
+         "source": "s7",
+         "quote": "International Baccalaureate: HL Grade 5 and 6 in two of Physics, Chemistry, Biology."
+        }
+       ],
        "notesEn": "Non-EU competitive admission bands (Table 1 columns: Special, Band 1, Band 2, Band 3). Special band: 40 points including bonus points.",
        "notesAr": "نطاقات القبول التنافسي لغير مواطني الاتحاد الأوروبي (أعمدة الجدول 1: الخاص، النطاق 1، النطاق 2، النطاق 3). النطاق الخاص: 40 نقطة تشمل النقاط الإضافية.",
        "source": "s5",
@@ -3845,6 +3897,14 @@
         "noteAr": "يلزم التحقق الأمني وفحص اللياقة الصحية والأهلية لممارسة المهنة.",
         "source": "s5",
         "quote": "Medicine Garda Vetting, Health Screening, Fitness to Practice"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "English Band B (standard entry) required. HPAT-Ireland applies to EU applicants via CAO.",
+        "noteAr": "يُشترط استيفاء متطلبات اللغة الإنجليزية من الفئة B. ويُطلب اختبار HPAT-Ireland من المتقدمين الأوروبيين عبر CAO.",
+        "source": "s7",
+        "quote": "Applicants to this course are required to meet Band B (Standard Entry) English language requirements."
        }
       ],
       "source": "s5"

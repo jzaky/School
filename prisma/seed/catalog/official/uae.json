@@ -1,6 +1,6 @@
 {
  "batch": "uae",
- "assembledAt": "2026-09-30T08:32:58.088Z",
+ "assembledAt": "2026-09-30T08:47:05.659Z",
  "universities": [
   {
    "key": "abu_dhabi_university",
@@ -4622,6 +4622,597 @@
      "durationYears": null,
      "url": "https://www.uowdubai.ac.ae/degrees/bachelors/computer-science/bachelor-computer-science",
      "curricula": {},
+     "general": null,
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "university_of_sharjah",
+   "website": "https://www.sharjah.ac.ae",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.sharjah.ac.ae/en/Admissions/Bachelors-Degree",
+     "title": "Undergraduate",
+     "retrievedAt": "2026-09-30T08:43:19.091Z",
+     "hash": "90484208b3b5601292f63db5fc51d9c0652b19c6b487d2e9cd48834e3566f7bf"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Competitive admission; priority to UAE citizens and higher grades.",
+     "noteAr": "القبول تنافسي، والأولوية للمواطنين وأصحاب الدرجات الأعلى.",
+     "source": "s1",
+     "quote": "Admission to the University of Sharjah is competitive, with priority given to citizens of the UAE and students with high secondary school grades."
+    },
+    {
+     "kind": "NOT_ACCEPTED",
+     "required": true,
+     "noteEn": "Professional diploma certificates are not accepted for bachelor's admission.",
+     "noteAr": "لا تُقبل شهادات الدبلوم المهني للالتحاق ببرامج البكالوريوس.",
+     "source": "s1",
+     "quote": "Professional diploma Certifications are not acceptable for admission into undergraduate programs."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {
+    "BRITISH": {
+     "accepted": true,
+     "notesEn": "Best seven subjects: five O-Levels at C plus two AS-Levels at D, or six O-Levels at C plus one A-Level at E; converted to a percentage that must meet the programme minimum.",
+     "notesAr": "أفضل سبع مواد: خمس مواد O-Level بدرجة C ومادتان AS بدرجة D، أو ست مواد O-Level بدرجة C ومادة A-Level بدرجة E؛ وتُحوَّل إلى نسبة يجب أن تبلغ الحد الأدنى للبرنامج.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "A minimum of five O-Level subjects with grades no less than \"C\" and two AS-Level subjects with grades no less than \"D\", or"
+    },
+    "IB": {
+     "minimumPoints": 24,
+     "notesEn": "Full IB Diploma with at least three Higher Level subjects.",
+     "notesAr": "دبلوم البكالوريا الدولية الكامل بثلاث مواد على الأقل في المستوى العالي.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "The student must have scored a total of no less than 24 out of 45 points, and the student grade average will be determined by this score."
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "notesEn": "Percentages are UAE Advanced-track grades or their Ministry-approved equivalents; the certificate must be attested and equated by the UAE Ministry of Education.",
+     "notesAr": "النسب المذكورة هي درجات المسار المتقدم الإماراتي أو ما يعادلها وفق إطار الوزارة؛ ويجب تصديق الشهادة ومعادلتها من وزارة التربية والتعليم.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "Students must have successfully completed a minimum of six subjects in high school, distributed across four academic domains: Mathematics, Sciences, Social and Human Sciences, and Languages. English language study is mandatory."
+    },
+    "CBSE": {
+     "accepted": true,
+     "notesEn": "Indian and Pakistani boards: Higher Secondary School Certificate; the programme's minimum percentage applies. Percentages are UAE Advanced-track grades or their Ministry-approved equivalents; the certificate must be attested and equated by the UAE Ministry of Education.",
+     "notesAr": "المجالس الهندية والباكستانية: شهادة الثانوية العليا، وتنطبق النسبة الدنيا للبرنامج. النسب المذكورة هي درجات المسار المتقدم الإماراتي أو ما يعادلها وفق إطار الوزارة؛ ويجب تصديق الشهادة ومعادلتها من وزارة التربية والتعليم.",
+     "subjects": [],
+     "source": "s1",
+     "quote": "Students must meet the minimum required percentage for the intended program."
+    }
+   },
+   "programs": [
+    {
+     "key": "university-of-sharjah-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science",
+     "nameAr": "علوم الحاسوب",
+     "degree": null,
+     "durationYears": null,
+     "url": "https://www.sharjah.ac.ae/en/Admissions/Bachelors-Degree",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "minimumPercent": 70,
+       "notesEn": "Elite, Advanced, Scientific or General track.",
+       "notesAr": "مسار النخبة أو المتقدم أو العلمي أو العام.",
+       "subjects": [],
+       "source": "s1",
+       "quote": "Applicants must have achieved at least 70% (Elite, Advanced, or Scientific, General track) to be admitted to the College of Sciences and College of Computing and Informatics (Computer Science, Information Technology-Multimedia, and Biomedical Informatics)."
+      }
+     },
+     "general": null,
+     "previous": null
+    },
+    {
+     "key": "university-of-sharjah-dent",
+     "status": "EXISTS",
+     "nameEn": "Dental Surgery (BDS)",
+     "nameAr": "بكالوريوس جراحة الفم والأسنان",
+     "degree": "BDS",
+     "durationYears": null,
+     "url": "https://www.sharjah.ac.ae/en/Admissions/Bachelors-Degree",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "minimumPercent": 85,
+       "stream": "ADVANCED|ELITE",
+       "notesEn": "Elite, Advanced or Scientific track only.",
+       "notesAr": "مسار النخبة أو المتقدم أو العلمي فقط.",
+       "subjects": [],
+       "source": "s1",
+       "quote": "For the College of Dentistry, applicants must obtain at least 85% (Elite, Advanced, or Scientific tracks)."
+      },
+      "AMERICAN": {
+       "accepted": true,
+       "minimumPercent": 85,
+       "notesEn": "Scientific or Advanced track; Mathematics and two sciences at 90% (A) in Grade 12.",
+       "notesAr": "المسار العلمي أو المتقدم؛ الرياضيات ومادتان علميتان بنسبة 90% (A) في الصف الثاني عشر.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "90",
+         "source": "s1",
+         "quote": "Year-based system: Students must have completed Mathematics and two science subjects (Chemistry, Biology, or Physics) in Grade 12 with a minimum grade of 90% or grade \"A\"."
+        },
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "chemistry",
+          "biology",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "90",
+         "source": "s1",
+         "quote": "Year-based system: Students must have completed Mathematics and two science subjects (Chemistry, Biology, or Physics) in Grade 12 with a minimum grade of 90% or grade \"A\"."
+        }
+       ],
+       "source": "s1",
+       "quote": "Admission to the College of Medicine requires a minimum overall average of 95% and is subject to competitive selection, while the College of Dental Medicine requires a minimum average of 85%."
+      },
+      "BRITISH": {
+       "accepted": true,
+       "minimumPercent": 85,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s1",
+         "quote": "Students must have studied Mathematics and two science subjects (Chemistry, Biology, or Physics) across IGCSE/GCSE (O-Level), AS-Level, or A-Level with a minimum grade of \"A\"."
+        },
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "chemistry",
+          "biology",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s1",
+         "quote": "Students must have studied Mathematics and two science subjects (Chemistry, Biology, or Physics) across IGCSE/GCSE (O-Level), AS-Level, or A-Level with a minimum grade of \"A\"."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "chemistry",
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "B",
+         "noteEn": "Chemistry and/or Biology at AS-Level grade A or A-Level grade B.",
+         "noteAr": "الكيمياء أو الأحياء أو كلاهما بدرجة A في AS أو B في A-Level.",
+         "source": "s1",
+         "quote": "Chemistry and Biology, or at least one of them, must be taken at AS-Level with a minimum grade of \"A\", or at A-Level with a minimum grade of \"B\"."
+        }
+       ],
+       "source": "s1",
+       "quote": "A minimum overall average of 95% is required for competitive admission to the College of Medicine, while a 85% average is required for the College of Dental Medicine."
+      },
+      "IB": {
+       "minimumPoints": 29,
+       "notesEn": "Mathematics and two sciences at 5 (HL) or 6 (SL); Chemistry or Biology at HL.",
+       "notesAr": "الرياضيات ومادتان علميتان بدرجة 5 (مستوى عال) أو 6 (مستوى عادي)؛ والكيمياء أو الأحياء بالمستوى العالي.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "5",
+         "source": "s1",
+         "quote": "Students must have studied Mathematics and two science subjects (Chemistry, Biology, or Physics) with a minimum score of 5 at HL or 6 at SL. One of the science subjects (Chemistry or Biology) must be studied at HL."
+        },
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "chemistry",
+          "biology",
+          "physics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "5",
+         "source": "s1",
+         "quote": "Students must have studied Mathematics and two science subjects (Chemistry, Biology, or Physics) with a minimum score of 5 at HL or 6 at SL. One of the science subjects (Chemistry or Biology) must be studied at HL."
+        }
+       ],
+       "source": "s1",
+       "quote": "Admission to the College of Medicine requires a minimum of 35 points and is subject to competitive selection, while the College of Dental Medicine requires a minimum of 29 points."
+      },
+      "CBSE": {
+       "accepted": true,
+       "notesEn": "Scientific or Medical track with Chemistry and Biology.",
+       "notesAr": "المسار العلمي أو الطبي مع الكيمياء والأحياء.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry",
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s1",
+         "quote": "Students must have pursued the Scientific or Medical track in Higher Secondary education, including Chemistry and Biology."
+        }
+       ],
+       "source": "s1",
+       "quote": "Students must have pursued the Scientific or Medical track in Higher Secondary education, including Chemistry and Biology."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "No conditional admission or remedial courses for Medicine and Dentistry; secondary school finished no more than one year before.",
+        "noteAr": "لا يوجد قبول مشروط ولا مقررات علاجية للطب وطب الأسنان؛ ويجب ألا يكون قد مضى أكثر من عام على إنهاء الثانوية.",
+        "source": "s1",
+        "quote": "Applicants to the Colleges of Medicine and Dentistry must fully satisfy all qualifying subject grade requirements for direct and final admission. Conditional admission and remedial courses are not permitted under any circumstances."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "university-of-sharjah-med",
+     "status": "EXISTS",
+     "nameEn": "Doctor of Medicine",
+     "nameAr": "دكتور في الطب",
+     "degree": "MD",
+     "durationYears": null,
+     "url": "https://www.sharjah.ac.ae/en/Admissions/Bachelors-Degree",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "minimumPercent": 95,
+       "stream": "ADVANCED|ELITE",
+       "notesEn": "Elite, Advanced or Scientific track only.",
+       "notesAr": "مسار النخبة أو المتقدم أو العلمي فقط.",
+       "subjects": [],
+       "source": "s1",
+       "quote": "For admission to the College of Medicine, a grade of at least 95% (Elite, Advanced, or Scientific tracks) is required."
+      },
+      "AMERICAN": {
+       "accepted": true,
+       "minimumPercent": 95,
+       "notesEn": "Scientific or Advanced track; Mathematics and two sciences at 90% (A) in Grade 12.",
+       "notesAr": "المسار العلمي أو المتقدم؛ الرياضيات ومادتان علميتان بنسبة 90% (A) في الصف الثاني عشر.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "90",
+         "source": "s1",
+         "quote": "Year-based system: Students must have completed Mathematics and two science subjects (Chemistry, Biology, or Physics) in Grade 12 with a minimum grade of 90% or grade \"A\"."
+        },
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "chemistry",
+          "biology",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "90",
+         "source": "s1",
+         "quote": "Year-based system: Students must have completed Mathematics and two science subjects (Chemistry, Biology, or Physics) in Grade 12 with a minimum grade of 90% or grade \"A\"."
+        }
+       ],
+       "source": "s1",
+       "quote": "Admission to the College of Medicine requires a minimum overall average of 95% and is subject to competitive selection, while the College of Dental Medicine requires a minimum average of 85%."
+      },
+      "BRITISH": {
+       "accepted": true,
+       "minimumPercent": 95,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s1",
+         "quote": "Students must have studied Mathematics and two science subjects (Chemistry, Biology, or Physics) across IGCSE/GCSE (O-Level), AS-Level, or A-Level with a minimum grade of \"A\"."
+        },
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "chemistry",
+          "biology",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "source": "s1",
+         "quote": "Students must have studied Mathematics and two science subjects (Chemistry, Biology, or Physics) across IGCSE/GCSE (O-Level), AS-Level, or A-Level with a minimum grade of \"A\"."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "chemistry",
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "B",
+         "noteEn": "Chemistry and/or Biology at AS-Level grade A or A-Level grade B.",
+         "noteAr": "الكيمياء أو الأحياء أو كلاهما بدرجة A في AS أو B في A-Level.",
+         "source": "s1",
+         "quote": "Chemistry and Biology, or at least one of them, must be taken at AS-Level with a minimum grade of \"A\", or at A-Level with a minimum grade of \"B\"."
+        }
+       ],
+       "source": "s1",
+       "quote": "A minimum overall average of 95% is required for competitive admission to the College of Medicine, while a 85% average is required for the College of Dental Medicine."
+      },
+      "IB": {
+       "minimumPoints": 35,
+       "notesEn": "Mathematics and two sciences at 5 (HL) or 6 (SL); Chemistry or Biology at HL.",
+       "notesAr": "الرياضيات ومادتان علميتان بدرجة 5 (مستوى عال) أو 6 (مستوى عادي)؛ والكيمياء أو الأحياء بالمستوى العالي.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "5",
+         "source": "s1",
+         "quote": "Students must have studied Mathematics and two science subjects (Chemistry, Biology, or Physics) with a minimum score of 5 at HL or 6 at SL. One of the science subjects (Chemistry or Biology) must be studied at HL."
+        },
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "chemistry",
+          "biology",
+          "physics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "5",
+         "source": "s1",
+         "quote": "Students must have studied Mathematics and two science subjects (Chemistry, Biology, or Physics) with a minimum score of 5 at HL or 6 at SL. One of the science subjects (Chemistry or Biology) must be studied at HL."
+        }
+       ],
+       "source": "s1",
+       "quote": "Admission to the College of Medicine requires a minimum of 35 points and is subject to competitive selection, while the College of Dental Medicine requires a minimum of 29 points."
+      },
+      "CBSE": {
+       "accepted": true,
+       "notesEn": "Scientific or Medical track with Chemistry and Biology.",
+       "notesAr": "المسار العلمي أو الطبي مع الكيمياء والأحياء.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry",
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s1",
+         "quote": "Students must have pursued the Scientific or Medical track in Higher Secondary education, including Chemistry and Biology."
+        }
+       ],
+       "source": "s1",
+       "quote": "Students must have pursued the Scientific or Medical track in Higher Secondary education, including Chemistry and Biology."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "No conditional admission or remedial courses for Medicine and Dentistry; secondary school finished no more than one year before.",
+        "noteAr": "لا يوجد قبول مشروط ولا مقررات علاجية للطب وطب الأسنان؛ ويجب ألا يكون قد مضى أكثر من عام على إنهاء الثانوية.",
+        "source": "s1",
+        "quote": "Applicants to the Colleges of Medicine and Dentistry must fully satisfy all qualifying subject grade requirements for direct and final admission. Conditional admission and remedial courses are not permitted under any circumstances."
+       },
+       {
+        "kind": "NOT_ACCEPTED",
+        "required": true,
+        "noteEn": "Only applicants with a UAE-issued secondary certificate may compete for Medicine.",
+        "noteAr": "يقتصر القبول في كلية الطب على حملة شهادة الثانوية الصادرة من دولة الإمارات.",
+        "source": "s1",
+        "quote": "Admission to the College of Medicine is limited to students who have obtained their secondary education certificate from the United Arab Emirates."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Mathematics and science subjects at 90 or above; IELTS or TOEFL required to enter the competition.",
+        "noteAr": "الرياضيات والمواد العلمية بدرجة 90 أو أعلى؛ ويُشترط IELTS أو TOEFL لدخول المنافسة.",
+        "source": "s1",
+        "quote": "Achieving the required score in Mathematics and science subjects in the high school certificate, with a minimum grade of 90."
+       },
+       {
+        "kind": "FOUNDATION_REQUIRED",
+        "required": true,
+        "noteEn": "A foundation year, with cumulative GPA 2.5 and 2.5 in Chemistry and Biology courses, precedes competitive promotion to year 1 of the Bachelor of Medicine and Surgery.",
+        "noteAr": "تسبق سنة تأسيسية (بمعدل تراكمي 2.5 و2.5 في مقررات الكيمياء والأحياء) الترقية التنافسية إلى السنة الأولى من بكالوريوس الطب والجراحة.",
+        "source": "s1",
+        "quote": "Successfully completing the foundation year."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "university-of-sharjah-pharm",
+     "status": "EXISTS",
+     "nameEn": "Pharmacy",
+     "nameAr": "الصيدلة",
+     "degree": null,
+     "durationYears": null,
+     "url": "https://www.sharjah.ac.ae/en/Admissions/Bachelors-Degree",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "minimumPercent": 85,
+       "stream": "ADVANCED|ELITE",
+       "notesEn": "Elite, Advanced or Scientific track only.",
+       "notesAr": "مسار النخبة أو المتقدم أو العلمي فقط.",
+       "subjects": [],
+       "source": "s1",
+       "quote": "For the College of Pharmacy, the minimum required grade is 85% (Elite, Advanced, or Scientific tracks)."
+      },
+      "AMERICAN": {
+       "accepted": true,
+       "minimumPercent": 85,
+       "notesEn": "Mathematics and two sciences at 80% (B) in Grade 12.",
+       "notesAr": "الرياضيات ومادتان علميتان بنسبة 80% (B) في الصف الثاني عشر.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "80",
+         "source": "s1",
+         "quote": "Year-based system: Students must have completed Mathematics and two science subjects (Chemistry, Biology, or Physics) in Grade 12 with a minimum grade of 80% or grade \"B\"."
+        },
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "chemistry",
+          "biology",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "80",
+         "source": "s1",
+         "quote": "Year-based system: Students must have completed Mathematics and two science subjects (Chemistry, Biology, or Physics) in Grade 12 with a minimum grade of 80% or grade \"B\"."
+        }
+       ],
+       "source": "s1",
+       "quote": "Admission to the College of Pharmacy: Students must have pursued the Scientific or Advanced track, or its equivalent. A minimum overall average of 85% is required."
+      },
+      "BRITISH": {
+       "accepted": true,
+       "minimumPercent": 85,
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "B",
+         "source": "s1",
+         "quote": "Students must have studied Mathematics and two science subjects (Chemistry, Biology, or Physics) across IGCSE/GCSE (O-Level), AS-Level, or A-Level with a minimum grade of \"B\"."
+        },
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "chemistry",
+          "biology",
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "B",
+         "source": "s1",
+         "quote": "Students must have studied Mathematics and two science subjects (Chemistry, Biology, or Physics) across IGCSE/GCSE (O-Level), AS-Level, or A-Level with a minimum grade of \"B\"."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "chemistry",
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "C",
+         "noteEn": "Chemistry and/or Biology at AS-Level grade B or A-Level grade C.",
+         "noteAr": "الكيمياء أو الأحياء أو كلاهما بدرجة B في AS أو C في A-Level.",
+         "source": "s1",
+         "quote": "Chemistry and Biology, or at least one of them, must be taken at AS-Level with a minimum grade of \"B\", or at A-Level with a minimum grade of \"C\"."
+        }
+       ],
+       "source": "s1",
+       "quote": "A minimum overall average of 85% is required. Students must have studied Mathematics and two science subjects (Chemistry, Biology, or Physics) across IGCSE/GCSE (O-Level), AS-Level, or A-Level with a minimum grade of \"B\"."
+      },
+      "IB": {
+       "minimumPoints": 29,
+       "notesEn": "Mathematics and two sciences at 5 (HL or SL); Chemistry or Biology at HL.",
+       "notesAr": "الرياضيات ومادتان علميتان بدرجة 5 (مستوى عال أو عادي)؛ والكيمياء أو الأحياء بالمستوى العالي.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "5",
+         "source": "s1",
+         "quote": "Students must have studied Mathematics and two science subjects (Chemistry, Biology, or Physics) with a minimum score of 5 at HL or SL. One of the science subjects (Chemistry or Biology) must be at HL."
+        },
+        {
+         "type": "TWO_OF",
+         "keys": [
+          "chemistry",
+          "biology",
+          "physics"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "5",
+         "source": "s1",
+         "quote": "Students must have studied Mathematics and two science subjects (Chemistry, Biology, or Physics) with a minimum score of 5 at HL or SL. One of the science subjects (Chemistry or Biology) must be at HL."
+        }
+       ],
+       "source": "s1",
+       "quote": "Admission to the College of Pharmacy: A minimum of 29 points is required."
+      },
+      "CBSE": {
+       "accepted": true,
+       "notesEn": "Scientific or Medical track with Chemistry and Biology.",
+       "notesAr": "المسار العلمي أو الطبي مع الكيمياء والأحياء.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry",
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "source": "s1",
+         "quote": "Students must have pursued the Scientific or Medical track in Higher Secondary education, including Chemistry and Biology."
+        }
+       ],
+       "source": "s1",
+       "quote": "Students must have pursued the Scientific or Medical track in Higher Secondary education, including Chemistry and Biology."
+      }
+     },
      "general": null,
      "previous": null
     }
