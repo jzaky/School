@@ -50,7 +50,8 @@ test("university planning: goal, matches, what-if, search, compare, plan approva
   await top.first().click();
   await a.waitForURL(/\/career\/pathways\/programs\//);
   await expect(a.locator("[data-testid=req-line]").first()).toBeVisible();
-  await expect(a.locator("[data-testid=example-label]")).toBeVisible();
+  await expect(a.locator("[data-testid=example-label]")).toHaveCount(0);
+  await expect(a.locator("[data-testid=evidence-quote]").first()).toBeVisible();
   await expect(a.locator("[data-testid=source-link]")).toBeVisible();
 
   // What-if: AP Calculus BC with a predicted 5 (added, or its grade set when the plan already has it).
