@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: { bodySizeLimit: "10mb" },
   },
+  // The service worker must never be served stale, or a fix to it would take a day to reach phones.
+  async headers() {
+    return [{ source: "/sw.js", headers: [{ key: "Cache-Control", value: "no-cache, no-store, must-revalidate" }] }];
+  },
 };
 
 export default withNextIntl(nextConfig);

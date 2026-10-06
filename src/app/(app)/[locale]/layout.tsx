@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title: { default: t("appTitle"), template: `%s · ${t("appTitle")}` },
     description: t("description"),
     manifest: "/manifest.webmanifest",
-    icons: { icon: "/icon.svg", apple: "/icon-192.png" },
+    icons: { icon: "/icon.svg", apple: "/apple-touch-icon.png" },
     appleWebApp: { capable: true, title: t("appShort"), statusBarStyle: "default" },
   };
 }

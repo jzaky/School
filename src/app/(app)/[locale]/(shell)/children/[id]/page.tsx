@@ -12,6 +12,7 @@ import { Panel, PanelHeader } from "@/components/app/panel";
 import { Pill, RequestStatusBadge } from "@/components/app/badges";
 import { Button } from "@/components/ui/button";
 import { requestWhere } from "@/server/access/request-access";
+import { CareerReportButton } from "@/components/career/career-report-button";
 
 export default async function ChildPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -21,16 +22,18 @@ export default async function ChildPage({ params }: { params: Promise<{ id: stri
   if (!links.some((l) => l.studentId === id)) notFound();
   const t = await getTranslations("children");
   const ts = await getTranslations("students");
+  const tr = await getTranslations("careerReport");
   const prefs = await formatPrefs(ctx);
   const { db, orgId, locale } = ctx;
   const s = links.find((l) => l.studentId === id)!.student;
-  const [enrollments, attendance, requests, appts, docs, recs] = await Promise.all([
+  const [enrollments, attendance, requests, appts, docs, recs, assessed] = await Promise.all([
     db.enrollment.findMany({ where: { studentId: id }, include: { class: { include: { subject: true } } } }),
     db.attendanceRecord.findMany({ where: { studentId: id, date: { gte: new Date(Date.now() - 42 * 86400_000) } }, orderBy: { date: "asc" } }),
     db.request.findMany({ where: { AND: [requestWhere(ctx), { studentId: id }] }, include: { service: true }, orderBy: { submittedAt: "desc" }, take: 6 }),
     db.appointment.findMany({ where: { orgId, studentId: id, caseId: null }, include: { type: true }, orderBy: { startsAt: "desc" }, take: 5 }),
     db.document.findMany({ where: { studentId: id, visibleToFamily: true }, orderBy: { createdAt: "desc" } }),
     db.careerRecommendation.findMany({ where: { studentId: id, status: "APPROVED" }, include: { career: true }, orderBy: { rank: "asc" }, take: 3 }),
+    db.aptitudeAssessment.count({ where: { studentId: id, completedAt: { not: null } } }),
   ]);
   const teachers = await db.membership.findMany({ where: { id: { in: [...enrollments.map((e) => e.class.teacherMembershipId), ...appts.map((a) => a.hostId)].filter(Boolean) as string[] } }, include: { user: true } });
   const nameOf = (mid: string | null) => (mid ? userName(teachers.find((m) => m.id === mid)?.user, locale) : "");
@@ -151,16 +154,25 @@ export default async function ChildPage({ params }: { params: Promise<{ id: stri
               <p className="text-sm text-muted-foreground">{t("none")}</p>
             )}
           </Panel>
-          {recs.length > 0 && (
+          {(recs.length > 0 || assessed > 0) && (
             <Panel>
               <PanelHeader title={t("career")} icon={<Compass className="size-4" />} />
-              <div className="flex flex-wrap gap-2">
-                {recs.map((r) => (
-                  <Pill key={r.id} tone="brand">
-                    {pick(locale, r.career.titleEn, r.career.titleAr)} · {r.matchScore}%
-                  </Pill>
-                ))}
-              </div>
+              {recs.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {recs.map((r) => (
+                    <Pill key={r.id} tone="brand">
+                      {pick(locale, r.career.titleEn, r.career.titleAr)} · {r.matchScore}%
+                    </Pill>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">{tr("awaitingReview")}</p>
+              )}
+              {assessed > 0 && (
+                <div className="mt-4">
+                  <CareerReportButton studentId={id} />
+                </div>
+              )}
             </Panel>
           )}
         </div>

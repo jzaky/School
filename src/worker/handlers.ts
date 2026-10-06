@@ -9,6 +9,9 @@ import { notify } from "@/server/notify/notify";
 import { fmtWhen } from "@/server/appointments/booking";
 import { advanceRun } from "@/server/workflows/engine";
 import { flushEffects } from "@/server/queue-core";
+import { isSensitiveForDevice, pushConfig, whatsappConfig } from "@/server/notify/channels";
+import { sendPush, type PushTarget } from "@/server/notify/web-push";
+import { sendWhatsApp } from "@/server/notify/whatsapp";
 
 export type FlushFn = (effects: Effect[]) => Promise<void>;
 
@@ -40,21 +43,37 @@ async function finishJob(tx: TenantTx, orgId: string, key: string, now: Date, re
 // Outbound delivery (queue "notify", job "deliver")
 // ---------------------------------------------------------------------------
 
-export type DeliverJob = { orgId: string; outboundId: string; locale?: "en" | "ar"; body?: string | null; href?: string | null };
+export type DeliverJob = {
+  orgId: string;
+  outboundId: string;
+  locale?: "en" | "ar";
+  body?: string | null;
+  href?: string | null;
+  /** Push and WhatsApp: the text was replaced by a generic line because the content is sensitive. */
+  generic?: boolean;
+  urgent?: boolean;
+};
 
 export type OutgoingMessage = {
   id: string;
   orgId: string;
-  channel: "EMAIL" | "SMS" | "WHATSAPP" | "IN_APP";
+  channel: "EMAIL" | "SMS" | "WHATSAPP" | "IN_APP" | "PUSH";
   to: string;
   subject: string | null;
   body: string | null;
   href: string | null;
   locale: "en" | "ar";
   idempotencyKey: string;
+  templateKey?: string | null;
+  generic?: boolean;
+  urgent?: boolean;
+  /** PUSH only: the member's subscribed devices. */
+  pushTargets?: PushTarget[];
+  /** PUSH only: the school name for the generic line. */
+  school?: string;
 };
 
-export type Sender = (msg: OutgoingMessage) => Promise<{ providerId: string }>;
+export type Sender = (msg: OutgoingMessage) => Promise<{ providerId: string; gone?: string[] }>;
 
 // RFC 2606 / 6761 reserved domains. The demo school uses these, so nothing is ever sent to them.
 const RESERVED_DOMAIN = /\.(example|test|invalid|localhost)$/i;
@@ -118,10 +137,36 @@ export const defaultSender: Sender = async (msg) => {
     const json = (await res.json().catch(() => ({}))) as { id?: string };
     return { providerId: json.id ?? "resend" };
   }
-  // SMS, WhatsApp and unconfigured email: console provider. Never print recipient or content.
+  if (msg.channel === "PUSH") return sendPushMessage(msg);
+  if (msg.channel === "WHATSAPP") {
+    const cfg = whatsappConfig();
+    if (cfg?.provider === "meta") {
+      const sensitive = msg.generic || isSensitiveForDevice(msg.templateKey ?? "", null);
+      return sendWhatsApp(cfg, { to: msg.to, kind: msg.templateKey ?? "", locale: msg.locale, school: msg.school ?? "", title: sensitive ? null : (msg.subject ?? ""), href: msg.href });
+    }
+  }
+  // SMS, WhatsApp without a provider and unconfigured email: console provider. Never print recipient or content.
   console.log(`[worker] outbound ${msg.id} channel=${msg.channel}`);
   return { providerId: "console" };
 };
+
+/** Web push to every device of one member. Expired subscriptions come back as `gone` and are removed. */
+async function sendPushMessage(msg: OutgoingMessage): Promise<{ providerId: string; gone?: string[] }> {
+  const keys = pushConfig();
+  const targets = msg.pushTargets ?? [];
+  if (!keys || targets.length === 0) return { providerId: "push:none" };
+  const path = msg.href ? (msg.href.startsWith("/") ? msg.href : `/${msg.href}`) : "/home";
+  const results = await sendPush(
+    targets,
+    { title: msg.subject ?? msg.school ?? "", body: msg.body, url: `/${msg.locale}${path}`, tag: msg.id, lang: msg.locale, dir: msg.locale === "ar" ? "rtl" : "ltr" },
+    keys,
+    { urgent: msg.urgent },
+  );
+  const gone = results.filter((r) => r.gone).map((r) => r.endpoint);
+  const delivered = results.filter((r) => r.ok).length;
+  if (!delivered && gone.length < results.length) throw new Error(`push_http_${results.find((r) => !r.ok && !r.gone)?.status ?? 0}`);
+  return { providerId: `push:${delivered}/${results.length}`, gone };
+}
 
 export type DeliverResult = "sent" | "skipped" | "failed";
 
@@ -137,18 +182,32 @@ export async function deliverOutbound(data: DeliverJob, opts: HandlerOpts & { se
   if (claimed.count !== 1) return "skipped";
   const row = await db.outboundMessage.findUnique({ where: { id: data.outboundId } });
   if (!row) return "skipped";
+  const locale = data.locale === "ar" ? "ar" : "en";
   try {
+    const device = row.channel === "PUSH" || row.channel === "WHATSAPP";
+    const org = device ? await db.organization.findUnique({ where: { id: row.orgId }, select: { nameEn: true, nameAr: true } }) : null;
+    const pushTargets = row.channel === "PUSH" ? await db.pushSubscription.findMany({ where: { orgId: row.orgId, membershipId: row.to }, select: { endpoint: true, p256dh: true, auth: true } }) : undefined;
     const res = await send({
       id: row.id,
       orgId: row.orgId,
       channel: row.channel,
       to: row.to,
       subject: row.subject,
+      // A lost job comes back through the sweeper without its body: device channels then send the title only.
       body: data.body ?? null,
       href: data.href ?? null,
-      locale: data.locale === "ar" ? "ar" : "en",
+      locale,
       idempotencyKey: row.idempotencyKey,
+      templateKey: row.templateKey,
+      generic: data.generic,
+      urgent: data.urgent,
+      pushTargets,
+      school: org ? (locale === "ar" ? org.nameAr : org.nameEn) : undefined,
     });
+    if (res.gone?.length) await db.pushSubscription.deleteMany({ where: { orgId: row.orgId, endpoint: { in: res.gone } } });
+    if (row.channel === "PUSH" && pushTargets?.length) {
+      await db.pushSubscription.updateMany({ where: { orgId: row.orgId, membershipId: row.to, endpoint: { notIn: res.gone ?? [] } }, data: { lastSuccessAt: now } });
+    }
     await db.outboundMessage.update({ where: { id: row.id }, data: { sentAt: now, providerId: res.providerId.slice(0, 200), error: null } });
     return "sent";
   } catch (err) {

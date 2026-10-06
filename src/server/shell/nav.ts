@@ -50,6 +50,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           { key: "exams", href: "/exams", icon: "graduation-cap" },
           { key: "trips", href: "/trips", icon: "bus" },
           { key: "documents", href: "/documents", icon: "file-text" },
+          // The school's own payment portal; hidden until the school sets a link.
+          ...(ctx.org.feePaymentUrl ? [{ key: "fees", href: "/fees", icon: "credit-card" }] : []),
         ],
       },
     ];

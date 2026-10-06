@@ -148,7 +148,8 @@
     "roles": "Roles and access",
     "invitations": "Invitations",
     "joinRequests": "Join requests",
-    "setup": "School setup"
+    "setup": "School setup",
+    "fees": "Fees"
   },
   "shell": {
     "openMenu": "Open menu",
@@ -1207,7 +1208,7 @@
     "hijriHint": "Adds the Hijri date next to Gregorian dates.",
     "hijriOff": "Your school has not enabled Hijri dates.",
     "notifications": "Notifications",
-    "notificationsHint": "Choose which updates also reach you by email.",
+    "notificationsHint": "Choose how each kind of update reaches you.",
     "kind": "Update",
     "inApp": "In app",
     "email": "Email",
@@ -7586,5 +7587,89 @@
         "FAILED": "Failed"
       }
     }
+  },
+  "devices": {
+    "title": "Phone and app alerts",
+    "hint": "Get school updates on this device. Private matters only ever show a short notice.",
+    "pushColumn": "Push",
+    "whatsappColumn": "WhatsApp",
+    "whatsappNotOffered": "The school does not send this update on WhatsApp.",
+    "privateHint": "Phone alerts and WhatsApp messages never include private details; open the portal to read them.",
+    "push": {
+      "title": "Notifications on this device",
+      "turnOn": "Turn on",
+      "turnOff": "Turn off",
+      "onToast": "Notifications are on for this device",
+      "offToast": "Notifications are off for this device",
+      "error": "Could not turn on notifications. Try again.",
+      "state": {
+        "checking": "Checking this device...",
+        "unsupported": "This browser cannot receive notifications. Try Chrome, Edge, Firefox or Safari.",
+        "iosInstall": "On iPhone and iPad, add Horizon to your Home Screen first, then open it from there to turn on notifications.",
+        "denied": "Notifications are blocked for this site. Allow them in your browser settings, then reload.",
+        "off": "Off. Turn on to get alerts even when the portal is closed.",
+        "on": "On. This device receives alerts for the updates you choose below."
+      }
+    },
+    "whatsapp": {
+      "title": "WhatsApp messages",
+      "hint": "The school can send these updates on WhatsApp: {kinds}.",
+      "listSeparator": ", ",
+      "phone": "WhatsApp number",
+      "consent": "I agree to receive school notifications on WhatsApp at this number. I can turn this off at any time.",
+      "turnOn": "Turn on WhatsApp",
+      "turnOff": "Turn off",
+      "onFor": "On for",
+      "since": "Agreed on {date}",
+      "onToast": "WhatsApp messages are on",
+      "offToast": "WhatsApp messages are off",
+      "error": {
+        "UNAVAILABLE": "WhatsApp is not available for your account.",
+        "CONSENT_REQUIRED": "Tick the box to agree first.",
+        "PHONE_INVALID": "Enter the number with the country code, for example +971 50 123 4567.",
+        "generic": "Could not save. Try again."
+      }
+    },
+    "install": {
+      "title": "Install the Horizon app",
+      "body": "Open the school portal from your home screen, like any other app.",
+      "install": "Install",
+      "later": "Not now",
+      "dismiss": "Close",
+      "iosStep1": "Tap the Share button in Safari",
+      "iosStep2": "Choose Add to Home Screen"
+    }
+  },
+  "fees": {
+    "title": "School fees",
+    "subtitle": "Pay school fees through the school's own payment portal.",
+    "cardTitle": "Pay school fees",
+    "cardBody": "Payments are made on the payment portal of {school}.",
+    "contact": "Questions about fees: {contact}",
+    "pay": "Pay fees",
+    "newTab": "(opens in a new tab)",
+    "note": "The payment portal is run by the school. Horizon does not see or store card details.",
+    "admin": {
+      "title": "Fee payments",
+      "hint": "Parents see a Pay fees button when a link is set. Leave the link empty to hide it.",
+      "url": "Payment portal link",
+      "urlHint": "The school's own payment page, starting with https://",
+      "contact": "Fee contact (optional)",
+      "contactHint": "For example the accounts office email or phone number.",
+      "save": "Save",
+      "saved": "Saved",
+      "whatsappTitle": "WhatsApp for parents",
+      "whatsappHint": "Choose which updates go to parents on WhatsApp. Parents opt in with their own number, and private matters are always sent as a short notice.",
+      "error": {
+        "URL_INVALID": "Enter a full https:// link.",
+        "CONTACT_TOO_LONG": "Keep the contact under 200 characters.",
+        "FORBIDDEN": "You do not have permission to change this.",
+        "generic": "Could not save. Try again."
+      }
+    }
+  },
+  "careerReport": {
+    "download": "Career report (PDF)",
+    "awaitingReview": "The career advisor is reviewing the assessment results."
   }
 }

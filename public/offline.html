@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123A63">
+<title>Offline · Horizon</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100dvh; display: grid; place-items: center; background: #F7F8FA; color: #111827;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Arabic", Tahoma, sans-serif; padding: 16px; }
+  main { width: 100%; max-width: 420px; background: #fff; border: 1px solid #E5E7EB; border-radius: 16px; padding: 24px; text-align: center; }
+  img { width: 64px; height: 64px; border-radius: 16px; }
+  h1 { font-size: 18px; margin: 16px 0 4px; }
+  p { font-size: 14px; color: #5B6778; margin: 0 0 4px; line-height: 1.6; }
+  hr { border: 0; border-top: 1px solid #E5E7EB; margin: 18px 0; }
+  button { margin-top: 20px; width: 100%; padding: 12px; border: 0; border-radius: 10px; background: #123A63; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; }
+</style>
+</head>
+<body>
+<main>
+  <img src="/icon-192.png" alt="">
+  <section lang="en" dir="ltr">
+    <h1>You are offline</h1>
+    <p>Check your internet connection. Your school information is not stored on this device, so it needs a connection to open.</p>
+  </section>
+  <hr>
+  <section lang="ar" dir="rtl">
+    <h1>أنت غير متصل بالإنترنت</h1>
+    <p>تحقق من اتصالك بالإنترنت. لا تُحفظ بيانات المدرسة على هذا الجهاز، لذلك تحتاج إلى اتصال لفتحها.</p>
+  </section>
+  <button type="button" onclick="location.reload()">Try again · أعد المحاولة</button>
+</main>
+</body>
+</html>

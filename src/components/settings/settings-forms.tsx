@@ -3,12 +3,11 @@
 import { useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Lock } from "lucide-react";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import { setLocaleAction } from "@/server/shell/actions";
-import { setDisplayAction, setEmailPreferenceAction } from "@/server/settings/actions";
+import { setDisplayAction } from "@/server/settings/actions";
 
 function Segmented({ value, options, onChange, disabled, testId }: { value: string; options: Array<{ value: string; label: string }>; onChange: (v: string) => void; disabled?: boolean; testId?: string }) {
   return (
@@ -102,57 +101,6 @@ export function DisplaySettings({ hijri, hijriAvailable, numerals }: { hijri: bo
           }}
         />
       </Row>
-    </div>
-  );
-}
-
-export function EmailPreferences({ kinds, locked, emailEnabled }: { kinds: Array<{ kind: string; label: string; email: boolean }>; locked: Array<{ kind: string; label: string }>; emailEnabled: boolean }) {
-  const t = useTranslations("settings");
-  const [state, setState] = useState(() => Object.fromEntries(kinds.map((k) => [k.kind, k.email])));
-  const [, start] = useTransition();
-  return (
-    <div className="divide-y">
-      <div className="grid grid-cols-[minmax(0,1fr)_70px_70px] gap-3 pb-2 text-xs font-medium text-muted-foreground">
-        <span>{t("kind")}</span>
-        <span className="text-center">{t("inApp")}</span>
-        <span className="text-center">{t("email")}</span>
-      </div>
-      {kinds.map((k) => (
-        <div key={k.kind} className="grid grid-cols-[minmax(0,1fr)_70px_70px] items-center gap-3 py-3">
-          <span className="text-sm">{k.label}</span>
-          <span className="flex justify-center">
-            <Switch checked disabled aria-label={`${k.label}: ${t("inApp")}`} />
-          </span>
-          <span className="flex justify-center">
-            <Switch
-              checked={state[k.kind]}
-              aria-label={`${k.label}: ${t("email")}`}
-              data-testid={`pref-${k.kind}`}
-              onCheckedChange={(v) => {
-                setState((s) => ({ ...s, [k.kind]: v }));
-                start(async () => {
-                  const res = await setEmailPreferenceAction({ kind: k.kind, email: v });
-                  if (res.ok) toast.success(t("saved"));
-                  else {
-                    toast.error(t("error"));
-                    setState((s) => ({ ...s, [k.kind]: !v }));
-                  }
-                });
-              }}
-            />
-          </span>
-        </div>
-      ))}
-      {locked.map((k) => (
-        <div key={k.kind} className="grid grid-cols-[minmax(0,1fr)_70px_70px] items-center gap-3 py-3">
-          <span className="flex items-center gap-1.5 text-sm">
-            <Lock className="size-3.5 text-muted-foreground" />
-            {k.label}
-          </span>
-          <span className="col-span-2 text-center text-xs text-muted-foreground">{t("alwaysOn")}</span>
-        </div>
-      ))}
-      <p className="pt-3 text-xs text-muted-foreground">{emailEnabled ? t("inAppHint") : t("emailDemoHint")}</p>
     </div>
   );
 }

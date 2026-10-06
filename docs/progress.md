@@ -54,6 +54,16 @@
 ## Grades module
 - /grades: spreadsheet-style gradebook with autosave, keyboard navigation, Excel paste, excused and comments, weighted averages and bands; publish with one notification per assessment and student; student and parent views of published grades with child switcher and term trend; staff overview (class averages, students below a threshold); grade band settings; bilingual term report card PDF stored as a GENERATED document. Seed: prisma/seed/academics/grades.ts. Tests: tests/unit/grades-calc.test.ts, tests/integration/grades.test.ts.
 
+## Parents: installable app, push, WhatsApp, fees, career report (worktree branch)
+- Installable app: manifest "Horizon" with maskable icons, apple-touch-icon and badge (scripts/pwa-icons.ts), start page /app (opens home in the saved language), service worker public/sw.js (offline fallback public/offline.html only, no caching of pages or data, push display and click), install card for parents and students on phones (native prompt on Android, Add to Home Screen steps on iOS, dismissal remembered per device).
+- Web push: VAPID and aes128gcm on Node crypto (src/server/notify/web-push.ts), env WEB_PUSH_PUBLIC_KEY / WEB_PUSH_PRIVATE_KEY / WEB_PUSH_SUBJECT (scripts/vapid-keys.ts), PushSubscription per membership, opt-in per device in Settings, a Push column in notification preferences, worker delivery with expired-device clean-up.
+- WhatsApp: Meta Cloud API provider with approved templates (src/server/notify/whatsapp.ts), WHATSAPP_PROVIDER=meta|console, admin switches per notification type on Administration > School, parent opt-in with number and consent (WhatsAppOptIn), WhatsApp column in preferences.
+- Push and WhatsApp plug into notify() with idempotency keys and preferences; sensitive content (wellbeing, safeguarding, medical, confidential, case kinds) becomes a generic line plus a link (src/server/notify/channels.ts).
+- Fees: fee payment link and contact on Administration > School (audited), Pay fees card on the parent home page and a Fees menu item and page, hidden when no link is set.
+- Career report: bilingual PDF with letterhead at /api/career/report (assessment, top matches, related fields, course plan status, next steps), download buttons on the career pages and the parent child page, access for the student, own parents and advising staff, audited.
+- Schema (additive): NotificationChannel.PUSH, PushSubscription, WhatsAppOptIn, Organization.whatsappKinds / feePaymentUrl / feeContact (migration 20261006090000_parent_channels).
+- Tests: tests/unit/parent-channels.test.ts, tests/integration/parent-channels.test.ts, tests/e2e/parents-mobile.spec.ts (phone viewport, en and ar).
+
 ## Broken
 - Nothing known. Production: https://myhorizon.up.railway.app (press Reset demo after each deploy to load new seed data).
 

@@ -74,6 +74,12 @@ Put shared values in Project > Settings > Shared Variables and reference them fr
 | `COLLEGE_SCORECARD_API_KEY` | web, worker | Free api.data.gov key for the US College Scorecard import (Universities, Manage programmes, Run import). Without it the import uses `DEMO_KEY`, which allows only a few requests an hour, so the button imports the first 5 pages only. |
 | `PLATFORM_DATABASE_URL` | web, worker | Optional owner-role Postgres URL for writing the shared university catalog (catalog review publish, requirement page checks, Scorecard catalog import). Falls back to `MIGRATION_DATABASE_URL`. Without either, catalog review is read-only and the catalog jobs log a skip. |
 | `PLATFORM_ADMIN_EMAILS` | web | Comma-separated emails of platform catalog reviewers who may publish shared requirements from a non-demo school. Members of the demo school with `catalog.review` may always publish. |
+| `WEB_PUSH_PUBLIC_KEY`, `WEB_PUSH_PRIVATE_KEY`, `WEB_PUSH_SUBJECT` | both | Web push (phone and browser notifications). Generate the key pair with `npx tsx scripts/vapid-keys.ts`; the subject is a `mailto:` or `https:` contact. Without all three the push option is hidden in Settings and nothing is sent. Changing the keys invalidates every device subscription. |
+| `WHATSAPP_PROVIDER` | both | Unset: WhatsApp is not offered. `console`: offered, messages are only logged (demo and development). `meta`: WhatsApp Business Cloud API, which also needs the variables below. |
+| `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID` | worker (and web for the switch) | Meta Cloud API access token and the sending phone number id. |
+| `WHATSAPP_TEMPLATE_GENERIC` | both | Name of the approved template used for every message without its own template and for all sensitive ones. Body `{{1}}` = school name; one URL button whose dynamic suffix is the portal path (base URL `APP_URL/` in the template). |
+| `WHATSAPP_TEMPLATE_<KIND>` | worker | Optional approved template per message type, for example `WHATSAPP_TEMPLATE_REQUEST_COMPLETED`. Body `{{1}}` = school name, `{{2}}` = notification title; same URL button. Templates must exist in en and ar. |
+| `WHATSAPP_API_VERSION` | worker | Graph API version. Default `v21.0`. |
 
 Set by the image, no action needed: `NODE_ENV=production`, `PORT=3000` (Railway overrides `PORT`, the server follows it), `HOSTNAME=0.0.0.0`.
 
