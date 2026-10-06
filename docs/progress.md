@@ -89,3 +89,11 @@
 - /admin/import (admin.access + people.manage; nav under Administration, linked from People and the setup wizard people step): staff, students and guardians, classes and enrollments, subject choices, each with a bilingual template, CSV/XLSX upload, per-row preview, confirm, result and a shared history. Services in src/server/imports (staff.ts, classes.ts, reuse.ts, actions.ts), parsers in src/lib/imports.
 - Invitation accept activates an existing INVITED membership and keeps the school's roles. School logo and name on letters, report cards, exam timetables and the join poster (src/server/documents/letterhead.ts).
 - Tests: tests/unit/imports.test.ts, tests/integration/imports.test.ts.
+
+## Integrations (student information system connection)
+- /admin/integrations (permission integrations.manage, school administrators): API keys tab (create with per-area scopes, shown once, hash only, revoke, last use and request count), Scheduled sync tab (sources with HTTPS URL, basic auth or token stored encrypted, column mapping with Read headers, hourly or daily, Run now, run history, failure banner), API guide tab (base URL, examples, fields, OpenAPI link, how to point an export at Horizon).
+- REST API v1: GET/POST /api/v1/students|staff|classes|enrollments|attendance (Bearer key, scopes, 120 requests a minute per key, cursor pagination, JSON errors without values); /api/v1/openapi.json; /api/v1/samples/<file>.csv sample exports.
+- Worker: queue "integrations" (job sync for Run now, job schedule every 5 minutes). Models ApiKey, SyncSource, SyncRun (migration 20261006000000_integrations).
+- "How people sign in" shows Google and Microsoft readiness on this server, redirect URLs and the staff domain rule.
+- Demo seed: two keys and a nightly sync source with three weeks of runs (prisma/seed/integrations.ts).
+- Tests: tests/unit/integrations.test.ts, tests/integration/integrations.test.ts, tests/e2e/integrations.spec.ts.

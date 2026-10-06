@@ -29,7 +29,7 @@ export const API_ERROR_MESSAGES = {
   INVALID_QUERY: "A query parameter is not valid.",
   FORBIDDEN: "The person who created this API key may not change this data.",
   NO_YEAR: "The school has no current academic year.",
-  UNAVAILABLE: "The API is not available on this server right now.",
+  UNAVAILABLE: "The API is not available on this server at the moment.",
   INTERNAL: "Something went wrong. Try again later.",
 } as const;
 export type ApiErrorCode = keyof typeof API_ERROR_MESSAGES;

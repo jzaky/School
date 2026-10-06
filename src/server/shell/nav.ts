@@ -85,6 +85,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("school.manage")) admin.push({ key: "schoolSetup", href: "/admin/school", icon: "building-2" });
   if (c("people.manage")) admin.push({ key: "people", href: "/admin/people", icon: "contact" });
   if (c("admin.access") && c("people.manage")) admin.push({ key: "import", href: "/admin/import", icon: "file-spreadsheet" });
+  if (c("integrations.manage")) admin.push({ key: "integrations", href: "/admin/integrations", icon: "plug" });
   if (c("roles.manage")) admin.push({ key: "roles", href: "/admin/roles", icon: "lock" });
   if (c("people.invite")) admin.push({ key: "invitations", href: "/admin/invitations", icon: "mail" });
   if (c("people.manage") || c("people.invite")) admin.push({ key: "joinRequests", href: "/admin/join-requests", icon: "users", badge: counts.joinRequests });

@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { AccessTabs } from "@/components/access/access-tabs";
 import { BulkStaffDialog, FamilyJoinUrl, FamilyQr, InviteDialog, InviteFamiliesButton, InviteRowActions, RegenerateCodeButton, StaffLinkDialog } from "@/components/access/invite-forms";
 import { SignInSettings } from "@/components/access/sign-in-settings";
+import { SignInReadiness } from "@/components/access/sign-in-readiness";
 
 export async function generateMetadata() {
   const t = await getTranslations("adminInvites");
@@ -75,6 +76,7 @@ export default async function InvitationsPage({ searchParams }: { searchParams: 
       />
       {tab === "invites" && (await invitesTab())}
       {tab === "links" && (await linksTab())}
+      {tab === "signin" && <SignInReadiness org={ctx.org} />}
       {tab === "signin" && (
         <SignInSettings
           canEdit={ctx.can("roles.manage")}

@@ -7,10 +7,7 @@
 // No "server-only" marker: the worker imports this.
 import { tenantDb, tenantTx } from "@/lib/tenant-db";
 import { decryptField, encryptField } from "@/lib/crypto";
-import { STUDENT_COLUMNS } from "@/lib/people-csv";
-import { STAFF_COLUMNS } from "@/lib/imports/staff";
-import { CLASS_COLUMNS, ENROLLMENT_COLUMNS } from "@/lib/imports/classes";
-import type { ColumnSpec } from "@/lib/imports/headers";
+import { SYNC_COLUMNS, SYNC_KINDS, type SyncKind } from "@/lib/integrations/kinds";
 import { tableToSheet } from "@/lib/imports/table";
 import { MAX_ROWS, type ImportSummary } from "@/lib/imports/types";
 import { applyMapping, cleanMapping, type ColumnMapping } from "@/lib/integrations/mapping";
@@ -26,11 +23,7 @@ import { importClasses, importEnrollments } from "@/server/imports/classes";
 import { fixXlsxDates, importStudents } from "@/server/imports/reuse";
 import { fetchExport, FetchExportError, isXlsx, type SyncAuth } from "./fetch-export";
 
-export const SYNC_KINDS = ["staff", "students", "classes", "enrollments"] as const;
-export type SyncKind = (typeof SYNC_KINDS)[number];
-export const isSyncKind = (v: unknown): v is SyncKind => typeof v === "string" && (SYNC_KINDS as readonly string[]).includes(v);
-
-export const SYNC_COLUMNS: Record<SyncKind, ColumnSpec[]> = { staff: STAFF_COLUMNS, students: STUDENT_COLUMNS, classes: CLASS_COLUMNS, enrollments: ENROLLMENT_COLUMNS };
+export { SYNC_COLUMNS, SYNC_KINDS, isSyncKind, type SyncKind } from "@/lib/integrations/kinds";
 
 export const MAX_SOURCES = 12;
 

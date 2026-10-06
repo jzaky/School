@@ -55,6 +55,7 @@ import {
   Wrench,
   Landmark,
   Send,
+  Plug,
 } from "lucide-react";
 import { DynamicIcon, type IconName } from "lucide-react/dynamic";
 
@@ -108,6 +109,7 @@ const STATIC: Record<string, LucideIcon> = {
   "school": School,
   "landmark": Landmark,
   "send": Send,
+  plug: Plug,
   "shield-alert": ShieldAlert,
   "stethoscope": Stethoscope,
   "trophy": Trophy,
