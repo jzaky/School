@@ -40,6 +40,7 @@ async function main() {
   const { prisma } = await import("@/lib/prisma");
   const { runDemoResetCore } = await import("@/server/demo/run-reset");
   const catalogJobs = await import("@/server/catalog-pipeline/jobs");
+  const sync = await import("@/server/integrations/sync");
 
   // Organization rows are only fully listable by the owner role (RLS hides non-demo orgs from app_user).
   const platform = process.env.MIGRATION_DATABASE_URL ? new PrismaClient({ datasourceUrl: process.env.MIGRATION_DATABASE_URL }) : prisma;
@@ -82,6 +83,18 @@ async function main() {
           throw new Error(`unknown job ${job.name}`);
       }
     },
+    integrations: async (job: Job) => {
+      switch (job.name) {
+        case "sync": {
+          const d = job.data as { orgId: string; sourceId: string; slot: string };
+          return sync.runSync(d.orgId, d.sourceId, { slot: d.slot, trigger: "MANUAL" });
+        }
+        case "schedule":
+          return forEachOrg("integrations.schedule", (orgId) => sync.runDueSyncs(orgId));
+        default:
+          throw new Error(`unknown job ${job.name}`);
+      }
+    },
     maintenance: async (job: Job) => {
       switch (job.name) {
         case "sweep":
@@ -106,7 +119,7 @@ async function main() {
     const connection = new IORedis(redisUrl, { maxRetriesPerRequest: null });
     connection.on("error", () => undefined);
     connections.push(connection);
-    const w = new Worker(name, processor, { connection, concurrency: name === "maintenance" || name === "catalog" ? 1 : 5 });
+    const w = new Worker(name, processor, { connection, concurrency: name === "maintenance" || name === "catalog" ? 1 : name === "integrations" ? 2 : 5 });
     w.on("failed", (job, err) => console.error(`[worker] ${name}:${job?.name ?? "?"} job ${job?.id ?? "?"} failed: ${describeError(err)}`));
     w.on("error", (err) => console.error(`[worker] ${name} worker error: ${describeError(err)}`));
     return w;
@@ -131,6 +144,11 @@ async function main() {
   const catalogQueue = queue(catalogJobs.CATALOG_QUEUE);
   if (catalogQueue) {
     await catalogQueue.upsertJobScheduler("catalog-refresh-weekly", { pattern: "10 1 * * 0", tz: "UTC" }, { name: catalogJobs.REFRESH_JOB, data: {}, opts: { attempts: 2 } });
+  }
+  // Scheduled sync sources: every 5 minutes; each source runs once per hourly or daily slot.
+  const integrationsQueue = queue("integrations");
+  if (integrationsQueue) {
+    await integrationsQueue.upsertJobScheduler("integrations-schedule", { every: 5 * 60_000 }, { name: "schedule", opts: { attempts: 1, removeOnComplete: 100, removeOnFail: 100 } });
   }
   console.log(`[worker] started: queues=${Object.keys(processors).join(",")} demoReset=${demoMode ? "on" : "off"} email=${process.env.RESEND_API_KEY ? "resend" : "console"}`);
 

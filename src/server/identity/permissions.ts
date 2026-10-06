@@ -64,6 +64,7 @@ export const PERMISSIONS = [
   "timetable.manage",
   "absence.report",
   "cover.manage",
+  "integrations.manage",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
@@ -135,6 +136,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "audit.view",
       "ai.admin_insights",
       "demo.reset",
+      "integrations.manage",
     ],
   },
   {
