@@ -24,7 +24,7 @@ import { StatusChip } from "./ui";
 import { AiSummary, GoalForm, NextStepCard, PlanBuilder, WhatIfPanel, type NextStepState } from "./client";
 import { CatalogNotice } from "@/components/pathway-engine/catalog-notice";
 
-export const GOAL_COUNTRIES = ["GB", "US", "CA", "AE", "AU", "IE", "NL", "DE", "SG", "HK", "JO", "CH"];
+export const GOAL_COUNTRIES = ["GB", "US", "CA", "AE", "SA", "AU", "IE", "NL", "DE", "SG", "HK", "JO", "CH"];
 type Tab = "overview" | "plan" | "whatIf" | "courses";
 
 export async function EngineHeader({ ctx, focus, tab }: { ctx: Ctx; focus: EngineFocus; tab: Tab }) {

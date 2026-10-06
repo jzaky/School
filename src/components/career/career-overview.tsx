@@ -28,6 +28,11 @@ const COUNTRY: Record<string, { en: string; ar: string }> = {
   IE: { en: "Ireland", ar: "أيرلندا" },
   FR: { en: "France", ar: "فرنسا" },
   ES: { en: "Spain", ar: "إسبانيا" },
+  SA: { en: "Saudi Arabia", ar: "المملكة العربية السعودية" },
+  JO: { en: "Jordan", ar: "الأردن" },
+  AU: { en: "Australia", ar: "أستراليا" },
+  SG: { en: "Singapore", ar: "سنغافورة" },
+  HK: { en: "Hong Kong", ar: "هونغ كونغ" },
 };
 export const countryName = (code: string, locale: string) => (COUNTRY[code] ? pick(locale, COUNTRY[code].en, COUNTRY[code].ar) : code);
 

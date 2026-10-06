@@ -119,6 +119,30 @@ const OFFERS: Record<string, string> = {
   wollongong_dubai: "cs bus",
   abu_dhabi_university: "cs ai ee law",
   aud: "cs bus",
+  ajman_university: "cs dent pharm law bus",
+  canadian_university_dubai: "bus arch media psy",
+  manipal_dubai: "cs ai bus psy",
+  bits_dubai: "cs ee me chemeng",
+  curtin_dubai: "cs eng bus psy",
+  amity_dubai: "cs ai bus psy",
+  murdoch_dubai: "cs bus psy media",
+  al_ain_university: "cs pharm law bus",
+  gulf_medical_university: "med dent pharm physio",
+  mbru: "med",
+  emirates_aviation_university: "aero ai bus",
+  university_of_dubai: "cs cyber ee bus",
+  kfupm: "cs ce ee me chemeng civil",
+  king_saud_university: "med dent pharm cs ee bus",
+  king_abdulaziz_university: "med cs ee me bus",
+  alfaisal: "med pharm se ee bus law",
+  prince_sultan_university: "cs se cyber law bus arch",
+  effat: "cs ee arch psy bus",
+  iau: "med dent pharm nursing arch",
+  ubt_jeddah: "cs ee me bus",
+  pmu: "cs ce me civil law bus",
+  dar_al_hekma: "cs cyber law arch design bus",
+  umm_al_qura: "med dent pharm cs eng",
+  al_yamamah: "cs se bus law arch",
   university_of_jordan: "dent pharm cs",
   just: "dent cs ee",
   psut: "cyber ds",
@@ -269,7 +293,7 @@ function durationFor(g: Group, degree: string, u: GlobalUniversity): number {
   const c = u.countryCode;
   if (g === "MED") return c === "GB" ? (u.key === "oxford" || u.key === "cambridge" ? 6 : 5) : c === "AE" || c === "JO" || c === "IE" ? 6 : c === "US" || c === "CA" ? 7 : 6;
   if (g === "DENT" || g === "VET") return 5;
-  if (g === "PHARM") return c === "JO" || c === "AE" ? 5 : 4;
+  if (g === "PHARM") return c === "JO" || c === "AE" ? 5 : c === "SA" ? 6 : 4;
   if (degree === "MEng") return 4;
   if (c === "GB") return SCOTLAND.has(u.key) ? 4 : g === "ARCH" ? 3 : 3;
   if (c === "AU" || c === "NL" || c === "DE" || c === "CH" || c === "FR") return g === "ENG" || g === "ENG_CHEM" || g === "ENG_BIO" ? (c === "AU" ? 4 : 3) : 3;
@@ -308,6 +332,9 @@ function tuitionFor(g: Group, u: GlobalUniversity): { amount: number | null; cur
       return { amount: 14000, currency: "EUR" };
     case "ES":
       return { amount: 25000, currency: "EUR" };
+    case "SA":
+      // No example fee: Saudi fees differ widely by nationality and sponsorship. Filled from official pages only.
+      return { amount: null, currency: "SAR" };
     default:
       return { amount: null, currency: "USD" };
   }
@@ -317,6 +344,7 @@ function teachingLanguage(g: Group, u: GlobalUniversity, legacyKey?: string): st
   if (legacyKey === "tum-informatics-bsc" || GERMAN_TAUGHT.has(u.key) || (u.key === "tu_munich" && g !== "BUS")) return "de";
   if (FRENCH_TAUGHT.has(u.key)) return "fr";
   if (u.countryCode === "JO" && (g === "LAW" || g === "BUS" || g === "MEDIA")) return "ar";
+  if (u.countryCode === "SA" && g === "LAW") return "ar";
   if (u.key === "sorbonne_abu_dhabi") return g === "LAW" ? "fr" : "en";
   return "en";
 }
@@ -448,7 +476,7 @@ function generalRow(g: Group, u: GlobalUniversity, lang: string, tpl: string): R
   else if (lang === "fr") r.languages.push({ test: "DELF_B2", minOverall: 50, minComponent: null, waiverNoteEn: "French-taught programme: French at B2 or above." });
   else if (lang === "ar") {
     // Arabic-taught: no English test.
-  } else if (c === "AE" || c === "JO") {
+  } else if (c === "AE" || c === "JO" || c === "SA") {
     r.languages.push({ test: "IELTS", minOverall: u.tier === 1 ? 6.5 : 6, minComponent: null, waiverNoteEn: null });
     r.languages.push({ test: "TOEFL", minOverall: u.tier === 1 ? 90 : 79, minComponent: null, waiverNoteEn: null });
     if (c === "AE") r.languages.push({ test: "EMSAT_ENGLISH", minOverall: u.tier === 1 ? 1400 : 1100, minComponent: null, waiverNoteEn: null });
@@ -474,7 +502,7 @@ function generalRow(g: Group, u: GlobalUniversity, lang: string, tpl: string): R
     r.additional.push({ kind: "INTERVIEW", required: true, noteEn: "Multiple mini interviews.", noteAr: "مقابلات قصيرة متعددة." });
   } else if ((c === "SG" || c === "HK" || c === "IE") && HEALTH.has(g)) {
     r.additional.push({ kind: "INTERVIEW", required: true, noteEn: "Shortlisted applicants are interviewed.", noteAr: "تُجرى مقابلة للمتقدمين المرشحين." });
-  } else if (c === "AE" && g === "MED") {
+  } else if ((c === "AE" || c === "SA") && g === "MED") {
     r.additional.push({ kind: "INTERVIEW", required: true, noteEn: "Interview and multiple mini interviews.", noteAr: "مقابلة شخصية ومقابلات قصيرة متعددة." });
   }
   if (g === "ARCH" || g === "DESIGN") r.additional.push({ kind: "PORTFOLIO", required: true, noteEn: "A portfolio of creative work.", noteAr: "ملف أعمال إبداعية." });
@@ -533,10 +561,10 @@ function curriculumRows(g: Group, u: GlobalUniversity): RowSeed[] {
     if (["BIO", "CHEM", "ENG_CHEM", "ENG_BIO", "PHARM"].includes(g)) us.push({ type: "REQUIRED", keys: ["chemistry"], minimumLevel: "STANDARD", minimumGrade: null }, { type: "RECOMMENDED", keys: ["biology"], minimumLevel: "ADVANCED", minimumGrade: null });
     if (!stem) us.push({ type: "RECOMMENDED", keys: ["mathematics"], minimumLevel: "STANDARD", minimumGrade: null });
     rows.push(row("AMERICAN", { evidenceLocator: "First-year applicants: recommended high school preparation", minimumGPA: t === 3 ? 3 : null, notesEn: NOTE_US_HOLISTIC.en, notesAr: NOTE_US_HOLISTIC.ar, subjects: us }));
-  } else if (c === "AE" || c === "JO") {
+  } else if (c === "AE" || c === "JO" || c === "SA") {
     const add = c === "JO" ? [{ kind: "NOTE", required: true, noteEn: NOTE_JO_EQUIV.en, noteAr: NOTE_JO_EQUIV.ar }] : [];
     const subjects = subjectLines(needs.filter((n) => n.strength !== "advice"), "STANDARD", () => null);
-    const tests = c === "AE" ? [{ test: "SAT", policy: "OPTIONAL", minScore: t === 1 ? 1300 : 1100, noteEn: "SAT can support the application." }] : [];
+    const tests = c === "AE" || c === "SA" ? [{ test: "SAT", policy: "OPTIONAL", minScore: t === 1 ? 1300 : 1100, noteEn: "SAT can support the application." }] : [];
     rows.push(row("AMERICAN", { evidenceLocator: locator, minimumGPA: t === 1 ? 3.5 : t === 2 ? 3.0 : 2.7, subjects, tests, additional: add }));
   } else {
     // UK, Canada, Europe, Australia, Singapore, Hong Kong: APs at stated scores (calculus for maths-heavy courses).

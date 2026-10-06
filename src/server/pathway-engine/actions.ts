@@ -25,7 +25,7 @@ const goalInput = z.object({
   studentId: z.string().min(1),
   careerKey: z.string().max(60).nullable(),
   fieldKeys: z.array(z.string().max(60)).max(10).default([]),
-  countries: z.array(z.string().length(2)).max(12).default([]),
+  countries: z.array(z.string().length(2)).max(20).default([]),
 });
 
 export async function generatePlanAction(raw: z.input<typeof goalInput>): Promise<Ok<{ planId: string; items: number; warnings: number }>> {

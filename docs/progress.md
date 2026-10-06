@@ -78,6 +78,9 @@
    - Career catalog and aptitude questions are platform content with no school editor.
    - Verification emails queued while Redis is down lose their link when the sweeper sends them later (body and href travel in the job, not the row).
 
+## Gulf catalog extension
+- 12 more UAE universities and 12 Saudi universities in the global catalog (prisma/seed/catalog/universities.ts, OFFERS in programs.ts), Saudi Arabia added as a country (route DIRECT, no example fees), country names in en/ar on the career overview and the pathway goal countries. Research inputs prepared for the official-requirements pipeline (batch "gulf"). Unit test: tests/unit/catalog-gulf.test.ts.
+
 ## Requirement data pipeline (catalog review)
 - Official data: prisma/seed/catalog/official.ts loads prisma/seed/catalog/official/*.json (assembled by scripts/research/assemble.mjs after scripts/research/validate.mjs passes). Change records only come from a university's archived page against its current page. The example seed (pipeline-demo.ts) is no longer loaded.
 - Built: source registry, polite fetcher with normalization and hashing, evidence-validated extraction (rule-based offline, AI on demand), versioned publishing with structured diffs and severity, change monitor with staff notifications, Scorecard import into the global catalog, worker jobs `catalog.refresh` (weekly) and `catalog.scorecard`, review screens under Career > Catalog review, demo seed `prisma/seed/catalog/pipeline-demo.ts`.
