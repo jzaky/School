@@ -1,0 +1,4951 @@
+{
+ "batch": "gulf",
+ "assembledAt": "2026-10-06T23:01:36.296Z",
+ "universities": [
+  {
+   "key": "ajman_university",
+   "website": "https://www.ajman.ac.ae",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ajman.ac.ae/en/admissions/undergraduate/undergraduate-admission-process",
+     "title": "Undergraduate Admission Process | Ajman University",
+     "retrievedAt": "2026-10-06T22:24:41.206Z",
+     "hash": "1e733513c893f42d055fbf1c81f855f1fb1ef35534f41fd2490534c364669920"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.ajman.ac.ae/en/virtual-student-hub-frequently-asked-questions/faqs-for-new-students",
+     "title": "FAQs for NEW STUDENTS",
+     "retrievedAt": "2026-10-06T22:24:51.419Z",
+     "hash": "71072a9e5801205d2dffbeeeda7eefa33413f24138c57dcd06d771f11b74678a"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.ajman.ac.ae/en/pharmacy/admission-requirements",
+     "title": "Admission Requirements",
+     "retrievedAt": "2026-10-06T22:24:48.644Z",
+     "hash": "7059ac1af54a6b1a18d4267c4a4257dc56a20d9fb7cb1f2ed1e188f09d9d6118"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.ajman.ac.ae/en/dentistry/college-programs",
+     "title": "College Programs",
+     "retrievedAt": "2026-10-06T22:51:13.586Z",
+     "hash": "cc52d6de75431c341b9186ab74c959071fb33a26197a504f68b880b531269570"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.ajman.ac.ae/en/engineering/departments/department-of-information-technology",
+     "title": "Department of Information Technology | Departments",
+     "retrievedAt": "2026-10-06T22:51:17.942Z",
+     "hash": "af46f6873ffa0961b26aa2972f042c504d38b77b238b2b40238de429eacd88ff"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 5,
+     "minComponent": null,
+     "waiverNoteEn": "A Grade 12 English score of 80% or above can be used instead.",
+     "waiverNoteAr": "يمكن الاكتفاء بدرجة 80% أو أعلى في مادة اللغة الإنجليزية للصف الثاني عشر.",
+     "source": "s1",
+     "quote": "For all programs taught in English: A minimum score of 80% in Grade 12 English subject, or its equivalent (5.0 IELTS Academic, or a TOEFL (ITP) score of 500, IBT 61)"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 61,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "For all programs taught in English: A minimum score of 80% in Grade 12 English subject, or its equivalent (5.0 IELTS Academic, or a TOEFL (ITP) score of 500, IBT 61)"
+    }
+   ],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Every applicant needs a UAE secondary school certificate or an equivalent approved and attested by the UAE Ministry of Education (equivalency certificate for foreign certificates).",
+     "noteAr": "يحتاج كل متقدم إلى شهادة ثانوية إماراتية أو ما يعادلها بموافقة وتصديق وزارة التربية والتعليم الإماراتية (شهادة معادلة للشهادات الأجنبية).",
+     "source": "s2",
+     "quote": "To be eligible for undergraduate admission, a student must have a secondary school certificate issued in the UAE, or its equivalent as approved/attested by the UAE Ministry of Education."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Admission is competitive and depends on the seats available in each college.",
+     "noteAr": "القبول تنافسي ويعتمد على المقاعد المتاحة في كل كلية.",
+     "source": "s1",
+     "quote": "The decision to admit an applicant is made on a competitive basis, considering the number of available seats as determined by the individual college and the applicant's final CGPA."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Applicants below a subject minimum must complete a remedial course in that subject (not available for Medicine).",
+     "noteAr": "على المتقدمين الذين لم يبلغوا الحد الأدنى في مادة ما إكمال مقرر علاجي فيها (غير متاح لبرنامج الطب).",
+     "source": "s1",
+     "quote": "Applicants who do not meet the minimum grade requirements in specific subjects must complete a remedial course in the respective subject(s) (N/A to Medicine Program)"
+    }
+   ],
+   "deadlines": [],
+   "programs": [
+    {
+     "key": "ajman-university-dent",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Dental Surgery",
+     "nameAr": "بكالوريوس طب وجراحة الفم والأسنان",
+     "degree": "BDS",
+     "durationYears": null,
+     "url": "https://www.ajman.ac.ae/en/admissions/undergraduate/undergraduate-admission-process",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "source": "s4",
+       "quote": "Bachelor of Dental Surgery | Elite 80%, Advanced 85% | 201 |",
+       "subjects": [],
+       "minimumPercent": 85,
+       "stream": "ADVANCED",
+       "notesEn": "Elite Track 80%.",
+       "notesAr": "المسار النخبوي 80%."
+      }
+     },
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "90",
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s1",
+        "quote": "College of Medicine, and College of Dentistry: A minimum score of 90% in Math and two Science subjects (Physics, Chemistry, Biology)."
+       },
+       {
+        "type": "TWO_OF",
+        "keys": [
+         "physics",
+         "chemistry",
+         "biology"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "90",
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s1",
+        "quote": "College of Medicine, and College of Dentistry: A minimum score of 90% in Math and two Science subjects (Physics, Chemistry, Biology)."
+       }
+      ],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 5,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "For Bachelor of Dental Surgery: A score of 5.0 IELTS Academic, or a TOEFL (ITP) score of 500, IBT 61, or its equivalent."
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 61,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "For Bachelor of Dental Surgery: A score of 5.0 IELTS Academic, or a TOEFL (ITP) score of 500, IBT 61, or its equivalent."
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Applicants must pass the college's personal interview.",
+        "noteAr": "يجب اجتياز المقابلة الشخصية التي تعقدها الكلية.",
+        "source": "s1",
+        "quote": "Applicants must pass the personal interview set by the college for the Doctor of Medicine, Bachelor of Dental Surgery, and Pharmacy programs."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "ajman-university-pharm",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Pharmacy (BPharm)",
+     "nameAr": "بكالوريوس الصيدلة",
+     "degree": "BPharm",
+     "durationYears": null,
+     "url": "https://www.ajman.ac.ae/en/pharmacy/admission-requirements",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "source": "s3",
+       "quote": "A minimum High School Average of 85% for Advanced Track or equivalent or at least 80% in Standardized International Systems.",
+       "subjects": [],
+       "minimumPercent": 85,
+       "stream": "ADVANCED",
+       "notesEn": "Applicants from international systems need at least 80%.",
+       "notesAr": "يحتاج المتقدمون من الأنظمة الدولية إلى 80% على الأقل."
+      }
+     },
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "80",
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s1",
+        "quote": "Bachelor of Pharmacy: A minimum score of 80% in Math and two Science subjects (Physics, Chemistry, Biology)."
+       },
+       {
+        "type": "TWO_OF",
+        "keys": [
+         "physics",
+         "chemistry",
+         "biology"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "80",
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s1",
+        "quote": "Bachelor of Pharmacy: A minimum score of 80% in Math and two Science subjects (Physics, Chemistry, Biology)."
+       }
+      ],
+      "english": [
+       {
+        "test": "EMSAT_ENGLISH",
+        "minOverall": 1100,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s3",
+        "quote": "An Emirates Standardized Test (EmSAT) score of 1100 for English language or an equivalent English Proficiency Test approved by the CAA such as TOEFL ITP score of 500, or 5.0 IELTS academic."
+       },
+       {
+        "test": "IELTS",
+        "minOverall": 5,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s3",
+        "quote": "An Emirates Standardized Test (EmSAT) score of 1100 for English language or an equivalent English Proficiency Test approved by the CAA such as TOEFL ITP score of 500, or 5.0 IELTS academic."
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "ADMISSIONS_TEST",
+        "required": true,
+        "noteEn": "College of Pharmacy admission exam in chemistry, biology, physics and mathematics.",
+        "noteAr": "اختبار قبول كلية الصيدلة في الكيمياء والأحياء والفيزياء والرياضيات.",
+        "source": "s3",
+        "quote": "Passing the Admission Exam designed by the College of Pharmacy which includes the following basic science subjects: Chemistry, Biology, Physics. & Mathematics"
+       },
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Personal interview set by the College of Pharmacy.",
+        "noteAr": "مقابلة شخصية تعقدها كلية الصيدلة.",
+        "source": "s3",
+        "quote": "Passing a personal interview set by the College of Pharmacy."
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    },
+    {
+     "key": "ajman-university-cs",
+     "status": "REPLACED",
+     "nameEn": "Bachelor in Information Technology/ Networking & Security",
+     "nameAr": "بكالوريوس تقنية المعلومات / الشبكات والأمن",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.ajman.ac.ae/en/engineering/departments/department-of-information-technology",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "75",
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s1",
+        "quote": "Information Technology, Bachelor of Science in Artificial Intelligence, and Data Analytics programs: A minimum score of 75% in Math."
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "ajman-university-law",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Law",
+     "nameAr": "بكالوريوس القانون",
+     "degree": "LLB",
+     "durationYears": null,
+     "url": "https://www.ajman.ac.ae/en/admissions/undergraduate/undergraduate-admission-process",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "70",
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s1",
+        "quote": "Bachelor of Law: A minimum score of 70% in Math."
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "canadian_university_dubai",
+   "website": "https://www.cud.ac.ae",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.cud.ac.ae/prospective-students/undergraduate",
+     "title": "",
+     "retrievedAt": "2025-04-19T00:00:00Z",
+     "hash": "7086d015c22b13e419d805e93bacd97219388eea5f91de46b6ec382e831becea",
+     "via": "archive:20250419143001"
+    },
+    {
+     "id": "s2",
+     "url": "http://www.cud.ac.ae/programs/undergraduate/management/bachelor-of-business-administration-in-international-business",
+     "title": "Study BBA ( Business Administration) in Dubai - Canadian University Dubai",
+     "retrievedAt": "2026-10-06T22:51:11.266Z",
+     "hash": "1a1c3d1cbc6d50d4c7bd4150fa996acaa547ab7f40369b07c2f1c72354bbfd34"
+    },
+    {
+     "id": "s3",
+     "url": "http://www.cud.ac.ae/programs/undergraduate/architecture/bachelor-of-architecture",
+     "title": "",
+     "retrievedAt": "2025-05-16T00:00:00Z",
+     "hash": "d969df524f66525b657ed8a871d6cc1c23ee2ff12ad3082b1c1ca3685bf3a8ac",
+     "via": "archive:20250516021336"
+    },
+    {
+     "id": "s4",
+     "url": "http://www.cud.ac.ae/programs/undergraduate/social-sciences/bachelor-of-arts-in-psychology",
+     "title": "Bachelor of Arts in Psychology | Canadian University Dubai",
+     "retrievedAt": "2026-10-06T22:51:23.913Z",
+     "hash": "1a162e48e73506e82c8bff41e441afee94a256ce0150db4e79ca01c16edd1020"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 5,
+     "minComponent": null,
+     "waiverNoteEn": "Exempt with 80% in English (UAE MoE Advanced Track) or proof of English-medium schooling; Creative Industries needs IELTS 5.5.",
+     "waiverNoteAr": "يُعفى من الاختبار من حصل على 80% في الإنجليزية (المسار المتقدم لوزارة التربية) أو أثبت الدراسة باللغة الإنجليزية؛ ويتطلب برنامج الصناعات الإبداعية 5.5 في IELTS.",
+     "source": "s1",
+     "quote": "Provide a valid English Language Proficiency Certificate with a minimum score of IELTS Academic (Band 5.0), TOEFL iBT (61), TOEFL ITP (500) or one of the standardized English language tests that is internationally recognized and approved by the Ministry of Education and Scientific Research, UAE."
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 61,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "Provide a valid English Language Proficiency Certificate with a minimum score of IELTS Academic (Band 5.0), TOEFL iBT (61), TOEFL ITP (500) or one of the standardized English language tests that is internationally recognized and approved by the Ministry of Education and Scientific Research, UAE."
+    }
+   ],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "IELTS Indicator, IELTS Online, IELTS UKVI and TOEFL Home Edition are not accepted.",
+     "noteAr": "لا تُقبل اختبارات IELTS Indicator وIELTS Online وIELTS UKVI وTOEFL Home Edition.",
+     "source": "s1",
+     "quote": "Note: IELTS Indicator, IELTS online, IELTS UKVI or TOEFL Home Edition are not acceptable for admission."
+    },
+    {
+     "kind": "ADMISSIONS_TEST",
+     "required": true,
+     "noteEn": "Maths placement test for admitted students, except Communication, Psychology and Creative Industries, or with UAE Maths 70% or SAT Math 450.",
+     "noteAr": "اختبار تحديد مستوى في الرياضيات للمقبولين، باستثناء الاتصال وعلم النفس والصناعات الإبداعية، أو لمن حصل على 70% في رياضيات الشهادة الإماراتية أو 450 في SAT للرياضيات.",
+     "source": "s1",
+     "quote": "All admitted students are required to take Math Placement test. Students are exempted from the Math Placement test if:"
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Applications are accepted all year for Fall, Spring and Summer entry.",
+     "noteAr": "تُقبل الطلبات طوال العام للالتحاق في الخريف والربيع والصيف.",
+     "source": "s1",
+     "quote": "Applications for admissions are accepted year-round. Entry can be in the Fall, Spring or Summer. However, course registration must be completed before the end of the registration week as shown on the academic calendar which is available at https://www.cud.ac.ae/academic-calendar#undergraduate"
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Non-UAE certificates need an equivalency certificate from the UAE Ministry of Education.",
+     "noteAr": "تحتاج الشهادات غير الإماراتية إلى شهادة معادلة من وزارة التربية والتعليم الإماراتية.",
+     "source": "s1",
+     "quote": "Students must obtain Equivalency Certificate from the Ministry of Education in the UAE."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": true,
+     "source": "s1",
+     "quote": "Are holders of UAE secondary education certificate with passing grade in all subjects",
+     "subjects": [],
+     "notesEn": "A pass in all subjects; programme-specific requirements also apply.",
+     "notesAr": "النجاح في جميع المواد، مع تطبيق متطلبات البرنامج."
+    },
+    "IB": {
+     "accepted": true,
+     "source": "s1",
+     "quote": "• A minimum score of 24 points.",
+     "subjects": [],
+     "minimumPoints": 24,
+     "notesEn": "IB Diploma with 6 subjects (Islamic Education excluded), as stated in the equivalency requirements.",
+     "notesAr": "دبلوم البكالوريا الدولية بست مواد (باستثناء التربية الإسلامية) حسب متطلبات المعادلة."
+    },
+    "BRITISH": {
+     "accepted": true,
+     "source": "s1",
+     "quote": "o Minimum score of 3 or D grade in 2 AS or 1 A Level Subjects",
+     "subjects": [],
+     "notesEn": "Seven subjects: five O-Levels at grade 4 or C and two AS or one A Level at grade 3 or D (Islamic Education and Arabic not counted).",
+     "notesAr": "سبع مواد: خمس مواد O-Level بدرجة 4 أو C ومادتان AS أو مادة A Level واحدة بدرجة 3 أو D (لا تُحتسب التربية الإسلامية والعربية)."
+    }
+   },
+   "programs": [
+    {
+     "key": "canadian-university-dubai-bus",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Business Administration in International Business",
+     "nameAr": "بكالوريوس إدارة الأعمال في الأعمال الدولية",
+     "degree": "BBA",
+     "durationYears": 4,
+     "url": "http://www.cud.ac.ae/programs/undergraduate/management/bachelor-of-business-administration-in-international-business",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "canadian-university-dubai-arch",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Architecture",
+     "nameAr": "بكالوريوس العمارة",
+     "degree": "BArch",
+     "durationYears": 5,
+     "url": "http://www.cud.ac.ae/programs/undergraduate/architecture/bachelor-of-architecture",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "canadian-university-dubai-psy",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Arts in Psychology",
+     "nameAr": "بكالوريوس الآداب في علم النفس",
+     "degree": "BA",
+     "durationYears": 4,
+     "url": "http://www.cud.ac.ae/programs/undergraduate/social-sciences/bachelor-of-arts-in-psychology",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "manipal_dubai",
+   "website": "https://www.manipaldubai.com",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.manipaldubai.com/admissions",
+     "title": "Manipal Dubai University Admissions 2025: UG, PG, Foundation & Doctoral Programs",
+     "retrievedAt": "2026-10-06T22:24:48.288Z",
+     "hash": "a870c1609dbd96ed3c7671dad1051f9933b9bce55b327f81522a07d8324b7774"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.manipaldubai.com/sob/programs/program-list/bba.html",
+     "title": "BBA in Dubai | Bachelor of Business Administration Course",
+     "retrievedAt": "2026-10-06T22:24:57.310Z",
+     "hash": "dca651deb9a29870101fcb04c3c568bcf03cf67666dd90f2dd4a27ba03edde34"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.manipaldubai.com/programs/ba-in-english-psychology-sociology-filmmaking-media",
+     "title": "Bachelor of Arts Hons in Dubai | Manipal University Dubai",
+     "retrievedAt": "2026-10-06T22:25:21.685Z",
+     "hash": "bbbf79da787498bef07ebd4ba8a42ed6c608bfd5a7d0b7245ada1bea09e3dca5",
+     "waybackTimestamp": "20250909060406",
+     "waybackHash": "656ced4a789956412e37b79063ad4b318a8c888e6b913237788b8efc5212a326"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.manipaldubai.com/programs/b-tech-computer-science-engineering",
+     "title": "BTech in Computer Science and Engineering (CSE) | MAHE Dubai",
+     "retrievedAt": "2026-10-06T22:51:17.794Z",
+     "hash": "1a267dbcfaff6c59f1930234a5254d832021e8f1dff24f8008a622cef51c3d03"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.manipaldubai.com/programs/b-tech-robotics-and-artificial-intelligence",
+     "title": "BTech - Robotics and Artificial Intelligence",
+     "retrievedAt": "2026-10-06T22:51:53.359Z",
+     "hash": "ad4c584367022df454003cb4266d61db782e207f7212bc68aa11fd4dca9e9d49"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "FOUNDATION_REQUIRED",
+     "required": true,
+     "noteEn": "Applicants below the minimum eligibility must pass the Manipal Enablers Competency Test and/or a 6-week Bridge Program with at least 60%.",
+     "noteAr": "على من لم يستوفِ الحد الأدنى اجتياز اختبار Manipal Enablers و/أو برنامج تجسير لمدة 6 أسابيع بنسبة 60% على الأقل.",
+     "source": "s1",
+     "quote": "Applicants not meeting the minimum eligibility must pass the Manipal Enablers Competency Test and/or a 6-week Bridge Program with a minimum score of 60%. Applicable fee apply."
+    }
+   ],
+   "deadlines": [],
+   "programs": [
+    {
+     "key": "manipal-dubai-bus",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Business Administration (BBA)",
+     "nameAr": "بكالوريوس إدارة الأعمال",
+     "degree": "BBA",
+     "durationYears": 3,
+     "url": "https://www.manipaldubai.com/sob/programs/program-list/bba.html",
+     "curricula": {
+      "CBSE": {
+       "accepted": true,
+       "source": "s2",
+       "quote": "Obtain a minimum of 50% aggregate marks in the qualifying examination",
+       "subjects": [],
+       "minimumPercent": 50,
+       "notesEn": "50% aggregate in the Grade 12 qualifying examination.",
+       "notesAr": "معدل إجمالي 50% في امتحان الصف الثاني عشر المؤهل."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "At least 60% in English in the Grade 12 qualifying exam, or the Manipal English test or bridge programme.",
+        "noteAr": "60% على الأقل في اللغة الإنجليزية في امتحان الصف الثاني عشر، أو اختبار مانيبال للغة الإنجليزية أو برنامج التجسير.",
+        "source": "s2",
+        "quote": "Language Proficiency: Minimum 60% in English in the qualifying exam (12th for UG). If not met, clear the Manipal Enablers English Competency Test and/or complete a 6-week Bridge Program with minimum 60% pass grade. If the medium of instruction was not English, submit IELTS/TOEFL with overall 5"
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "manipal-dubai-psy",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Arts (Honours), Psychology major",
+     "nameAr": "بكالوريوس الآداب (مع مرتبة الشرف) تخصص علم النفس",
+     "degree": "BA",
+     "durationYears": 3,
+     "url": "https://www.manipaldubai.com/programs/ba-in-english-psychology-sociology-filmmaking-media",
+     "curricula": {
+      "CBSE": {
+       "accepted": true,
+       "source": "s3",
+       "quote": "Passed with at least 55% aggregate marks",
+       "subjects": [],
+       "minimumPercent": 55,
+       "notesEn": "55% aggregate in the Grade 12 qualifying examination.",
+       "notesAr": "معدل إجمالي 55% في امتحان الصف الثاني عشر المؤهل."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "At least 60% in English in the Grade 12 qualifying exam, or the Manipal English test or bridge programme.",
+        "noteAr": "60% على الأقل في اللغة الإنجليزية في امتحان الصف الثاني عشر، أو اختبار مانيبال للغة الإنجليزية أو برنامج التجسير.",
+        "source": "s3",
+        "quote": "Language Proficiency: Minimum 60% in English in the qualifying exam (12th for UG). If not met, clear the Manipal Enablers English Competency Test and/or complete a 6-week Bridge Program with minimum 60% pass grade. If the medium of instruction was not English, submit IELTS/TOEFL with overall 5"
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    },
+    {
+     "key": "manipal-dubai-cs",
+     "status": "REPLACED",
+     "nameEn": "BTech Computer Science and Engineering",
+     "nameAr": "بكالوريوس التكنولوجيا في علوم وهندسة الحاسوب",
+     "degree": "BTech",
+     "durationYears": 4,
+     "url": "https://www.manipaldubai.com/programs/b-tech-computer-science-engineering",
+     "curricula": {
+      "CBSE": {
+       "accepted": true,
+       "source": "s4",
+       "quote": "Minimum 60% aggregate in Physics + Mathematics + any one optional subject. If not met, applicants must take the Manipal Enablers subject-specific Competency Test. Scoring below 60% in the test requires enrollment in a Bridge/Foundation program as per the relevant UG eligibility.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s4",
+         "quote": "Minimum 60% aggregate in Physics + Mathematics + any one optional subject. If not met, applicants must take the Manipal Enablers subject-specific Competency Test. Scoring below 60% in the test requires enrollment in a Bridge/Foundation program as per the relevant UG eligibility."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s4",
+         "quote": "Minimum 60% aggregate in Physics + Mathematics + any one optional subject. If not met, applicants must take the Manipal Enablers subject-specific Competency Test. Scoring below 60% in the test requires enrollment in a Bridge/Foundation program as per the relevant UG eligibility."
+        }
+       ],
+       "minimumPercent": 60,
+       "notesEn": "60% aggregate in Physics, Mathematics and one optional subject; otherwise the Manipal subject test or a bridge/foundation programme.",
+       "notesAr": "معدل 60% في الفيزياء والرياضيات ومادة اختيارية؛ وإلا فاختبار مانيبال في المادة أو برنامج تجسير أو تأسيسي."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 5,
+        "minComponent": null,
+        "waiverNoteEn": "Only when the medium of instruction was not English; otherwise 60% in Grade 12 English, the Manipal English test or a bridge programme.",
+        "waiverNoteAr": "فقط إذا لم تكن لغة الدراسة الإنجليزية؛ وإلا فـ60% في إنجليزية الصف الثاني عشر أو اختبار مانيبال للإنجليزية أو برنامج تجسير.",
+        "source": "s4",
+        "quote": "Language Proficiency: Minimum 60% in English in the qualifying exam (12th for UG). If not met, clear the Manipal Enablers English Competency Test and/or complete a 6-week Bridge Program with minimum 60% pass grade. If the medium of instruction was not English, submit IELTS/TOEFL with overall 5."
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "manipal-dubai-ai",
+     "status": "REPLACED",
+     "nameEn": "B.Tech Robotics and Artificial Intelligence",
+     "nameAr": "بكالوريوس التكنولوجيا في الروبوتات والذكاء الاصطناعي",
+     "degree": "BTech",
+     "durationYears": null,
+     "url": "https://www.manipaldubai.com/programs/b-tech-robotics-and-artificial-intelligence",
+     "curricula": {
+      "CBSE": {
+       "accepted": true,
+       "source": "s5",
+       "quote": "Achieve at least a 60% aggregate mark in Physics, Mathematics, and one optional technical subject.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "physics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s5",
+         "quote": "Achieve at least a 60% aggregate mark in Physics, Mathematics, and one optional technical subject."
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s5",
+         "quote": "Achieve at least a 60% aggregate mark in Physics, Mathematics, and one optional technical subject."
+        }
+       ],
+       "minimumPercent": 60,
+       "notesEn": "60% aggregate in Physics, Mathematics and one technical subject.",
+       "notesAr": "معدل 60% في الفيزياء والرياضيات ومادة تقنية واحدة."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "bits_dubai",
+   "website": "https://www.bits-pilani.ac.in/dubai/",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.bits-pilani.ac.in/academics/integrated-first-degree/b-e-computer-science-engineering-dubai/",
+     "title": "B.E. (Computer Science) - BITS Pilani",
+     "retrievedAt": "2026-10-06T22:25:15.435Z",
+     "hash": "5812440bb412e717ae25ee520d76edd239fa6abb787df4f64eea7d80d88df2fe",
+     "waybackTimestamp": "20250907121358",
+     "waybackHash": "12a2944bb7af87afb39a70f41e8458a42d8e50340f021c3b8ad799a072c73430"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.bits-pilani.ac.in/academics/integrated-first-degree/b-e-electrical-electronics-programme-dubai/",
+     "title": "B.E. (Electrical and Electronics) - BITS Pilani",
+     "retrievedAt": "2026-10-06T22:25:14.543Z",
+     "hash": "23d03433f285d14f79ac78dde5f783af7341f3e09fdf340a73697c7123f915df",
+     "waybackTimestamp": "20250916235111",
+     "waybackHash": "82d5313776f7b23813319189de4faa1ff4b5aecfe7bc48ff42b660dee02c771b"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.bits-pilani.ac.in/academics/integrated-first-degree/b-e-mechanical-programme-dubai/",
+     "title": "B.E. (Mechanical) - BITS Pilani",
+     "retrievedAt": "2026-10-06T22:25:12.056Z",
+     "hash": "f31f0289fc845afc39fa02f399d46ce78f90260db96b7886a313bfac3dfb1fa8",
+     "waybackTimestamp": "20250815124719",
+     "waybackHash": "6f310e74f0f335d31e137e51afd0c0cc361e14ae35b96245355ec3e271968336"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.bits-dubai.ac.ae/admissions/be/",
+     "title": "First Degree (B.E.) – BITS Pilani",
+     "retrievedAt": "2026-10-06T22:51:57.477Z",
+     "hash": "81c53d7645c46e84242150ec082a2b745617d02e84d022f48a7fe9bd00b9a43b"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.bits-pilani.ac.in/dubai/chemical-engineering/",
+     "title": "Chemical Engineering - BITS Pilani",
+     "retrievedAt": "2026-10-06T22:51:26.613Z",
+     "hash": "38649f3dda70339a79b3ac83f77a5764c33c0ea98e958e77ba9f5ac6d138062d"
+    }
+   ],
+   "english": [],
+   "tests": [
+    {
+     "test": "BITSAT",
+     "policy": "OPTIONAL",
+     "minScore": null,
+     "noteEn": "Not compulsory for the Dubai campus; high BITSAT scores can earn a merit scholarship.",
+     "noteAr": "غير إلزامي لحرم دبي، ويمكن أن تؤهل الدرجات العالية فيه لمنحة تفوق.",
+     "source": "s4",
+     "quote": "Note: BITSAT is not compulsory for Dubai Campus admission."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Qualifying exams include the UAE Ministry of Education certificate, CBSE (All India Senior School Certificate), IB and Cambridge or other UK A Levels.",
+     "noteAr": "تشمل الشهادات المؤهلة شهادة وزارة التربية والتعليم الإماراتية وCBSE والبكالوريا الدولية وA Level من كامبريدج أو غيرها من الهيئات البريطانية.",
+     "source": "s4",
+     "quote": "For Admission to all integrated first degree programmes, candidates must have passed the requisite qualifying Grade 12 examination, which is the secondary school certificate examination of the Ministry of Education, UAE or the All India Senior school certificate examination or I.B. or A Level from C"
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {
+    "CBSE": {
+     "accepted": true,
+     "source": "s4",
+     "quote": "Admission to all B.E programmes -The candidates must have obtained a minimum 60% overall aggregate of marks in the Grade 12 examination and a minimum aggregate of 60% in Physics, Mathematics and Chemistry/ Biology/ Computer Science or any other vocational subjects with at least 50% marks in each sub",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "physics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": "50",
+       "noteEn": null,
+       "noteAr": null,
+       "source": "s4",
+       "quote": "Admission to all B.E programmes -The candidates must have obtained a minimum 60% overall aggregate of marks in the Grade 12 examination and a minimum aggregate of 60% in Physics, Mathematics and Chemistry/ Biology/ Computer Science or any other vocational subjects with at least 50% marks in each sub"
+      },
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": "50",
+       "noteEn": null,
+       "noteAr": null,
+       "source": "s4",
+       "quote": "Admission to all B.E programmes -The candidates must have obtained a minimum 60% overall aggregate of marks in the Grade 12 examination and a minimum aggregate of 60% in Physics, Mathematics and Chemistry/ Biology/ Computer Science or any other vocational subjects with at least 50% marks in each sub"
+      },
+      {
+       "type": "ONE_OF",
+       "keys": [
+        "chemistry",
+        "biology",
+        "computer_science"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": "50",
+       "noteEn": null,
+       "noteAr": null,
+       "source": "s4",
+       "quote": "Admission to all B.E programmes -The candidates must have obtained a minimum 60% overall aggregate of marks in the Grade 12 examination and a minimum aggregate of 60% in Physics, Mathematics and Chemistry/ Biology/ Computer Science or any other vocational subjects with at least 50% marks in each sub"
+      }
+     ],
+     "minimumPercent": 60,
+     "notesEn": "60% overall in Grade 12 and 60% aggregate in Physics, Mathematics and Chemistry/Biology/Computer Science, with at least 50% in each.",
+     "notesAr": "60% إجمالًا في الصف الثاني عشر و60% معدلًا في الفيزياء والرياضيات والكيمياء أو الأحياء أو علوم الحاسوب، مع 50% على الأقل في كل منها."
+    },
+    "UAE_MOE": {
+     "accepted": true,
+     "source": "s4",
+     "quote": "Admission to all B.E programmes -The candidates must have obtained a minimum 60% overall aggregate of marks in the Grade 12 examination and a minimum aggregate of 60% in Physics, Mathematics and Chemistry/ Biology/ Computer Science or any other vocational subjects with at least 50% marks in each sub",
+     "subjects": [
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "physics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": "50",
+       "noteEn": null,
+       "noteAr": null,
+       "source": "s4",
+       "quote": "Admission to all B.E programmes -The candidates must have obtained a minimum 60% overall aggregate of marks in the Grade 12 examination and a minimum aggregate of 60% in Physics, Mathematics and Chemistry/ Biology/ Computer Science or any other vocational subjects with at least 50% marks in each sub"
+      },
+      {
+       "type": "REQUIRED",
+       "keys": [
+        "mathematics"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": "50",
+       "noteEn": null,
+       "noteAr": null,
+       "source": "s4",
+       "quote": "Admission to all B.E programmes -The candidates must have obtained a minimum 60% overall aggregate of marks in the Grade 12 examination and a minimum aggregate of 60% in Physics, Mathematics and Chemistry/ Biology/ Computer Science or any other vocational subjects with at least 50% marks in each sub"
+      },
+      {
+       "type": "ONE_OF",
+       "keys": [
+        "chemistry",
+        "biology",
+        "computer_science"
+       ],
+       "minimumLevel": "ADVANCED",
+       "minimumGrade": "50",
+       "noteEn": null,
+       "noteAr": null,
+       "source": "s4",
+       "quote": "Admission to all B.E programmes -The candidates must have obtained a minimum 60% overall aggregate of marks in the Grade 12 examination and a minimum aggregate of 60% in Physics, Mathematics and Chemistry/ Biology/ Computer Science or any other vocational subjects with at least 50% marks in each sub"
+      }
+     ],
+     "minimumPercent": 60,
+     "notesEn": "60% overall in Grade 12 and 60% aggregate in Physics, Mathematics and Chemistry/Biology/Computer Science, with at least 50% in each.",
+     "notesAr": "60% إجمالًا في الصف الثاني عشر و60% معدلًا في الفيزياء والرياضيات والكيمياء أو الأحياء أو علوم الحاسوب، مع 50% على الأقل في كل منها."
+    }
+   },
+   "programs": [
+    {
+     "key": "bits-dubai-cs",
+     "status": "REPLACED",
+     "nameEn": "B.E. Computer Science",
+     "nameAr": "بكالوريوس الهندسة في علوم الحاسوب",
+     "degree": "BE",
+     "durationYears": 4,
+     "url": "https://www.bits-pilani.ac.in/academics/integrated-first-degree/b-e-computer-science-engineering-dubai/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "bits-dubai-ee",
+     "status": "REPLACED",
+     "nameEn": "B.E. Electrical and Electronics",
+     "nameAr": "بكالوريوس الهندسة الكهربائية والإلكترونية",
+     "degree": "BE",
+     "durationYears": 4,
+     "url": "https://www.bits-pilani.ac.in/academics/integrated-first-degree/b-e-electrical-electronics-programme-dubai/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "bits-dubai-me",
+     "status": "REPLACED",
+     "nameEn": "B.E. Mechanical",
+     "nameAr": "بكالوريوس الهندسة الميكانيكية",
+     "degree": "BE",
+     "durationYears": 4,
+     "url": "https://www.bits-pilani.ac.in/academics/integrated-first-degree/b-e-mechanical-programme-dubai/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "bits-dubai-chemeng",
+     "status": "REPLACED",
+     "nameEn": "B.E. Chemical (Energy, Environment & Sustainability)",
+     "nameAr": "بكالوريوس الهندسة الكيميائية (الطاقة والبيئة والاستدامة)",
+     "degree": "BE",
+     "durationYears": 4,
+     "url": "https://www.bits-pilani.ac.in/dubai/chemical-engineering/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "curtin_dubai",
+   "website": "https://curtindubai.ac.ae",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://curtindubai.ac.ae/curtin-dubai-foundation-program/",
+     "title": "Foundation Course, Pathway Program at Curtin Univeristy Dubai, UAE",
+     "retrievedAt": "2026-10-06T22:25:35.853Z",
+     "hash": "ee57909eeff8462752271b43f926aef03cf95d43063ee810281f98a995f460ff",
+     "waybackTimestamp": "20250901162516",
+     "waybackHash": "99bcae931b23a58fd59557039235777498d817d62a25afb2d46b7948a227bda9"
+    },
+    {
+     "id": "s2",
+     "url": "https://curtindubai.ac.ae/lp-engineering-program",
+     "title": "Engineering Programs at Curtin University Dubai",
+     "retrievedAt": "2026-10-06T22:25:36.136Z",
+     "hash": "1f128150645b1931544de734c832e3588a1516e09ea7ee7ec252d906f09db90f"
+    },
+    {
+     "id": "s3",
+     "url": "https://curtindubai.ac.ae/arts-humanities-and-health-sciences/bachelor-of-science-psychological-science",
+     "title": "Bachelor of Science (Psychological Science)",
+     "retrievedAt": "2026-10-06T22:25:37.721Z",
+     "hash": "29aad1a2a11e90a2ad20a1e224b45e266d4603ed800a52f134e60674109c2f61"
+    },
+    {
+     "id": "s4",
+     "url": "https://curtindubai.ac.ae/business-and-management/bachelor-of-business-administration/",
+     "title": "Bachelor of Business Administration - Curtin University Dubai",
+     "retrievedAt": "2026-10-06T22:25:38.914Z",
+     "hash": "7e67cbd1bdfc0318ff3fd1dcc5239d3cd309343894314734896ffc5e6d5a404e",
+     "waybackTimestamp": "20250814044618",
+     "waybackHash": "d59bf9d9facd9ef18ebe524acb508177448de3079ffbe131e162d5cb0a0a7545"
+    },
+    {
+     "id": "s5",
+     "url": "https://curtindubai.ac.ae/it-and-computing/information-technology/",
+     "title": "Bachelor of Science (Information Technology)",
+     "retrievedAt": "2026-10-06T22:52:03.960Z",
+     "hash": "3d8a5edbe2b8f85fc18bbae212fe5ace560c9f9b28c631867caa2d24d2607e91"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "FOUNDATION_REQUIRED",
+     "required": true,
+     "noteEn": "Applicants who do not meet direct entry can take the Curtin Dubai Foundation Program, with guaranteed progression when its academic requirements are met.",
+     "noteAr": "يمكن لمن لا يستوفي شروط القبول المباشر الالتحاق بالبرنامج التأسيسي في كيرتن دبي، مع انتقال مضمون إلى البكالوريوس عند استيفاء متطلباته الأكاديمية.",
+     "source": "s1",
+     "quote": "Students who complete this Foundation pathway will have guaranteed progression into the bachelor's degree upon meeting the academic requirements."
+    }
+   ],
+   "deadlines": [],
+   "programs": [
+    {
+     "key": "curtin-dubai-eng",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Engineering (Honours)",
+     "nameAr": "بكالوريوس الهندسة (مع مرتبة الشرف)",
+     "degree": "BEng (Hons)",
+     "durationYears": null,
+     "url": "https://curtindubai.ac.ae/lp-engineering-program",
+     "curricula": {
+      "IB": {
+       "accepted": true,
+       "source": "s2",
+       "quote": "IB: 28 points or better",
+       "subjects": [],
+       "minimumPoints": 28
+      },
+      "CBSE": {
+       "accepted": true,
+       "source": "s2",
+       "quote": "Indian Board: Average of 70% CBSE/ICSE | Average of 71% in HSC",
+       "subjects": [],
+       "minimumPercent": 70
+      },
+      "ISC": {
+       "accepted": true,
+       "source": "s2",
+       "quote": "Indian Board: Average of 70% CBSE/ICSE | Average of 71% in HSC",
+       "subjects": [],
+       "minimumPercent": 70
+      },
+      "BRITISH": {
+       "accepted": true,
+       "source": "s2",
+       "quote": "UK GCE A-Levels: 8 points with pre requisites (Math, Physics or Chemistry)",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "UK GCE A-Levels: 8 points with pre requisites (Math, Physics or Chemistry)"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "physics",
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "UK GCE A-Levels: 8 points with pre requisites (Math, Physics or Chemistry)"
+        }
+       ],
+       "notesEn": "A-Levels totalling 8 points, with Mathematics and Physics or Chemistry.",
+       "notesAr": "مواد A-Level بمجموع 8 نقاط، مع الرياضيات والفيزياء أو الكيمياء."
+      },
+      "AMERICAN": {
+       "accepted": true,
+       "source": "s2",
+       "quote": "USA High School Diploma: US High School Diploma and Grade Point of 6 required in AP Examinations: AP Calculus AB and AP Chemistry OR AP Physics 1 and AP Physics 2",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "calculus"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": null,
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "USA High School Diploma: US High School Diploma and Grade Point of 6 required in AP Examinations: AP Calculus AB and AP Chemistry OR AP Physics 1 and AP Physics 2"
+        }
+       ],
+       "notesEn": "US diploma plus AP exams totalling 6 grade points: AP Calculus AB with AP Chemistry, or AP Physics 1 and AP Physics 2.",
+       "notesAr": "الدبلوم الأمريكي مع اختبارات AP بمجموع 6 نقاط: AP Calculus AB مع AP Chemistry، أو AP Physics 1 وAP Physics 2."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6,
+        "minComponent": 6,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s2",
+        "quote": "ELTS: 6.0 in each band, 6.0 overall"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 68,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s2",
+        "quote": "TOEFL - internet-based: 68 overall"
+       },
+       {
+        "test": "PTE",
+        "minOverall": 50,
+        "minComponent": 50,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s2",
+        "quote": "PTE: total 50, no band less than 50"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "FOUNDATION_REQUIRED",
+        "required": false,
+        "noteEn": "An engineering Foundation Program is available for applicants below direct entry.",
+        "noteAr": "يتوفر برنامج تأسيسي هندسي لمن لا يستوفي شروط القبول المباشر.",
+        "source": "s2",
+        "quote": "An engineering specific Foundation Program is available for those not meeting the direct entry requirements."
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "curtin-dubai-psy",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Science (Psychological Science)",
+     "nameAr": "بكالوريوس العلوم (العلوم النفسية)",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://curtindubai.ac.ae/arts-humanities-and-health-sciences/bachelor-of-science-psychological-science",
+     "curricula": {
+      "IB": {
+       "accepted": true,
+       "source": "s3",
+       "quote": "To enter our Bachelor of Science (Psychological Science) program, you will require GCE A-Levels: 5 points (best of 3 subjects) | IB: 24 points | India: CBSE/ICSE - 60% HSC - 65%. |",
+       "subjects": [],
+       "minimumPoints": 24
+      },
+      "CBSE": {
+       "accepted": true,
+       "source": "s3",
+       "quote": "To enter our Bachelor of Science (Psychological Science) program, you will require GCE A-Levels: 5 points (best of 3 subjects) | IB: 24 points | India: CBSE/ICSE - 60% HSC - 65%. |",
+       "subjects": [],
+       "minimumPercent": 60
+      },
+      "ISC": {
+       "accepted": true,
+       "source": "s3",
+       "quote": "To enter our Bachelor of Science (Psychological Science) program, you will require GCE A-Levels: 5 points (best of 3 subjects) | IB: 24 points | India: CBSE/ICSE - 60% HSC - 65%. |",
+       "subjects": [],
+       "minimumPercent": 60
+      },
+      "BRITISH": {
+       "accepted": true,
+       "source": "s3",
+       "quote": "To enter our Bachelor of Science (Psychological Science) program, you will require GCE A-Levels: 5 points (best of 3 subjects) | IB: 24 points | India: CBSE/ICSE - 60% HSC - 65%. |",
+       "subjects": [],
+       "notesEn": "A-Levels totalling 5 points across the best 3 subjects.",
+       "notesAr": "مواد A-Level بمجموع 5 نقاط في أفضل 3 مواد."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": 6,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s3",
+        "quote": "The English language requirements are an IELTS overall band score of 6.5 with a minimum of 6.0 in each band. |"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s3"
+     },
+     "previous": null
+    },
+    {
+     "key": "curtin-dubai-bus",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Business Administration",
+     "nameAr": "بكالوريوس إدارة الأعمال",
+     "degree": "BBA",
+     "durationYears": null,
+     "url": "https://curtindubai.ac.ae/business-and-management/bachelor-of-business-administration/",
+     "curricula": {
+      "IB": {
+       "accepted": true,
+       "source": "s4",
+       "quote": "IB: 24 points",
+       "subjects": [],
+       "minimumPoints": 24
+      },
+      "CBSE": {
+       "accepted": true,
+       "source": "s4",
+       "quote": "India: CBSE/ICSE - 60% HSC - 65%",
+       "subjects": [],
+       "minimumPercent": 60
+      },
+      "BRITISH": {
+       "accepted": true,
+       "source": "s4",
+       "quote": "Admission requirements for this BBA degree in Dubai are to have a minimum of GCE A-Levels: 5 points (best of 3 subjects)",
+       "subjects": [],
+       "notesEn": "A-Levels totalling 5 points across the best 3 subjects.",
+       "notesAr": "مواد A-Level بمجموع 5 نقاط في أفضل 3 مواد."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6,
+        "minComponent": 6,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s4",
+        "quote": "75%. The English language requirements are for an IELTS overall band score of 6.0 with a minimum of 6.0 in each band."
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "curtin-dubai-cs",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Science (Information Technology)",
+     "nameAr": "بكالوريوس العلوم (تقنية المعلومات)",
+     "degree": "BSc",
+     "durationYears": 3,
+     "url": "https://curtindubai.ac.ae/it-and-computing/information-technology/",
+     "curricula": {
+      "IB": {
+       "accepted": true,
+       "source": "s5",
+       "quote": "GCE A-Levels: 5 points (minimum 2 subjects) | IB: 24 points | India: CBSE/ICSE - 60% HSC - 65% | Prerequisites: Mathematics is essential and calculus is desirable. |",
+       "subjects": [],
+       "minimumPoints": 24
+      },
+      "CBSE": {
+       "accepted": true,
+       "source": "s5",
+       "quote": "GCE A-Levels: 5 points (minimum 2 subjects) | IB: 24 points | India: CBSE/ICSE - 60% HSC - 65% | Prerequisites: Mathematics is essential and calculus is desirable. |",
+       "subjects": [],
+       "minimumPercent": 60
+      },
+      "ISC": {
+       "accepted": true,
+       "source": "s5",
+       "quote": "GCE A-Levels: 5 points (minimum 2 subjects) | IB: 24 points | India: CBSE/ICSE - 60% HSC - 65% | Prerequisites: Mathematics is essential and calculus is desirable. |",
+       "subjects": [],
+       "minimumPercent": 60
+      },
+      "BRITISH": {
+       "accepted": true,
+       "source": "s5",
+       "quote": "GCE A-Levels: 5 points (minimum 2 subjects) | IB: 24 points | India: CBSE/ICSE - 60% HSC - 65% | Prerequisites: Mathematics is essential and calculus is desirable. |",
+       "subjects": [],
+       "notesEn": "A-Levels totalling 5 points from at least 2 subjects.",
+       "notesAr": "مواد A-Level بمجموع 5 نقاط من مادتين على الأقل."
+      }
+     },
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": null,
+        "minimumGrade": null,
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s5",
+        "quote": "GCE A-Levels: 5 points (minimum 2 subjects) | IB: 24 points | India: CBSE/ICSE - 60% HSC - 65% | Prerequisites: Mathematics is essential and calculus is desirable. |"
+       },
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "calculus"
+        ],
+        "minimumLevel": null,
+        "minimumGrade": null,
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s5",
+        "quote": "GCE A-Levels: 5 points (minimum 2 subjects) | IB: 24 points | India: CBSE/ICSE - 60% HSC - 65% | Prerequisites: Mathematics is essential and calculus is desirable. |"
+       }
+      ],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6,
+        "minComponent": 6,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s5",
+        "quote": "12th CBSE - 60% | IGCSE English Language and Literature - C | IBDP - 4 | IELTS 6.0, with no band less than 6.0 or equivalent. |"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s5"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "amity_dubai",
+   "website": "https://amityuniversity.ae",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://amityuniversity.ae/join-amity/admission-requirements",
+     "title": "CAA Accredited University| Amity University, Dubai| Admission Process and Guidelines",
+     "retrievedAt": "2026-10-06T22:26:47.297Z",
+     "hash": "bca96216b3d4112a33c07543d7be7766e84c5f0312af224753769dfbfa31d67a"
+    },
+    {
+     "id": "s2",
+     "url": "https://amityuniversity.ae/degree/bachelors-degree/engineering-architecture-and-interior-design/bachelor-of-science-in-computer-science-artificial-intelligence",
+     "title": "Bachelor of Science in Computer Science - AI in Dubai, UAE",
+     "retrievedAt": "2026-10-06T22:51:55.703Z",
+     "hash": "cb350a6527d7edd11313f5760bda9f57f8e75adc1689d46246a14f02f9580499"
+    },
+    {
+     "id": "s3",
+     "url": "https://amityuniversity.ae/degree/bachelors-degree/engineering-architecture-and-interior-design/bachelor-of-science-in-computer-science-cybersecurity",
+     "title": "Bachelor of Science in Computer Science - Cyber Security in Dubai, UAE",
+     "retrievedAt": "2026-10-06T22:51:45.264Z",
+     "hash": "0d3e0c98543a55ae354e861d34720668bc3f4fc2dc639c3dfee7ab60bc57c59b"
+    },
+    {
+     "id": "s4",
+     "url": "https://amityuniversity.ae/degree/bachelors-degree/business/bachelor-of-business-administration",
+     "title": "Bachelor of Business Administration (BBA) Courses in Dubai | Amity University Dubai",
+     "retrievedAt": "2026-10-06T22:52:09.729Z",
+     "hash": "f653e35c3c36c0f37475a69276173f00be60fc0c07925715eb4bcfa736e294fa"
+    },
+    {
+     "id": "s5",
+     "url": "https://amityuniversity.ae/degree/bachelors-degree/humanities-arts-and-applied-sciences-science/bachelor-of-arts-honours-applied-psychology",
+     "title": "Bachelor of Science in Psychology | BS Psychology Course Dubai",
+     "retrievedAt": "2026-10-06T22:52:30.843Z",
+     "hash": "a892fddcf29329262c9f22ad43d7a2d10d6c438c410aa6663dd6d5394c0ca6fe"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 5,
+     "minComponent": null,
+     "waiverNoteEn": "Exempt when the school curriculum was taught in English; UAE MoE students need at least 80% in high school English.",
+     "waiverNoteAr": "يُعفى من درس منهجًا باللغة الإنجليزية؛ ويحتاج طلاب منهج وزارة التربية إلى 80% على الأقل في اللغة الإنجليزية بالثانوية.",
+     "source": "s1",
+     "quote": "-Students from non-MoE curricula taught in a language other than English must demonstrate proficiency through international standardized tests (IELTS 5 and above"
+    }
+   ],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Applicants need a UAE higher secondary school certificate, an equivalent foreign qualification or 12 years of schooling.",
+     "noteAr": "يحتاج المتقدمون إلى شهادة الثانوية العامة الإماراتية أو مؤهل أجنبي معادل أو 12 سنة من الدراسة.",
+     "source": "s1",
+     "quote": "All applicants should hold a higher secondary school certificate from UAE or an equivalent foreign qualification or 12 years of school study."
+    }
+   ],
+   "deadlines": [],
+   "programs": [
+    {
+     "key": "amity-dubai-ai",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Science in Computer Science - Artificial Intelligence",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب - الذكاء الاصطناعي",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://amityuniversity.ae/degree/bachelors-degree/engineering-architecture-and-interior-design/bachelor-of-science-in-computer-science-artificial-intelligence",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "source": "s1",
+       "quote": "-For BS Computer Science: Students must have achieved a 60% average in their Secondary School Certificate (Grade 12) in the UAE Ministry of Education (MOE) curriculum or its equivalent, including 60% or more in Mathematics and in any one of the Science courses.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "60",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s1",
+         "quote": "-For BS Computer Science: Students must have achieved a 60% average in their Secondary School Certificate (Grade 12) in the UAE Ministry of Education (MOE) curriculum or its equivalent, including 60% or more in Mathematics and in any one of the Science courses."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "physics",
+          "chemistry",
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "60",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s1",
+         "quote": "-For BS Computer Science: Students must have achieved a 60% average in their Secondary School Certificate (Grade 12) in the UAE Ministry of Education (MOE) curriculum or its equivalent, including 60% or more in Mathematics and in any one of the Science courses."
+        }
+       ],
+       "minimumPercent": 60,
+       "notesEn": "Includes 60% or more in Mathematics and in one science; the same applies to equivalent curricula.",
+       "notesAr": "مع 60% أو أكثر في الرياضيات وفي مادة علمية واحدة؛ وينطبق ذلك على المناهج المعادلة."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "amity-dubai-cs",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Science in Computer Science - Cybersecurity",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب - الأمن السيبراني",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://amityuniversity.ae/degree/bachelors-degree/engineering-architecture-and-interior-design/bachelor-of-science-in-computer-science-cybersecurity",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "source": "s1",
+       "quote": "-For BS Computer Science: Students must have achieved a 60% average in their Secondary School Certificate (Grade 12) in the UAE Ministry of Education (MOE) curriculum or its equivalent, including 60% or more in Mathematics and in any one of the Science courses.",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "60",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s1",
+         "quote": "-For BS Computer Science: Students must have achieved a 60% average in their Secondary School Certificate (Grade 12) in the UAE Ministry of Education (MOE) curriculum or its equivalent, including 60% or more in Mathematics and in any one of the Science courses."
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "physics",
+          "chemistry",
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "60",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s1",
+         "quote": "-For BS Computer Science: Students must have achieved a 60% average in their Secondary School Certificate (Grade 12) in the UAE Ministry of Education (MOE) curriculum or its equivalent, including 60% or more in Mathematics and in any one of the Science courses."
+        }
+       ],
+       "minimumPercent": 60,
+       "notesEn": "Includes 60% or more in Mathematics and in one science; the same applies to equivalent curricula.",
+       "notesAr": "مع 60% أو أكثر في الرياضيات وفي مادة علمية واحدة؛ وينطبق ذلك على المناهج المعادلة."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "amity-dubai-bus",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Business Administration",
+     "nameAr": "بكالوريوس إدارة الأعمال",
+     "degree": "BBA",
+     "durationYears": null,
+     "url": "https://amityuniversity.ae/degree/bachelors-degree/business/bachelor-of-business-administration",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "source": "s1",
+       "quote": "Bachelor of Commerce in Accounting) requires students to have attained the General Education Secondary School Certificate (G 12) or equivalent. In addition to achieving a minimum high school average of 60%.",
+       "subjects": [],
+       "minimumPercent": 60,
+       "notesEn": "Grade 12 certificate or equivalent with an average of at least 60%.",
+       "notesAr": "شهادة الصف الثاني عشر أو ما يعادلها بمعدل 60% على الأقل."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Maths evidence: EmSAT Mathematics 600, 60% in Grade 12 Mathematics in a centrally examined system, or 60% on the Amity Mathematics placement test.",
+        "noteAr": "إثبات الكفاءة في الرياضيات: 600 في EmSAT للرياضيات، أو 60% في رياضيات الصف الثاني عشر في نظام امتحانات مركزي، أو 60% في اختبار تحديد المستوى في الرياضيات في أميتي.",
+        "source": "s1",
+        "quote": "-'EmSAT Achieve' minimum score of 600 in Mathematics, or"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "amity-dubai-psy",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Psychology",
+     "nameAr": "بكالوريوس العلوم في علم النفس",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://amityuniversity.ae/degree/bachelors-degree/humanities-arts-and-applied-sciences-science/bachelor-of-arts-honours-applied-psychology",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "source": "s1",
+       "quote": "Entry to the above undergraduate programs requires students to have attained the General Education Secondary School Certificate (G 12) or equivalent. In addition to achieving a minimum high school average of 60%, all applicants must provide:",
+       "subjects": [],
+       "minimumPercent": 60,
+       "notesEn": "Grade 12 certificate or equivalent with an average of at least 60%.",
+       "notesAr": "شهادة الصف الثاني عشر أو ما يعادلها بمعدل 60% على الأقل."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "murdoch_dubai",
+   "website": "https://www.murdochuniversitydubai.com",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.murdochuniversitydubai.com/apply/english-entry-requirements/",
+     "title": "English Language Entry Requirements - Murdoch University Dubai",
+     "retrievedAt": "2026-10-06T22:25:50.356Z",
+     "hash": "272e289937ede87d1543c8dbd6a81ff281fa6e24efb0aa0efd0ca618f05bc079",
+     "waybackTimestamp": "20250814173159",
+     "waybackHash": "388c2b1f0a12cf5fc92cfa28fc9d592d52c6aa41e53f1ac5c920ccec84b0608e"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.murdochuniversitydubai.com/apply/academic-entry-requirements-2026/",
+     "title": "Academic Entry Requirements - Murdoch University Dubai",
+     "retrievedAt": "2026-10-06T22:25:50.215Z",
+     "hash": "4f038092bc9160c2617f3993844b7511a21e1c5d2d33396bb7ef63349f092704",
+     "waybackTimestamp": "20251109032102",
+     "waybackHash": "0b51e4c8882d1368cb6228ec3b7b4ce0d55ab96a13c9fb98944b298e52d195b7"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.murdochuniversitydubai.com/study/undergraduate/computer-science/",
+     "title": "Bachelor of Information Technology in Computer Science - Murdoch University Dubai",
+     "retrievedAt": "2026-10-06T22:52:01.865Z",
+     "hash": "d3614a224510db62f75a428f0012c67ac398b775b7ecd297ce16a3bfbd435b71"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.murdochuniversitydubai.com/study/undergraduate/management/",
+     "title": "Bachelor of Business in Management - Murdoch University Dubai",
+     "retrievedAt": "2026-10-06T22:51:51.804Z",
+     "hash": "a2e73b71d66e936f6eea54eb1eb6c41a7c91e817247f3faea562ccdcd6800585"
+    },
+    {
+     "id": "s5",
+     "url": "https://www.murdochuniversitydubai.com/study/undergraduate/psychology/",
+     "title": "Bachelor of Psychology in Psychological Science - Murdoch University Dubai",
+     "retrievedAt": "2026-10-06T22:52:15.401Z",
+     "hash": "13b86468716166c5f1d50e8d30d7f131ef38679408156b9922facd8634cc7892"
+    },
+    {
+     "id": "s6",
+     "url": "https://www.murdochuniversitydubai.com/study/undergraduate/digital-communication/",
+     "title": "Bachelor of Communication in Digital Communication - Murdoch University Dubai",
+     "retrievedAt": "2026-10-06T22:52:37.105Z",
+     "hash": "ed63bc2fcb9d9870a7a20050eaa028524d2478fd0ee74ff8c389035fd57510b9"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6,
+     "minComponent": 6,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "6.0 overall score (no band less than 6.0)"
+    },
+    {
+     "test": "PTE",
+     "minOverall": 50,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "Overall score of 50 (with a minimum 53 in Reading, 50 in Listening, 50 in Speaking and 54 in Writing)"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 60,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "Overall score of 60 (with a minimum of 13 in Reading, 12 in Listening, 18 in Speaking and 21 in Writing)"
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 115,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "Overall score of 115 (with minimum scores of 110 in Reading, Writing, and Speaking, and 105 in Listening)"
+    }
+   ],
+   "tests": [],
+   "additional": [],
+   "deadlines": [],
+   "curriculumRules": {
+    "IB": {
+     "accepted": true,
+     "source": "s2",
+     "quote": "International Baccalaureate (IB) | Aggregate score of < 21 | Aggregate score of 21 or above | Successful completion of the International Baccalaureate (IB) Diploma Programme (DP) with a total score of 24 points or higher |",
+     "subjects": [],
+     "minimumPoints": 24
+    },
+    "CBSE": {
+     "accepted": true,
+     "source": "s2",
+     "quote": "Undergraduate - Successful completion of All India Senior School Certificate (Class XII) (CBSE/CISCE/NIOS) with a minimum average of 65% in the best 4 academic subjects.",
+     "subjects": [],
+     "minimumPercent": 65,
+     "notesEn": "Average of the best 4 academic subjects.",
+     "notesAr": "معدل أفضل 4 مواد أكاديمية."
+    },
+    "ISC": {
+     "accepted": true,
+     "source": "s2",
+     "quote": "Undergraduate - Successful completion of All India Senior School Certificate (Class XII) (CBSE/CISCE/NIOS) with a minimum average of 65% in the best 4 academic subjects.",
+     "subjects": [],
+     "minimumPercent": 65,
+     "notesEn": "Average of the best 4 academic subjects.",
+     "notesAr": "معدل أفضل 4 مواد أكاديمية."
+    },
+    "BRITISH": {
+     "accepted": true,
+     "source": "s2",
+     "quote": "Undergraduate - Aggregate of 5 points from: A maximum of the best three A-level subjects;",
+     "subjects": [],
+     "notesEn": "At least 5 points from the best three A-levels (A*=6, A=5, B=4, C=3, D=2, E=1), with at least two A-levels counted.",
+     "notesAr": "5 نقاط على الأقل من أفضل ثلاث مواد A-level (A*=6، A=5، B=4، C=3، D=2، E=1)، على أن تُحتسب مادتان A-level على الأقل."
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "source": "s2",
+     "quote": "gh School Diploma OR Composite score not less than 22 and a completed High School Diploma in ACT OR US High School Diploma with a GPA of 2.5 or higher AND a total score of 1090 out of 1600 in the SAT.",
+     "subjects": [],
+     "minimumGPA": 2.5,
+     "notesEn": "US diploma with GPA 2.5 and SAT 1090, or ACT 22, or two AP subjects with 7 points.",
+     "notesAr": "الدبلوم الأمريكي بمعدل 2.5 مع 1090 في SAT، أو 22 في ACT، أو مادتا AP بمجموع 7 نقاط."
+    }
+   },
+   "programs": [
+    {
+     "key": "murdoch-dubai-cs",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Information Technology in Computer Science",
+     "nameAr": "بكالوريوس تقنية المعلومات في علوم الحاسوب",
+     "degree": "BIT",
+     "durationYears": 3,
+     "url": "https://www.murdochuniversitydubai.com/study/undergraduate/computer-science/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "murdoch-dubai-bus",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Business in Management",
+     "nameAr": "بكالوريوس الأعمال في الإدارة",
+     "degree": "BBus",
+     "durationYears": 3,
+     "url": "https://www.murdochuniversitydubai.com/study/undergraduate/management/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "murdoch-dubai-psy",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Psychology in Psychological Science",
+     "nameAr": "بكالوريوس علم النفس في العلوم النفسية",
+     "degree": "BPsych",
+     "durationYears": 3,
+     "url": "https://www.murdochuniversitydubai.com/study/undergraduate/psychology/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "murdoch-dubai-media",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Communication in Digital Communication",
+     "nameAr": "بكالوريوس الاتصال في الاتصال الرقمي",
+     "degree": "BComm",
+     "durationYears": 3,
+     "url": "https://www.murdochuniversitydubai.com/study/undergraduate/digital-communication/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "al_ain_university",
+   "website": "https://aau.ac.ae",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://aau.ac.ae/en/admission/undergraduate/general-admission-requirements",
+     "title": "Admission Requirements - Al Ain University(AAU) - One of the Best Universities in UAE",
+     "retrievedAt": "2026-10-06T22:25:26.989Z",
+     "hash": "0ef8223911a849ee184918e0128a133a2a8bc92ab95399a0cc7e70c54e68c79a"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.aau.ac.ae/en/admission/undergraduate/language-requirements",
+     "title": "English Language Requirements - Al Ain University(AAU) - One of the Best Universities in UAE",
+     "retrievedAt": "2026-10-06T22:25:52.344Z",
+     "hash": "0c44198cce8b2a4a052d0715598c5b28a1f91fc710e89202bc0731a0399f19d8"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 5,
+     "minComponent": null,
+     "waiverNoteEn": "A high school English score of 80% is also accepted; the requirement is waived when the curriculum was taught in English.",
+     "waiverNoteAr": "تُقبل أيضًا درجة 80% في اللغة الإنجليزية بالثانوية، ويُعفى من المتطلب من درس منهجًا باللغة الإنجليزية.",
+     "source": "s1",
+     "quote": "2. For programs taught in English, applicants must achieve a minimum High School English score of 80%, or a score of 5 in the IELTS exam, or 500 in the TOEFL exam."
+    }
+   ],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Applicants who miss a required subject score for Pharmacy, Engineering or Law take a 3-credit remedial course in that subject in their first semester.",
+     "noteAr": "يدرس المتقدم الذي لم يحقق درجة المادة المطلوبة لبرامج الصيدلة أو الهندسة أو القانون مقررًا علاجيًا من 3 ساعات في تلك المادة في فصله الأول.",
+     "source": "s1",
+     "quote": "3. For the (Pharmacy, Engineering, Law) programs, applicants who fail to meet the required subject scores must take a 3 CR.H. remedial course related to the deficient subject during their admission semester. This course is outside the academic plan and is excluded from the cumulative GPA."
+    }
+   ],
+   "deadlines": [],
+   "programs": [
+    {
+     "key": "al-ain-university-cs",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Computer Science",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسوب",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://aau.ac.ae/en/admission/undergraduate/general-admission-requirements",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "al-ain-university-pharm",
+     "status": "REPLACED",
+     "nameEn": "Doctor of Pharmacy (PharmD)",
+     "nameAr": "دكتور في الصيدلة",
+     "degree": "PharmD",
+     "durationYears": null,
+     "url": "https://aau.ac.ae/en/admission/undergraduate/general-admission-requirements",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "80",
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s1",
+        "quote": "Bachelor of Science in Pharmacy | English | 80 | 80 | 80 | 80 | Doctor of Pharmacy (PharmD) | Two of the three subjects |"
+       },
+       {
+        "type": "TWO_OF",
+        "keys": [
+         "physics",
+         "biology",
+         "chemistry"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "80",
+        "noteEn": "80% in Mathematics and in two of Physics, Biology and Chemistry.",
+        "noteAr": "80% في الرياضيات وفي مادتين من الفيزياء والأحياء والكيمياء.",
+        "source": "s1",
+        "quote": "Bachelor of Science in Pharmacy | English | 80 | 80 | 80 | 80 | Doctor of Pharmacy (PharmD) | Two of the three subjects |"
+       }
+      ],
+      "english": [
+       {
+        "test": "EMSAT_ENGLISH",
+        "minOverall": 1100,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s2",
+        "quote": "College of EngineeringCollege of PharmacyCollege of Education, Humanities and Social Sciences(IT teacher and English teacher)College of Business Student must have a valid English Language Proficiency Certificate in one of the below certificates or its equivalent, at least as the following: 1100 500 61 173 5"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "al-ain-university-law",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Law",
+     "nameAr": "بكالوريوس القانون",
+     "degree": "LLB",
+     "durationYears": null,
+     "url": "https://aau.ac.ae/en/admission/undergraduate/general-admission-requirements",
+     "curricula": {},
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "70",
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s1",
+        "quote": "Bachelor of Law | Arabic | 70 |"
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Taught in Arabic. English for Law: EmSAT 950, TOEFL ITP 450 or IELTS 4.5 (or equivalent).",
+        "noteAr": "يُدرَّس باللغة العربية. اللغة الإنجليزية لبرنامج القانون: 950 في EmSAT أو 450 في TOEFL ITP أو 4.5 في IELTS (أو ما يعادلها).",
+        "source": "s2",
+        "quote": "College of LawCollege of Education, Humanities and Social Sciences(except IT teacher and English teacher)College of Communication and Media Student must have a valid English Language Proficiency Certificate in one of the below certificates or its equivalent, at least as the following: 950 450 4.5"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "al-ain-university-bus",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Business Administration in Management",
+     "nameAr": "بكالوريوس إدارة الأعمال في الإدارة",
+     "degree": "BBA",
+     "durationYears": null,
+     "url": "https://aau.ac.ae/en/admission/undergraduate/general-admission-requirements",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "gulf_medical_university",
+   "website": "https://gmu.ac.ae",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://gmu.ac.ae/policy-and-general-admission-requirements/",
+     "title": "Policy and General Admission Requirements | GMU",
+     "retrievedAt": "2026-10-06T22:26:05.846Z",
+     "hash": "4c0df2cde7a45c107cc0f982dfeffc37b25c6b5ce10d74494663c1b0b6b22d97"
+    },
+    {
+     "id": "s2",
+     "url": "https://gmu.ac.ae/college-medicine/bachelor-of-medicine-and-bachelor-of-surgery-mbbs/",
+     "title": "Doctor of Medicine Program (MD) – 6 Years - GMU",
+     "retrievedAt": "2026-10-06T22:26:59.273Z",
+     "hash": "d6b44449dd9636940b04a377aaf21b84ed6c574fa0f6d1b796fdaf0127fd8ef3",
+     "waybackTimestamp": "20250825101620",
+     "waybackHash": "2326ad794cea8728af5e0d17bf9a109a8c90f406461d3c4e2efddbf9496cbcbf"
+    },
+    {
+     "id": "s3",
+     "url": "https://gmu.ac.ae/wp-content/uploads/2025/12/UG-Catalog-AY-2025-2026.pdf",
+     "title": "PDF",
+     "retrievedAt": "2026-10-06T22:26:20.045Z",
+     "hash": "5f1699fe6f04d55292fbc4578ebba234f5fea280d61689450dbd060f945c527e"
+    },
+    {
+     "id": "s4",
+     "url": "https://gmu.ac.ae/college-of-health-sciences/bachelor-of-physiotherapy-bpt-program/",
+     "title": "Bachelor of Physiotherapy (BPT) Program - Gulf Medical University",
+     "retrievedAt": "2026-10-06T22:26:07.610Z",
+     "hash": "abcc339f16603d0978e10c55566004203552099d2dc1b6480456864f682c87e8",
+     "waybackTimestamp": "20250807103944",
+     "waybackHash": "59e19bc6a1d63fe139e4acf70e376995a7cbc48228ff7d853535eaa0f308cf20"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Applicants from international curricula must submit a UAE equivalency certificate; without it, admission is conditional for one semester.",
+     "noteAr": "يجب على المتقدمين من المناهج الدولية تقديم شهادة معادلة إماراتية، وإلا يكون القبول مشروطًا لفصل دراسي واحد.",
+     "source": "s1",
+     "quote": "All international curriculum applicants are mandatory to submit an equivalency certificate."
+    },
+    {
+     "kind": "INTERVIEW",
+     "required": true,
+     "noteEn": "After the admission exam, the applicant and a parent meet the GMU Admission Committee.",
+     "noteAr": "بعد اختبار القبول، يلتقي المتقدم وولي أمره بلجنة القبول في الجامعة.",
+     "source": "s1",
+     "quote": "After successful completion of the selection process with an admission exam, a personal meeting with the applicant and parent is arranged before the GMU Admission Committee."
+    }
+   ],
+   "deadlines": [],
+   "programs": [
+    {
+     "key": "gulf-medical-university-med",
+     "status": "REPLACED",
+     "nameEn": "Doctor of Medicine (MD)",
+     "nameAr": "دكتور في الطب",
+     "degree": "MD",
+     "durationYears": 6,
+     "url": "https://gmu.ac.ae/college-medicine/bachelor-of-medicine-and-bachelor-of-surgery-mbbs/",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "source": "s2",
+       "quote": "UAE | Elite/Advanced/Abu Dhabi Education Council | Biology - 90% Chemistry - 90% Physics/Mathematics - 70% |",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "90",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "UAE | Elite/Advanced/Abu Dhabi Education Council | Biology - 90%"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "90",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "UAE | Elite/Advanced/Abu Dhabi Education Council | Biology - 90% Chemistry - 90%"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "physics",
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "70",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "UAE | Elite/Advanced/Abu Dhabi Education Council | Biology - 90% Chemistry - 90% Physics/Mathematics - 70% |"
+        }
+       ],
+       "stream": "ELITE|ADVANCED",
+       "notesEn": "Biology 90%, Chemistry 90%, Physics or Mathematics 70%.",
+       "notesAr": "الأحياء 90% والكيمياء 90% والفيزياء أو الرياضيات 70%."
+      },
+      "CBSE": {
+       "accepted": true,
+       "source": "s2",
+       "quote": "India | State Board / CBSE / ICSE | Biology - 75% Chemistry - 75% Physics/Mathematics - 50% |",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "75",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "India | State Board / CBSE / ICSE | Biology - 75%"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "75",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "India | State Board / CBSE / ICSE | Biology - 75% Chemistry - 75%"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "physics",
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "50",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "India | State Board / CBSE / ICSE | Biology - 75% Chemistry - 75% Physics/Mathematics - 50% |"
+        }
+       ],
+       "notesEn": "Biology 75%, Chemistry 75%, Physics or Mathematics 50%.",
+       "notesAr": "الأحياء 75% والكيمياء 75% والفيزياء أو الرياضيات 50%."
+      },
+      "BRITISH": {
+       "accepted": true,
+       "source": "s2",
+       "quote": "Minimum C grade in all three O-Level science subjects (Biology, Chemistry, Physics) AND minimum C grade in Biology & Chemistry at AS (12th grade)/A-Level",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "C",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "Minimum C grade in all three O-Level science subjects (Biology, Chemistry, Physics) AND minimum C grade in Biology & Chemistry at AS (12th grade)/A-Level"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "C",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "Minimum C grade in all three O-Level science subjects (Biology, Chemistry, Physics) AND minimum C grade in Biology & Chemistry at AS (12th grade)/A-Level"
+        }
+       ],
+       "notesEn": "Grade C in Biology and Chemistry at AS or A Level, C in all three O-Level sciences, and at least D in Physics or Mathematics at O or AS Level.",
+       "notesAr": "درجة C في الأحياء والكيمياء في AS أو A Level، وC في مواد العلوم الثلاث في O-Level، وD على الأقل في الفيزياء أو الرياضيات في O أو AS."
+      },
+      "IB": {
+       "accepted": true,
+       "source": "s2",
+       "quote": "International Baccalaureate | IB Diploma | Biology & Chemistry (High Level in grade 13) ≥ 5",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "5",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "International Baccalaureate | IB Diploma | Biology & Chemistry (High Level in grade 13) ≥ 5"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "HIGHER",
+         "minimumGrade": "5",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "International Baccalaureate | IB Diploma | Biology & Chemistry (High Level in grade 13) ≥ 5"
+        }
+       ],
+       "notesEn": "Biology and Chemistry at Higher Level 5 or above; Physics or Mathematics 4 or above.",
+       "notesAr": "الأحياء والكيمياء في المستوى العالي بدرجة 5 أو أكثر، والفيزياء أو الرياضيات 4 أو أكثر."
+      },
+      "AMERICAN": {
+       "accepted": true,
+       "source": "s2",
+       "quote": "USA | American Diploma | Biology - 90% Chemistry - 90% Physics/Mathematics - 70% SAT Math required for equivalency AP Biology and AP Chemistry preferred |",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "90",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "USA | American Diploma | Biology - 90%"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "90",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "USA | American Diploma | Biology - 90% Chemistry - 90%"
+        }
+       ],
+       "notesEn": "Biology 90%, Chemistry 90%, Physics or Mathematics 70%; SAT Math is required for equivalency and AP Biology and AP Chemistry are preferred.",
+       "notesAr": "الأحياء 90% والكيمياء 90% والفيزياء أو الرياضيات 70%؛ ويُطلب SAT للرياضيات للمعادلة، ويُفضَّل AP Biology وAP Chemistry."
+      },
+      "SABIS": {
+       "accepted": true,
+       "source": "s2",
+       "quote": "SABIS | SABIS System | Biology - 85% Chemistry - 85% Physics/Mathematics - 70%",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "SABIS | SABIS System | Biology - 85%"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s2",
+         "quote": "SABIS | SABIS System | Biology - 85% Chemistry - 85%"
+        }
+       ],
+       "notesEn": "Biology 85%, Chemistry 85%, Physics or Mathematics 70%.",
+       "notesAr": "الأحياء 85% والكيمياء 85% والفيزياء أو الرياضيات 70%."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "TOEFL",
+        "minOverall": 79,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s2",
+        "quote": "TOEFL: 550 (CBT 213 / iBT 79)"
+       },
+       {
+        "test": "IELTS",
+        "minOverall": 6,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s2",
+        "quote": "IELTS Academic: 6.0"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "ADMISSIONS_TEST",
+        "required": true,
+        "noteEn": "GMU entrance test with at least 70% in Biology and Chemistry and 50% in Physics or Mathematics, then a written situational judgment assessment.",
+        "noteAr": "اختبار القبول في الجامعة بحد أدنى 70% في الأحياء والكيمياء و50% في الفيزياء أو الرياضيات، ثم تقييم كتابي للمواقف.",
+        "source": "s2",
+        "quote": "All applicants must appear for the GMU Entrance test."
+       },
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Interview with the Admissions Committee after the test and written assessment.",
+        "noteAr": "مقابلة مع لجنة القبول بعد الاختبار والتقييم الكتابي.",
+        "source": "s2",
+        "quote": "Upon successful completion of the above steps, the applicant will attend an interview with the Admissions Committee."
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "gulf-medical-university-dent",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Dental Surgery (BDS)",
+     "nameAr": "بكالوريوس جراحة الأسنان",
+     "degree": "BDS",
+     "durationYears": null,
+     "url": "https://gmu.ac.ae/wp-content/uploads/2025/12/UG-Catalog-AY-2025-2026.pdf",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "source": "s3",
+       "quote": "Applicants from UAE educational systems (Elite and Advanced track) must have secured an individual minimum score in the following three science subjects in Grade 11 or 12. Mandatory Science subjects a. Biology - 85%",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "85",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s3",
+         "quote": "Applicants from UAE educational systems (Elite and Advanced track) must have secured an individual minimum score in the following three science subjects in Grade 11 or 12. Mandatory Science subjects a. Biology - 85%"
+        },
+        {
+         "type": "ONE_OF",
+         "keys": [
+          "physics",
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "70",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s3",
+         "quote": "b. Chemistry - 85% c. Physics or Mathematics - 70%"
+        }
+       ],
+       "stream": "ELITE|ADVANCED",
+       "notesEn": "Biology 85%, Chemistry 85%, Physics or Mathematics 70% in Grade 11 or 12.",
+       "notesAr": "الأحياء 85% والكيمياء 85% والفيزياء أو الرياضيات 70% في الصف الحادي عشر أو الثاني عشر."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 5,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s3",
+        "quote": "TOEFL CBT 173 - iBT 61 ▪ 5.0 in IELTS for Academic"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 61,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s3",
+        "quote": "▪ TOEFL CBT 173 - iBT 61"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "ADMISSIONS_TEST",
+        "required": true,
+        "noteEn": "Pass the GMU Biology and Chemistry tests (70%), or approved AP or SAT subject scores, or qualifying final school scores.",
+        "noteAr": "اجتياز اختباري الأحياء والكيمياء في الجامعة (70%)، أو درجات AP أو SAT المعتمدة، أو درجات مدرسية نهائية مؤهلة.",
+        "source": "s3",
+        "quote": "GMU admission test: Secure Pass scores (70% minimum) in admission tests for Biology and Chemistry offered by GMU"
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    },
+    {
+     "key": "gulf-medical-university-pharm",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Pharmacy (B Pharm)",
+     "nameAr": "بكالوريوس الصيدلة",
+     "degree": "BPharm",
+     "durationYears": null,
+     "url": "https://gmu.ac.ae/wp-content/uploads/2025/12/UG-Catalog-AY-2025-2026.pdf",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "source": "s3",
+       "quote": "Applicants from UAE educational systems have secured an individual minimum score in the following any three science subjects in Grade 11 or 12. Mandatory Science subjects a. Biology - 80% b. Chemistry - 80% c. Physics or Mathematics - 70%",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "80",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s3",
+         "quote": "Applicants from UAE educational systems have secured an individual minimum score in the following any three science subjects in Grade 11 or 12. Mandatory Science subjects a. Biology - 80%"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "80",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s3",
+         "quote": "a. Biology - 80% b. Chemistry - 80%"
+        }
+       ],
+       "notesEn": "Biology 80%, Chemistry 80%, Physics or Mathematics 70% in Grade 11 or 12.",
+       "notesAr": "الأحياء 80% والكيمياء 80% والفيزياء أو الرياضيات 70% في الصف الحادي عشر أو الثاني عشر."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "ADMISSIONS_TEST",
+        "required": true,
+        "noteEn": "Pass the GMU Biology and Chemistry tests (70%), or approved AP or SAT scores, or qualifying final school scores.",
+        "noteAr": "اجتياز اختباري الأحياء والكيمياء في الجامعة (70%)، أو درجات AP أو SAT المعتمدة، أو درجات مدرسية نهائية مؤهلة.",
+        "source": "s3",
+        "quote": "UAE and American systems: 80% each in Biology and Chemistry and 70% in Physics or Mathematics"
+       }
+      ],
+      "source": "s3"
+     },
+     "previous": null
+    },
+    {
+     "key": "gulf-medical-university-physio",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Physiotherapy (BPT)",
+     "nameAr": "بكالوريوس العلاج الطبيعي",
+     "degree": "BPT",
+     "durationYears": 4,
+     "url": "https://gmu.ac.ae/college-of-health-sciences/bachelor-of-physiotherapy-bpt-program/",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "source": "s4",
+       "quote": "Applicants from UAE educational systems (all tracks) must have secured a minimum aggregate score equivalent to 65% in Grade 12.",
+       "subjects": [],
+       "minimumPercent": 65,
+       "stream": "ELITE|ADVANCED|GENERAL"
+      }
+     },
+     "general": {
+      "subjects": [
+       {
+        "type": "OPTIONAL",
+        "keys": [
+         "biology",
+         "chemistry",
+         "physics",
+         "mathematics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": null,
+        "noteEn": "Pass any three of Biology, Chemistry, Physics or Mathematics in Grade 11 or 12.",
+        "noteAr": "النجاح في ثلاث من الأحياء والكيمياء والفيزياء أو الرياضيات في الصف الحادي عشر أو الثاني عشر.",
+        "source": "s4",
+        "quote": "Applicants must have passed any three science subjects (Biology, Chemistry, Physics or Mathematics in any of the following grades: 11th or 12th."
+       }
+      ],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 5,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s4",
+        "quote": "5.0 in IELTS for Academic"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 61,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s4",
+        "quote": "TOEFL CBT 173 - iBT 61"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Interview with the college admission committee.",
+        "noteAr": "مقابلة مع لجنة القبول في الكلية.",
+        "source": "s4",
+        "quote": "All applicants shall complete an interview with admission committee of the College. The decision of the Admission Committee shall be final and binding."
+       }
+      ],
+      "source": "s4"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "mbru",
+   "website": "https://www.mbru.ac.ae",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.mbru.ac.ae/programs/doctor-of-medicine-md/",
+     "title": "Doctor of Medicine (MD) – 6 years - MBRU",
+     "retrievedAt": "2026-10-06T22:27:08.374Z",
+     "hash": "0c8f8da598cc83651dadf7b667f8bd14c923b3f9ac5300a4b40f4aa868d08791",
+     "waybackTimestamp": "20250628062752",
+     "waybackHash": "94786581efb4b7d4e019071d7176a9f1de142d82b3d808ef407b44aa5e993651"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.mbru.ac.ae/faqs-landing/faqs-detail/",
+     "title": "FAQ's Detail - MBRU",
+     "retrievedAt": "2026-10-06T22:26:16.912Z",
+     "hash": "234c44e68eb73dedc726a4b8eb42652c6e14cda484a06ba06834695594feb4a7"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-01-18",
+     "labelEn": "Applications close (MD, 2027-28 cycle)",
+     "labelAr": "إغلاق باب التقديم (الطب، دورة 2027-2028)",
+     "source": "s1",
+     "quote": "January 18, 2027 | Applications Close |"
+    }
+   ],
+   "programs": [
+    {
+     "key": "mbru-med",
+     "status": "REPLACED",
+     "nameEn": "Doctor of Medicine (MD)",
+     "nameAr": "دكتور في الطب",
+     "degree": "MD",
+     "durationYears": 6,
+     "url": "https://www.mbru.ac.ae/programs/doctor-of-medicine-md/",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "source": "s1",
+       "quote": "Advanced Track - Overall Average of 90% and an average of 90% in three science subjects.",
+       "subjects": [],
+       "minimumPercent": 90,
+       "stream": "ADVANCED",
+       "notesEn": "Elite Track: 85% overall and 85% in three sciences.",
+       "notesAr": "المسار النخبوي: 85% إجمالًا و85% في ثلاث مواد علمية."
+      },
+      "BRITISH": {
+       "accepted": true,
+       "source": "s1",
+       "quote": "Minimum 3 B's in AS or A-Level in at least three science subjects.",
+       "subjects": [
+        {
+         "type": "OPTIONAL",
+         "keys": [
+          "biology",
+          "chemistry",
+          "physics",
+          "mathematics"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "B",
+         "noteEn": "Three science subjects at grade B.",
+         "noteAr": "ثلاث مواد علمية بدرجة B.",
+         "source": "s1",
+         "quote": "Minimum 3 B's in AS or A-Level in at least three science subjects."
+        }
+       ],
+       "notesEn": "Also six IGCSE/GCSE subjects including three sciences at B or 5, and any four at A or 7.",
+       "notesAr": "بالإضافة إلى ست مواد IGCSE/GCSE منها ثلاث علمية بدرجة B أو 5، وأي أربع مواد بدرجة A أو 7."
+      },
+      "AMERICAN": {
+       "accepted": true,
+       "source": "s1",
+       "quote": "Overall average of 90% or minimum cGPA 3.5 on a scale of 4.0 or equivalent (e.g.: cGPA 3.76 on a scale of 4.3).",
+       "subjects": [],
+       "minimumGPA": 3.5,
+       "notesEn": "Also 90% average in at least three sciences.",
+       "notesAr": "مع معدل 90% في ثلاث مواد علمية على الأقل."
+      },
+      "IB": {
+       "accepted": true,
+       "source": "s1",
+       "quote": "29 points, excluding any bonus points",
+       "subjects": [],
+       "minimumPoints": 29,
+       "notesEn": "At least 5 in three sciences including Mathematics, two of them at Higher Level.",
+       "notesAr": "5 على الأقل في ثلاث مواد علمية منها الرياضيات، اثنتان منها في المستوى العالي."
+      },
+      "CBSE": {
+       "accepted": true,
+       "source": "s1",
+       "quote": "CBSE/ICSE (Indian Curriculum) | Overall average of 85%.",
+       "subjects": [],
+       "minimumPercent": 85,
+       "notesEn": "Also 85% average in three sciences.",
+       "notesAr": "مع معدل 85% في ثلاث مواد علمية."
+      },
+      "ISC": {
+       "accepted": true,
+       "source": "s1",
+       "quote": "CBSE/ICSE (Indian Curriculum) | Overall average of 85%.",
+       "subjects": [],
+       "minimumPercent": 85,
+       "notesEn": "Also 85% average in three sciences; all ICSE courses count in the average.",
+       "notesAr": "مع معدل 85% في ثلاث مواد علمية، وتُحتسب جميع مواد ICSE في المعدل."
+      },
+      "SABIS": {
+       "accepted": true,
+       "source": "s1",
+       "quote": "SABIS | Overall Average 90%",
+       "subjects": [],
+       "minimumPercent": 90,
+       "notesEn": "Also 90% average in three sciences.",
+       "notesAr": "مع معدل 90% في ثلاث مواد علمية."
+      }
+     },
+     "general": {
+      "subjects": [
+       {
+        "type": "RECOMMENDED",
+        "keys": [
+         "chemistry",
+         "biology"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": null,
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s1",
+        "quote": "We highly recommend students completing Chemistry and Biology in grades 11 and/or 12."
+       }
+      ],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 6,
+        "minComponent": 5.5,
+        "waiverNoteEn": "Required from all applicants, whatever their medium of study; IELTS Indicator is not accepted.",
+        "waiverNoteAr": "مطلوب من جميع المتقدمين أيًا كانت لغة دراستهم، ولا يُقبل IELTS Indicator.",
+        "source": "s1",
+        "quote": "IELTS Academic Minimum of band 6 with no skill less than 5.5"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 80,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "iBT 80; CBT 213"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "ADMISSIONS_TEST",
+        "required": true,
+        "noteEn": "MBRU Admissions Test in science (about two-thirds Biology and Chemistry); international students take it online.",
+        "noteAr": "اختبار القبول في الجامعة في العلوم (نحو ثلثيه أحياء وكيمياء)، ويؤديه الطلاب الدوليون عبر الإنترنت.",
+        "source": "s1",
+        "quote": "The purpose of the MBRU Admissions Test is specifically to provide an assessment of candidates' potential to succeed in the MD program. It is not designed to assess the appropriateness of candidates' high school qualifications."
+       },
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Multiple mini interviews (MMI) on campus for short-listed candidates; no remote interviews.",
+        "noteAr": "مقابلات قصيرة متعددة في الحرم الجامعي للمرشحين، ولا تُجرى مقابلات عن بُعد.",
+        "source": "s2",
+        "quote": "Candidates will not be offered a place at MBRU without going through the MMI process. We do not offer Skype, telephone or video-linked interviews."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "emirates_aviation_university",
+   "website": "https://www.eau.ac.ae",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.eau.ac.ae/en/admissions/admissions-requirements/",
+     "title": "Admissions",
+     "retrievedAt": "2026-10-06T22:26:32.209Z",
+     "hash": "9737bbe094d874e20dbfcb1923eeca1e9b2e27df851b0f0a32d7a9f56daaafde",
+     "waybackTimestamp": "20250725065553",
+     "waybackHash": "4213e7a8432090e0c057dad530f73908c108a43b04fd8071fd53d1b73f9c31a7"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.eau.ac.ae/en/programmes/undergraduate/bachelor-of-science-bsc/bsc-in-aeronautical-engineering/",
+     "title": "Aeronautical Engineering",
+     "retrievedAt": "2026-10-06T22:26:26.706Z",
+     "hash": "95ceeb597e647d0d1fe4907345602a1d61a879b28aef0ad06e04e21e50bc5147",
+     "waybackTimestamp": "20251015230423",
+     "waybackHash": "c73e4a73dd84cd2de2582d7b105893e68877860d6d4cf735df7c2245c1de8f32"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 6,
+     "minComponent": null,
+     "waiverNoteEn": "Exempt when the previous qualification was completed in English.",
+     "waiverNoteAr": "يُعفى من أتم مؤهله السابق باللغة الإنجليزية.",
+     "source": "s1",
+     "quote": "IELTS Academic with a minimum score of 6.0"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 79,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "TOEFL iBT with a minimum score of 79"
+    }
+   ],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "INTERVIEW",
+     "required": false,
+     "noteEn": "Applicants below the minimum entry requirements may be asked to attend an interview with the faculty.",
+     "noteAr": "قد يُطلب ممن لا يستوفي الحد الأدنى لشروط القبول حضور مقابلة مع الكلية.",
+     "source": "s1",
+     "quote": "Applicants who do not meet the minimum entry requirements for the programme may be required to attend an interview with the relevant faculty."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Full-time students must hold a valid UAE residence visa; the university can sponsor a student visa.",
+     "noteAr": "يجب أن يحمل طلاب الدوام الكامل تأشيرة إقامة إماراتية سارية، ويمكن للجامعة كفالة تأشيرة الطالب.",
+     "source": "s1",
+     "quote": "It is mandatory that all students, attending full-time programmes, to carry a valid UAE residence visa during their study period at Emirates Aviation University."
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {
+    "UAE_MOE": {
+     "accepted": true,
+     "source": "s1",
+     "quote": "Elite Track: 85% Advanced Track: 85% General Track: 95%",
+     "subjects": [],
+     "minimumPercent": 85,
+     "stream": "ELITE|ADVANCED",
+     "notesEn": "Elite and Advanced Track 85%; General Track 95%.",
+     "notesAr": "المساران النخبوي والمتقدم 85%، والمسار العام 95%."
+    },
+    "BRITISH": {
+     "accepted": true,
+     "source": "s1",
+     "quote": "Two AS-level subjects with a minimum grade of \"B\" or one A-Level subject with a minimum grade of \"B\"",
+     "subjects": [],
+     "notesEn": "Five GCSE/IGCSE subjects at B, plus two AS levels at B or one A Level at B.",
+     "notesAr": "خمس مواد GCSE/IGCSE بدرجة B، مع مادتين AS بدرجة B أو مادة A Level بدرجة B."
+    },
+    "IB": {
+     "accepted": true,
+     "source": "s1",
+     "quote": "IB certificate with a minimum grade of 30/42 |",
+     "subjects": [],
+     "minimumPoints": 30
+    },
+    "AMERICAN": {
+     "accepted": true,
+     "source": "s1",
+     "quote": "American High School Diploma | Minimum of 90% |",
+     "subjects": [],
+     "minimumPercent": 90
+    },
+    "CBSE": {
+     "accepted": true,
+     "source": "s1",
+     "quote": "Indian Boards (Std XII) | Minimum of 70% in the Senior Secondary School Certificate (12th Standard)",
+     "subjects": [],
+     "minimumPercent": 70
+    }
+   },
+   "programs": [
+    {
+     "key": "emirates-aviation-university-aero",
+     "status": "REPLACED",
+     "nameEn": "BSc in Aeronautical Engineering",
+     "nameAr": "بكالوريوس العلوم في هندسة الطيران",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.eau.ac.ae/en/programmes/undergraduate/bachelor-of-science-bsc/bsc-in-aeronautical-engineering/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "emirates-aviation-university-ai",
+     "status": "EXISTS",
+     "nameEn": "BSc in Artificial Intelligence",
+     "nameAr": "بكالوريوس العلوم في الذكاء الاصطناعي",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.eau.ac.ae/en/admissions/admissions-requirements/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "emirates-aviation-university-bus",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Science (BSc) in Aviation Management",
+     "nameAr": "بكالوريوس العلوم في إدارة الطيران",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.eau.ac.ae/en/admissions/admissions-requirements/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "university_of_dubai",
+   "website": "https://ud.ac.ae",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://ud.ac.ae/how-to-apply/",
+     "title": "How to Apply | University of Dubai",
+     "retrievedAt": "2026-10-06T22:26:05.927Z",
+     "hash": "7e98009b4a7a649d837a0deab4000be67d5a5d5694e2f6f8bcb66ed9c8cedd68"
+    },
+    {
+     "id": "s2",
+     "url": "https://ud.ac.ae/faq/",
+     "title": "FAQ | University of Dubai",
+     "retrievedAt": "2026-10-06T22:26:26.488Z",
+     "hash": "e815d93168ec919e3d75dfd20249f1366bf13fcd06053e0fa6f089d6b9100e4e"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 5,
+     "minComponent": null,
+     "waiverNoteEn": "A high school English grade of 80% or a pass in the UD English Proficiency Test is accepted for the BBA, Engineering and IT programmes.",
+     "waiverNoteAr": "تُقبل درجة 80% في اللغة الإنجليزية بالثانوية أو اجتياز اختبار الكفاءة في الإنجليزية بالجامعة لبرامج إدارة الأعمال والهندسة وتقنية المعلومات.",
+     "source": "s1",
+     "quote": "- If English is not your first language, you must demonstrate English proficiency equivalent to IELTS (Academic) 5.0 overall."
+    }
+   ],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Open to all nationalities.",
+     "noteAr": "مفتوحة لجميع الجنسيات.",
+     "source": "s2",
+     "quote": "Is University of Dubai open to all nationalities?"
+    }
+   ],
+   "deadlines": [],
+   "programs": [
+    {
+     "key": "university-of-dubai-cs",
+     "status": "REPLACED",
+     "nameEn": "BSc in Computing & Information Systems",
+     "nameAr": "بكالوريوس العلوم في الحوسبة ونظم المعلومات",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://ud.ac.ae/faq/",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "source": "s2",
+       "quote": "BSc in Computing & Information SystemsMinimum high school average of 70%, or the equivalent in standardised international systems.",
+       "subjects": [],
+       "minimumPercent": 70,
+       "notesEn": "Or the equivalent in standardised international systems.",
+       "notesAr": "أو ما يعادلها في الأنظمة الدولية المعيارية."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "university-of-dubai-ee",
+     "status": "REPLACED",
+     "nameEn": "BSc in Electrical Engineering",
+     "nameAr": "بكالوريوس العلوم في الهندسة الكهربائية",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://ud.ac.ae/faq/",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "source": "s2",
+       "quote": "BSc in Electrical EngineeringMinimum high school average of 75% (Elite Track) or 80% (Advanced Track), or the equivalent in standardised international systems.",
+       "subjects": [],
+       "minimumPercent": 75,
+       "stream": "ELITE",
+       "notesEn": "Elite Track 75%; Advanced Track 80%.",
+       "notesAr": "المسار النخبوي 75%، والمسار المتقدم 80%."
+      }
+     },
+     "general": {
+      "subjects": [
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "mathematics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "80",
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s1",
+        "quote": "For the Bachelor of Science in Engineering: a high school grade of 80% or higher in English, or a passing score in the UD EPT. Additionally, students must have a high school grade of 80% or higher in Math and Physics, along with either Biology or Chemistry."
+       },
+       {
+        "type": "REQUIRED",
+        "keys": [
+         "physics"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "80",
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s1",
+        "quote": "For the Bachelor of Science in Engineering: a high school grade of 80% or higher in English, or a passing score in the UD EPT. Additionally, students must have a high school grade of 80% or higher in Math and Physics, along with either Biology or Chemistry."
+       },
+       {
+        "type": "ONE_OF",
+        "keys": [
+         "biology",
+         "chemistry"
+        ],
+        "minimumLevel": "ADVANCED",
+        "minimumGrade": "80",
+        "noteEn": null,
+        "noteAr": null,
+        "source": "s1",
+        "quote": "For the Bachelor of Science in Engineering: a high school grade of 80% or higher in English, or a passing score in the UD EPT. Additionally, students must have a high school grade of 80% or higher in Math and Physics, along with either Biology or Chemistry."
+       }
+      ],
+      "english": [],
+      "tests": [],
+      "additional": [],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "university-of-dubai-bus",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Business Administration",
+     "nameAr": "بكالوريوس إدارة الأعمال",
+     "degree": "BBA",
+     "durationYears": null,
+     "url": "https://ud.ac.ae/faq/",
+     "curricula": {
+      "UAE_MOE": {
+       "accepted": true,
+       "source": "s2",
+       "quote": "Bachelor of Business AdministrationMinimum high school average of 70% (Advanced or Elite Track), or 75% (General Track) - or the equivalent in standardised international systems.",
+       "subjects": [],
+       "minimumPercent": 70,
+       "stream": "ADVANCED|ELITE",
+       "notesEn": "General Track 75%.",
+       "notesAr": "المسار العام 75%."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "kfupm",
+   "website": "https://www.kfupm.edu.sa",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://apply.kfupm.edu.sa/early-admissions/",
+     "title": "KFUPM",
+     "retrievedAt": "2026-10-06T22:26:49.645Z",
+     "hash": "ae9e92e050cfe896052f9f2f25eba2994b7f117f74b1efda1021857ed949d5d1"
+    },
+    {
+     "id": "s2",
+     "url": "https://apply.kfupm.edu.sa/undergraduate-sat-admission/",
+     "title": "KFUPM",
+     "retrievedAt": "2026-10-06T22:27:23.645Z",
+     "hash": "5d222b0d7bd02dc7d08b4b728cc9e95bd24a7cf06b41a4132b9c9772ddc44ef1"
+    },
+    {
+     "id": "s3",
+     "url": "https://admissions.kfupm.edu.sa/docs/default-source/default-document-library/digital-version_en_2026.pdf",
+     "title": "PDF",
+     "retrievedAt": "2026-10-06T22:26:31.701Z",
+     "hash": "9a36e908c27fcdf5f328166365cea123be0670940239ff5747c5e181943843e3"
+    },
+    {
+     "id": "s4",
+     "url": "https://bulletin.kfupm.edu.sa/program?program_id=101&title=bachelor-of-science-in-computer-science---internship-option",
+     "title": "KFUPM Bulletin |",
+     "retrievedAt": "2026-10-06T22:53:13.001Z",
+     "hash": "f0cd214aaabc346a6f26172246df495cf5ae115af4721441c7b40f709c0ba179"
+    },
+    {
+     "id": "s5",
+     "url": "https://bulletin.kfupm.edu.sa/program?program_id=100&title=bachelor-of-science-in-computer-engineering---summer-training-option",
+     "title": "KFUPM Bulletin |",
+     "retrievedAt": "2026-10-06T22:26:19.100Z",
+     "hash": "1dc0ba795d8a45f56e6dd9a08dccc175924fad596533a1b4de6bd249268d84a0",
+     "waybackTimestamp": "20250807193916",
+     "waybackHash": "1e1324b794f1c7d49f19a11c71557bd0996b0cf8d74a56651d5949bea9ea6f6b"
+    },
+    {
+     "id": "s6",
+     "url": "https://bulletin.kfupm.edu.sa/program?program_id=90&title=bachelor-of-science-in-electrical-engineering---internship-option",
+     "title": "KFUPM Bulletin |",
+     "retrievedAt": "2026-10-06T22:52:50.246Z",
+     "hash": "1d51c68997b51f4692707f4a978d34ae98cb93339813ee959d93eb5ae179f3ed"
+    },
+    {
+     "id": "s7",
+     "url": "https://bulletin.kfupm.edu.sa/program?program_id=91",
+     "title": "KFUPM Bulletin |",
+     "retrievedAt": "2026-10-06T22:26:40.801Z",
+     "hash": "e0b779f0ffae55df80da9fc2773250b83a8fb3954b55d754b75e5d50ce26c5e1",
+     "waybackTimestamp": "20240715134218",
+     "waybackHash": "f6e6a2257c6f566b5d3d83b6ceab838a80916113815f64f87eddf0d52dd4cd8b"
+    },
+    {
+     "id": "s8",
+     "url": "https://bulletin.kfupm.edu.sa/program?program_id=96",
+     "title": "KFUPM Bulletin |",
+     "retrievedAt": "2026-10-06T22:27:31.140Z",
+     "hash": "d743b90bdd16b90b1a6037739b9736237eb530e1283fdf47d4e503fccb6ee657"
+    },
+    {
+     "id": "s9",
+     "url": "https://bulletin.kfupm.edu.sa/program?program_id=89&title=bachelor-of-science-in-civil-engineering---internship-option",
+     "title": "KFUPM Bulletin |",
+     "retrievedAt": "2026-10-06T22:52:31.682Z",
+     "hash": "e833fef1495770576341ecf0824d8f39230a49fe99bc0b4589e9a2d27920d046"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 4.5,
+     "minComponent": null,
+     "waiverNoteEn": "Not required on the SAT and Olympiad tracks.",
+     "waiverNoteAr": "غير مطلوب في مساري SAT والأولمبياد.",
+     "source": "s1",
+     "quote": "Achieve a minimum score of 65 on the STEP test or its equivalent in other tests (IELTS 4.5, Duolingo 80, or TOEFL iBT 3 [45 out of 120 under the old scoring system]). This applies to all admission tracks, except for SAT and Olympiad."
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 80,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "Achieve a minimum score of 65 on the STEP test or its equivalent in other tests (IELTS 4.5, Duolingo 80, or TOEFL iBT 3 [45 out of 120 under the old scoring system]). This applies to all admission tracks, except for SAT and Olympiad."
+    }
+   ],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "REQUIRED",
+     "minScore": 1350,
+     "noteEn": "SAT track (open to local and international students): no Qudurat or Tahsili needed; the SAT must come from a single sitting.",
+     "noteAr": "مسار SAT (للطلاب المحليين والدوليين): لا يُشترط اختبار القدرات أو التحصيلي، ويجب أن تكون الدرجة من جلسة واحدة.",
+     "source": "s2",
+     "quote": "A minimum SAT score of 1350 is required to apply. Meeting the minimum score does not ensure admission. Admissions are competitive."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "ADMISSIONS_TEST",
+     "required": true,
+     "noteEn": "SAT-track applicants must pass the KFUPM mathematics test.",
+     "noteAr": "يجب على المتقدمين في مسار SAT اجتياز اختبار الرياضيات في الجامعة.",
+     "source": "s2",
+     "quote": "Qualified applicants must pass the university's Mathematics test."
+    },
+    {
+     "kind": "INTERVIEW",
+     "required": false,
+     "noteEn": "Applicants may be asked to attend an interview.",
+     "noteAr": "قد يُطلب من المتقدمين حضور مقابلة.",
+     "source": "s2",
+     "quote": "Applicants may also be required to participate in an interview for admission."
+    },
+    {
+     "kind": "REFERENCE",
+     "required": true,
+     "noteEn": "A recommendation letter from the school.",
+     "noteAr": "خطاب توصية من المدرسة.",
+     "source": "s2",
+     "quote": "Recommendation Letter: The student must complete and attach a letter of recommendation to the application form."
+    },
+    {
+     "kind": "PERSONAL_STATEMENT",
+     "required": true,
+     "noteEn": "A statement of purpose about academic goals and contribution to the community.",
+     "noteAr": "بيان غرض عن الأهداف الأكاديمية والإسهام في المجتمع.",
+     "source": "s2",
+     "quote": "The student must submit a statement of purpose (a brief description of yourself, explaining your academic goals and how you aim to contribute to improving your community and the world)."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Applicants must have graduated in the current year or the previous two years, from a science track or an international school (natural sciences).",
+     "noteAr": "يجب أن يكون المتقدم قد تخرج في العام الحالي أو العامين السابقين من مسار علمي أو من مدرسة دولية (العلوم الطبيعية).",
+     "source": "s2",
+     "quote": "The applicant must be a high school graduate (General, Computer Science and Engineering, Health and Life) or an international school graduate (Natural Sciences) in the current year or the previous two years."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Primary track (50% Qudurat, 50% KFUPM Tahsili test); the Olympiad track is only for Saudis and children of Saudi mothers.",
+     "noteAr": "المسار الأساسي (50% القدرات و50% اختبار التحصيلي الخاص بالجامعة)؛ ومسار الأولمبياد للسعوديين وأبناء السعوديات فقط.",
+     "source": "s1",
+     "quote": "This is the primary track for university admission, ensuring a competitive opportunity to secure a seat; the following tests each contribute equally to the overall score; 50% General Aptitude Test (Qudrat) and 50% KFUPM Achievement test."
+    }
+   ],
+   "deadlines": [
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2027-02-11",
+     "labelEn": "SAT track application window closes",
+     "labelAr": "إغلاق التقديم في مسار SAT",
+     "source": "s3",
+     "quote": "SAT Admission Track: February 1-11, 2027"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "FINAL",
+     "date": "2027-01-24",
+     "labelEn": "Primary track application window closes",
+     "labelAr": "إغلاق التقديم في المسار الأساسي",
+     "source": "s3",
+     "quote": "Primary Admission Track: January 10-24, 2027"
+    },
+    {
+     "intakeYear": 2027,
+     "kind": "OTHER",
+     "date": "2027-02-02",
+     "labelEn": "Primary track test score deadline",
+     "labelAr": "آخر موعد لتقديم درجات الاختبارات للمسار الأساسي",
+     "source": "s3",
+     "quote": "Primary Admission Track Score Submission Deadline: February 2, 2027"
+    }
+   ],
+   "programs": [
+    {
+     "key": "kfupm-cs",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Computer Science",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسب",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://bulletin.kfupm.edu.sa/program?program_id=101&title=bachelor-of-science-in-computer-science---internship-option",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "kfupm-ce",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Computer Engineering",
+     "nameAr": "بكالوريوس العلوم في هندسة الحاسب",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://bulletin.kfupm.edu.sa/program?program_id=100&title=bachelor-of-science-in-computer-engineering---summer-training-option",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "kfupm-ee",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Science in Electrical Engineering",
+     "nameAr": "بكالوريوس العلوم في الهندسة الكهربائية",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://bulletin.kfupm.edu.sa/program?program_id=90&title=bachelor-of-science-in-electrical-engineering---internship-option",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "kfupm-me",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Mechanical Engineering",
+     "nameAr": "بكالوريوس العلوم في الهندسة الميكانيكية",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://bulletin.kfupm.edu.sa/program?program_id=91",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "kfupm-chemeng",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Chemical Engineering",
+     "nameAr": "بكالوريوس العلوم في الهندسة الكيميائية",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://bulletin.kfupm.edu.sa/program?program_id=96",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "kfupm-civil",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Civil Engineering",
+     "nameAr": "بكالوريوس العلوم في الهندسة المدنية",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://bulletin.kfupm.edu.sa/program?program_id=89&title=bachelor-of-science-in-civil-engineering---internship-option",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "king_saud_university",
+   "website": "https://ksu.edu.sa",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://dar.ksu.edu.sa/en/overseas",
+     "title": "Admission for Non Saudi Students | Deanship of Admission and Registration Affairs",
+     "retrievedAt": "2026-10-06T22:26:57.423Z",
+     "hash": "21d092bdd89a1c43e32cd669491e966e81e7a6fab2a1a813f293dd63a09dd040"
+    },
+    {
+     "id": "s2",
+     "url": "https://dar.ksu.edu.sa/en/ksu-admission",
+     "title": "Admission to Bachelor’s Programs for Saudi Students | Deanship of Admission and Registration Affairs",
+     "retrievedAt": "2026-10-06T22:26:43.033Z",
+     "hash": "77711bc0a5e0b6939d7425db781622901ee6d7059386dad0de0ada63809af7c4"
+    }
+   ],
+   "english": [],
+   "tests": [
+    {
+     "test": "SAT",
+     "policy": "REQUIRED",
+     "minScore": 1010,
+     "noteEn": "For non-resident applicants (external scholarships and fee-based health programmes).",
+     "noteAr": "للمتقدمين غير المقيمين (المنح الخارجية وبرامج العلوم الصحية المدفوعة).",
+     "source": "s1",
+     "quote": "2. The applicant must obtain a valid SAT (Scholastic Assessment Test) score of no less than 1010."
+    },
+    {
+     "test": "QUDURAT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "For applicants resident in Saudi Arabia.",
+     "noteAr": "للمتقدمين المقيمين في المملكة.",
+     "source": "s1",
+     "quote": "4. The applicant must obtain valid scores issued by the National Center for Assessment (Qiyas) for both the General Aptitude Test (Qudurat) and the Achievement Test (Tahsili), in accordance with the applicable admission criteria."
+    },
+    {
+     "test": "TAHSILI",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "For applicants resident in Saudi Arabia.",
+     "noteAr": "للمتقدمين المقيمين في المملكة.",
+     "source": "s1",
+     "quote": "4. The applicant must obtain valid scores issued by the National Center for Assessment (Qiyas) for both the General Aptitude Test (Qudurat) and the Achievement Test (Tahsili), in accordance with the applicable admission criteria."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "NOT_ACCEPTED",
+     "required": true,
+     "noteEn": "Non-Saudis who live outside Saudi Arabia can only apply through external scholarships or the fee-based Health Sciences programmes (via studyinsaudi.sa).",
+     "noteAr": "لا يمكن لغير السعوديين المقيمين خارج المملكة التقديم إلا عبر المنح الخارجية أو برامج العلوم الصحية المدفوعة (عبر منصة ادرس في السعودية).",
+     "source": "s1",
+     "quote": "Non-residents may apply through two tracks; external scholarships and fee-based bachelor's programs in Health Sciences. Applicants may review the admission requirements outlined below and apply via the following link:"
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Non-Saudi residents with a valid Iqama apply to fee-paying programmes or internal scholarships, with Qudurat and Tahsili scores and the unified admission percentages.",
+     "noteAr": "يتقدم غير السعوديين المقيمون بإقامة سارية إلى البرامج المدفوعة أو المنح الداخلية، مع درجات القدرات والتحصيلي ونسب القبول الموحد.",
+     "source": "s1",
+     "quote": "The university allows non-Saudi residents in the Kingdom of Saudi Arabia, who hold a valid legal residency (Iqama), to apply for admission to bachelor's programs on a fee-paying basis, in accordance with the admission percentages determined through the national platform for unified admission."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Regular (non-fee) admission is for Saudi nationals, children of Saudi mothers and mothers of Saudi children.",
+     "noteAr": "القبول العام (غير المدفوع) للسعوديين وأبناء السعوديات وأمهات الأبناء السعوديين.",
+     "source": "s2",
+     "quote": "The applicant must be a Saudi national, born to a Saudi mother, or the mother of Saudi children."
+    }
+   ],
+   "deadlines": [],
+   "programs": [
+    {
+     "key": "king-saud-university-med",
+     "status": "REPLACED",
+     "nameEn": "Medicine and Surgery (for Academically Distinguished Students)",
+     "nameAr": "الطب والجراحة (للطلاب المتميزين أكاديميًا)",
+     "degree": "MBBS",
+     "durationYears": null,
+     "url": "https://dar.ksu.edu.sa/en/overseas",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [
+       {
+        "test": "SAT",
+        "policy": "REQUIRED",
+        "minScore": 1200,
+        "noteEn": "Non-resident self-sponsored applicants.",
+        "noteAr": "للمتقدمين غير المقيمين على نفقتهم الخاصة.",
+        "source": "s1",
+        "quote": "1. A minimum SAT score of 1200 is required to be considered for admission to the Medicine and Surgery program."
+       }
+      ],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Personal interview for Medicine and Dentistry.",
+        "noteAr": "مقابلة شخصية لكليتي الطب وطب الأسنان.",
+        "source": "s1",
+        "quote": "13. The applicant must successfully pass the personal interview for admission to the Colleges of Medicine and Dentistry, and the written test for admission to the College of Architecture and Planning"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "The high school diploma must be from the last two years; the programme is for academically distinguished students and needs a GPA of 4.5 out of 5 in the first year to continue.",
+        "noteAr": "يجب أن تكون شهادة الثانوية خلال آخر سنتين، والبرنامج للطلاب المتميزين أكاديميًا ويتطلب معدل 4.5 من 5 في السنة الأولى للاستمرار.",
+        "source": "s1",
+        "quote": "2. Applicants to the College of Medicine must have obtained their high school diploma within the last two years."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "king-saud-university-dent",
+     "status": "REPLACED",
+     "nameEn": "General Dentistry",
+     "nameAr": "طب الأسنان العام",
+     "degree": "BDS",
+     "durationYears": null,
+     "url": "https://dar.ksu.edu.sa/en/overseas",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Personal interview for Dentistry.",
+        "noteAr": "مقابلة شخصية لطب الأسنان.",
+        "source": "s1",
+        "quote": "13. The applicant must successfully pass the personal interview for admission to the Colleges of Medicine and Dentistry, and the written test for admission to the College of Architecture and Planning"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "king-saud-university-pharm",
+     "status": "EXISTS",
+     "nameEn": "Doctor of Pharmacy",
+     "nameAr": "دكتور صيدلة",
+     "degree": "PharmD",
+     "durationYears": null,
+     "url": "https://dar.ksu.edu.sa/en/overseas",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "king-saud-university-cs",
+     "status": "EXISTS",
+     "nameEn": "Computer Science (Academically Distinguished Students)",
+     "nameAr": "علوم الحاسب (للطلاب المتميزين أكاديميًا)",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://dar.ksu.edu.sa/en/overseas",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "king-saud-university-ee",
+     "status": "REPLACED",
+     "nameEn": "Electrical Engineering (Academically Distinguished Students)",
+     "nameAr": "الهندسة الكهربائية (للطلاب المتميزين أكاديميًا)",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://dar.ksu.edu.sa/en/overseas",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "king-saud-university-bus",
+     "status": "EXISTS",
+     "nameEn": "Business Administration",
+     "nameAr": "إدارة الأعمال",
+     "degree": "BBA",
+     "durationYears": null,
+     "url": "https://dar.ksu.edu.sa/en/overseas",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "alfaisal",
+   "website": "https://www.alfaisal.edu",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://admissions.alfaisal.edu/en/sa-faqs",
+     "title": "Student FAQ | Alfaisal University",
+     "retrievedAt": "2026-10-06T22:28:31.527Z",
+     "hash": "e5263a90d0881e385412d5143cde3aeb0b14785c75f10ea44950b2ad082c48d1"
+    },
+    {
+     "id": "s2",
+     "url": "https://oise.alfaisal.edu/ug-programs",
+     "title": "Office of International Student & Exchange (OISE)- Alfaisal University, Riyadh.",
+     "retrievedAt": "2026-10-06T22:27:01.481Z",
+     "hash": "0acbe04aa210ada0caedeb9308a8355672792292aa5baaa093d2f4e8bf5b6309",
+     "waybackTimestamp": "20250803054443",
+     "waybackHash": "a91f623a404e25d2200de2e4df89bd96a9d1c4c345746d13d8a0f727dfa112ec"
+    },
+    {
+     "id": "s3",
+     "url": "https://admissions.alfaisal.edu/en/criteria",
+     "title": "Admissions Criteria | Alfaisal University",
+     "retrievedAt": "2026-10-06T22:26:52.610Z",
+     "hash": "7ea2db6fd23c812a15aa3b4328fac8b6f774e171b3441214dbf0cc8a8fcc50a0"
+    },
+    {
+     "id": "s4",
+     "url": "https://admissions.alfaisal.edu/en/storage/app/media/pdf/criteria/British-System-en.pdf",
+     "title": "PDF",
+     "retrievedAt": "2026-10-06T22:26:47.036Z",
+     "hash": "0695fe98fda1f88fb165e4942f296b310d119e6e2e6d11c1e23c3a64b7fc3bef"
+    },
+    {
+     "id": "s5",
+     "url": "https://catalog.alfaisal.edu/direct-admission-criteria-for-saudi-curriculum",
+     "title": "Direct Admission Criteria for Saudi Curriculum | Alfaisal University",
+     "retrievedAt": "2026-10-06T22:27:28.334Z",
+     "hash": "db51778a8fe73bf05c9a4ddc206f4ed12ef94415d81e05944fc7debf51e70416"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Applicants who are neither Saudi citizens nor Iqama holders apply as international students and usually need a student visa.",
+     "noteAr": "يتقدم من ليس مواطنًا سعوديًا ولا يحمل إقامة كطالب دولي، ويحتاج عادة إلى تأشيرة طالب.",
+     "source": "s1",
+     "quote": "Any student who is not a Saudi citizen or a have a valid Iqama in Saudi Arabia is considered an international student. International students usually need student visa to study in Saudi Arabia"
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "International applicants must show a bank statement covering the first year's tuition (at least 150,000 SAR) or a financial guarantee.",
+     "noteAr": "يجب على المتقدمين الدوليين تقديم كشف حساب بنكي يغطي رسوم السنة الأولى (150,000 ريال على الأقل) أو ضمان مالي.",
+     "source": "s2",
+     "quote": "You must submit an authenticated bank statement (your own or your guardian's) showing account activity for the last six months and a balance covering the first year's tuition fees - a minimum of 150,000 SAR (approximately $40,000)."
+    },
+    {
+     "kind": "ADMISSIONS_TEST",
+     "required": true,
+     "noteEn": "Standardized test results are expected (SAT, ACT, IB, O/AS/A2 Levels, Qudurat, Tahsili or similar), unless the applicant's system has none.",
+     "noteAr": "يُنتظر تقديم نتائج اختبار معياري (SAT أو ACT أو IB أو O/AS/A2 أو القدرات أو التحصيلي أو ما يماثلها)، ما لم يكن نظام المتقدم خاليًا منها.",
+     "source": "s2",
+     "quote": "Acceptable standardized tests include SAT, ACT, ACT Subject Tests, IB, O-Level, AS-Level, A2-Level exams, MCAT, UCAT, Tahseely, Qudurat, or similar."
+    },
+    {
+     "kind": "FOUNDATION_REQUIRED",
+     "required": false,
+     "noteEn": "Applicants below direct admission can join the University Preparatory Program (UPP) and progress after completing it.",
+     "noteAr": "يمكن لمن لا يستوفي شروط القبول المباشر الالتحاق بالبرنامج التحضيري الجامعي ثم الانتقال بعد إتمامه.",
+     "source": "s3",
+     "quote": "Applicants who do not meet direct Admissions requirements can join UPP at Alfaisal University. This program will enable you to improve English language proficiency and academic skills."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Home schooling is not accepted.",
+     "noteAr": "لا يُقبل التعليم المنزلي.",
+     "source": "s3",
+     "quote": "*Home schooling is not accepted at Alfaisal University."
+    }
+   ],
+   "deadlines": [],
+   "programs": [
+    {
+     "key": "alfaisal-med",
+     "status": "EXISTS",
+     "nameEn": "Medicine",
+     "nameAr": "الطب",
+     "degree": "MBBS",
+     "durationYears": null,
+     "url": "https://admissions.alfaisal.edu/en/storage/app/media/pdf/criteria/British-System-en.pdf",
+     "curricula": {
+      "BRITISH": {
+       "accepted": true,
+       "source": "s4",
+       "quote": "Two subjects in A2 level related to selected major N/A A,A (For Medicine: Biology and Chemistry)",
+       "subjects": [
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "biology"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s4",
+         "quote": "Two subjects in A2 level related to selected major N/A A,A (For Medicine: Biology and Chemistry)"
+        },
+        {
+         "type": "REQUIRED",
+         "keys": [
+          "chemistry"
+         ],
+         "minimumLevel": "ADVANCED",
+         "minimumGrade": "A",
+         "noteEn": null,
+         "noteAr": null,
+         "source": "s4",
+         "quote": "Two subjects in A2 level related to selected major N/A A,A (For Medicine: Biology and Chemistry)"
+        }
+       ],
+       "notesEn": "Biology and Chemistry at A2 (or AS) with grades A,A.",
+       "notesAr": "الأحياء والكيمياء في مستوى A2 (أو AS) بتقدير A,A."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "TOEFL",
+        "minOverall": 79,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s4",
+        "quote": "TOEFL IBT 61 79"
+       },
+       {
+        "test": "IELTS",
+        "minOverall": 6.5,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s4",
+        "quote": "IELTS 6 6.5"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Interview required for Medicine.",
+        "noteAr": "المقابلة مطلوبة للطب.",
+        "source": "s5",
+        "quote": "Interview | N/A | Required |"
+       }
+      ],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "alfaisal-pharm",
+     "status": "EXISTS",
+     "nameEn": "Pharm.D",
+     "nameAr": "دكتور صيدلة",
+     "degree": "PharmD",
+     "durationYears": null,
+     "url": "https://admissions.alfaisal.edu/en/storage/app/media/pdf/criteria/British-System-en.pdf",
+     "curricula": {
+      "BRITISH": {
+       "accepted": true,
+       "source": "s4",
+       "quote": "Two subjects in AS level related to selected major (For Medicine, and Science: Biology and Chemistry) Average of two subjects 80 A,A",
+       "subjects": [],
+       "notesEn": "Two AS-level subjects related to the major with an average of 80 (A2 grades not required).",
+       "notesAr": "مادتان في مستوى AS مرتبطتان بالتخصص بمعدل 80 (لا تُشترط درجات A2)."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "TOEFL",
+        "minOverall": 61,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s4",
+        "quote": "TOEFL IBT 61 79"
+       },
+       {
+        "test": "IELTS",
+        "minOverall": 6,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s4",
+        "quote": "IELTS 6 6.5"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "alfaisal-bus",
+     "status": "EXISTS",
+     "nameEn": "Business",
+     "nameAr": "إدارة الأعمال",
+     "degree": "BBA",
+     "durationYears": null,
+     "url": "https://admissions.alfaisal.edu/en/storage/app/media/pdf/criteria/British-System-en.pdf",
+     "curricula": {
+      "BRITISH": {
+       "accepted": true,
+       "source": "s4",
+       "quote": "Two subjects in AS level related to selected major (For Medicine, and Science: Biology and Chemistry) Average of two subjects 80 A,A",
+       "subjects": [],
+       "notesEn": "Two AS-level subjects related to the major with an average of 80 (A2 grades not required).",
+       "notesAr": "مادتان في مستوى AS مرتبطتان بالتخصص بمعدل 80 (لا تُشترط درجات A2)."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "TOEFL",
+        "minOverall": 61,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s4",
+        "quote": "TOEFL IBT 61 79"
+       },
+       {
+        "test": "IELTS",
+        "minOverall": 6,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s4",
+        "quote": "IELTS 6 6.5"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s4"
+     },
+     "previous": null
+    },
+    {
+     "key": "alfaisal-law",
+     "status": "EXISTS",
+     "nameEn": "Law",
+     "nameAr": "القانون",
+     "degree": "LLB",
+     "durationYears": null,
+     "url": "https://admissions.alfaisal.edu/en/storage/app/media/pdf/criteria/British-System-en.pdf",
+     "curricula": {
+      "BRITISH": {
+       "accepted": true,
+       "source": "s4",
+       "quote": "Two subjects in AS level related to selected major (For Medicine, and Science: Biology and Chemistry) Average of two subjects 80 A,A",
+       "subjects": [],
+       "notesEn": "Two AS-level subjects related to the major with an average of 80 (A2 grades not required).",
+       "notesAr": "مادتان في مستوى AS مرتبطتان بالتخصص بمعدل 80 (لا تُشترط درجات A2)."
+      }
+     },
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "TOEFL",
+        "minOverall": 61,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s4",
+        "quote": "TOEFL IBT 61 79"
+       },
+       {
+        "test": "IELTS",
+        "minOverall": 6,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s4",
+        "quote": "IELTS 6 6.5"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s4"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "prince_sultan_university",
+   "website": "https://psu.edu.sa",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://psu.edu.sa/en/admissions-Undergraduate-Admission",
+     "title": "Prince Sultan University | Undergraduate Admission: High School Graduates",
+     "retrievedAt": "2026-10-06T22:26:49.404Z",
+     "hash": "1469d2e96e2310f1976c76bf911527b5978b59db3872250b633e962f67014ee3"
+    },
+    {
+     "id": "s2",
+     "url": "https://psu.edu.sa/en/CCIS/se",
+     "title": "College of Computer & Information Science (CCIS) || Prince Sultan University",
+     "retrievedAt": "2026-10-06T22:53:25.189Z",
+     "hash": "8e3e899c6f07c72f551fb113f722d7df1663925ce2c09e1b9fb1b10c63df871d"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.psu.edu.sa/en/CL/llb",
+     "title": "College of Law (CL) || Prince Sultan University",
+     "retrievedAt": "2026-10-06T22:53:32.611Z",
+     "hash": "545c4a53f7081ceac4b881b59ef86648552880d509595db33b45216f3d98210c"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 4,
+     "minComponent": null,
+     "waiverNoteEn": "Minimum to enter the Preparatory Year; below it, students first take one semester of intensive English. Waived for English-medium schooling.",
+     "waiverNoteAr": "الحد الأدنى لدخول السنة التحضيرية، ومن لم يبلغه يدرس فصلًا من اللغة الإنجليزية المكثفة أولًا. ويُعفى من درس باللغة الإنجليزية.",
+     "source": "s1",
+     "quote": "A minimum overall score of 4 in the Academic IELTS."
+    },
+    {
+     "test": "DUOLINGO",
+     "minOverall": 60,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "A minimum overall score of 60 in the Duolingo English Test (DET)."
+    }
+   ],
+   "tests": [
+    {
+     "test": "QUDURAT",
+     "policy": "RECOMMENDED",
+     "minScore": null,
+     "noteEn": "Qudrat or SAT is not mandatory but strongly recommended; it may be used for shortlisting.",
+     "noteAr": "اختبار القدرات أو SAT غير إلزامي لكنه موصى به بشدة، وقد يُستخدم للمفاضلة.",
+     "source": "s1",
+     "quote": "The General Aptitude Test (Qudrat) or other similar tests (e.g., SAT) are not mandatory. However, it is strongly recommended that applicants submit their scores."
+    },
+    {
+     "test": "SAT",
+     "policy": "RECOMMENDED",
+     "minScore": null,
+     "noteEn": null,
+     "noteAr": null,
+     "source": "s1",
+     "quote": "The General Aptitude Test (Qudrat) or other similar tests (e.g., SAT) are not mandatory. However, it is strongly recommended that applicants submit their scores."
+    }
+   ],
+   "additional": [
+    {
+     "kind": "NOT_ACCEPTED",
+     "required": true,
+     "noteEn": "Only Saudi or GCC nationals and legal residents of Saudi Arabia can apply; non-resident international applicants are not admitted to bachelor's programmes.",
+     "noteAr": "يقتصر التقديم على مواطني السعودية ودول الخليج والمقيمين نظاميًا في المملكة، ولا يُقبل المتقدمون الدوليون غير المقيمين في برامج البكالوريوس.",
+     "source": "s1",
+     "quote": "The applicant must be a Saudi or GCC national or a legal resident of Saudi Arabia."
+    },
+    {
+     "kind": "FOUNDATION_REQUIRED",
+     "required": true,
+     "noteEn": "No direct entry for school leavers: all start with the one-year Preparatory Year Program (PYP).",
+     "noteAr": "لا يوجد قبول مباشر لخريجي الثانوية: يبدأ الجميع بالسنة التحضيرية لمدة عام.",
+     "source": "s1",
+     "quote": "For high school graduates, there is no direct admission to the undergraduate level at Prince Sultan University, as the student is first accepted into the Preparatory Year Program (PYP), which is one year (two semesters) of preparatory study that prepares the student for future enrollment in bachelor"
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Certificates from outside Saudi Arabia must be evaluated and recognized as equivalent by the Saudi Ministry of Education.",
+     "noteAr": "يجب أن تُقيَّم الشهادات الصادرة من خارج المملكة وتُعادل من وزارة التعليم السعودية.",
+     "source": "s1",
+     "quote": "The applicant must hold a high school certificate or its equivalent. If the certificate was obtained outside the Kingdom, it must be evaluated by the Ministry of Education in Saudi Arabia and recognized as equivalent to a Saudi high school diploma."
+    }
+   ],
+   "deadlines": [],
+   "programs": [
+    {
+     "key": "prince-sultan-university-se",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Software Engineering",
+     "nameAr": "بكالوريوس العلوم في هندسة البرمجيات",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://psu.edu.sa/en/CCIS/se",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "prince-sultan-university-law",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Laws (LLB)",
+     "nameAr": "بكالوريوس القانون",
+     "degree": "LLB",
+     "durationYears": null,
+     "url": "https://www.psu.edu.sa/en/CL/llb",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "effat",
+   "website": "https://www.effatuniversity.edu.sa",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.effatuniversity.edu.sa/English/Academics/Undergraduate/Catalogue/CS-Flyer.pdf",
+     "title": "PDF",
+     "retrievedAt": "2026-10-06T22:27:37.899Z",
+     "hash": "5c66489b5fc70b4b83657ea6648b38cb4dcf2942b71f7568296fdf1e0cf7319e"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.effatuniversity.edu.sa/English/academics/Undergraduate/CoAD/Documents/NAAB/NAAB-International-Certification-Self-Evaluation-Report-2-June-2025.pdf",
+     "title": "PDF",
+     "retrievedAt": "2026-10-06T22:53:00.468Z",
+     "hash": "53d8d0eed259e8223a12a240425ec87588fef41f92d285db9e5e7680d3034f6d"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Open to qualified high school graduates and transfer students from universities recognized by the Saudi Ministry of Education.",
+     "noteAr": "مفتوحة لخريجي الثانوية المؤهلين والطلاب المحولين من جامعات معترف بها من وزارة التعليم السعودية.",
+     "source": "s2",
+     "quote": "Effat University is open to applicants from all qualified high school graduates and transfer students from universities recognized by the Saudi Ministry of Education."
+    }
+   ],
+   "deadlines": [],
+   "programs": [
+    {
+     "key": "effat-cs",
+     "status": "EXISTS",
+     "nameEn": "BSc of Computer Science",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسب",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.effatuniversity.edu.sa/English/Academics/Undergraduate/Catalogue/CS-Flyer.pdf",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "effat-arch",
+     "status": "EXISTS",
+     "nameEn": "BSc Architecture",
+     "nameAr": "بكالوريوس العلوم في العمارة",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.effatuniversity.edu.sa/English/academics/Undergraduate/CoAD/Documents/NAAB/NAAB-International-Certification-Self-Evaluation-Report-2-June-2025.pdf",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 5.5,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s2",
+        "quote": "In addition to a minimum of 80% in high school percentage, applicants are required to achieve a minimum of 60% in the Math exam, a minimum of 65% in Qudurat/SAT, TOEFL score of at least 525, or an IELTS score of at least 5.5, or a LinguaSkill score of at least 162. Also, each ARCH applicant must undergo a personal interview."
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "ADMISSIONS_TEST",
+        "required": true,
+        "noteEn": "At least 60% in the Math exam and 65% in Qudurat or SAT.",
+        "noteAr": "60% على الأقل في اختبار الرياضيات و65% في القدرات أو SAT.",
+        "source": "s2",
+        "quote": "In addition to a minimum of 80% in high school percentage, applicants are required to achieve a minimum of 60% in the Math exam, a minimum of 65% in Qudurat/SAT, TOEFL score of at least 525, or an IELTS score of at least 5.5, or a LinguaSkill score of at least 162. Also, each ARCH applicant must undergo a personal interview."
+       },
+       {
+        "kind": "INTERVIEW",
+        "required": true,
+        "noteEn": "Every architecture applicant has a personal interview.",
+        "noteAr": "يخضع كل متقدم للعمارة لمقابلة شخصية.",
+        "source": "s2",
+        "quote": "In addition to a minimum of 80% in high school percentage, applicants are required to achieve a minimum of 60% in the Math exam, a minimum of 65% in Qudurat/SAT, TOEFL score of at least 525, or an IELTS score of at least 5.5, or a LinguaSkill score of at least 162. Also, each ARCH applicant must undergo a personal interview."
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "High school percentage of at least 80%.",
+        "noteAr": "نسبة 80% على الأقل في الثانوية.",
+        "source": "s2",
+        "quote": "In addition to a minimum of 80% in high school percentage, applicants are required to achieve a minimum of 60% in the Math exam, a minimum of 65% in Qudurat/SAT, TOEFL score of at least 525, or an IELTS score of at least 5.5, or a LinguaSkill score of at least 162. Also, each ARCH applicant must undergo a personal interview."
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "ubt_jeddah",
+   "website": "https://www.ubt.edu.sa",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.ubt.edu.sa/admission",
+     "title": "Advising & Administration - UBT Admissions - University of Business and Technology",
+     "retrievedAt": "2026-10-06T22:26:57.353Z",
+     "hash": "a01289ac8b7f549b46ce8b18003fd812874ffc2e81b367db5eb64f628034da6c"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.ubt.edu.sa/college/ubtce/electrical-engineering",
+     "title": "UBTCE Programs - University of Business and Technology",
+     "retrievedAt": "2026-10-06T22:53:08.400Z",
+     "hash": "8f75f9a9e50a60bfe0b94553c55d974badd52085cef26157660ab3b339e0d626"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.ubt.edu.sa/college/ubtce/mechanical-engineering",
+     "title": "UBTCE Programs - University of Business and Technology",
+     "retrievedAt": "2026-10-06T22:54:38.041Z",
+     "hash": "43b613154ff20d716efb29ec6d85e893370f34925456b760497846a2821350d5"
+    },
+    {
+     "id": "s4",
+     "url": "https://www.ubt.edu.sa/college/ubtce/software-engineering",
+     "title": "UBTCE Programs - University of Business and Technology",
+     "retrievedAt": "2026-10-06T22:54:41.786Z",
+     "hash": "daf042c7c811c029805dfb0b7b2dca008e40b301a2a0a1c3b405c3bebf0b7f1a"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "ADMISSIONS_TEST",
+     "required": true,
+     "noteEn": "Mathematics standard-setting test for all students; English placement test for those without the required IELTS or TOEFL.",
+     "noteAr": "اختبار تحديد مستوى في الرياضيات لجميع الطلاب، واختبار تحديد مستوى في الإنجليزية لمن ليس لديه درجة IELTS أو TOEFL المطلوبة.",
+     "source": "s1",
+     "quote": "Mathematics standard-setting Test (for all students)"
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Non-Saudi applicants provide a copy of their Iqama.",
+     "noteAr": "يقدم المتقدمون غير السعوديين نسخة من الإقامة.",
+     "source": "s1",
+     "quote": "A copy of the National ID for the Saudis or a copy of Iqama for non-Saudis."
+    }
+   ],
+   "deadlines": [],
+   "programs": [
+    {
+     "key": "ubt-jeddah-ee",
+     "status": "EXISTS",
+     "nameEn": "Electrical Engineering",
+     "nameAr": "الهندسة الكهربائية",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.ubt.edu.sa/college/ubtce/electrical-engineering",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "TOEFL",
+        "minOverall": 75,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s2",
+        "quote": "TOEFL iBT result of 75/120 and IELTS result of 5/9"
+       },
+       {
+        "test": "IELTS",
+        "minOverall": 5,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s2",
+        "quote": "TOEFL iBT result of 75/120 and IELTS result of 5/9"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "ubt-jeddah-me",
+     "status": "EXISTS",
+     "nameEn": "Mechanical Engineering",
+     "nameAr": "الهندسة الميكانيكية",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.ubt.edu.sa/college/ubtce/mechanical-engineering",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "TOEFL",
+        "minOverall": 75,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s3",
+        "quote": "TOEFL iBT result of 75/120 and IELTS result of 5/9"
+       },
+       {
+        "test": "IELTS",
+        "minOverall": 5,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s3",
+        "quote": "TOEFL iBT result of 75/120 and IELTS result of 5/9"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s3"
+     },
+     "previous": null
+    },
+    {
+     "key": "ubt-jeddah-cs",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Science in Software Engineering",
+     "nameAr": "بكالوريوس العلوم في هندسة البرمجيات",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.ubt.edu.sa/college/ubtce/software-engineering",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "TOEFL",
+        "minOverall": 75,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s4",
+        "quote": "TOEFL iBT result of 75/120 and IELTS result of 5/9"
+       },
+       {
+        "test": "IELTS",
+        "minOverall": 5,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s4",
+        "quote": "TOEFL iBT result of 75/120 and IELTS result of 5/9"
+       }
+      ],
+      "tests": [],
+      "additional": [],
+      "source": "s4"
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "pmu",
+   "website": "https://www.pmu.edu.sa",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.pmu.edu.sa/admission/undergraduate_programs_admission",
+     "title": "Access Denied",
+     "retrievedAt": "2026-06-08T00:00:00Z",
+     "hash": "30af43d69ec9b15e485a762f707f8ba9525efff62a6ecef319fa621ce2e39ea1",
+     "via": "archive:20260608170148",
+     "waybackTimestamp": "20251010223124",
+     "waybackHash": "2aab1c25e043292430aaedda558a79296c338d4ae4685489ade9266a1d27e95a"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.pmu.edu.sa/Admission/Freshman_Admission.aspx",
+     "title": "Access Denied",
+     "retrievedAt": "2018-12-17T00:00:00Z",
+     "hash": "9d01c38186f8c1373d7d07a809f8935b63dc915ff919fa20f843012daeee320f",
+     "via": "archive:20181217022755"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 5.5,
+     "minComponent": null,
+     "waiverNoteEn": "Exempts from the placement test; scores must be less than two years old.",
+     "waiverNoteAr": "يُعفي من اختبار تحديد المستوى، ويجب ألا يتجاوز عمر الدرجة سنتين.",
+     "source": "s2",
+     "quote": "** Applicants with a TOEFL score of 513 (CBT 183, iBT 65) or more, or with an IELTS Band of 5.5 or more (with a minimum of 5.5 in writing part ) will be exempted from the placement test and will be required to submit their original TOEFL/IELTS scores. Scores should be less than two years old."
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 65,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s2",
+     "quote": "** Applicants with a TOEFL score of 513 (CBT 183, iBT 65) or more, or with an IELTS Band of 5.5 or more (with a minimum of 5.5 in writing part ) will be exempted from the placement test and will be required to submit their original TOEFL/IELTS scores. Scores should be less than two years old."
+    }
+   ],
+   "tests": [
+    {
+     "test": "QUDURAT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "Qudrat 60% or an equivalent SAT score.",
+     "noteAr": "60% في اختبار القدرات أو ما يعادلها في SAT.",
+     "source": "s1",
+     "quote": "General Aptitude Test *60% (Qudrat) or equivalent (SAT 1)"
+    }
+   ],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Secondary school certificate average of 80% or equivalent.",
+     "noteAr": "معدل 80% في شهادة الثانوية العامة أو ما يعادله.",
+     "source": "s1",
+     "quote": "Secondary school certificate GPA *80% or equivalent"
+    },
+    {
+     "kind": "FOUNDATION_REQUIRED",
+     "required": false,
+     "noteEn": "Students start with the Preparatory Program unless they present a recognized English test for direct entry.",
+     "noteAr": "يبدأ الطلاب بالبرنامج التحضيري ما لم يقدموا اختبار لغة إنجليزية معتمدًا للقبول المباشر.",
+     "source": "s1",
+     "quote": "A candidate may apply to PMU as a freshman or a transfer student. However, there are two possible paths to starting his/her undergraduate program, (1) by passing the Preparatory Program or (2) Direct Entry by providing PMU recognized proficiency English language test certificate."
+    },
+    {
+     "kind": "INTERVIEW",
+     "required": true,
+     "noteEn": "English placement test and interview on the stated date.",
+     "noteAr": "اختبار تحديد مستوى في الإنجليزية ومقابلة في الموعد المحدد.",
+     "source": "s2",
+     "quote": "Must take the placement test examination and interview on the stated date"
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "High school completed within the last 5 years; certificates from outside Saudi Arabia need a Ministry of Education equivalency letter.",
+     "noteAr": "إتمام الثانوية خلال آخر 5 سنوات، وتحتاج الشهادات من خارج المملكة إلى خطاب معادلة من وزارة التعليم.",
+     "source": "s2",
+     "quote": "Must have completed his/her high school within the last 5 years"
+    }
+   ],
+   "deadlines": [],
+   "programs": []
+  },
+  {
+   "key": "dar_al_hekma",
+   "website": "https://www.dah.edu.sa",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://www.dah.edu.sa/en/admission/Pages/un-admission-requirements.aspx",
+     "title": "Admission Requirements for Undergraduate Studies at DAH",
+     "retrievedAt": "2026-10-06T22:27:06.141Z",
+     "hash": "3f58794056b65c174f9477a07cf4d0fa3915e0668052c09efdfc464eb9e95f09"
+    },
+    {
+     "id": "s2",
+     "url": "https://www.dah.edu.sa/en/academics/hsbl/programs/Pages/Law.aspx",
+     "title": "Bachelor of Law in KSA - Undergraduate Law Degree",
+     "retrievedAt": "2026-10-06T22:53:34.497Z",
+     "hash": "dfff4a0756016da732663142bd0fce0f317d76abcae6735b7f5056fb003540af"
+    },
+    {
+     "id": "s3",
+     "url": "https://www.dah.edu.sa/en/academics/hsec/programs/Pages/Cybersecurity.aspx",
+     "title": "Engineering, Computing and Design Programs",
+     "retrievedAt": "2026-10-06T22:55:01.343Z",
+     "hash": "d43e276cd009b0f350bf8c78a61b3855c9dd37cb8bf61a85d6ee1f51f1604fb3"
+    }
+   ],
+   "english": [
+    {
+     "test": "IELTS",
+     "minOverall": 5.5,
+     "minComponent": null,
+     "waiverNoteEn": "IELTS Indicator is accepted. Computer Science and Cybersecurity need IELTS 4 or TOEFL iBT 32.",
+     "waiverNoteAr": "يُقبل IELTS Indicator. ويتطلب برنامجا علوم الحاسب والأمن السيبراني 4 في IELTS أو 32 في TOEFL iBT.",
+     "source": "s1",
+     "quote": "Freshmen (direct to the major) | 162 or above | 61 or above | 5.5 or above"
+    },
+    {
+     "test": "TOEFL",
+     "minOverall": 61,
+     "minComponent": null,
+     "waiverNoteEn": null,
+     "waiverNoteAr": null,
+     "source": "s1",
+     "quote": "Freshmen (direct to the major) | 162 or above | 61 or above"
+    }
+   ],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Certificates from other systems need SACM stamping or a Ministry of Education equivalency letter.",
+     "noteAr": "تحتاج شهادات الأنظمة الأخرى إلى ختم الملحقية الثقافية السعودية أو خطاب معادلة من وزارة التعليم.",
+     "source": "s1",
+     "quote": "Applicants from academic backgrounds other than the Saudi secondary school system must submit the original high school certificate stamped by The Saudi Arabian Cultural Mission (SACM), or submit a letter from the Ministry of Education (MOE) verifying that their high school certificates are equivalen"
+    }
+   ],
+   "deadlines": [],
+   "curriculumRules": {
+    "BRITISH": {
+     "accepted": true,
+     "source": "s1",
+     "quote": "*The grade of each O-Level course should be C or higher, and the grade of each A-Level and A-S-Level course should be D or higher",
+     "subjects": [],
+     "notesEn": "8 IGCSE O-Levels, or 5 O-Levels with 2 AS-Levels or 1 A-Level; O-Levels at C or higher and AS/A-Levels at D or higher.",
+     "notesAr": "8 مواد IGCSE O-Level، أو 5 مواد O-Level مع مادتين AS أو مادة A-Level؛ بدرجة C أو أعلى في O-Level وD أو أعلى في AS/A-Level."
+    }
+   },
+   "programs": [
+    {
+     "key": "dar-al-hekma-law",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Law",
+     "nameAr": "بكالوريوس القانون",
+     "degree": "LLB",
+     "durationYears": null,
+     "url": "https://www.dah.edu.sa/en/admission/Pages/un-admission-requirements.aspx",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Minimum high school percentage of 80%; Law applicants must be proficient in Arabic and English.",
+        "noteAr": "حد أدنى 80% في الثانوية، ويجب أن يتقن المتقدمون للقانون العربية والإنجليزية.",
+        "source": "s1",
+        "quote": "SCHOOL OF BUSINESS AND LAW Programs | Bachelor of Banking and Finance | Bachelor of Marketing | Bachelor of Law | Bachelor of Arts in Diplomacy and International Relations | Requirements | Required Certificate Percentage | A minimum High-School Percentage of 80% |"
+       },
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "The Law programme is a bilingual (English and Arabic) programme for women.",
+        "noteAr": "برنامج القانون ثنائي اللغة (الإنجليزية والعربية) ومخصص للنساء.",
+        "source": "s2",
+        "quote": "The Bachelor of Law program at Dar Al-Hekma University is the first law program for women in Saudi Arabia that has a bilingual curriculum. Since its inception in 2007, the program has been offering courses in general law and Sharia law, in both English and Arabic."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "dar-al-hekma-bus",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Marketing",
+     "nameAr": "بكالوريوس التسويق",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.dah.edu.sa/en/admission/Pages/un-admission-requirements.aspx",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Minimum high school percentage of 80%.",
+        "noteAr": "حد أدنى 80% في الثانوية.",
+        "source": "s1",
+        "quote": "SCHOOL OF BUSINESS AND LAW Programs | Bachelor of Banking and Finance | Bachelor of Marketing | Bachelor of Law | Bachelor of Arts in Diplomacy and International Relations | Requirements | Required Certificate Percentage | A minimum High-School Percentage of 80% |"
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "dar-al-hekma-cs",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Computer Science",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسب",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://www.dah.edu.sa/en/admission/Pages/un-admission-requirements.aspx",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 4,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "Freshmen (direct to the major for cybersecurity & Computer science) | 142 | 32 | 4"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 32,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "Freshmen (direct to the major for cybersecurity & Computer science) | 142 | 32"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Applicants must have graduated from the Science Track in high school.",
+        "noteAr": "يجب أن يكون المتقدم من خريجي المسار العلمي في الثانوية.",
+        "source": "s1",
+        "quote": "Applicants to Computer Science and Cybersecurity Programs must graduate with a Science Track from High School."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "dar-al-hekma-cyber",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Cybersecurity",
+     "nameAr": "بكالوريوس العلوم في الأمن السيبراني",
+     "degree": "BSc",
+     "durationYears": 4,
+     "url": "https://www.dah.edu.sa/en/academics/hsec/programs/Pages/Cybersecurity.aspx",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [
+       {
+        "test": "IELTS",
+        "minOverall": 4,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "Freshmen (direct to the major for cybersecurity & Computer science) | 142 | 32 | 4"
+       },
+       {
+        "test": "TOEFL",
+        "minOverall": 32,
+        "minComponent": null,
+        "waiverNoteEn": null,
+        "waiverNoteAr": null,
+        "source": "s1",
+        "quote": "Freshmen (direct to the major for cybersecurity & Computer science) | 142 | 32"
+       }
+      ],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Applicants must have graduated from the Science Track in high school.",
+        "noteAr": "يجب أن يكون المتقدم من خريجي المسار العلمي في الثانوية.",
+        "source": "s1",
+        "quote": "Applicants to Computer Science and Cybersecurity Programs must graduate with a Science Track from High School."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "dar-al-hekma-arch",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Architecture",
+     "nameAr": "بكالوريوس العمارة",
+     "degree": "BArch",
+     "durationYears": null,
+     "url": "https://www.dah.edu.sa/en/admission/Pages/un-admission-requirements.aspx",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "ADMISSIONS_TEST",
+        "required": true,
+        "noteEn": "Literary Track graduates must pass a Math Placement Test.",
+        "noteAr": "يجب على خريجي المسار الأدبي اجتياز اختبار تحديد مستوى في الرياضيات.",
+        "source": "s1",
+        "quote": "Applicants to the Architecture Department and only who graduated with Literary Track from High School must sit for a Math Placement Test (MPT) during the admission period to assess their aptitude and ability to enroll in the math courses required by the Department."
+       }
+      ],
+      "source": "s1"
+     },
+     "previous": null
+    },
+    {
+     "key": "dar-al-hekma-design",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Graphic Design and Digital Media",
+     "nameAr": "بكالوريوس التصميم الجرافيكي والوسائط الرقمية",
+     "degree": "BDes",
+     "durationYears": null,
+     "url": "https://www.dah.edu.sa/en/admission/Pages/un-admission-requirements.aspx",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "umm_al_qura",
+   "website": "https://uqu.edu.sa",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://uqu.edu.sa/en/colmedsc/80761",
+     "title": "General Overview of the Bachelor of Medicine and Surgery Program - College of Medicine",
+     "retrievedAt": "2026-10-06T22:27:19.634Z",
+     "hash": "149177578e38d8b313fb0aef595283d1a6eac082931cd7eb6c621b4a6d6baad3",
+     "waybackTimestamp": "20210922134114",
+     "waybackHash": "5f121f982b478556d6aa20af296976daef6747e434b7db9e5d3dfd8b0318b8cc"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [],
+   "deadlines": [],
+   "programs": [
+    {
+     "key": "umm-al-qura-med",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Medicine and Surgery",
+     "nameAr": "بكالوريوس الطب والجراحة",
+     "degree": "MBBS",
+     "durationYears": null,
+     "url": "https://uqu.edu.sa/en/colmedsc/80761",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "al_yamamah",
+   "website": "https://yu.edu.sa",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://yu.edu.sa/admission/freshmen-students/",
+     "title": "Undergraduate Students",
+     "retrievedAt": "2026-10-06T22:27:48.396Z",
+     "hash": "2c4a8007a29fb4fad4b81a9100bbfac4a61fcf06d7463f50419c9b1597e6439e"
+    },
+    {
+     "id": "s2",
+     "url": "https://yu.edu.sa/freshmen-admission-in-architecture/",
+     "title": "Freshmen Admission in Architecture",
+     "retrievedAt": "2026-10-06T22:28:13.088Z",
+     "hash": "c49113c121cde3008cda02d1d74e44b2b68ed9f7d3881bc0c0b2d509fb82e034"
+    },
+    {
+     "id": "s3",
+     "url": "https://yu.edu.sa/freshmen-admission-in-industrial-network-software-engineering/",
+     "title": "Freshmen Admission in Industrial, Network & Software Engineering",
+     "retrievedAt": "2026-10-06T22:55:10.408Z",
+     "hash": "b8dea6715fb1ea1860920292793f0183d9f68eca48f2e001fdf2bf6155492fc1"
+    }
+   ],
+   "english": [],
+   "tests": [
+    {
+     "test": "QUDURAT",
+     "policy": "REQUIRED",
+     "minScore": null,
+     "noteEn": "Qiyas (Qudurat) or SAT result.",
+     "noteAr": "نتيجة قياس (القدرات) أو SAT.",
+     "source": "s1",
+     "quote": "The applicant must submit Qiyas or SAT 1 test result"
+    }
+   ],
+   "additional": [
+    {
+     "kind": "ADMISSIONS_TEST",
+     "required": true,
+     "noteEn": "Admission test and personal interview.",
+     "noteAr": "اختبار قبول ومقابلة شخصية.",
+     "source": "s1",
+     "quote": "The applicant must pass the admission test and the personal interview."
+    },
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "Certificates from outside Saudi Arabia must be authenticated by the Saudi Ministry of Education.",
+     "noteAr": "يجب توثيق الشهادات الصادرة من خارج المملكة من وزارة التعليم السعودية.",
+     "source": "s1",
+     "quote": "The secondary certificate from outside the Kingdom must be authenticated by the Saudi Ministry of Education."
+    }
+   ],
+   "deadlines": [],
+   "programs": [
+    {
+     "key": "al-yamamah-arch",
+     "status": "EXISTS",
+     "nameEn": "Architecture",
+     "nameAr": "العمارة",
+     "degree": "BArch",
+     "durationYears": 5,
+     "url": "https://yu.edu.sa/freshmen-admission-in-architecture/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": [
+       {
+        "kind": "OTHER",
+        "required": true,
+        "noteEn": "Taught in English over 10 semesters (5 years) after the orientation year.",
+        "noteAr": "يُدرَّس باللغة الإنجليزية على مدى 10 فصول (5 سنوات) بعد السنة التمهيدية.",
+        "source": "s2",
+        "quote": "The Duration of Program: 10 Semesters for 5 Years"
+       }
+      ],
+      "source": "s2"
+     },
+     "previous": null
+    },
+    {
+     "key": "al-yamamah-se",
+     "status": "EXISTS",
+     "nameEn": "Industrial, Network & Software Engineering",
+     "nameAr": "الهندسة الصناعية والشبكات والبرمجيات",
+     "degree": "BSc",
+     "durationYears": 4,
+     "url": "https://yu.edu.sa/freshmen-admission-in-industrial-network-software-engineering/",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    }
+   ]
+  },
+  {
+   "key": "king_abdulaziz_university",
+   "website": "https://www.kau.edu.sa",
+   "applyVia": "DIRECT",
+   "sources": [
+    {
+     "id": "s1",
+     "url": "https://kau.edu.sa/en/page/undergraduate-admission",
+     "title": "Undergraduate Admission | King Abdulaziz University",
+     "retrievedAt": "2026-10-06T22:53:10.575Z",
+     "hash": "19cc18d672997d040ee8778bf1b442cb66cd8ff622123bc87b1c325631affe47"
+    },
+    {
+     "id": "s2",
+     "url": "https://kau.edu.sa/en/programs/bachelor-of-medicine-and-surgery-mbbs",
+     "title": "King Abdulaziz University",
+     "retrievedAt": "2026-10-06T22:52:52.186Z",
+     "hash": "32006c068edf8912d13461290c09f8e84d58271ff45a19a94b93c95cc70463d8"
+    },
+    {
+     "id": "s3",
+     "url": "https://kau.edu.sa/en/programs/bachelor-of-science-in-computer-science",
+     "title": "King Abdulaziz University",
+     "retrievedAt": "2026-10-06T22:53:20.245Z",
+     "hash": "37b8a792ad43811003524d89948687b256f340103907b6588636d4d1c0d373b3"
+    },
+    {
+     "id": "s4",
+     "url": "https://kau.edu.sa/en/programs/bachelor-electrical-engineering",
+     "title": "King Abdulaziz University",
+     "retrievedAt": "2026-10-06T22:53:28.861Z",
+     "hash": "06bc2f3ae1b9719b30762b4d5fcbcc28ddabe745c631d0d511f68e846cf8f717"
+    },
+    {
+     "id": "s5",
+     "url": "https://kau.edu.sa/en/programs/bachelor-mechanical-engineering",
+     "title": "King Abdulaziz University",
+     "retrievedAt": "2026-10-06T22:53:15.639Z",
+     "hash": "306fac6557320d530da0f003406a7eefcb77ee87d6f4fa73df8333ac49e9e1ff"
+    },
+    {
+     "id": "s6",
+     "url": "https://kau.edu.sa/en/programs/bachelor-of-science-in-business-administration",
+     "title": "King Abdulaziz University",
+     "retrievedAt": "2026-10-06T22:52:56.909Z",
+     "hash": "73f1b126a24da6eeef7c4d764dd0b123e27b1028ed2d810fb291508aaba4c489"
+    }
+   ],
+   "english": [],
+   "tests": [],
+   "additional": [
+    {
+     "kind": "OTHER",
+     "required": true,
+     "noteEn": "The admissions office lists separate routes for non-Saudis: fee-paying admission and external scholarships.",
+     "noteAr": "يذكر مكتب القبول مسارات خاصة لغير السعوديين: القبول برسوم دراسية والمنح الخارجية.",
+     "source": "s1",
+     "quote": "Admission of Non-Saudis with a Financial Fee"
+    }
+   ],
+   "deadlines": [],
+   "programs": [
+    {
+     "key": "king-abdulaziz-university-med",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Medicine and Surgery (MBBS)",
+     "nameAr": "بكالوريوس الطب والجراحة",
+     "degree": "MBBS",
+     "durationYears": 6,
+     "url": "https://kau.edu.sa/en/programs/bachelor-of-medicine-and-surgery-mbbs",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "king-abdulaziz-university-cs",
+     "status": "EXISTS",
+     "nameEn": "Bachelor of Science in Computer Science",
+     "nameAr": "بكالوريوس العلوم في علوم الحاسب",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://kau.edu.sa/en/programs/bachelor-of-science-in-computer-science",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "king-abdulaziz-university-ee",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Science in Electrical Engineering",
+     "nameAr": "بكالوريوس العلوم في الهندسة الكهربائية",
+     "degree": "BSc",
+     "durationYears": 5,
+     "url": "https://kau.edu.sa/en/programs/bachelor-electrical-engineering",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "king-abdulaziz-university-me",
+     "status": "REPLACED",
+     "nameEn": "Bachelor Mechanical Engineering",
+     "nameAr": "بكالوريوس الهندسة الميكانيكية",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://kau.edu.sa/en/programs/bachelor-mechanical-engineering",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    },
+    {
+     "key": "king-abdulaziz-university-bus",
+     "status": "REPLACED",
+     "nameEn": "Bachelor of Science in Business Administration",
+     "nameAr": "بكالوريوس العلوم في إدارة الأعمال",
+     "degree": "BSc",
+     "durationYears": null,
+     "url": "https://kau.edu.sa/en/programs/bachelor-of-science-in-business-administration",
+     "curricula": {},
+     "general": {
+      "subjects": [],
+      "english": [],
+      "tests": [],
+      "additional": []
+     },
+     "previous": null
+    }
+   ]
+  }
+ ]
+}
