@@ -149,18 +149,20 @@ export function PricingEstimator({ pricing, locale }: { pricing: PricingConfig; 
               <h2 className="font-semibold">{t("assumptionsTitle")}</h2>
               <p className="mt-1 text-sm text-muted-foreground">{t("assumptionsBody")}</p>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              disabled={!changed}
-              onClick={() => {
-                setA(DEFAULT_ASSUMPTIONS);
-                setCost(DEFAULT_STAFF_COST_PER_HOUR);
-              }}
-            >
-              <RotateCcw className="size-4" />
-              {t("reset")}
-            </Button>
+            {changed && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setA(DEFAULT_ASSUMPTIONS);
+                  setCost(DEFAULT_STAFF_COST_PER_HOUR);
+                }}
+                data-testid="pricing-reset"
+              >
+                <RotateCcw className="size-4" />
+                {t("reset")}
+              </Button>
+            )}
           </div>
           <div className="mt-5 space-y-5">
             <div className="rounded-xl border border-dashed p-4">

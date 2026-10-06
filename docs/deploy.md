@@ -73,7 +73,7 @@ Put shared values in Project > Settings > Shared Variables and reference them fr
 | `AI_MODEL` | web | Model id for the AI provider. Default `claude-opus-5`. |
 | `COLLEGE_SCORECARD_API_KEY` | web, worker | Free api.data.gov key for the US College Scorecard import (Universities, Manage programmes, Run import). Without it the import uses `DEMO_KEY`, which allows only a few requests an hour, so the button imports the first 5 pages only. |
 | `PLATFORM_DATABASE_URL` | web, worker | Optional owner-role Postgres URL for writing the shared university catalog (catalog review publish, requirement page checks, Scorecard catalog import). Falls back to `MIGRATION_DATABASE_URL`. Without either, catalog review is read-only and the catalog jobs log a skip. |
-| `PLATFORM_ADMIN_EMAILS` | web | Comma-separated emails of platform catalog reviewers who may publish shared requirements from a non-demo school. Members of the demo school with `catalog.review` may always publish. |
+| `PLATFORM_ADMIN_EMAILS` | web | Comma-separated emails of platform admins. They see the Platform section (marketing leads with CSV export, referrals per school, platform settings such as pricing) and may publish shared requirements from a non-demo school. Members of the demo school with `catalog.review` may always publish catalog changes. Never list a demo persona: in production, addresses on reserved domains (for example horizon.example) are ignored. |
 
 Set by the image, no action needed: `NODE_ENV=production`, `PORT=3000` (Railway overrides `PORT`, the server follows it), `HOSTNAME=0.0.0.0`.
 

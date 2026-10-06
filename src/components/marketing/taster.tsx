@@ -119,10 +119,14 @@ export function CareerTaster({ questions, locale }: { questions: TasterQuestionV
           </motion.div>
         </AnimatePresence>
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-          <Button variant="ghost" size="sm" onClick={() => setIndex(Math.max(0, index - 1))} disabled={index === 0 || scoring}>
-            <BackIcon className="size-4" />
-            {t("back")}
-          </Button>
+          {index > 0 ? (
+            <Button variant="ghost" size="sm" onClick={() => setIndex(index - 1)} disabled={scoring}>
+              <BackIcon className="size-4" />
+              {t("back")}
+            </Button>
+          ) : (
+            <span />
+          )}
           {scoring && (
             <span className="flex items-center gap-2 text-sm text-muted-foreground" role="status">
               <Loader2 className="size-4 animate-spin" />

@@ -37,11 +37,18 @@ async function sendLeadEmail(leadId: string) {
   const q = queue("notify");
   const db = catalogDb();
   try {
-    if (q) await q.add(LEAD_EMAIL_JOB, { leadId }, { jobId: `${LEAD_EMAIL_JOB}:${leadId}` });
-    else if (db) await deliverLeadEmail(db, leadId);
+    if (q) {
+      await q.add(LEAD_EMAIL_JOB, { leadId }, { jobId: `${LEAD_EMAIL_JOB}:${leadId}` });
+      return;
+    }
+  } catch {
+    // Queue not reachable right now: send from here instead (the claim keeps it to one send).
+  }
+  try {
+    if (db) await deliverLeadEmail(db, leadId);
   } catch {
     // The row stays QUEUED and the worker sweeper sends it later.
-    console.error("[marketing] lead email could not be queued");
+    console.error("[marketing] lead email could not be sent");
   }
 }
 
