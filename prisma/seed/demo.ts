@@ -22,6 +22,7 @@ import { seedTrips } from "./academics/trips";
 import { seedCalendar } from "./academics/calendar";
 import { seedPathways } from "./academics/pathways";
 import { seedApplications } from "./academics/applications";
+import { seedCareerEvents } from "./academics/career-events";
 import { seedCurriculum } from "./academics/curriculum";
 import { seedPathwayEngine } from "./academics/pathway-engine";
 import { seedTranscripts } from "./academics/transcripts";
@@ -734,6 +735,7 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   await seedCalendar(world);
   await seedPathways(world);
   await seedApplications(world);
+  await seedCareerEvents(world);
   await seedPathwayEngine(world);
   await seedTranscripts(world);
   await seedCurriculum(world);

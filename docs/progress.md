@@ -54,6 +54,13 @@
 ## Grades module
 - /grades: spreadsheet-style gradebook with autosave, keyboard navigation, Excel paste, excused and comments, weighted averages and bands; publish with one notification per assessment and student; student and parent views of published grades with child switcher and term trend; staff overview (class averages, students below a threshold); grade band settings; bilingual term report card PDF stored as a GENERATED document. Seed: prisma/seed/academics/grades.ts. Tests: tests/unit/grades-calc.test.ts, tests/integration/grades.test.ts.
 
+## Inspection evidence, university fairs and visits, partner resources (schoolfeatures branch)
+- /admin/inspection (inspection.view: school_admin, principal): evidence pack for a chosen period under six headings (safeguarding, wellbeing and counseling, parent communication, careers guidance, attendance and academics, policies and compliance records), each labelled "Evidence commonly requested in inspections", with the related framework areas per regulator (InspectionMapping, seeded defaults, docs/inspection-readiness.md). Bilingual PDF on the school letterhead and CSV (/api/inspection/export), both audited. Case references only for viewers case-access allows, audited per case, never exported.
+- /career/events and /career/events/[id]: university visits, fairs and info sessions (catalog universities or free text, time, place or online link, grades, capacity, deadline), on the calendar for the chosen grades. Students and parents register and cancel; advisors see attendees, export a CSV and mark attendance. Notices, reminders and cancellations through notify with idempotency keys; worker job careerEvents.reminders (hourly). Seed: prisma/seed/academics/career-events.ts (four upcoming events, one past with attendance).
+- /career/resources: partner links (name and description in en/ar, category, https URL, audience, active) managed by school admins and career advisors (career.partners), shown to students and parents, with an aggregate click counter. Three generic examples in the demo. Partner card on the student career page.
+- Schema (additive): InspectionMapping, CareerEvent, CareerEventRegistration, PartnerResource; enums CareerEventKind, CareerEventStatus, CareerRegistrationStatus. Migration 20261006000000_inspection_career_events. Permissions inspection.view and career.partners.
+- Tests: tests/unit/inspection.test.ts, tests/integration/inspection-events.test.ts, tests/e2e/inspection-events.spec.ts.
+
 ## Broken
 - Nothing known. Production: https://myhorizon.up.railway.app (press Reset demo after each deploy to load new seed data).
 

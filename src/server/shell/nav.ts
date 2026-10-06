@@ -18,6 +18,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           { key: "tasks", href: "/tasks", icon: "check-square", badge: counts.tasks },
           { key: "timetable", href: "/timetable", icon: "calendar-days" },
           { key: "career", href: "/career", icon: "compass" },
+          { key: "careerEvents", href: "/career/events", icon: "calendar-check" },
+          { key: "partnerResources", href: "/career/resources", icon: "handshake" },
           ...(c("registration.submit") ? [{ key: "subjects", href: "/subjects", icon: "book-open" }] : []),
           ...(c("grades.view_own") ? [{ key: "grades", href: "/grades", icon: "clipboard-check" }] : []),
           ...(c("pathways.view") ? [{ key: "pathwayPlanning", href: "/career/pathways", icon: "map" }, { key: "universities", href: "/career/universities", icon: "landmark" }] : []),
@@ -41,6 +43,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           ...(c("grades.view_own") ? [{ key: "grades", href: "/grades", icon: "clipboard-check" }] : []),
           ...(c("pathways.view") ? [{ key: "pathwayPlanning", href: "/career/pathways", icon: "map" }, { key: "universities", href: "/career/universities", icon: "landmark" }] : []),
           ...(c("pathways.view") ? [{ key: "applications", href: "/career/applications", icon: "send" }] : []),
+          { key: "careerEvents", href: "/career/events", icon: "calendar-check" },
+          { key: "partnerResources", href: "/career/resources", icon: "handshake" },
           { key: "services", href: "/services", icon: "layout-grid" },
           { key: "requests", href: "/requests", icon: "inbox" },
           { key: "approvals", href: "/approvals", icon: "stamp", badge: counts.approvals },
@@ -70,7 +74,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("people.view")) school.push({ key: "students", href: "/students", icon: "graduation-cap" });
   if (c("grades.enter") || c("registration.manage")) school.push({ key: "classes", href: "/classes", icon: "school" });
   if (c("grades.enter") || c("grades.view_all")) school.push({ key: "grades", href: "/grades", icon: "clipboard-check" });
-  if (c("career.advise")) school.push({ key: "career", href: "/career", icon: "compass" });
+  if (c("career.advise")) school.push({ key: "career", href: "/career", icon: "compass" }, { key: "careerEvents", href: "/career/events", icon: "calendar-check" });
+  if (c("career.partners") || c("career.advise")) school.push({ key: "partnerResources", href: "/career/resources", icon: "handshake" });
   if (c("pathways.view") && c("people.view")) school.push({ key: "pathwayPlanning", href: "/career/pathways", icon: "map" });
   if (c("pathways.view") && c("people.view") && (c("planner.approve") || c("pathways.manage"))) school.push({ key: "pathwayDashboard", href: "/career/pathways/dashboard", icon: "list-checks" });
   if (c("pathways.view")) school.push({ key: "universities", href: "/career/universities", icon: "landmark" });
@@ -98,6 +103,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("calendar.manage")) admin.push({ key: "calendarAdmin", href: "/admin/calendar", icon: "calendar-days" }, { key: "examsAdmin", href: "/admin/exams", icon: "clipboard-check" });
   if (c("compliance.manage")) admin.push({ key: "compliance", href: "/admin/compliance", icon: "scale" });
   if (c("audit.view")) admin.push({ key: "auditLog", href: "/admin/audit", icon: "scroll-text" });
+  if (c("inspection.view")) admin.push({ key: "inspection", href: "/admin/inspection", icon: "clipboard-list" });
   const sections: NavSection[] = [
     { key: "sectionWork", items: work },
     { key: "sectionSchool", items: school },

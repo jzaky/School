@@ -22,10 +22,10 @@ export const PERMISSION_GROUPS: Array<{ key: string; permissions: Permission[] }
   { key: "documents", permissions: ["documents.view", "documents.manage", "documents.sensitive", "documents.templates"] },
   {
     key: "university",
-    permissions: ["career.use", "career.advise", "pathways.view", "pathways.manage", "planner.approve", "applications.manage", "catalog.review"],
+    permissions: ["career.use", "career.advise", "pathways.view", "pathways.manage", "planner.approve", "applications.manage", "catalog.review", "career.partners"],
   },
   { key: "teaching", permissions: ["curriculum.plan", "curriculum.review", "curriculum.manage", "trips.manage", "trips.consent", "comms.send"] },
-  { key: "insights", permissions: ["analytics.view", "ai.use", "ai.admin_insights"] },
+  { key: "insights", permissions: ["analytics.view", "inspection.view", "ai.use", "ai.admin_insights"] },
   { key: "admin", permissions: ["admin.access", "school.manage", "roles.manage", "compliance.manage", "audit.view", "demo.reset"] },
   { key: "portals", permissions: ["family.portal", "student.portal"] },
 ];

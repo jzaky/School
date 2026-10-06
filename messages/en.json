@@ -148,7 +148,10 @@
     "roles": "Roles and access",
     "invitations": "Invitations",
     "joinRequests": "Join requests",
-    "setup": "School setup"
+    "setup": "School setup",
+    "inspection": "Inspection evidence",
+    "careerEvents": "University fairs and visits",
+    "partnerResources": "Partner resources"
   },
   "shell": {
     "openMenu": "Open menu",
@@ -1310,7 +1313,19 @@
       "org_update": "School settings changed",
       "template_update": "Document template changed",
       "retention_update": "Retention policy changed",
-      "ai_settings_update": "AI settings changed"
+      "ai_settings_update": "AI settings changed",
+      "inspection_export": "Downloaded the inspection evidence pack",
+      "inspection_case_reference_view": "Viewed a case reference in the evidence pack",
+      "career_event_create": "Created a university event",
+      "career_event_update": "Updated a university event",
+      "career_event_cancel": "Cancelled a university event",
+      "career_event_register": "Registered for a university event",
+      "career_event_cancel_registration": "Cancelled a university event registration",
+      "career_event_attendance": "Marked attendance at a university event",
+      "career_event_export": "Exported a university event list",
+      "partner_resource_create": "Added a partner resource",
+      "partner_resource_update": "Updated a partner resource",
+      "partner_resource_delete": "Deleted a partner resource"
     }
   },
   "adminCompliance": {
@@ -2291,6 +2306,26 @@
       "importCenter": {
         "title": "Import a school from spreadsheets",
         "body": "Download a template, upload staff or classes, check the preview with its row errors, then import."
+      },
+      "universityFairs": {
+        "title": "Register for a university fair",
+        "body": "See visits and fairs for your grade and save a place."
+      },
+      "universityFairsParent": {
+        "title": "University fairs for your children",
+        "body": "Register Adam for a visit or cancel with one tap."
+      },
+      "fairsManage": {
+        "title": "Run university visits and fairs",
+        "body": "Create an event, watch places fill and mark attendance."
+      },
+      "partnerResources": {
+        "title": "Share partner resources",
+        "body": "Links to outside programs, with click counts in total only."
+      },
+      "inspectionPack": {
+        "title": "Build the inspection evidence pack",
+        "body": "Choose dates and download a bilingual PDF or CSV."
       }
     }
   },
@@ -6272,6 +6307,10 @@
         "advise": {
           "label": "Career advising",
           "help": "See students' career profiles and advise them."
+        },
+        "partners": {
+          "label": "Manage partner resources",
+          "help": "Add and change the external partner links students and parents see on the career pages."
         }
       },
       "pathways": {
@@ -6394,6 +6433,12 @@
         "portal": {
           "label": "Student portal",
           "help": "The student home and their own records."
+        }
+      },
+      "inspection": {
+        "view": {
+          "label": "View the inspection evidence pack",
+          "help": "See and download school-wide evidence for inspections. Sensitive cases appear only as counts."
         }
       }
     }
@@ -7585,6 +7630,330 @@
         "COMPLETED": "Completed",
         "FAILED": "Failed"
       }
+    }
+  },
+  "inspection": {
+    "title": "Inspection evidence pack",
+    "subtitle": "Evidence commonly requested in inspections, assembled from Horizon for the dates you choose.",
+    "disclaimer": "This pack collects records the school keeps in Horizon. It does not state or certify compliance with any inspection framework. Check your regulator's current framework before relying on it.",
+    "aggregatesOnly": "Safeguarding and wellbeing figures are counts and timings only. No names or case details are included.",
+    "from": "From",
+    "to": "To",
+    "apply": "Update",
+    "presets": {
+      "label": "Period",
+      "last30": "Last 30 days",
+      "last90": "Last 90 days",
+      "year": "This academic year",
+      "custom": "Custom dates"
+    },
+    "exportPdf": "Download PDF",
+    "exportCsv": "Download CSV",
+    "exportHint": "Every download is recorded in the audit log.",
+    "headingPrefix": "Evidence commonly requested in inspections",
+    "headings": {
+      "safeguarding": "Safeguarding",
+      "wellbeing": "Wellbeing and counseling",
+      "parents": "Parent communication and engagement",
+      "careers": "Student support and careers guidance",
+      "attendance": "Attendance and academics",
+      "compliance": "Policies and compliance records"
+    },
+    "metrics": {
+      "opened": "Cases opened",
+      "highConcern": "High or immediate concern level",
+      "medianFirstResponse": "Median time to first response",
+      "respondedWithin24h": "First response within 24 hours",
+      "awaitingFirstResponse": "Opened without a recorded response yet",
+      "closedInRange": "Resolved or closed in this period",
+      "openNow": "Open now",
+      "ledByDsl": "Led by the DSL or deputy",
+      "dslCount": "Designated Safeguarding Leads",
+      "deputyCount": "Deputy safeguarding leads",
+      "externalReferrals": "External agency referrals",
+      "familyDecisions": "Recorded family notification decisions",
+      "training": "Safeguarding training records",
+      "counselingHeld": "Counseling sessions held",
+      "counselingBooked": "Counseling sessions booked",
+      "messagesDelivered": "Messages delivered (email, SMS, WhatsApp)",
+      "inAppToParents": "In-app notifications to parents",
+      "announcements": "Announcements to families",
+      "parentMeetings": "Parent meetings",
+      "parentRequests": "Requests submitted by parents",
+      "requestTurnaround": "Median request turnaround",
+      "requestsOnTime": "Completed within the service time",
+      "assessmentsCompleted": "Career assessments completed",
+      "plansApproved": "University plans approved",
+      "guidanceSessions": "Career guidance sessions held",
+      "applicationsByStage": "University applications by stage",
+      "applicationsSubmitted": "Applications submitted in this period",
+      "careerEvents": "University fairs, visits and sessions held",
+      "careerEventAttendance": "Registered students who attended",
+      "attendanceRate": "Attendance rate",
+      "attendanceRecords": "Attendance records",
+      "unexcusedAbsences": "Unexcused absences",
+      "assessmentsPublished": "Assessments published",
+      "gradesRecorded": "Grades recorded for them",
+      "processingPurposes": "Data processing purposes recorded",
+      "consentRecords": "Consent records",
+      "retentionPolicies": "Retention policies",
+      "retentionLastRun": "Retention last applied",
+      "transfersApproved": "Cross-border transfers approved",
+      "dataRequests": "Data subject requests received",
+      "dataRequestsOnTime": "Data subject requests completed on time",
+      "incidents": "Data incidents logged",
+      "auditEvents": "Audit log entries",
+      "sensitiveViewsAudited": "Audited views of sensitive records",
+      "packExports": "Evidence pack downloads"
+    },
+    "breakdown": {
+      "NEW": "New",
+      "OPEN": "Open",
+      "IN_PROGRESS": "In progress",
+      "WAITING": "Waiting",
+      "RESOLVED": "Resolved",
+      "CLOSED": "Closed",
+      "COMPLETED": "Held",
+      "CONFIRMED": "Booked",
+      "SCHEDULED": "Scheduled",
+      "NO_SHOW": "Did not attend",
+      "CANCELLED": "Cancelled",
+      "EMAIL": "Email",
+      "SMS": "SMS",
+      "WHATSAPP": "WhatsApp",
+      "IN_APP": "In app",
+      "RESEARCHING": "Researching",
+      "SHORTLISTED": "Shortlisted",
+      "PREPARING": "Preparing",
+      "SUBMITTED": "Submitted",
+      "INTERVIEW": "Interview",
+      "OFFER": "Offer",
+      "WAITLISTED": "Waitlisted",
+      "ACCEPTED": "Accepted",
+      "ENROLLED": "Enrolled",
+      "REJECTED": "Not offered",
+      "PRESENT": "Present",
+      "LATE": "Late",
+      "EXCUSED": "Excused",
+      "ABSENT": "Absent",
+      "GRANTED": "Granted",
+      "WITHDRAWN": "Withdrawn",
+      "REFUSED": "Refused",
+      "PENDING": "Pending"
+    },
+    "notes": {
+      "notRecorded": "Not recorded in Horizon",
+      "snapshot": "As of today",
+      "noneInRange": "None in this period"
+    },
+    "units": {
+      "hours": "{n} h",
+      "days": "{n} days",
+      "percent": "{n}%",
+      "ratio": "{value} of {of}"
+    },
+    "mapping": {
+      "title": "Related framework areas",
+      "hint": "A suggested mapping kept as editable data. The school must check its regulator's current framework.",
+      "yours": "Your regulator",
+      "customized": "Edited by the school",
+      "frameworks": {
+        "KHDA": "KHDA (Dubai)",
+        "ADEK": "ADEK (Abu Dhabi)",
+        "SPEA": "SPEA (Sharjah)",
+        "MOE": "Ministry of Education"
+      }
+    },
+    "references": {
+      "show": "Show case references",
+      "hide": "Hide case references",
+      "title": "Case references",
+      "hint": "Only cases you can open are listed, by number and dates. Viewing them is recorded in the audit log. They are never included in downloads.",
+      "notAllowed": "Case references are not shown for your role. The figures above are aggregates only.",
+      "number": "Case",
+      "status": "Status",
+      "opened": "Opened",
+      "firstResponse": "First response",
+      "closed": "Closed",
+      "none": "No cases in this period."
+    },
+    "pdf": {
+      "period": "Period",
+      "generated": "Generated",
+      "generatedBy": "Generated by",
+      "page": "Page"
+    },
+    "error": {
+      "INVALID_RANGE": "Choose a start date before the end date, at most 400 days apart.",
+      "generic": "The evidence pack could not be built. Try again."
+    }
+  },
+  "careerEvents": {
+    "title": "University fairs and visits",
+    "subtitleStaff": "University visits, fairs and information sessions for your students. They appear on the calendar for the grades you choose.",
+    "subtitleStudent": "Meet universities at school and online. Register for the sessions that interest you.",
+    "subtitleParent": "University visits, fairs and information sessions for your children. Register them or cancel here.",
+    "newEvent": "New event",
+    "editEvent": "Edit event",
+    "dialogBody": "Students in the chosen grades are told in the app and can register until the deadline.",
+    "upcoming": "Upcoming",
+    "past": "Past and cancelled",
+    "empty": "No university events yet",
+    "emptyStaff": "Create a university visit, fair or information session for your students.",
+    "emptyFamily": "When the school plans university visits or fairs for your grade, they appear here.",
+    "forChild": "For {name}",
+    "kind": {
+      "UNIVERSITY_VISIT": "University visit",
+      "FAIR": "University fair",
+      "INFO_SESSION": "Information session"
+    },
+    "state": {
+      "open": "Registration open",
+      "full": "Full",
+      "closed": "Registration closed",
+      "cancelled": "Cancelled",
+      "past": "Finished"
+    },
+    "registered": "Registered",
+    "attended": "Attended",
+    "absent": "Did not attend",
+    "notMarked": "Not marked",
+    "register": "Register",
+    "cancelRegistration": "Cancel registration",
+    "registeredToast": "Registered",
+    "cancelledToast": "Registration cancelled",
+    "places": "{taken} of {capacity} places taken",
+    "registeredCount": "{count, plural, =0 {No one registered yet} one {# registered} other {# registered}}",
+    "placesLeft": "{count, plural, one {# place left} other {# places left}}",
+    "registerBy": "Register by {date}",
+    "grades": "Grades {grades}",
+    "online": "Online",
+    "joinOnline": "Join online",
+    "universities": "Universities",
+    "noUniversities": "Universities to be confirmed",
+    "details": "Details",
+    "attendees": "Attendees",
+    "attendeesHint": "Mark attendance from an hour before the start.",
+    "attendanceLocked": "Attendance opens an hour before the event starts.",
+    "noAttendees": "No students registered yet.",
+    "exportList": "Export list",
+    "markAttended": "Mark attended",
+    "markAbsent": "Mark absent",
+    "cancelEvent": "Cancel event",
+    "cancelEventTitle": "Cancel this event?",
+    "cancelEventBody": "Registered students and their parents are told, and the event is removed from the calendar. This cannot be undone.",
+    "eventCancelled": "Event cancelled",
+    "saved": "Event saved",
+    "organizer": "Organizer",
+    "when": "When",
+    "where": "Where",
+    "capacity": "Capacity",
+    "unlimited": "No limit",
+    "deadline": "Registration deadline",
+    "noDeadline": "Until the event starts",
+    "notEligible": "This event is for other grades.",
+    "back": "All events",
+    "field": {
+      "kind": "Type",
+      "titleEn": "Title (English)",
+      "titleAr": "Title (Arabic)",
+      "descEn": "Description (English)",
+      "descAr": "Description (Arabic)",
+      "universities": "Universities from the catalog",
+      "universitiesSearch": "Search universities",
+      "otherUniversities": "Other universities",
+      "otherUniversitiesHint": "Not in the catalog? Type names separated by commas.",
+      "date": "Date",
+      "start": "Starts",
+      "end": "Ends",
+      "locationEn": "Place (English)",
+      "locationAr": "Place (Arabic)",
+      "onlineUrl": "Online link",
+      "onlineUrlHint": "For online sessions. Starts with https://",
+      "grades": "Grades",
+      "capacity": "Capacity",
+      "capacityHint": "Leave empty for no limit.",
+      "deadline": "Registration deadline",
+      "selected": "{count} selected"
+    },
+    "error": {
+      "FORBIDDEN": "You cannot do this.",
+      "NOT_FOUND": "This event no longer exists.",
+      "NOT_ELIGIBLE": "This event is for other grades.",
+      "FULL": "All places are taken.",
+      "CLOSED": "Registration has closed.",
+      "CANCELLED": "This event was cancelled.",
+      "STARTED": "The event has already started.",
+      "NOT_REGISTERED": "This student is not registered.",
+      "NOT_STARTED": "Attendance opens an hour before the event starts.",
+      "INVALID": "Check the form and try again.",
+      "TITLE_REQUIRED": "Add a title of at least 3 characters.",
+      "INVALID_DATES": "Check the date and times. The end must be after the start.",
+      "IN_PAST": "The event must start in the future.",
+      "DEADLINE_AFTER_START": "The registration deadline must be before the event.",
+      "GRADES_REQUIRED": "Choose at least one grade.",
+      "PLACE_REQUIRED": "Add a place or an online link.",
+      "INVALID_URL": "The online link must start with https://",
+      "CAPACITY_BELOW_REGISTERED": "More students are already registered than this capacity.",
+      "generic": "Something went wrong. Try again."
+    }
+  },
+  "partners": {
+    "title": "Partner resources",
+    "subtitleManage": "Links to external partner providers that students and parents see on their career pages. Clicks are counted in total only, never per person.",
+    "subtitleFamily": "Outside programs and services the school recommends for careers and university preparation.",
+    "outsideNote": "These links open websites outside Horizon. The school does not share your details with them.",
+    "add": "Add partner",
+    "edit": "Edit partner",
+    "dialogBody": "Only https links are accepted.",
+    "empty": "No partner resources yet",
+    "emptyManage": "Add links to external programs your students and parents can use.",
+    "emptyFamily": "The school has not added any partner resources yet.",
+    "example": "Example",
+    "exampleHint": "A generic example added with the demo. Edit or delete it.",
+    "active": "Active",
+    "inactive": "Hidden",
+    "clicks": "{count, plural, =0 {No clicks yet} one {# click} other {# clicks}}",
+    "open": "Open website",
+    "preview": "Preview",
+    "audience": {
+      "student": "Students",
+      "parent": "Parents"
+    },
+    "category": {
+      "career_experience": "Career experiences",
+      "advising": "Advising",
+      "test_prep": "Test preparation",
+      "scholarships": "Scholarships",
+      "internships": "Internships",
+      "other": "Other"
+    },
+    "field": {
+      "nameEn": "Name (English)",
+      "nameAr": "Name (Arabic)",
+      "descEn": "Description (English)",
+      "descAr": "Description (Arabic)",
+      "category": "Category",
+      "url": "Website",
+      "audience": "Shown to",
+      "active": "Show to families"
+    },
+    "deleteTitle": "Delete this partner link?",
+    "deleteBody": "Students and parents will no longer see it. The click count is removed too.",
+    "saved": "Partner saved",
+    "deleted": "Partner deleted",
+    "cardTitle": "Partner resources",
+    "cardBody": "Outside programs the school recommends.",
+    "seeAll": "See all",
+    "error": {
+      "FORBIDDEN": "You cannot do this.",
+      "NOT_FOUND": "This link no longer exists.",
+      "NAME_REQUIRED": "Add a name.",
+      "DESC_REQUIRED": "Add a short description.",
+      "INVALID_URL": "Enter a full website address starting with https://",
+      "INVALID_CATEGORY": "Choose a category.",
+      "AUDIENCE_REQUIRED": "Choose who sees it.",
+      "generic": "Something went wrong. Try again."
     }
   }
 }

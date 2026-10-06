@@ -1,0 +1,213 @@
+{
+  "careerEvents": {
+    "title": ["University fairs and visits", "المعارض والزيارات الجامعية"],
+    "subtitleStaff": [
+      "University visits, fairs and information sessions for your students. They appear on the calendar for the grades you choose.",
+      "الزيارات الجامعية والمعارض والجلسات التعريفية لطلابك. تظهر في التقويم للصفوف التي تختارها."
+    ],
+    "subtitleStudent": [
+      "Meet universities at school and online. Register for the sessions that interest you.",
+      "تعرّف على الجامعات في المدرسة وعبر الإنترنت، وسجّل في الجلسات التي تهمك."
+    ],
+    "subtitleParent": [
+      "University visits, fairs and information sessions for your children. Register them or cancel here.",
+      "الزيارات الجامعية والمعارض والجلسات التعريفية لأبنائك. سجّلهم أو ألغِ التسجيل من هنا."
+    ],
+    "newEvent": ["New event", "فعالية جديدة"],
+    "editEvent": ["Edit event", "تعديل الفعالية"],
+    "dialogBody": [
+      "Students in the chosen grades are told in the app and can register until the deadline.",
+      "يتلقى طلاب الصفوف المختارة إشعارًا في التطبيق ويمكنهم التسجيل حتى الموعد النهائي."
+    ],
+    "upcoming": ["Upcoming", "القادمة"],
+    "past": ["Past and cancelled", "السابقة والملغاة"],
+    "empty": ["No university events yet", "لا توجد فعاليات جامعية بعد"],
+    "emptyStaff": ["Create a university visit, fair or information session for your students.", "أنشئ زيارة جامعية أو معرضًا أو جلسة تعريفية لطلابك."],
+    "emptyFamily": ["When the school plans university visits or fairs for your grade, they appear here.", "عندما تخطط المدرسة لزيارات جامعية أو معارض لصفك، ستظهر هنا."],
+    "forChild": ["For {name}", "لـ {name}"],
+    "kind": {
+      "UNIVERSITY_VISIT": ["University visit", "زيارة جامعية"],
+      "FAIR": ["University fair", "معرض جامعي"],
+      "INFO_SESSION": ["Information session", "جلسة تعريفية"]
+    },
+    "state": {
+      "open": ["Registration open", "التسجيل مفتوح"],
+      "full": ["Full", "مكتمل العدد"],
+      "closed": ["Registration closed", "التسجيل مغلق"],
+      "cancelled": ["Cancelled", "ملغاة"],
+      "past": ["Finished", "انتهت"]
+    },
+    "registered": ["Registered", "مسجّل"],
+    "attended": ["Attended", "حضر"],
+    "absent": ["Did not attend", "لم يحضر"],
+    "notMarked": ["Not marked", "غير محدد"],
+    "register": ["Register", "تسجيل"],
+    "cancelRegistration": ["Cancel registration", "إلغاء التسجيل"],
+    "registeredToast": ["Registered", "تم التسجيل"],
+    "cancelledToast": ["Registration cancelled", "أُلغي التسجيل"],
+    "places": ["{taken} of {capacity} places taken", "{taken} من {capacity} مقعدًا محجوزًا"],
+    "registeredCount": ["{count, plural, =0 {No one registered yet} one {# registered} other {# registered}}", "{count, plural, =0 {لم يسجل أحد بعد} one {مسجّل واحد} two {مسجّلان} few {# مسجّلين} many {# مسجّلًا} other {# مسجّل}}"],
+    "placesLeft": ["{count, plural, one {# place left} other {# places left}}", "{count, plural, one {مقعد واحد متبقٍ} two {مقعدان متبقيان} few {# مقاعد متبقية} many {# مقعدًا متبقيًا} other {# مقعد متبقٍ}}"],
+    "registerBy": ["Register by {date}", "سجّل قبل {date}"],
+    "grades": ["Grades {grades}", "الصفوف {grades}"],
+    "online": ["Online", "عبر الإنترنت"],
+    "joinOnline": ["Join online", "الانضمام عبر الإنترنت"],
+    "universities": ["Universities", "الجامعات"],
+    "noUniversities": ["Universities to be confirmed", "الجامعات قيد التأكيد"],
+    "details": ["Details", "التفاصيل"],
+    "attendees": ["Attendees", "الحضور"],
+    "attendeesHint": [
+      "Mark attendance from an hour before the start.",
+      "يمكن تسجيل الحضور قبل ساعة من البداية."
+    ],
+    "attendanceLocked": ["Attendance opens an hour before the event starts.", "يُفتح تسجيل الحضور قبل ساعة من بدء الفعالية."],
+    "noAttendees": ["No students registered yet.", "لم يسجل أي طالب بعد."],
+    "exportList": ["Export list", "تصدير القائمة"],
+    "markAttended": ["Mark attended", "تسجيل الحضور"],
+    "markAbsent": ["Mark absent", "تسجيل الغياب"],
+    "cancelEvent": ["Cancel event", "إلغاء الفعالية"],
+    "cancelEventTitle": ["Cancel this event?", "هل تريد إلغاء هذه الفعالية؟"],
+    "cancelEventBody": [
+      "Registered students and their parents are told, and the event is removed from the calendar. This cannot be undone.",
+      "سيُبلَّغ الطلاب المسجلون وأولياء أمورهم، وتُزال الفعالية من التقويم. لا يمكن التراجع عن ذلك."
+    ],
+    "eventCancelled": ["Event cancelled", "أُلغيت الفعالية"],
+    "saved": ["Event saved", "حُفظت الفعالية"],
+    "organizer": ["Organizer", "المنظم"],
+    "when": ["When", "الموعد"],
+    "where": ["Where", "المكان"],
+    "capacity": ["Capacity", "السعة"],
+    "unlimited": ["No limit", "بلا حد"],
+    "deadline": ["Registration deadline", "آخر موعد للتسجيل"],
+    "noDeadline": ["Until the event starts", "حتى بدء الفعالية"],
+    "notEligible": ["This event is for other grades.", "هذه الفعالية لصفوف أخرى."],
+    "back": ["All events", "كل الفعاليات"],
+    "field": {
+      "kind": ["Type", "النوع"],
+      "titleEn": ["Title (English)", "العنوان (بالإنجليزية)"],
+      "titleAr": ["Title (Arabic)", "العنوان (بالعربية)"],
+      "descEn": ["Description (English)", "الوصف (بالإنجليزية)"],
+      "descAr": ["Description (Arabic)", "الوصف (بالعربية)"],
+      "universities": ["Universities from the catalog", "جامعات من الدليل"],
+      "universitiesSearch": ["Search universities", "ابحث عن جامعة"],
+      "otherUniversities": ["Other universities", "جامعات أخرى"],
+      "otherUniversitiesHint": ["Not in the catalog? Type names separated by commas.", "غير موجودة في الدليل؟ اكتب الأسماء مفصولة بفواصل."],
+      "date": ["Date", "التاريخ"],
+      "start": ["Starts", "يبدأ"],
+      "end": ["Ends", "ينتهي"],
+      "locationEn": ["Place (English)", "المكان (بالإنجليزية)"],
+      "locationAr": ["Place (Arabic)", "المكان (بالعربية)"],
+      "onlineUrl": ["Online link", "رابط الانضمام عبر الإنترنت"],
+      "onlineUrlHint": ["For online sessions. Starts with https://", "للجلسات عبر الإنترنت. يبدأ بـ https://"],
+      "grades": ["Grades", "الصفوف"],
+      "capacity": ["Capacity", "السعة"],
+      "capacityHint": ["Leave empty for no limit.", "اتركه فارغًا لعدم تحديد عدد."],
+      "deadline": ["Registration deadline", "آخر موعد للتسجيل"],
+      "selected": ["{count} selected", "{count} محددة"]
+    },
+    "error": {
+      "FORBIDDEN": ["You cannot do this.", "لا يمكنك القيام بذلك."],
+      "NOT_FOUND": ["This event no longer exists.", "لم تعد هذه الفعالية موجودة."],
+      "NOT_ELIGIBLE": ["This event is for other grades.", "هذه الفعالية لصفوف أخرى."],
+      "FULL": ["All places are taken.", "جميع المقاعد محجوزة."],
+      "CLOSED": ["Registration has closed.", "أُغلق التسجيل."],
+      "CANCELLED": ["This event was cancelled.", "أُلغيت هذه الفعالية."],
+      "STARTED": ["The event has already started.", "بدأت الفعالية بالفعل."],
+      "NOT_REGISTERED": ["This student is not registered.", "هذا الطالب غير مسجّل."],
+      "NOT_STARTED": ["Attendance opens an hour before the event starts.", "يُفتح تسجيل الحضور قبل ساعة من بدء الفعالية."],
+      "INVALID": ["Check the form and try again.", "راجع النموذج وحاول مرة أخرى."],
+      "TITLE_REQUIRED": ["Add a title of at least 3 characters.", "أضف عنوانًا من 3 أحرف على الأقل."],
+      "INVALID_DATES": ["Check the date and times. The end must be after the start.", "راجع التاريخ والأوقات. يجب أن تكون النهاية بعد البداية."],
+      "IN_PAST": ["The event must start in the future.", "يجب أن تبدأ الفعالية في المستقبل."],
+      "DEADLINE_AFTER_START": ["The registration deadline must be before the event.", "يجب أن يكون آخر موعد للتسجيل قبل الفعالية."],
+      "GRADES_REQUIRED": ["Choose at least one grade.", "اختر صفًا واحدًا على الأقل."],
+      "PLACE_REQUIRED": ["Add a place or an online link.", "أضف مكانًا أو رابطًا للانضمام عبر الإنترنت."],
+      "INVALID_URL": ["The online link must start with https://", "يجب أن يبدأ الرابط بـ https://"],
+      "CAPACITY_BELOW_REGISTERED": ["More students are already registered than this capacity.", "عدد المسجلين حاليًا أكبر من هذه السعة."],
+      "generic": ["Something went wrong. Try again.", "حدث خطأ ما. حاول مرة أخرى."]
+    }
+  },
+  "partners": {
+    "title": ["Partner resources", "موارد الشركاء"],
+    "subtitleManage": [
+      "Links to external partner providers that students and parents see on their career pages. Clicks are counted in total only, never per person.",
+      "روابط لمقدمي خدمات خارجيين يراها الطلاب وأولياء الأمور في صفحات التوجيه المهني. تُحتسب النقرات إجمالًا فقط، ولا تُربط بأي شخص."
+    ],
+    "subtitleFamily": [
+      "Outside programs and services the school recommends for careers and university preparation.",
+      "برامج وخدمات خارجية توصي بها المدرسة للتوجيه المهني والاستعداد للجامعة."
+    ],
+    "outsideNote": [
+      "These links open websites outside Horizon. The school does not share your details with them.",
+      "تفتح هذه الروابط مواقع خارج Horizon. لا تشارك المدرسة بياناتك معها."
+    ],
+    "add": ["Add partner", "إضافة شريك"],
+    "edit": ["Edit partner", "تعديل الشريك"],
+    "dialogBody": ["Only https links are accepted.", "تُقبل روابط https فقط."],
+    "empty": ["No partner resources yet", "لا توجد موارد شركاء بعد"],
+    "emptyManage": ["Add links to external programs your students and parents can use.", "أضف روابط لبرامج خارجية يمكن لطلابك وأولياء أمورهم الاستفادة منها."],
+    "emptyFamily": ["The school has not added any partner resources yet.", "لم تضف المدرسة أي موارد شركاء بعد."],
+    "example": ["Example", "مثال"],
+    "exampleHint": ["A generic example added with the demo. Edit or delete it.", "مثال عام أُضيف مع النسخة التجريبية. عدّله أو احذفه."],
+    "active": ["Active", "مفعّل"],
+    "inactive": ["Hidden", "مخفي"],
+    "clicks": ["{count, plural, =0 {No clicks yet} one {# click} other {# clicks}}", "{count, plural, =0 {لا نقرات بعد} one {نقرة واحدة} two {نقرتان} few {# نقرات} many {# نقرة} other {# نقرة}}"],
+    "open": ["Open website", "فتح الموقع"],
+    "preview": ["Preview", "معاينة"],
+    "audience": {
+      "student": ["Students", "الطلاب"],
+      "parent": ["Parents", "أولياء الأمور"]
+    },
+    "category": {
+      "career_experience": ["Career experiences", "تجارب مهنية"],
+      "advising": ["Advising", "استشارات"],
+      "test_prep": ["Test preparation", "التحضير للاختبارات"],
+      "scholarships": ["Scholarships", "المنح الدراسية"],
+      "internships": ["Internships", "التدريب العملي"],
+      "other": ["Other", "أخرى"]
+    },
+    "field": {
+      "nameEn": ["Name (English)", "الاسم (بالإنجليزية)"],
+      "nameAr": ["Name (Arabic)", "الاسم (بالعربية)"],
+      "descEn": ["Description (English)", "الوصف (بالإنجليزية)"],
+      "descAr": ["Description (Arabic)", "الوصف (بالعربية)"],
+      "category": ["Category", "الفئة"],
+      "url": ["Website", "الموقع الإلكتروني"],
+      "audience": ["Shown to", "يظهر لـ"],
+      "active": ["Show to families", "إظهار للأسر"]
+    },
+    "deleteTitle": ["Delete this partner link?", "هل تريد حذف رابط الشريك هذا؟"],
+    "deleteBody": ["Students and parents will no longer see it. The click count is removed too.", "لن يراه الطلاب وأولياء الأمور بعد الآن، وسيُحذف عدد النقرات أيضًا."],
+    "saved": ["Partner saved", "حُفظ الشريك"],
+    "deleted": ["Partner deleted", "حُذف الشريك"],
+    "cardTitle": ["Partner resources", "موارد الشركاء"],
+    "cardBody": ["Outside programs the school recommends.", "برامج خارجية توصي بها المدرسة."],
+    "seeAll": ["See all", "عرض الكل"],
+    "error": {
+      "FORBIDDEN": ["You cannot do this.", "لا يمكنك القيام بذلك."],
+      "NOT_FOUND": ["This link no longer exists.", "لم يعد هذا الرابط موجودًا."],
+      "NAME_REQUIRED": ["Add a name.", "أضف اسمًا."],
+      "DESC_REQUIRED": ["Add a short description.", "أضف وصفًا قصيرًا."],
+      "INVALID_URL": ["Enter a full website address starting with https://", "أدخل عنوان موقع كاملًا يبدأ بـ https://"],
+      "INVALID_CATEGORY": ["Choose a category.", "اختر فئة."],
+      "AUDIENCE_REQUIRED": ["Choose who sees it.", "اختر من يراه."],
+      "generic": ["Something went wrong. Try again.", "حدث خطأ ما. حاول مرة أخرى."]
+    }
+  },
+  "adminAudit": {
+    "actions": {
+      "inspection_export": ["Downloaded the inspection evidence pack", "نزّل ملف أدلة التفتيش"],
+      "inspection_case_reference_view": ["Viewed a case reference in the evidence pack", "اطّلع على رقم حالة في ملف الأدلة"],
+      "career_event_create": ["Created a university event", "أنشأ فعالية جامعية"],
+      "career_event_update": ["Updated a university event", "عدّل فعالية جامعية"],
+      "career_event_cancel": ["Cancelled a university event", "ألغى فعالية جامعية"],
+      "career_event_register": ["Registered for a university event", "سجّل في فعالية جامعية"],
+      "career_event_cancel_registration": ["Cancelled a university event registration", "ألغى التسجيل في فعالية جامعية"],
+      "career_event_attendance": ["Marked attendance at a university event", "سجّل الحضور في فعالية جامعية"],
+      "career_event_export": ["Exported a university event list", "صدّر قائمة فعالية جامعية"],
+      "partner_resource_create": ["Added a partner resource", "أضاف مورد شريك"],
+      "partner_resource_update": ["Updated a partner resource", "عدّل مورد شريك"],
+      "partner_resource_delete": ["Deleted a partner resource", "حذف مورد شريك"]
+    }
+  }
+}

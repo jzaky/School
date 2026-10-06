@@ -10,6 +10,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "pathwaySearch", href: "/career/pathways/search" },
     { key: "pathways", href: "/career/universities" },
     { key: "myApplications", href: "/career/applications" },
+    { key: "universityFairs", href: "/career/events" },
     { key: "bookAdvisor", href: "/services/career_guidance" },
     { key: "myRequests", href: "/requests" },
     { key: "tasks", href: "/tasks" },
@@ -28,6 +29,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "childTimetable", href: "/timetable" },
     { key: "pathwaysParent", href: "/career/universities/results" },
     { key: "childApplications", href: "/career/applications" },
+    { key: "universityFairsParent", href: "/career/events" },
     { key: "pathwayChild", href: "/career/pathways" },
   ],
   teacher: [
@@ -56,6 +58,8 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
   ],
   career_advisor: [
     { key: "careerDesk", href: "/career" },
+    { key: "fairsManage", href: "/career/events" },
+    { key: "partnerResources", href: "/career/resources" },
     { key: "pathwaysManage", href: "/career/universities/manage" },
     { key: "applicationBoard", href: "/career/applications/manage" },
     { key: "catalogReview", href: "/career/catalog" },
@@ -79,6 +83,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "coverBoard", href: "/admin/cover" },
     { key: "curriculumGaps", href: "/curriculum" },
     { key: "rolesAccess", href: "/admin/roles" },
+    { key: "inspectionPack", href: "/admin/inspection" },
   ],
   admin: [
     { key: "schoolSetupWizard", href: "/setup?step=done" },
