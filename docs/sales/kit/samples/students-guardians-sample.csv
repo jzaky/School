@@ -1,0 +1,13 @@
+﻿Student number / رقم الطالب,First name (English) / الاسم الأول بالإنجليزية,Last name (English) / اسم العائلة بالإنجليزية,First name (Arabic) / الاسم الأول بالعربية,Last name (Arabic) / اسم العائلة بالعربية,Grade / الصف,Section / الشعبة,Date of birth / تاريخ الميلاد,Emirates ID / رقم الهوية الإماراتية,Passport number / رقم جواز السفر,Guardian first name (English) / الاسم الأول لولي الأمر بالإنجليزية,Guardian last name (English) / اسم عائلة ولي الأمر بالإنجليزية,Guardian first name (Arabic) / الاسم الأول لولي الأمر بالعربية,Guardian last name (Arabic) / اسم عائلة ولي الأمر بالعربية,Guardian email / بريد ولي الأمر,Guardian phone / هاتف ولي الأمر,Relationship / صلة القرابة
+PS-30001,Yousef,Karam,يوسف,كرم,9,S,2011-04-12,,,Dina,Karam,دينا,كرم,dina.karam@family.example,+971 50 000 0101,mother
+PS-30002,Salma,Karam,سلمى,كرم,10,S,2010-09-03,,,Dina,Karam,دينا,كرم,dina.karam@family.example,+971 50 000 0101,mother
+PS-30003,Ali,Mahmoud,علي,محمود,9,S,21/02/2011,,,Hassan,Mahmoud,حسن,محمود,hassan.mahmoud@family.example,+971 50 000 0103,father
+PS-30004,Noor,Baker,نور,باكر,9,S,2011-07-28,,,Samira,Baker,سميرة,باكر,samira.baker@family.example,+971 50 000 0104,mother
+PS-30005,Zayd,Hamdan,زيد,حمدان,9,S,2011-01-15,,,Rashid,Hamdan,راشد,حمدان,rashid.hamdan@family.example,+971 50 000 0105,father
+PS-30006,Leen,Sabbagh,لين,صباغ,9,S,2011-11-02,,,Maha,Sabbagh,مها,صباغ,maha.sabbagh@family.example,+971 50 000 0106,mother
+PS-30007,Karim,Nasr,كريم,نصر,9,S,2011-05-19,,,Fadi,Nasr,فادي,نصر,fadi.nasr@family.example,+971 50 000 0107,father
+PS-30008,Jana,Taha,جنى,طه,9,S,08/03/2011,,,Amal,Taha,أمل,طه,amal.taha@family.example,+971 50 000 0108,grandmother
+PS-30009,Hamza,Qasim,حمزة,قاسم,10,S,2010-06-22,,,Bilal,Qasim,بلال,قاسم,bilal.qasim@family.example,+971 50 000 0109,father
+PS-30010,Rana,Issa,رنا,عيسى,10,S,2010-12-09,,,Nadia,Issa,نادية,عيسى,nadia.issa@family.example,+971 50 000 0110,mother
+PS-30011,Omar,Fakhoury,عمر,فاخوري,10,S,2010-02-14,,,Walid,Fakhoury,وليد,فاخوري,walid.fakhoury@family.example,+971 50 000 0111,guardian
+PS-30012,Maya,Shami,مايا,شامي,10,S,2010-08-30,,,Lama,Shami,لمى,شامي,lama.shami@family.example,+971 50 000 0112,mother

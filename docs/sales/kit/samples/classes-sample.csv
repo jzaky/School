@@ -1,0 +1,5 @@
+﻿Class code / رمز الفصل,Class name (English) / اسم الفصل بالإنجليزية,Class name (Arabic) / اسم الفصل بالعربية,Subject / المادة,Grade / الصف,Section / الشعبة,Teacher email / بريد المعلم,Room / القاعة,Capacity / السعة,Homeroom / فصل الرعاية,Option block / مجموعة الاختيار,Student numbers / أرقام الطلاب
+9S-HR,Homeroom 9S,فصل الرعاية 9S,,9,S,sami.odeh@pilot-school.example,A-109,26,yes,,PS-30001; PS-30003; PS-30004; PS-30005; PS-30006; PS-30007; PS-30008
+9S-MATH,Mathematics 9S,الرياضيات 9S,MATH,9,S,mariam.khoury@pilot-school.example,B-204,26,no,,
+9S-ENG,English 9S,اللغة الإنجليزية 9S,ENG,9,S,lina.farouk@pilot-school.example,B-112,26,no,,
+10S-PHYS,Physics 10S,الفيزياء 10S,PHYS,10,S,tariq.haddad@pilot-school.example,Lab 2,24,no,,

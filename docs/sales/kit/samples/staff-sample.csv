@@ -1,0 +1,9 @@
+﻿Name (English) / الاسم بالإنجليزية,Name (Arabic) / الاسم بالعربية,Email / البريد الإلكتروني,Roles / الأدوار,Department / القسم,Job title (English) / المسمى الوظيفي بالإنجليزية,Job title (Arabic) / المسمى الوظيفي بالعربية,Subjects taught / المواد التي يدرّسها,Grades taught / الصفوف التي يدرّسها
+Mariam Khoury,مريم خوري,mariam.khoury@pilot-school.example,teacher,Mathematics,Mathematics Teacher,معلمة رياضيات,MATH,9-10
+Tariq Haddad,طارق حداد,tariq.haddad@pilot-school.example,teacher; department_head,Science,Head of Science,رئيس قسم العلوم,PHYS; CHEM,9-12
+Lina Farouk,لينا فاروق,lina.farouk@pilot-school.example,teacher,English,English Teacher,معلمة لغة إنجليزية,ENG,9-10
+Sami Odeh,سامي عودة,sami.odeh@pilot-school.example,teacher,Arabic and Islamic Studies,Arabic Teacher,معلم لغة عربية,ARAB; ISL,"9, 10"
+Grace Mensah,غريس منسا,grace.mensah@pilot-school.example,teacher,Computing,Computer Science Teacher,معلمة علوم الحاسوب,CS,9-12
+Huda Saeed,هدى سعيد,huda.saeed@pilot-school.example,counselor,Student Services,School Counselor,مرشدة طلابية,,9-12
+Faisal Rahimi,فيصل رحيمي,faisal.rahimi@pilot-school.example,registrar,Administration,Registrar,المسجل,,
+Reem Abbas,ريم عباس,reem.abbas@pilot-school.example,nurse,Student Services,School Nurse,ممرضة المدرسة,,
