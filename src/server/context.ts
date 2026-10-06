@@ -7,6 +7,7 @@ import { tenantDb, identityDb } from "@/lib/tenant-db";
 import { can, permissionsOf, roleKeysOf } from "@/server/identity/can";
 import type { Permission } from "@/server/identity/permissions";
 import { isLocale, type AppLocale } from "@/i18n/routing";
+import { groupRolesForUser } from "@/server/groups/access";
 
 async function loadContext() {
   const session = await auth();
@@ -28,6 +29,10 @@ async function loadContext() {
     identityDb.user.findUnique({ where: { id: session.user.id } }),
   ]);
   if (!org || !membership || !user || membership.status !== "ACTIVE") return null;
+  // "Active users" on the group dashboard: remember the last visit, at most once an hour.
+  if (!membership.lastSeenAt || Date.now() - membership.lastSeenAt.getTime() > 3_600_000) {
+    void db.membership.update({ where: { id: membershipId }, data: { lastSeenAt: new Date() } }).catch(() => undefined);
+  }
   const perms = permissionsOf(membership);
   const roles = roleKeysOf(membership);
   const requestLocale = await getLocale();
@@ -66,10 +71,19 @@ async function waitingRedirect(): Promise<string | null> {
   return `/${isLocale(locale) ? locale : "en"}/join/waiting`;
 }
 
+/** A signed-in school group person with no school session goes to the group area instead of the sign-in page. */
+async function groupOnlyRedirect(): Promise<string | null> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.membershipId) return null;
+  if (!(await groupRolesForUser(session.user.id)).length) return null;
+  const locale = await getLocale();
+  return `/${isLocale(locale) ? locale : "en"}/group`;
+}
+
 /** Request context. Cached per request. Redirects to the sign-in page when there is no valid session. */
 export const getCtx = cache(async (): Promise<Ctx> => {
   const ctx = await loadContext();
-  if (!ctx) redirect((await waitingRedirect()) ?? "/login");
+  if (!ctx) redirect((await waitingRedirect()) ?? (await groupOnlyRedirect()) ?? "/login");
   return ctx;
 });
 

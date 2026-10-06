@@ -8,6 +8,7 @@ import { identityDb, publicOrgBySlug, tenantDb } from "@/lib/tenant-db";
 import { resolveActiveMembership } from "@/server/identity/session-org";
 import { passwordSignInAllowed, oauthSignInDecision } from "@/server/access/sign-in";
 import { pendingSignup } from "@/server/onboarding/oauth-signup";
+import { groupRolesForUser } from "@/server/groups/access";
 
 declare module "next-auth" {
   interface Session {
@@ -55,7 +56,11 @@ const providers: NextAuthConfig["providers"] = [
       const ok = await bcrypt.compare(parsed.data.password, user.passwordHash);
       if (!ok) return null;
       const membership = await resolveActiveMembership(user.id, user.lastActiveOrgId, { includePending: true });
-      if (!membership) return null;
+      if (!membership) {
+        // School group people may have no membership in any school: they get a session for the group area only.
+        if ((await groupRolesForUser(user.id)).length) return { id: user.id, email: user.email, name: user.nameEn };
+        return null;
+      }
       return { id: user.id, email: user.email, name: user.nameEn, activeOrgId: membership.orgId, membershipId: membership.id };
     },
   }),

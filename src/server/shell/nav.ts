@@ -4,7 +4,7 @@ export type NavItem = { key: string; href: string; icon: string; badge?: number 
 export type NavSection = { key: string; items: NavItem[] };
 
 /** Role-aware navigation. Only features the member can use appear. */
-export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; notifications: number; joinRequests?: number }): NavSection[] {
+export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; notifications: number; joinRequests?: number; group?: boolean }): NavSection[] {
   const c = ctx.can;
   if (ctx.isStudent) {
     return [
@@ -80,6 +80,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   school.push({ key: "documents", href: "/documents", icon: "file-text" });
   if (c("curriculum.plan") || c("curriculum.review") || c("curriculum.manage")) school.push({ key: "curriculum", href: "/curriculum", icon: "book-open" });
   if (c("analytics.view")) school.push({ key: "analytics", href: "/analytics", icon: "bar-chart-3" });
+  // School group people (see src/server/groups): a way into the group area.
+  if (counts.group) school.push({ key: "groupDashboard", href: "/group", icon: "network" });
   const admin: NavItem[] = [];
   if (c("school.manage") || ctx.roles.includes("principal")) admin.push({ key: "setup", href: "/setup", icon: "list-checks" });
   if (c("school.manage")) admin.push({ key: "schoolSetup", href: "/admin/school", icon: "building-2" });

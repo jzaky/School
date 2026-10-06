@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { BookOpen, Building2, CalendarRange, Layers, MapPin } from "lucide-react";
+import { BookOpen, Building2, CalendarRange, Layers, MapPin, Network } from "lucide-react";
 import { SubjectDialog } from "@/components/onboarding/config-dialogs";
 import { requirePermission } from "@/server/context";
 import { formatPrefs } from "@/server/format";
@@ -11,6 +11,8 @@ import { Pill } from "@/components/app/badges";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { CampusDialog, DepartmentDialog, SchoolProfileForm, SetCurrentYear } from "@/components/admin/school-forms";
+import { GroupMark } from "@/components/groups/group-mark";
+import { JoinGroupForm } from "@/components/groups/join-group-panel";
 
 export async function generateMetadata() {
   const t = await getTranslations("adminSchool");
@@ -23,12 +25,14 @@ export default async function SchoolSetupPage() {
   const tSetup = await getTranslations("onboarding.settingsLink");
   const prefs = await formatPrefs(ctx);
   const { db, org, locale } = ctx;
-  const [campuses, years, departments, staff, subjects] = await Promise.all([
+  const tg = await getTranslations("groups");
+  const [campuses, years, departments, staff, subjects, groupLink] = await Promise.all([
     db.campus.findMany({ orderBy: [{ isMain: "desc" }, { nameEn: "asc" }], include: { _count: { select: { students: true } } } }),
     db.academicYear.findMany({ orderBy: { startsOn: "desc" }, include: { terms: { orderBy: { startsOn: "asc" } } } }),
     db.department.findMany({ orderBy: { nameEn: "asc" }, include: { _count: { select: { staff: true, subjects: true } } } }),
     db.staffProfile.findMany({ include: { membership: { include: { user: true } } } }),
     db.subject.findMany({ orderBy: { nameEn: "asc" } }),
+    db.schoolGroupSchool.findUnique({ where: { orgId: ctx.orgId }, include: { group: { select: { id: true, nameEn: true, nameAr: true, logoUrl: true, updatedAt: true } } } }),
   ]);
   const tc = await getTranslations("onboarding.config");
   const deptOptions = departments.map((d) => ({ id: d.id, label: pick(locale, d.nameEn, d.nameAr) }));
@@ -65,6 +69,20 @@ export default async function SchoolSetupPage() {
             emirate: org.emirate,
           }}
         />
+      </Panel>
+      <Panel>
+        <PanelHeader title={tg("join.title")} description={groupLink ? tg("join.memberHint") : tg("join.hint")} icon={<Network className="size-4" />} />
+        {groupLink ? (
+          <div className="flex items-center gap-3" data-testid="school-group-current">
+            <GroupMark groupId={groupLink.group.id} name={pick(locale, groupLink.group.nameEn, groupLink.group.nameAr)} hasLogo={!!groupLink.group.logoUrl} version={groupLink.group.updatedAt.getTime()} className="size-10" />
+            <div className="min-w-0">
+              <p className="text-sm font-medium">{pick(locale, groupLink.group.nameEn, groupLink.group.nameAr)}</p>
+              <p className="text-xs text-muted-foreground">{tg("joinedOn", { date: fmtDate(prefs, groupLink.joinedAt) })}</p>
+            </div>
+          </div>
+        ) : (
+          <JoinGroupForm />
+        )}
       </Panel>
       <Panel padded={false}>
         <div className="p-5 pb-0">
