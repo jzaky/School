@@ -1,6 +1,6 @@
 // Global university catalog: the former per-school lists (prisma/seed/data/universities.ts and the
 // pathways additions) plus more institutions in the UK, US, Canada, Australia, Ireland, the
-// Netherlands, Germany, Singapore, Hong Kong, the UAE and Jordan. Facts are indicative.
+// Netherlands, Germany, Singapore, Hong Kong, the UAE, Saudi Arabia and Jordan. Facts are indicative.
 import { UNIVERSITIES } from "../data/universities";
 import { EXTRA_UNIVERSITIES, UNIVERSITY_ROUTES } from "../academics/pathways-data";
 
@@ -39,6 +39,7 @@ const COUNTRY_ROUTE: Record<string, { system: string; applyVia: string }> = {
   CH: { system: "CH", applyVia: "DIRECT" },
   FR: { system: "FR", applyVia: "DIRECT" },
   ES: { system: "ES", applyVia: "DIRECT" },
+  SA: { system: "SA", applyVia: "DIRECT" },
 };
 
 const ADMISSIONS: Record<string, string> = {
@@ -102,7 +103,9 @@ const ADMISSIONS: Record<string, string> = {
 
 const TIER1 = new Set(["oxford", "cambridge", "imperial_college_london", "ucl", "lse", "mit", "stanford", "harvard", "carnegie_mellon", "uc_berkeley", "cornell", "johns_hopkins", "eth_zurich", "epfl", "columbia", "princeton", "nus", "mbzuai", "nyu_abu_dhabi", "university_of_toronto", "waterloo"]);
 const TIER3 = new Set(["middlesex_dubai", "wollongong_dubai", "abu_dhabi_university", "zayed_university", "university_of_sharjah", "rit_dubai", "heriot_watt_dubai", "yarmouk", "university_of_alberta", "aud", "sorbonne_abu_dhabi", "ie_university"]);
-const tierOf = (key: string, rank: number | null): 1 | 2 | 3 => (TIER1.has(key) ? 1 : TIER3.has(key) ? 3 : rank !== null && rank <= 60 ? 2 : rank === null || rank > 300 ? 3 : 2);
+// Selective Gulf universities without a world rank in this catalog.
+const TIER2 = new Set(["kfupm", "king_saud_university", "king_abdulaziz_university", "alfaisal", "iau", "mbru", "bits_dubai"]);
+const tierOf = (key: string, rank: number | null): 1 | 2 | 3 => (TIER1.has(key) ? 1 : TIER3.has(key) ? 3 : TIER2.has(key) ? 2 : rank !== null && rank <= 60 ? 2 : rank === null || rank > 300 ? 3 : 2);
 
 const bi = (en: string, ar: string): Bi => ({ en, ar });
 type NewUni = [key: string, name: Bi, country: string, city: Bi, rank: number | null, acceptance: number | null, website: string, deadlineMonth: number | null, admissionsUrl: string, applyVia?: string];
@@ -154,6 +157,32 @@ const NEW_UNIVERSITIES: NewUni[] = [
   ["cuhk", bi("The Chinese University of Hong Kong", "الجامعة الصينية في هونغ كونغ"), "HK", bi("Hong Kong", "هونغ كونغ"), 36, 15, "cuhk.edu.hk", 1, "https://admission.cuhk.edu.hk/"],
   // United Arab Emirates
   ["aud", bi("American University in Dubai", "الجامعة الأمريكية في دبي"), "AE", bi("Dubai", "دبي"), null, 70, "aud.edu", 8, "https://www.aud.edu/admissions/"],
+  // More UAE universities (admissions pages found on the official sites; requirements come from the research step).
+  ["ajman_university", bi("Ajman University", "جامعة عجمان"), "AE", bi("Ajman", "عجمان"), null, null, "ajman.ac.ae", null, "https://www.ajman.ac.ae/en/admissions/undergraduate/undergraduate-admission-process"],
+  ["canadian_university_dubai", bi("Canadian University Dubai", "الجامعة الكندية في دبي"), "AE", bi("Dubai", "دبي"), null, null, "cud.ac.ae", null, "https://www.cud.ac.ae/prospective-students/undergraduate"],
+  ["manipal_dubai", bi("Manipal Academy of Higher Education Dubai", "أكاديمية مانيبال للتعليم العالي في دبي"), "AE", bi("Dubai", "دبي"), null, null, "manipaldubai.com", null, "https://www.manipaldubai.com/admissions"],
+  ["bits_dubai", bi("BITS Pilani Dubai Campus", "معهد بيلاني للتكنولوجيا والعلوم، حرم دبي"), "AE", bi("Dubai", "دبي"), null, null, "bits-pilani.ac.in", null, "https://www.bits-pilani.ac.in/dubai-admission/"],
+  ["curtin_dubai", bi("Curtin University Dubai", "جامعة كيرتن دبي"), "AE", bi("Dubai", "دبي"), null, null, "curtindubai.ac.ae", null, "https://curtindubai.ac.ae/equivalency-and-recognition/"],
+  ["amity_dubai", bi("Amity University Dubai", "جامعة أميتي دبي"), "AE", bi("Dubai", "دبي"), null, null, "amityuniversity.ae", null, "https://amityuniversity.ae/join-amity/admission-requirements"],
+  ["murdoch_dubai", bi("Murdoch University Dubai", "جامعة مردوخ دبي"), "AE", bi("Dubai", "دبي"), null, null, "murdochuniversitydubai.com", null, "https://www.murdochuniversitydubai.com/apply/academic-entry-requirements-2026/"],
+  ["al_ain_university", bi("Al Ain University", "جامعة العين"), "AE", bi("Al Ain", "العين"), null, null, "aau.ac.ae", null, "https://aau.ac.ae/en/admission/undergraduate/general-admission-requirements"],
+  ["gulf_medical_university", bi("Gulf Medical University", "جامعة الخليج الطبية"), "AE", bi("Ajman", "عجمان"), null, null, "gmu.ac.ae", null, "https://gmu.ac.ae/policy-and-general-admission-requirements/"],
+  ["mbru", bi("Mohammed Bin Rashid University of Medicine and Health Sciences", "جامعة محمد بن راشد للطب والعلوم الصحية"), "AE", bi("Dubai", "دبي"), null, null, "mbru.ac.ae", null, "https://www.mbru.ac.ae/college-of-medicine/"],
+  ["emirates_aviation_university", bi("Emirates Aviation University", "جامعة الإمارات للطيران"), "AE", bi("Dubai", "دبي"), null, null, "eau.ac.ae", null, "https://www.eau.ac.ae/en/admissions/admissions-requirements/"],
+  ["university_of_dubai", bi("University of Dubai", "جامعة دبي"), "AE", bi("Dubai", "دبي"), null, null, "ud.ac.ae", null, "https://ud.ac.ae/how-to-apply/"],
+  // Saudi Arabia (admissions pages found on the official sites; requirements come from the research step).
+  ["kfupm", bi("King Fahd University of Petroleum and Minerals", "جامعة الملك فهد للبترول والمعادن"), "SA", bi("Dhahran", "الظهران"), null, null, "kfupm.edu.sa", null, "https://admissions.kfupm.edu.sa/en"],
+  ["king_saud_university", bi("King Saud University", "جامعة الملك سعود"), "SA", bi("Riyadh", "الرياض"), null, null, "ksu.edu.sa", null, "https://dar.ksu.edu.sa/en/overseas"],
+  ["king_abdulaziz_university", bi("King Abdulaziz University", "جامعة الملك عبدالعزيز"), "SA", bi("Jeddah", "جدة"), null, null, "kau.edu.sa", null, "https://admission.kau.edu.sa/Pages-BachelorDegree.aspx"],
+  ["alfaisal", bi("Alfaisal University", "جامعة الفيصل"), "SA", bi("Riyadh", "الرياض"), null, null, "alfaisal.edu", null, "https://admissions.alfaisal.edu/en/criteria"],
+  ["prince_sultan_university", bi("Prince Sultan University", "جامعة الأمير سلطان"), "SA", bi("Riyadh", "الرياض"), null, null, "psu.edu.sa", null, "https://psu.edu.sa/en/admissions-Undergraduate-Admission"],
+  ["effat", bi("Effat University", "جامعة عفت"), "SA", bi("Jeddah", "جدة"), null, null, "effatuniversity.edu.sa", null, "https://www.effatuniversity.edu.sa/English/Pages/default.aspx"],
+  ["iau", bi("Imam Abdulrahman Bin Faisal University", "جامعة الإمام عبدالرحمن بن فيصل"), "SA", bi("Dammam", "الدمام"), null, null, "iau.edu.sa", null, "https://admitportal.iau.edu.sa/web/en/Article/Index/33"],
+  ["ubt_jeddah", bi("University of Business and Technology", "جامعة الأعمال والتكنولوجيا"), "SA", bi("Jeddah", "جدة"), null, null, "ubt.edu.sa", null, "https://www.ubt.edu.sa/admission"],
+  ["pmu", bi("Prince Mohammad Bin Fahd University", "جامعة الأمير محمد بن فهد"), "SA", bi("Al Khobar", "الخبر"), null, null, "pmu.edu.sa", null, "https://www.pmu.edu.sa/admission/undergraduate_programs_admission"],
+  ["dar_al_hekma", bi("Dar Al-Hekma University", "جامعة دار الحكمة"), "SA", bi("Jeddah", "جدة"), null, null, "dah.edu.sa", null, "https://www.dah.edu.sa/en/admission/Pages/un-admission-requirements.aspx"],
+  ["umm_al_qura", bi("Umm Al-Qura University", "جامعة أم القرى"), "SA", bi("Makkah", "مكة المكرمة"), null, null, "uqu.edu.sa", null, "https://uqu.edu.sa/en/dadregis/bsc"],
+  ["al_yamamah", bi("Al Yamamah University", "جامعة اليمامة"), "SA", bi("Riyadh", "الرياض"), null, null, "yu.edu.sa", null, "https://yu.edu.sa/admission/freshmen-students/"],
 ];
 
 const FROM_CAREER: GlobalUniversity[] = UNIVERSITIES.map((u) => {
