@@ -1,5 +1,8 @@
 import { getTranslations } from "next-intl/server";
-import { BookOpen, Building2, CalendarRange, Layers, MapPin } from "lucide-react";
+import { BookOpen, Building2, CalendarRange, CreditCard, Layers, MapPin, MessageCircle } from "lucide-react";
+import { FeeSettingsForm, WhatsAppKindsForm } from "@/components/admin/family-settings";
+import { whatsappConfig } from "@/server/notify/channels";
+import { FAMILY_KINDS } from "@/server/settings/kinds";
 import { SubjectDialog } from "@/components/onboarding/config-dialogs";
 import { requirePermission } from "@/server/context";
 import { formatPrefs } from "@/server/format";
@@ -31,6 +34,8 @@ export default async function SchoolSetupPage() {
     db.subject.findMany({ orderBy: { nameEn: "asc" } }),
   ]);
   const tc = await getTranslations("onboarding.config");
+  const tf = await getTranslations("fees.admin");
+  const tk = await getTranslations("settings");
   const deptOptions = departments.map((d) => ({ id: d.id, label: pick(locale, d.nameEn, d.nameAr) }));
   const staffOptions = staff
     .filter((s) => s.membership.status === "ACTIVE")
@@ -66,6 +71,16 @@ export default async function SchoolSetupPage() {
           }}
         />
       </Panel>
+      <Panel>
+        <PanelHeader title={tf("title")} description={tf("hint")} icon={<CreditCard className="size-4" />} />
+        <FeeSettingsForm url={org.feePaymentUrl ?? ""} contact={org.feeContact ?? ""} />
+      </Panel>
+      {whatsappConfig() && (
+        <Panel>
+          <PanelHeader title={tf("whatsappTitle")} description={tf("whatsappHint")} icon={<MessageCircle className="size-4" />} />
+          <WhatsAppKindsForm kinds={FAMILY_KINDS.map((kind) => ({ kind, label: tk(`kinds.${kind}`) }))} enabled={org.whatsappKinds} />
+        </Panel>
+      )}
       <Panel padded={false}>
         <div className="p-5 pb-0">
           <PanelHeader title={tc("subjectsTitle")} description={tc("subjectsBody")} icon={<BookOpen className="size-4" />} action={<SubjectDialog departments={deptOptions} />} />

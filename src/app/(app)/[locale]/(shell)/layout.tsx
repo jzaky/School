@@ -14,6 +14,7 @@ import { BrandStyle } from "@/components/onboarding/brand-style";
 import { VerifyBanner } from "@/components/onboarding/verify-banner";
 import { schoolVerified } from "@/server/onboarding/verification";
 import { canSetup } from "@/server/onboarding/access";
+import { InstallPrompt, PwaRegister } from "@/components/pwa/install-prompt";
 
 export default async function ShellLayout({ children }: { children: React.ReactNode }) {
   const ctx = await getCtx();
@@ -67,6 +68,8 @@ export default async function ShellLayout({ children }: { children: React.ReactN
     >
       {showVerify && <VerifyBanner email={isFounder ? ctx.user.email : null} canResend={isFounder} />}
       {children}
+      <PwaRegister />
+      {(ctx.isParent || ctx.isStudent) && <InstallPrompt />}
       {guideSteps.length > 0 && (
         <DemoGuide
           persona={ctx.persona!}

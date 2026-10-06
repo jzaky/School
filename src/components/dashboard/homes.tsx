@@ -39,6 +39,7 @@ import { AnnouncementsPanel, Greeting, MeetingsPanel, QuickServices, RequestsPan
 import { listableCaseWhere } from "@/server/access/case-access";
 import { schoolKpis } from "@/server/analytics/kpis";
 import { isRestrictedForViewer } from "@/server/access/request-access";
+import { FeesCard } from "@/components/fees/fees-card";
 
 const REFERRAL_SERVICES = ["academic_concern", "behavioral_referral", "wellbeing_referral", "learning_support_referral", "safeguarding_concern"];
 
@@ -137,6 +138,7 @@ export async function ParentHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs 
           <span className="text-sm font-medium text-brand">{t("review")}</span>
         </Link>
       )}
+      {ctx.org.feePaymentUrl && <FeesCard url={ctx.org.feePaymentUrl} contact={ctx.org.feeContact} school={pick(ctx.locale, ctx.org.nameEn, ctx.org.nameAr)} />}
       <div className="grid gap-4 md:grid-cols-2 [&>*]:min-w-0">
         {kids.map((k) => {
           const rows = attendance.filter((a) => a.studentId === k.id);

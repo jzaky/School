@@ -228,6 +228,7 @@ enum NotificationChannel {
   EMAIL
   SMS
   WHATSAPP
+  PUSH
 }
 
 enum DeliveryStatus {
@@ -420,6 +421,12 @@ model Organization {
   googleSignIn           Boolean            @default(true)
   microsoftSignIn        Boolean            @default(true)
   supportEmail           String?
+  /// Notification kinds the school sends on WhatsApp to parents who opted in.
+  whatsappKinds          String[]
+  /// The school's own fee payment portal (https). Horizon never processes payments.
+  feePaymentUrl          String?
+  /// Who parents contact about fees (free text, for example an email address or phone number).
+  feeContact             String?
   createdById            String?
   createdAt              DateTime           @default(now())
   updatedAt              DateTime           @updatedAt
@@ -1728,6 +1735,37 @@ model NotificationPreference {
   channels     NotificationChannel[]
 
   @@unique([membershipId, kind])
+  @@index([orgId])
+}
+
+/// A browser or phone that receives web push notifications for one membership.
+model PushSubscription {
+  id            String    @id @default(cuid())
+  orgId         String
+  membershipId  String
+  endpoint      String
+  p256dh        String
+  auth          String
+  deviceLabel   String?
+  createdAt     DateTime  @default(now())
+  lastSuccessAt DateTime?
+
+  @@unique([orgId, endpoint])
+  @@index([orgId, membershipId])
+}
+
+/// A member's consent to receive school notifications on WhatsApp at one phone number.
+model WhatsAppOptIn {
+  id             String    @id @default(cuid())
+  orgId          String
+  membershipId   String    @unique
+  /// E.164 number, for example +971501234567.
+  phone          String
+  consentedAt    DateTime
+  consentVersion String
+  withdrawnAt    DateTime?
+  updatedAt      DateTime  @updatedAt
+
   @@index([orgId])
 }
 

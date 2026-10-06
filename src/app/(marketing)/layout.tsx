@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: t("title"),
     description: t("description"),
     manifest: "/manifest.webmanifest",
-    icons: { icon: "/icon.svg", apple: "/icon-192.png" },
+    icons: { icon: "/icon.svg", apple: "/apple-touch-icon.png" },
   };
 }
 

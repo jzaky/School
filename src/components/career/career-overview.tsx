@@ -16,6 +16,7 @@ import { gapText } from "@/components/pathways/pathway-ui";
 import { checkProgram, loadStudentPathway } from "@/server/pathways/profile";
 import { programsForEntries } from "@/server/pathways/shortlist";
 import { catalogScope } from "@/server/pathways/scope";
+import { CareerReportButton } from "./career-report-button";
 
 const COUNTRY: Record<string, { en: string; ar: string }> = {
   AE: { en: "UAE", ar: "الإمارات" },
@@ -126,6 +127,9 @@ export async function CareerOverview({ ctx, prefs, studentId, mode }: { ctx: Ctx
       <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <Panel>
           <PanelHeader title={t("strengths")} description={t("assessedOn", { date: fmtDate(prefs, assessment.completedAt) })} />
+          <div className="mb-4">
+            <CareerReportButton studentId={studentId} />
+          </div>
           <BarList
             rows={scores ? [...DIMENSIONS].sort((a, b) => scores[b] - scores[a]).map((d) => ({ label: pick(locale, DIMENSION_LABELS[d].en, DIMENSION_LABELS[d].ar), value: scores[d] })) : []}
             format={(n) => `${fmtNumber(prefs, n)}%`}
