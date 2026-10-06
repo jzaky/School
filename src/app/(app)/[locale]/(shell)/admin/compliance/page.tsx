@@ -1,5 +1,10 @@
 import { getTranslations } from "next-intl/server";
-import { Bot, CheckCircle2, Clock, FileLock2, Globe2, IdCard, Scale, ShieldAlert, Timer, UserCheck } from "lucide-react";
+import { Archive, Bot, CheckCircle2, Clock, FileLock2, Globe2, IdCard, Scale, ShieldAlert, Timer, UserCheck, UserSearch } from "lucide-react";
+import { Link } from "@/i18n/navigation";
+import { Button } from "@/components/ui/button";
+import { LogDsrButton, PersonLink } from "@/components/privacy/subject-tools";
+import { PurposeEditor } from "@/components/privacy/purpose-editor";
+import { basisKey, categoryKey } from "@/server/privacy/purposes";
 import { requirePermission } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { fmtDate, fmtNumber } from "@/lib/format";
@@ -18,12 +23,13 @@ export async function generateMetadata() {
 export default async function CompliancePage() {
   const ctx = await requirePermission("compliance.manage");
   const t = await getTranslations("adminCompliance");
+  const tp = await getTranslations("privacy");
   const prefs = await formatPrefs(ctx);
   const { db, orgId, org, locale } = ctx;
   const now = new Date();
   const since = new Date(now.getTime() - 30 * 86400_000);
   const [purposes, consents, dsrs, breaches, policies, transfers, aiTotal, aiBlocked] = await Promise.all([
-    db.processingPurpose.findMany({ where: { orgId }, orderBy: { key: "asc" } }),
+    db.processingPurpose.findMany({ where: { orgId }, orderBy: { nameEn: "asc" } }),
     db.consentRecord.groupBy({ by: ["purposeId", "status"], where: { orgId }, _count: { _all: true } }),
     db.dataSubjectRequest.findMany({ where: { orgId }, orderBy: { receivedAt: "desc" } }),
     db.breachLog.findMany({ where: { orgId }, orderBy: { occurredAt: "desc" } }),
@@ -32,12 +38,22 @@ export default async function CompliancePage() {
     db.aiInteraction.count({ where: { orgId, createdAt: { gte: since } } }),
     db.aiInteraction.count({ where: { orgId, createdAt: { gte: since }, status: "BLOCKED" } }),
   ]);
+  const subjectOf = (d: { studentId: string | null; guardianId: string | null; membershipId: string | null }) =>
+    d.studentId ? { kind: "student" as const, id: d.studentId } : d.guardianId ? { kind: "guardian" as const, id: d.guardianId } : d.membershipId ? { kind: "staff" as const, id: d.membershipId } : null;
   const openDsr = dsrs.filter((d) => !["COMPLETED", "REJECTED"].includes(d.status));
   const overdue = openDsr.filter((d) => d.dueAt < now).length;
   const count = (purposeId: string, status: string) => consents.find((c) => c.purposeId === purposeId && c.status === status)?._count._all ?? 0;
   const n = (v: number) => fmtNumber(prefs, v);
   const slug = (v: string) => v.toLowerCase().replace(/[^a-z]+/g, "_");
   const label = (ns: string, v: string) => (t.has(`${ns}.${slug(v)}`) ? t(`${ns}.${slug(v)}`) : v);
+
+  const policyOptions = policies.map((p) => ({ id: p.id, nameEn: p.nameEn, nameAr: p.nameAr }));
+  const policyName = (id: string) => {
+    const p = policies.find((x) => x.id === id);
+    return p ? pick(locale, p.nameEn, p.nameAr) : null;
+  };
+  const basisOptions = ["consent", "contract_with_the_family", "legal_obligation", "vital_interests", "vital_interests_and_legal_obligation", "legitimate_interest_with_opt_out", "public_interest"];
+  const canExit = ctx.can("school.manage");
 
   const controls = [
     { key: "rls", ok: true },
@@ -135,18 +151,19 @@ export default async function CompliancePage() {
 
       <Panel padded={false}>
         <div className="p-5 pb-0">
-          <PanelHeader title={t("purposesTitle")} description={t("purposesHint")} icon={<FileLock2 className="size-4" />} />
+          <PanelHeader title={t("purposesTitle")} description={t("purposesHint")} icon={<FileLock2 className="size-4" />} action={<PurposeEditor policies={policyOptions} />} />
         </div>
         <ul className="divide-y">
           {purposes.map((p) => (
-            <li key={p.id} className="grid gap-2 px-5 py-3.5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_220px] lg:items-center">
+            <li key={p.id} className="grid gap-2 px-5 py-3.5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_220px_auto] lg:items-center" data-testid="purpose-row">
               <div>
                 <p className="text-sm font-medium">{pick(locale, p.nameEn, p.nameAr)}</p>
                 <p className="text-xs text-muted-foreground">{pick(locale, p.descEn, p.descAr)}</p>
+                {p.retentionPolicyId && policyName(p.retentionPolicyId) && <p className="text-xs text-muted-foreground">{tp("purposeRetentionLine", { policy: policyName(p.retentionPolicyId)! })}</p>}
               </div>
               <div className="flex flex-wrap gap-1.5 text-xs">
                 <Pill>{label("basis", p.lawfulBasis)}</Pill>
-                {p.dataCategories.slice(0, 3).map((c) => (
+                {p.dataCategories.map((c) => (
                   <Pill key={c} tone="neutral">
                     {label("category", c)}
                   </Pill>
@@ -154,6 +171,22 @@ export default async function CompliancePage() {
               </div>
               <div className="text-xs text-muted-foreground lg:text-end">
                 {p.requiresConsent ? t("consentCounts", { granted: count(p.id, "GRANTED"), refused: count(p.id, "REFUSED") + count(p.id, "WITHDRAWN"), pending: count(p.id, "PENDING") }) : t("noConsentNeeded")}
+              </div>
+              <div className="lg:justify-self-end">
+                <PurposeEditor
+                  policies={policyOptions}
+                  initial={{
+                    id: p.id,
+                    nameEn: p.nameEn,
+                    nameAr: p.nameAr,
+                    descEn: p.descEn,
+                    descAr: p.descAr,
+                    basis: basisOptions.includes(basisKey(p.lawfulBasis)) ? basisKey(p.lawfulBasis) : "consent",
+                    categories: p.dataCategories.map(categoryKey),
+                    requiresConsent: p.requiresConsent,
+                    retentionPolicyId: p.retentionPolicyId,
+                  }}
+                />
               </div>
             </li>
           ))}
@@ -163,7 +196,22 @@ export default async function CompliancePage() {
       <div className="grid gap-6 lg:grid-cols-2 [&>*]:min-w-0">
         <Panel padded={false}>
           <div className="p-5 pb-0">
-            <PanelHeader title={t("dsrTitle")} description={t("dsrHint")} icon={<UserCheck className="size-4" />} />
+            <PanelHeader
+              title={t("dsrTitle")}
+              description={t("dsrHint")}
+              icon={<UserCheck className="size-4" />}
+              action={
+                <div className="flex flex-wrap justify-end gap-2">
+                  <LogDsrButton />
+                  <Button size="sm" variant="ghost" asChild>
+                    <Link href="/admin/compliance/person" data-testid="person-tools-link">
+                      <UserSearch className="size-4" />
+                      {tp("personTools")}
+                    </Link>
+                  </Button>
+                </div>
+              }
+            />
           </div>
           <ul className="divide-y">
             {dsrs.map((d) => {
@@ -182,6 +230,11 @@ export default async function CompliancePage() {
                       {d.subjectName} · {t("due", { date: fmtDate(prefs, d.dueAt) })}
                     </p>
                     {d.resolution && <p className="truncate text-xs text-muted-foreground">{d.resolution}</p>}
+                    {subjectOf(d) && (
+                      <PersonLink kind={subjectOf(d)!.kind} id={subjectOf(d)!.id}>
+                        {tp("openPerson")}
+                      </PersonLink>
+                    )}
                   </div>
                   <DsrStatusControl id={d.id} status={d.status} />
                 </li>
@@ -212,6 +265,23 @@ export default async function CompliancePage() {
           )}
         </Panel>
       </div>
+
+      {canExit && (
+        <Panel>
+          <PanelHeader
+            title={tp("exitTitle")}
+            description={tp("exitHint")}
+            icon={<Archive className="size-4" />}
+            action={
+              <Button size="sm" variant="outline" asChild>
+                <Link href="/admin/compliance/exit" data-testid="exit-link">
+                  {tp("exitOpen")}
+                </Link>
+              </Button>
+            }
+          />
+        </Panel>
+      )}
     </PageBody>
   );
 }

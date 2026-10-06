@@ -6,6 +6,7 @@ import { auth } from "@/auth";
 import { tenantDb, identityDb } from "@/lib/tenant-db";
 import { can, permissionsOf, roleKeysOf } from "@/server/identity/can";
 import type { Permission } from "@/server/identity/permissions";
+import { lastActiveIsStale, touchLastActive } from "@/server/identity/last-active";
 import { isLocale, type AppLocale } from "@/i18n/routing";
 
 async function loadContext() {
@@ -28,6 +29,8 @@ async function loadContext() {
     identityDb.user.findUnique({ where: { id: session.user.id } }),
   ]);
   if (!org || !membership || !user || membership.status !== "ACTIVE") return null;
+  // Last active: no query when the loaded timestamp is fresh; never blocks or fails the request.
+  if (lastActiveIsStale(membership.lastSeenAt, new Date())) void touchLastActive(db, membership.id, membership.lastSeenAt).catch(() => undefined);
   const perms = permissionsOf(membership);
   const roles = roleKeysOf(membership);
   const requestLocale = await getLocale();

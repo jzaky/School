@@ -1,5 +1,5 @@
 // UAE compliance records for the demo school: purposes, consents, DSRs, breach log, retention, transfers.
-import { at, id } from "./lib";
+import { at, id, rng } from "./lib";
 import type { SeedWorld } from "./demo";
 
 export async function seedCompliance(w: SeedWorld) {
@@ -103,6 +103,25 @@ export async function seedCompliance(w: SeedWorld) {
   for (const p of policies) {
     await db.retentionPolicy.updateMany({ where: { orgId, recordType: p.type }, data: { lastRunAt: at(-1, 3, 0, now), lastRunCount: p.type === "notification" ? 212 : 0 } });
   }
+
+  // Each processing purpose points at the retention policy that governs its records.
+  const policyIds = new Map((await db.retentionPolicy.findMany({ where: { orgId }, select: { id: true, recordType: true } })).map((p) => [p.recordType, p.id]));
+  const purposeRetention: Record<string, string> = { education: "student_record", wellbeing: "case_wellbeing", safeguarding: "case_safeguarding", health: "medical", ai_assist: "ai_interaction", trips: "request" };
+  for (const [key, type] of Object.entries(purposeRetention)) {
+    if (policyIds.has(type)) await db.processingPurpose.updateMany({ where: { orgId, key }, data: { retentionPolicyId: policyIds.get(type)! } });
+  }
+
+  // Last active times, so the pilot measures show a realistic first week: most staff were in this
+  // week, linked parents within the last fortnight, a few people not for a while.
+  const members = await db.membership.findMany({ where: { orgId, status: "ACTIVE" }, select: { id: true, student: { select: { id: true } }, guardian: { select: { id: true } } }, orderBy: { id: "asc" } });
+  const roll = rng(4207).next;
+  const seen = members.map((m) => {
+    const r = roll();
+    const isStaff = !m.student && !m.guardian;
+    const daysAgo = isStaff ? (r < 0.85 ? r * 6 : 9 + r * 20) : m.guardian ? (r < 0.6 ? r * 13 : 20 + r * 40) : r < 0.7 ? r * 6 : 10 + r * 30;
+    return new Date(now.getTime() - daysAgo * 86_400_000 - Math.floor(roll() * 8) * 3600_000);
+  });
+  await db.$executeRaw`UPDATE "Membership" m SET "lastSeenAt" = v.ts FROM unnest(${members.map((m) => m.id)}::text[], ${seen}::timestamp[]) AS v(id, ts) WHERE m.id = v.id`;
 
   await db.crossBorderTransfer.deleteMany({ where: { orgId } });
   await db.crossBorderTransfer.createMany({

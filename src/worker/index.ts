@@ -6,6 +6,7 @@ import { Worker, type Job, type Processor } from "bullmq";
 import IORedis from "ioredis";
 import type { DeliverJob, ReminderJob, ResumeJob, TestIdempotentJob } from "./handlers";
 import type { RefreshJob, ScorecardJob } from "@/server/catalog-pipeline/jobs";
+import type { SchoolExportJob } from "@/server/privacy/school-export";
 
 async function loadDotenv() {
   // Local development convenience. In production the platform injects variables and .env is absent.
@@ -40,6 +41,7 @@ async function main() {
   const { prisma } = await import("@/lib/prisma");
   const { runDemoResetCore } = await import("@/server/demo/run-reset");
   const catalogJobs = await import("@/server/catalog-pipeline/jobs");
+  const schoolExport = await import("@/server/privacy/school-export");
 
   // Organization rows are only fully listable by the owner role (RLS hides non-demo orgs from app_user).
   const platform = process.env.MIGRATION_DATABASE_URL ? new PrismaClient({ datasourceUrl: process.env.MIGRATION_DATABASE_URL }) : prisma;
@@ -82,12 +84,19 @@ async function main() {
           throw new Error(`unknown job ${job.name}`);
       }
     },
+    privacy: async (job: Job) => {
+      if (job.name !== schoolExport.SCHOOL_EXPORT_JOB) throw new Error(`unknown job ${job.name}`);
+      return schoolExport.runSchoolExport(job.data as SchoolExportJob);
+    },
     maintenance: async (job: Job) => {
       switch (job.name) {
         case "sweep":
           return forEachOrg("sweep", (orgId) => handlers.sweepOrg(orgId));
         case "retention":
-          return forEachOrg("retention", (orgId) => handlers.sweepRetention(orgId));
+          return forEachOrg("retention", async (orgId) => {
+            await schoolExport.expireSchoolExports(orgId);
+            return handlers.sweepRetention(orgId);
+          });
         case "demo-reset":
           if (!demoMode) return "skipped";
           return runDemoResetCore();
@@ -106,7 +115,7 @@ async function main() {
     const connection = new IORedis(redisUrl, { maxRetriesPerRequest: null });
     connection.on("error", () => undefined);
     connections.push(connection);
-    const w = new Worker(name, processor, { connection, concurrency: name === "maintenance" || name === "catalog" ? 1 : 5 });
+    const w = new Worker(name, processor, { connection, concurrency: name === "maintenance" || name === "catalog" || name === "privacy" ? 1 : 5 });
     w.on("failed", (job, err) => console.error(`[worker] ${name}:${job?.name ?? "?"} job ${job?.id ?? "?"} failed: ${describeError(err)}`));
     w.on("error", (err) => console.error(`[worker] ${name} worker error: ${describeError(err)}`));
     return w;

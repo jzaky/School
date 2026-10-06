@@ -15,6 +15,9 @@ import { BarList } from "@/components/charts/bar-list";
 import { TrendChart } from "@/components/charts/trend-chart";
 import { Ring } from "@/components/charts/ring";
 import { AskInsights } from "@/components/analytics/ask-insights";
+import { PilotMeasuresPanel } from "@/components/analytics/pilot-measures";
+import { canSeePilotMeasures } from "@/server/analytics/pilot-access";
+import { parsePeriod, pilotMeasures } from "@/server/analytics/pilot";
 
 export async function generateMetadata() {
   const t = await getTranslations("analytics");
@@ -23,7 +26,7 @@ export async function generateMetadata() {
 
 const PERIODS = [7, 30, 90] as const;
 
-export default async function AnalyticsPage({ searchParams }: { searchParams: Promise<{ days?: string }> }) {
+export default async function AnalyticsPage({ searchParams }: { searchParams: Promise<{ days?: string; pfrom?: string; pto?: string }> }) {
   const sp = await searchParams;
   const ctx = await requirePermission("analytics.view");
   const t = await getTranslations("analytics");
@@ -57,6 +60,10 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
   const held = appts.filter((a) => a.status === "COMPLETED").reduce((s, a) => s + a._count._all, 0);
 
   const suggestions = [t("suggest1"), t("suggest2"), t("suggest3")];
+  const showPilot = canSeePilotMeasures(ctx);
+  const pilotPeriod = parsePeriod(sp.pfrom, sp.pto);
+  const pilot = showPilot ? await pilotMeasures(db, orgId, pilotPeriod) : null;
+  const dayKey = (d: Date) => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Dubai" }).format(d);
   return (
     <PageBody>
       <PageHeader
@@ -76,6 +83,7 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
         <ShieldCheck className="size-4 shrink-0 text-success" />
         {t("privacyNote")}
       </p>
+      {pilot && <PilotMeasuresPanel m={pilot} from={dayKey(pilotPeriod.from)} to={dayKey(pilotPeriod.to)} days={days} prefs={prefs} />}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label={t("kpiRequests")} value={n(k.requests.thisPeriod)} hint={t("vsPrevious", { delta: `${k.requests.delta >= 0 ? "+" : ""}${k.requests.delta}%` })} icon={<TrendingUp className="size-5" />} testId="analytics-requests" />
         <StatCard label={t("kpiResolution")} value={hrs(k.avgResolutionHours)} hint={t("closedInPeriod")} icon={<Timer className="size-5" />} tone="info" />

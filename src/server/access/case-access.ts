@@ -111,6 +111,41 @@ export function listableCaseWhere(ctx: Ctx, surface: CaseSurface): Prisma.CaseWh
   return { orgId, OR: [standard, wellbeing] };
 }
 
+// ---------------------------------------------------------------------------
+// Data subject exports (PDPL access requests)
+// ---------------------------------------------------------------------------
+
+export type ExportWithheldReason = "no_request" | "request_type" | "protected" | "no_access" | "third_party";
+export type ExportDecision = { include: true } | { include: false; reason: ExportWithheldReason };
+
+/**
+ * Whether a sensitive record may go into a data subject export run by `ctx`.
+ * - Safeguarding content is never released through a subject export (protection of the child; the DSL
+ *   handles any disclosure separately). It is listed as withheld ("protected"), without saying what it is.
+ * - Wellbeing and medical content needs a recorded ACCESS request and full access for the exporter.
+ *   Including a wellbeing case counts as a view and is audited ("case.export").
+ * - Standard and confidential case content needs full access for the exporter.
+ */
+export async function subjectExportDecision(
+  ctx: Ctx,
+  input: { requestType: "ACCESS" | "CORRECTION" | "DELETION" | null; sensitivity: Sensitivity; caseRow?: CaseLike | null },
+): Promise<ExportDecision> {
+  const { requestType, sensitivity, caseRow } = input;
+  if (sensitivity === "SAFEGUARDING") return { include: false, reason: "protected" };
+  const sensitive = sensitivity === "WELLBEING" || sensitivity === "MEDICAL";
+  if (sensitivity === "WELLBEING" || sensitivity === "MEDICAL") {
+    if (!requestType) return { include: false, reason: "no_request" };
+    if (requestType !== "ACCESS") return { include: false, reason: "request_type" };
+  }
+  if (caseRow) {
+    const ok = await canViewCase(ctx, caseRow, { action: "case.export" });
+    return ok ? { include: true } : { include: false, reason: sensitive ? "protected" : "no_access" };
+  }
+  if (sensitivity === "WELLBEING") return ctx.can("cases.wellbeing") ? { include: true } : { include: false, reason: "protected" };
+  if (sensitivity === "MEDICAL") return ctx.can("people.medical") || ctx.can("cases.wellbeing") ? { include: true } : { include: false, reason: "protected" };
+  return { include: true };
+}
+
 /** Parents are never notified automatically about sensitive cases (rule 7). */
 export function familyMayBeAutoNotified(sensitivity: Sensitivity) {
   return !SENSITIVE.includes(sensitivity);

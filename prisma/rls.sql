@@ -94,3 +94,7 @@ CREATE POLICY org_update ON "Organization" FOR UPDATE
   USING ("id" = current_setting('app.current_org_id', true))
   WITH CHECK ("id" = current_setting('app.current_org_id', true));
 -- No INSERT or DELETE policy for app_user: organizations are created by platform admin tooling as the owner.
+
+-- 4. Platform audit records (kept after a school is deleted). Written and read only by the owner role.
+ALTER TABLE "PlatformAuditEvent" ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON TABLE "PlatformAuditEvent" FROM app_user;

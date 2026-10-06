@@ -1,4 +1,5 @@
 import type { Ctx } from "@/server/context";
+import { isPlatformAdmin } from "@/server/platform/admin";
 
 export type NavItem = { key: string; href: string; icon: string; badge?: number };
 export type NavSection = { key: string; items: NavItem[] };
@@ -98,6 +99,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("calendar.manage")) admin.push({ key: "calendarAdmin", href: "/admin/calendar", icon: "calendar-days" }, { key: "examsAdmin", href: "/admin/exams", icon: "clipboard-check" });
   if (c("compliance.manage")) admin.push({ key: "compliance", href: "/admin/compliance", icon: "scale" });
   if (c("audit.view")) admin.push({ key: "auditLog", href: "/admin/audit", icon: "scroll-text" });
+  if (isPlatformAdmin(ctx.user)) admin.push({ key: "platformSchools", href: "/platform/schools", icon: "building-2" });
   const sections: NavSection[] = [
     { key: "sectionWork", items: work },
     { key: "sectionSchool", items: school },
