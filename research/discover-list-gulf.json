@@ -1,0 +1,625 @@
+{
+ "universities": [
+  {
+   "key": "ajman_university",
+   "domains": [
+    "www.ajman.ac.ae",
+    "ajman.ac.ae",
+    "engineering.ajman.ac.ae",
+    "cad.ajman.ac.ae"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "bachelor",
+    "bba",
+    "bds",
+    "business",
+    "computer-science",
+    "computing",
+    "dds",
+    "dental",
+    "dentistry",
+    "information-technology",
+    "law",
+    "llb",
+    "management",
+    "pharmacy",
+    "pharmd",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "canadian_university_dubai",
+   "domains": [
+    "www.cud.ac.ae",
+    "cud.ac.ae"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "architecture",
+    "bachelor",
+    "bba",
+    "business",
+    "communication",
+    "management",
+    "media",
+    "psychology",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "manipal_dubai",
+   "domains": [
+    "www.manipaldubai.com",
+    "manipaldubai.com",
+    "info.manipaldubai.com"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "artificial-intelligence",
+    "bachelor",
+    "bba",
+    "business",
+    "computer-science",
+    "computing",
+    "data-science",
+    "information-technology",
+    "management",
+    "psychology",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "bits_dubai",
+   "domains": [
+    "www.bits-pilani.ac.in",
+    "bits-pilani.ac.in",
+    "admissions.bits-pilani.ac.in"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "bachelor",
+    "chemical",
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "information-technology",
+    "mechanical",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "curtin_dubai",
+   "domains": [
+    "www.curtindubai.ac.ae",
+    "curtindubai.ac.ae",
+    "study.curtindubai.ac.ae"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "bachelor",
+    "bba",
+    "business",
+    "computer-science",
+    "computing",
+    "engineering",
+    "information-technology",
+    "management",
+    "psychology",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "amity_dubai",
+   "domains": [
+    "www.amityuniversity.ae",
+    "amityuniversity.ae"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "artificial-intelligence",
+    "bachelor",
+    "bba",
+    "business",
+    "computer-science",
+    "computing",
+    "data-science",
+    "information-technology",
+    "management",
+    "psychology",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "murdoch_dubai",
+   "domains": [
+    "www.murdochuniversitydubai.com",
+    "murdochuniversitydubai.com"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "bachelor",
+    "bba",
+    "business",
+    "communication",
+    "computer-science",
+    "computing",
+    "information-technology",
+    "management",
+    "media",
+    "psychology",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "al_ain_university",
+   "domains": [
+    "www.aau.ac.ae",
+    "aau.ac.ae",
+    "admission.aau.ac.ae"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "bachelor",
+    "bba",
+    "business",
+    "computer-science",
+    "computing",
+    "information-technology",
+    "law",
+    "llb",
+    "management",
+    "pharmacy",
+    "pharmd",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "gulf_medical_university",
+   "domains": [
+    "www.gmu.ac.ae",
+    "gmu.ac.ae"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "bachelor",
+    "bds",
+    "dds",
+    "dental",
+    "dentistry",
+    "mbbs",
+    "md",
+    "medical",
+    "medicine",
+    "pharmacy",
+    "pharmd",
+    "physical-therapy",
+    "physiotherapy",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "mbru",
+   "domains": [
+    "www.mbru.ac.ae",
+    "mbru.ac.ae"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "bachelor",
+    "mbbs",
+    "md",
+    "medical",
+    "medicine",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "emirates_aviation_university",
+   "domains": [
+    "www.eau.ac.ae",
+    "eau.ac.ae"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "aeronautical",
+    "aerospace",
+    "artificial-intelligence",
+    "aviation",
+    "bachelor",
+    "bba",
+    "business",
+    "data-science",
+    "engineering",
+    "management",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "university_of_dubai",
+   "domains": [
+    "www.ud.ac.ae",
+    "ud.ac.ae"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "bachelor",
+    "bba",
+    "business",
+    "computer-science",
+    "computing",
+    "cyber",
+    "cyber-security",
+    "cybersecurity",
+    "electrical",
+    "electronic",
+    "engineering",
+    "information-technology",
+    "management",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "kfupm",
+   "domains": [
+    "www.kfupm.edu.sa",
+    "kfupm.edu.sa",
+    "admissions.kfupm.edu.sa",
+    "apply.kfupm.edu.sa",
+    "bulletin.kfupm.edu.sa"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "bachelor",
+    "chemical",
+    "civil",
+    "computer-engineering",
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "information-technology",
+    "mechanical",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "king_saud_university",
+   "domains": [
+    "www.ksu.edu.sa",
+    "ksu.edu.sa",
+    "dar.ksu.edu.sa",
+    "medicine.ksu.edu.sa"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "bachelor",
+    "bba",
+    "bds",
+    "business",
+    "computer-science",
+    "computing",
+    "dds",
+    "dental",
+    "dentistry",
+    "electrical",
+    "electronic",
+    "engineering",
+    "information-technology",
+    "management",
+    "mbbs",
+    "md",
+    "medical",
+    "medicine",
+    "pharmacy",
+    "pharmd",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "king_abdulaziz_university",
+   "domains": [
+    "www.kau.edu.sa",
+    "kau.edu.sa",
+    "admission.kau.edu.sa",
+    "mykau.kau.edu.sa"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "bachelor",
+    "bba",
+    "business",
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "information-technology",
+    "management",
+    "mbbs",
+    "md",
+    "mechanical",
+    "medical",
+    "medicine",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "alfaisal",
+   "domains": [
+    "www.alfaisal.edu",
+    "alfaisal.edu",
+    "admissions.alfaisal.edu",
+    "catalog.alfaisal.edu"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "bachelor",
+    "bba",
+    "business",
+    "electrical",
+    "electronic",
+    "engineering",
+    "law",
+    "llb",
+    "management",
+    "mbbs",
+    "md",
+    "medical",
+    "medicine",
+    "pharmacy",
+    "pharmd",
+    "requirements",
+    "software",
+    "software-engineering",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "prince_sultan_university",
+   "domains": [
+    "www.psu.edu.sa",
+    "psu.edu.sa"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "architecture",
+    "bachelor",
+    "bba",
+    "business",
+    "computer-science",
+    "computing",
+    "cyber",
+    "cyber-security",
+    "cybersecurity",
+    "information-technology",
+    "law",
+    "llb",
+    "management",
+    "requirements",
+    "software",
+    "software-engineering",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "effat",
+   "domains": [
+    "www.effatuniversity.edu.sa",
+    "effatuniversity.edu.sa"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "architecture",
+    "bachelor",
+    "bba",
+    "business",
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "information-technology",
+    "management",
+    "psychology",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "iau",
+   "domains": [
+    "www.iau.edu.sa",
+    "iau.edu.sa",
+    "admitportal.iau.edu.sa"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "architecture",
+    "bachelor",
+    "bds",
+    "dds",
+    "dental",
+    "dentistry",
+    "mbbs",
+    "md",
+    "medical",
+    "medicine",
+    "nursing",
+    "pharmacy",
+    "pharmd",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "ubt_jeddah",
+   "domains": [
+    "www.ubt.edu.sa",
+    "ubt.edu.sa"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "bachelor",
+    "bba",
+    "business",
+    "computer-science",
+    "computing",
+    "electrical",
+    "electronic",
+    "engineering",
+    "information-technology",
+    "management",
+    "mechanical",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "pmu",
+   "domains": [
+    "www.pmu.edu.sa",
+    "pmu.edu.sa"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "bachelor",
+    "bba",
+    "business",
+    "civil",
+    "computer-engineering",
+    "computer-science",
+    "computing",
+    "engineering",
+    "information-technology",
+    "law",
+    "llb",
+    "management",
+    "mechanical",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "dar_al_hekma",
+   "domains": [
+    "www.dah.edu.sa",
+    "dah.edu.sa"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "architecture",
+    "bachelor",
+    "bba",
+    "business",
+    "computer-science",
+    "computing",
+    "cyber",
+    "cyber-security",
+    "cybersecurity",
+    "design",
+    "graphic-design",
+    "information-technology",
+    "interior-design",
+    "law",
+    "llb",
+    "management",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "umm_al_qura",
+   "domains": [
+    "www.uqu.edu.sa",
+    "uqu.edu.sa"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "bachelor",
+    "bds",
+    "computer-science",
+    "computing",
+    "dds",
+    "dental",
+    "dentistry",
+    "engineering",
+    "information-technology",
+    "mbbs",
+    "md",
+    "medical",
+    "medicine",
+    "pharmacy",
+    "pharmd",
+    "requirements",
+    "undergraduate"
+   ]
+  },
+  {
+   "key": "al_yamamah",
+   "domains": [
+    "www.yu.edu.sa",
+    "yu.edu.sa"
+   ],
+   "keywords": [
+    "admission",
+    "admissions",
+    "architecture",
+    "bachelor",
+    "bba",
+    "business",
+    "computer-science",
+    "computing",
+    "information-technology",
+    "law",
+    "llb",
+    "management",
+    "requirements",
+    "software",
+    "software-engineering",
+    "undergraduate"
+   ]
+  }
+ ]
+}
