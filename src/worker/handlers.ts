@@ -52,6 +52,9 @@ export type OutgoingMessage = {
   href: string | null;
   locale: "en" | "ar";
   idempotencyKey: string;
+  /** Absolute link for emails that point outside the school portal (public site). Overrides href. */
+  linkUrl?: string | null;
+  linkLabel?: string | null;
 };
 
 export type Sender = (msg: OutgoingMessage) => Promise<{ providerId: string }>;
@@ -72,8 +75,8 @@ function appLink(msg: OutgoingMessage) {
 
 export function renderEmail(msg: OutgoingMessage) {
   const dir = msg.locale === "ar" ? "rtl" : "ltr";
-  const link = appLink(msg);
-  const linkLabel = msg.locale === "ar" ? "فتح في المنصة" : "Open in the school portal";
+  const link = msg.linkUrl ?? appLink(msg);
+  const linkLabel = msg.linkLabel ?? (msg.locale === "ar" ? "فتح في المنصة" : "Open in the school portal");
   const subject = msg.subject ?? "";
   const body = msg.body ?? "";
   const html = [

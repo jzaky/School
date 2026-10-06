@@ -94,3 +94,10 @@ CREATE POLICY org_update ON "Organization" FOR UPDATE
   USING ("id" = current_setting('app.current_org_id', true))
   WITH CHECK ("id" = current_setting('app.current_org_id', true));
 -- No INSERT or DELETE policy for app_user: organizations are created by platform admin tooling as the owner.
+
+-- 4. Platform marketing and operations tables (no orgId, not school data).
+-- Marketing leads and platform settings are only reachable through the owner role (platform admin pages,
+-- public lead capture in src/server/marketing). The app role may read uptime samples for /status, nothing else.
+REVOKE ALL ON TABLE "MarketingLead" FROM app_user;
+REVOKE ALL ON TABLE "PlatformSetting" FROM app_user;
+REVOKE INSERT, UPDATE, DELETE ON TABLE "UptimeSample" FROM app_user;

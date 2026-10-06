@@ -13,6 +13,10 @@ const GLOBAL_MODELS = new Set([
   "CanonicalSubject",
   "FieldOfStudy",
   "CareerField",
+  // Platform tables with no orgId (owner role only; see prisma/rls.sql).
+  "MarketingLead",
+  "PlatformSetting",
+  "UptimeSample",
 ]);
 const CREATE_OPS = new Set(["create", "createMany", "createManyAndReturn"]);
 
@@ -106,6 +110,15 @@ export const identityDb = {
   user: prisma.user,
   account: prisma.account,
   verificationToken: prisma.verificationToken,
+};
+
+/**
+ * Public service status (/status): a database ping and the uptime samples. UptimeSample holds no school data
+ * and is read-only for the app role (prisma/rls.sql); the worker writes it on the owner connection.
+ */
+export const statusDb = {
+  uptimeSample: prisma.uptimeSample,
+  $queryRaw: prisma.$queryRaw.bind(prisma) as typeof prisma.$queryRaw,
 };
 
 /** Read-only view of organizations visible without a session (the public demo school). */

@@ -12,6 +12,7 @@ import { sendVerificationEmail } from "@/server/onboarding/verification";
 import { getCtx } from "@/server/context";
 import { audit } from "@/server/audit/audit";
 import { PENDING_COOKIE, sealPending } from "@/server/onboarding/oauth-signup";
+import { normalizeReferralCode } from "@/server/platform/referrals";
 
 export type SignupState = {
   error: null | "disabled" | "rate" | "invalid" | "credentials" | "failed";
@@ -79,7 +80,7 @@ export async function signUpAction(_: SignupState, formData: FormData): Promise<
   let orgId: string;
   let membershipId: string;
   try {
-    ({ orgId, membershipId } = await provisionSchool({ userId: user.userId, schoolNameEn: input.schoolNameEn, schoolNameAr: input.schoolNameAr, emirate: input.emirate, curricula: input.curricula, locale: input.locale, isPrincipal: input.isPrincipal }));
+    ({ orgId, membershipId } = await provisionSchool({ userId: user.userId, schoolNameEn: input.schoolNameEn, schoolNameAr: input.schoolNameAr, emirate: input.emirate, curricula: input.curricula, locale: input.locale, isPrincipal: input.isPrincipal, referralCode: normalizeReferralCode(formData.get("ref")) }));
   } catch {
     if (user.created) await removeOrphanUser(user.userId).catch(() => undefined);
     return { error: "failed" };
@@ -108,7 +109,7 @@ export async function startOAuthSignupAction(_: SignupState, formData: FormData)
   const { password: _p, email: _e, ...rest } = parsed.data;
   void _p;
   void _e;
-  (await cookies()).set(PENDING_COOKIE, sealPending(rest), { path: "/", httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", maxAge: 30 * 60 });
+  (await cookies()).set(PENDING_COOKIE, sealPending({ ...rest, ref: normalizeReferralCode(formData.get("ref")) }), { path: "/", httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", maxAge: 30 * 60 });
   await signIn(provider, { redirectTo: "/signup/complete" });
   return { error: null };
 }

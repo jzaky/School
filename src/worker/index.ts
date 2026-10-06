@@ -40,10 +40,19 @@ async function main() {
   const { prisma } = await import("@/lib/prisma");
   const { runDemoResetCore } = await import("@/server/demo/run-reset");
   const catalogJobs = await import("@/server/catalog-pipeline/jobs");
+  const status = await import("@/server/status/status");
+  const leadEmail = await import("@/server/marketing/lead-email");
 
   // Organization rows are only fully listable by the owner role (RLS hides non-demo orgs from app_user).
   const platform = process.env.MIGRATION_DATABASE_URL ? new PrismaClient({ datasourceUrl: process.env.MIGRATION_DATABASE_URL }) : prisma;
   const demoMode = process.env.DEMO_MODE === "true";
+
+  // Heartbeat for /status: a timestamp in Redis every minute. Overwrites one key, so it is idempotent.
+  const heartbeat = new IORedis(redisUrl, { maxRetriesPerRequest: 1 });
+  heartbeat.on("error", () => undefined);
+  const beat = () => status.writeHeartbeat(heartbeat).catch(() => undefined);
+  await beat();
+  const heartbeatTimer = setInterval(beat, 60_000);
 
   async function forEachOrg(label: string, fn: (orgId: string) => Promise<unknown>) {
     const ids = await handlers.listOrgIds(platform);
@@ -61,6 +70,8 @@ async function main() {
 
   const processors: Record<string, Processor> = {
     notify: async (job: Job) => {
+      // Marketing lead emails are platform mail: the lead row lives outside any school, on the owner client.
+      if (job.name === leadEmail.LEAD_EMAIL_JOB) return leadEmail.deliverLeadEmail(platform, String((job.data as { leadId: string }).leadId));
       if (job.name !== "deliver") throw new Error(`unknown job ${job.name}`);
       return handlers.deliverOutbound(job.data as DeliverJob);
     },
@@ -85,7 +96,15 @@ async function main() {
     maintenance: async (job: Job) => {
       switch (job.name) {
         case "sweep":
+          await leadEmail.sweepLeadEmails(platform).catch((err) => console.error(`[worker] lead email sweep failed: ${describeError(err)}`));
           return forEachOrg("sweep", (orgId) => handlers.sweepOrg(orgId));
+        case "status.sample": {
+          // One row per 5-minute slot; the slot is the primary key, so a retry or a second replica writes nothing.
+          const now = new Date();
+          const checks = { web: await status.checkWeb(), database: await status.checkDatabase(platform), redis: await status.checkRedis(heartbeat), worker: await status.checkWorker(heartbeat, now) };
+          if (!checks.database) return "database-down";
+          return (await status.recordSample(platform, checks, now)).written ? "written" : "exists";
+        }
         case "retention":
           return forEachOrg("retention", (orgId) => handlers.sweepRetention(orgId));
         case "demo-reset":
@@ -116,6 +135,7 @@ async function main() {
   const maintenance = queue("maintenance");
   if (maintenance) {
     await maintenance.upsertJobScheduler("sweep", { every: 60_000 }, { name: "sweep", opts: { attempts: 1, removeOnComplete: 100, removeOnFail: 100 } });
+    await maintenance.upsertJobScheduler("status.sample", { pattern: "*/5 * * * *", tz: "UTC" }, { name: "status.sample", opts: { attempts: 2, removeOnComplete: 50, removeOnFail: 50 } });
     // 23:30 UTC is 03:30 in Dubai, after the nightly demo reset.
     await maintenance.upsertJobScheduler("retention", { pattern: "30 23 * * *", tz: "UTC" }, { name: "retention", opts: { attempts: 3 } });
     // 03:45 UTC is 07:45 in Dubai: application reminders arrive before school starts.
@@ -144,9 +164,11 @@ async function main() {
       process.exit(1);
     }, 25_000);
     force.unref();
+    clearInterval(heartbeatTimer);
     await Promise.allSettled(workers.map((w) => w.close()));
     await closeQueues();
     for (const c of connections) c.disconnect();
+    heartbeat.disconnect();
     await Promise.allSettled([prisma.$disconnect(), platform === prisma ? Promise.resolve() : platform.$disconnect()]);
     console.log("[worker] stopped");
     process.exit(0);

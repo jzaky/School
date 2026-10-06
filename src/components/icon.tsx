@@ -55,6 +55,9 @@ import {
   Wrench,
   Landmark,
   Send,
+  Gift,
+  Settings,
+  Share2,
 } from "lucide-react";
 import { DynamicIcon, type IconName } from "lucide-react/dynamic";
 
@@ -112,6 +115,9 @@ const STATIC: Record<string, LucideIcon> = {
   "stethoscope": Stethoscope,
   "trophy": Trophy,
   "wrench": Wrench,
+  gift: Gift,
+  settings: Settings,
+  "share-2": Share2,
 };
 
 /** Icon by kebab-case lucide name. Common icons are bundled; others load on demand. */
