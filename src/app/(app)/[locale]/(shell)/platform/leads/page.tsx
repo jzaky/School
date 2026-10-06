@@ -84,7 +84,7 @@ export default async function PlatformLeadsPage({ searchParams }: { searchParams
       ) : (
         <Panel padded={false} className="overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px] text-sm" data-testid="leads-table">
+            <table className="w-full min-w-[1100px] text-sm" data-testid="leads-table">
               <thead className="border-b bg-muted/40 text-xs text-muted-foreground">
                 <tr>
                   <th className="px-4 py-2.5 text-start font-medium">{t("col.created")}</th>
@@ -111,8 +111,8 @@ export default async function PlatformLeadsPage({ searchParams }: { searchParams
                       </p>
                     </td>
                     <td className="px-4 py-3">{t(`role.${l.role}`)}</td>
-                    <td className="px-4 py-3">{l.schoolName ?? <span className="text-muted-foreground">-</span>}</td>
-                    <td className="max-w-xs px-4 py-3 text-xs text-muted-foreground">{summary(l)}</td>
+                    <td className="min-w-32 px-4 py-3">{l.schoolName ?? <span className="text-muted-foreground">-</span>}</td>
+                    <td className="min-w-56 max-w-xs px-4 py-3 text-xs text-muted-foreground">{summary(l)}</td>
                     <td className="whitespace-nowrap px-4 py-3 text-xs text-muted-foreground">
                       {fmtDateTime({ locale }, l.consentAt)}
                       <span className="block">{t("consentVersion", { v: l.consentVersion, lang: l.locale === "ar" ? t("langAr") : t("langEn") })}</span>
