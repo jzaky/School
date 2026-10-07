@@ -124,3 +124,10 @@
 - Schema (additive, migration 20261006090000_privacy_tools): DataSubjectRequest.guardianId and membershipId, Student/Guardian/Membership.anonymisedAt, ProcessingPurpose.retentionPolicyId and updatedAt, DataExport (tenant), PlatformAuditEvent (platform, owner only).
 - Seed: last active times for every member, purposes linked to retention policies.
 - Tests: tests/unit/privacy.test.ts, tests/integration/privacy.test.ts, tests/e2e/privacy.spec.ts.
+## Integrations (student information system connection)
+- /admin/integrations (permission integrations.manage, school administrators): API keys tab (create with per-area scopes, shown once, hash only, revoke, last use and request count), Scheduled sync tab (sources with HTTPS URL, basic auth or token stored encrypted, column mapping with Read headers, hourly or daily, Run now, run history, failure banner), API guide tab (base URL, examples, fields, OpenAPI link, how to point an export at Horizon).
+- REST API v1: GET/POST /api/v1/students|staff|classes|enrollments|attendance (Bearer key, scopes, 120 requests a minute per key, cursor pagination, JSON errors without values); /api/v1/openapi.json; /api/v1/samples/<file>.csv sample exports.
+- Worker: queue "integrations" (job sync for Run now, job schedule every 5 minutes). Models ApiKey, SyncSource, SyncRun (migration 20261006000000_integrations).
+- "How people sign in" shows Google and Microsoft readiness on this server, redirect URLs and the staff domain rule.
+- Demo seed: two keys and a nightly sync source with three weeks of runs (prisma/seed/integrations.ts).
+- Tests: tests/unit/integrations.test.ts, tests/integration/integrations.test.ts, tests/e2e/integrations.spec.ts.

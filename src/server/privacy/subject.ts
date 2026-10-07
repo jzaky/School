@@ -73,9 +73,11 @@ export function tenantModels(): Array<{ model: string; nullableOrg: boolean; fie
 }
 
 export async function resolveSubject(db: AnyDb, orgId: string, ref: SubjectRef): Promise<Subject | null> {
+  // Both client shapes share the same model API; narrowing to one avoids a union TypeScript cannot compare.
+  const q = db as TenantTx;
   if (!ref?.id || !isSubjectKind(ref.kind)) return null;
   if (ref.kind === "student") {
-    const s = await db.student.findFirst({ where: { id: ref.id, orgId }, include: { membership: true } });
+    const s = await q.student.findFirst({ where: { id: ref.id, orgId }, include: { membership: true } });
     if (!s) return null;
     return {
       kind: "student",
@@ -89,7 +91,7 @@ export async function resolveSubject(db: AnyDb, orgId: string, ref: SubjectRef):
     };
   }
   if (ref.kind === "guardian") {
-    const g = await db.guardian.findFirst({ where: { id: ref.id, orgId }, include: { membership: true } });
+    const g = await q.guardian.findFirst({ where: { id: ref.id, orgId }, include: { membership: true } });
     if (!g) return null;
     return {
       kind: "guardian",
@@ -102,7 +104,7 @@ export async function resolveSubject(db: AnyDb, orgId: string, ref: SubjectRef):
       anonymisedAt: g.anonymisedAt,
     };
   }
-  const m = await db.membership.findFirst({ where: { id: ref.id, orgId }, include: { user: true, staffProfile: true, student: true, guardian: true } });
+  const m = await q.membership.findFirst({ where: { id: ref.id, orgId }, include: { user: true, staffProfile: true, student: true, guardian: true } });
   if (!m || m.student || m.guardian) return null;
   return {
     kind: "staff",

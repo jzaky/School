@@ -36,7 +36,7 @@ Send this list about a week before. Every template is downloadable from **School
 9. **Safeguarding**: who is the Designated Safeguarding Lead and deputy.
 10. **Launch services**: the five procedures to go live with first (suggested: school documents, absence requests, parent meetings, teacher referrals, safeguarding concerns).
 
-Most schools export items 3 to 5 from their current system (iSAMS, SIMS, Phoenix, PowerSchool, Engage) as CSV or Excel. Horizon reads either.
+Most schools export items 3 to 5 from their current student information system as CSV or Excel. Horizon reads either, and can keep reading them on a schedule (section 8).
 
 ## 2. Path A: the school sets itself up (self-serve)
 
@@ -108,7 +108,36 @@ After the call: the school sends the staff invitations and the family letter or 
 
 **Microsoft** (schools on Microsoft 365): in https://entra.microsoft.com go to App registrations > New registration, name "Horizon", supported accounts "Accounts in any organizational directory and personal Microsoft accounts", redirect URI (Web) `https://myhorizon.up.railway.app/api/auth/callback/microsoft-entra-id`. Then Certificates and secrets > New client secret. Set `AUTH_MICROSOFT_ENTRA_ID_ID` (Application (client) ID), `AUTH_MICROSOFT_ENTRA_ID_SECRET` (the secret value) and `AUTH_MICROSOFT_ENTRA_ID_ISSUER` (`https://login.microsoftonline.com/common/v2.0`).
 
-## 8. Common questions
+## 8. Integrations: connecting the school's student information system
+
+The answer to "do you connect to our student information system?" is yes, in two ways, both under **Administration > Integrations** (school administrators; permission `integrations.manage`). Both run the very same checks and matching as the Import center, so a record sent by the system behaves exactly like a row in an uploaded file, and repeating a send never creates duplicates.
+
+### API keys and the REST API
+- **Create a key** on the API keys tab: give it a name and choose, per area, no access, read only, or read and write: students and guardians, staff, classes and enrollments, attendance. The key (`hzk_...`) is shown **once**; only a SHA-256 fingerprint is stored. Revoke it at any time; it stops working at once.
+- A key acts with the access of the administrator who created it, limited to its areas. If that person is suspended or loses `integrations.manage`, their keys stop working; create a new one.
+- Every key is limited to 120 requests a minute (HTTP 429 with `Retry-After` above that). Creation and revocation are in the audit log; use is audited once an hour per key with the number of requests, not once per request.
+- Endpoints (base `https://<site>/api/v1`, header `Authorization: Bearer hzk_...`): `GET` and `POST` on `/students`, `/staff`, `/classes`, `/enrollments`, `/attendance`. `POST` takes a batch (`{"students": [...]}`), matching students on student number, staff and guardians on email, classes on class code, attendance on student number and date. Field names are the Import center column keys (for example `student_no`, `first_name_en`, `grade`, `email`, `roles`, `class_code`); a student's guardians go in a `guardians` array. `GET` returns one page and a `next_cursor`.
+- Errors are JSON with an item position, a field and a code. They never repeat the values that were sent, so they are safe for the school's system to log.
+- The OpenAPI 3 document is at `/api/v1/openapi.json`; the API guide tab shows the same with copyable examples. API batches appear in the Import center history (file name `API hzk_...`).
+
+### Scheduled sync from an export file
+- On the Scheduled sync tab, **Add sync source**: a name, what the file holds (staff, students and guardians, classes, enrollments), the HTTPS address of the export, and how to sign in to it (none, user name and password, or a token; stored encrypted with `FIELD_ENCRYPTION_KEY` and never shown again), then once a day at a chosen hour (school time) or every hour.
+- Files in the Import center template format need no setup. For the system's own layout, press **Read headers**: each header shows the column Horizon would read it as, and you choose another column or "Ignore". The form says which required columns are still missing.
+- The worker checks every 5 minutes and runs each source once per hourly or daily slot (the source and slot are the idempotency key, so restarts and retries never import twice). **Run now** runs it straight away. The run history shows rows added, updated and with errors, never the content of the file; row errors are in the Import center history.
+- After 3 failed runs in a row, the school's integration administrators get a notification (in-app and email) and the page shows a warning.
+- Only HTTPS addresses on the public internet are fetched (private and internal addresses are refused, redirects are not followed, files up to 8 MB). **SFTP and shared folders are not supported**: ask the school to publish the export to a secure web address (most systems and file-sharing services can).
+- To try it: `https://<site>/api/v1/samples/sis-students.csv` is a sample export in a typical student information system layout (fictional students). The demo school has a source set up on it.
+
+### Pointing a student information system export at Horizon (setup call checklist)
+1. Ask the school which way its system works: calling a web API, or publishing scheduled CSV or Excel exports.
+2. API: create a key with read and write on the areas the system owns, give the school's IT contact the base address and the API guide tab (or the OpenAPI document). Send staff first, then students with guardians, then classes and enrollments.
+3. Export: have IT schedule the exports (staff, students with one guardian per row, classes, enrollments) to an HTTPS address with a user name and password or a token, add one sync source per file, read the headers and map the columns once, then press Run now and check the run history.
+4. Agree that the system stays the source of truth for these records. A sync never removes people or access; that is done on the People and Roles pages.
+
+### Sign-in readiness
+The **How people sign in** tab (Invitations) now shows whether Google and Microsoft sign-in are set up on this server (which variable names are missing, never values), the exact redirect address to register with each, and the school's staff email domain rule.
+
+## 9. Common questions
 
 - **A parent says their child's details do not match.** Check the student number and date of birth in the student record; approve the request manually in Join requests.
 - **Someone cannot see a page.** Use Roles and access > Access check on that person; it shows every permission and which role grants it.

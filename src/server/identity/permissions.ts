@@ -66,6 +66,7 @@ export const PERMISSIONS = [
   "cover.manage",
   "inspection.view",
   "career.partners",
+  "integrations.manage",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
@@ -139,6 +140,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "demo.reset",
       "inspection.view",
       "career.partners",
+      "integrations.manage",
     ],
   },
   {

@@ -154,7 +154,8 @@
     "platformSchools": "Schools (platform)",
     "inspection": "Inspection evidence",
     "careerEvents": "University fairs and visits",
-    "partnerResources": "Partner resources"
+    "partnerResources": "Partner resources",
+    "integrations": "Integrations"
   },
   "shell": {
     "openMenu": "Open menu",
@@ -6447,6 +6448,12 @@
           "label": "View the inspection evidence pack",
           "help": "See and download school-wide evidence for inspections. Sensitive cases appear only as counts."
         }
+      },
+      "integrations": {
+        "manage": {
+          "label": "Manage integrations",
+          "help": "Create and revoke API keys and set up scheduled sync with the school's own systems."
+        }
       }
     }
   },
@@ -6712,7 +6719,33 @@
     "studentSelfJoin": "Students can join with the school code",
     "studentSelfJoinBody": "Off by default. Students verify with their student number and date of birth.",
     "saveSettings": "Save settings",
-    "allFamiliesOnApp": "Every parent with an email in your student records already has an account or an invitation."
+    "allFamiliesOnApp": "Every parent with an email in your student records already has an account or an invitation.",
+    "readiness": {
+      "title": "Sign-in methods on this server",
+      "body": "Whether Google and Microsoft sign-in are set up for this site, and the addresses to register with them. Secrets are never shown here.",
+      "configured": "Set up on this server",
+      "notConfigured": "Not set up yet",
+      "schoolOn": "On for this school",
+      "schoolOff": "Off for this school",
+      "missingBody": "The platform owner needs to add these settings to the web service:",
+      "redirectUrl": "Redirect address to register",
+      "origin": "Authorized origin",
+      "google": {
+        "name": "Google",
+        "readyBody": "People can use \"Continue with Google\" once the school switches it on below."
+      },
+      "microsoft": {
+        "name": "Microsoft",
+        "readyBody": "People can use \"Continue with Microsoft\" once the school switches it on below.",
+        "issuerNote": "No tenant is set, so any work or personal Microsoft account can be used. The school still decides who belongs."
+      },
+      "domainTitle": "Staff email domain",
+      "noDomain": "None set",
+      "domainAuto": "Staff who sign in with an address on this domain join the school straight away.",
+      "domainApproval": "Staff who sign in with an address on this domain can ask to join; an administrator approves them.",
+      "domainNone": "Staff can use any email address, but only people the school invited or imported can get in. Add a domain below to let staff join with their school address.",
+      "noSiteUrl": "The site address is not set on this server (AUTH_URL), so the addresses above come from this request. Set AUTH_URL before registering them."
+    }
   },
   "joinRequests": {
     "title": "Join requests",
@@ -8609,6 +8642,224 @@
       "INVALID_CATEGORY": "Choose a category.",
       "AUDIENCE_REQUIRED": "Choose who sees it.",
       "generic": "Something went wrong. Try again."
+    }
+  },
+  "integrations": {
+    "title": "Integrations",
+    "subtitle": "Connect your student information system: API keys for the school's API, and scheduled sync from an export file.",
+    "copy": "Copy",
+    "copyFailed": "Could not copy. Select the text and copy it.",
+    "done": "Done",
+    "cancel": "Cancel",
+    "someone": "Someone",
+    "colActions": "Actions",
+    "tabs": {
+      "keys": "API keys",
+      "sync": "Scheduled sync",
+      "docs": "API guide"
+    },
+    "areas": {
+      "students": "Students and guardians",
+      "studentsBody": "Student records and their guardians",
+      "staff": "Staff",
+      "staffBody": "Staff directory, roles, departments and subjects",
+      "classes": "Classes and enrollments",
+      "classesBody": "Classes of the current year and who is in them",
+      "attendance": "Attendance",
+      "attendanceBody": "Daily attendance marks"
+    },
+    "levels": {
+      "none": "No access",
+      "read": "Read only",
+      "write": "Read and write"
+    },
+    "kinds": {
+      "staff": "Staff",
+      "students": "Students and guardians",
+      "classes": "Classes",
+      "enrollments": "Enrollments"
+    },
+    "authTypes": {
+      "NONE": "No sign-in",
+      "BASIC": "User name and password",
+      "BEARER": "Access token"
+    },
+    "schedules": {
+      "DAILY": "Once a day",
+      "HOURLY": "Every hour"
+    },
+    "runStatus": {
+      "QUEUED": "Queued",
+      "RUNNING": "Running",
+      "SUCCEEDED": "Succeeded",
+      "PARTIAL": "Some rows failed",
+      "FAILED": "Failed"
+    },
+    "keys": {
+      "create": "Create API key",
+      "createTitle": "New API key",
+      "createBody": "Give the key a name you will recognise and choose what it may read or change. It acts with your access, limited to these areas.",
+      "readyTitle": "Copy your API key now",
+      "readyBody": "Paste it into your student information system or integration tool.",
+      "onceWarning": "This is the only time the key is shown. Only a fingerprint is stored, so it cannot be shown again. If it is lost, revoke it and create a new one.",
+      "label": "Name",
+      "labelPlaceholder": "For example: Student information system sync",
+      "scopes": "Access",
+      "scopesBody": "Read and write includes reading. Choose at least one area.",
+      "createConfirm": "Create key",
+      "revoked": "Key revoked",
+      "revoke": "Revoke",
+      "revokeTitle": "Revoke \"{label}\"?",
+      "revokeBody": "Anything using this key stops working straight away. This cannot be undone.",
+      "tooMany": "A school can have up to {max} active keys. Revoke one first.",
+      "intro": "Keys let your student information system read and update students and guardians, staff, classes and attendance through the school's API. Each key has its own access, can be revoked at any time, is limited to {limit} requests a minute, and its use is recorded in the audit log once an hour.",
+      "empty": "No API keys yet",
+      "emptyBody": "Create a key when you are ready to connect your student information system.",
+      "colKey": "Key",
+      "colScopes": "Access",
+      "colUse": "Use",
+      "revokedState": "Revoked",
+      "active": "Active",
+      "createdBy": "Created by {name}, {date}",
+      "scopeChip": "{area}: {level}",
+      "lastUsed": "Last used {when}, {count} requests in total",
+      "neverUsed": "Not used yet",
+      "revokedOn": "Revoked {date}"
+    },
+    "sync": {
+      "edit": "Edit",
+      "add": "Add sync source",
+      "editTitle": "Edit sync source",
+      "addTitle": "New sync source",
+      "formBody": "Point Horizon at a file your student information system publishes. It is fetched on the schedule and imported exactly like an upload in the Import center.",
+      "name": "Name",
+      "namePlaceholder": "For example: Nightly student export",
+      "kind": "What the file holds",
+      "url": "File address (HTTPS)",
+      "urlHelp": "A CSV or Excel (.xlsx) file. Put the user name and password or token in the fields below, never in the address.",
+      "auth": "Sign-in",
+      "username": "User name",
+      "password": "Password",
+      "token": "Token",
+      "savedPlaceholder": "Saved, leave blank to keep",
+      "secretKept": "The saved sign-in details are kept unless you type new ones.",
+      "secretStored": "Sign-in details are stored encrypted and are never shown again.",
+      "schedule": "Schedule",
+      "hour": "Time (school time)",
+      "enabled": "Active",
+      "mappingTitle": "Columns",
+      "mappingBody": "Files in the Import center template format need nothing here. For your own export, read its headers and say which column is which.",
+      "readHeaders": "Read headers",
+      "mappingEmpty": "Column headers are read automatically in English or Arabic.",
+      "auto": "Automatic: {column}",
+      "autoNone": "Automatic: not used",
+      "ignore": "Ignore this column",
+      "missing": "Still missing required columns: {columns}",
+      "mappingOk": "All required columns are found.",
+      "save": "Save source",
+      "saved": "Sync source saved",
+      "queued": "Run started. Refresh in a minute to see the result.",
+      "finished": "Run finished",
+      "deleted": "Sync source deleted",
+      "runNow": "Run now",
+      "runningTip": "A run for this source is already in progress.",
+      "delete": "Delete",
+      "deleteTitle": "Delete \"{name}\"?",
+      "deleteBody": "Scheduled runs stop and the run history of this source is removed. People and classes already imported stay.",
+      "tooMany": "A school can have up to {max} sync sources.",
+      "intro": "Most student information systems can publish a scheduled CSV or Excel export to a web address. Add that address here and Horizon imports it every hour or every day, with the same checks as the Import center. Re-running a file updates people instead of duplicating them.",
+      "sftpNote": "Files are fetched over HTTPS only. SFTP and shared folders are not supported; ask your system to publish the export to a secure web address instead.",
+      "failingBanner": "These sources have failed {count} or more times in a row: {names}. Check the address and sign-in details.",
+      "empty": "No sync sources yet",
+      "emptyBody": "Add the address of your system's export to keep staff, students and classes up to date automatically.",
+      "paused": "Paused",
+      "everyHour": "Every hour",
+      "everyDay": "Every day at {time}",
+      "mapped": "Mapped columns: {count}",
+      "templateFormat": "Template format",
+      "lastRun": "Last run {when}",
+      "neverRun": "Not run yet",
+      "sampleNote": "To try it, use this sample export in a typical student information system layout (fictional students). Read its headers to see the column mapping."
+    },
+    "runs": {
+      "title": "Run history",
+      "body": "The last 40 runs. Only counts are kept, never the content of the file.",
+      "empty": "No runs yet.",
+      "deletedSource": "Deleted source",
+      "manual": "Run by {name}",
+      "scheduled": "Scheduled",
+      "inProgress": "In progress",
+      "counts": "{total} rows: {created} added, {updated} updated or unchanged, {failed} with errors",
+      "importHistory": "Row-by-row errors are in the import history.",
+      "openImport": "Open the Import center"
+    },
+    "runError": {
+      "OWNER_NO_ACCESS": "The person who set up this source no longer has access to integrations. Edit and save it again.",
+      "KIND": "This source has an unknown file type.",
+      "CREDENTIALS": "The saved sign-in details could not be read. Enter them again.",
+      "MISSING_COLUMNS": "The file is missing required columns. Check the column settings.",
+      "EMPTY": "The file has no rows.",
+      "TOO_MANY_ROWS": "The file has too many rows for one import.",
+      "FILE_TYPE": "The file is not a CSV or Excel file.",
+      "FILE_XLS_OLD": "Old .xls files are not supported. Export as .xlsx or CSV.",
+      "FILE_UNREADABLE": "The file could not be read.",
+      "FILE_EMPTY": "The file is empty.",
+      "ALL_ROWS_FAILED": "Every row had errors. See the import history.",
+      "FETCH_URL": "The address is not a valid HTTPS address.",
+      "FETCH_BLOCKED_ADDRESS": "This address points to a private network and cannot be used.",
+      "FETCH_AUTH": "The server refused the sign-in details.",
+      "FETCH_HTTP_STATUS": "The server answered with an error.",
+      "FETCH_REDIRECT": "The address redirects elsewhere. Use the final address of the file.",
+      "FETCH_TIMEOUT": "The server took too long to answer.",
+      "FETCH_TOO_LARGE": "The file is larger than 8 MB.",
+      "FETCH_NETWORK": "The server could not be reached.",
+      "FETCH_EMPTY": "The server sent an empty file.",
+      "IMPORT_NO_YEAR": "The school has no current academic year.",
+      "IMPORT_FORBIDDEN": "The person running this source may not import this data.",
+      "IMPORT_TOO_MANY_ROWS": "The file has too many rows for one import.",
+      "INTERNAL": "Something went wrong. Try again later."
+    },
+    "error": {
+      "generic": "Something went wrong. Please try again.",
+      "FORBIDDEN": "You do not have access to integrations.",
+      "LABEL": "Give the key a name of up to 80 characters.",
+      "SCOPES": "Choose access for at least one area.",
+      "TOO_MANY": "The limit has been reached. Remove one first.",
+      "NOT_FOUND": "It no longer exists. Refresh the page.",
+      "INVALID": "Check the form and try again.",
+      "URL": "Enter a full HTTPS address without a user name or password in it.",
+      "CREDENTIALS": "Enter the sign-in details for this source.",
+      "NO_ENCRYPTION_KEY": "This server cannot store sign-in details yet (encryption key missing). Ask the platform owner.",
+      "ALREADY_RUNNING": "A run for this source is already in progress."
+    },
+    "docs": {
+      "openapi": "OpenAPI document",
+      "startTitle": "Getting started",
+      "startBody": "The school's API speaks JSON over HTTPS. Upserts use exactly the same checks and matching as the Import center.",
+      "baseUrl": "Base address",
+      "step1": "Create an API key on the API keys tab with only the access your system needs.",
+      "step2": "Send it on every request in the Authorization header: Bearer followed by the key.",
+      "step3": "POST a batch to create or update; sending the same batch again changes nothing. GET lists one page at a time; pass next_cursor to get the next page.",
+      "step4": "Each key may make {limit} requests a minute. Above that the API answers 429 with a Retry-After header.",
+      "endpointsTitle": "Endpoints",
+      "endpointsBody": "Every endpoint lists (GET) and creates or updates (POST).",
+      "endpointLine": "Access: {area}. Up to {max} items per request.",
+      "matchOn": "Matched on",
+      "fieldsTitle": "Fields",
+      "fieldsBody": "Field names are the Import center column keys. Required fields are highlighted.",
+      "fieldsNote": "Lists (roles, subjects, student numbers) can be sent as arrays. A student's guardians go in a guardians array, matched by email; guardians are added and updated, never removed.",
+      "examplePost": "Create or update students",
+      "responseLabel": "Response",
+      "exampleGet": "List students",
+      "nextPage": "Next page",
+      "errorsLabel": "Item errors",
+      "errorsNote": "Errors give the position in your batch (from 0), the field and a code. They never repeat the values you sent, so they are safe to log.",
+      "sisTitle": "Pointing your student information system at Horizon",
+      "sisBody": "Two ways, use whichever your system supports.",
+      "sis1": "If your system or integration tool can call a web API: create a key with read and write access to the areas it owns, set the base address above, and send staff first, then students with guardians, then classes and enrollments.",
+      "sis2": "If it can only export files: schedule a CSV or Excel export to a secure web address, add it on the Scheduled sync tab, and map the columns once.",
+      "sis3": "Keep your system as the source of truth for these records: changes made there arrive here on the next run.",
+      "sis4": "Removing people or access is never done by a sync. Do it on the People or Roles pages."
     }
   }
 }
