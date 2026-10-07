@@ -151,3 +151,7 @@ CREATE POLICY group_push_read ON "GroupTemplatePush" FOR SELECT
 CREATE POLICY group_push_insert ON "GroupTemplatePush" FOR INSERT
   WITH CHECK ("pushedById" = current_setting('app.current_user_id', true)
     AND "groupId" IN (SELECT gm."groupId" FROM "GroupMember" gm WHERE gm."userId" = current_setting('app.current_user_id', true) AND gm."role" = 'ADMIN'));
+
+-- 5. Platform audit records (kept after a school is deleted). Written and read only by the owner role.
+ALTER TABLE "PlatformAuditEvent" ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON TABLE "PlatformAuditEvent" FROM app_user;

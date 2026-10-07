@@ -436,15 +436,18 @@ model Organization {
 }
 
 model Membership {
-  id         String           @id @default(cuid())
-  orgId      String
-  userId     String
-  status     MembershipStatus @default(ACTIVE)
-  titleEn    String?
-  titleAr    String?
-  locale     Locale?
-  lastSeenAt DateTime?
-  createdAt  DateTime         @default(now())
+  id           String           @id @default(cuid())
+  orgId        String
+  userId       String
+  status       MembershipStatus @default(ACTIVE)
+  titleEn      String?
+  titleAr      String?
+  locale       Locale?
+  /// Last time this member used the app. Written at most once per 15 minutes (src/server/identity/last-active.ts).
+  lastSeenAt   DateTime?
+  /// Set when the person's data was erased or anonymised after a data subject request.
+  anonymisedAt DateTime?
+  createdAt    DateTime         @default(now())
 
   org          Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
   user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -666,6 +669,8 @@ model Student {
   curriculum      SchoolCurriculum @default(BRITISH)
   photoUrl        String?
   hasSen          Boolean          @default(false)
+  /// Set when the student's personal data was anonymised after a deletion request.
+  anonymisedAt    DateTime?
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
@@ -687,18 +692,20 @@ model Student {
 }
 
 model Guardian {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   orgId        String
-  membershipId String?  @unique
+  membershipId String?   @unique
   firstNameEn  String
   lastNameEn   String
   firstNameAr  String
   lastNameAr   String
   email        String?
   phone        String?
-  preferredLoc Locale   @default(en)
+  preferredLoc Locale    @default(en)
   occupation   String?
-  createdAt    DateTime @default(now())
+  /// Set when the guardian's personal data was anonymised after a deletion request.
+  anonymisedAt DateTime?
+  createdAt    DateTime  @default(now())
 
   membership Membership?    @relation(fields: [membershipId], references: [id], onDelete: SetNull)
   links      GuardianLink[]
@@ -1858,16 +1865,19 @@ model AuditEvent {
 }
 
 model ProcessingPurpose {
-  id              String   @id @default(cuid())
-  orgId           String
-  key             String
-  nameEn          String
-  nameAr          String
-  descEn          String
-  descAr          String
-  lawfulBasis     String
-  dataCategories  String[]
-  requiresConsent Boolean  @default(false)
+  id                String    @id @default(cuid())
+  orgId             String
+  key               String
+  nameEn            String
+  nameAr            String
+  descEn            String
+  descAr            String
+  lawfulBasis       String
+  dataCategories    String[]
+  requiresConsent   Boolean   @default(false)
+  /// Retention policy that governs records kept for this purpose.
+  retentionPolicyId String?
+  updatedAt         DateTime? @updatedAt
 
   consents ConsentRecord[]
 
@@ -1900,6 +1910,9 @@ model DataSubjectRequest {
   subjectName   String
   requesterName String
   studentId     String?
+  /// The person the request is about when it is a guardian or a staff member (studentId for students).
+  guardianId    String?
+  membershipId  String?
   detailsEn     String?
   receivedAt    DateTime  @default(now())
   dueAt         DateTime
@@ -1961,6 +1974,41 @@ model CrossBorderTransfer {
 // ---------------------------------------------------------------------------
 // Demo, jobs, imports
 // ---------------------------------------------------------------------------
+
+/// A school-wide data export (school exit). Built by the worker, downloaded through an expiring link.
+model DataExport {
+  id             String    @id @default(cuid())
+  orgId          String
+  kind           String    @default("SCHOOL")
+  status         String    @default("QUEUED")
+  idempotencyKey String
+  requestedById  String
+  storageKey     String?
+  sizeBytes      Int?
+  fileCount      Int?
+  rowCount       Int?
+  summary        Json?
+  error          String?
+  expiresAt      DateTime?
+  createdAt      DateTime  @default(now())
+  startedAt      DateTime?
+  finishedAt     DateTime?
+
+  @@unique([orgId, idempotencyKey])
+  @@index([orgId, createdAt])
+}
+
+/// Platform-level audit record kept after a school is deleted. Holds no personal data: ids, counts and the actor's user id only.
+model PlatformAuditEvent {
+  id          String   @id @default(cuid())
+  action      String
+  orgRef      String
+  actorUserId String?
+  meta        Json?
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+}
 
 model DemoPersona {
   id           String @id @default(cuid())

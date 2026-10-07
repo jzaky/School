@@ -6,6 +6,7 @@ import { auth } from "@/auth";
 import { tenantDb, identityDb } from "@/lib/tenant-db";
 import { can, permissionsOf, roleKeysOf } from "@/server/identity/can";
 import type { Permission } from "@/server/identity/permissions";
+import { lastActiveIsStale, touchLastActive } from "@/server/identity/last-active";
 import { isLocale, type AppLocale } from "@/i18n/routing";
 import { groupRolesForUser } from "@/server/groups/access";
 
@@ -29,10 +30,8 @@ async function loadContext() {
     identityDb.user.findUnique({ where: { id: session.user.id } }),
   ]);
   if (!org || !membership || !user || membership.status !== "ACTIVE") return null;
-  // "Active users" on the group dashboard: remember the last visit, at most once an hour.
-  if (!membership.lastSeenAt || Date.now() - membership.lastSeenAt.getTime() > 3_600_000) {
-    void db.membership.update({ where: { id: membershipId }, data: { lastSeenAt: new Date() } }).catch(() => undefined);
-  }
+  // Last active: no query when the loaded timestamp is fresh; never blocks or fails the request.
+  if (lastActiveIsStale(membership.lastSeenAt, new Date())) void touchLastActive(db, membership.id, membership.lastSeenAt).catch(() => undefined);
   const perms = permissionsOf(membership);
   const roles = roleKeysOf(membership);
   const requestLocale = await getLocale();

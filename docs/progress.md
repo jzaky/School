@@ -83,7 +83,6 @@
    - The marketing Logo and app title say Horizon OS (the sidebar now shows the school logo or initial).
    - Service categories cannot be renamed or added from the UI.
    - Appointment types (meeting kinds, durations, buffers, hosts) and staff availability have no admin page.
-   - Data processing purposes (compliance) cannot be added or edited; retention and processors can.
    - Rooms are free text on classes and exams; there is no room list to manage.
    - Career catalog and aptitude questions are platform content with no school editor.
    - Verification emails queued while Redis is down lose their link when the sweeper sends them later (body and href travel in the job, not the row).
@@ -109,3 +108,13 @@
 - School side: School group panel on /admin/school (enter a code, check the group, join). Shell nav shows "Group dashboard" for group people.
 - Seed: prisma/seed/groups.ts (Horizon Education Group, two extra schools, Group Director persona on /demo, a viewer with no school membership).
 - Tests: tests/unit/groups.test.ts, tests/integration/groups.test.ts (isolation, nothing sensitive, invite acceptance, template push), tests/e2e/groups.spec.ts.
+## Privacy tools and pilot measures (PDPL readiness, worktree branch)
+- Person data tools at /admin/compliance/person (compliance.manage): find a student, guardian or staff member, log a request (access, correction, deletion; DSRs now link guardians and staff too), export for a request as a ZIP (bilingual summary PDF, JSON, CSV per area, uploaded files, withheld.csv; sensitive content through `subjectExportDecision` in the case access module; audited), and erasure with a preview, a typed confirmation and a plan hash (retained records anonymised per the retention settings, everything else deleted with the stored files, account anonymised when not used elsewhere; audited). Code: src/server/privacy (subject, export, erase, account, summary-pdf, labels, actions), src/app/api/admin/privacy/export.
+- School data export at /admin/compliance/exit (compliance.manage + school.manage, typed school code): idempotent background job (queue "privacy", job "school.export", DataExport row), CSV per table grouped by area plus files, 24 hour download through /api/admin/school-export/[id], expired files removed by the daily retention job.
+- Delete school at /platform/schools for platform admins (User.isPlatformAdmin or PLATFORM_ADMIN_EMAILS): dry run, typed slug, removes all tenant rows, files and exclusive accounts; PlatformAuditEvent keeps ids and counts only.
+- Membership.lastSeenAt written from the request context at most once per 15 minutes (src/server/identity/last-active.ts). Pilot measures panel on /analytics for principal and school_admin with a period picker and CSV (/api/admin/pilot-measures).
+- Processing purposes addable and editable on the compliance page (name en/ar, description, lawful basis, categories, consent, linked retention policy), audited.
+- Storage abstraction gained get, delete, per-school list and delete, and signed links with a chosen lifetime (src/server/documents/storage-core.ts, shared with the worker). ZIP writer in src/lib/zip.ts, CSV writer in src/lib/csv-out.ts.
+- Schema (additive, migration 20261006090000_privacy_tools): DataSubjectRequest.guardianId and membershipId, Student/Guardian/Membership.anonymisedAt, ProcessingPurpose.retentionPolicyId and updatedAt, DataExport (tenant), PlatformAuditEvent (platform, owner only).
+- Seed: last active times for every member, purposes linked to retention policies.
+- Tests: tests/unit/privacy.test.ts, tests/integration/privacy.test.ts, tests/e2e/privacy.spec.ts.
