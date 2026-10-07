@@ -12,7 +12,17 @@ import { signUpAction, startOAuthSignupAction, type SignupState } from "@/server
 
 const emirateKey = (e: string) => e.replace(/\s+/g, "");
 
-export function SignupForm({ providers, locale, initialError }: { providers: { google: boolean; microsoft: boolean }; locale: "en" | "ar"; initialError: "oauth" | "failed" | null }) {
+export function SignupForm({
+  providers,
+  locale,
+  initialError,
+  referralCode = null,
+}: {
+  providers: { google: boolean; microsoft: boolean };
+  locale: "en" | "ar";
+  initialError: "oauth" | "failed" | null;
+  referralCode?: string | null;
+}) {
   const t = useTranslations("onboarding.signup");
   const tc = useTranslations("onboarding.curricula");
   const te = useTranslations("onboarding.emirates");
@@ -60,6 +70,7 @@ export function SignupForm({ providers, locale, initialError }: { providers: { g
   return (
     <form ref={formRef} onSubmit={submit} className="space-y-6" data-testid="signup-form">
       <input type="hidden" name="locale" value={locale} />
+      {referralCode && <input type="hidden" name="ref" value={referralCode} />}
       {/* Honeypot: hidden from people and assistive technology. */}
       <div aria-hidden="true" className="pointer-events-none absolute -z-10 size-px overflow-hidden opacity-0">
         <label htmlFor="website">{t("honeypot")}</label>

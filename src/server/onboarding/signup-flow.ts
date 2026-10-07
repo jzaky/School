@@ -17,7 +17,7 @@ export async function completeOAuthSignup(): Promise<string> {
   jar.delete(PENDING_COOKIE);
   let provisioned: { orgId: string; membershipId: string };
   try {
-    provisioned = await provisionSchool({ userId, schoolNameEn: pending.schoolNameEn, schoolNameAr: pending.schoolNameAr, emirate: pending.emirate, curricula: pending.curricula, locale: pending.locale, isPrincipal: pending.isPrincipal });
+    provisioned = await provisionSchool({ userId, schoolNameEn: pending.schoolNameEn, schoolNameAr: pending.schoolNameAr, emirate: pending.emirate, curricula: pending.curricula, locale: pending.locale, isPrincipal: pending.isPrincipal, referralCode: pending.ref ?? null });
   } catch {
     return "/signup?error=failed";
   }

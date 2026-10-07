@@ -428,11 +428,17 @@ model Organization {
   /// Who parents contact about fees (free text, for example an email address or phone number).
   feeContact             String?
   createdById            String?
+  /// Code another school can use at sign-up (/signup?ref=CODE). Created on first view of the referral page.
+  referralCode           String?            @unique
+  /// The school whose referral code was used when this school signed up. Commercial terms are handled offline.
+  referredByOrgId        String?
   createdAt              DateTime           @default(now())
   updatedAt              DateTime           @updatedAt
 
   memberships Membership[]
   groupLink   SchoolGroupSchool?
+
+  @@index([referredByOrgId])
 }
 
 model Membership {
@@ -3465,4 +3471,72 @@ model SyncRun {
 
   @@unique([sourceId, slot])
   @@index([orgId, startedAt])
+}
+
+// ---------------------------------------------------------------------------
+// Platform marketing and operations (no orgId: these are not school data).
+// Only the owner role may touch MarketingLead and PlatformSetting (prisma/rls.sql revokes app_user);
+// app_user may only read UptimeSample for the public status page.
+// ---------------------------------------------------------------------------
+
+enum MarketingLeadType {
+  TASTER
+  OFFER
+}
+
+enum MarketingLeadRole {
+  STUDENT
+  PARENT
+  STAFF
+}
+
+enum LeadEmailStatus {
+  QUEUED
+  SENT
+  FAILED
+  SKIPPED
+}
+
+/// A marketing lead from the public site: someone who asked for a career taster result or a school offer.
+/// Holds only what the visitor typed, with their consent time and the page it came from.
+model MarketingLead {
+  id              String            @id @default(cuid())
+  type            MarketingLeadType
+  /// Page the lead came from: "try" or "pricing".
+  source          String
+  name            String
+  email           String
+  role            MarketingLeadRole
+  schoolName      String?
+  locale          Locale            @default(en)
+  consentAt       DateTime
+  /// Version of the consent wording the visitor agreed to.
+  consentVersion  String
+  /// Taster: answers, scores and top areas. Offer: the estimator inputs.
+  payload         Json
+  emailStatus     LeadEmailStatus   @default(QUEUED)
+  emailSentAt     DateTime?
+  createdAt       DateTime          @default(now())
+
+  @@index([type, createdAt])
+  @@index([createdAt])
+}
+
+/// Platform-wide settings edited by platform admins (for example pricing). Key-value, JSON values.
+model PlatformSetting {
+  key         String   @id
+  value       Json
+  updatedById String?
+  updatedAt   DateTime @updatedAt
+}
+
+/// One row per 5-minute slot, written by the worker. Feeds the 90-day history on /status.
+model UptimeSample {
+  /// Start of the 5-minute slot in UTC. The primary key makes each slot's write idempotent.
+  slot      DateTime @id
+  web       Boolean?
+  database  Boolean
+  redis     Boolean
+  worker    Boolean
+  createdAt DateTime @default(now())
 }

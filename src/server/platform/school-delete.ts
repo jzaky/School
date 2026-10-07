@@ -9,7 +9,7 @@
 import { PrismaClient } from "@prisma/client";
 import { tenantTablesInDeleteOrder } from "../../../prisma/seed/lib";
 import { deleteOrgObjects, listOrgObjects } from "@/server/documents/storage-core";
-export { isPlatformAdmin } from "./admin";
+export { isPlatformAdmin } from "./catalog-db";
 
 const g = globalThis as unknown as { __platformDb?: PrismaClient };
 

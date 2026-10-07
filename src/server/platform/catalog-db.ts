@@ -49,6 +49,16 @@ export function platformAdminEmails(): string[] {
     .filter(Boolean);
 }
 
+// Demo personas use reserved domains (horizon.example) and their sign-in is public, so in production an
+// address on a reserved domain is never a platform admin, even if it is listed by mistake.
+const RESERVED_DOMAIN = /\.(example|test|invalid|localhost)$/i;
+
+export function isPlatformAdminEmail(email: string | null | undefined, env: string | undefined = process.env.NODE_ENV): boolean {
+  const e = email?.trim().toLowerCase();
+  if (!e || !platformAdminEmails().includes(e)) return false;
+  return !(env === "production" && RESERVED_DOMAIN.test(e.split("@")[1] ?? ""));
+}
+
 /** Who is asking to write global catalog rows. Built from the request context. */
 export type CatalogActor = {
   orgId: string;
@@ -80,4 +90,10 @@ export class CatalogAccessError extends Error {
 export function assertCatalogWrite(actor: CatalogActor, opts: { writable?: boolean } = {}) {
   const denial = catalogWriteDenial(actor, opts);
   if (denial) throw new CatalogAccessError(denial);
+}
+
+/** A platform admin runs the hosted service (not a school role): User.isPlatformAdmin or PLATFORM_ADMIN_EMAILS. */
+export function isPlatformAdmin(user: { email: string; isPlatformAdmin?: boolean | null }) {
+  // Email-listed admins go through isPlatformAdminEmail, which never accepts demo persona domains in production.
+  return Boolean(user.isPlatformAdmin) || isPlatformAdminEmail(user.email);
 }

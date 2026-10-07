@@ -81,6 +81,14 @@
 - Everything-editable fixes: subjects editable on /admin/school, notification message texts editable on /admin/templates, academic year and term dates editable in the wizard, brand colors, logo and time zone editable.
 - Tests: tests/unit/onboarding.test.ts, tests/integration/onboarding.test.ts.
 
+## Growth pages: career taster, pricing and ROI, referrals, status (growth worktree)
+- /try: free 12-statement career taster (no sign-in), teaser with the top three career areas in the visitor's language; the full result (/try/result/[token]) with example careers, strengths profile and a bilingual PDF unlocks with name, email, role, optional school and consent, which creates a TASTER marketing lead and emails the result (lead-email job, idempotent).
+- /pricing: ROI estimator (letters, absence reports, meeting booking, parent messages) with every assumption labelled and editable, staff cost per hour; prices per student per module, pilot discount and minimums from /platform/settings, unset by default so the page shows "Request an offer" (creates an OFFER lead). Linked from the landing header, a landing band and the footer.
+- Referrals: /admin/referral (school_admin, principal) with the school's code and /signup?ref=CODE link; sign-up records the referring school. /platform/referrals lists referrals per school (no automatic discounts).
+- /status: live web, database, Redis and worker heartbeat checks, 90-day uptime bars from UptimeSample (worker job every 5 minutes, keyed by slot). /api/health for the web check. Linked in the marketing footer.
+- Platform admin (PLATFORM_ADMIN_EMAILS): /platform/leads with filters and CSV export (audited), /platform/referrals, /platform/settings.
+- Tests: tests/unit/growth.test.ts, tests/integration/growth.test.ts, tests/e2e/growth.spec.ts.
+
 ## Next
 1. Owner actions on Railway: RESEND_API_KEY and EMAIL_FROM (real email), optional Google/Microsoft sign-in keys, Postgres backups, custom domain; press Reset demo after deploys.
 2. Pilot school: verify the requirement rows of the 50 to 100 programmes its students apply to (Mark verified), import its people, run the setup wizard with the school.

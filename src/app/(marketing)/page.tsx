@@ -4,6 +4,7 @@ import {
   ArrowLeft,
   ArrowRight,
   Bot,
+  Calculator,
   CalendarClock,
   CheckCircle2,
   Compass,
@@ -21,8 +22,7 @@ import {
   Users,
   Workflow,
 } from "lucide-react";
-import { Logo } from "@/components/marketing/logo";
-import { MarketingLocaleToggle } from "@/components/marketing/locale-toggle";
+import { SiteFooter, SiteHeader } from "@/components/marketing/site-chrome";
 import { Button } from "@/components/ui/button";
 import { signupEnabled } from "@/lib/signup";
 
@@ -52,6 +52,7 @@ const ROLES = [
 
 export default async function Landing() {
   const t = await getTranslations("landing");
+  const g = await getTranslations("growth.site");
   const locale = await getLocale();
   const Arrow = locale === "ar" ? ArrowLeft : ArrowRight;
   const pilot = signupEnabled();
@@ -60,42 +61,7 @@ export default async function Landing() {
 
   return (
     <div className="min-h-dvh bg-background">
-      <header className="sticky top-0 z-30 border-b border-transparent bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
-          <Link href="/" aria-label={t("home")}>
-            <Logo />
-          </Link>
-          <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
-            <a href="#journeys" className="hover:text-foreground">
-              {t("navJourneys")}
-            </a>
-            <a href="#portals" className="hover:text-foreground">
-              {t("navPortals")}
-            </a>
-            <a href="#trust" className="hover:text-foreground">
-              {t("navTrust")}
-            </a>
-          </nav>
-          <div className="flex items-center gap-1.5">
-            <MarketingLocaleToggle />
-            <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
-              <Link href="/login">{t("signIn")}</Link>
-            </Button>
-            {pilot && (
-              <Button variant="outline" size="sm" asChild className="hidden md:inline-flex">
-                <Link href="/signup" data-testid="cta-pilot-header">
-                  {tPilot("startPilot")}
-                </Link>
-              </Button>
-            )}
-            <Button size="sm" asChild>
-              <Link href="/demo" data-testid="cta-demo-header">
-                {t("tryDemo")}
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader active="home" />
 
       <main>
         {/* Hero */}
@@ -286,6 +252,42 @@ export default async function Landing() {
           </div>
         </section>
 
+        {/* Career taster and pricing */}
+        <section className="border-b py-16" data-testid="landing-taster">
+          <div className="mx-auto grid max-w-6xl gap-4 px-4 sm:px-6 md:grid-cols-2">
+            <div className="flex flex-col justify-between rounded-2xl border bg-brand-soft/40 p-6">
+              <div>
+                <Compass className="size-6 text-brand" />
+                <h2 className="mt-3 text-xl font-semibold tracking-tight">{g("tasterBandTitle")}</h2>
+                <p className="mt-2 text-sm text-muted-foreground">{g("tasterBandBody")}</p>
+              </div>
+              <div className="mt-5">
+                <Button asChild>
+                  <Link href="/try" data-testid="cta-try">
+                    {g("tasterBandCta")}
+                    <Arrow className="size-4" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+            <div className="flex flex-col justify-between rounded-2xl border bg-card p-6">
+              <div>
+                <Calculator className="size-6 text-brand" />
+                <h2 className="mt-3 text-xl font-semibold tracking-tight">{g("pricingBandTitle")}</h2>
+                <p className="mt-2 text-sm text-muted-foreground">{g("pricingBandBody")}</p>
+              </div>
+              <div className="mt-5">
+                <Button variant="outline" asChild>
+                  <Link href="/pricing" data-testid="cta-pricing">
+                    {g("pricingBandCta")}
+                    <Arrow className="size-4" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* CTA */}
         <section className="py-20">
           <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
@@ -304,12 +306,7 @@ export default async function Landing() {
         </section>
       </main>
 
-      <footer className="border-t py-8">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <Logo />
-          <p>{t("footer")}</p>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

@@ -80,6 +80,7 @@ Put shared values in Project > Settings > Shared Variables and reference them fr
 | `WHATSAPP_TEMPLATE_GENERIC` | both | Name of the approved template used for every message without its own template and for all sensitive ones. Body `{{1}}` = school name; one URL button whose dynamic suffix is the portal path (base URL `APP_URL/` in the template). |
 | `WHATSAPP_TEMPLATE_<KIND>` | worker | Optional approved template per message type, for example `WHATSAPP_TEMPLATE_REQUEST_COMPLETED`. Body `{{1}}` = school name, `{{2}}` = notification title; same URL button. Templates must exist in en and ar. |
 | `WHATSAPP_API_VERSION` | worker | Graph API version. Default `v21.0`. |
+| `PLATFORM_ADMIN_EMAILS` | web | Comma-separated emails of platform admins. They see the Platform section (marketing leads with CSV export, referrals per school, platform settings such as pricing) and may publish shared requirements from a non-demo school. Members of the demo school with `catalog.review` may always publish catalog changes. Never list a demo persona: in production, addresses on reserved domains (for example horizon.example) are ignored. |
 
 Set by the image, no action needed: `NODE_ENV=production`, `PORT=3000` (Railway overrides `PORT`, the server follows it), `HOSTNAME=0.0.0.0`.
 

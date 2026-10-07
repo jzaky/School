@@ -155,3 +155,10 @@ CREATE POLICY group_push_insert ON "GroupTemplatePush" FOR INSERT
 -- 5. Platform audit records (kept after a school is deleted). Written and read only by the owner role.
 ALTER TABLE "PlatformAuditEvent" ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON TABLE "PlatformAuditEvent" FROM app_user;
+
+-- 6. Platform marketing and operations tables (no orgId, not school data).
+-- Marketing leads and platform settings are only reachable through the owner role (platform admin pages,
+-- public lead capture in src/server/marketing). The app role may read uptime samples for /status, nothing else.
+REVOKE ALL ON TABLE "MarketingLead" FROM app_user;
+REVOKE ALL ON TABLE "PlatformSetting" FROM app_user;
+REVOKE INSERT, UPDATE, DELETE ON TABLE "UptimeSample" FROM app_user;

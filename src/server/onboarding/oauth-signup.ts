@@ -7,7 +7,7 @@ import type { SignupInput } from "@/lib/signup";
 export const PENDING_COOKIE = "pending_signup";
 const TTL_MS = 30 * 60_000;
 
-export type PendingSignup = Omit<SignupInput, "password" | "email"> & { exp: number };
+export type PendingSignup = Omit<SignupInput, "password" | "email"> & { exp: number; ref?: string | null };
 
 const secret = () => process.env.AUTH_SECRET ?? "";
 const sign = (body: string) => createHmac("sha256", secret()).update(body).digest("base64url");

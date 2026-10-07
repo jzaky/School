@@ -11,6 +11,7 @@ import { randomBytes } from "node:crypto";
 import bcrypt from "bcryptjs";
 import type { SchoolCurriculum } from "@prisma/client";
 import { catalogDb, type CatalogDb } from "./catalog-db";
+import { resolveReferralCode } from "./referrals";
 import { installStarterTemplate } from "../../../prisma/seed/starter";
 import { wipeTenant } from "../../../prisma/seed/lib";
 import { joinCodeFrom, regulatorFor, slugCandidates } from "@/lib/signup";
@@ -74,6 +75,8 @@ export type ProvisionInput = {
   curricula: SchoolCurriculum[];
   locale: "en" | "ar";
   isPrincipal: boolean;
+  /** Referral code from /signup?ref=CODE. An unknown code is ignored. */
+  referralCode?: string | null;
   now?: Date;
 };
 
@@ -84,6 +87,7 @@ export async function provisionSchool(input: ProvisionInput, db: CatalogDb = own
   const now = input.now ?? new Date();
   const slug = await freeSlug(input.schoolNameEn, db);
   const joinCode = await freeJoinCode(db);
+  const referrer = input.referralCode ? await resolveReferralCode(db, input.referralCode) : null;
   const org = await db.organization.create({
     data: {
       slug,
@@ -98,6 +102,7 @@ export async function provisionSchool(input: ProvisionInput, db: CatalogDb = own
       joinCode,
       createdById: input.userId,
       isDemo: false,
+      referredByOrgId: referrer?.id ?? null,
     },
   });
   try {
@@ -110,7 +115,7 @@ export async function provisionSchool(input: ProvisionInput, db: CatalogDb = own
     await db.membershipRole.createMany({ data: roles.map((r) => ({ orgId: org.id, membershipId: membership.id, roleId: r.id })) });
     await db.user.update({ where: { id: input.userId }, data: { lastActiveOrgId: org.id } });
     await db.auditEvent.create({
-      data: { orgId: org.id, actorId: membership.id, actorUserId: input.userId, action: "org.signup", entityType: "Organization", entityId: org.id, meta: { curricula: input.curricula, emirate: input.emirate, principal: input.isPrincipal } },
+      data: { orgId: org.id, actorId: membership.id, actorUserId: input.userId, action: "org.signup", entityType: "Organization", entityId: org.id, meta: { curricula: input.curricula, emirate: input.emirate, principal: input.isPrincipal, referred: Boolean(referrer) } },
     });
     return { orgId: org.id, slug, membershipId: membership.id };
   } catch (e) {

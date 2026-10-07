@@ -5,7 +5,7 @@
 // school: opening a school still needs an ACTIVE membership there.
 import type { GroupRole } from "@prisma/client";
 import { identityDb, userScope } from "@/lib/tenant-db";
-import { platformAdminEmails } from "@/server/platform/catalog-db";
+import { isPlatformAdminEmail } from "@/server/platform/catalog-db";
 
 export type GroupSummary = { id: string; slug: string; nameEn: string; nameAr: string; logoUrl: string | null; updatedAt: Date };
 export type GroupRoleRow = { groupId: string; role: GroupRole; titleEn: string | null; titleAr: string | null; group: GroupSummary };
@@ -50,7 +50,8 @@ export async function groupSchoolLinks(userId: string, groupId: string) {
 /** Platform admins: the User flag, or an email listed in PLATFORM_ADMIN_EMAILS. */
 export function isPlatformAdmin(user: { isPlatformAdmin: boolean; email: string } | null | undefined): boolean {
   if (!user) return false;
-  return user.isPlatformAdmin || platformAdminEmails().includes(user.email.trim().toLowerCase());
+  // Same rule as src/server/platform/catalog-db.ts: demo persona domains never count in production.
+  return user.isPlatformAdmin || isPlatformAdminEmail(user.email);
 }
 
 export async function platformAdminById(userId: string): Promise<boolean> {
