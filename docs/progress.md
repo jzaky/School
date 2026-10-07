@@ -102,3 +102,10 @@
 - /admin/import (admin.access + people.manage; nav under Administration, linked from People and the setup wizard people step): staff, students and guardians, classes and enrollments, subject choices, each with a bilingual template, CSV/XLSX upload, per-row preview, confirm, result and a shared history. Services in src/server/imports (staff.ts, classes.ts, reuse.ts, actions.ts), parsers in src/lib/imports.
 - Invitation accept activates an existing INVITED membership and keeps the school's roles. School logo and name on letters, report cards, exam timetables and the join poster (src/server/documents/letterhead.ts).
 - Tests: tests/unit/imports.test.ts, tests/integration/imports.test.ts.
+
+## School groups (groups worktree branch)
+- Models: SchoolGroup, SchoolGroupSchool, GroupMember (ADMIN or VIEWER), GroupInvite, GroupTemplatePush (migration 20261006221127_school_groups, RLS in prisma/rls.sql section 4). Code in src/server/groups.
+- /group (separate area, en/ar): dashboard with totals and school-by-school comparison (open requests, turnaround, overdue, parent meetings, service usage, setup status, active users, university plans and applications by stage), phone cards, Open school only with a membership. /group/schools: member schools and single-use invite codes. /group/templates: share a service (with form and workflow), letter or notification message to other member schools, with history. /group/platform: platform admins create groups, upload a logo, assign schools, give people roles.
+- School side: School group panel on /admin/school (enter a code, check the group, join). Shell nav shows "Group dashboard" for group people.
+- Seed: prisma/seed/groups.ts (Horizon Education Group, two extra schools, Group Director persona on /demo, a viewer with no school membership).
+- Tests: tests/unit/groups.test.ts, tests/integration/groups.test.ts (isolation, nothing sensitive, invite acceptance, template push), tests/e2e/groups.spec.ts.

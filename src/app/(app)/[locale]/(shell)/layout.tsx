@@ -15,12 +15,13 @@ import { VerifyBanner } from "@/components/onboarding/verify-banner";
 import { schoolVerified } from "@/server/onboarding/verification";
 import { canSetup } from "@/server/onboarding/access";
 import { InstallPrompt, PwaRegister } from "@/components/pwa/install-prompt";
+import { groupRolesForUser } from "@/server/groups/access";
 
 export default async function ShellLayout({ children }: { children: React.ReactNode }) {
   const ctx = await getCtx();
   const { db, orgId, membershipId, locale } = ctx;
   const tRoles = await getTranslations("roles");
-  const [approvals, tasks, unread, personas, joinRequests, schools] = await Promise.all([
+  const [approvals, tasks, unread, personas, joinRequests, schools, groupRoles] = await Promise.all([
     db.approvalAssignee.count({ where: { orgId, membershipId, status: "PENDING", approval: { status: "PENDING" } } }),
     db.task.count({ where: { orgId, assigneeId: membershipId, status: { in: ["TODO", "IN_PROGRESS"] } } }),
     db.notification.count({ where: { orgId, recipientId: membershipId, readAt: null } }),
@@ -29,6 +30,7 @@ export default async function ShellLayout({ children }: { children: React.ReactN
       : Promise.resolve([]),
     ctx.can("people.manage") || ctx.can("people.invite") ? db.joinRequest.count({ where: { orgId, status: "PENDING" } }) : Promise.resolve(0),
     listUserOrganizations(ctx.user.id),
+    groupRolesForUser(ctx.user.id),
   ]);
   const personaMembers = personas.length
     ? await db.membership.findMany({ where: { id: { in: personas.map((p) => p.membershipId) } }, include: { user: true } })
@@ -36,7 +38,7 @@ export default async function ShellLayout({ children }: { children: React.ReactN
   const name = userName(ctx.user, locale);
   const primaryRole = ctx.roles[0];
   // Switched-off modules disappear from the navigation and the guide.
-  const nav = filterNav(ctx.org, buildNav(ctx, { approvals, tasks, notifications: unread, joinRequests }));
+  const nav = filterNav(ctx.org, buildNav(ctx, { approvals, tasks, notifications: unread, joinRequests, group: groupRoles.length > 0 }));
   const tGuide = await getTranslations("guide");
   const guideSteps = personas.length && ctx.persona ? (GUIDE_STEPS[ctx.persona] ?? []).filter((s) => pathEnabled(ctx.org, s.href)) : [];
   // New schools: administrators see a banner until the founding administrator confirms their email.

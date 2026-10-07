@@ -111,6 +111,17 @@ export function listableCaseWhere(ctx: Ctx, surface: CaseSurface): Prisma.CaseWh
   return { orgId, OR: [standard, wellbeing] };
 }
 
+/**
+ * What a school group (several schools, see src/server/groups) may count across its member schools.
+ * Group users are not members of each school's student services team, so this module allows no case
+ * figures at all at group level (not even counts of wellbeing or safeguarding cases), and only requests,
+ * services and tasks of STANDARD sensitivity. Confidential and medical work is left out too, because a
+ * small school's count alone can point at a child. The group dashboard reads this policy; it is never widened per group.
+ */
+export function groupAggregatePolicy(): { cases: false; requestSensitivities: Sensitivity[]; taskSensitivities: Sensitivity[] } {
+  return { cases: false, requestSensitivities: ["STANDARD"], taskSensitivities: ["STANDARD"] };
+}
+
 /** Parents are never notified automatically about sensitive cases (rule 7). */
 export function familyMayBeAutoNotified(sensitivity: Sensitivity) {
   return !SENSITIVE.includes(sensitivity);

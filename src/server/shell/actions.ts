@@ -5,7 +5,7 @@ import { AuthError } from "next-auth";
 import { signIn, signOut } from "@/auth";
 import { getCtx } from "@/server/context";
 import { isLocale } from "@/i18n/routing";
-import { DEMO_SLUG } from "@/server/demo/constants";
+import { DEMO_SLUG, GROUP_PERSONA } from "@/server/demo/constants";
 
 export async function setLocaleAction(locale: string) {
   if (!isLocale(locale)) return { ok: false };
@@ -27,7 +27,8 @@ export async function setMarketingLocaleAction(locale: string) {
 export async function signInAsPersonaAction(personaKey: string, locale: string) {
   const loc = isLocale(locale) ? locale : "en";
   try {
-    await signIn("persona", { orgSlug: DEMO_SLUG, personaKey, redirectTo: `/${loc}/home` });
+    // The school group persona starts on the group dashboard; everyone else on their school home.
+    await signIn("persona", { orgSlug: DEMO_SLUG, personaKey, redirectTo: `/${loc}/${personaKey === GROUP_PERSONA ? "group" : "home"}` });
   } catch (e) {
     if (e instanceof AuthError) return { ok: false, error: "persona" };
     throw e;

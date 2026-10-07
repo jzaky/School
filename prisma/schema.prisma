@@ -432,6 +432,7 @@ model Organization {
   updatedAt              DateTime           @updatedAt
 
   memberships Membership[]
+  groupLink   SchoolGroupSchool?
 }
 
 model Membership {
@@ -3114,4 +3115,100 @@ model JoinRequest {
   createdAt       DateTime          @default(now())
 
   @@index([orgId, status])
+}
+
+// ---------------------------------------------------------------------------
+// School groups (platform level): one operator running several schools.
+// No orgId on group tables: they are protected by user-scoped policies in prisma/rls.sql.
+// SchoolGroupSchool carries orgId (the member school) and has its own policy.
+// ---------------------------------------------------------------------------
+
+enum GroupRole {
+  ADMIN
+  VIEWER
+}
+
+model SchoolGroup {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  nameEn      String
+  nameAr      String
+  logoUrl     String?
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  schools SchoolGroupSchool[]
+  members GroupMember[]
+  invites GroupInvite[]
+  pushes  GroupTemplatePush[]
+}
+
+/// A school's membership of a group. A school belongs to at most one group.
+model SchoolGroupSchool {
+  id        String   @id @default(cuid())
+  groupId   String
+  orgId     String   @unique
+  /// "platform" (assigned by a platform admin) or "invite" (the school accepted a group invite code).
+  via       String   @default("platform")
+  addedById String?
+  joinedAt  DateTime @default(now())
+
+  group SchoolGroup  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  org   Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([groupId])
+}
+
+/// A person's role in a group. They may or may not also hold a membership in each school.
+model GroupMember {
+  id        String    @id @default(cuid())
+  groupId   String
+  userId    String
+  role      GroupRole @default(VIEWER)
+  titleEn   String?
+  titleAr   String?
+  createdAt DateTime  @default(now())
+
+  group SchoolGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+  @@index([userId])
+}
+
+/// Single-use code a group admin hands to a school. Only a hash of the code is stored.
+model GroupInvite {
+  id          String    @id @default(cuid())
+  groupId     String
+  codeHash    String    @unique
+  codeHint    String
+  createdById String
+  expiresAt   DateTime
+  usedAt      DateTime?
+  usedByOrgId String?
+  revokedAt   DateTime?
+  createdAt   DateTime  @default(now())
+
+  group SchoolGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@index([groupId])
+}
+
+/// Configuration pushed from one member school to others. Each target school also gets an AuditEvent.
+model GroupTemplatePush {
+  id           String   @id @default(cuid())
+  groupId      String
+  sourceOrgId  String
+  kind         String
+  sourceId     String
+  labelEn      String
+  labelAr      String
+  targetOrgIds String[]
+  results      Json
+  pushedById   String
+  createdAt    DateTime @default(now())
+
+  group SchoolGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@index([groupId, createdAt])
 }

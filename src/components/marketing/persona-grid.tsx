@@ -3,9 +3,10 @@
 import { useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "framer-motion";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight, Building, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signInAsPersonaAction } from "@/server/shell/actions";
+import { GROUP_PERSONA } from "@/server/demo/constants";
 
 type Persona = { key: string; name: string; initials: string; role: string; blurb: string; primary: boolean };
 
@@ -33,7 +34,8 @@ export function PersonaGrid({ personas }: { personas: Persona[] }) {
     });
   };
   const primary = personas.filter((p) => p.primary);
-  const more = personas.filter((p) => !p.primary);
+  const more = personas.filter((p) => !p.primary && p.key !== GROUP_PERSONA);
+  const group = personas.find((p) => p.key === GROUP_PERSONA);
   return (
     <div className="space-y-8">
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -60,6 +62,29 @@ export function PersonaGrid({ personas }: { personas: Persona[] }) {
           </motion.button>
         ))}
       </div>
+      {group && (
+        <button
+          onClick={() => enter(group.key)}
+          disabled={active !== null}
+          data-testid={`enter-${group.key}`}
+          className="group flex w-full flex-col gap-4 rounded-xl border bg-card p-5 text-start shadow-xs transition hover:border-brand/30 hover:shadow-md disabled:opacity-70 sm:flex-row sm:items-center"
+        >
+          <div className="grid size-11 shrink-0 place-items-center rounded-full bg-gradient-to-br from-slate-500/15 to-slate-500/5 text-slate-700">
+            {active === group.key ? <Loader2 className="size-4 animate-spin" /> : <Building className="size-5" />}
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("groupHeading")}</div>
+            <div className="mt-0.5 text-base font-semibold">
+              {group.name} <span className="font-normal text-muted-foreground">· {group.role}</span>
+            </div>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{group.blurb}</p>
+          </div>
+          <div className="flex items-center gap-1.5 text-sm font-medium text-brand">
+            {t("enterAs")}
+            <ArrowRight className="size-4 transition group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
+          </div>
+        </button>
+      )}
       {more.length > 0 && (
         <div>
           <div className="mb-3 text-sm font-medium text-muted-foreground">{t("morePeople")}</div>

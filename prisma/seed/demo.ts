@@ -27,6 +27,7 @@ import { seedPathwayEngine } from "./academics/pathway-engine";
 import { seedTranscripts } from "./academics/transcripts";
 import { seedGlobalCatalog } from "./catalog";
 import { seedAccess } from "./access";
+import { seedGroupDemo } from "./groups";
 import { academicStartYear, installStarterTemplate } from "./starter";
 
 export const DEMO_SLUG = "horizon";
@@ -738,6 +739,8 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   await seedTranscripts(world);
   await seedCurriculum(world);
   await seedAccess(world);
+  // School group: Horizon Education Group with two small extra schools (demo tenant only).
+  if (isDemoTenant) await seedGroupDemo(world);
   // Requirement pipeline examples (after the global catalog seed; programs are looked up at runtime).
   // The catalog review and change monitor show real data only: changes found between archived and
   // current official pages (see prisma/seed/catalog/official.ts). No example drafts or changes are seeded.

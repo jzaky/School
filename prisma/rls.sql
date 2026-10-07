@@ -69,6 +69,15 @@ BEGIN
                   OR "userId" = current_setting(''app.current_user_id'', true))
            WITH CHECK ("orgId" = current_setting(''app.current_org_id'', true))',
         t.table_name);
+    ELSIF t.table_name = 'SchoolGroupSchool' THEN
+      -- A school sees its own group link; a group member sees the schools of their groups.
+      -- Read only for app_user (writes are revoked in section 4).
+      EXECUTE format(
+        'CREATE POLICY tenant_isolation ON %I FOR SELECT
+           USING ("orgId" = current_setting(''app.current_org_id'', true)
+                  OR "groupId" IN (SELECT gm."groupId" FROM "GroupMember" gm
+                                   WHERE gm."userId" = current_setting(''app.current_user_id'', true)))',
+        t.table_name);
     ELSE
       EXECUTE format(
         'CREATE POLICY tenant_isolation ON %I
@@ -94,3 +103,51 @@ CREATE POLICY org_update ON "Organization" FOR UPDATE
   USING ("id" = current_setting('app.current_org_id', true))
   WITH CHECK ("id" = current_setting('app.current_org_id', true));
 -- No INSERT or DELETE policy for app_user: organizations are created by platform admin tooling as the owner.
+
+-- 4. School groups (platform level). Created and assigned by the platform admin on the owner role.
+-- Group members read their groups through userScope (app.current_user_id); a school reads its own group
+-- through tenantDb (app.current_org_id). School data is never read through these tables: the group
+-- dashboard evaluates each member school separately through tenantDb(orgId).
+REVOKE INSERT, UPDATE, DELETE ON TABLE "SchoolGroup" FROM app_user;
+REVOKE INSERT, UPDATE, DELETE ON TABLE "GroupMember" FROM app_user;
+REVOKE INSERT, UPDATE, DELETE ON TABLE "SchoolGroupSchool" FROM app_user;
+REVOKE DELETE ON TABLE "GroupInvite" FROM app_user;
+REVOKE UPDATE, DELETE ON TABLE "GroupTemplatePush" FROM app_user;
+
+ALTER TABLE "GroupMember" ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS group_member_read ON "GroupMember";
+CREATE POLICY group_member_read ON "GroupMember" FOR SELECT
+  USING ("userId" = current_setting('app.current_user_id', true));
+
+ALTER TABLE "SchoolGroup" ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS group_read ON "SchoolGroup";
+CREATE POLICY group_read ON "SchoolGroup" FOR SELECT
+  USING (
+    "id" IN (SELECT gm."groupId" FROM "GroupMember" gm WHERE gm."userId" = current_setting('app.current_user_id', true))
+    OR "id" IN (SELECT s."groupId" FROM "SchoolGroupSchool" s WHERE s."orgId" = current_setting('app.current_org_id', true))
+  );
+
+-- Invites: group members read them; only group admins create and revoke them. Schools redeem a code
+-- through the platform function in src/server/groups/platform.ts (owner role), never through app_user.
+ALTER TABLE "GroupInvite" ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS group_invite_read ON "GroupInvite";
+DROP POLICY IF EXISTS group_invite_insert ON "GroupInvite";
+DROP POLICY IF EXISTS group_invite_update ON "GroupInvite";
+CREATE POLICY group_invite_read ON "GroupInvite" FOR SELECT
+  USING ("groupId" IN (SELECT gm."groupId" FROM "GroupMember" gm WHERE gm."userId" = current_setting('app.current_user_id', true)));
+CREATE POLICY group_invite_insert ON "GroupInvite" FOR INSERT
+  WITH CHECK ("createdById" = current_setting('app.current_user_id', true)
+    AND "groupId" IN (SELECT gm."groupId" FROM "GroupMember" gm WHERE gm."userId" = current_setting('app.current_user_id', true) AND gm."role" = 'ADMIN'));
+CREATE POLICY group_invite_update ON "GroupInvite" FOR UPDATE
+  USING ("groupId" IN (SELECT gm."groupId" FROM "GroupMember" gm WHERE gm."userId" = current_setting('app.current_user_id', true) AND gm."role" = 'ADMIN'))
+  WITH CHECK ("groupId" IN (SELECT gm."groupId" FROM "GroupMember" gm WHERE gm."userId" = current_setting('app.current_user_id', true) AND gm."role" = 'ADMIN'));
+
+-- Push history: group members read it; group admins add to it.
+ALTER TABLE "GroupTemplatePush" ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS group_push_read ON "GroupTemplatePush";
+DROP POLICY IF EXISTS group_push_insert ON "GroupTemplatePush";
+CREATE POLICY group_push_read ON "GroupTemplatePush" FOR SELECT
+  USING ("groupId" IN (SELECT gm."groupId" FROM "GroupMember" gm WHERE gm."userId" = current_setting('app.current_user_id', true)));
+CREATE POLICY group_push_insert ON "GroupTemplatePush" FOR INSERT
+  WITH CHECK ("pushedById" = current_setting('app.current_user_id', true)
+    AND "groupId" IN (SELECT gm."groupId" FROM "GroupMember" gm WHERE gm."userId" = current_setting('app.current_user_id', true) AND gm."role" = 'ADMIN'));
