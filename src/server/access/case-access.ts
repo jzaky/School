@@ -161,3 +161,29 @@ export async function subjectExportDecision(
 export function familyMayBeAutoNotified(sensitivity: Sensitivity) {
   return !SENSITIVE.includes(sensitivity);
 }
+
+/**
+ * Inspection evidence pack (src/server/inspection). Members who may view the pack see sensitive cases
+ * only as aggregate counts and timings, never as a list.
+ */
+export function inspectionAggregatesAllowed(ctx: Pick<Ctx, "isStaff" | "can">): boolean {
+  return ctx.isStaff && ctx.can("inspection.view");
+}
+
+/**
+ * Cases whose reference (number, status and dates; never names, summaries or notes) the member may see in
+ * the evidence pack. Mirrors caseAccess full access through role, assignment, team membership or an active
+ * grant. Break-glass and referrer status-only access do not extend to the evidence pack.
+ */
+export function inspectionReferenceWhere(ctx: Pick<Ctx, "isStaff" | "can" | "membershipId" | "orgId">, sensitivity: "WELLBEING" | "SAFEGUARDING"): Prisma.CaseWhereInput {
+  if (!ctx.isStaff || !ctx.can("inspection.view")) return { id: "none" };
+  const me = ctx.membershipId;
+  const now = new Date();
+  const grant: Prisma.CaseWhereInput = { grants: { some: { membershipId: me, revokedAt: null, OR: [{ expiresAt: null }, { expiresAt: { gt: now } }] } } };
+  if (sensitivity === "SAFEGUARDING") {
+    if (ctx.can("safeguarding.view")) return { orgId: ctx.orgId, sensitivity };
+    return { orgId: ctx.orgId, sensitivity, OR: [{ assigneeId: me }, grant] };
+  }
+  if (ctx.can("cases.wellbeing")) return { orgId: ctx.orgId, sensitivity };
+  return { orgId: ctx.orgId, sensitivity, OR: [{ assigneeId: me }, { participants: { some: { membershipId: me, role: { in: ["ASSIGNEE", "TEAM"] } } } }, grant] };
+}

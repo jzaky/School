@@ -3260,3 +3260,122 @@ model GroupTemplatePush {
 
   @@index([groupId, createdAt])
 }
+
+// ---------------------------------------------------------------------------
+// Inspection evidence pack
+// ---------------------------------------------------------------------------
+
+/// Which evidence heading relates to which area of a regulator's inspection framework.
+/// Seeded with defaults (src/server/inspection/mapping.ts) that the school must check against its
+/// current framework; stored as data so it can be edited without a code change.
+model InspectionMapping {
+  id         String    @id @default(cuid())
+  orgId      String
+  headingKey String
+  framework  Regulator
+  areaEn     String
+  areaAr     String
+  noteEn     String?
+  noteAr     String?
+  sortOrder  Int       @default(0)
+  customized Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([orgId, headingKey, framework])
+  @@index([orgId])
+}
+
+// ---------------------------------------------------------------------------
+// Career events (university visits, fairs, info sessions) and partner resources
+// ---------------------------------------------------------------------------
+
+enum CareerEventKind {
+  UNIVERSITY_VISIT
+  FAIR
+  INFO_SESSION
+}
+
+enum CareerEventStatus {
+  PUBLISHED
+  CANCELLED
+}
+
+enum CareerRegistrationStatus {
+  REGISTERED
+  CANCELLED
+}
+
+model CareerEvent {
+  id                   String            @id @default(cuid())
+  orgId                String
+  kind                 CareerEventKind
+  status               CareerEventStatus @default(PUBLISHED)
+  titleEn              String
+  titleAr              String
+  descEn               String?
+  descAr               String?
+  /// Universities from the catalog (global or the school's own).
+  universityIds        String[]
+  /// Universities typed in by staff when they are not in the catalog.
+  otherUniversities    String[]
+  startsAt             DateTime
+  endsAt               DateTime
+  locationEn           String?
+  locationAr           String?
+  onlineUrl            String?
+  gradeLevels          Int[]
+  capacity             Int?
+  registrationDeadline DateTime?
+  organizerId          String
+  calendarEventId      String?
+  cancelledAt          DateTime?
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+
+  registrations CareerEventRegistration[]
+
+  @@index([orgId, startsAt])
+}
+
+model CareerEventRegistration {
+  id                   String                   @id @default(cuid())
+  orgId                String
+  eventId              String
+  studentId            String
+  status               CareerRegistrationStatus @default(REGISTERED)
+  registeredById       String
+  registeredAt         DateTime                 @default(now())
+  cancelledAt          DateTime?
+  attended             Boolean?
+  attendanceMarkedAt   DateTime?
+  attendanceMarkedById String?
+
+  event CareerEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, studentId])
+  @@index([orgId, studentId])
+}
+
+/// Links to external partner providers shown on the career pages. Clicks are counted in aggregate only.
+model PartnerResource {
+  id          String   @id @default(cuid())
+  orgId       String
+  nameEn      String
+  nameAr      String
+  descEn      String
+  descAr      String
+  category    String
+  url         String
+  /// "student" and/or "parent"
+  audience    String[]
+  active      Boolean  @default(true)
+  /// Generic demo examples, labelled as examples in the UI.
+  isExample   Boolean  @default(false)
+  clickCount  Int      @default(0)
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([orgId, active])
+}

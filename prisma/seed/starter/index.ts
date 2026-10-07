@@ -18,6 +18,8 @@ import { ensureCalendarTemplates } from "@/server/trips/templates";
 import { ensurePlanTemplates } from "@/server/curriculum/review";
 import { ensureGradeTemplate } from "@/server/grades/service";
 import { ensureTemplates as ensureApplicationTemplates } from "@/server/applications/service";
+import { ensureCareerEventTemplates } from "@/server/career-events/templates";
+import { ensureInspectionMapping } from "@/server/inspection/seed";
 import { SERVICES, SERVICE_CATEGORIES } from "../data/services";
 import { FORM_TEMPLATES } from "../data/forms";
 import { WORKFLOW_TEMPLATES } from "../data/workflows";
@@ -235,6 +237,7 @@ export async function installStarterTemplate(db: Db, orgId: string, opts: Starte
   await ensureCalendarTemplates(tx, orgId);
   await ensurePlanTemplates(tx, orgId);
   await ensureApplicationTemplates(tx, orgId);
+  await ensureCareerEventTemplates(tx, orgId);
 
   // --- Career catalogs ------------------------------------------------------------------------------
   if ((await db.aptitudeQuestion.count({ where: { orgId } })) === 0) {
@@ -280,6 +283,8 @@ export async function installStarterTemplate(db: Db, orgId: string, opts: Starte
     await db.crossBorderTransfer.createMany({ data: STARTER_TRANSFERS.map((t) => ({ orgId, ...t, approved: false })) });
     created("crossBorderTransfers", STARTER_TRANSFERS.length);
   }
+  // Inspection evidence mapping (suggested defaults the school checks against its current framework).
+  created("inspectionMapping", await ensureInspectionMapping(db, orgId));
 
   // --- Curricula and course catalog ----------------------------------------------------------------
   if (opts.curricula.length && org.curricula.length === 0) await db.organization.update({ where: { id: orgId }, data: { curricula: opts.curricula } });

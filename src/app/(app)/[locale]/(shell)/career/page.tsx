@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { Compass, Map as MapIcon } from "lucide-react";
+import { Compass, Handshake, Map as MapIcon } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { fmtRelative } from "@/lib/format";
@@ -23,6 +23,9 @@ export default async function CareerPage({ searchParams }: { searchParams: Promi
   const t = await getTranslations("career");
   const prefs = await formatPrefs(ctx);
   if (ctx.isStudent && ctx.membership.student) {
+    const tp = await getTranslations("partners");
+    const tn = await getTranslations("nav");
+    const partners = await ctx.db.partnerResource.findMany({ where: { active: true, audience: { has: "student" } }, orderBy: { nameEn: "asc" }, take: 3 });
     return (
       <PageBody>
         <PageHeader
@@ -32,6 +35,9 @@ export default async function CareerPage({ searchParams }: { searchParams: Promi
             <>
               <Button asChild variant="outline">
                 <Link href="/career/explore">{t("explorer")}</Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/career/events">{tn("careerEvents")}</Link>
               </Button>
               {ctx.can("pathways.view") && (
                 <Button asChild data-testid="open-pathway-planning">
@@ -51,6 +57,32 @@ export default async function CareerPage({ searchParams }: { searchParams: Promi
           </Link>
         )}
         <CareerOverview ctx={ctx} prefs={prefs} studentId={ctx.membership.student.id} mode="student" />
+        {partners.length > 0 && (
+          <section className="rounded-xl border bg-card p-5 shadow-xs" data-testid="career-partners">
+            <div className="mb-3 flex items-start justify-between gap-3">
+              <div className="flex items-start gap-2.5">
+                <Handshake className="mt-0.5 size-4 text-muted-foreground" />
+                <div>
+                  <h2 className="text-sm font-semibold">{tp("cardTitle")}</h2>
+                  <p className="text-xs text-muted-foreground">{tp("cardBody")}</p>
+                </div>
+              </div>
+              <Link href="/career/resources" className="shrink-0 text-xs font-medium text-brand">
+                {tp("seeAll")}
+              </Link>
+            </div>
+            <ul className="grid gap-2 sm:grid-cols-3">
+              {partners.map((p) => (
+                <li key={p.id} className="min-w-0 rounded-lg border p-3">
+                  <a href={`/api/career/resources/${p.id}/go`} target="_blank" rel="noopener noreferrer" className="block text-sm font-medium hover:text-brand">
+                    {pick(ctx.locale, p.nameEn, p.nameAr)}
+                  </a>
+                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{pick(ctx.locale, p.descEn, p.descAr)}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </PageBody>
     );
   }

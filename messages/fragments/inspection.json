@@ -1,0 +1,206 @@
+{
+  "nav": {
+    "inspection": ["Inspection evidence", "أدلة التفتيش"],
+    "careerEvents": ["University fairs and visits", "المعارض والزيارات الجامعية"],
+    "partnerResources": ["Partner resources", "موارد الشركاء"]
+  },
+  "inspection": {
+    "title": ["Inspection evidence pack", "ملف أدلة التفتيش"],
+    "subtitle": [
+      "Evidence commonly requested in inspections, assembled from Horizon for the dates you choose.",
+      "الأدلة التي تُطلب عادةً في عمليات التفتيش، مجمّعة من Horizon للفترة التي تختارها."
+    ],
+    "disclaimer": [
+      "This pack collects records the school keeps in Horizon. It does not state or certify compliance with any inspection framework. Check your regulator's current framework before relying on it.",
+      "يجمع هذا الملف السجلات التي تحتفظ بها المدرسة في Horizon، ولا يثبت أو يشهد بالامتثال لأي إطار تفتيش. راجع الإطار المعتمد حاليًا لدى الجهة التنظيمية قبل الاعتماد عليه."
+    ],
+    "aggregatesOnly": [
+      "Safeguarding and wellbeing figures are counts and timings only. No names or case details are included.",
+      "أرقام الحماية والرفاه أعداد وأوقات فقط، ولا تتضمن أي أسماء أو تفاصيل حالات."
+    ],
+    "from": ["From", "من"],
+    "to": ["To", "إلى"],
+    "apply": ["Update", "تحديث"],
+    "presets": {
+      "label": ["Period", "الفترة"],
+      "last30": ["Last 30 days", "آخر 30 يومًا"],
+      "last90": ["Last 90 days", "آخر 90 يومًا"],
+      "year": ["This academic year", "العام الدراسي الحالي"],
+      "custom": ["Custom dates", "تواريخ مخصصة"]
+    },
+    "exportPdf": ["Download PDF", "تنزيل PDF"],
+    "exportCsv": ["Download CSV", "تنزيل CSV"],
+    "exportHint": [
+      "Every download is recorded in the audit log.",
+      "يُسجَّل كل تنزيل في سجل التدقيق."
+    ],
+    "headingPrefix": ["Evidence commonly requested in inspections", "أدلة تُطلب عادةً في عمليات التفتيش"],
+    "headings": {
+      "safeguarding": ["Safeguarding", "حماية الطفل"],
+      "wellbeing": ["Wellbeing and counseling", "الرفاه والإرشاد"],
+      "parents": ["Parent communication and engagement", "التواصل مع أولياء الأمور ومشاركتهم"],
+      "careers": ["Student support and careers guidance", "دعم الطلاب والتوجيه المهني"],
+      "attendance": ["Attendance and academics", "الحضور والتحصيل الأكاديمي"],
+      "compliance": ["Policies and compliance records", "السياسات وسجلات الامتثال"]
+    },
+    "metrics": {
+      "opened": ["Cases opened", "الحالات المفتوحة"],
+      "highConcern": ["High or immediate concern level", "مستوى قلق مرتفع أو خطر فوري"],
+      "medianFirstResponse": ["Median time to first response", "متوسط الوقت حتى أول استجابة"],
+      "respondedWithin24h": ["First response within 24 hours", "أول استجابة خلال 24 ساعة"],
+      "awaitingFirstResponse": ["Opened without a recorded response yet", "مفتوحة دون استجابة مسجلة بعد"],
+      "closedInRange": ["Resolved or closed in this period", "محلولة أو مغلقة في هذه الفترة"],
+      "openNow": ["Open now", "مفتوحة حاليًا"],
+      "ledByDsl": ["Led by the DSL or deputy", "يتولاها مسؤول الحماية أو نائبه"],
+      "dslCount": ["Designated Safeguarding Leads", "مسؤولو حماية الطفل المعيّنون"],
+      "deputyCount": ["Deputy safeguarding leads", "نواب مسؤول الحماية"],
+      "externalReferrals": ["External agency referrals", "الإحالات إلى جهات خارجية"],
+      "familyDecisions": ["Recorded family notification decisions", "قرارات إبلاغ الأسرة المسجلة"],
+      "training": ["Safeguarding training records", "سجلات التدريب على الحماية"],
+      "counselingHeld": ["Counseling sessions held", "جلسات الإرشاد المنعقدة"],
+      "counselingBooked": ["Counseling sessions booked", "جلسات الإرشاد المحجوزة"],
+      "messagesDelivered": ["Messages delivered (email, SMS, WhatsApp)", "الرسائل المرسلة (بريد إلكتروني، رسائل نصية، واتساب)"],
+      "inAppToParents": ["In-app notifications to parents", "الإشعارات داخل التطبيق لأولياء الأمور"],
+      "announcements": ["Announcements to families", "الإعلانات الموجهة للأسر"],
+      "parentMeetings": ["Parent meetings", "اجتماعات أولياء الأمور"],
+      "parentRequests": ["Requests submitted by parents", "الطلبات المقدمة من أولياء الأمور"],
+      "requestTurnaround": ["Median request turnaround", "متوسط مدة إنجاز الطلبات"],
+      "requestsOnTime": ["Completed within the service time", "المنجزة ضمن مدة الخدمة"],
+      "assessmentsCompleted": ["Career assessments completed", "تقييمات الميول المهنية المكتملة"],
+      "plansApproved": ["University plans approved", "الخطط الجامعية المعتمدة"],
+      "guidanceSessions": ["Career guidance sessions held", "جلسات التوجيه المهني المنعقدة"],
+      "applicationsByStage": ["University applications by stage", "طلبات الالتحاق بالجامعات حسب المرحلة"],
+      "applicationsSubmitted": ["Applications submitted in this period", "الطلبات المقدمة في هذه الفترة"],
+      "careerEvents": ["University fairs, visits and sessions held", "المعارض والزيارات والجلسات الجامعية المنعقدة"],
+      "careerEventAttendance": ["Registered students who attended", "الطلاب المسجلون الذين حضروا"],
+      "attendanceRate": ["Attendance rate", "نسبة الحضور"],
+      "attendanceRecords": ["Attendance records", "سجلات الحضور"],
+      "unexcusedAbsences": ["Unexcused absences", "الغياب بدون عذر"],
+      "assessmentsPublished": ["Assessments published", "التقييمات المنشورة"],
+      "gradesRecorded": ["Grades recorded for them", "الدرجات المسجلة لها"],
+      "processingPurposes": ["Data processing purposes recorded", "أغراض معالجة البيانات المسجلة"],
+      "consentRecords": ["Consent records", "سجلات الموافقة"],
+      "retentionPolicies": ["Retention policies", "سياسات الاحتفاظ بالبيانات"],
+      "retentionLastRun": ["Retention last applied", "آخر تطبيق لسياسات الاحتفاظ"],
+      "transfersApproved": ["Cross-border transfers approved", "عمليات النقل خارج الدولة المعتمدة"],
+      "dataRequests": ["Data subject requests received", "طلبات أصحاب البيانات المستلمة"],
+      "dataRequestsOnTime": ["Data subject requests completed on time", "طلبات أصحاب البيانات المنجزة في موعدها"],
+      "incidents": ["Data incidents logged", "حوادث البيانات المسجلة"],
+      "auditEvents": ["Audit log entries", "إدخالات سجل التدقيق"],
+      "sensitiveViewsAudited": ["Audited views of sensitive records", "عمليات الاطلاع المدققة على السجلات الحساسة"],
+      "packExports": ["Evidence pack downloads", "مرات تنزيل ملف الأدلة"]
+    },
+    "breakdown": {
+      "NEW": ["New", "جديدة"],
+      "OPEN": ["Open", "مفتوحة"],
+      "IN_PROGRESS": ["In progress", "قيد المعالجة"],
+      "WAITING": ["Waiting", "بالانتظار"],
+      "RESOLVED": ["Resolved", "محلولة"],
+      "CLOSED": ["Closed", "مغلقة"],
+      "COMPLETED": ["Held", "منعقدة"],
+      "CONFIRMED": ["Booked", "محجوزة"],
+      "SCHEDULED": ["Scheduled", "مجدولة"],
+      "NO_SHOW": ["Did not attend", "لم يحضر"],
+      "CANCELLED": ["Cancelled", "ملغاة"],
+      "EMAIL": ["Email", "بريد إلكتروني"],
+      "SMS": ["SMS", "رسائل نصية"],
+      "WHATSAPP": ["WhatsApp", "واتساب"],
+      "IN_APP": ["In app", "داخل التطبيق"],
+      "RESEARCHING": ["Researching", "بحث"],
+      "SHORTLISTED": ["Shortlisted", "قائمة مختصرة"],
+      "PREPARING": ["Preparing", "قيد الإعداد"],
+      "SUBMITTED": ["Submitted", "مقدّم"],
+      "INTERVIEW": ["Interview", "مقابلة"],
+      "OFFER": ["Offer", "عرض قبول"],
+      "WAITLISTED": ["Waitlisted", "قائمة انتظار"],
+      "ACCEPTED": ["Accepted", "مقبول"],
+      "ENROLLED": ["Enrolled", "مسجّل"],
+      "REJECTED": ["Not offered", "لم يُقبل"],
+      "PRESENT": ["Present", "حاضر"],
+      "LATE": ["Late", "متأخر"],
+      "EXCUSED": ["Excused", "غياب بعذر"],
+      "ABSENT": ["Absent", "غائب"],
+      "GRANTED": ["Granted", "موافقة"],
+      "WITHDRAWN": ["Withdrawn", "مسحوبة"],
+      "REFUSED": ["Refused", "مرفوضة"],
+      "PENDING": ["Pending", "معلقة"]
+    },
+    "notes": {
+      "notRecorded": ["Not recorded in Horizon", "غير مسجل في Horizon"],
+      "snapshot": ["As of today", "حتى اليوم"],
+      "noneInRange": ["None in this period", "لا يوجد في هذه الفترة"]
+    },
+    "units": {
+      "hours": ["{n} h", "{n} ساعة"],
+      "days": ["{n} days", "{n} يوم"],
+      "percent": ["{n}%", "{n}%"],
+      "ratio": ["{value} of {of}", "{value} من {of}"]
+    },
+    "mapping": {
+      "title": ["Related framework areas", "مجالات الإطار ذات الصلة"],
+      "hint": [
+        "A suggested mapping kept as editable data. The school must check its regulator's current framework.",
+        "ربط مقترح محفوظ كبيانات قابلة للتعديل. على المدرسة مراجعة الإطار المعتمد حاليًا لدى الجهة التنظيمية."
+      ],
+      "yours": ["Your regulator", "الجهة التنظيمية لمدرستك"],
+      "customized": ["Edited by the school", "عدّلته المدرسة"],
+      "frameworks": {
+        "KHDA": ["KHDA (Dubai)", "هيئة المعرفة والتنمية البشرية في دبي"],
+        "ADEK": ["ADEK (Abu Dhabi)", "دائرة التعليم والمعرفة في أبوظبي"],
+        "SPEA": ["SPEA (Sharjah)", "هيئة الشارقة للتعليم الخاص"],
+        "MOE": ["Ministry of Education", "وزارة التربية والتعليم"]
+      }
+    },
+    "references": {
+      "show": ["Show case references", "عرض أرقام الحالات"],
+      "hide": ["Hide case references", "إخفاء أرقام الحالات"],
+      "title": ["Case references", "أرقام الحالات"],
+      "hint": [
+        "Only cases you can open are listed, by number and dates. Viewing them is recorded in the audit log. They are never included in downloads.",
+        "تظهر فقط الحالات التي يحق لك فتحها، بأرقامها وتواريخها. يُسجَّل الاطلاع عليها في سجل التدقيق، ولا تُضمَّن أبدًا في التنزيلات."
+      ],
+      "notAllowed": [
+        "Case references are not shown for your role. The figures above are aggregates only.",
+        "لا تظهر أرقام الحالات لدورك. الأرقام أعلاه إجمالية فقط."
+      ],
+      "number": ["Case", "الحالة"],
+      "status": ["Status", "الحالة الراهنة"],
+      "opened": ["Opened", "تاريخ الفتح"],
+      "firstResponse": ["First response", "أول استجابة"],
+      "closed": ["Closed", "تاريخ الإغلاق"],
+      "none": ["No cases in this period.", "لا توجد حالات في هذه الفترة."]
+    },
+    "pdf": {
+      "period": ["Period", "الفترة"],
+      "generated": ["Generated", "تاريخ الإنشاء"],
+      "generatedBy": ["Generated by", "أنشأه"],
+      "page": ["Page", "صفحة"]
+    },
+    "error": {
+      "INVALID_RANGE": ["Choose a start date before the end date, at most 400 days apart.", "اختر تاريخ بداية يسبق تاريخ النهاية، وبفارق لا يتجاوز 400 يوم."],
+      "generic": ["The evidence pack could not be built. Try again.", "تعذّر إنشاء ملف الأدلة. حاول مرة أخرى."]
+    }
+  },
+  "access": {
+    "perms": {
+      "inspection": {
+        "view": {
+          "label": ["View the inspection evidence pack", "عرض ملف أدلة التفتيش"],
+          "help": [
+            "See and download school-wide evidence for inspections. Sensitive cases appear only as counts.",
+            "الاطلاع على أدلة المدرسة للتفتيش وتنزيلها. تظهر الحالات الحساسة كأعداد فقط."
+          ]
+        }
+      },
+      "career": {
+        "partners": {
+          "label": ["Manage partner resources", "إدارة موارد الشركاء"],
+          "help": [
+            "Add and change the external partner links students and parents see on the career pages.",
+            "إضافة روابط الشركاء الخارجيين التي يراها الطلاب وأولياء الأمور في صفحات التوجيه المهني وتعديلها."
+          ]
+        }
+      }
+    }
+  }
+}

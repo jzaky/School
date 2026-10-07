@@ -1,0 +1,26 @@
+{
+  "guide": {
+    "steps": {
+      "universityFairs": {
+        "title": ["Register for a university fair", "سجّل في معرض جامعي"],
+        "body": ["See visits and fairs for your grade and save a place.", "اطّلع على الزيارات والمعارض لصفك واحجز مقعدًا."]
+      },
+      "universityFairsParent": {
+        "title": ["University fairs for your children", "المعارض الجامعية لأبنائك"],
+        "body": ["Register Adam for a visit or cancel with one tap.", "سجّل آدم في زيارة أو ألغِ التسجيل بنقرة واحدة."]
+      },
+      "fairsManage": {
+        "title": ["Run university visits and fairs", "نظّم الزيارات والمعارض الجامعية"],
+        "body": ["Create an event, watch places fill and mark attendance.", "أنشئ فعالية وتابع امتلاء المقاعد وسجّل الحضور."]
+      },
+      "partnerResources": {
+        "title": ["Share partner resources", "شارك موارد الشركاء"],
+        "body": ["Links to outside programs, with click counts in total only.", "روابط لبرامج خارجية مع عدد النقرات الإجمالي فقط."]
+      },
+      "inspectionPack": {
+        "title": ["Build the inspection evidence pack", "أنشئ ملف أدلة التفتيش"],
+        "body": ["Choose dates and download a bilingual PDF or CSV.", "اختر الفترة ونزّل ملف PDF أو CSV ثنائي اللغة."]
+      }
+    }
+  }
+}

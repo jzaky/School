@@ -71,6 +71,9 @@ export async function calendarItems(ctx: Ctx, from: Date, to: Date, scope: CalSc
       events = events.filter((e) => !hidden.has(e.id));
     }
     const tripHref = new Map(trips.map((tr) => [tr.calendarEventId, `/trips/${tr.id}`]));
+    // University fairs and visits open their event page.
+    const careerEvents = await db.careerEvent.findMany({ where: { orgId, calendarEventId: { in: events.map((e) => e.id) } }, select: { id: true, calendarEventId: true } });
+    for (const ce of careerEvents) tripHref.set(ce.calendarEventId, `/career/events/${ce.id}`);
     for (const e of events) {
       const kind: CalKind = e.kind === "DEADLINE" ? "deadline" : "event";
       if (!kinds.includes(kind)) continue;
