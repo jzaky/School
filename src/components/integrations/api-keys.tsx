@@ -57,7 +57,7 @@ export function CodeBlock({ code, testId }: { code: string; testId?: string }) {
     }
   };
   return (
-    <div className="relative min-w-0 rounded-lg border bg-muted/40" data-testid={testId}>
+    <div dir="ltr" className="relative min-w-0 rounded-lg border bg-muted/40" data-testid={testId}>
       <Button type="button" variant="ghost" size="icon" className="absolute end-1 top-1 size-7" onClick={copy} aria-label={t("copy")}>
         {copied ? <Check className="size-3.5 text-success" /> : <Copy className="size-3.5" />}
       </Button>

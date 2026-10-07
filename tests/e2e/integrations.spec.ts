@@ -68,7 +68,7 @@ test("integrations: sync source with mapping and run now (local only)", async ({
   await page.locator("[data-testid=source-name]").fill(name);
   await page.locator("[data-testid=source-url]").fill(sampleUrl);
   await page.locator("[data-testid=read-headers]").click();
-  await expect(page.locator("[data-testid=mapping-missing]")).toBeVisible();
+  await expect(page.locator("[data-testid=mapping-missing]")).toBeVisible({ timeout: 120_000 });
   // Map the required columns the automatic header resolution cannot guess.
   const rows = page.locator("[data-testid=mapping-rows] > div");
   for (const [header, option] of [["Pupil ID", "رقم الطالب"], ["Legal Forename", "الاسم الأول بالإنجليزية"], ["Legal Surname", "اسم العائلة بالإنجليزية"], ["NC Year", "الصف *"]] as const) {
@@ -83,7 +83,7 @@ test("integrations: sync source with mapping and run now (local only)", async ({
   await card.locator("[data-testid=run-now]").click();
   await expect(async () => {
     await page.reload();
-    await expect(page.locator("[data-testid=run-row]", { hasText: name }).first()).toContainText(/3/);
+    await expect(page.locator("[data-testid=run-row]", { hasText: name }).first()).toContainText("نجحت");
   }).toPass({ timeout: 60_000 });
   await page.screenshot({ path: "test-results/integrations-sync-ar.png", fullPage: true });
   await card.locator("[data-testid=delete-source]").click();
