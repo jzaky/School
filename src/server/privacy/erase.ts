@@ -252,7 +252,7 @@ export async function applyErasure(tx: TenantTx, orgId: string, subject: Subject
     } else if (o.model === "Submission") count = (await tx.submission.updateMany({ where, data: { data: {} } })).count;
     else if (o.model === "TimelineEvent") count = (await tx.timelineEvent.updateMany({ where, data: { bodyEn: null, bodyAr: null, data: Prisma.DbNull } })).count;
     else if (o.model === "StaffProfile") count = (await tx.staffProfile.updateMany({ where, data: { phone: null, bioEn: null, bioAr: null, officeEn: null, officeAr: null } })).count;
-    else if (o.model === "DataSubjectRequest") count = (await tx.dataSubjectRequest.updateMany({ where, data: { subjectName: `Erased (${subject.reference})`, requesterName: "Erased", detailsEn: null } })).count;
+    else if (o.model === "DataSubjectRequest") count = (await tx.dataSubjectRequest.updateMany({ where, data: { subjectName: `Erased (${subject.reference})`, requesterName: "Erased / محذوف", detailsEn: null } })).count;
     record(o, count);
   }
   const deleteOrder = ["AppointmentAttendee", "Appointment", "Task", "TimelineEvent", "Message", "Notification", "NotificationPreference", "SavedView", "FormDraft", "Submission", "Document"];

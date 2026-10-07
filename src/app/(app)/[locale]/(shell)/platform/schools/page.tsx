@@ -42,7 +42,7 @@ export default async function PlatformSchoolsPage() {
             {schools.map((s) => {
               const blocked = s.isDemo ? t("blockedDemo") : s.id === ctx.orgId ? t("blockedCurrent") : null;
               return (
-                <li key={s.id} className="flex flex-col gap-2 px-5 py-3.5 sm:flex-row sm:items-center sm:justify-between" data-testid="platform-school">
+                <li key={s.id} className="flex flex-col gap-2 px-5 py-3.5 sm:flex-row sm:items-center sm:justify-between" data-testid="platform-school" data-slug={s.slug}>
                   <div className="min-w-0">
                     <p className="flex flex-wrap items-center gap-2 text-sm font-medium">
                       {pick(ctx.locale, s.nameEn, s.nameAr)}

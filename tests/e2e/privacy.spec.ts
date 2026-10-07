@@ -121,8 +121,28 @@ test("platform schools: only platform admins, demo school protected", async ({ b
   if (!process.env.E2E_PLATFORM_ADMIN) return;
   const a = await loginAs(browser, "admin", "en");
   await go(a, "/platform/schools");
-  const demo = a.page.getByTestId("platform-school").filter({ hasText: "horizon" });
+  const demo = a.page.locator("[data-testid=platform-school][data-slug=horizon]");
   await expect(demo.getByRole("button")).toBeDisabled();
+  // Delete a throwaway school: dry run, typed slug, gone.
+  if (process.env.MIGRATION_DATABASE_URL) {
+    const { PrismaClient } = await import("@prisma/client");
+    const owner = new PrismaClient({ datasourceUrl: process.env.MIGRATION_DATABASE_URL });
+    const slug = `e2e-leaving-${Date.now()}`;
+    await owner.organization.create({ data: { slug, nameEn: "E2E Leaving School", nameAr: "مدرسة مغادرة" } });
+    await a.page.reload();
+    const row = a.page.locator(`[data-testid=platform-school][data-slug=${slug}]`);
+    await row.getByTestId("school-dry-run").click();
+    await expect(a.page.getByTestId("school-report")).toBeVisible();
+    if (shots) await a.page.screenshot({ path: `${shots}/platform-dry-run-en.png` });
+    await a.page.getByTestId("school-delete-continue").click();
+    await expect(a.page.getByTestId("school-delete-confirm")).toBeDisabled();
+    await a.page.getByTestId("school-delete-input").fill(slug);
+    await a.page.getByTestId("school-delete-confirm").click();
+    await expect(row).toHaveCount(0);
+    expect(await owner.organization.count({ where: { slug } })).toBe(0);
+    expect(await owner.platformAuditEvent.count({ where: { action: "school.delete", createdAt: { gte: new Date(Date.now() - 600_000) } } })).toBeGreaterThan(0);
+    await owner.$disconnect();
+  }
   if (shots) await a.page.screenshot({ path: `${shots}/platform-en.png`, fullPage: true });
   expectNoErrors(a);
   await a.context.close();
