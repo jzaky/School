@@ -32,7 +32,7 @@ export async function renderEvidencePdf(pack: EvidencePack, input: { letterhead:
   };
   let page = 1;
   const footer = () => {
-    const fy = H - 46;
+    const fy = H - 58;
     doc.moveTo(M, fy).lineTo(W - M, fy).lineWidth(0.5).strokeColor("#E5E7EB").stroke();
     drawLtr(doc, `${en.disclaimer} ${en.pdf.page} ${page}`, M, fy + 6, inner / 2 - 10, { size: 6.5, color: MUTED });
     drawRtl(doc, `${ar.disclaimer} ${ar.pdf.page} ${page}`, W / 2 + 10, fy + 2, inner / 2 - 10, { size: 6.5, color: MUTED });
@@ -54,14 +54,21 @@ export async function renderEvidencePdf(pack: EvidencePack, input: { letterhead:
   drawLtr(doc, `${en.pdf.period}: ${periodText(pack, "en")}`, M, y, half, { size: 9, color: MUTED });
   drawRtl(doc, `${ar.pdf.period}: ${periodText(pack, "ar")}`, W / 2 + 30, y - 4, half, { size: 9, color: MUTED });
   y += 14;
-  drawLtr(doc, `${en.pdf.generated}: ${fmtGen("en")}, ${en.pdf.generatedBy}: ${input.generatedBy.en}`, M, y, half, { size: 8, color: MUTED });
-  drawRtl(doc, `${ar.pdf.generated}: ${fmtGen("ar")}، ${ar.pdf.generatedBy}: ${input.generatedBy.ar}`, W / 2 + 30, y - 4, half, { size: 8, color: MUTED });
-  y += 22;
-  // Disclaimer box
-  doc.rect(M, y, inner, 46).fill("#FFF8E6");
-  drawLtr(doc, `${en.disclaimer} ${en.aggregatesOnly}`, M + 8, y + 6, inner / 2 - 16, { size: 7.5, color: "#6B4E00" });
-  drawRtl(doc, `${ar.disclaimer} ${ar.aggregatesOnly}`, W / 2 + 8, y + 2, inner / 2 - 16, { size: 7.5, color: "#6B4E00" });
-  y += 58;
+  const g1 = drawLtr(doc, `${en.pdf.generated}: ${fmtGen("en")}, ${en.pdf.generatedBy}: ${input.generatedBy.en}`, M, y, half, { size: 8, color: MUTED });
+  const g2 = drawRtl(doc, `${ar.pdf.generated}: ${fmtGen("ar")}، ${ar.pdf.generatedBy}: ${input.generatedBy.ar}`, W / 2 + 30, y - 4, half, { size: 8, color: MUTED });
+  y = Math.max(g1, g2 - 4) + 10;
+  // Disclaimer box, sized to its text.
+  const boxW = inner / 2 - 16;
+  const discEn = `${en.disclaimer} ${en.aggregatesOnly}`;
+  const discAr = `${ar.disclaimer} ${ar.aggregatesOnly}`;
+  doc.font(FONTS.regular).fontSize(7.5);
+  const hEn = doc.heightOfString(discEn, { width: boxW, lineGap: 7.5 * 0.45 });
+  const hAr = doc.heightOfString(discAr, { width: boxW }) * 1.45;
+  const boxH = Math.max(hEn, hAr) + 16;
+  doc.rect(M, y, inner, boxH).fill("#FFF8E6");
+  drawLtr(doc, discEn, M + 8, y + 6, boxW, { size: 7.5, color: "#6B4E00" });
+  drawRtl(doc, discAr, W / 2 + 8, y + 2, boxW, { size: 7.5, color: "#6B4E00" });
+  y += boxH + 12;
 
   const C = { labelEn: M, valEn: M + 168, valAr: M + 262, labelAr: M + 345 };
   const W_LABEL = 160;
@@ -78,7 +85,7 @@ export async function renderEvidencePdf(pack: EvidencePack, input: { letterhead:
     drawRtl(doc, headingLabel(s.key, "ar"), W / 2 + 8, y + 10, inner / 2 - 16, { size: 11, font: FONTS.bold, color: NAVY });
     y += 40;
     for (const m of s.metrics) {
-      if (y > H - 80) y = newPage();
+      if (y > H - 92) y = newPage();
       const top = y;
       const a = drawLtr(doc, metricLabel(m.key, "en"), C.labelEn, top, W_LABEL, { size: 8.5 });
       const b = drawLtr(doc, metricValue(m, "en"), C.valEn, top, W_VAL, { size: 8.5, font: FONTS.semibold });
@@ -96,9 +103,9 @@ export async function renderEvidencePdf(pack: EvidencePack, input: { letterhead:
     // Related framework areas (the school's own regulator; all four for other regulators).
     const rows = pack.regulator === "OTHER" ? s.mapping : s.mapping.filter((r) => r.framework === pack.regulator);
     for (const r of rows) {
-      if (y > H - 80) y = newPage();
+      if (y > H - 92) y = newPage();
       const e = drawLtr(doc, `${en.mapping.title} (${frameworkLabel(r.framework, "en")}): ${r.areaEn}`, M, y + 2, inner / 2 - 10, { size: 7, color: NAVY });
-      const f = drawRtl(doc, `${ar.mapping.title} (${frameworkLabel(r.framework, "ar")}): ${r.areaAr}`, W / 2 + 10, y - 1, inner / 2 - 10, { size: 7, color: NAVY });
+      const f = drawRtl(doc, `${ar.mapping.title}، ${frameworkLabel(r.framework, "ar")}: ${r.areaAr}`, W / 2 + 10, y - 1, inner / 2 - 10, { size: 7, color: NAVY });
       y = Math.max(e, f - 3) + 2;
     }
     y += 12;

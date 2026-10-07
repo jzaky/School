@@ -49,7 +49,7 @@
     "registeredCount": ["{count, plural, =0 {No one registered yet} one {# registered} other {# registered}}", "{count, plural, =0 {لم يسجل أحد بعد} one {مسجّل واحد} two {مسجّلان} few {# مسجّلين} many {# مسجّلًا} other {# مسجّل}}"],
     "placesLeft": ["{count, plural, one {# place left} other {# places left}}", "{count, plural, one {مقعد واحد متبقٍ} two {مقعدان متبقيان} few {# مقاعد متبقية} many {# مقعدًا متبقيًا} other {# مقعد متبقٍ}}"],
     "registerBy": ["Register by {date}", "سجّل قبل {date}"],
-    "grades": ["Grades {grades}", "الصفوف {grades}"],
+    "grades": ["Grades: {grades}", "الصفوف: {grades}"],
     "online": ["Online", "عبر الإنترنت"],
     "joinOnline": ["Join online", "الانضمام عبر الإنترنت"],
     "universities": ["Universities", "الجامعات"],

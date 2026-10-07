@@ -57,7 +57,8 @@ export function breakdownText(m: Metric, loc: Loc): string {
 export function periodText(pack: Pick<EvidencePack, "from" | "to">, loc: Loc) {
   // `to` is exclusive (the start of the day after the last day).
   const last = new Date(new Date(pack.to).getTime() - 1).toISOString();
-  return `${day(pack.from, loc)} - ${day(last, loc)}`;
+  // Arabic reads "from ... to ..." so the two dates never get reordered by the bidi algorithm.
+  return loc === "ar" ? `من ${day(pack.from, loc)} إلى ${day(last, loc)}` : `${day(pack.from, loc)} - ${day(last, loc)}`;
 }
 
 const cell = (v: unknown) => {

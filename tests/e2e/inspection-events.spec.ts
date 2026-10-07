@@ -26,7 +26,7 @@ for (const locale of LOCALES) {
     expect(pdf.headers()["content-type"]).toContain("application/pdf");
 
     // Case references: wellbeing yes (role), safeguarding no.
-    await s.page.getByTestId("toggle-refs-wellbeing").click();
+    await go(s, `/admin/inspection${new URL((await s.page.getByTestId("toggle-refs-wellbeing").getAttribute("href")) as string, "http://x").search}`);
     await expect(s.page.getByTestId("refs-wellbeing").getByTestId("case-ref").first()).toBeVisible();
     await expect(s.page.getByTestId("toggle-refs-safeguarding")).toHaveCount(0);
     expectNoErrors(s);

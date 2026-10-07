@@ -145,8 +145,8 @@
       "yours": ["Your regulator", "الجهة التنظيمية لمدرستك"],
       "customized": ["Edited by the school", "عدّلته المدرسة"],
       "frameworks": {
-        "KHDA": ["KHDA (Dubai)", "هيئة المعرفة والتنمية البشرية (دبي)"],
-        "ADEK": ["ADEK (Abu Dhabi)", "دائرة التعليم والمعرفة (أبوظبي)"],
+        "KHDA": ["KHDA (Dubai)", "هيئة المعرفة والتنمية البشرية في دبي"],
+        "ADEK": ["ADEK (Abu Dhabi)", "دائرة التعليم والمعرفة في أبوظبي"],
         "SPEA": ["SPEA (Sharjah)", "هيئة الشارقة للتعليم الخاص"],
         "MOE": ["Ministry of Education", "وزارة التربية والتعليم"]
       }

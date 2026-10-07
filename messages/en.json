@@ -7826,7 +7826,7 @@
     "registeredCount": "{count, plural, =0 {No one registered yet} one {# registered} other {# registered}}",
     "placesLeft": "{count, plural, one {# place left} other {# places left}}",
     "registerBy": "Register by {date}",
-    "grades": "Grades {grades}",
+    "grades": "Grades: {grades}",
     "online": "Online",
     "joinOnline": "Join online",
     "universities": "Universities",
