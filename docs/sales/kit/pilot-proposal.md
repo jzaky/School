@@ -31,17 +31,17 @@ The school may swap any of these for another service from the catalog (29 servic
 - **Documents and letters:** bilingual PDF letters (English and Arabic) with the school's logo and seal, family document sharing, signed download links.
 - **Meetings:** booking against real availability, reminders and calendar files.
 - **Cases and safeguarding:** referrals, case pages, restricted safeguarding queue for the Designated Safeguarding Lead, recorded decisions on informing families.
-- **Notifications:** in-app and email, in English and Arabic.
-- **Analytics:** requests, time to close, share closed within target, meetings held. Wellbeing and safeguarding records are always excluded.
-- **Administration:** setup wizard, Import center, roles and access, invitations and family join code, compliance settings, audit log.
+- **Notifications:** in-app and email, in English and Arabic. Parents and students can also install Horizon on their phone home screen and turn on app alerts; WhatsApp messages can be switched on per notification type once the school's WhatsApp sender is approved, and each parent opts in with their own number.
+- **Analytics:** requests, time to close, share closed within target, meetings held, and a Pilot measures panel for the principal (staff active, parent adoption, median days to issue a letter, requests closed on time, meetings booked) for any chosen period, with CSV download. Wellbeing and safeguarding records are always excluded.
+- **Administration:** setup wizard, Import center, roles and access, invitations and family join code, compliance settings (including personal data export and erasure), audit log.
 
 Other modules (grades, timetable, career guidance, university planning and more) can be switched on during the pilot if the school wants them, but they are not part of the success measures unless agreed in writing.
 
 ### Not in scope
 
-- Automatic sync with the school's existing student information system. Data comes in through the Import center (CSV or XLSX exports).
-- SMS and messaging-app delivery (planned). Notifications are in-app and email.
-- Fee collection or payments.
+- Connecting the school's student information system is optional. Data comes in through the Import center (CSV or XLSX exports); if the school's system can publish a scheduled export over HTTPS or call an API, Horizon can also read it on a schedule or receive it through the Horizon API. Setting this up with the school's system supplier is outside the pilot measures.
+- SMS delivery (not built). Notifications are in-app, email, phone app alerts and, where the school enables it, WhatsApp.
+- Fee collection or payments. Horizon can show families a link to the school's own fee payment page, but processes no payments.
 
 ## 3. Timeline
 
@@ -84,10 +84,10 @@ Agreed before week 1. Baselines come from the school's current process (a short 
 
 | Measure | Baseline | Target | How Horizon measures it |
 |---|---|---|---|
-| Days to issue a school document | [baseline] | [target] | Analytics: average time to close per service (Slowest services panel), and each request's submitted and completed times on its request page. |
+| Days to issue a school document | [baseline] | [target] | Analytics: Pilot measures, "Median days to issue a letter", plus each request's submitted and completed times on its request page. |
 | Share of requests closed within target | [baseline] | [target] % | Analytics: Service levels, "Within target" (requests closed before their service target, last 7, 30 or 90 days). |
-| Parent adoption | [baseline] | [target] % of families | Accepted invitations on School admin > Invitations, plus families approved through Join requests, divided by the number of families imported. |
-| Staff active weekly | [baseline] | [target] % of staff | Audit log export (CSV with time and person): staff with at least one recorded action in the week, divided by staff invited. An in-app weekly count is planned. |
+| Parent adoption | [baseline] | [target] % of families | Analytics: Pilot measures, "Parent adoption" (parent accounts linked, of guardians on record). Invitations and Join requests show the detail. |
+| Staff active | [baseline] | [target] % of staff | Analytics: Pilot measures, "Staff active" for the chosen period (staff seen in the app or with a recorded action, of all active staff accounts). |
 | Requests handled online | [baseline] | [target] per month | Analytics: Requests received and Requests by service. |
 | Meetings held as booked | [baseline] | [target] % | Analytics: Service levels, "Meetings held". |
 
@@ -113,7 +113,7 @@ If the agreed success measures are not met at the end-of-term review, the school
 
 ### At exit or at the end of the pilot
 
-- **Export:** on request, Horizon provides the school's records as CSV files and its documents as files within [number] days. Some exports are already self-serve in the app (audit log CSV, documents, safeguarding chronology for the DSL). A one-click full school export is planned.
+- **Export:** the school exports its own data at any time from Admin > Compliance > School data export: a CSV file per table and every stored document, prepared in the background, with a download link that works for 24 hours. Horizon can help on request.
 - **Deletion:** after the export is confirmed, Horizon deletes the school's records from the live database and its stored files within [number] days, and confirms in writing. Backup copies expire within [backup retention period].
 
 ## 8. Easy exit

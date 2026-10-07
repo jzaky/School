@@ -28,14 +28,14 @@ All figures from the school's Horizon account for [period]. Wellbeing and safegu
 
 | Measure | Before | After | Where it comes from |
 |---|---|---|---|
-| Days to issue a school document | [before] | [after] | Analytics: average time to close per service |
+| Days to issue a school document | [before] | [after] | Analytics: Pilot measures, Median days to issue a letter |
 | Requests closed within target | [before] % | [after] % | Analytics: Service levels, Within target |
 | Average time to close a request | [before] | [after] hours | Analytics: Average time to close |
 | Requests handled online | [before] | [after] | Analytics: Requests received |
 | Letters issued | [before] | [after] | Analytics: Guidance and letters, Letters issued |
 | Meetings held as booked | [before] % | [after] % | Analytics: Service levels, Meetings held |
-| Parent adoption | n/a | [after] % of families | Invitations accepted and join requests approved |
-| Staff active weekly | n/a | [after] % | Audit log export: staff with a recorded action per week |
+| Parent adoption | n/a | [after] % of families | Analytics: Pilot measures, Parent adoption |
+| Staff active | n/a | [after] % | Analytics: Pilot measures, Staff active |
 
 [Optional chart: Analytics, "Time to close, week by week" (last 12 weeks). Use a screenshot only if it shows no personal data.]
 

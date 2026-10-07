@@ -4,11 +4,11 @@
 
 ### How it works
 
-1. Every Horizon school gets its own referral code, for example [code format, such as HRZ-REF-SCHOOLNAME].
-2. The school shares the code with another school (a principal they know, a sister school, a schools network).
-3. When the referred school signs its pilot proposal or contract and quotes the code, both schools receive the reward below.
+1. Every Horizon school has its own 8-character referral code and a ready sign-up link, under School admin > Refer a school (administrators and the principal).
+2. The school shares the code or link with another school (a principal they know, a sister school, a schools network).
+3. When the referred school signs up through the link, Horizon records which school referred it. When it signs its pilot proposal or contract, both schools receive the reward below.
 
-Referral codes are issued and tracked by the Horizon team (they are not a feature inside the app).
+The app records the referral; it applies no discount by itself. Rewards are agreed and applied by the Horizon team under the terms below.
 
 ### Terms (to confirm)
 
@@ -23,7 +23,7 @@ Referral codes are issued and tracked by the Horizon team (they are not a featur
 
 ### Short text a school can forward
 
-> We use Horizon for our school procedures (letters, absences, meetings, referrals and safeguarding concerns) in English and Arabic. If you would like to see it, contact Nexus AI Assurance FZCO on +971 52 377 7246 and quote our code [code]. [New school reward line.]
+> We use Horizon for our school procedures (letters, absences, meetings, referrals and safeguarding concerns) in English and Arabic. If you would like to see it, start through our link [referral link, from School admin > Refer a school], or contact Nexus AI Assurance FZCO on +971 52 377 7246 and quote our code [code]. [New school reward line.]
 
 ## Part 2: One-page pitch for school groups
 
@@ -40,13 +40,9 @@ Every school in the group gets its own Horizon tenant: its own staff, families, 
 - **Each school keeps its own identity.** Logo, colours, names, letterhead and seal on every letter and report card.
 - **Group-wide safeguards by design.** In every school, wellbeing and safeguarding records never appear in dashboards or analytics, and every view of a sensitive record is audited.
 - **Comparable figures.** Every school's Analytics page reports the same measures (requests, time to close, share within target, meetings held), so results can be compared school by school.
-
-### Planned for groups
-
-- **Shared templates:** publish a form, approval route or letter once and copy it to every school in the group.
-- **Group dashboard:** the same operational figures across all schools on one page, with wellbeing and safeguarding data excluded, as in every Horizon dashboard.
-
-[Timeline for group features to confirm.]
+- **Group dashboard.** Group leaders sign in to one page with totals and a school-by-school comparison: open requests, turnaround, overdue work, parent meetings, service usage, setup status, active users, and university plans and applications by stage. It works on a phone. Wellbeing, safeguarding, confidential and medical work is excluded entirely, not even counted.
+- **Shared templates.** A group administrator shares a service (with its form and approval route), a letter or a notification message from one school to the other member schools. Each school receives its own copy, switched off until it is ready, and the group keeps a history of what was shared.
+- **Clear joining and roles.** A school joins the group with a single-use code from the group, after its own administrator has seen what the group can and cannot see. Group roles are administrator or viewer (for example, a board member). A group role gives no access inside a school's records.
 
 ### Commercial terms (to confirm)
 

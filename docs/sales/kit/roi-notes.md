@@ -18,6 +18,8 @@ Ask the school to estimate each line in week 1 (a quick count over one normal we
 
 Staff cost per hour: [the school's figure, or leave out and talk in hours].
 
+The public /pricing page has the same kind of estimate as a calculator (letters, absence reports, meeting booking and parent messages, with staff cost per hour). Every assumption is labelled and editable; use the school's own figures, and say it is an estimate, not a promise.
+
 ## 2. How to work it out
 
 For each category:
@@ -42,7 +44,9 @@ Beyond time, name the benefits the school cares about, without putting a number 
 | Share within target | Analytics: Service levels, Within target |
 | Letters issued | Analytics: Guidance and letters, Letters issued |
 | Meetings held as booked | Analytics: Service levels, Meetings held |
-| Staff actually using it | Audit log export: staff with a recorded action each week |
+| Staff actually using it | Analytics: Pilot measures, Staff active (any period, CSV download) |
+| Parent adoption | Analytics: Pilot measures, Parent adoption |
+| Median days to issue a letter | Analytics: Pilot measures |
 
 Minutes per task with Horizon are not tracked by the app. Ask two or three staff to time a handful of tasks in week 6 and again at the end of term.
 
