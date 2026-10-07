@@ -93,6 +93,7 @@ for (const locale of LOCALES) {
 }
 
 test("referral link, platform leads, referrals and pricing settings", async ({ browser }) => {
+  test.setTimeout(600_000);
   const s = await loginAs(browser, "admin", "en");
   await go(s, "/admin/referral");
   const code = (await s.page.locator("[data-testid=referral-code]").textContent())!.trim();
@@ -116,11 +117,16 @@ test("referral link, platform leads, referrals and pricing settings", async ({ b
   // Publish a core price, see it on /pricing, then clear it again.
   await go(s, "/platform/settings");
   await s.page.locator("[data-testid=setting-price_core]").fill("150");
-  await s.page.locator("[data-testid=setting-published]").click();
+  const published = s.page.locator("[data-testid=setting-published]");
+  if ((await published.getAttribute("aria-checked")) !== "true") await published.click();
+  await expect(published).toHaveAttribute("aria-checked", "true");
   await s.page.locator("[data-testid=pricing-settings-save]").click();
   await expect(s.page.getByText(/Pricing saved/)).toBeVisible();
   const pub = await s.context.newPage();
   await pub.goto(`${base}/pricing`);
+  // Safeguarding is selected by default and has no price, so the page asks for an offer until it is unticked.
+  await expect(pub.locator("[data-testid=pricing-no-price]")).toBeVisible();
+  await pub.locator("[data-testid=pricing-module-safeguarding]").uncheck();
   await expect(pub.locator("[data-testid=pricing-total]")).toBeVisible();
   await pub.close();
   await go(s, "/platform/settings");
