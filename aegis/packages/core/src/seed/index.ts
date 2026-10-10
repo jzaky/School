@@ -5,6 +5,8 @@ import { fileURLToPath } from "node:url";
 import { seedDemoTenant, DEMO_PASSWORD, DEMO_USERS, PLATFORM_ADMIN } from "./demo-tenant.js";
 import { seedDemoHistory } from "./demo-history.js";
 import { runBankingDemo, runRefundDemo, runSensitiveDataDemo } from "../demos/scenarios.js";
+import { runMonitoring, acknowledgeAlert, resolveAlert } from "../monitoring/service.js";
+import { withTenant } from "@aegis/db";
 
 export async function runSeed() {
   const started = Date.now();
@@ -16,6 +18,15 @@ export async function runSeed() {
   await runBankingDemo(actors, { decision: "leave" });
   await runRefundDemo(actors);
   await runSensitiveDataDemo(actors);
+  // Monitoring over the seeded history, with a few alerts already handled.
+  const mon = await withTenant(t.orgId, async (db) => {
+    const r = await runMonitoring(db, t.users.owner!.ctx);
+    const alerts = await db.alert.findMany({ where: { orgId: t.orgId }, orderBy: { createdAt: "asc" } });
+    if (alerts[0]) await acknowledgeAlert(db, t.users.security_analyst!.ctx, alerts[0].id);
+    if (alerts[1]) await resolveAlert(db, t.users.security_analyst!.ctx, alerts[1].id, "Reviewed with the agent owner; expected behaviour during the campaign window.");
+    return r;
+  });
+  console.log(`Monitoring: ${mon.evaluated} rules, ${mon.newAlerts} alerts${mon.errors.length ? ", errors: " + mon.errors.join("; ") : ""}`);
   // Demo agent API keys are needed by the SDK examples and the live demo runner. Written to a
   // gitignored file in the monorepo root; never printed to logs.
   const keysPath = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "..", ".demo-keys.json");

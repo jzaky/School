@@ -13,6 +13,7 @@ import { encryptSecret, randomToken } from "../lib/crypto.js";
 import { listUserMemberships } from "../identity/memberships.js";
 import { seedDemoPolicies } from "./demo-policies.js";
 import { storeCredential } from "../integrations/service.js";
+import { ensureDefaultMonitoringRules } from "../monitoring/service.js";
 
 export const DEMO_SLUG = "meridian";
 export const DEMO_PASSWORD = "AegisDemo2026!";
@@ -173,6 +174,7 @@ export async function seedDemoTenant(): Promise<SeededTenant> {
     }
   });
   await withTenant(org.id, (db) => seedDemoPolicies(db, users.governance_manager!.ctx, ownerCtx, out.agents));
+  await withTenant(org.id, (db) => ensureDefaultMonitoringRules(db, ownerCtx));
   void admin;
   return out;
 }
