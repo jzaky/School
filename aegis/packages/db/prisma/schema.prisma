@@ -1,0 +1,1188 @@
+// AEGIS schema. Every tenant table carries orgId and is protected by RLS (prisma/rls.sql).
+// Enums are kept in PostgreSQL so constraints hold even for raw SQL.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("MIGRATION_DATABASE_URL")
+}
+
+// ---------- Identity ----------
+
+enum UserStatus {
+  active
+  disabled
+}
+
+model User {
+  id              String     @id @default(uuid(7)) @db.Uuid
+  email           String     @unique
+  name            String
+  passwordHash    String?    @map("password_hash")
+  mfaSecretEnc    String?    @map("mfa_secret_enc")
+  mfaEnabled      Boolean    @default(false) @map("mfa_enabled")
+  isPlatformAdmin Boolean    @default(false) @map("is_platform_admin")
+  status          UserStatus @default(active)
+  failedLogins    Int        @default(0) @map("failed_logins")
+  lockedUntil     DateTime?  @map("locked_until")
+  lastLoginAt     DateTime?  @map("last_login_at")
+  createdAt       DateTime   @default(now()) @map("created_at")
+  updatedAt       DateTime   @updatedAt @map("updated_at")
+
+  sessions    Session[]
+  memberships Membership[]
+
+  @@map("users")
+}
+
+model Session {
+  id         String    @id @default(uuid(7)) @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  tokenHash  String    @unique @map("token_hash")
+  activeOrgId String?  @map("active_org_id") @db.Uuid
+  mfaPassed  Boolean   @default(false) @map("mfa_passed")
+  ip         String?
+  userAgent  String?   @map("user_agent")
+  expiresAt  DateTime  @map("expires_at")
+  revokedAt  DateTime? @map("revoked_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  lastSeenAt DateTime  @default(now()) @map("last_seen_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+// ---------- Organizations ----------
+
+model Organization {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  slug      String   @unique
+  name      String
+  plan      String   @default("enterprise_trial")
+  demoMode  Boolean  @default(false) @map("demo_mode")
+  settings  Json     @default("{}")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("organizations")
+}
+
+enum MembershipStatus {
+  active
+  invited
+  suspended
+}
+
+model Role {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  orgId       String   @map("org_id") @db.Uuid
+  key         String
+  name        String
+  description String   @default("")
+  permissions String[] @default([])
+  isSystem    Boolean  @default(false) @map("is_system")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  memberships Membership[]
+
+  @@unique([orgId, key])
+  @@index([orgId])
+  @@map("roles")
+}
+
+model Membership {
+  id        String           @id @default(uuid(7)) @db.Uuid
+  orgId     String           @map("org_id") @db.Uuid
+  userId    String           @map("user_id") @db.Uuid
+  roleId    String           @map("role_id") @db.Uuid
+  status    MembershipStatus @default(active)
+  title     String?
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id])
+
+  @@unique([orgId, userId])
+  @@index([orgId])
+  @@index([userId])
+  @@map("memberships")
+}
+
+model Team {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  orgId       String   @map("org_id") @db.Uuid
+  key         String
+  name        String
+  description String   @default("")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  members TeamMember[]
+
+  @@unique([orgId, key])
+  @@index([orgId])
+  @@map("teams")
+}
+
+model TeamMember {
+  id           String   @id @default(uuid(7)) @db.Uuid
+  orgId        String   @map("org_id") @db.Uuid
+  teamId       String   @map("team_id") @db.Uuid
+  membershipId String   @map("membership_id") @db.Uuid
+  isLead       Boolean  @default(false) @map("is_lead")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, membershipId])
+  @@index([orgId])
+  @@map("team_members")
+}
+
+model Invitation {
+  id         String    @id @default(uuid(7)) @db.Uuid
+  orgId      String    @map("org_id") @db.Uuid
+  email      String
+  roleId     String    @map("role_id") @db.Uuid
+  tokenHash  String    @unique @map("token_hash")
+  invitedBy  String    @map("invited_by") @db.Uuid
+  expiresAt  DateTime  @map("expires_at")
+  acceptedAt DateTime? @map("accepted_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  @@index([orgId])
+  @@map("invitations")
+}
+
+model SsoConnection {
+  id              String   @id @default(uuid(7)) @db.Uuid
+  orgId           String   @map("org_id") @db.Uuid
+  issuer          String
+  clientId        String   @map("client_id")
+  clientSecretEnc String   @map("client_secret_enc")
+  emailDomains    String[] @default([]) @map("email_domains")
+  enabled         Boolean  @default(false)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@unique([orgId])
+  @@map("sso_connections")
+}
+
+enum ApiKeySubject {
+  agent
+  integration
+  user
+}
+
+model ApiKey {
+  id          String        @id @default(uuid(7)) @db.Uuid
+  orgId       String        @map("org_id") @db.Uuid
+  name        String
+  prefix      String        @unique
+  keyHash     String        @unique @map("key_hash")
+  subjectType ApiKeySubject @map("subject_type")
+  subjectId   String        @map("subject_id") @db.Uuid
+  scopes      String[]      @default([])
+  expiresAt   DateTime?     @map("expires_at")
+  revokedAt   DateTime?     @map("revoked_at")
+  lastUsedAt  DateTime?     @map("last_used_at")
+  createdBy   String?       @map("created_by") @db.Uuid
+  createdAt   DateTime      @default(now()) @map("created_at")
+
+  @@index([orgId])
+  @@index([subjectType, subjectId])
+  @@map("api_keys")
+}
+
+// ---------- Agent registry ----------
+
+enum AgentStatus {
+  draft
+  registered
+  active
+  suspended
+  revoked
+  archived
+}
+
+enum Environment {
+  development
+  staging
+  production
+}
+
+enum DataClassification {
+  public
+  internal
+  confidential
+  restricted
+}
+
+model Agent {
+  id                      String             @id @default(uuid(7)) @db.Uuid
+  orgId                   String             @map("org_id") @db.Uuid
+  slug                    String
+  name                    String
+  description             String             @default("")
+  status                  AgentStatus        @default(draft)
+  environment             Environment        @default(development)
+  modelProvider           String             @default("") @map("model_provider")
+  modelId                 String             @default("") @map("model_id")
+  businessOwnerId         String?            @map("business_owner_id") @db.Uuid
+  technicalOwnerId        String?            @map("technical_owner_id") @db.Uuid
+  teamId                  String?            @map("team_id") @db.Uuid
+  dataClassificationLimit DataClassification @default(internal) @map("data_classification_limit")
+  riskTier                String             @default("medium") @map("risk_tier")
+  currentVersion          Int                @default(1) @map("current_version")
+  metadata                Json               @default("{}")
+  statusReason            String?            @map("status_reason")
+  statusChangedAt         DateTime?          @map("status_changed_at")
+  lastActivityAt          DateTime?          @map("last_activity_at")
+  createdAt               DateTime           @default(now()) @map("created_at")
+  updatedAt               DateTime           @updatedAt @map("updated_at")
+
+  versions    AgentVersion[]
+  tools       AgentTool[]
+  permissions Permission[]
+  requests    ActionRequest[]
+
+  @@unique([orgId, slug])
+  @@index([orgId, status])
+  @@map("agents")
+}
+
+model AgentVersion {
+  id         String    @id @default(uuid(7)) @db.Uuid
+  orgId      String    @map("org_id") @db.Uuid
+  agentId    String    @map("agent_id") @db.Uuid
+  version    Int
+  manifest   Json      @default("{}")
+  notes      String    @default("")
+  deployedAt DateTime? @map("deployed_at")
+  createdBy  String?   @map("created_by") @db.Uuid
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  agent Agent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@unique([agentId, version])
+  @@index([orgId])
+  @@map("agent_versions")
+}
+
+enum IntegrationStatus {
+  active
+  disabled
+}
+
+model Integration {
+  id               String            @id @default(uuid(7)) @db.Uuid
+  orgId            String            @map("org_id") @db.Uuid
+  key              String
+  name             String
+  type             String
+  description      String            @default("")
+  baseUrl          String?           @map("base_url")
+  status           IntegrationStatus @default(active)
+  statusReason     String?           @map("status_reason")
+  webhookSecretEnc String?           @map("webhook_secret_enc")
+  settings         Json              @default("{}")
+  lastHealthAt     DateTime?         @map("last_health_at")
+  lastHealthOk     Boolean?          @map("last_health_ok")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+
+  tools       Tool[]
+  credentials Credential[]
+
+  @@unique([orgId, key])
+  @@index([orgId])
+  @@map("integrations")
+}
+
+model Credential {
+  id            String    @id @default(uuid(7)) @db.Uuid
+  orgId         String    @map("org_id") @db.Uuid
+  integrationId String    @map("integration_id") @db.Uuid
+  name          String
+  secretEnc     String    @map("secret_enc")
+  version       Int       @default(1)
+  rotationDueAt DateTime? @map("rotation_due_at")
+  rotatedAt     DateTime? @map("rotated_at")
+  revokedAt     DateTime? @map("revoked_at")
+  createdBy     String?   @map("created_by") @db.Uuid
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  integration Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+
+  @@unique([integrationId, name])
+  @@index([orgId])
+  @@map("credentials")
+}
+
+model Tool {
+  id               String      @id @default(uuid(7)) @db.Uuid
+  orgId            String      @map("org_id") @db.Uuid
+  key              String
+  name             String
+  description      String      @default("")
+  integrationId    String?     @map("integration_id") @db.Uuid
+  parameterSchema  Json        @default("{}") @map("parameter_schema")
+  destinationRules Json        @default("{}") @map("destination_rules")
+  riskLevel        String      @default("medium") @map("risk_level")
+  enabled          Boolean     @default(true)
+  disabledReason   String?     @map("disabled_reason")
+  createdAt        DateTime    @default(now()) @map("created_at")
+  updatedAt        DateTime    @updatedAt @map("updated_at")
+
+  integration Integration? @relation(fields: [integrationId], references: [id])
+  agentTools  AgentTool[]
+
+  @@unique([orgId, key])
+  @@index([orgId])
+  @@map("tools")
+}
+
+model AgentTool {
+  id             String    @id @default(uuid(7)) @db.Uuid
+  orgId          String    @map("org_id") @db.Uuid
+  agentId        String    @map("agent_id") @db.Uuid
+  toolId         String    @map("tool_id") @db.Uuid
+  enabled        Boolean   @default(true)
+  revokedAt      DateTime? @map("revoked_at")
+  revokedReason  String?   @map("revoked_reason")
+  scope          Json      @default("{}")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  agent Agent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  tool  Tool  @relation(fields: [toolId], references: [id], onDelete: Cascade)
+
+  @@unique([agentId, toolId])
+  @@index([orgId])
+  @@map("agent_tools")
+}
+
+model Resource {
+  id             String             @id @default(uuid(7)) @db.Uuid
+  orgId          String             @map("org_id") @db.Uuid
+  key            String
+  name           String
+  type           String
+  classification DataClassification @default(internal)
+  ownerTeamId    String?            @map("owner_team_id") @db.Uuid
+  attributes     Json               @default("{}")
+  createdAt      DateTime           @default(now()) @map("created_at")
+  updatedAt      DateTime           @updatedAt @map("updated_at")
+
+  permissions Permission[]
+
+  @@unique([orgId, key])
+  @@index([orgId])
+  @@map("resources")
+}
+
+model Permission {
+  id          String    @id @default(uuid(7)) @db.Uuid
+  orgId       String    @map("org_id") @db.Uuid
+  agentId     String    @map("agent_id") @db.Uuid
+  resourceId  String    @map("resource_id") @db.Uuid
+  actions     String[]  @default([])
+  constraints Json      @default("{}")
+  grantedBy   String?   @map("granted_by") @db.Uuid
+  expiresAt   DateTime? @map("expires_at")
+  revokedAt   DateTime? @map("revoked_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  agent    Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  resource Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@unique([agentId, resourceId])
+  @@index([orgId])
+  @@map("permissions")
+}
+
+// ---------- Policy ----------
+
+enum PolicyVersionState {
+  draft
+  review
+  active
+  retired
+}
+
+model Policy {
+  id               String   @id @default(uuid(7)) @db.Uuid
+  orgId            String   @map("org_id") @db.Uuid
+  key              String
+  name             String
+  description      String   @default("")
+  category         String   @default("authorization")
+  archived         Boolean  @default(false)
+  currentVersionId String?  @map("current_version_id") @db.Uuid
+  createdBy        String?  @map("created_by") @db.Uuid
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  versions    PolicyVersion[]
+  assignments PolicyAssignment[]
+  events      PolicyEvent[]
+
+  @@unique([orgId, key])
+  @@index([orgId])
+  @@map("policies")
+}
+
+model PolicyVersion {
+  id          String             @id @default(uuid(7)) @db.Uuid
+  orgId       String             @map("org_id") @db.Uuid
+  policyId    String             @map("policy_id") @db.Uuid
+  version     Int
+  document    Json
+  contentHash String             @map("content_hash")
+  state       PolicyVersionState @default(draft)
+  changeNote  String             @default("") @map("change_note")
+  createdBy   String?            @map("created_by") @db.Uuid
+  approvedBy  String?            @map("approved_by") @db.Uuid
+  activatedAt DateTime?          @map("activated_at")
+  retiredAt   DateTime?          @map("retired_at")
+  createdAt   DateTime           @default(now()) @map("created_at")
+
+  policy Policy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@unique([policyId, version])
+  @@index([orgId])
+  @@map("policy_versions")
+}
+
+enum PolicyTargetType {
+  agent
+  team
+  org
+}
+
+model PolicyAssignment {
+  id         String           @id @default(uuid(7)) @db.Uuid
+  orgId      String           @map("org_id") @db.Uuid
+  policyId   String           @map("policy_id") @db.Uuid
+  targetType PolicyTargetType @map("target_type")
+  targetId   String?          @map("target_id") @db.Uuid
+  priority   Int              @default(100)
+  createdBy  String?          @map("created_by") @db.Uuid
+  createdAt  DateTime         @default(now()) @map("created_at")
+
+  policy Policy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, targetType, targetId])
+  @@map("policy_assignments")
+}
+
+model PolicyEvent {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  orgId     String   @map("org_id") @db.Uuid
+  policyId  String   @map("policy_id") @db.Uuid
+  versionId String?  @map("version_id") @db.Uuid
+  type      String
+  actorId   String?  @map("actor_id") @db.Uuid
+  note      String   @default("")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  policy Policy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, policyId])
+  @@map("policy_events")
+}
+
+// ---------- Gateway ----------
+
+enum ActionRequestStatus {
+  evaluating
+  allowed
+  denied
+  pending_approval
+  approved
+  rejected
+  expired
+  executed
+  failed
+}
+
+model ActionRequest {
+  id              String              @id @default(uuid(7)) @db.Uuid
+  orgId           String              @map("org_id") @db.Uuid
+  agentId         String              @map("agent_id") @db.Uuid
+  toolId          String?             @map("tool_id") @db.Uuid
+  toolKey         String              @map("tool_key")
+  action          String
+  resourceKey     String?             @map("resource_key")
+  params          Json                @default("{}")
+  paramsHash      String              @map("params_hash")
+  idempotencyKey  String              @map("idempotency_key")
+  correlationId   String              @map("correlation_id")
+  traceId         String?             @map("trace_id")
+  principalUserId String?             @map("principal_user_id") @db.Uuid
+  principalRef    String?             @map("principal_ref")
+  environment     Environment         @default(development)
+  status          ActionRequestStatus @default(evaluating)
+  justification   String              @default("")
+  riskIndicators  Json                @default("[]") @map("risk_indicators")
+  context         Json                @default("{}")
+  expiresAt       DateTime?           @map("expires_at")
+  completedAt     DateTime?           @map("completed_at")
+  createdAt       DateTime            @default(now()) @map("created_at")
+  updatedAt       DateTime            @updatedAt @map("updated_at")
+
+  agent     Agent                   @relation(fields: [agentId], references: [id])
+  decisions AuthorizationDecision[]
+  approvals ApprovalRequest[]
+  grants    ExecutionGrant[]
+  receipts  ExecutionReceipt[]
+
+  @@unique([orgId, idempotencyKey])
+  @@index([orgId, status])
+  @@index([orgId, agentId, createdAt])
+  @@index([orgId, createdAt])
+  @@map("action_requests")
+}
+
+enum DecisionResult {
+  allow
+  deny
+  require_approval
+  error
+}
+
+model AuthorizationDecision {
+  id               String         @id @default(uuid(7)) @db.Uuid
+  orgId            String         @map("org_id") @db.Uuid
+  actionRequestId  String         @map("action_request_id") @db.Uuid
+  result           DecisionResult
+  policyVersionIds String[]       @default([]) @map("policy_version_ids") @db.Uuid
+  matchedRuleIds   String[]       @default([]) @map("matched_rule_ids")
+  explanation      Json           @default("{}")
+  evaluator        String         @default("aegis-deterministic")
+  inputHash        String         @map("input_hash")
+  latencyMs        Int            @default(0) @map("latency_ms")
+  createdAt        DateTime       @default(now()) @map("created_at")
+
+  request ActionRequest @relation(fields: [actionRequestId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, createdAt])
+  @@index([actionRequestId])
+  @@map("authorization_decisions")
+}
+
+enum ApprovalStatus {
+  pending
+  approved
+  rejected
+  expired
+  more_info
+  escalated
+}
+
+model ApprovalRequest {
+  id                String         @id @default(uuid(7)) @db.Uuid
+  orgId             String         @map("org_id") @db.Uuid
+  actionRequestId   String         @map("action_request_id") @db.Uuid
+  status            ApprovalStatus @default(pending)
+  requiredApprovals Int            @default(1) @map("required_approvals")
+  requiredRoles     String[]       @default([]) @map("required_roles")
+  assignedUserId    String?        @map("assigned_user_id") @db.Uuid
+  escalatedToUserId String?        @map("escalated_to_user_id") @db.Uuid
+  requestHash       String         @map("request_hash")
+  triggeringRuleId  String?        @map("triggering_rule_id")
+  policyVersionId   String?        @map("policy_version_id") @db.Uuid
+  reason            String         @default("")
+  expiresAt         DateTime       @map("expires_at")
+  decidedAt         DateTime?      @map("decided_at")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+
+  request   ActionRequest      @relation(fields: [actionRequestId], references: [id], onDelete: Cascade)
+  responses ApprovalResponse[]
+
+  @@index([orgId, status])
+  @@index([actionRequestId])
+  @@map("approval_requests")
+}
+
+enum ApprovalDecision {
+  approve
+  reject
+  request_info
+  escalate
+  reassign
+  info_provided
+}
+
+model ApprovalResponse {
+  id                String           @id @default(uuid(7)) @db.Uuid
+  orgId             String           @map("org_id") @db.Uuid
+  approvalRequestId String           @map("approval_request_id") @db.Uuid
+  userId            String           @map("user_id") @db.Uuid
+  decision          ApprovalDecision
+  comment           String           @default("")
+  requestHashSeen   String           @map("request_hash_seen")
+  targetUserId      String?          @map("target_user_id") @db.Uuid
+  createdAt         DateTime         @default(now()) @map("created_at")
+
+  approval ApprovalRequest @relation(fields: [approvalRequestId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@index([approvalRequestId])
+  @@map("approval_responses")
+}
+
+model ExecutionGrant {
+  id              String    @id @default(uuid(7)) @db.Uuid
+  orgId           String    @map("org_id") @db.Uuid
+  actionRequestId String    @map("action_request_id") @db.Uuid
+  tokenHash       String    @unique @map("token_hash")
+  requestHash     String    @map("request_hash")
+  expiresAt       DateTime  @map("expires_at")
+  consumedAt      DateTime? @map("consumed_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  request ActionRequest @relation(fields: [actionRequestId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@map("execution_grants")
+}
+
+enum ReceiptStatus {
+  succeeded
+  failed
+  skipped
+}
+
+model ExecutionReceipt {
+  id                  String        @id @default(uuid(7)) @db.Uuid
+  orgId               String        @map("org_id") @db.Uuid
+  actionRequestId     String        @map("action_request_id") @db.Uuid
+  status              ReceiptStatus
+  downstreamSystem    String        @map("downstream_system")
+  downstreamReference String?       @map("downstream_reference")
+  responseSummary     Json          @default("{}") @map("response_summary")
+  durationMs          Int           @default(0) @map("duration_ms")
+  createdAt           DateTime      @default(now()) @map("created_at")
+
+  request ActionRequest @relation(fields: [actionRequestId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, createdAt])
+  @@map("execution_receipts")
+}
+
+// ---------- Evidence and monitoring ----------
+
+model EvidenceEvent {
+  id            String   @id @default(uuid(7)) @db.Uuid
+  orgId         String   @map("org_id") @db.Uuid
+  seq           BigInt
+  type          String
+  actorType     String   @map("actor_type")
+  actorId       String?  @map("actor_id")
+  subjectType   String   @map("subject_type")
+  subjectId     String?  @map("subject_id")
+  correlationId String?  @map("correlation_id")
+  traceId       String?  @map("trace_id")
+  payload       Json     @default("{}")
+  prevHash      String   @map("prev_hash")
+  hash          String
+  occurredAt    DateTime @default(now()) @map("occurred_at")
+
+  @@unique([orgId, seq])
+  @@index([orgId, occurredAt])
+  @@index([orgId, type])
+  @@index([orgId, correlationId])
+  @@index([orgId, subjectType, subjectId])
+  @@map("evidence_events")
+}
+
+model EvidenceCheckpoint {
+  id         String   @id @default(uuid(7)) @db.Uuid
+  orgId      String   @map("org_id") @db.Uuid
+  throughSeq BigInt   @map("through_seq")
+  hash       String
+  signature  String
+  keyId      String   @map("key_id")
+  signedAt   DateTime @default(now()) @map("signed_at")
+
+  @@unique([orgId, throughSeq])
+  @@map("evidence_checkpoints")
+}
+
+model MonitoringRule {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  orgId       String   @map("org_id") @db.Uuid
+  key         String
+  name        String
+  description String   @default("")
+  definition  Json
+  severity    String   @default("medium")
+  enabled     Boolean  @default(true)
+  lastRunAt   DateTime? @map("last_run_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  alerts Alert[]
+
+  @@unique([orgId, key])
+  @@index([orgId])
+  @@map("monitoring_rules")
+}
+
+enum AlertStatus {
+  open
+  acknowledged
+  resolved
+}
+
+model Alert {
+  id             String      @id @default(uuid(7)) @db.Uuid
+  orgId          String      @map("org_id") @db.Uuid
+  ruleId         String?     @map("rule_id") @db.Uuid
+  severity       String
+  title          String
+  detail         Json        @default("{}")
+  status         AlertStatus @default(open)
+  agentId        String?     @map("agent_id") @db.Uuid
+  dedupeKey      String      @map("dedupe_key")
+  acknowledgedBy String?     @map("acknowledged_by") @db.Uuid
+  resolvedBy     String?     @map("resolved_by") @db.Uuid
+  resolvedAt     DateTime?   @map("resolved_at")
+  createdAt      DateTime    @default(now()) @map("created_at")
+  updatedAt      DateTime    @updatedAt @map("updated_at")
+
+  rule MonitoringRule? @relation(fields: [ruleId], references: [id])
+
+  @@unique([orgId, dedupeKey])
+  @@index([orgId, status])
+  @@map("alerts")
+}
+
+enum EvidenceSource {
+  automated
+  customer_document
+  human_validated
+  missing
+}
+
+model ControlMapping {
+  id           String         @id @default(uuid(7)) @db.Uuid
+  orgId        String         @map("org_id") @db.Uuid
+  controlId    String         @map("control_id") @db.Uuid
+  source       EvidenceSource @default(missing)
+  evidenceType String?        @map("evidence_type")
+  status       String         @default("not_assessed")
+  notes        String         @default("")
+  validatedBy  String?        @map("validated_by") @db.Uuid
+  validatedAt  DateTime?      @map("validated_at")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  control Control @relation(fields: [controlId], references: [id])
+
+  @@unique([orgId, controlId])
+  @@map("control_mappings")
+}
+
+// ---------- Shield ----------
+
+enum DataAction {
+  allow
+  mask
+  redact
+  block
+  require_approval
+}
+
+model DataClass {
+  id          String     @id @default(uuid(7)) @db.Uuid
+  orgId       String     @map("org_id") @db.Uuid
+  key         String
+  name        String
+  description String     @default("")
+  detector    String
+  pattern     String?
+  action      DataAction @default(mask)
+  severity    String     @default("medium")
+  enabled     Boolean    @default(true)
+  isSystem    Boolean    @default(false) @map("is_system")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  @@unique([orgId, key])
+  @@map("data_classes")
+}
+
+enum SecurityEventStatus {
+  open
+  triaged
+  dismissed
+  linked
+}
+
+model SecurityEvent {
+  id              String              @id @default(uuid(7)) @db.Uuid
+  orgId           String              @map("org_id") @db.Uuid
+  type            String
+  severity        String
+  title           String
+  agentId         String?             @map("agent_id") @db.Uuid
+  actionRequestId String?             @map("action_request_id") @db.Uuid
+  policyVersionId String?             @map("policy_version_id") @db.Uuid
+  incidentId      String?             @map("incident_id") @db.Uuid
+  detail          Json                @default("{}")
+  status          SecurityEventStatus @default(open)
+  createdAt       DateTime            @default(now()) @map("created_at")
+
+  incident Incident? @relation(fields: [incidentId], references: [id])
+
+  @@index([orgId, createdAt])
+  @@index([orgId, severity, status])
+  @@map("security_events")
+}
+
+enum IncidentStatus {
+  open
+  investigating
+  contained
+  resolved
+}
+
+model Incident {
+  id         String         @id @default(uuid(7)) @db.Uuid
+  orgId      String         @map("org_id") @db.Uuid
+  number     Int
+  title      String
+  severity   String
+  status     IncidentStatus @default(open)
+  summary    String         @default("")
+  assigneeId String?        @map("assignee_id") @db.Uuid
+  agentIds   String[]       @default([]) @map("agent_ids") @db.Uuid
+  resolvedAt DateTime?      @map("resolved_at")
+  createdAt  DateTime       @default(now()) @map("created_at")
+  updatedAt  DateTime       @updatedAt @map("updated_at")
+
+  events         IncidentEvent[]
+  securityEvents SecurityEvent[]
+
+  @@unique([orgId, number])
+  @@index([orgId, status])
+  @@map("incidents")
+}
+
+model IncidentEvent {
+  id              String   @id @default(uuid(7)) @db.Uuid
+  orgId           String   @map("org_id") @db.Uuid
+  incidentId      String   @map("incident_id") @db.Uuid
+  type            String
+  actorId         String?  @map("actor_id") @db.Uuid
+  note            String   @default("")
+  securityEventId String?  @map("security_event_id") @db.Uuid
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  incident Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  @@index([incidentId])
+  @@map("incident_events")
+}
+
+// ---------- Audit (assessments) ----------
+
+model Framework {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  orgId       String?  @map("org_id") @db.Uuid
+  key         String
+  name        String
+  version     String   @default("")
+  publisher   String   @default("")
+  licenseNote String   @default("") @map("license_note")
+  description String   @default("")
+  isCustom    Boolean  @default(false) @map("is_custom")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  controls Control[]
+  assessments Assessment[]
+
+  @@unique([key, orgId])
+  @@map("frameworks")
+}
+
+model Control {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  frameworkId String   @map("framework_id") @db.Uuid
+  code        String
+  title       String
+  summary     String   @default("")
+  category    String   @default("")
+  keywords    String[] @default([])
+  automatedEvidenceType String? @map("automated_evidence_type")
+  sortOrder   Int      @default(0) @map("sort_order")
+
+  framework Framework        @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+  mappings  ControlMapping[]
+  findings  Finding[]
+
+  @@unique([frameworkId, code])
+  @@map("controls")
+}
+
+enum DocumentStatus {
+  uploaded
+  parsing
+  parsed
+  failed
+}
+
+model Document {
+  id             String         @id @default(uuid(7)) @db.Uuid
+  orgId          String         @map("org_id") @db.Uuid
+  title          String
+  filename       String
+  mime           String
+  size           Int
+  sha256         String
+  storageKey     String         @map("storage_key")
+  status         DocumentStatus @default(uploaded)
+  error          String?
+  pageCount      Int?           @map("page_count")
+  chunkCount     Int            @default(0) @map("chunk_count")
+  retentionUntil DateTime?      @map("retention_until")
+  uploadedBy     String?        @map("uploaded_by") @db.Uuid
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  chunks DocumentChunk[]
+
+  @@index([orgId])
+  @@map("documents")
+}
+
+model DocumentChunk {
+  id         String @id @default(uuid(7)) @db.Uuid
+  orgId      String @map("org_id") @db.Uuid
+  documentId String @map("document_id") @db.Uuid
+  idx        Int
+  text       String
+  page       Int?
+  tokens     Int    @default(0)
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, idx])
+  @@index([orgId])
+  @@map("document_chunks")
+}
+
+enum AssessmentStatus {
+  draft
+  running
+  completed
+  failed
+}
+
+model Assessment {
+  id          String           @id @default(uuid(7)) @db.Uuid
+  orgId       String           @map("org_id") @db.Uuid
+  frameworkId String           @map("framework_id") @db.Uuid
+  name        String
+  scope       String           @default("")
+  status      AssessmentStatus @default(draft)
+  documentIds String[]         @default([]) @map("document_ids") @db.Uuid
+  summary     Json             @default("{}")
+  startedBy   String?          @map("started_by") @db.Uuid
+  completedAt DateTime?        @map("completed_at")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  framework Framework          @relation(fields: [frameworkId], references: [id])
+  findings  Finding[]
+  artifacts EvidenceArtifact[]
+
+  @@index([orgId])
+  @@map("assessments")
+}
+
+enum FindingStatus {
+  covered
+  partial
+  missing
+  ambiguous
+}
+
+model Finding {
+  id           String        @id @default(uuid(7)) @db.Uuid
+  orgId        String        @map("org_id") @db.Uuid
+  assessmentId String        @map("assessment_id") @db.Uuid
+  controlId    String        @map("control_id") @db.Uuid
+  status       FindingStatus
+  confidence   Float         @default(0)
+  rationale    String        @default("")
+  recommendation String      @default("")
+  humanStatus  FindingStatus? @map("human_status")
+  validatedBy  String?       @map("validated_by") @db.Uuid
+  validatedAt  DateTime?     @map("validated_at")
+  validationNote String      @default("") @map("validation_note")
+  resolvedAt   DateTime?     @map("resolved_at")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  assessment  Assessment         @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  control     Control            @relation(fields: [controlId], references: [id])
+  artifacts   EvidenceArtifact[]
+  remediation RemediationTask[]
+
+  @@unique([assessmentId, controlId])
+  @@index([orgId])
+  @@map("findings")
+}
+
+enum ArtifactKind {
+  automated
+  document
+  human
+}
+
+model EvidenceArtifact {
+  id           String       @id @default(uuid(7)) @db.Uuid
+  orgId        String       @map("org_id") @db.Uuid
+  assessmentId String       @map("assessment_id") @db.Uuid
+  findingId    String?      @map("finding_id") @db.Uuid
+  kind         ArtifactKind
+  documentId   String?      @map("document_id") @db.Uuid
+  chunkId      String?      @map("chunk_id") @db.Uuid
+  excerpt      String       @default("")
+  score        Float        @default(0)
+  reference    String       @default("")
+  addedBy      String?      @map("added_by") @db.Uuid
+  createdAt    DateTime     @default(now()) @map("created_at")
+
+  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  finding    Finding?   @relation(fields: [findingId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@map("evidence_artifacts")
+}
+
+enum RemediationStatus {
+  open
+  in_progress
+  review
+  resolved
+  reopened
+}
+
+model RemediationTask {
+  id          String            @id @default(uuid(7)) @db.Uuid
+  orgId       String            @map("org_id") @db.Uuid
+  findingId   String?           @map("finding_id") @db.Uuid
+  title       String
+  description String            @default("")
+  ownerId     String?           @map("owner_id") @db.Uuid
+  dueAt       DateTime?         @map("due_at")
+  status      RemediationStatus @default(open)
+  evidenceDocumentIds String[]  @default([]) @map("evidence_document_ids") @db.Uuid
+  history     Json              @default("[]")
+  createdBy   String?           @map("created_by") @db.Uuid
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+
+  finding Finding? @relation(fields: [findingId], references: [id])
+
+  @@index([orgId, status])
+  @@map("remediation_tasks")
+}
+
+model AuditExport {
+  id         String   @id @default(uuid(7)) @db.Uuid
+  orgId      String   @map("org_id") @db.Uuid
+  kind       String
+  format     String
+  storageKey String   @map("storage_key")
+  size       Int      @default(0)
+  sha256     String   @default("")
+  createdBy  String?  @map("created_by") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([orgId])
+  @@map("audit_exports")
+}
+
+// ---------- Platform ----------
+
+model Notification {
+  id             String    @id @default(uuid(7)) @db.Uuid
+  orgId          String    @map("org_id") @db.Uuid
+  userId         String    @map("user_id") @db.Uuid
+  type           String
+  title          String
+  body           String    @default("")
+  link           String?
+  idempotencyKey String    @map("idempotency_key")
+  readAt         DateTime? @map("read_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  @@unique([orgId, idempotencyKey])
+  @@index([orgId, userId, readAt])
+  @@map("notifications")
+}
+
+enum JobStatus {
+  pending
+  running
+  done
+  failed
+}
+
+model Job {
+  id             String    @id @default(uuid(7)) @db.Uuid
+  orgId          String?   @map("org_id") @db.Uuid
+  type           String
+  payload        Json      @default("{}")
+  idempotencyKey String    @unique @map("idempotency_key")
+  runAt          DateTime  @default(now()) @map("run_at")
+  attempts       Int       @default(0)
+  maxAttempts    Int       @default(5) @map("max_attempts")
+  status         JobStatus @default(pending)
+  lockedAt       DateTime? @map("locked_at")
+  lockedBy       String?   @map("locked_by")
+  lastError      String?   @map("last_error")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  @@index([status, runAt])
+  @@map("jobs")
+}
+
+model PlatformEvent {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  type      String
+  actorId   String?  @map("actor_id") @db.Uuid
+  orgId     String?  @map("org_id") @db.Uuid
+  detail    Json     @default("{}")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@map("platform_events")
+}
+
+model DeploymentVersion {
+  id         String   @id @default(uuid(7)) @db.Uuid
+  component  String
+  version    String
+  gitSha     String   @default("") @map("git_sha")
+  deployedAt DateTime @default(now()) @map("deployed_at")
+  notes      String   @default("")
+
+  @@map("deployment_versions")
+}
