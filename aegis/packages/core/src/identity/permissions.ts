@@ -61,7 +61,7 @@ export const SYSTEM_ROLES: SystemRole[] = [
     key: "security_analyst",
     name: "Security Analyst",
     description: "Investigates security events and incidents, manages data protection",
-    permissions: ["org:read", "users:read", "agents:read", "agents:control", "policies:read", "gateway:read", "integrations:read", "integrations:write", "evidence:read", "monitoring:read", "monitoring:write", "security:read", "security:write", "reports:read"],
+    permissions: ["org:read", "users:read", "agents:read", "agents:control", "policies:read", "gateway:read", "approvals:decide", "integrations:read", "integrations:write", "evidence:read", "monitoring:read", "monitoring:write", "security:read", "security:write", "reports:read"],
   },
   {
     key: "auditor",

@@ -81,7 +81,7 @@ export async function appendEvidence(db: TenantDb, ctx: OrgContext, input: Evide
     traceId: input.traceId ?? ctx.traceId ?? null,
     payload: input.payload ?? {},
     prevHash,
-    occurredAt: input.occurredAt ?? new Date(),
+    occurredAt: input.occurredAt ?? ctx.now ?? new Date(),
   };
   const hash = computeEvidenceHash(base);
   const row = await db.evidenceEvent.create({ data: { ...base, payload: base.payload as Prisma.InputJsonValue, hash } });

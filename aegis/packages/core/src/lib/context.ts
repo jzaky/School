@@ -18,12 +18,14 @@ export interface OrgContext {
   requestId: string;
   ip?: string;
   traceId?: string;
+  /** Overrides the clock for seeded history. Never set from request code. */
+  now?: Date;
 }
 
 export const systemActor: Actor = { type: "system", id: null, label: "system" };
 
 export function makeContext(orgId: string, actor: Actor, extra: Partial<Omit<OrgContext, "orgId" | "actor">> = {}): OrgContext {
-  return { orgId, actor, requestId: extra.requestId ?? randomUUID(), ip: extra.ip, traceId: extra.traceId };
+  return { orgId, actor, requestId: extra.requestId ?? randomUUID(), ip: extra.ip, traceId: extra.traceId, now: extra.now };
 }
 
 export function systemContext(orgId: string): OrgContext {

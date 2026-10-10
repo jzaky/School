@@ -20,6 +20,9 @@ export async function buildApp(): Promise<FastifyInstance> {
     trustProxy: true,
   });
 
+  // Evidence sequence numbers are BigInt; serialise them as strings everywhere.
+  app.setSerializerCompiler(() => (data) => JSON.stringify(data, (_k, v) => (typeof v === "bigint" ? v.toString() : v)));
+  app.setReplySerializer((payload) => JSON.stringify(payload, (_k, v) => (typeof v === "bigint" ? v.toString() : v)));
   await app.register(helmet, { contentSecurityPolicy: false });
   await app.register(cors, {
     origin: env().API_CORS_ORIGINS.split(",").map((s) => s.trim()),

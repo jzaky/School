@@ -11,6 +11,8 @@ import { createAgent, grantResourcePermission, setAgentTool, transitionAgent, up
 import { issueApiKey } from "../identity/api-keys.js";
 import { encryptSecret, randomToken } from "../lib/crypto.js";
 import { listUserMemberships } from "../identity/memberships.js";
+import { seedDemoPolicies } from "./demo-policies.js";
+import { storeCredential } from "../integrations/service.js";
 
 export const DEMO_SLUG = "meridian";
 export const DEMO_PASSWORD = "AegisDemo2026!";
@@ -49,11 +51,11 @@ export async function resetDemoTenant(): Promise<void> {
     }
     try {
       await owner.$executeRawUnsafe(`DELETE FROM evidence_events WHERE org_id = $1::uuid`, existing.id);
-      await owner.organization.delete({ where: { id: existing.id } });
-      // Cascade does not cover tables without FK to organizations; clean them explicitly.
-      for (const t of ["roles", "memberships", "teams", "team_members", "invitations", "sso_connections", "api_keys", "agents", "integrations", "tools", "resources", "policies", "action_requests", "monitoring_rules", "alerts", "control_mappings", "data_classes", "security_events", "incidents", "documents", "assessments", "remediation_tasks", "audit_exports", "notifications", "frameworks"]) {
+      // Dependents first; tables without FK cascades to organizations are cleaned explicitly.
+      for (const t of ["team_members", "teams", "invitations", "sso_connections", "api_keys", "memberships", "roles", "notifications", "alerts", "monitoring_rules", "security_events", "incidents", "action_requests", "policies", "agents", "tools", "integrations", "resources", "control_mappings", "data_classes", "remediation_tasks", "assessments", "documents", "audit_exports", "frameworks"]) {
         await owner.$executeRawUnsafe(`DELETE FROM ${t} WHERE org_id = $1::uuid`, existing.id);
       }
+      await owner.organization.delete({ where: { id: existing.id } });
     } finally {
       for (const t of ["evidence_events", "authorization_decisions", "approval_responses", "execution_receipts", "policy_events", "policy_versions"]) {
         await owner.$executeRawUnsafe(`ALTER TABLE ${t} ENABLE TRIGGER USER`);
@@ -117,7 +119,8 @@ export async function seedDemoTenant(): Promise<SeededTenant> {
     for (const i of integrations) {
       const row = await db.integration.create({ data: { orgId: org.id, ...i, webhookSecretEnc: encryptSecret(randomToken(24), `integration:${i.key}`), lastHealthAt: new Date(), lastHealthOk: true, settings: { simulated: true } } });
       out.integrations[i.key] = row.id;
-      await db.credential.create({ data: { orgId: org.id, integrationId: row.id, name: "service-token", secretEnc: encryptSecret(`sim-token-${randomToken(12)}`, `credential:${row.id}:service-token`), rotationDueAt: new Date(Date.now() + 60 * 86400_000), rotatedAt: new Date(Date.now() - 30 * 86400_000) } });
+      const cred = await storeCredential(db, engineerCtx, row.id, "service-token", `sim-token-${randomToken(12)}`, 90);
+      await db.credential.update({ where: { id: cred.id }, data: { rotatedAt: new Date(Date.now() - 30 * 86400_000), rotationDueAt: new Date(Date.now() + 60 * 86400_000) } });
     }
 
     const resources = [
@@ -143,8 +146,8 @@ export async function seedDemoTenant(): Promise<SeededTenant> {
     for (const t of tools) out.tools[t.key] = (await upsertTool(db, engineerCtx, { ...t, description: t.description })).id;
 
     const agents = [
-      { slug: "treasury-transfer-agent", name: "Treasury Transfer Agent", description: "Prepares and initiates intra-bank transfers requested by treasury analysts. Operates under AED limits with supervisor approval above threshold.", environment: "production" as const, modelProvider: "anthropic", modelId: "claude-opus-5-5", teamId: team("payments-ops"), businessOwnerId: users.approver!.id, technicalOwnerId: users.engineer!.id, dataClassificationLimit: "restricted" as const, riskTier: "critical" as const, status: "active" as const, tools: ["initiate-transfer", "query-crm"], resources: [["payments-core", ["read", "transfer"]], ["customer-accounts", ["read"]]] as [string, string[]][] },
-      { slug: "support-refund-agent", name: "Customer Support Refund Agent", description: "Handles refund requests in the customer care queue. Issues small refunds autonomously, escalates larger ones.", environment: "production" as const, modelProvider: "anthropic", modelId: "claude-sonnet-5-5", teamId: team("customer-care"), businessOwnerId: users.approver!.id, technicalOwnerId: users.engineer!.id, dataClassificationLimit: "confidential" as const, riskTier: "high" as const, status: "active" as const, tools: ["issue-refund", "update-ticket", "query-crm", "send-email"], resources: [["support-tickets", ["read", "write"]], ["customer-accounts", ["read"]]] as [string, string[]][] },
+      { slug: "treasury-transfer-agent", name: "Treasury Transfer Agent", description: "Prepares and initiates intra-bank transfers requested by treasury analysts. Operates under AED limits with supervisor approval above threshold.", environment: "production" as const, modelProvider: "anthropic", modelId: "claude-opus-5-5", teamId: team("payments-ops"), businessOwnerId: users.governance_manager!.id, technicalOwnerId: users.engineer!.id, dataClassificationLimit: "restricted" as const, riskTier: "critical" as const, status: "active" as const, tools: ["initiate-transfer", "query-crm"], resources: [["payments-core", ["read", "transfer"]], ["customer-accounts", ["read"]]] as [string, string[]][] },
+      { slug: "support-refund-agent", name: "Customer Support Refund Agent", description: "Handles refund requests in the customer care queue. Issues small refunds autonomously, escalates larger ones.", environment: "production" as const, modelProvider: "anthropic", modelId: "claude-sonnet-5-5", teamId: team("customer-care"), businessOwnerId: users.governance_manager!.id, technicalOwnerId: users.engineer!.id, dataClassificationLimit: "confidential" as const, riskTier: "high" as const, status: "active" as const, tools: ["issue-refund", "update-ticket", "query-crm", "send-email"], resources: [["support-tickets", ["read", "write", "execute"]], ["customer-accounts", ["read"]]] as [string, string[]][] },
       { slug: "marketing-outreach-agent", name: "Marketing Outreach Agent", description: "Drafts campaign emails and exports audience segments for approved campaigns.", environment: "production" as const, modelProvider: "openai", modelId: "gpt-5", teamId: team("customer-care"), businessOwnerId: users.governance_manager!.id, technicalOwnerId: users.engineer!.id, dataClassificationLimit: "internal" as const, riskTier: "high" as const, status: "active" as const, tools: ["send-email", "export-customer-records", "http-request"], resources: [["marketing-lists", ["read", "export"]]] as [string, string[]][] },
       { slug: "kyc-document-agent", name: "KYC Document Review Agent", description: "Extracts fields from onboarding documents and flags inconsistencies for analysts.", environment: "staging" as const, modelProvider: "anthropic", modelId: "claude-sonnet-5-5", teamId: team("ai-platform"), businessOwnerId: users.security_analyst!.id, technicalOwnerId: users.engineer!.id, dataClassificationLimit: "restricted" as const, riskTier: "high" as const, status: "active" as const, tools: ["query-crm", "update-ticket"], resources: [["customer-accounts", ["read"]]] as [string, string[]][] },
       { slug: "analytics-copilot", name: "Analytics Copilot", description: "Answers business questions over the warehouse with read-only SQL.", environment: "production" as const, modelProvider: "google", modelId: "gemini-3-pro", teamId: team("ai-platform"), businessOwnerId: users.governance_manager!.id, technicalOwnerId: users.engineer!.id, dataClassificationLimit: "restricted" as const, riskTier: "medium" as const, status: "active" as const, tools: ["run-warehouse-query"], resources: [["analytics-warehouse", ["read"]]] as [string, string[]][] },
@@ -169,6 +172,7 @@ export async function seedDemoTenant(): Promise<SeededTenant> {
       await db.agent.update({ where: { id: row.id }, data: { lastActivityAt: status === "active" ? new Date(Date.now() - Math.random() * 3600_000) : status === "suspended" ? new Date(Date.now() - 3 * 86400_000) : null } });
     }
   });
+  await withTenant(org.id, (db) => seedDemoPolicies(db, users.governance_manager!.ctx, ownerCtx, out.agents));
   void admin;
   return out;
 }
