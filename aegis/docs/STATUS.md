@@ -29,3 +29,26 @@ Research, ADRs 0001 to 0005, architecture, database design, threat model, design
 - Evidence service: filtered listing, per-event verification, verify-and-record, JSON Lines and CSV export with chain verification stamp and checkpoint public key, governance report JSON.
 - Compliance: observed technical controls with measurements and framework references; per-framework mapping summary fed by the Audit module.
 - Tests: 7 monitoring and assurance tests (total core 54, isolation 11).
+
+## Phase 4: complete (core and API), console in progress
+- Detector registry (email, phone, IBAN with mod-97, card numbers with Luhn, Emirates ID with check digit, API keys and high-entropy tokens, JWT, private keys, password assignments, IP, URL, safe custom regex) with per-class actions allow, mask, redact, block, require approval; addressing fields are classified but never rewritten (destination allowlists govern them).
+- Shield inspector wired into the gateway before policy evaluation; fails closed on internal error. Data classes per organization with 11 system defaults and custom classes.
+- Prompt-injection signals (instruction override, role hijack, exfiltration, tool coercion, hidden text, encoded payloads, urgency) labelled heuristic; enforcement never depends on them.
+- Tool security report reusing the gateway's structural checks; security events with triage and automatic incident escalation; incident management with timeline, assignment, status workflow and notifications.
+- Security evaluation corpus: 38 cases; on the corpus, injection recall 18/18, benign false blocks 0/10, PII 10/10; enforcement proven through the gateway (ungranted tool denied regardless of injected text; card data blocked before execution).
+- Execution grants now bind to the parameters that execute after masking.
+- Tests: 29 (shield 18, eval 7, incidents 4).
+
+## Phase 5: complete (core and API), console in progress
+- Document ingestion for PDF, DOCX, TXT and Markdown with size and type limits, chunking, retention; files stored under the configured directory with opaque names; no content ever leaves the deployment.
+- Frameworks: ISO/IEC 42001 (65 controls), ISO/IEC 27001:2022 (93 Annex A controls), NIST AI RMF 1.0 (72 subcategories), custom frameworks with CSV import. ISO entries reference identifiers with original one-sentence summaries only.
+- Assessment engine: BM25 lexical retrieval plus deterministic checks and 10 automated evidence types drawn from AEGIS records; findings covered, partial, ambiguous or missing with confidence, rationale, cited excerpts and recommendations; every conclusion labelled automated or human validated; control mappings refreshed per run for Assurance.
+- Remediation tasks with owner, due date, evidence attachments, review workflow and history. Reports in JSON and PDF (executive summary, detailed, evidence inventory, gap report, remediation plan) with disclaimers on every page.
+- Tests: 28 (retrieval 16, audit 12).
+
+## Phase 6: in progress
+- Done: OIDC SSO with PKCE and JIT provisioning, TOTP MFA, rate limiting, security headers, OpenTelemetry bootstrap, Dockerfile and Compose, Kubernetes manifests with network policy, CI workflow, backup and restore drill, deployment, security and third-party docs, per-organization transaction serialization with deadlock retry, float-safe canonical hashing.
+- Remaining: performance test run, final security review pass, implementation report.
+
+## Test totals at this point
+Core 119, isolation 11, API 6, console Playwright 10. All passing on 2026-10-11.
