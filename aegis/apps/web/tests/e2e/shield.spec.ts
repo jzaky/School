@@ -1,5 +1,9 @@
 import { test, expect, type Page } from "@playwright/test";
 
+// The dev server compiles each route on first visit (10 to 30 s), so give every test room.
+test.describe.configure({ timeout: 180_000 });
+const SLOW = { timeout: 60_000 };
+
 const PASSWORD = "AegisDemo2026!";
 const ANALYST = "tariq.saleh@meridian-demo.example";
 const VIEWER = "sara.khalil@meridian-demo.example";
@@ -41,7 +45,7 @@ test.describe("security analyst", () => {
     await dialog.getByLabel("Note").fill("E2E: reviewed, expected behaviour for the demo tenant");
     await dialog.getByRole("button", { name: "Mark triaged" }).click();
     await expect(dialog).toBeHidden();
-    await expect(page.getByText(/Triaged by Tariq Saleh/)).toBeVisible();
+    await expect(page.getByText(/Triaged by Tariq Saleh/)).toBeVisible(SLOW);
   });
 
   test("data protection toggles a class action and the sample test masks a card number", async ({ page }) => {
@@ -50,7 +54,7 @@ test.describe("security analyst", () => {
     const cardAction = page.getByRole("combobox", { name: "Action for Payment card number" });
     await expect(cardAction).toContainText("Block");
     await pickSelect(page, cardAction, "Mask");
-    await expect(page.getByText("Payment card number: action set to Mask")).toBeVisible();
+    await expect(page.getByText("Payment card number: action set to Mask")).toBeVisible(SLOW);
     await expect(cardAction).toContainText("Mask");
 
     await page.locator("#sample-text").fill("Refund card 4111 1111 1111 1111 for the customer.");
@@ -66,7 +70,7 @@ test.describe("security analyst", () => {
 
     // Restore the demo default so later runs start from the same state.
     await pickSelect(page, cardAction, "Block");
-    await expect(page.getByText("Payment card number: action set to Block")).toBeVisible();
+    await expect(page.getByText("Payment card number: action set to Block")).toBeVisible(SLOW);
   });
 
   test("tool security evaluate reports a failed destination check for an external domain", async ({ page }) => {
@@ -81,7 +85,7 @@ test.describe("security analyst", () => {
     await page.locator("#eval-params").fill('{"segment": "vip", "destination": "https://files.partner-upload.example/inbox"}');
     await page.getByRole("button", { name: "Evaluate", exact: true }).click();
     const report = page.getByTestId("tool-security-report");
-    await expect(report).toBeVisible();
+    await expect(report).toBeVisible(SLOW);
     await expect(report.locator('[data-check="Grant"]')).toHaveAttribute("data-mark", "pass");
     await expect(report.locator('[data-check="Destination check"]')).toHaveAttribute("data-mark", "fail");
     await expect(report.getByText("Would be denied")).toBeVisible();
@@ -109,7 +113,7 @@ test.describe("security analyst", () => {
     await dialog.getByLabel("Note").fill("E2E: starting the investigation");
     await dialog.getByRole("button", { name: "Investigate" }).click();
     await expect(dialog).toBeHidden();
-    await expect(header.getByText("Investigating", { exact: true }).first()).toBeVisible();
+    await expect(header.getByText("Investigating", { exact: true }).first()).toBeVisible(SLOW);
     await expect(page.getByText("Moved to investigating")).toBeVisible();
     await expect(page.getByText("E2E: starting the investigation")).toBeVisible();
   });

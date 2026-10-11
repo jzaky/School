@@ -97,7 +97,7 @@ export async function exportEvidence(db: TenantDb, ctx: OrgContext, f: z.infer<t
  * Governance report: a structured snapshot combining metrics, policy activity, approvals, alerts,
  * incidents and chain status for a period. JSON always; the console renders it and offers PDF.
  */
-export async function governanceReport(db: TenantDb, ctx: OrgContext, days = 30) {
+export async function governanceReport(db: TenantDb, ctx: OrgContext, days = 30, opts: { record?: boolean } = {}) {
   assertPermission(ctx, "reports:read");
   const since = new Date(Date.now() - days * 86400_000);
   const { governanceMetrics, approvalTurnaround, topAgentsByDenials } = await import("./dashboard.js");
@@ -125,6 +125,7 @@ export async function governanceReport(db: TenantDb, ctx: OrgContext, days = 30)
     complianceEvidence: controlMappings.map((m) => ({ source: m.source, controls: m._count._all })),
     evidenceChain: { valid: chain.valid, checked: chain.checked, lastHash: chain.lastHash, checkpoints: chain.checkpoints.length },
   };
-  await appendEvidence(db, ctx, { type: "report.generated", subjectType: "report", subjectId: "governance", payload: { periodDays: days, sha256: sha256Hex(JSON.stringify(report)) } });
+  // Viewing the report in the console is a read; only an explicit export is recorded as evidence.
+  if (opts.record) await appendEvidence(db, ctx, { type: "report.generated", subjectType: "report", subjectId: "governance", payload: { periodDays: days, sha256: sha256Hex(JSON.stringify(report)) } });
   return report;
 }

@@ -36,7 +36,7 @@ export async function assuranceRoutes(app: FastifyInstance) {
   app.get("/report", async (req) => {
     const ctx = await req.orgContext();
     const { days } = z.object({ days: z.coerce.number().int().min(1).max(365).default(30) }).parse(req.query);
-    return withTenant(ctx.orgId, (db) => governanceReport(db, ctx, days), { timeout: 60_000 });
+    return withTenant(ctx.orgId, (db) => governanceReport(db, ctx, days, { record: true }), { timeout: 60_000 });
   });
   app.get("/alerts", async (req) => {
     const ctx = await req.orgContext();

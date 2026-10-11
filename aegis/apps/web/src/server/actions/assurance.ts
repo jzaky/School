@@ -68,7 +68,7 @@ export async function downloadReportAction(days: number) {
     const c = await getConsoleContext();
     if (!c.can("reports:read")) throw forbidden("Missing permission reports:read");
     const d = z.coerce.number().int().refine((n) => [7, 30, 90].includes(n), "Period must be 7, 30 or 90 days").parse(days);
-    const report = await withTenant(c.ctx.orgId, (db) => governanceReport(db, c.ctx, d), { timeout: 60_000 });
+    const report = await withTenant(c.ctx.orgId, (db) => governanceReport(db, c.ctx, d, { record: true }), { timeout: 60_000 });
     revalidatePath("/evidence");
     return { filename: `aegis-governance-report-${d}d-${report.generatedAt.slice(0, 10)}.json`, body: JSON.stringify(report, null, 2) };
   });
