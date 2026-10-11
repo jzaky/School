@@ -30,7 +30,7 @@ jobs:
       MIGRATION_DATABASE_URL: postgresql://aegis_owner:aegis_owner_dev@127.0.0.1:5432/aegis
       AEGIS_APP_PASSWORD: aegis_app_dev
       REDIS_URL: redis://127.0.0.1:6379
-      AEGIS_MASTER_KEY: ${{ secrets.AEGIS_TEST_MASTER_KEY || 'Y2ktb25seS1tYXN0ZXIta2V5LTMyLWJ5dGVzLWxvbmchISE=' }}
+      AEGIS_MASTER_KEY: ${{ secrets.AEGIS_TEST_MASTER_KEY || 'Y2ktb25seS1tYXN0ZXIta2V5LTMyLWJ5dGVzLW9rISE=' }}
       AEGIS_SESSION_SECRET: ${{ secrets.AEGIS_TEST_SESSION_SECRET || 'Y2ktb25seS1zZXNzaW9uLXNlY3JldC0zMi1ieXRlcyEhISE=' }}
       AEGIS_DEMO_MODE: "true"
       NODE_ENV: test
@@ -80,7 +80,7 @@ jobs:
       DATABASE_URL: postgresql://aegis_app:aegis_app_dev@127.0.0.1:5432/aegis
       MIGRATION_DATABASE_URL: postgresql://aegis_owner:aegis_owner_dev@127.0.0.1:5432/aegis
       AEGIS_APP_PASSWORD: aegis_app_dev
-      AEGIS_MASTER_KEY: Y2ktb25seS1tYXN0ZXIta2V5LTMyLWJ5dGVzLWxvbmchISE=
+      AEGIS_MASTER_KEY: Y2ktb25seS1tYXN0ZXIta2V5LTMyLWJ5dGVzLW9rISE=
       AEGIS_SESSION_SECRET: Y2ktb25seS1zZXNzaW9uLXNlY3JldC0zMi1ieXRlcyEhISE=
       AEGIS_DEMO_MODE: "true"
     steps:
