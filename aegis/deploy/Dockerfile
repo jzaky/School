@@ -1,0 +1,55 @@
+# Multi-stage build for every AEGIS process. Build with:
+#   docker build -f deploy/Dockerfile --target api    -t aegis-api .
+#   docker build -f deploy/Dockerfile --target worker -t aegis-worker .
+#   docker build -f deploy/Dockerfile --target web    -t aegis-web .
+# Runs as a non-root user. No secrets are baked in; everything comes from the environment.
+FROM node:22-bookworm-slim AS base
+ENV PNPM_HOME=/pnpm PATH=/pnpm:$PATH NEXT_TELEMETRY_DISABLED=1
+RUN corepack enable && corepack prepare pnpm@10.28.0 --activate && apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+
+FROM base AS deps
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY apps/api/package.json apps/api/
+COPY apps/web/package.json apps/web/
+COPY apps/worker/package.json apps/worker/
+COPY packages/db/package.json packages/db/
+COPY packages/core/package.json packages/core/
+COPY packages/sdk/package.json packages/sdk/
+RUN pnpm install --frozen-lockfile
+
+FROM deps AS source
+COPY . .
+RUN pnpm --filter @aegis/db generate
+
+# ---- API (Action Gateway) ----
+FROM source AS api
+RUN addgroup --system aegis && adduser --system --ingroup aegis aegis && chown -R aegis:aegis /app
+USER aegis
+ENV NODE_ENV=production API_PORT=4000
+EXPOSE 4000
+HEALTHCHECK --interval=30s --timeout=5s CMD node -e "fetch('http://127.0.0.1:4000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+CMD ["pnpm", "--filter", "@aegis/api", "start"]
+
+# ---- Worker ----
+FROM source AS worker
+RUN addgroup --system aegis && adduser --system --ingroup aegis aegis && chown -R aegis:aegis /app
+USER aegis
+ENV NODE_ENV=production
+CMD ["pnpm", "--filter", "@aegis/worker", "start"]
+
+# ---- Migrations (run once per deploy, owner credentials) ----
+FROM source AS migrate
+CMD ["pnpm", "--filter", "@aegis/db", "migrate"]
+
+# ---- Web console ----
+FROM source AS web-build
+ENV NODE_ENV=production
+RUN pnpm --filter @aegis/web build
+
+FROM web-build AS web
+RUN addgroup --system aegis && adduser --system --ingroup aegis aegis && chown -R aegis:aegis /app
+USER aegis
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=5s CMD node -e "fetch('http://127.0.0.1:3000/login').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+CMD ["pnpm", "--filter", "@aegis/web", "start"]

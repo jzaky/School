@@ -1,5 +1,7 @@
-import { env, logger } from "@aegis/core";
+import { env, logger, startTelemetry } from "@aegis/core";
 import { buildApp } from "./app.js";
+
+const telemetry = await startTelemetry("api");
 
 const app = await buildApp();
 const port = env().API_PORT;
@@ -13,6 +15,7 @@ try {
 for (const sig of ["SIGINT", "SIGTERM"] as const) {
   process.on(sig, async () => {
     await app.close();
+    await telemetry.shutdown();
     process.exit(0);
   });
 }

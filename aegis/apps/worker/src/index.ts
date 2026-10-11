@@ -1,5 +1,5 @@
 import { withTenant, disconnectAll } from "@aegis/db";
-import { claimJobs, env, expireApproval, expireOverdueApprovals, logger, recoverStaleJobs, registerJobHandler, runJob, systemContext, writeCheckpoint } from "@aegis/core";
+import { claimJobs, env, expireApproval, expireOverdueApprovals, logger, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, systemContext, writeCheckpoint } from "@aegis/core";
 import { rawPrisma } from "@aegis/db";
 import { registerModuleHandlers } from "./handlers.js";
 
@@ -58,11 +58,13 @@ async function loop() {
   }
 }
 
+const telemetry = await startTelemetry("worker");
 log.info({ env: env().NODE_ENV }, "aegis-worker starting");
 void loop();
 for (const sig of ["SIGINT", "SIGTERM"] as const) {
   process.on(sig, async () => {
     stopping = true;
+    await telemetry.shutdown();
     await disconnectAll();
     process.exit(0);
   });

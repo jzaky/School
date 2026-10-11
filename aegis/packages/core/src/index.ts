@@ -35,3 +35,5 @@ export * from "./monitoring/service.js";
 export * from "./assurance/dashboard.js";
 export * from "./assurance/evidence-service.js";
 export * from "./assurance/compliance.js";
+export * from "./lib/otel.js";
+export * from "./identity/oidc.js";

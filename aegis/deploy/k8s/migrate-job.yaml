@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: aegis-migrate
+  namespace: aegis
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: ghcr.io/example/aegis-migrate:latest
+          envFrom:
+            - configMapRef: { name: aegis-config }
+            - secretRef: { name: aegis-secrets }

@@ -1,0 +1,134 @@
+import { createHash, randomBytes } from "node:crypto";
+import { createRemoteJWKSet, jwtVerify } from "jose";
+import { rawPrisma, withTenant, type TenantDb } from "@aegis/db";
+import { z } from "zod";
+import { appendEvidence } from "../evidence/ledger.js";
+import { makeContext, type OrgContext } from "../lib/context.js";
+import { decryptSecret, encryptSecret, hmacHex, randomToken } from "../lib/crypto.js";
+import { env } from "../env.js";
+import { forbidden, notFound, unauthorized, validation } from "../lib/errors.js";
+import { assertPermission } from "../orgs/orgs.js";
+import { createSession } from "./sessions.js";
+
+/**
+ * Enterprise SSO: OpenID Connect authorization code flow with PKCE, one connection per
+ * organization. Users are provisioned on first login when their email domain is allowed by the
+ * connection and receive the organization's default role ("viewer") until an admin changes it.
+ * Tokens are verified against the issuer's JWKS with `jose`. SAML is not implemented.
+ */
+export const ssoConnectionSchema = z.object({
+  issuer: z.string().url(),
+  clientId: z.string().min(1).max(200),
+  clientSecret: z.string().min(1).max(500).optional(),
+  emailDomains: z.array(z.string().min(3).max(100)).min(1),
+  enabled: z.boolean().default(false),
+});
+
+export async function upsertSsoConnection(db: TenantDb, ctx: OrgContext, input: z.infer<typeof ssoConnectionSchema>) {
+  assertPermission(ctx, "org:admin");
+  const existing = await db.ssoConnection.findUnique({ where: { orgId: ctx.orgId } });
+  if (!existing && !input.clientSecret) throw validation("Client secret is required for a new connection");
+  const data = { issuer: input.issuer.replace(/\/$/, ""), clientId: input.clientId, emailDomains: input.emailDomains.map((d) => d.toLowerCase()), enabled: input.enabled, ...(input.clientSecret ? { clientSecretEnc: encryptSecret(input.clientSecret, `sso:${ctx.orgId}`) } : {}) };
+  const row = existing ? await db.ssoConnection.update({ where: { id: existing.id }, data }) : await db.ssoConnection.create({ data: { orgId: ctx.orgId, ...data, clientSecretEnc: data.clientSecretEnc! } });
+  await appendEvidence(db, ctx, { type: "sso.connection_updated", subjectType: "sso_connection", subjectId: row.id, payload: { issuer: row.issuer, enabled: row.enabled, domains: row.emailDomains, secretRotated: !!input.clientSecret } });
+  return { ...row, clientSecretEnc: undefined };
+}
+
+export async function getSsoConnection(db: TenantDb, ctx: OrgContext) {
+  assertPermission(ctx, "org:read");
+  const row = await db.ssoConnection.findUnique({ where: { orgId: ctx.orgId } });
+  return row ? { ...row, clientSecretEnc: undefined, hasSecret: !!row.clientSecretEnc } : null;
+}
+
+interface Discovery {
+  authorization_endpoint: string;
+  token_endpoint: string;
+  jwks_uri: string;
+  issuer: string;
+}
+const discoveryCache = new Map<string, { at: number; doc: Discovery }>();
+async function discover(issuer: string): Promise<Discovery> {
+  const cached = discoveryCache.get(issuer);
+  if (cached && Date.now() - cached.at < 3600_000) return cached.doc;
+  const res = await fetch(`${issuer}/.well-known/openid-configuration`, { signal: AbortSignal.timeout(5000) });
+  if (!res.ok) throw unauthorized("Identity provider discovery failed");
+  const doc = (await res.json()) as Discovery;
+  if (!doc.authorization_endpoint || !doc.token_endpoint || !doc.jwks_uri) throw unauthorized("Identity provider discovery document is incomplete");
+  discoveryCache.set(issuer, { at: Date.now(), doc });
+  return doc;
+}
+
+/** Signed, short-lived state carried through the round trip (stateless: no server storage needed). */
+function signState(payload: Record<string, string>): string {
+  const body = Buffer.from(JSON.stringify({ ...payload, exp: Date.now() + 10 * 60_000 })).toString("base64url");
+  return `${body}.${hmacHex(env().AEGIS_SESSION_SECRET, `sso-state:${body}`)}`;
+}
+function readState(state: string): Record<string, string> {
+  const [body, sig] = state.split(".");
+  if (!body || !sig || hmacHex(env().AEGIS_SESSION_SECRET, `sso-state:${body}`) !== sig) throw unauthorized("Invalid SSO state");
+  const parsed = JSON.parse(Buffer.from(body, "base64url").toString("utf8")) as Record<string, string> & { exp: number };
+  if (parsed.exp < Date.now()) throw unauthorized("SSO state expired");
+  return parsed;
+}
+
+/** Step 1: build the provider redirect for an organization slug. Returns the URL and the PKCE verifier to keep in a cookie. */
+export async function beginSsoLogin(orgSlug: string, redirectUri: string): Promise<{ url: string; verifier: string }> {
+  const org = await rawPrisma().organization.findUnique({ where: { slug: orgSlug } });
+  if (!org) throw notFound("Organization");
+  const conn = await withTenant(org.id, (db) => db.ssoConnection.findUnique({ where: { orgId: org.id } }));
+  if (!conn || !conn.enabled) throw forbidden("Single sign-on is not enabled for this organization");
+  const disc = await discover(conn.issuer);
+  const verifier = randomToken(48);
+  const challenge = createHash("sha256").update(verifier).digest("base64url");
+  const nonce = randomBytes(16).toString("hex");
+  const state = signState({ orgId: org.id, nonce, redirectUri });
+  const url = new URL(disc.authorization_endpoint);
+  url.searchParams.set("response_type", "code");
+  url.searchParams.set("client_id", conn.clientId);
+  url.searchParams.set("redirect_uri", redirectUri);
+  url.searchParams.set("scope", "openid email profile");
+  url.searchParams.set("state", state);
+  url.searchParams.set("nonce", nonce);
+  url.searchParams.set("code_challenge", challenge);
+  url.searchParams.set("code_challenge_method", "S256");
+  return { url: url.toString(), verifier };
+}
+
+/** Step 2: exchange the code, verify the id token, provision or load the user, create a session. */
+export async function completeSsoLogin(params: { code: string; state: string; verifier: string; ip?: string; userAgent?: string }) {
+  const st = readState(params.state);
+  const orgId = st.orgId!;
+  const conn = await withTenant(orgId, (db) => db.ssoConnection.findUnique({ where: { orgId } }));
+  if (!conn || !conn.enabled) throw forbidden("Single sign-on is not enabled");
+  const disc = await discover(conn.issuer);
+  const body = new URLSearchParams({ grant_type: "authorization_code", code: params.code, redirect_uri: st.redirectUri!, client_id: conn.clientId, client_secret: decryptSecret(conn.clientSecretEnc, `sso:${orgId}`), code_verifier: params.verifier });
+  const tokenRes = await fetch(disc.token_endpoint, { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body, signal: AbortSignal.timeout(8000) });
+  if (!tokenRes.ok) throw unauthorized("Token exchange failed");
+  const tokens = (await tokenRes.json()) as { id_token?: string };
+  if (!tokens.id_token) throw unauthorized("No id_token returned");
+  const jwks = createRemoteJWKSet(new URL(disc.jwks_uri));
+  const { payload } = await jwtVerify(tokens.id_token, jwks, { issuer: disc.issuer || conn.issuer, audience: conn.clientId });
+  if (payload.nonce !== st.nonce) throw unauthorized("Nonce mismatch");
+  const email = typeof payload.email === "string" ? payload.email.toLowerCase() : null;
+  if (!email || (payload.email_verified === false)) throw unauthorized("Identity provider did not return a verified email");
+  const domain = email.split("@")[1] ?? "";
+  if (!conn.emailDomains.includes(domain)) throw forbidden(`Email domain ${domain} is not allowed for this organization`);
+  const name = typeof payload.name === "string" ? payload.name : email;
+  let user = await rawPrisma().user.findUnique({ where: { email } });
+  if (!user) user = await rawPrisma().user.create({ data: { email, name, passwordHash: null } });
+  if (user.status !== "active") throw forbidden("Account disabled");
+  await withTenant(orgId, async (db) => {
+    const ctx = makeContext(orgId, { type: "user", id: user!.id });
+    const m = await db.membership.findUnique({ where: { orgId_userId: { orgId, userId: user!.id } } });
+    if (!m) {
+      const viewer = await db.role.findUniqueOrThrow({ where: { orgId_key: { orgId, key: "viewer" } } });
+      await db.membership.create({ data: { orgId, userId: user!.id, roleId: viewer.id, status: "active" } });
+      await appendEvidence(db, ctx, { type: "sso.user_provisioned", subjectType: "membership", subjectId: user!.id, payload: { domain, role: "viewer" } });
+    }
+    await appendEvidence(db, ctx, { type: "sso.login", subjectType: "user", subjectId: user!.id, payload: { issuer: conn.issuer } });
+  });
+  await rawPrisma().user.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } });
+  // SSO logins satisfy MFA when the provider enforces it; we still honour a user's own TOTP flag.
+  const { token, session } = await createSession(user.id, { ip: params.ip, userAgent: params.userAgent, activeOrgId: orgId, mfaPassed: !user.mfaEnabled });
+  return { token, sessionId: session.id, userId: user.id, orgId, mfaRequired: user.mfaEnabled };
+}
