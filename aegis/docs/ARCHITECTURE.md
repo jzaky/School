@@ -40,9 +40,19 @@ Tradeoffs recorded in ADR-0001. Short version: one database, one schema, three d
 4. The authorization service builds the policy input (agent, principal, org, resource, action, environment, parameters, classification, amount, context) and evaluates the active policy versions assigned to the agent. Evaluation failure is a deny.
 5. Shield runs data-classification and tool-security checks on the parameters. A block from Shield is a deny with a security event.
 6. The result is one of `allow`, `deny`, `require_approval`. An `authorization_decisions` row is written with the full explanation and the policy version ids.
-7. `allow`: the gateway issues an execution grant (short lived, bound to the request hash) and, for simulated systems, performs the downstream call itself using credentials from the vault. The downstream system verifies the grant. An `execution_receipts` row records the outcome.
-8. `require_approval`: an `approval_requests` row is created with an expiry. Nothing executes. Approvers decide in the Approval Center; every response is an `approval_responses` row. On approval the gateway re-validates that the request hash still matches, re-checks agent status, and executes. An expired approval can never be used.
+7. `allow`: the request becomes `allowed` and the gateway issues its single execution grant (five minutes, bound to the hash of tool, action and the parameters that will execute). Execution then runs in its own phases, described below.
+8. `require_approval`: an `approval_requests` row is created with an expiry. Nothing executes. Approvers decide in the Approval Center; every response is an `approval_responses` row. On approval the gateway re-validates that the request hash still matches, re-checks agent status and the emergency pause, marks the request `approved` and issues the single grant. Execution happens after the approval transaction commits, never inside it. An expired approval can never be used.
 9. Every step appends an `evidence_events` row to the hash chain.
+
+## Execution phases and the one-live-grant rule
+
+Execution is deliberately not one transaction, because a downstream call is an external side effect that cannot be rolled back.
+
+1. Phase 1 (transaction): re-check status, agent and pause; consume the grant. Consuming moves the request to `executing`, which means no further grant can be issued and no other grant verifies. A partial unique index on `execution_grants` guarantees at most one live grant per request even under concurrent issuance; pause, suspension and revocation void live grants.
+2. Phase 2 (no transaction): the downstream call, carrying the stable idempotency key `aegis:<requestId>`. Real providers (Stripe test mode) receive it as their idempotency key; simulators honour it too. The connector reports `succeeded`, `failed` (nothing happened downstream) or `unknown` (the call may have happened, no definitive answer).
+3. Phase 3 (transaction): the receipt and the final status. `unknown` keeps the request `executing` and schedules reconciliation: the connector looks the operation up by idempotency key and the request becomes `executed` or `failed` from the downstream system's own record. When the system cannot tell after several attempts, the request becomes `unknown`, a security event and a monitoring alert (RM-012) ask a human to check the downstream system and settle it with a reason. Nothing is ever re-sent blindly.
+
+A single-use grant is therefore not a claim of exactly-once execution. The guarantee is: the gateway never starts a request twice, every outcome is recorded against the downstream system's own record, and ambiguity is surfaced rather than guessed.
 
 ## Fail-closed guarantees
 
@@ -54,7 +64,10 @@ Tradeoffs recorded in ADR-0001. Short version: one database, one schema, three d
 | Approval expired | status `expired`, execution refused |
 | Parameters changed after approval | request hash mismatch, new evaluation required |
 | Agent suspended or revoked | rejected at authentication, before evaluation |
-| Downstream system call fails | receipt `failed`, no retry without a new idempotent request |
+| Downstream system refuses before acting | receipt `failed`, no retry without a new request |
+| Downstream call sent but no definitive answer | receipt `unknown`, request stays `executing`, reconciled by idempotency key; never re-sent blindly |
+| Reconciliation cannot determine the outcome | request `unknown`, security event and alert, human settlement with a recorded reason |
+| Gateway paused after approval | execution refused, grants voided, request stays `approved` until an administrator resumes and runs it |
 
 ## Tenant isolation
 

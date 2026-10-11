@@ -9,7 +9,7 @@ Fail closed, least privilege, every action attributable, tamper-evident evidence
 - Roles: 8 system roles over 22 explicit permissions; custom roles cannot hold the wildcard. Four-eyes rule on policy activation. Separation of duties on approvals (owners of an agent cannot approve its requests).
 
 ## Authorization path
-Registry checks (agent active, tool granted and enabled, integration active, parameter schema, resource permission, classification, destination allowlist, gateway pause) then Shield inspection then deterministic policy evaluation with default deny. Decisions, approvals and receipts are written in the same transaction as the evidence event; an evidence failure rolls back the decision. Execution grants are single use, five minutes, bound to the SHA-256 of tool, action and parameters; downstream systems verify them.
+Registry checks (agent active, tool granted and enabled, integration active, parameter schema, resource permission, classification, destination allowlist, gateway pause) then Shield inspection then deterministic policy evaluation with default deny. Decisions, approvals and receipts are written in the same transaction as the evidence event; an evidence failure rolls back the decision. Execution grants are single use, five minutes, bound to the SHA-256 of tool, action and parameters; downstream systems verify them. At most one live grant exists per request (partial unique index), consuming a grant moves the request to `executing`, and pause, suspension and revocation void outstanding grants. Execution runs in separate phases from the decision (see ARCHITECTURE.md); an ambiguous downstream outcome is recorded as `unknown` and reconciled from the downstream system's own record by idempotency key, never retried blindly. Only test-mode credentials are accepted for the Stripe connector; live keys are refused at storage and at use.
 
 ## Data protection
 - Secrets at rest: AES-256-GCM with the master key, ciphertext bound to the row (AAD).
@@ -22,6 +22,9 @@ Row-level security on every tenant table, app role `NOBYPASSRLS` and non-owner, 
 
 ## Integrity
 Per-organization SHA-256 hash chain over canonical JSON, UPDATE and DELETE rejected by trigger, Ed25519 checkpoints with the key outside the database, verification API and exports with the public key. Tamper-evident, not immutable: an attacker with the owner role and the signing key could rewrite history; externally stored checkpoints make that detectable.
+
+## Process boundaries
+The api, web and worker processes run as the non-owner database role and refuse to start in production if they find `MIGRATION_DATABASE_URL` or `AEGIS_APP_PASSWORD` in their environment (`assertApplicationProcess`). Only the migrate job carries owner credentials. Uploaded documents live on shared storage mounted into every process.
 
 ## Network and runtime
 Rate limits per key and per IP, body limits, Helmet headers, CORS allowlist, HMAC-signed webhooks with a replay window, non-root containers, Kubernetes network policy template for egress.

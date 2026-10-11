@@ -11,9 +11,10 @@ Base URL: `API_PUBLIC_URL` (default http://localhost:4000). JSON everywhere. Err
   - `200` allowed (executed in gateway mode, receipt included), `202` approval required, `403` denied, `409` idempotency conflict, `401` bad key. Non-2xx must be treated as deny by callers.
   - Header `Idempotency-Key` may carry the idempotency key instead of the body.
 - `GET /v1/gateway/actions`, `GET /v1/gateway/actions/:id` (agents see only their own)
-- `POST /v1/gateway/actions/:id/grant` agent mode: single-use grant for an allowed or approved request
-- `POST /v1/gateway/actions/:id/execute` agent mode: record execution with the grant
-- `POST /v1/gateway/grants/verify` (integration key) `{ grant, toolKey, action, params }` downstream verification; `403` when the grant is unknown, expired, consumed or the parameter hash differs
+- `POST /v1/gateway/actions/:id/grant` agent mode: the single live grant for an allowed or approved request. `409` while a grant is outstanding, when the request is already `executing`, or while the gateway is paused. Returns `{ grant, expiresAt, requestHash, params }`; the agent must execute exactly `params`.
+- `POST /v1/gateway/actions/:id/execute` agent mode: the agent reports the outcome of its own execution, body `{ grant, outcome: "succeeded" | "failed", reference?, summary? }`. The grant must belong to the request; if the downstream system never verified it, it is consumed here. Idempotent. If the agent does not know whether the call happened it must not report; the gateway reconciles instead.
+- `POST /v1/gateway/grants/verify` (integration key) `{ grant, toolKey, action, params }` downstream verification; consuming moves the request to `executing`. `403` when the grant is unknown, expired, consumed, voided (pause, suspension), the agent is inactive, the gateway is paused, or the parameter hash differs. The response carries `reason`.
+- Request statuses: `evaluating`, `allowed`, `denied`, `pending_approval`, `approved`, `rejected`, `expired`, `executing`, `executed`, `failed`, `unknown`. Receipt statuses: `succeeded`, `failed`, `skipped`, `unknown`.
 - `POST /v1/gateway/approvals/:id/info` answer a request for information
 
 ## Approvals (users)

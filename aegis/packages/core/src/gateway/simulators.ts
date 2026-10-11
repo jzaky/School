@@ -122,7 +122,8 @@ function simulator(key: string, label: string, act: (req: DownstreamRequest, req
         // Nothing was sent: a definitive failure, not an ambiguous one.
         return { outcome: "failed", reference: null, summary: {}, error: e instanceof Error ? e.message : "rejected" };
       }
-      const requestRef = req.actionRequestId.slice(0, 8).toUpperCase();
+      // The random tail of the request id: the head of a UUIDv7 is a timestamp and collides within one second.
+      const requestRef = req.actionRequestId.replace(/-/g, "").slice(-8).toUpperCase();
       const planned = act(req, requestRef);
       if ("reject" in planned) return { outcome: "failed", reference: null, summary: {}, error: planned.reject };
       const reference = planned.reference ?? `${String(planned.entry.type ?? "op").toUpperCase().slice(0, 3)}-${requestRef}`;

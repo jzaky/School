@@ -37,6 +37,11 @@ Policy documents and versions; approval decisions; evidence chain; downstream cr
 | T18 | Platform admin accesses tenant data without trace | Platform module writes platform events for every tenant read | Built |
 | T19 | Denial of service on the gateway | Rate limits per key, body size limits, timeouts | Built (basic) |
 | T20 | Dependency vulnerabilities | `pnpm audit` in CI, lockfile pinned | CI step defined |
+| T21 | One approved request executed twice (two grants fetched, or two callers executing) | One live grant per request (application check plus partial unique index); consuming a grant moves the request to `executing`; a request with a final receipt never re-executes | Built, tested (execution-safety.test.ts) |
+| T22 | Emergency pause blocks new requests but previously approved actions still run | Pause voids live grants; approvals cannot be granted while paused; grant issuance and verification refuse while paused; approved-but-unexecuted requests wait for an administrator | Built, tested |
+| T23 | Downstream call succeeds but the response is lost, so the gateway retries and refunds twice | Stable idempotency key `aegis:<requestId>` sent to the downstream system; ambiguous outcomes recorded as `unknown` and reconciled by looking the operation up, never re-sent blindly; unresolved outcomes escalate to a human | Built, tested against simulators and a Stripe fake; not yet verified against real Stripe test mode |
+| T24 | Application process holds table-owner credentials, so an injection bypasses RLS | Owner URL only reaches the migrate job; application processes refuse to start in production when they find it | Built |
+| T25 | A live payment credential is connected by mistake | Connector validates keys at storage and at use; only test-mode keys are accepted | Built for the Stripe connector |
 
 ## Known gaps
 - No SAML.
