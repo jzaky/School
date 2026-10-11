@@ -8,6 +8,7 @@ import { runBankingDemo, runRefundDemo, runSensitiveDataDemo } from "../demos/sc
 import { runMonitoring, acknowledgeAlert, resolveAlert } from "../monitoring/service.js";
 import { installShield } from "../shield/inspector.js";
 import { seedDemoDataClasses, seedDemoShield } from "./demo-shield.js";
+import { seedDemoAudit, seedSharedFrameworks } from "./demo-audit.js";
 import { withTenant } from "@aegis/db";
 
 export async function runSeed() {
@@ -23,8 +24,15 @@ export async function runSeed() {
   await runRefundDemo(actors);
   await runSensitiveDataDemo(actors);
   await withTenant(t.orgId, (db) => seedDemoShield(db, t.users.security_analyst!.ctx, t.agents));
-  // Monitoring over the seeded history, with a few alerts already handled.
+  await seedSharedFrameworks();
+  const audit = await withTenant(t.orgId, (db) => seedDemoAudit(db, t.users.owner!.ctx, { ownerUserId: t.users.owner!.id, auditorUserId: t.users.auditor!.id }), { timeout: 180_000 });
+  console.log(`Audit: ${audit.documents.length} documents, ${audit.assessments.length} assessments, ${audit.tasks.length} tasks`);
+  // Monitoring over the seeded history: run at several points in the past so alerts carry realistic timestamps,
+  // then once now. A few alerts are already handled.
   const mon = await withTenant(t.orgId, async (db) => {
+    for (const daysAgo of [60, 45, 30, 21, 14, 7, 3, 1]) {
+      await runMonitoring(db, { ...t.users.owner!.ctx, now: new Date(Date.now() - daysAgo * 86400_000 + 14 * 3600_000) }, new Date(Date.now() - daysAgo * 86400_000 + 14 * 3600_000));
+    }
     const r = await runMonitoring(db, t.users.owner!.ctx);
     const alerts = await db.alert.findMany({ where: { orgId: t.orgId }, orderBy: { createdAt: "asc" } });
     if (alerts[0]) await acknowledgeAlert(db, t.users.security_analyst!.ctx, alerts[0].id);

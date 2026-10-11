@@ -44,13 +44,13 @@ export async function resetDemoTenant(): Promise<void> {
   const owner = ownerPrisma();
   const existing = await owner.organization.findUnique({ where: { slug: DEMO_SLUG } });
   if (existing) {
-    await owner.$executeRawUnsafe(`DELETE FROM evidence_checkpoints WHERE org_id = $1::uuid`, existing.id);
     await owner.$executeRawUnsafe(`DELETE FROM jobs WHERE org_id = $1::uuid`, existing.id);
     // Append-only tables refuse DELETE through triggers; the owner disables them for the reset only.
-    for (const t of ["evidence_events", "authorization_decisions", "approval_responses", "execution_receipts", "policy_events", "policy_versions"]) {
+    for (const t of ["evidence_events", "evidence_checkpoints", "authorization_decisions", "approval_responses", "execution_receipts", "policy_events", "policy_versions"]) {
       await owner.$executeRawUnsafe(`ALTER TABLE ${t} DISABLE TRIGGER USER`);
     }
     try {
+      await owner.$executeRawUnsafe(`DELETE FROM evidence_checkpoints WHERE org_id = $1::uuid`, existing.id);
       await owner.$executeRawUnsafe(`DELETE FROM evidence_events WHERE org_id = $1::uuid`, existing.id);
       // Dependents first; tables without FK cascades to organizations are cleaned explicitly.
       for (const t of ["team_members", "teams", "invitations", "sso_connections", "api_keys", "memberships", "roles", "notifications", "alerts", "monitoring_rules", "security_events", "incidents", "action_requests", "policies", "agents", "tools", "integrations", "resources", "control_mappings", "data_classes", "remediation_tasks", "assessments", "documents", "audit_exports", "frameworks"]) {
@@ -58,7 +58,7 @@ export async function resetDemoTenant(): Promise<void> {
       }
       await owner.organization.delete({ where: { id: existing.id } });
     } finally {
-      for (const t of ["evidence_events", "authorization_decisions", "approval_responses", "execution_receipts", "policy_events", "policy_versions"]) {
+      for (const t of ["evidence_events", "evidence_checkpoints", "authorization_decisions", "approval_responses", "execution_receipts", "policy_events", "policy_versions"]) {
         await owner.$executeRawUnsafe(`ALTER TABLE ${t} ENABLE TRIGGER USER`);
       }
     }

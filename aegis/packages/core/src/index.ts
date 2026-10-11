@@ -38,5 +38,7 @@ export * from "./assurance/compliance.js";
 export * from "./shield/index.js";
 export * from "./incidents/service.js";
 export { seedDemoShield, seedDemoDataClasses } from "./seed/demo-shield.js";
+export * from "./audit/index.js";
+export { seedDemoAudit, seedSharedFrameworks } from "./seed/demo-audit.js";
 export * from "./lib/otel.js";
 export * from "./identity/oidc.js";

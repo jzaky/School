@@ -23,3 +23,8 @@ export * from "./key-value";
 export * from "./code-block";
 export * from "./page-header";
 export * from "./demo-badge";
+export * from "./url-tabs";
+export * from "./countdown";
+export * from "./note";
+export * from "./download";
+export * from "./simple-table";

@@ -16,12 +16,20 @@ export interface TenantTxOptions {
   timeout?: number;
   /** Use a specific client (tests). */
   client?: PrismaClient;
+  /** Skip the per-organization serialization lock (read-only work that never appends evidence). */
+  readOnly?: boolean;
 }
 
 /**
  * Run `fn` inside a transaction where every statement sees only `orgId`'s rows.
  * The tenant context is a transaction-local setting, so it cannot leak between
  * requests that share a pooled connection.
+ *
+ * Writing transactions for one organization are serialized with a transaction-scoped
+ * advisory lock taken before any row is touched. This keeps the evidence chain strictly
+ * ordered and removes the deadlock class where one transaction holds row locks and waits
+ * for the chain lock while another holds the chain lock and waits for the rows. Governance
+ * workloads are modest; the cost is one lock wait per tenant transaction.
  */
 export async function withTenant<T>(orgId: string, fn: (db: TenantDb) => Promise<T>, opts: TenantTxOptions = {}): Promise<T> {
   assertUuid(orgId, "orgId");
@@ -29,6 +37,7 @@ export async function withTenant<T>(orgId: string, fn: (db: TenantDb) => Promise
   return client.$transaction(
     async (tx) => {
       await tx.$executeRawUnsafe(`SELECT set_config('app.current_org', '${orgId}', true)`);
+      if (!opts.readOnly) await tx.$executeRawUnsafe(`SELECT pg_advisory_xact_lock(hashtext('evidence:' || '${orgId}'))`);
       return fn(tx);
     },
     { timeout: opts.timeout ?? 15_000, maxWait: 5_000 },

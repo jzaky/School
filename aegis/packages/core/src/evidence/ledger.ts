@@ -64,6 +64,7 @@ export function computeEvidenceHash(e: Omit<EvidenceRecord, "id" | "hash">): str
  * a transaction-scoped advisory lock.
  */
 export async function appendEvidence(db: TenantDb, ctx: OrgContext, input: EvidenceInput): Promise<EvidenceRecord> {
+  // Re-entrant for the transaction that already holds it (withTenant takes it first); harmless otherwise.
   await db.$executeRawUnsafe(`SELECT pg_advisory_xact_lock(hashtext('evidence:' || $1))`, ctx.orgId);
   const last = await db.evidenceEvent.findFirst({ where: { orgId: ctx.orgId }, orderBy: { seq: "desc" }, select: { seq: true, hash: true } });
   const seq = (last?.seq ?? 0n) + 1n;

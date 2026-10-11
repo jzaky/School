@@ -56,7 +56,7 @@ export async function createVersionAction(policyId: string, input: unknown) {
     const id = uuid.parse(policyId);
     const raw = (input ?? {}) as Record<string, unknown>;
     const data = versionSchema.parse({ ...raw, document: parseDocument(raw.document) });
-    const v = await withTenant(c.ctx.orgId, (db) => createPolicyVersion(db, c.ctx, id, data));
+    const v = await withTenant(c.ctx.orgId, (db) => createPolicyVersion(db, c.ctx, id, { document: data.document ?? null, changeNote: data.changeNote }));
     revalidatePolicy(id);
     return { versionId: v.id, version: v.version };
   });
@@ -69,7 +69,7 @@ export async function saveDraftAction(policyId: string, versionId: string, input
     const vid = uuid.parse(versionId);
     const raw = (input ?? {}) as Record<string, unknown>;
     const data = z.object({ document: z.unknown(), changeNote: z.string().max(500).optional() }).parse({ ...raw, document: parseDocument(raw.document) });
-    const v = await withTenant(c.ctx.orgId, (db) => updateDraftVersion(db, c.ctx, vid, data));
+    const v = await withTenant(c.ctx.orgId, (db) => updateDraftVersion(db, c.ctx, vid, { document: data.document ?? null, changeNote: data.changeNote }));
     revalidatePolicy(pid);
     return { contentHash: v.contentHash };
   });
