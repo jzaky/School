@@ -14,7 +14,7 @@ This report separates what is implemented, what is tested, what is simulated, wh
 | Shield (detectors, injection signals, tool security, incidents) | Yes | 29 | None | NLP based detection, Presidio adapter |
 | Audit (documents, frameworks, assessments, remediation, reports) | Yes | 28 | None | Table extraction (Docling), semantic embeddings (Qdrant) |
 | Enterprise readiness | Mostly | Restore drill, load test | None | WAL based point in time recovery drill, penetration test, multi-replica run |
-| Console | Phase 1 screens verified; Control, Assurance, Shield and Audit screens see the console section | Playwright 10 (Phase 1), 13 (public site), see console section for the rest | Demo data labelled | See console section |
+| Console (all four products plus organization and platform admin) | Yes, every navigation item released | 36 Playwright tests across console areas | Demo data labelled | Visual policy authoring is JSON plus a form builder and canvas, not free-form |
 | Public website | Yes | 13 Playwright | Tour is a static illustration, labelled | None |
 
 Code size: about 9,000 lines in `packages/core`, 1,300 in api, worker, db and sdk, and 20,000 in the console and site. 50 database models.
@@ -72,8 +72,15 @@ Code size: about 9,000 lines in `packages/core`, 1,300 in api, worker, db and sd
 | Core | `pnpm --filter @aegis/core test` | 119 passed (12 files) |
 | API | `pnpm --filter @aegis/api test` | 6 passed |
 | Console Phase 1 | `npx playwright test tests/e2e/console.spec.ts` | 10 passed |
-| Public site | `npx playwright test tests/e2e/marketing.spec.ts` | 13 passed (one navigation test was flaky under concurrent load and passed on rerun) |
-| Console Control, Assurance, Shield, Audit | see console section below | |
+| Public site | `npx playwright test tests/e2e/marketing.spec.ts` | 13 passed |
+| Console Control and Assurance | `npx playwright test tests/e2e/control.spec.ts tests/e2e/assurance.spec.ts` | 14 passed |
+| Console Shield and Audit | `npx playwright test tests/e2e/shield.spec.ts tests/e2e/audit.spec.ts` | 12 passed |
+| Whole web suite in one run | `npx playwright test` | 49 passed (10.7 minutes against the dev server) |
+| CI | `.github/workflows/aegis-ci.yml` on head 20c39c8 | test and e2e jobs green |
 
 ## Console section
-(Updated when the remaining console work is verified.)
+Every screen in the navigation is built and exercised by Playwright against the seeded tenant: Command Center, Live Activity, Alerts; AI Agents, Policies (list, detail with Rules, Editor, Simulate, Versions, Assignments, History), Action Gateway (list, request detail with decision trace, emergency controls, demo runner), Approvals (center and decision page with eligibility and hash binding), Integrations (management, credentials, webhook setup, simulated ledger); Evidence Ledger (verify, export), Risk Monitoring, Governance Reports (with compliance evidence and framework drill-down), Policy History; Security Events, Data Protection, Tool Security, Incidents; Assessments, Standards, Documents, Remediation, Reports; Users, Teams, Roles, Settings, Billing; Tenants, Infrastructure Health, System Events, Deployment Versions, Operational Diagnostics.
+
+Known test characteristics: under heavy concurrent load (several Playwright runs plus the load test at once) individual dev-mode tests have timed out and passed on rerun; the full suite run alone passed 49 of 49. Tests mutate the demo tenant minimally and the seed restores it.
+
+Console gaps: resolve and reopen finding buttons are not exposed (resolution is driven by remediation tasks); custom framework deletion is not exposed; the reports page derives an export's assessment from the evidence ledger because the export row does not store it; the marketing inquiry rate limit is per process.

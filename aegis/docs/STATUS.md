@@ -46,9 +46,14 @@ Research, ADRs 0001 to 0005, architecture, database design, threat model, design
 - Remediation tasks with owner, due date, evidence attachments, review workflow and history. Reports in JSON and PDF (executive summary, detailed, evidence inventory, gap report, remediation plan) with disclaimers on every page.
 - Tests: 28 (retrieval 16, audit 12).
 
-## Phase 6: in progress
-- Done: OIDC SSO with PKCE and JIT provisioning, TOTP MFA, rate limiting, security headers, OpenTelemetry bootstrap, Dockerfile and Compose, Kubernetes manifests with network policy, CI workflow, backup and restore drill, deployment, security and third-party docs, per-organization transaction serialization with deadlock retry, float-safe canonical hashing.
-- Remaining: performance test run, final security review pass, implementation report.
+## Phase 6: complete
+- OIDC SSO with PKCE and JIT provisioning, TOTP MFA, rate limiting, security headers, OpenTelemetry bootstrap, Dockerfile and Compose, Kubernetes manifests with network policy, CI workflow (green on the final head), backup and restore drill, deployment, security and third-party docs, per-organization transaction serialization with deadlock retry, float-safe canonical hashing, pool-safe tenant transactions, gateway load test (docs/PERFORMANCE.md).
+- Remaining for production: WAL-based recovery drill, KMS-backed keys, penetration test, multi-replica run.
 
-## Test totals at this point
-Core 119, isolation 11, API 6, console Playwright 10. All passing on 2026-10-11.
+## Phase 7: complete
+- Console: every navigation item released. Control (policies with editor, canvas and simulator, gateway with decision traces, approval center, integrations, live activity, alerts, demo runner), Assurance (evidence ledger with verification and exports, monitoring rules, governance reports, policy history), Shield (security events, data protection with sample testing, tool security, incidents), Audit (documents, standards, assessments with validation, remediation, reports with download).
+- Public website: home, products, interactive tour, architecture, security, open source, pricing inquiry, contact and demo forms, legal drafts; no unsupported claims.
+- Implementation report: docs/IMPLEMENTATION_REPORT.md.
+
+## Final test totals (2026-10-11)
+Core 120, isolation 11, API 6, console and website Playwright 49 (console 10, control 9, assurance 5, shield 5, audit 7, marketing 13). All passing locally in one run; CI (test and e2e jobs) green on head 20c39c8.
