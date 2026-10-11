@@ -16,19 +16,23 @@ async function login(page: Page, email: string) {
   await page.waitForURL(/\/(overview|no-organization|platform|mfa)/);
 }
 
-/** Rows are server rendered before React hydrates, so a click can land before the handler exists. Retry until the effect shows. */
+/** Rows are server rendered before React hydrates, so a click can land before the handler exists. Click the first cell (never a link) and retry until the effect shows. */
 async function clickRowUntilUrl(page: Page, row: ReturnType<Page["locator"]>, url: RegExp) {
+  await expect(row).toBeVisible();
+  await page.waitForLoadState("networkidle").catch(() => undefined);
   await expect(async () => {
-    await row.click();
-    await page.waitForURL(url, { timeout: 5_000 });
-  }).toPass({ timeout: 90_000 });
+    await row.locator("td").first().click();
+    await page.waitForURL(url, { timeout: 30_000 });
+  }).toPass({ timeout: 150_000 });
 }
 
-async function clickRowUntilVisible(row: ReturnType<Page["locator"]>, target: ReturnType<Page["locator"]>) {
+async function clickRowUntilVisible(page: Page, row: ReturnType<Page["locator"]>, target: ReturnType<Page["locator"]>) {
+  await expect(row).toBeVisible();
+  await page.waitForLoadState("networkidle").catch(() => undefined);
   await expect(async () => {
-    await row.click();
-    await expect(target).toBeVisible({ timeout: 5_000 });
-  }).toPass({ timeout: 90_000 });
+    await row.locator("td").first().click();
+    await expect(target).toBeVisible({ timeout: 30_000 });
+  }).toPass({ timeout: 150_000 });
 }
 
 async function pickSelect(page: Page, trigger: ReturnType<Page["locator"]>, optionText: string | RegExp) {
@@ -86,7 +90,7 @@ test.describe("auditor", () => {
 
     // Tidy up: open the sheet, confirm the chunk preview, delete the document.
     const sheet = page.getByRole("dialog");
-    await clickRowUntilVisible(row, sheet.getByText(/First chunks/));
+    await clickRowUntilVisible(page, row, sheet.getByText(/First chunks/));
     await expect(sheet.locator("pre").first()).toContainText("Access Control Procedure");
     await sheet.getByRole("button", { name: "Delete document" }).click();
     const confirm = page.getByRole("dialog").filter({ hasText: `Delete ${title}` });
@@ -120,7 +124,7 @@ test.describe("auditor", () => {
     const code = await finding.getAttribute("data-finding");
     await pickSelect(page, finding.locator('[id^="hv-status-"]'), "Partial");
     await finding.locator('[id^="hv-note-"]').fill("E2E: confirmed against the cited passage");
-    await finding.getByRole("button", { name: "Validate" }).click();
+    await finding.getByRole("button", { name: "Validate", exact: true }).click();
     await expect(page.getByText(`${code} validated as partial`)).toBeVisible(SLOW);
     const refreshed = page.locator(`li[data-finding="${code}"]`);
     await expect(refreshed.getByText("Human validated").first()).toBeVisible(SLOW);
@@ -155,7 +159,7 @@ test.describe("auditor", () => {
     await page.goto("/audit/remediation?status=open");
     await expect(page.getByRole("heading", { level: 1, name: "Remediation" })).toBeVisible();
     await expect(page.locator("table")).toBeVisible();
-    const rows = page.locator("tbody tr");
+    const rows = page.locator('tbody tr[role="link"]');
     if ((await rows.count()) === 0) {
       await page.getByRole("button", { name: "New task" }).click();
       const create = page.getByRole("dialog");
@@ -165,7 +169,7 @@ test.describe("auditor", () => {
       await expect(page.locator("tbody tr").first()).toBeVisible();
     }
     const sheet = page.getByTestId("task-sheet");
-    await clickRowUntilVisible(page.locator("tbody tr").first(), sheet);
+    await clickRowUntilVisible(page, page.locator('tbody tr[role="link"]').first(), sheet);
     await sheet.getByRole("button", { name: "Start work" }).click();
     await sheet.locator("#task-transition-note").fill("E2E: work started");
     await sheet.getByRole("button", { name: /Confirm: Start work/ }).click();
