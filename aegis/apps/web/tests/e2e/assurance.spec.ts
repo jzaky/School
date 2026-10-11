@@ -66,7 +66,7 @@ test.describe("assurance as owner", () => {
     await page.getByRole("tab", { name: "7 days" }).click();
     await page.waitForURL(/days=7/);
     await expect(page.getByText(/period 7 days/)).toBeVisible();
-    await page.getByRole("link", { name: /ISO|NIST|SOC|AI/ }).first().click();
+    await page.locator("section", { hasText: "Framework mapping" }).first().getByRole("link").first().click();
     await page.waitForURL(/\/reports\/frameworks\/[0-9a-f-]{36}/);
     await expect(page.locator("tbody tr").first()).toBeVisible();
   });
