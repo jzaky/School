@@ -13,7 +13,7 @@ packages/core  Domain modules: identity, orgs, agents, policy, gateway, approval
 packages/db    Prisma schema, migrations, row-level security, tenant database helper
 packages/sdk   TypeScript client for agents and downstream systems
 deploy/        Dockerfile, Docker Compose, Kubernetes manifests
-docs/          Architecture, research, policy language, API, security, deployment, status
+docs/          Architecture, research, policy language, API, security, deployment, status, demo-to-production and real-world validation plans
 ```
 
 ## Quick start
