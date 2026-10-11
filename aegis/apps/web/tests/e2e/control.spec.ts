@@ -139,7 +139,7 @@ test.describe("control as approver", () => {
     const reference = page.getByTestId("receipt-reference");
     await expect(reference).toBeVisible({ timeout: 30_000 });
     await expect(reference).toContainText(/^TRF-/);
-    await page.getByRole("link", { name: "Open the action request" }).click();
+    await page.getByRole("link", { name: "Open the action request" }).first().click();
     await page.waitForURL(/\/gateway\/[0-9a-f-]{36}/);
     await expect(page.locator("h1 ~ *").getByText("Executed").first().or(page.getByText("Executed").first())).toBeVisible();
     await expect(page.getByText(/reference/).first()).toBeVisible();

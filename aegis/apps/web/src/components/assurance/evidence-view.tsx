@@ -146,9 +146,9 @@ export function EvidenceView({ rows, pagination, filters, types, subjectTypes, i
           <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
           Verify chain now
         </Button>
-        <Badge tone={chain.valid ? "allow" : "deny"} data-testid="chain-status">
-          {chain.valid ? `Chain valid: ${chain.checked} events, ${chain.checkpoints} checkpoints` : `Chain invalid${chain.firstBadSeq ? ` at seq ${chain.firstBadSeq}` : ""}: ${chain.reason}`}
-        </Badge>
+        <span data-testid="chain-status">
+          <Badge tone={chain.valid ? "allow" : "deny"}>{chain.valid ? `Chain valid: ${chain.checked} events, ${chain.checkpoints} checkpoints` : `Chain invalid${chain.firstBadSeq ? ` at seq ${chain.firstBadSeq}` : ""}: ${chain.reason}`}</Badge>
+        </span>
         <div className="ms-auto flex items-center gap-2">
           <Button size="sm" loading={exporting === "jsonl"} disabled={exporting !== null} onClick={() => doExport("jsonl")}>
             <Download className="h-3.5 w-3.5" aria-hidden />

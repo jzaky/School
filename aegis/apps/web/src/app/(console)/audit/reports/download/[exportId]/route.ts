@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { withTenant } from "@aegis/db";
 import { isAegisError, readExport } from "@aegis/core";
-import { getSession } from "@/server/session";
-import { getConsoleContext } from "@/server/session";
+import { getConsoleContext, getSession } from "@/server/session";
 
 export const dynamic = "force-dynamic";
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -17,7 +16,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ exportI
   if (!c.can("reports:read")) return NextResponse.json({ error: "Requires reports:read" }, { status: 403 });
   try {
     const r = await withTenant(c.ctx.orgId, (db) => readExport(db, c.ctx, exportId));
-    const body = new Uint8Array(r.buffer.buffer, r.buffer.byteOffset, r.buffer.byteLength);
+    const body = new Blob([new Uint8Array(r.buffer)], { type: r.contentType });
     return new Response(body, {
       status: 200,
       headers: {
