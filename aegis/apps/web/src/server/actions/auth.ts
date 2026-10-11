@@ -17,7 +17,7 @@ export async function loginAction(_prev: ActionState, formData: FormData): Promi
   try {
     const r = await loginWithPassword(parsed.data, { ip: h.get("x-forwarded-for") ?? undefined, userAgent: h.get("user-agent") ?? undefined });
     (await cookies()).set(SESSION_COOKIE, r.token, cookieOpts);
-    redirect(r.mfaRequired ? "/mfa" : "/overview");
+    redirect(r.mfaRequired ? "/mfa" : safeNext(formData.get("next")));
   } catch (e) {
     if (isRedirect(e)) throw e;
     return { error: isAegisError(e) ? e.message : "Sign in failed" };
@@ -47,6 +47,12 @@ export async function switchOrgAction(orgId: string): Promise<void> {
   if (!memberships.some((m) => m.orgId === orgId && m.status === "active")) return;
   await setSessionOrg(s.id, orgId);
   redirect("/overview");
+}
+
+/** Only same-origin paths are honoured as a post-login destination. */
+function safeNext(value: FormDataEntryValue | null): string {
+  const v = typeof value === "string" ? value : "";
+  return v.startsWith("/") && !v.startsWith("//") && !v.startsWith("/login") ? v : "/overview";
 }
 
 function isRedirect(e: unknown): boolean {
