@@ -40,11 +40,11 @@ test.describe("assurance as owner", () => {
     await expect(page.getByRole("dialog").getByText(/Hash recomputed and verified/)).toBeVisible();
   });
 
-  test("monitoring page shows 11 built-in rules and alert stats", async ({ page }) => {
+  test("monitoring page shows 12 built-in rules and alert stats", async ({ page }) => {
     await page.goto("/monitoring");
     await expect(page.getByRole("heading", { level: 1, name: "Risk Monitoring" })).toBeVisible();
-    await expect(page.locator("tbody tr[data-rule-key^='RM-']")).toHaveCount(11);
-    await expect(page.locator("tbody tr").filter({ hasText: "built-in" })).toHaveCount(11);
+    await expect(page.locator("tbody tr[data-rule-key^='RM-']")).toHaveCount(12);
+    await expect(page.locator("tbody tr").filter({ hasText: "built-in" })).toHaveCount(12);
     await expect(page.getByText("RM-010")).toBeVisible();
     await expect(page.getByRole("heading", { level: 2, name: "Alert status" })).toBeVisible();
     await expect(page.getByRole("button", { name: "New custom rule" })).toBeEnabled();

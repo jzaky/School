@@ -39,7 +39,7 @@ const MODULES: Module[] = [
       "Ed25519 checkpoints written by the worker every N events or minutes; the signing key lives outside the database; public key exported with every export",
       "Verification per event and for the whole chain, with a verify-and-record action that itself becomes evidence",
       "Export as JSON Lines or CSV with the chain verification stamp and checkpoint public key; governance report JSON",
-      "11 built-in monitoring rules with configurable thresholds: repeated denials, permission escalation, unusual tool usage, transaction volume, integration failures, policy evaluation failures, missing evidence or receipts, abnormal activity, approvals about to expire, chain integrity, credential rotation due",
+      "12 built-in monitoring rules with configurable thresholds: repeated denials, permission escalation, unusual tool usage, transaction volume, integration failures, policy evaluation failures, missing evidence or receipts, abnormal activity, approvals about to expire, chain integrity, credential rotation due, unresolved execution outcomes",
       "Deduplicated alerts with acknowledge and resolve, each resolution recorded as evidence; evaluated by the worker every minute",
       "Governance dashboard computed from real records: agents, decisions, approvals, violations, high-risk events, failed integrations, evidence status, service health, day series, approval turnaround percentiles",
       "Observed technical controls with measurements and framework references, feeding the per-framework mapping summary used by Audit",

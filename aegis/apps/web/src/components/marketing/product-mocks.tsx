@@ -128,7 +128,7 @@ export function MonitoringMock() {
     <figure className="mk-mock" role="img" aria-label="Illustration of Risk Monitoring alerts produced by deterministic rules">
       <div className="mk-mock-bar">
         <span className="font-semibold text-[#e6ebf5]">Risk Monitoring</span>
-        <span className="ms-auto text-[#93a1ba]">11 rules, evaluated every minute</span>
+        <span className="ms-auto text-[#93a1ba]">12 rules, evaluated every minute</span>
       </div>
       {rows.map((r) => (
         <div key={r[0]} className="mk-mock-row grid-cols-[52px_1fr_1fr_64px]">
