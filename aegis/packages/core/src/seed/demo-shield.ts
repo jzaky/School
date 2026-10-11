@@ -30,7 +30,7 @@ export async function seedDemoDataClasses(db: TenantDb, ctx: OrgContext) {
   const created: string[] = [];
   for (const c of custom) {
     if (byKey.has(c.key)) continue;
-    await createCustomDataClass(db, ctx, c);
+    await createCustomDataClass(db, ctx, { ...c, enabled: true });
     created.push(c.key);
   }
   return { created };
