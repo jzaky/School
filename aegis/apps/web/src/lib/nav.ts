@@ -44,6 +44,8 @@ export interface NavItem {
   platformAdmin?: boolean;
   /** Needs an active organization (false for platform pages). */
   needsOrg?: boolean;
+  /** Shell data field whose count is shown as a badge. */
+  badge?: "pendingApprovals";
 }
 
 export interface NavGroup {
@@ -59,27 +61,27 @@ export const NAV: NavGroup[] = [
     label: "Overview",
     items: [
       { label: "Command Center", href: "/overview", icon: LayoutDashboard, ready: true },
-      { label: "Live Activity", href: "/activity", icon: Activity, ready: false, permission: "gateway:read" },
-      { label: "Alerts", href: "/alerts", icon: AlertTriangle, ready: false, permission: "monitoring:read" },
+      { label: "Live Activity", href: "/activity", icon: Activity, ready: true, permission: "gateway:read" },
+      { label: "Alerts", href: "/alerts", icon: AlertTriangle, ready: true, permission: "monitoring:read" },
     ],
   },
   {
     label: "Control",
     items: [
       { label: "AI Agents", href: "/agents", icon: Bot, ready: true, permission: "agents:read" },
-      { label: "Policies", href: "/policies", icon: Scale, ready: false, permission: "policies:read" },
-      { label: "Action Gateway", href: "/gateway", icon: GitBranch, ready: false, permission: "gateway:read" },
-      { label: "Approvals", href: "/approvals", icon: CheckSquare, ready: false, permission: "approvals:decide" },
+      { label: "Policies", href: "/policies", icon: Scale, ready: true, permission: "policies:read" },
+      { label: "Action Gateway", href: "/gateway", icon: GitBranch, ready: true, permission: "gateway:read" },
+      { label: "Approvals", href: "/approvals", icon: CheckSquare, ready: true, permission: "gateway:read", badge: "pendingApprovals" },
       { label: "Integrations", href: "/integrations", icon: Plug, ready: true, permission: "integrations:read" },
     ],
   },
   {
     label: "Assurance",
     items: [
-      { label: "Evidence Ledger", href: "/evidence", icon: ScrollText, ready: false, permission: "evidence:read" },
-      { label: "Risk Monitoring", href: "/monitoring", icon: BarChart3, ready: false, permission: "monitoring:read" },
-      { label: "Governance Reports", href: "/reports", icon: FileText, ready: false, permission: "reports:read" },
-      { label: "Policy History", href: "/policy-history", icon: History, ready: false, permission: "policies:read" },
+      { label: "Evidence Ledger", href: "/evidence", icon: ScrollText, ready: true, permission: "evidence:read" },
+      { label: "Risk Monitoring", href: "/monitoring", icon: BarChart3, ready: true, permission: "monitoring:read" },
+      { label: "Governance Reports", href: "/reports", icon: FileText, ready: true, permission: "reports:read" },
+      { label: "Policy History", href: "/policy-history", icon: History, ready: true, permission: "policies:read" },
     ],
   },
   {

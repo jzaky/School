@@ -59,7 +59,7 @@ export async function listMembers(db: TenantDb, ctx: OrgContext) {
   assertPermission(ctx, "users:read");
   const rows = await db.membership.findMany({ where: { orgId: ctx.orgId }, include: { role: true }, orderBy: { createdAt: "asc" } });
   // users is a global table; fetch display fields for the ids we have.
-  const users = await rawPrisma().user.findMany({ where: { id: { in: rows.map((r) => r.userId) } }, select: { id: true, email: true, name: true, mfaEnabled: true, lastLoginAt: true, status: true } });
+  const users = await db.user.findMany({ where: { id: { in: rows.map((r) => r.userId) } }, select: { id: true, email: true, name: true, mfaEnabled: true, lastLoginAt: true, status: true } });
   const byId = new Map(users.map((u) => [u.id, u]));
   return rows.map((m) => ({ ...m, user: byId.get(m.userId) ?? null }));
 }
@@ -163,7 +163,7 @@ export async function inviteUser(db: TenantDb, ctx: OrgContext, input: { email: 
   const role = await db.role.findUnique({ where: { id: input.roleId } });
   if (!role) throw notFound("Role");
   const email = input.email.toLowerCase().trim();
-  const user = await rawPrisma().user.findUnique({ where: { email }, select: { id: true } });
+  const user = await db.user.findUnique({ where: { email }, select: { id: true } });
   if (user) {
     const existing = await db.membership.findUnique({ where: { orgId_userId: { orgId: ctx.orgId, userId: user.id } } });
     if (existing) throw conflict("This person is already a member");

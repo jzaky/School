@@ -28,3 +28,4 @@ export * from "./countdown";
 export * from "./note";
 export * from "./download";
 export * from "./simple-table";
+export * from "./link-button";

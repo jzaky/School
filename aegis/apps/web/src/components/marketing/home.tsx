@@ -107,12 +107,10 @@ export function HomePage() {
         <ol className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {STEPS.map((s) => (
             <li key={s.n} className="mk-card flex flex-col">
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-xs text-(--mk-accent)">{s.n}</span>
-                <code className="mk-code text-[11px]">{s.code}</code>
-              </div>
-              <h3 className="mk-h3 mt-3">{s.title}</h3>
-              <p className="mt-2 text-sm text-(--mk-muted)">{s.body}</p>
+              <span className="font-mono text-xs text-(--mk-accent)">{s.n}</span>
+              <h3 className="mk-h3 mt-2">{s.title}</h3>
+              <p className="mt-2 flex-1 text-sm text-(--mk-muted)">{s.body}</p>
+              <code className="mk-code mt-4 self-start whitespace-normal break-words text-[11px]">{s.code}</code>
             </li>
           ))}
         </ol>
@@ -171,7 +169,7 @@ export function HomePage() {
           </div>
           <dl className="grid gap-4 sm:grid-cols-2">
             {SECURITY.map((s) => (
-              <div key={s.title} className="rounded-xl border border-(--mk-line) bg-(--mk-bg-2) p-5">
+              <div key={s.title} className="rounded-xl border border-(--mk-line) bg-(--mk-bg-2) p-5 sm:[&:last-child]:col-span-2">
                 <dt className="font-semibold">{s.title}</dt>
                 <dd className="mt-2 text-sm text-(--mk-muted)">{s.body}</dd>
               </div>

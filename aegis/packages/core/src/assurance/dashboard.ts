@@ -1,5 +1,4 @@
 import type { TenantDb } from "@aegis/db";
-import { rawPrisma } from "@aegis/db";
 import type { OrgContext } from "../lib/context.js";
 import { assertPermission } from "../orgs/orgs.js";
 import { verifyChain } from "../evidence/ledger.js";
@@ -113,7 +112,7 @@ export async function serviceHealth(db: TenantDb, ctx: OrgContext) {
   const started = Date.now();
   let database = "up";
   try {
-    await rawPrisma().$queryRaw`SELECT 1`;
+    await db.$queryRaw`SELECT 1`;
   } catch {
     database = "down";
   }

@@ -167,7 +167,7 @@ export async function auditRoutes(app: FastifyInstance) {
   app.post("/assessments/:id/run", async (req) => {
     const ctx = await req.orgContext();
     const { id } = idParam.parse(req.params);
-    return withTenant(ctx.orgId, (db) => runAssessment(db, ctx, id), { timeout: 120_000 });
+    return withTenant(ctx.orgId, (db) => runAssessment(db, ctx, id), { timeout: 120_000, lock: "lazy" });
   });
   app.post("/findings/:id/validate", async (req) => {
     const ctx = await req.orgContext();

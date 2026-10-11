@@ -14,7 +14,6 @@ import { buildAuthorizationInput, extractDestinationDomain, type AuthorizationIn
 import { issueGrant } from "./grants.js";
 import { getShieldInspector } from "./shield-hook.js";
 import { getDownstreamSystem } from "./simulators.js";
-import { rawPrisma } from "@aegis/db";
 
 export const actionRequestInputSchema = z.object({
   tool: z.string().min(1).max(80),
@@ -50,8 +49,9 @@ export function requestHashOf(toolKey: string, action: string, params: Record<st
   return hashObject({ toolKey, action, params });
 }
 
-async function gatewayPausedState(orgId: string): Promise<{ paused: boolean; reason?: string }> {
-  const org = await rawPrisma().organization.findUnique({ where: { id: orgId }, select: { settings: true } });
+/** Reads through the transaction client: never touch the shared pool from inside a tenant transaction (pool exhaustion under load). */
+async function gatewayPausedState(db: TenantDb, orgId: string): Promise<{ paused: boolean; reason?: string }> {
+  const org = await db.organization.findUnique({ where: { id: orgId }, select: { settings: true } });
   const s = (org?.settings ?? {}) as { gatewayPaused?: boolean; gatewayPausedReason?: string };
   return { paused: !!s.gatewayPaused, reason: s.gatewayPausedReason };
 }
@@ -124,7 +124,7 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
 
   try {
     const destinationDomain = extractDestinationDomain(input.params);
-    const paused = await gatewayPausedState(ctx.orgId);
+    const paused = await gatewayPausedState(db, ctx.orgId);
     const baseline = baselineChecks({ agent, tool, action: input.action, resource, resourceKeyRequested: input.resource ?? null, params: input.params, destinationDomain, gatewayPaused: paused });
 
     const shield = await getShieldInspector()(db, ctx.orgId, { params: input.params, toolKey: input.tool, destinationDomain, agentId });

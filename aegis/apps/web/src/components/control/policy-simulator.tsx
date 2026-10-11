@@ -4,7 +4,6 @@ import { Play } from "lucide-react";
 import { simulatePolicyAction, type SimulationOutput } from "@/server/actions/policies";
 import { Button } from "@/components/ui/button";
 import { Field, FormError, Input, Textarea } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
 import { Combobox } from "@/components/ui/combobox";
 import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/ui/status";

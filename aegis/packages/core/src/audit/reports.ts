@@ -4,7 +4,7 @@
  * PDF carries the engine disclaimer. Files are written to storage and recorded as AuditExport rows
  * with their sha256 so a downloaded report can be verified.
  */
-import { rawPrisma, type FindingStatus, type TenantDb } from "@aegis/db";
+import type { FindingStatus, TenantDb } from "@aegis/db";
 import PDFDocument from "pdfkit";
 import { z } from "zod";
 import { appendEvidence } from "../evidence/ledger.js";
@@ -90,7 +90,7 @@ export async function buildReportContent(db: TenantDb, ctx: OrgContext, assessme
   findings.sort((x, y) => x.control.sortOrder - y.control.sortOrder || x.control.code.localeCompare(y.control.code));
   const documents = a.documentIds.length ? await db.document.findMany({ where: { orgId: ctx.orgId, id: { in: a.documentIds } }, select: { id: true, title: true, filename: true, sha256: true, pageCount: true, chunkCount: true } }) : [];
   const ownerIds = [...new Set(findings.flatMap((f) => f.remediation.map((t) => t.ownerId)).filter((x): x is string => !!x))];
-  const owners = ownerIds.length ? await rawPrisma().user.findMany({ where: { id: { in: ownerIds } }, select: { id: true, name: true } }) : [];
+  const owners = ownerIds.length ? await db.user.findMany({ where: { id: { in: ownerIds } }, select: { id: true, name: true } }) : [];
   const ownerName = new Map(owners.map((o) => [o.id, o.name]));
   const now = ctx.now ?? new Date();
 

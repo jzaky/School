@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-const PUBLIC_PREFIXES = ["/login", "/mfa", "/_next", "/favicon", "/api/public", "/site", "/assets", "/no-organization", "/forbidden", "/invite"];
+const PUBLIC_PREFIXES = ["/login", "/mfa", "/_next", "/favicon", "/api/public", "/site", "/assets", "/no-organization", "/forbidden", "/invite", "/robots.txt", "/sitemap.xml", "/sso"];
 
 /** Edge check only: is there a session cookie? Real validation happens in server components. */
 export function middleware(req: NextRequest) {

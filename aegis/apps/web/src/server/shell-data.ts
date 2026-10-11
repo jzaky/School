@@ -6,10 +6,12 @@ import { getConsoleContext, type ConsoleContext } from "./session";
 
 export async function shellDataFromContext(c: ConsoleContext): Promise<ShellData> {
   let unread = 0;
+  let pendingApprovals = 0;
   try {
-    unread = await withTenant(c.ctx.orgId, (db) => unreadCount(db, c.ctx, c.session.user.id));
+    [unread, pendingApprovals] = await withTenant(c.ctx.orgId, async (db) => Promise.all([unreadCount(db, c.ctx, c.session.user.id), c.can("gateway:read") ? db.approvalRequest.count({ where: { orgId: c.ctx.orgId, status: { in: ["pending", "more_info", "escalated"] } } }) : 0]));
   } catch {
     unread = 0;
+    pendingApprovals = 0;
   }
   return {
     user: { id: c.session.user.id, name: c.session.user.name, email: c.session.user.email, isPlatformAdmin: c.session.user.isPlatformAdmin },
@@ -18,6 +20,7 @@ export async function shellDataFromContext(c: ConsoleContext): Promise<ShellData
     memberships: c.memberships.filter((m) => m.status === "active").map((m) => ({ orgId: m.orgId, orgName: m.orgName, orgSlug: m.orgSlug, orgDemo: m.orgDemo, roleName: m.roleName })),
     permissions: c.membership.permissions,
     unread,
+    pendingApprovals,
   };
 }
 

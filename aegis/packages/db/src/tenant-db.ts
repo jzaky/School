@@ -18,6 +18,14 @@ export interface TenantTxOptions {
   client?: PrismaClient;
   /** Skip the per-organization serialization lock (read-only work that never appends evidence). */
   readOnly?: boolean;
+  /**
+   * "upfront" (default): take the organization lock before any row is touched. Right for short
+   * request-path transactions (gateway, approvals, console actions).
+   * "lazy": do not take the lock up front; appendEvidence takes it when it writes. Right for long
+   * jobs (monitoring runs, assessments, seeding) that would otherwise block the request path for
+   * their whole duration. Deadlocks that this can cause are resolved by the retry below.
+   */
+  lock?: "upfront" | "lazy";
   /** Attempts on deadlock or serialization failure. Default 3. */
   retries?: number;
   /** Milliseconds to wait for a connection and the lock before starting. Default 10s. */
@@ -44,7 +52,7 @@ export async function withTenant<T>(orgId: string, fn: (db: TenantDb) => Promise
       return await client.$transaction(
         async (tx) => {
           await tx.$executeRawUnsafe(`SELECT set_config('app.current_org', '${orgId}', true)`);
-          if (!opts.readOnly) await tx.$executeRawUnsafe(`SELECT pg_advisory_xact_lock(hashtext('evidence:' || '${orgId}'))`);
+          if (!opts.readOnly && (opts.lock ?? "upfront") === "upfront") await tx.$executeRawUnsafe(`SELECT pg_advisory_xact_lock(hashtext('evidence:' || '${orgId}'))`);
           return fn(tx);
         },
         { timeout: opts.timeout ?? 15_000, maxWait: opts.maxWait ?? 10_000 },

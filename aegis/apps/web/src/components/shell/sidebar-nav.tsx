@@ -34,6 +34,11 @@ export function SidebarNav({ data, collapsed, onNavigate }: { data: ShellData; c
                   <Icon className="h-4 w-4 shrink-0" aria-hidden />
                   {!collapsed ? <span className="truncate">{item.label}</span> : null}
                   {!collapsed && state.disabled ? <Lock className="ms-auto h-3 w-3 shrink-0 text-fg-dim" aria-hidden /> : null}
+                  {!collapsed && !state.disabled && item.badge && (data[item.badge] ?? 0) > 0 ? (
+                    <span className="ms-auto rounded-full bg-approval/20 px-1.5 text-[10px] font-semibold tabular text-approval" aria-label={`${data[item.badge]} pending`} data-nav-badge={item.href}>
+                      {data[item.badge]}
+                    </span>
+                  ) : null}
                 </>
               );
               const cls = cn("flex h-7 w-full items-center gap-2.5 rounded-md px-2 text-[13px] transition-colors duration-150", collapsed && "justify-center px-0", active ? "bg-accent/15 text-fg" : "text-fg-muted hover:bg-bg-elev-2 hover:text-fg", state.disabled && "cursor-not-allowed opacity-50 hover:bg-transparent hover:text-fg-muted");

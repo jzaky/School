@@ -13,4 +13,6 @@ export interface ShellData {
   memberships: ShellMembership[];
   permissions: string[];
   unread: number;
+  /** Approvals waiting for a decision, shown on the Approvals nav item. */
+  pendingApprovals?: number;
 }

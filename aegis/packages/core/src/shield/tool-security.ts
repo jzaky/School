@@ -1,4 +1,4 @@
-import { rawPrisma, type TenantDb } from "@aegis/db";
+import type { TenantDb } from "@aegis/db";
 import { baselineChecks, validateParams, type BaselineFailure } from "../gateway/baseline.js";
 import { extractDestinationDomain } from "../gateway/input.js";
 import type { OrgContext } from "../lib/context.js";
@@ -27,9 +27,9 @@ export interface ToolSecurityReport {
   heuristic: false;
 }
 
-async function gatewayPaused(orgId: string): Promise<{ paused: boolean; reason?: string }> {
+async function gatewayPaused(db: TenantDb, orgId: string): Promise<{ paused: boolean; reason?: string }> {
   // organizations is a global table (no org_id); reading it is how the gateway does it too.
-  const org = await rawPrisma().organization.findUnique({ where: { id: orgId }, select: { settings: true } });
+  const org = await db.organization.findUnique({ where: { id: orgId }, select: { settings: true } });
   const s = (org?.settings ?? {}) as { gatewayPaused?: boolean; gatewayPausedReason?: string };
   return { paused: !!s.gatewayPaused, reason: s.gatewayPausedReason };
 }
@@ -43,7 +43,7 @@ export async function evaluateToolSecurity(db: TenantDb, orgId: string, input: {
   const resource = input.resourceKey ? await db.resource.findUnique({ where: { orgId_key: { orgId, key: input.resourceKey } } }) : null;
   const destinationDomain = input.destinationDomain === undefined ? extractDestinationDomain(params) : input.destinationDomain;
 
-  const baseline = baselineChecks({ agent, tool, action, resource, resourceKeyRequested: input.resourceKey ?? null, params, destinationDomain, gatewayPaused: await gatewayPaused(orgId) });
+  const baseline = baselineChecks({ agent, tool, action, resource, resourceKeyRequested: input.resourceKey ?? null, params, destinationDomain, gatewayPaused: await gatewayPaused(db, orgId) });
   const codes = new Set(baseline.failures.map((f) => f.code));
 
   const rules = (tool?.destinationRules ?? {}) as { allowedDomains?: string[]; allowedResourceKeys?: string[] };

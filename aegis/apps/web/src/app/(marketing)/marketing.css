@@ -387,3 +387,14 @@ textarea.mk-input {
   height: 8px;
   border-radius: 999px;
 }
+
+/* Grid and flex children default to min-width:auto, which lets wide <pre> and diagram blocks push
+   the page wider than the viewport on phones. Allow them to shrink and scroll internally instead. */
+.mk [class*="grid"] > *,
+.mk [class*="flex"] > * {
+  min-width: 0;
+}
+.mk-pre,
+.mk-table-wrap {
+  max-width: 100%;
+}
