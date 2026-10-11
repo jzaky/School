@@ -13,7 +13,7 @@ export function SimpleTable({ children, className, caption }: { children: React.
   );
 }
 
-export function Th({ children, align = "start", className, ...props }: React.ThHTMLAttributes<HTMLTableCellElement> & { align?: "start" | "end" }) {
+export function Th({ children, align = "start", className, ...props }: Omit<React.ThHTMLAttributes<HTMLTableCellElement>, "align"> & { align?: "start" | "end" }) {
   return (
     <th scope="col" className={cn("h-9 whitespace-nowrap border-b border-line bg-bg-elev-2/95 px-3 text-xs font-medium text-fg-muted", align === "end" ? "text-end" : "text-start", className)} {...props}>
       {children}
@@ -21,7 +21,7 @@ export function Th({ children, align = "start", className, ...props }: React.ThH
   );
 }
 
-export function Td({ children, align = "start", mono, className, ...props }: React.TdHTMLAttributes<HTMLTableCellElement> & { align?: "start" | "end"; mono?: boolean }) {
+export function Td({ children, align = "start", mono, className, ...props }: Omit<React.TdHTMLAttributes<HTMLTableCellElement>, "align"> & { align?: "start" | "end"; mono?: boolean }) {
   return (
     <td className={cn("h-9 px-3 align-middle text-fg", align === "end" && "tabular text-end", mono && "font-mono text-xs", className)} {...props}>
       {children}

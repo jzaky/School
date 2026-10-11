@@ -18,6 +18,10 @@ export interface TenantTxOptions {
   client?: PrismaClient;
   /** Skip the per-organization serialization lock (read-only work that never appends evidence). */
   readOnly?: boolean;
+  /** Attempts on deadlock or serialization failure. Default 3. */
+  retries?: number;
+  /** Milliseconds to wait for a connection and the lock before starting. Default 10s. */
+  maxWait?: number;
 }
 
 /**
@@ -34,14 +38,32 @@ export interface TenantTxOptions {
 export async function withTenant<T>(orgId: string, fn: (db: TenantDb) => Promise<T>, opts: TenantTxOptions = {}): Promise<T> {
   assertUuid(orgId, "orgId");
   const client = opts.client ?? rawPrisma();
-  return client.$transaction(
-    async (tx) => {
-      await tx.$executeRawUnsafe(`SELECT set_config('app.current_org', '${orgId}', true)`);
-      if (!opts.readOnly) await tx.$executeRawUnsafe(`SELECT pg_advisory_xact_lock(hashtext('evidence:' || '${orgId}'))`);
-      return fn(tx);
-    },
-    { timeout: opts.timeout ?? 15_000, maxWait: 5_000 },
-  );
+  const attempts = opts.retries ?? 3;
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await client.$transaction(
+        async (tx) => {
+          await tx.$executeRawUnsafe(`SELECT set_config('app.current_org', '${orgId}', true)`);
+          if (!opts.readOnly) await tx.$executeRawUnsafe(`SELECT pg_advisory_xact_lock(hashtext('evidence:' || '${orgId}'))`);
+          return fn(tx);
+        },
+        { timeout: opts.timeout ?? 15_000, maxWait: opts.maxWait ?? 10_000 },
+      );
+    } catch (err) {
+      // PostgreSQL aborts one side of a deadlock (40P01) or a serialization conflict (40001); the whole
+      // transaction rolled back, so re-running `fn` is safe and is the standard remedy.
+      if (attempt < attempts && isRetryable(err)) {
+        await new Promise((r) => setTimeout(r, 50 * attempt + Math.floor(Math.random() * 100)));
+        continue;
+      }
+      throw err;
+    }
+  }
+}
+
+function isRetryable(err: unknown): boolean {
+  const text = err instanceof Error ? `${err.message} ${JSON.stringify((err as { meta?: unknown }).meta ?? "")}` : String(err);
+  return /40P01|deadlock detected|40001|could not serialize/.test(text);
 }
 
 /** Convenience alias matching the name used across the codebase. */

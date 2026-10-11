@@ -1,7 +1,7 @@
 "use server";
 import { headers } from "next/headers";
 import { z } from "zod";
-import { rawPrisma } from "@aegis/db";
+import { rawPrisma, type Prisma } from "@aegis/db";
 import type { ActionResult } from "@/lib/action-result";
 import { DEPLOYMENTS, INTERESTS } from "@/components/marketing/form-options";
 
@@ -85,7 +85,7 @@ export async function submitMarketingForm(input: unknown): Promise<MarketingResu
     detail.deploymentPreference = data.deploymentPreference;
   }
   try {
-    const row = await rawPrisma().platformEvent.create({ data: { type: data.kind === "inquiry" ? "marketing.inquiry" : "marketing.demo_request", detail }, select: { id: true } });
+    const row = await rawPrisma().platformEvent.create({ data: { type: data.kind === "inquiry" ? "marketing.inquiry" : "marketing.demo_request", detail: detail as Prisma.InputJsonValue }, select: { id: true } });
     return { ok: true, data: { reference: row.id.slice(0, 8).toUpperCase(), kind: data.kind } };
   } catch (e) {
     // Log the error class only; the payload holds contact details.

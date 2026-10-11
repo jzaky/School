@@ -51,8 +51,11 @@ export function decryptSecret(envelope: string, aad = ""): string {
 
 /**
  * Canonical JSON (RFC 8785 style): sorted object keys, no whitespace, arrays in order,
- * numbers as shortest round-trip, undefined dropped. Used for every hash in AEGIS so the
- * same logical content always hashes identically.
+ * undefined dropped. Non-integer numbers are normalised to 15 significant digits because JSON
+ * stored in PostgreSQL through the database driver can come back with one digit less precision
+ * than JavaScript's shortest representation (1/24 round-trips as 0.04166666666666666); 15 digits
+ * survive that round trip exactly. Used for every hash in AEGIS so the same logical content
+ * always hashes identically, before and after storage.
  */
 export function canonicalJson(value: unknown): string {
   return JSON.stringify(sortKeys(value));
@@ -71,7 +74,18 @@ function sortKeys(value: unknown): unknown {
     return out;
   }
   if (typeof value === "bigint") return value.toString();
+  if (typeof value === "number") return normaliseNumber(value);
   return value;
+}
+
+export function normaliseNumber(n: number): number {
+  if (!Number.isFinite(n) || Number.isInteger(n)) return n;
+  return Number(n.toPrecision(15));
+}
+
+/** Returns a deep copy with numbers normalised and keys sorted: exactly what canonicalJson hashes. */
+export function canonicalValue<T>(value: T): T {
+  return JSON.parse(canonicalJson(value)) as T;
 }
 
 export function hashObject(value: unknown): string {

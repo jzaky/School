@@ -11,6 +11,11 @@ describe("canonical JSON", () => {
     expect(hashObject({ amount: 500, currency: "AED" })).toBe(hashObject({ currency: "AED", amount: 500 }));
     expect(hashObject({ amount: 500 })).not.toBe(hashObject({ amount: 501 }));
   });
+  it("normalises floats so values survive a database round trip", () => {
+    expect(canonicalJson({ x: 1 / 24 })).toBe(canonicalJson({ x: 0.04166666666666666 }));
+    expect(canonicalJson({ x: 0.1 + 0.2 })).toBe(canonicalJson({ x: 0.3 }));
+    expect(canonicalJson({ n: 250000, m: 2500.5, big: 1e21 })).toBe('{"big":1e+21,"m":2500.5,"n":250000}');
+  });
   it("serialises dates and bigints deterministically", () => {
     expect(canonicalJson({ d: new Date("2026-01-01T00:00:00.000Z"), n: 10n })).toBe('{"d":"2026-01-01T00:00:00.000Z","n":"10"}');
   });

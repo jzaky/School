@@ -1,7 +1,7 @@
 import { createPrivateKey, createPublicKey, sign, verify } from "node:crypto";
 import type { Prisma, TenantDb } from "@aegis/db";
 import { env } from "../env.js";
-import { canonicalJson, sha256Hex } from "../lib/crypto.js";
+import { canonicalJson, canonicalValue, sha256Hex } from "../lib/crypto.js";
 import type { OrgContext } from "../lib/context.js";
 
 export const GENESIS_HASH = "0".repeat(64);
@@ -80,7 +80,8 @@ export async function appendEvidence(db: TenantDb, ctx: OrgContext, input: Evide
     subjectId: input.subjectId ?? null,
     correlationId: input.correlationId ?? ctx.requestId,
     traceId: input.traceId ?? ctx.traceId ?? null,
-    payload: input.payload ?? {},
+    // Stored exactly as hashed (sorted keys, normalised numbers) so verification is byte-stable.
+    payload: canonicalValue(input.payload ?? {}),
     prevHash,
     occurredAt: input.occurredAt ?? ctx.now ?? new Date(),
   };
