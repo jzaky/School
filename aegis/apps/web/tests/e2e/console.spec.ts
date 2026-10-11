@@ -39,21 +39,34 @@ test.describe("owner", () => {
     await expect(page.getByText("Recent evidence")).toBeVisible();
   });
 
-  test("navigation groups render and not-ready items carry a tooltip", async ({ page }) => {
+  test("navigation groups render and every item is a working link or a disabled item with a tooltip", async ({ page }) => {
     await page.goto("/overview");
     const nav = page.getByRole("navigation", { name: "Main" });
     for (const group of ["Overview", "Control", "Assurance", "Shield", "Audit", "Organization"]) {
       await expect(nav.getByText(group, { exact: true })).toBeVisible();
     }
     await expect(nav.getByText("Platform Admin")).toHaveCount(0);
-    const policies = nav.locator('[data-nav-item="/policies"]');
-    await expect(policies).toHaveAttribute("aria-disabled", "true");
-    await expect(async () => {
-      await page.mouse.move(0, 0);
-      await policies.hover();
-      await expect(page.getByRole("tooltip").filter({ hasText: "Available in a later release of this build" }).first()).toBeVisible({ timeout: 2000 });
-    }).toPass({ timeout: 20_000 });
     await expect(nav.locator('[data-nav-item="/agents"]')).toHaveAttribute("href", "/agents");
+    const items = nav.locator("[data-nav-item]");
+    const count = await items.count();
+    expect(count).toBeGreaterThan(20);
+    let disabledSeen = 0;
+    for (let i = 0; i < count; i++) {
+      const item = items.nth(i);
+      const disabled = (await item.getAttribute("aria-disabled")) === "true";
+      if (!disabled) {
+        expect(await item.getAttribute("href")).toBe(await item.getAttribute("data-nav-item"));
+        continue;
+      }
+      disabledSeen++;
+      if (disabledSeen === 1) {
+        await expect(async () => {
+          await page.mouse.move(0, 0);
+          await item.hover();
+          await expect(page.getByRole("tooltip").first()).toBeVisible({ timeout: 2000 });
+        }).toPass({ timeout: 20_000 });
+      }
+    }
   });
 
   test("agents list shows 8 agents and filters by status", async ({ page }) => {
