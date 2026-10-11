@@ -87,20 +87,20 @@ export const NAV: NavGroup[] = [
   {
     label: "Shield",
     items: [
-      { label: "Security Events", href: "/security/events", icon: ShieldAlert, ready: false, permission: "security:read" },
-      { label: "Data Protection", href: "/security/data-protection", icon: Lock, ready: false, permission: "security:read" },
-      { label: "Tool Security", href: "/security/tools", icon: Wrench, ready: false, permission: "security:read" },
-      { label: "Incidents", href: "/security/incidents", icon: Siren, ready: false, permission: "security:read" },
+      { label: "Security Events", href: "/security/events", icon: ShieldAlert, ready: true, permission: "security:read" },
+      { label: "Data Protection", href: "/security/data-protection", icon: Lock, ready: true, permission: "security:read" },
+      { label: "Tool Security", href: "/security/tools", icon: Wrench, ready: true, permission: "security:read" },
+      { label: "Incidents", href: "/security/incidents", icon: Siren, ready: true, permission: "security:read" },
     ],
   },
   {
     label: "Audit",
     items: [
-      { label: "Assessments", href: "/audit/assessments", icon: ClipboardList, ready: false, permission: "audit:read" },
-      { label: "Standards", href: "/audit/standards", icon: Landmark, ready: false, permission: "audit:read" },
-      { label: "Documents", href: "/audit/documents", icon: FileCheck2, ready: false, permission: "audit:read" },
-      { label: "Remediation", href: "/audit/remediation", icon: ListChecks, ready: false, permission: "audit:read" },
-      { label: "Reports", href: "/audit/reports", icon: FileText, ready: false, permission: "audit:read" },
+      { label: "Assessments", href: "/audit/assessments", icon: ClipboardList, ready: true, permission: "audit:read" },
+      { label: "Standards", href: "/audit/standards", icon: Landmark, ready: true, permission: "audit:read" },
+      { label: "Documents", href: "/audit/documents", icon: FileCheck2, ready: true, permission: "audit:read" },
+      { label: "Remediation", href: "/audit/remediation", icon: ListChecks, ready: true, permission: "audit:read" },
+      { label: "Reports", href: "/audit/reports", icon: FileText, ready: true, permission: "audit:read" },
     ],
   },
   {
