@@ -1,0 +1,25 @@
+import { chromium } from "@playwright/test";
+const out = new URL("../../../docs/screens/", import.meta.url).pathname;
+const base = "http://localhost:3000";
+const ids = { agent: "01a1297c-4d68-7541-8aa5-086fa183c6dd", policy: "01a1297c-4f2e-72c1-8e3d-d61e86864ec0", request: "01a12abe-fdf7-7083-97e1-09a07c393080", approval: "01a12a94-ac4d-7d10-a2d6-b7d997007436", assessment: "01a1297c-d34a-7070-b44b-8b59b3f61679", incident: "01a1297c-d030-7c72-b22c-e38a454a271e" };
+const browser = await chromium.launch();
+const page = await (await browser.newContext({ viewport: { width: 1440, height: 900 } })).newPage();
+await page.goto(`${base}/login`);
+await page.fill("#email", "nadia.haddad@meridian-demo.example");
+await page.fill("#password", "AegisDemo2026!");
+await page.click("button[type=submit]");
+await page.waitForURL(/overview/);
+const shot = async (name: string, path: string) => {
+  await page.goto(`${base}${path}`, { waitUntil: "networkidle" }).catch(() => undefined);
+  await page.waitForTimeout(2500);
+  await page.screenshot({ path: `${out}${name}.png` });
+  console.log("captured", name, page.url());
+};
+await shot("12-agent-detail", `/agents/${ids.agent}`);
+await shot("14-policy-detail", `/policies/${ids.policy}`);
+await shot("14b-policy-simulate", `/policies/${ids.policy}?tab=simulate`);
+await shot("16-request-detail", `/gateway/${ids.request}`);
+await shot("17b-approval-detail", `/approvals/${ids.approval}`);
+await shot("26b-incident-detail", `/security/incidents/${ids.incident}`);
+await shot("28-assessment-detail", `/audit/assessments/${ids.assessment}`);
+await browser.close();
