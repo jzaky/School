@@ -20,7 +20,7 @@ docs/          Architecture, research, policy language, API, security, deploymen
 See `docs/DEPLOYMENT.md`. In short: PostgreSQL 16 with an owner role and a non-owner app role, `pnpm install`, `pnpm db:migrate`, `pnpm db:seed`, then start the api, web and worker. Sign in to the synthetic demo tenant with the credentials the seed prints.
 
 ## Status
-`docs/STATUS.md` lists what is implemented, tested, simulated and missing, phase by phase. `docs/IMPLEMENTATION_REPORT.md` is the detailed report produced at the end of the build.
+`docs/OVERVIEW.md` explains the product in plain language. `docs/STATUS.md` lists what is implemented, tested, simulated and missing, phase by phase. `docs/IMPLEMENTATION_REPORT.md` is the detailed report produced at the end of the build.
 
 ## Honesty notes
 Demo data is synthetic and labelled. The evidence ledger is tamper-evident, not immutable. Prompt-injection detection produces signals, not guarantees. Automated compliance evidence shows that controls operated inside AEGIS; it does not prove organizational compliance with any standard. AEGIS has no customers, certifications or independent audits.
