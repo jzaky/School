@@ -114,8 +114,8 @@ test.describe("security analyst", () => {
     await dialog.getByRole("button", { name: "Investigate" }).click();
     await expect(dialog).toBeHidden();
     await expect(header.getByText("Investigating", { exact: true }).first()).toBeVisible(SLOW);
-    await expect(page.getByText("Moved to investigating")).toBeVisible();
-    await expect(page.getByText("E2E: starting the investigation")).toBeVisible();
+    await expect(page.getByText("Moved to investigating").first()).toBeVisible();
+    await expect(page.getByText("E2E: starting the investigation").first()).toBeVisible();
   });
 });
 
