@@ -208,7 +208,8 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
   let grant: { token: string; expiresAt: Date } | null = null;
   if (decisionResult === "allow") {
     status = "allowed";
-    const g = await issueGrant(db, ctx.orgId, request.id, paramsHash);
+    // The grant binds the parameters that will execute (after Shield masking), so the downstream check matches.
+    const g = await issueGrant(db, ctx.orgId, request.id, requestHashOf(input.tool, input.action, effectiveParams));
     grant = { token: g.token, expiresAt: g.grant.expiresAt };
   } else if (decisionResult === "require_approval") {
     status = "pending_approval";

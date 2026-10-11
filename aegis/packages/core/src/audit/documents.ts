@@ -128,7 +128,7 @@ export async function extractText(mime: string, buffer: Buffer): Promise<Extract
  * from form feed separators when present. Deterministic: the same text always yields the same chunks.
  */
 export function chunkText(text: string, opts: { chunkTokens?: number; overlapTokens?: number } = {}): TextChunk[] {
-  const windowWords = Math.max(20, Math.round((opts.chunkTokens ?? CHUNK_TOKENS) / TOKENS_PER_WORD));
+  const windowWords = Math.max(1, Math.round((opts.chunkTokens ?? CHUNK_TOKENS) / TOKENS_PER_WORD));
   const overlapWords = Math.min(windowWords - 1, Math.max(0, Math.round((opts.overlapTokens ?? CHUNK_OVERLAP_TOKENS) / TOKENS_PER_WORD)));
   const hasPages = text.includes("\f");
   const words: { w: string; page: number | null }[] = [];

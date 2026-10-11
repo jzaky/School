@@ -356,7 +356,7 @@ export function reportFilename(content: ReportContent, format: ReportFormat): st
 }
 
 /** Generates the report, writes it to storage and records an AuditExport with its sha256. */
-export async function generateReport(db: TenantDb, ctx: OrgContext, input: z.infer<typeof generateReportSchema>) {
+export async function generateReport(db: TenantDb, ctx: OrgContext, input: z.input<typeof generateReportSchema>) {
   const data = generateReportSchema.parse(input);
   const content = await buildReportContent(db, ctx, data.assessmentId, data.kind);
   const bytes = data.format === "pdf" ? await renderPdf(content) : Buffer.from(JSON.stringify(content, null, 2), "utf8");

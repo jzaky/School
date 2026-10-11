@@ -35,5 +35,8 @@ export * from "./monitoring/service.js";
 export * from "./assurance/dashboard.js";
 export * from "./assurance/evidence-service.js";
 export * from "./assurance/compliance.js";
+export * from "./shield/index.js";
+export * from "./incidents/service.js";
+export { seedDemoShield, seedDemoDataClasses } from "./seed/demo-shield.js";
 export * from "./lib/otel.js";
 export * from "./identity/oidc.js";

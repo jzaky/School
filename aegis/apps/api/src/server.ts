@@ -1,7 +1,8 @@
-import { env, logger, startTelemetry } from "@aegis/core";
+import { env, installShield, logger, startTelemetry } from "@aegis/core";
 import { buildApp } from "./app.js";
 
 const telemetry = await startTelemetry("api");
+installShield();
 
 const app = await buildApp();
 const port = env().API_PORT;

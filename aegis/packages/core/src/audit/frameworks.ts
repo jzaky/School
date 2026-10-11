@@ -66,7 +66,7 @@ export async function getFrameworkByKey(db: TenantDb, ctx: OrgContext, key: stri
   return f;
 }
 
-export async function createCustomFramework(db: TenantDb, ctx: OrgContext, input: z.infer<typeof createFrameworkSchema>) {
+export async function createCustomFramework(db: TenantDb, ctx: OrgContext, input: z.input<typeof createFrameworkSchema>) {
   assertPermission(ctx, "audit:write");
   const data = createFrameworkSchema.parse(input);
   const existing = await db.framework.findFirst({ where: { key: data.key, OR: [{ orgId: null }, { orgId: ctx.orgId }] } });

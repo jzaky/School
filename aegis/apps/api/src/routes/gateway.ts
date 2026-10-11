@@ -40,8 +40,11 @@ export async function gatewayRoutes(app: FastifyInstance) {
       if (!r || r.agentId !== ctx.actor.id) throw notFound("Action request");
       if (!["allowed", "approved"].includes(r.status)) throw forbidden(`Request is ${r.status}`);
       if (r.agent.status !== "active") throw forbidden(`Agent is ${r.agent.status}`);
-      const g = await issueGrant(db, ctx.orgId, r.id, r.paramsHash);
-      return { grant: g.token, expiresAt: g.grant.expiresAt, requestHash: r.paramsHash };
+      // Grants bind the stored parameters (after Shield masking); the agent must execute exactly these.
+      const params = r.params as Record<string, unknown>;
+      const requestHash = hashObject({ toolKey: r.toolKey, action: r.action, params });
+      const g = await issueGrant(db, ctx.orgId, r.id, requestHash);
+      return { grant: g.token, expiresAt: g.grant.expiresAt, requestHash, params };
     });
   });
 

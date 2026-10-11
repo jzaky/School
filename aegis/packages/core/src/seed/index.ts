@@ -6,11 +6,15 @@ import { seedDemoTenant, DEMO_PASSWORD, DEMO_USERS, PLATFORM_ADMIN } from "./dem
 import { seedDemoHistory } from "./demo-history.js";
 import { runBankingDemo, runRefundDemo, runSensitiveDataDemo } from "../demos/scenarios.js";
 import { runMonitoring, acknowledgeAlert, resolveAlert } from "../monitoring/service.js";
+import { installShield } from "../shield/inspector.js";
+import { seedDemoDataClasses, seedDemoShield } from "./demo-shield.js";
 import { withTenant } from "@aegis/db";
 
 export async function runSeed() {
   const started = Date.now();
+  installShield();
   const t = await seedDemoTenant();
+  await withTenant(t.orgId, (db) => seedDemoDataClasses(db, t.users.security_analyst!.ctx));
   const history = await seedDemoHistory(t);
   console.log(`History: ${history.requests} requests, ${history.approvals} approvals, ${history.denied} denied`);
   // Leave live demo scenarios ready: pending approvals for the console.
@@ -18,6 +22,7 @@ export async function runSeed() {
   await runBankingDemo(actors, { decision: "leave" });
   await runRefundDemo(actors);
   await runSensitiveDataDemo(actors);
+  await withTenant(t.orgId, (db) => seedDemoShield(db, t.users.security_analyst!.ctx, t.agents));
   // Monitoring over the seeded history, with a few alerts already handled.
   const mon = await withTenant(t.orgId, async (db) => {
     const r = await runMonitoring(db, t.users.owner!.ctx);

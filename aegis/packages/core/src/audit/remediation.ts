@@ -60,7 +60,7 @@ function entry(ctx: OrgContext, from: RemediationStatus | null, to: string, note
   return { at: (ctx.now ?? new Date()).toISOString(), by: ctx.actor.id, from, to, note };
 }
 
-export async function createTask(db: TenantDb, ctx: OrgContext, input: z.infer<typeof createTaskSchema>) {
+export async function createTask(db: TenantDb, ctx: OrgContext, input: z.input<typeof createTaskSchema>) {
   assertPermission(ctx, "audit:write");
   const data = createTaskSchema.parse(input);
   if (data.findingId) {
@@ -110,7 +110,7 @@ export async function getTask(db: TenantDb, ctx: OrgContext, taskId: string) {
   return { ...t, evidenceDocuments, history: t.history as unknown as HistoryEntry[] };
 }
 
-export async function updateTask(db: TenantDb, ctx: OrgContext, taskId: string, patch: z.infer<typeof updateTaskSchema>) {
+export async function updateTask(db: TenantDb, ctx: OrgContext, taskId: string, patch: z.input<typeof updateTaskSchema>) {
   assertPermission(ctx, "audit:write");
   const data = updateTaskSchema.parse(patch);
   const t = await db.remediationTask.findUnique({ where: { id: taskId } });

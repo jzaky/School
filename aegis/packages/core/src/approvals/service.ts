@@ -8,6 +8,7 @@ import { assertPermission } from "../orgs/orgs.js";
 import { executeRequest } from "../gateway/gateway.js";
 import { issueGrant } from "../gateway/grants.js";
 import { hasPermission } from "../identity/permissions.js";
+import { hashObject } from "../lib/crypto.js";
 
 export const approvalListFilter = z.object({
   status: z.enum(["pending", "approved", "rejected", "expired", "more_info", "escalated", "all"]).default("pending"),
@@ -146,7 +147,8 @@ export async function decideApproval(db: TenantDb, ctx: OrgContext, approvalId: 
       await db.actionRequest.update({ where: { id: a.actionRequestId }, data: { status: "approved", updatedAt: now } });
       await appendEvidence(db, ctx, { type: "approval.granted", subjectType: "approval_request", subjectId: a.id, correlationId: a.request.correlationId, payload: { actionRequestId: a.actionRequestId, approvals, approverIds: [...a.responses.filter((r) => r.decision === "approve").map((r) => r.userId), ctx.actor.id] } });
       const mode = ((a.request.context as { executionMode?: string }) ?? {}).executionMode ?? "gateway";
-      const grant = await issueGrant(db, ctx.orgId, a.actionRequestId, a.requestHash);
+      // Bind the grant to the stored (Shield-rewritten) parameters that will actually execute.
+      const grant = await issueGrant(db, ctx.orgId, a.actionRequestId, hashObject({ toolKey: a.request.toolKey, action: a.request.action, params: a.request.params }));
       if (mode === "agent") {
         // The agent fetches its grant through the gateway API; nothing executes here.
         await db.actionRequest.update({ where: { id: a.actionRequestId }, data: { context: { ...(a.request.context as object), grantIssued: true } as Prisma.InputJsonValue } });

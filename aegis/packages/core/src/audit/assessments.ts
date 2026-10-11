@@ -30,7 +30,7 @@ export const createAssessmentSchema = z.object({
   documentIds: z.array(z.string().uuid()).max(100).default([]),
 });
 
-export async function createAssessment(db: TenantDb, ctx: OrgContext, input: z.infer<typeof createAssessmentSchema>) {
+export async function createAssessment(db: TenantDb, ctx: OrgContext, input: z.input<typeof createAssessmentSchema>) {
   assertPermission(ctx, "audit:write");
   const data = createAssessmentSchema.parse(input);
   const framework = await db.framework.findUnique({ where: { id: data.frameworkId }, select: { id: true, key: true, name: true } });
@@ -287,7 +287,7 @@ export async function getAssessment(db: TenantDb, ctx: OrgContext, assessmentId:
 
 export const validateFindingSchema = z.object({ humanStatus: z.enum(["covered", "partial", "missing", "ambiguous"]), note: z.string().trim().max(2000).default("") });
 
-export async function validateFinding(db: TenantDb, ctx: OrgContext, findingId: string, input: z.infer<typeof validateFindingSchema>) {
+export async function validateFinding(db: TenantDb, ctx: OrgContext, findingId: string, input: z.input<typeof validateFindingSchema>) {
   assertPermission(ctx, "audit:write");
   if (ctx.actor.type !== "user" || !ctx.actor.id) throw validation("Only a signed-in person can validate a finding");
   const data = validateFindingSchema.parse(input);
