@@ -106,7 +106,7 @@ export class AegisClient {
     while (Date.now() < deadline) {
       const r = await this.getRequest(requestId);
       const status = (r?.status as string | undefined) ?? "unknown";
-      if (!["pending_approval", "approved", "evaluating"].includes(status)) {
+      if (!["pending_approval", "approved", "evaluating", "executing"].includes(status)) {
         const receipts = (r?.receipts as Record<string, unknown>[] | undefined) ?? [];
         return { status, receipt: receipts[0] ?? null };
       }
@@ -121,9 +121,13 @@ export class AegisClient {
     return r.ok ? r.data : null;
   }
 
-  /** Agent-mode: record that the agent executed with the grant (the gateway writes the receipt). */
-  async reportExecution(requestId: string, grant: string): Promise<Record<string, unknown> | null> {
-    const r = await this.request<Record<string, unknown>>("POST", `/v1/gateway/actions/${requestId}/execute`, { grant });
+  /**
+   * Agent-mode: report the outcome of executing with the grant (the gateway writes the receipt).
+   * Report `failed` when the downstream system definitively refused; if you do not know whether the
+   * call happened, do not report at all: the gateway reconciles the request from the downstream system.
+   */
+  async reportExecution(requestId: string, grant: string, outcome: { outcome?: "succeeded" | "failed"; reference?: string | null; summary?: Record<string, unknown> } = {}): Promise<Record<string, unknown> | null> {
+    const r = await this.request<Record<string, unknown>>("POST", `/v1/gateway/actions/${requestId}/execute`, { grant, outcome: outcome.outcome ?? "succeeded", reference: outcome.reference ?? null, summary: outcome.summary ?? {} });
     return r.ok ? r.data : null;
   }
 

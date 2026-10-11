@@ -15,6 +15,7 @@ export const ruleDefinitionSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("integration_failures"), threshold: z.number().int().min(1).default(3), windowMinutes: z.number().int().min(5).default(60) }),
   z.object({ type: z.literal("policy_evaluation_failures"), threshold: z.number().int().min(1).default(1), windowMinutes: z.number().int().min(5).default(60) }),
   z.object({ type: z.literal("missing_evidence"), olderThanMinutes: z.number().int().min(1).default(10) }),
+  z.object({ type: z.literal("unresolved_execution"), olderThanMinutes: z.number().int().min(1).default(5) }),
   z.object({ type: z.literal("abnormal_activity"), multiplier: z.number().min(1.1).default(3), baselineDays: z.number().int().min(1).default(7), minimumRequests: z.number().int().min(1).default(20) }),
   z.object({ type: z.literal("approval_backlog"), expiringWithinMinutes: z.number().int().min(1).default(60) }),
   z.object({ type: z.literal("chain_integrity") }),
@@ -41,6 +42,7 @@ export const DEFAULT_RULES: { key: string; name: string; description: string; se
   { key: "RM-008", name: "Abnormal agent activity", description: "Requests in the last hour exceed 3 times the 7-day hourly average (minimum 20)", severity: "medium", definition: { type: "abnormal_activity", multiplier: 3, baselineDays: 7, minimumRequests: 20 } },
   { key: "RM-009", name: "Approvals about to expire", description: "Pending approvals expiring within 60 minutes", severity: "low", definition: { type: "approval_backlog", expiringWithinMinutes: 60 } },
   { key: "RM-010", name: "Evidence chain integrity", description: "The evidence hash chain or a signed checkpoint failed verification", severity: "critical", definition: { type: "chain_integrity" } },
+  { key: "RM-012", name: "Unresolved execution outcomes", description: "Requests whose downstream outcome is still unconfirmed after 5 minutes, or marked unknown after reconciliation gave up", severity: "high", definition: { type: "unresolved_execution", olderThanMinutes: 5 } },
   { key: "RM-011", name: "Credential rotation due", description: "Integration credentials due for rotation within 7 days or overdue", severity: "low", definition: { type: "credential_rotation_due", withinDays: 7 } },
 ];
 
@@ -91,6 +93,11 @@ export async function evaluateRule(db: TenantDb, orgId: string, def: RuleDefinit
       const rows = await db.authorizationDecision.findMany({ where: { orgId, result: "error", createdAt: { gte: minutesAgo(now, def.windowMinutes) } }, include: { request: { select: { agentId: true } } } });
       if (rows.length < def.threshold) return [];
       return [{ dedupeKey: `policy_eval_failures:${bucket(now, def.windowMinutes)}`, agentId: rows.length === 1 ? rows[0]!.request.agentId : null, title: `${rows.length} policy evaluation failure(s) (denied fail-closed)`, detail: { count: rows.length, requestIds: rows.slice(0, 10).map((r) => r.actionRequestId) } }];
+    }
+    case "unresolved_execution": {
+      const rows = await db.actionRequest.findMany({ where: { orgId, OR: [{ status: "unknown" }, { status: "executing", updatedAt: { lt: minutesAgo(now, def.olderThanMinutes) } }] }, select: { id: true, agentId: true, toolKey: true, status: true }, take: 50 });
+      if (rows.length === 0) return [];
+      return [{ dedupeKey: `unresolved_execution:${bucket(now, 60)}`, agentId: rows.length === 1 ? rows[0]!.agentId : null, title: `${rows.length} request(s) with an unconfirmed downstream outcome`, detail: { requestIds: rows.slice(0, 10).map((r) => r.id), statuses: rows.map((r) => r.status), instructions: "Open each request and use reconcile or settle; never re-run the action blindly." } }];
     }
     case "missing_evidence": {
       const stale = await db.actionRequest.findMany({ where: { orgId, status: { in: ["allowed", "approved"] }, updatedAt: { lt: minutesAgo(now, def.olderThanMinutes) }, receipts: { none: {} } }, select: { id: true, agentId: true, toolKey: true } });

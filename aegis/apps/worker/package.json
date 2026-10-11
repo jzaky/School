@@ -9,7 +9,7 @@
     "build": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "test": "echo no-tests",
-    "lint": "echo lint-ok"
+    "lint": "eslint src"
   },
   "dependencies": {
     "@aegis/core": "workspace:*",
@@ -17,5 +17,8 @@
     "dotenv": "^16.6.1",
     "pino": "^9.14.0"
   },
-  "devDependencies": { "tsx": "^4.23.15", "typescript": "5.9.3" }
+  "devDependencies": {
+    "tsx": "^4.23.15",
+    "typescript": "5.9.3"
+  }
 }

@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { withTenant } from "@aegis/db";
 import { makeGatewayFixture, type GatewayFixture } from "./gateway-fixture.js";
-import { decideApproval, expireApproval, listApprovals } from "../src/approvals/service.js";
+import { decideApprovalAndExecute, expireApproval, listApprovals } from "../src/approvals/service.js";
 import { revokeAgentTool, transitionAgent } from "../src/agents/registry.js";
 import { resolveApiKey } from "../src/identity/api-keys.js";
 import { verifyChain } from "../src/evidence/ledger.js";
@@ -59,12 +59,12 @@ describe("gateway: allow, deny, approval", () => {
     const a = await approval(r.requestId);
     const list = await withTenant(f.orgId, (db) => listApprovals(db, f.approver.ctx, { status: "pending", page: 1, pageSize: 50, mine: false }));
     expect(list.items.some((x) => x.id === a.id)).toBe(true);
-    const decided = await withTenant(f.orgId, (db) => decideApproval(db, f.approver.ctx, a.id, { decision: "approve", comment: "ok", requestHash: a.requestHash }));
+    const decided = await decideApprovalAndExecute((fn) => withTenant(f.orgId, fn), f.approver.ctx, a.id, { decision: "approve", comment: "ok", requestHash: a.requestHash });
     expect(decided.status).toBe("approved");
     expect(decided.executed).toBe(true);
     expect((await f.ledger()).length).toBe(before + 1);
     // Approving again is refused (already decided) and does not execute twice.
-    await expect(withTenant(f.orgId, (db) => decideApproval(db, f.approver2.ctx, a.id, { decision: "approve", comment: "again", requestHash: a.requestHash }))).rejects.toThrow(/approved/);
+    await expect(decideApprovalAndExecute((fn) => withTenant(f.orgId, fn), f.approver2.ctx, a.id, { decision: "approve", comment: "again", requestHash: a.requestHash })).rejects.toThrow(/approved/);
     expect((await f.ledger()).length).toBe(before + 1);
   });
 
@@ -72,7 +72,7 @@ describe("gateway: allow, deny, approval", () => {
     const before = (await f.ledger()).length;
     const r = await f.call({ amount: 800 });
     const a = await approval(r.requestId);
-    const d = await withTenant(f.orgId, (db) => decideApproval(db, f.approver.ctx, a.id, { decision: "reject", comment: "Customer not entitled", requestHash: a.requestHash }));
+    const d = await decideApprovalAndExecute((fn) => withTenant(f.orgId, fn), f.approver.ctx, a.id, { decision: "reject", comment: "Customer not entitled", requestHash: a.requestHash });
     expect(d.status).toBe("rejected");
     const req = await withTenant(f.orgId, (db) => db.actionRequest.findUniqueOrThrow({ where: { id: r.requestId } }));
     expect(req.status).toBe("rejected");
@@ -91,7 +91,7 @@ describe("gateway: approval integrity", () => {
     const r = await f.call({ amount: 700 });
     const a = await approval(r.requestId);
     await withTenant(f.orgId, (db) => db.approvalRequest.update({ where: { id: a.id }, data: { expiresAt: new Date(Date.now() - 1000) } }));
-    await expect(withTenant(f.orgId, (db) => decideApproval(db, f.approver.ctx, a.id, { decision: "approve", comment: "", requestHash: a.requestHash }))).rejects.toThrow(/expired/);
+    await expect(decideApprovalAndExecute((fn) => withTenant(f.orgId, fn), f.approver.ctx, a.id, { decision: "approve", comment: "", requestHash: a.requestHash })).rejects.toThrow(/expired/);
     const res = await withTenant(f.orgId, (db) => expireApproval(db, f.ownerCtx, a.id));
     expect(res.changed).toBe(true);
     const req = await withTenant(f.orgId, (db) => db.actionRequest.findUniqueOrThrow({ where: { id: r.requestId } }));
@@ -103,13 +103,13 @@ describe("gateway: approval integrity", () => {
     const r = await f.call({ amount: 900 });
     const a = await approval(r.requestId);
     const tampered = hashObject({ toolKey: "issue-refund", action: "execute", params: { orderId: "ORD-X", customerId: "CUST-1", amount: 90000, currency: "AED" } });
-    await expect(withTenant(f.orgId, (db) => decideApproval(db, f.approver.ctx, a.id, { decision: "approve", comment: "", requestHash: tampered }))).rejects.toThrow(/changed since/);
+    await expect(decideApprovalAndExecute((fn) => withTenant(f.orgId, fn), f.approver.ctx, a.id, { decision: "approve", comment: "", requestHash: tampered })).rejects.toThrow(/changed since/);
     // Even a grant presented downstream with other parameters fails.
+    await withTenant(f.orgId, (db) => db.actionRequest.update({ where: { id: r.requestId }, data: { status: "approved" } }));
     const grant = await withTenant(f.orgId, async (db) => {
       const { issueGrant } = await import("../src/gateway/grants.js");
       return issueGrant(db, f.orgId, r.requestId, a.requestHash);
     });
-    await withTenant(f.orgId, (db) => db.actionRequest.update({ where: { id: r.requestId }, data: { status: "approved" } }));
     const bad = await withTenant(f.orgId, (db) => consumeGrant(db, grant.token, tampered));
     expect(bad).toEqual({ ok: false, reason: "hash_mismatch" });
     const good = await withTenant(f.orgId, (db) => consumeGrant(db, grant.token, a.requestHash));
@@ -121,9 +121,9 @@ describe("gateway: approval integrity", () => {
   it("unauthorised users cannot approve; separation of duties blocks the agent owner", async () => {
     const r = await f.call({ amount: 1000 });
     const a = await approval(r.requestId);
-    await expect(withTenant(f.orgId, (db) => decideApproval(db, f.viewer.ctx, a.id, { decision: "approve", comment: "", requestHash: a.requestHash }))).rejects.toThrow(/approvals:decide/);
+    await expect(decideApprovalAndExecute((fn) => withTenant(f.orgId, fn), f.viewer.ctx, a.id, { decision: "approve", comment: "", requestHash: a.requestHash })).rejects.toThrow(/approvals:decide/);
     // Engineer is the technical owner and also lacks the approver role.
-    await expect(withTenant(f.orgId, (db) => decideApproval(db, f.engineer.ctx, a.id, { decision: "approve", comment: "", requestHash: a.requestHash }))).rejects.toThrow(/Separation of duties|Requires role|approvals:decide/);
+    await expect(decideApprovalAndExecute((fn) => withTenant(f.orgId, fn), f.engineer.ctx, a.id, { decision: "approve", comment: "", requestHash: a.requestHash })).rejects.toThrow(/Separation of duties|Requires role|approvals:decide/);
     const req = await withTenant(f.orgId, (db) => db.actionRequest.findUniqueOrThrow({ where: { id: r.requestId } }));
     expect(req.status).toBe("pending_approval");
   });
@@ -131,14 +131,14 @@ describe("gateway: approval integrity", () => {
   it("request_info pauses, escalate hands over, and the escalated approver can decide", async () => {
     const r = await f.call({ amount: 1100 });
     const a = await approval(r.requestId);
-    await withTenant(f.orgId, (db) => decideApproval(db, f.approver.ctx, a.id, { decision: "request_info", comment: "Which order?", requestHash: a.requestHash }));
+    await decideApprovalAndExecute((fn) => withTenant(f.orgId, fn), f.approver.ctx, a.id, { decision: "request_info", comment: "Which order?", requestHash: a.requestHash });
     expect((await approval(r.requestId)).status).toBe("more_info");
     const { provideApprovalInfo } = await import("../src/approvals/service.js");
     await withTenant(f.orgId, (db) => provideApprovalInfo(db, f.agentCtx, a.id, "Order ORD-77 from the Dubai store"));
     expect((await approval(r.requestId)).status).toBe("pending");
-    await withTenant(f.orgId, (db) => decideApproval(db, f.approver.ctx, a.id, { decision: "escalate", comment: "Above my comfort", requestHash: a.requestHash, targetUserId: f.approver2.userId }));
+    await decideApprovalAndExecute((fn) => withTenant(f.orgId, fn), f.approver.ctx, a.id, { decision: "escalate", comment: "Above my comfort", requestHash: a.requestHash, targetUserId: f.approver2.userId });
     expect((await approval(r.requestId)).status).toBe("escalated");
-    const d = await withTenant(f.orgId, (db) => decideApproval(db, f.approver2.ctx, a.id, { decision: "approve", comment: "fine", requestHash: a.requestHash }));
+    const d = await decideApprovalAndExecute((fn) => withTenant(f.orgId, fn), f.approver2.ctx, a.id, { decision: "approve", comment: "fine", requestHash: a.requestHash });
     expect(d.executed).toBe(true);
   });
 });
@@ -219,7 +219,7 @@ describe("gateway: structural and emergency controls", () => {
     expect(r.reasons.join(" ")).toMatch(/Agent is suspended/);
     // An approval granted while suspended does not execute.
     const a = await approval(pending.requestId);
-    await expect(withTenant(f.orgId, (db) => decideApproval(db, f.approver.ctx, a.id, { decision: "approve", comment: "", requestHash: a.requestHash }))).rejects.toThrow(/agent is suspended/);
+    await expect(decideApprovalAndExecute((fn) => withTenant(f.orgId, fn), f.approver.ctx, a.id, { decision: "approve", comment: "", requestHash: a.requestHash })).rejects.toThrow(/agent is suspended/);
     await withTenant(f.orgId, (db) => transitionAgent(db, f.ownerCtx, f.agentId, "active", "resume after drill"));
     const pending2 = await f.call({ amount: 1500 });
     await withTenant(f.orgId, (db) => transitionAgent(db, f.ownerCtx, f.agentId, "revoked", "compromised"));

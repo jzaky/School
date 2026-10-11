@@ -11,5 +11,6 @@ data:
   WEB_PUBLIC_URL: https://console.aegis.example.com
   API_CORS_ORIGINS: https://console.aegis.example.com
   AEGIS_DEMO_MODE: "false"
+  AEGIS_STORAGE_DIR: /data/uploads
   OTEL_SERVICE_NAME: aegis
   OTEL_EXPORTER_OTLP_ENDPOINT: ""

@@ -15,6 +15,7 @@ export * from "./orgs/orgs.js";
 export * from "./agents/registry.js";
 export * from "./evidence/ledger.js";
 export * from "./jobs/queue.js";
+export * from "./process-guard.js";
 export * from "./notify/notifications.js";
 export * from "./policy/schema.js";
 export * from "./policy/evaluate.js";

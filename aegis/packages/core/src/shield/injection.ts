@@ -86,6 +86,7 @@ const RULES: SignalRule[] = [
 const URGENCY_STRONG: RegExp[] = [/\b(?:do not|don't|never|without)\s+(?:tell|inform|notify|alert|mention|report)\b[^.\n]{0,30}\b(?:anyone|anybody|the user|your (?:operator|owner|admin)|security|compliance|humans?|them)\b/i, /\bkeep (?:this|it) (?:a )?(?:secret|confidential|between us|quiet)\b/i, /\bbefore (?:anyone|someone|they|the (?:team|admin|user)) (?:notices?|finds? out|sees?|checks?)\b/i, /\bthis is (?:an? )?(?:emergency|urgent)\b[^.\n]{0,40}\b(?:skip|bypass|ignore|no time for)\b/i, /\b(?:no time|there is no time) (?:for|to)\s+(?:approval|review|checks?|verification)\b/i];
 const URGENCY_WEAK: RegExp[] = [/\bimmediately\b/i, /\bright now\b/i, /\burgent(?:ly)?\b/i, /\bsecret(?:ly)?\b/i, /\bas soon as possible\b/i, /\basap\b/i];
 
+// eslint-disable-next-line no-irregular-whitespace -- the detector targets these invisible characters on purpose
 const ZERO_WIDTH = /[​-‏⁠﻿‪-‮⁦-⁩]/g;
 const UNICODE_TAGS = /[\u{E0000}-\u{E007F}]/gu;
 const HTML_COMMENT = /<!--[\s\S]{1,2000}?-->/g;

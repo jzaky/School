@@ -138,6 +138,7 @@ export async function deleteCustomFramework(db: TenantDb, ctx: OrgContext, frame
  * quoted fields with embedded commas and doubled quotes.
  */
 export function importControlsCsv(text: string): ControlInput[] {
+  // eslint-disable-next-line no-irregular-whitespace -- strips a UTF-8 byte order mark
   const rows = parseCsv(text.replace(/^﻿/, ""));
   if (rows.length === 0) throw validation("CSV is empty");
   const header = rows[0]!.map((h) => h.trim().toLowerCase());

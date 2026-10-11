@@ -21,6 +21,10 @@ spec:
           envFrom:
             - configMapRef: { name: aegis-config }
             - secretRef: { name: aegis-secrets }
+          env:
+            - { name: AEGIS_PROCESS, value: api }
+          volumeMounts:
+            - { name: uploads, mountPath: /data/uploads }
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false
@@ -36,6 +40,9 @@ spec:
           livenessProbe:
             httpGet: { path: /health, port: 4000 }
             periodSeconds: 30
+      volumes:
+        - name: uploads
+          persistentVolumeClaim: { claimName: aegis-uploads }
 ---
 apiVersion: v1
 kind: Service

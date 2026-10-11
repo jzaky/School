@@ -79,8 +79,10 @@ export function estimateTokens(text: string): number {
 /** Collapses whitespace while preserving form feeds (page separators) and paragraph breaks. */
 export function normaliseWhitespace(text: string): string {
   return text
+    // eslint-disable-next-line no-control-regex -- stripping NUL bytes from extracted text is intentional
     .replace(/\u0000/g, "")
     .replace(/\r\n?/g, "\n")
+    // eslint-disable-next-line no-irregular-whitespace -- collapses non-breaking spaces from PDF extraction
     .replace(/[ \t ]+/g, " ")
     .replace(/ ?\n ?/g, "\n")
     .replace(/\n{3,}/g, "\n\n")

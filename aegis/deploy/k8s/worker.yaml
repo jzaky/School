@@ -21,6 +21,10 @@ spec:
           envFrom:
             - configMapRef: { name: aegis-config }
             - secretRef: { name: aegis-secrets }
+          env:
+            - { name: AEGIS_PROCESS, value: worker }
+          volumeMounts:
+            - { name: uploads, mountPath: /data/uploads }
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false
@@ -28,5 +32,6 @@ spec:
           resources:
             requests: { cpu: 250m, memory: 512Mi }
             limits: { cpu: "1", memory: 1Gi }
-
-
+      volumes:
+        - name: uploads
+          persistentVolumeClaim: { claimName: aegis-uploads }

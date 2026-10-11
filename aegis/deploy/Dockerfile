@@ -24,22 +24,23 @@ RUN pnpm --filter @aegis/db generate
 
 # ---- API (Action Gateway) ----
 FROM source AS api
-RUN addgroup --system aegis && adduser --system --ingroup aegis aegis && chown -R aegis:aegis /app
+RUN addgroup --system aegis && adduser --system --ingroup aegis aegis && chown -R aegis:aegis /app && mkdir -p /data/uploads && chown aegis:aegis /data/uploads
 USER aegis
-ENV NODE_ENV=production API_PORT=4000
+ENV NODE_ENV=production API_PORT=4000 AEGIS_STORAGE_DIR=/data/uploads AEGIS_PROCESS=api
 EXPOSE 4000
 HEALTHCHECK --interval=30s --timeout=5s CMD node -e "fetch('http://127.0.0.1:4000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 CMD ["pnpm", "--filter", "@aegis/api", "start"]
 
 # ---- Worker ----
 FROM source AS worker
-RUN addgroup --system aegis && adduser --system --ingroup aegis aegis && chown -R aegis:aegis /app
+RUN addgroup --system aegis && adduser --system --ingroup aegis aegis && chown -R aegis:aegis /app && mkdir -p /data/uploads && chown aegis:aegis /data/uploads
 USER aegis
-ENV NODE_ENV=production
+ENV NODE_ENV=production AEGIS_STORAGE_DIR=/data/uploads AEGIS_PROCESS=worker
 CMD ["pnpm", "--filter", "@aegis/worker", "start"]
 
-# ---- Migrations (run once per deploy, owner credentials) ----
+# ---- Migrations (run once per deploy, the only image that receives owner credentials) ----
 FROM source AS migrate
+ENV AEGIS_PROCESS=migrate
 CMD ["pnpm", "--filter", "@aegis/db", "migrate"]
 
 # ---- Web console ----
@@ -48,8 +49,9 @@ ENV NODE_ENV=production
 RUN pnpm --filter @aegis/web build
 
 FROM web-build AS web
-RUN addgroup --system aegis && adduser --system --ingroup aegis aegis && chown -R aegis:aegis /app
+RUN addgroup --system aegis && adduser --system --ingroup aegis aegis && chown -R aegis:aegis /app && mkdir -p /data/uploads && chown aegis:aegis /data/uploads
 USER aegis
+ENV AEGIS_STORAGE_DIR=/data/uploads AEGIS_PROCESS=web
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s CMD node -e "fetch('http://127.0.0.1:3000/login').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 CMD ["pnpm", "--filter", "@aegis/web", "start"]

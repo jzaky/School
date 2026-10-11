@@ -13,7 +13,10 @@ for (const candidate of [join(here, "..", "..", "..", ".env"), join(process.cwd(
 const schema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   DATABASE_URL: z.string().min(1),
-  MIGRATION_DATABASE_URL: z.string().optional(),
+  /** Owner-role URL. Only migrations, seeds and platform scripts may carry it; an empty string counts as unset. */
+  MIGRATION_DATABASE_URL: z.string().optional().transform((v) => (v && v.trim() !== "" ? v : undefined)),
+  /** Which process this is (api, web, worker, migrate, script). Used by the startup guard. */
+  AEGIS_PROCESS: z.enum(["api", "web", "worker", "migrate", "script"]).optional(),
   REDIS_URL: z.string().optional(),
   AEGIS_MASTER_KEY: z.string().min(32, "AEGIS_MASTER_KEY must be 32 random bytes, base64"),
   AEGIS_SESSION_SECRET: z.string().min(32),
@@ -32,6 +35,7 @@ const schema = z.object({
   EMAIL_FROM: z.string().default("aegis@example.com"),
   LOG_LEVEL: z.string().default("info"),
   AEGIS_STORAGE_DIR: z.string().default(".uploads"),
+  AEGIS_APP_PASSWORD: z.string().optional().transform((v) => (v && v.trim() !== "" ? v : undefined)),
 });
 
 export type Env = z.infer<typeof schema>;

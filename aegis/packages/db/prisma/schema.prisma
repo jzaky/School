@@ -511,8 +511,10 @@ enum ActionRequestStatus {
   approved
   rejected
   expired
+  executing
   executed
   failed
+  unknown
 }
 
 model ActionRequest {
@@ -537,6 +539,11 @@ model ActionRequest {
   context         Json                @default("{}")
   expiresAt       DateTime?           @map("expires_at")
   completedAt     DateTime?           @map("completed_at")
+  /// Set when a grant is consumed and the downstream call begins. Cleared never: it dates the first attempt.
+  executionStartedAt DateTime?        @map("execution_started_at")
+  executionAttempts  Int              @default(0) @map("execution_attempts")
+  /// Stable key handed to the downstream system so repeats of one request are one operation there.
+  downstreamIdempotencyKey String?    @map("downstream_idempotency_key")
   createdAt       DateTime            @default(now()) @map("created_at")
   updatedAt       DateTime            @updatedAt @map("updated_at")
 
@@ -650,11 +657,15 @@ model ExecutionGrant {
   requestHash     String    @map("request_hash")
   expiresAt       DateTime  @map("expires_at")
   consumedAt      DateTime? @map("consumed_at")
+  /// Set when the grant is withdrawn (pause, suspension, revocation, expiry housekeeping). A voided grant never verifies.
+  voidedAt        DateTime? @map("voided_at")
+  voidReason      String?   @map("void_reason")
   createdAt       DateTime  @default(now()) @map("created_at")
 
   request ActionRequest @relation(fields: [actionRequestId], references: [id], onDelete: Cascade)
 
   @@index([orgId])
+  @@index([actionRequestId])
   @@map("execution_grants")
 }
 
@@ -662,6 +673,7 @@ enum ReceiptStatus {
   succeeded
   failed
   skipped
+  unknown
 }
 
 model ExecutionReceipt {
@@ -673,11 +685,14 @@ model ExecutionReceipt {
   downstreamReference String?       @map("downstream_reference")
   responseSummary     Json          @default("{}") @map("response_summary")
   durationMs          Int           @default(0) @map("duration_ms")
+  /// Which execution attempt produced this receipt (1 = first call, later numbers = reconciliation or retry).
+  attempt             Int           @default(1)
   createdAt           DateTime      @default(now()) @map("created_at")
 
   request ActionRequest @relation(fields: [actionRequestId], references: [id], onDelete: Cascade)
 
   @@index([orgId, createdAt])
+  @@index([actionRequestId, createdAt])
   @@map("execution_receipts")
 }
 

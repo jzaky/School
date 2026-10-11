@@ -3,9 +3,9 @@
  * backdated clock. Deterministic per seed run except for ids. Volumes are modest so the seed
  * finishes in seconds.
  */
-import { withTenant } from "@aegis/db";
+import { withTenant, type TenantDb } from "@aegis/db";
 import { authorizeAndExecute } from "../gateway/gateway.js";
-import { decideApproval, expireApproval } from "../approvals/service.js";
+import { decideApprovalAndExecute, expireApproval } from "../approvals/service.js";
 import { makeContext, type OrgContext } from "../lib/context.js";
 import type { SeededTenant } from "./demo-tenant.js";
 
@@ -23,6 +23,8 @@ export async function seedDemoHistory(t: SeededTenant, days = 75) {
   const approverCtx = (now: Date): OrgContext => ({ ...t.users.approver!.ctx, now });
   const secCtx = (now: Date): OrgContext => ({ ...t.users.security_analyst!.ctx, now });
   const stats = { requests: 0, approvals: 0, denied: 0 };
+  const run = <T>(fn: (db: TenantDb) => Promise<T>) => withTenant(t.orgId, fn);
+  const approvalFor = (requestId: string) => withTenant(t.orgId, (db) => db.approvalRequest.findFirstOrThrow({ where: { actionRequestId: requestId } }), { readOnly: true });
   const start = Date.now() - days * 86400_000;
   for (let d = 0; d < days; d++) {
     const dayStart = start + d * 86400_000;
@@ -40,15 +42,15 @@ export async function seedDemoHistory(t: SeededTenant, days = 75) {
           stats.approvals++;
           const roll = rand();
           const later = new Date(now.getTime() + (10 + rand() * 120) * 60_000);
-          await withTenant(t.orgId, async (db) => {
-            const ap = await db.approvalRequest.findFirstOrThrow({ where: { actionRequestId: r.requestId } });
-            if (roll < 0.7) await decideApproval(db, approverCtx(later), ap.id, { decision: "approve", comment: pick(["Verified order and entitlement", "Agreed with team lead", "Customer retention case"]), requestHash: ap.requestHash });
-            else if (roll < 0.9) await decideApproval(db, approverCtx(later), ap.id, { decision: "reject", comment: pick(["Customer not entitled", "Duplicate of an earlier refund", "Order outside refund window"]), requestHash: ap.requestHash });
-            else if (d < days - 1) {
+          const ap = await approvalFor(r.requestId);
+          if (roll < 0.7) await decideApprovalAndExecute(run, approverCtx(later), ap.id, { decision: "approve", comment: pick(["Verified order and entitlement", "Agreed with team lead", "Customer retention case"]), requestHash: ap.requestHash });
+          else if (roll < 0.9) await decideApprovalAndExecute(run, approverCtx(later), ap.id, { decision: "reject", comment: pick(["Customer not entitled", "Duplicate of an earlier refund", "Order outside refund window"]), requestHash: ap.requestHash });
+          else if (d < days - 1) {
+            await run(async (db) => {
               await db.approvalRequest.update({ where: { id: ap.id }, data: { expiresAt: new Date(now.getTime() + 60_000) } });
               await expireApproval(db, { ...approverCtx(new Date(now.getTime() + 5 * 3600_000)) }, ap.id);
-            }
-          });
+            });
+          }
         }
         if (r.status === "denied") stats.denied++;
       } else if (kind < 0.75) {
@@ -59,11 +61,9 @@ export async function seedDemoHistory(t: SeededTenant, days = 75) {
         if (r.status === "pending_approval") {
           stats.approvals++;
           const later = new Date(now.getTime() + (15 + rand() * 90) * 60_000);
-          await withTenant(t.orgId, async (db) => {
-            const ap = await db.approvalRequest.findFirstOrThrow({ where: { actionRequestId: r.requestId } });
-            if (rand() < 0.8) await decideApproval(db, approverCtx(later), ap.id, { decision: "approve", comment: "Beneficiary and instruction verified", requestHash: ap.requestHash });
-            else await decideApproval(db, approverCtx(later), ap.id, { decision: "reject", comment: "Beneficiary not on approved list", requestHash: ap.requestHash });
-          });
+          const ap = await approvalFor(r.requestId);
+          if (rand() < 0.8) await decideApprovalAndExecute(run, approverCtx(later), ap.id, { decision: "approve", comment: "Beneficiary and instruction verified", requestHash: ap.requestHash });
+          else await decideApprovalAndExecute(run, approverCtx(later), ap.id, { decision: "reject", comment: "Beneficiary not on approved list", requestHash: ap.requestHash });
         }
         if (r.status === "denied") stats.denied++;
       } else if (kind < 0.9) {
@@ -85,10 +85,8 @@ export async function seedDemoHistory(t: SeededTenant, days = 75) {
         stats.requests++;
         if (r.status === "denied") stats.denied++;
         if (r.status === "pending_approval") {
-          await withTenant(t.orgId, async (db) => {
-            const ap = await db.approvalRequest.findFirstOrThrow({ where: { actionRequestId: r.requestId } });
-            await decideApproval(db, secCtx(new Date(now.getTime() + 3600_000)), ap.id, { decision: rand() < 0.6 ? "approve" : "reject", comment: "Data protection review", requestHash: ap.requestHash });
-          });
+          const ap = await approvalFor(r.requestId);
+          await decideApprovalAndExecute(run, secCtx(new Date(now.getTime() + 3600_000)), ap.id, { decision: rand() < 0.6 ? "approve" : "reject", comment: "Data protection review", requestHash: ap.requestHash });
         }
       }
     }

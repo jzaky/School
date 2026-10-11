@@ -51,7 +51,10 @@ jobs:
       - name: Migrate and apply RLS
         run: pnpm --filter @aegis/db migrate
       - run: pnpm -r typecheck
-      - run: pnpm -r lint
+      - name: Lint (typescript-eslint for packages and services, eslint-config-next for the console)
+        run: pnpm -r lint
+      - name: Project style rule (no em dashes)
+        run: ./scripts/check-no-em-dash.sh
       - name: Tenant isolation tests
         run: pnpm --filter @aegis/db test
       - name: Core tests (authorization, approvals, monitoring, shield, audit)

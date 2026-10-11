@@ -3,8 +3,8 @@
  * service and simulated downstream systems; nothing here is a frontend simulation. Every record it
  * creates is labelled synthetic through the demo organization's demoMode flag.
  */
-import { withTenant } from "@aegis/db";
-import { decideApproval } from "../approvals/service.js";
+import { withTenant, type TenantDb } from "@aegis/db";
+import { decideApprovalAndExecute } from "../approvals/service.js";
 import { authorizeAndExecute, type GatewayResponse } from "../gateway/gateway.js";
 import { makeContext, type OrgContext } from "../lib/context.js";
 
@@ -46,18 +46,13 @@ function summarize(r: GatewayResponse): string {
   return r.status;
 }
 
-async function approve(a: Actors, requestId: string, comment: string) {
-  return withTenant(a.orgId, async (db) => {
-    const ap = await db.approvalRequest.findFirstOrThrow({ where: { actionRequestId: requestId } });
-    return decideApproval(db, { ...a.approverCtx, now: a.now }, ap.id, { decision: "approve", comment, requestHash: ap.requestHash });
-  });
+async function decide(a: Actors, requestId: string, decision: "approve" | "reject", comment: string) {
+  const run = <T>(fn: (db: TenantDb) => Promise<T>) => withTenant(a.orgId, fn);
+  const ap = await run((db) => db.approvalRequest.findFirstOrThrow({ where: { actionRequestId: requestId } }));
+  return decideApprovalAndExecute(run, { ...a.approverCtx, now: a.now }, ap.id, { decision, comment, requestHash: ap.requestHash });
 }
-async function reject(a: Actors, requestId: string, comment: string) {
-  return withTenant(a.orgId, async (db) => {
-    const ap = await db.approvalRequest.findFirstOrThrow({ where: { actionRequestId: requestId } });
-    return decideApproval(db, { ...a.approverCtx, now: a.now }, ap.id, { decision: "reject", comment, requestHash: ap.requestHash });
-  });
-}
+const approve = (a: Actors, requestId: string, comment: string) => decide(a, requestId, "approve", comment);
+const reject = (a: Actors, requestId: string, comment: string) => decide(a, requestId, "reject", comment);
 
 /** Demo 1: a treasury agent attempts a simulated AED 250,000 transfer that exceeds its autonomous authority. */
 export async function runBankingDemo(a: Actors, opts: { decision?: "approve" | "reject" | "leave" } = {}): Promise<DemoRun> {

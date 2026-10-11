@@ -1,0 +1,19 @@
+# Shared storage for uploaded documents and generated exports (AEGIS_STORAGE_DIR=/data/uploads).
+# The api, web and worker pods all read and write it, and the api and web run with several replicas,
+# so the claim must be ReadWriteMany (NFS, CephFS, EFS, Azure Files, Filestore or similar). Pick the
+# storage class that provides it in your cluster. A single-replica evaluation can use ReadWriteOnce
+# with replicas set to 1 for api and web.
+#
+# Alternative: point AEGIS_STORAGE_DIR at an object-storage mount (S3 via a CSI driver). The
+# application only needs a POSIX path.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: aegis-uploads
+  namespace: aegis
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: CHANGE_ME_RWX_STORAGE_CLASS
+  resources:
+    requests:
+      storage: 50Gi

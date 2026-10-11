@@ -5,10 +5,9 @@ import type { OrgContext } from "../lib/context.js";
 import { forbidden, notFound, validation } from "../lib/errors.js";
 import { notifyUsers } from "../notify/notifications.js";
 import { assertPermission } from "../orgs/orgs.js";
-import { executeRequest } from "../gateway/gateway.js";
+import { executeRequest, gatewayPausedState, requestHashOf, type ExecutionOutcome, type TenantRunner } from "../gateway/gateway.js";
 import { issueGrant } from "../gateway/grants.js";
 import { hasPermission } from "../identity/permissions.js";
-import { hashObject } from "../lib/crypto.js";
 
 export const approvalListFilter = z.object({
   status: z.enum(["pending", "approved", "rejected", "expired", "more_info", "escalated", "all"]).default("pending"),
@@ -137,29 +136,51 @@ export async function decideApproval(db: TenantDb, ctx: OrgContext, approvalId: 
         await db.approvalRequest.update({ where: { id: a.id }, data: { status: "pending" } });
         return { status: "pending" as const, executed: false, approvalsSoFar: approvals };
       }
-      // Final re-check before anything executes.
+      // Final re-checks before the request becomes executable.
       if (a.request.agent.status !== "active") {
         await db.approvalRequest.update({ where: { id: a.id }, data: { status: "expired", decidedAt: new Date(), reason: `agent ${a.request.agent.status}` } });
         await db.actionRequest.update({ where: { id: a.actionRequestId }, data: { status: "expired", completedAt: new Date() } });
         throw validation(`Approved, but the agent is ${a.request.agent.status}; the action will not execute`);
       }
+      const paused = await gatewayPausedState(db, ctx.orgId);
+      if (paused.paused) {
+        // Emergency control wins over the approval: the response is recorded, the request stays pending.
+        await appendEvidence(db, ctx, { type: "approval.blocked_gateway_paused", subjectType: "approval_request", subjectId: a.id, correlationId: a.request.correlationId, payload: { reason: paused.reason ?? null } });
+        throw validation(`Gateway is paused (${paused.reason ?? "emergency control"}). The approval was recorded but nothing can execute until the gateway resumes; decide again after resumption.`);
+      }
       await db.approvalRequest.update({ where: { id: a.id }, data: { status: "approved", decidedAt: now, updatedAt: now } });
       await db.actionRequest.update({ where: { id: a.actionRequestId }, data: { status: "approved", updatedAt: now } });
       await appendEvidence(db, ctx, { type: "approval.granted", subjectType: "approval_request", subjectId: a.id, correlationId: a.request.correlationId, payload: { actionRequestId: a.actionRequestId, approvals, approverIds: [...a.responses.filter((r) => r.decision === "approve").map((r) => r.userId), ctx.actor.id] } });
       const mode = ((a.request.context as { executionMode?: string }) ?? {}).executionMode ?? "gateway";
-      // Bind the grant to the stored (Shield-rewritten) parameters that will actually execute.
-      const grant = await issueGrant(db, ctx.orgId, a.actionRequestId, hashObject({ toolKey: a.request.toolKey, action: a.request.action, params: a.request.params }));
       if (mode === "agent") {
-        // The agent fetches its grant through the gateway API; nothing executes here.
-        await db.actionRequest.update({ where: { id: a.actionRequestId }, data: { context: { ...(a.request.context as object), grantIssued: true } as Prisma.InputJsonValue } });
-        await notifyUsers(db, ctx, { userIds: agentOwners, type: "approval.approved", title: `Approved: ${a.request.agent.name} ${a.request.toolKey}`, body: "Grant issued; the agent may execute", link: `/approvals/${a.id}`, idempotencyKey: `approval.approved:${a.id}` });
-        return { status: "approved" as const, executed: false, grantToken: grant.token };
+        // The agent fetches its single grant through the gateway API (one live grant per request); nothing executes here.
+        await notifyUsers(db, ctx, { userIds: agentOwners, type: "approval.approved", title: `Approved: ${a.request.agent.name} ${a.request.toolKey}`, body: "The agent may now obtain its execution grant", link: `/approvals/${a.id}`, idempotencyKey: `approval.approved:${a.id}` });
+        return { status: "approved" as const, executed: false, executeNow: null };
       }
-      const receipt = await executeRequest(db, ctx, a.actionRequestId, grant.token, a.request.params as Record<string, unknown>);
-      await notifyUsers(db, ctx, { userIds: agentOwners, type: "approval.approved", title: `Approved and ${receipt.status}: ${a.request.agent.name} ${a.request.toolKey}`, body: receipt.reference ?? "", link: `/approvals/${a.id}`, idempotencyKey: `approval.approved:${a.id}` });
-      return { status: "approved" as const, executed: receipt.status === "succeeded", receipt };
+      // Gateway mode: issue the single grant bound to the stored (Shield-rewritten) parameters. Execution
+      // happens after this transaction commits (decideApprovalAndExecute), never inside it.
+      const params = a.request.params as Record<string, unknown>;
+      const grant = await issueGrant(db, ctx.orgId, a.actionRequestId, requestHashOf(a.request.toolKey, a.request.action, params), { now });
+      await notifyUsers(db, ctx, { userIds: agentOwners, type: "approval.approved", title: `Approved: ${a.request.agent.name} ${a.request.toolKey}`, body: "Executing through the gateway", link: `/approvals/${a.id}`, idempotencyKey: `approval.approved:${a.id}` });
+      return { status: "approved" as const, executed: false, executeNow: { actionRequestId: a.actionRequestId, grantToken: grant.token, params } };
     }
   }
+}
+
+export type DecideResult = Awaited<ReturnType<typeof decideApproval>>;
+
+/**
+ * Decides in one transaction and, for gateway mode, executes afterwards in the gateway's own
+ * phases. Callers that only have a transaction (seed history, tests of the decision alone) may call
+ * decideApproval directly, but then nothing executes.
+ */
+export async function decideApprovalAndExecute(run: TenantRunner, ctx: OrgContext, approvalId: string, input: z.infer<typeof decideSchema>): Promise<DecideResult & { receipt?: ExecutionOutcome }> {
+  const decided = await run((db) => decideApproval(db, ctx, approvalId, input));
+  if (decided.status !== "approved" || !("executeNow" in decided) || !decided.executeNow) return decided;
+  const receipt = await executeRequest(run, ctx, decided.executeNow.actionRequestId, decided.executeNow.grantToken, decided.executeNow.params);
+  const { executeNow: _done, ...rest } = decided;
+  void _done;
+  return { ...rest, executed: receipt.status === "succeeded", receipt, executeNow: null };
 }
 
 /** The agent (or its owner) answers a request for information; the approval returns to pending. */

@@ -13,6 +13,10 @@ See `.env.example`. Required secrets: `AEGIS_MASTER_KEY` (32 bytes base64, encry
 
 Two database URLs: `DATABASE_URL` for the non-owner `aegis_app` role and `MIGRATION_DATABASE_URL` for the owner. The app role must not own tables or RLS would not apply to it.
 
+Credential boundary: only the migrate job may carry `MIGRATION_DATABASE_URL` and `AEGIS_APP_PASSWORD`. The api, web and worker processes check their environment at startup (`assertApplicationProcess`): in production they refuse to start if either is present; in development they log a warning. The Compose file overrides both to empty for the application services, and the Kubernetes manifests keep them in a separate `aegis-migrate-secrets` secret mounted only by the Job.
+
+Uploaded documents and generated exports are files under `AEGIS_STORAGE_DIR` (default `.uploads` under the monorepo root for local development, `/data/uploads` in the containers). Every process that touches documents (api, web, worker) must mount the same storage: Compose uses the shared `uploads` volume, Kubernetes the `aegis-uploads` ReadWriteMany claim in `deploy/k8s/storage.yaml`. Without shared storage, uploads disappear on restart and one replica cannot read what another wrote.
+
 ## Local development
 ```
 cd aegis
@@ -33,13 +37,13 @@ docker compose -f deploy/docker-compose.yml up --build
 Add `-f deploy/docker-compose.observability.yml` to run an OTLP collector and set `OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318`.
 
 ## Kubernetes
-Manifests in `deploy/k8s`: namespace, config map, secret template, migrate job, api/web/worker deployments with non-root security contexts, services, ingress with TLS, and a network policy that restricts API egress to the database, Redis and DNS. Add explicit egress rules for real downstream systems so agents cannot bypass the gateway at the network level. Apply order: namespace, secrets, configmap, migrate job (wait for completion), deployments, ingress.
+Manifests in `deploy/k8s`: namespace, config map, two secret templates (application and migration), shared upload storage claim, migrate job, api/web/worker deployments with non-root security contexts, services, ingress with TLS, and a network policy that restricts API egress to the database, Redis and DNS. Add explicit egress rules for real downstream systems so agents cannot bypass the gateway at the network level. Apply order: namespace, secrets, configmap, storage, migrate job (wait for completion), deployments, ingress.
 
 ## Private deployment
 Everything runs inside the customer boundary: no component calls an external AI provider, no telemetry leaves the cluster unless `OTEL_EXPORTER_OTLP_ENDPOINT` is set, documents uploaded to Audit are stored on the configured volume (`AEGIS_STORAGE_DIR`), and email is disabled unless `RESEND_API_KEY` is set (console provider logs instead).
 
 ## Release checklist
-1. `pnpm -r typecheck && pnpm -r lint && pnpm -r test` green (CI: `.github/workflows/aegis-ci.yml`).
+1. `pnpm -r typecheck && pnpm -r lint && pnpm -r test` green. CI runs the same checks from `.github/workflows/aegis-ci.yml` at the repository root (GitHub only reads workflows there, so the file sits outside `aegis/`; `scripts/make-archive.sh` includes it in source archives). Lint is real: typescript-eslint for packages and services, eslint-config-next for the console, plus the em dash rule.
 2. Build images from `deploy/Dockerfile` targets.
 3. Run the migrate job; confirm `RLS and integrity triggers applied` in its log.
 4. Roll api, worker, web.

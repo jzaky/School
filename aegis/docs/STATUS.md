@@ -24,7 +24,7 @@ Research, ADRs 0001 to 0005, architecture, database design, threat model, design
 - Tests: 47 core tests (10 crypto, 10 evaluator, 6 foundation, 21 gateway and approvals) plus 11 isolation tests. HTTP smoke test of the banking approval flow passed.
 
 ## Phase 3: complete (core and API), console pending
-- Monitoring: 11 deterministic built-in rules (repeated denials, permission escalation, unusual tool usage, transaction volume, integration failures, policy evaluation failures, missing evidence or receipts, abnormal activity, approvals about to expire, chain integrity, credential rotation due) with configurable thresholds, deduplicated alerts, acknowledge and resolve with evidence, worker job every minute.
+- Monitoring: 12 deterministic built-in rules (repeated denials, permission escalation, unusual tool usage, transaction volume, integration failures, policy evaluation failures, missing evidence or receipts, abnormal activity, approvals about to expire, chain integrity, credential rotation due, unresolved execution outcomes) with configurable thresholds, deduplicated alerts, acknowledge and resolve with evidence, worker job every minute.
 - Governance dashboard queries from real records: agents, decisions, approvals, violations, high-risk events, failed integrations, evidence status, service health; day series; approval turnaround percentiles.
 - Evidence service: filtered listing, per-event verification, verify-and-record, JSON Lines and CSV export with chain verification stamp and checkpoint public key, governance report JSON.
 - Compliance: observed technical controls with measurements and framework references; per-framework mapping summary fed by the Audit module.

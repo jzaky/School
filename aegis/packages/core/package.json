@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "keygen": "tsx scripts/keygen.ts",
-    "lint": "echo lint-ok",
+    "lint": "eslint src tests",
     "seed": "tsx src/seed/index.ts"
   },
   "dependencies": {

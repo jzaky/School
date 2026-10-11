@@ -11,6 +11,7 @@ spec:
       containers:
         - name: migrate
           image: ghcr.io/example/aegis-migrate:latest
+          # The only workload that receives the table-owner credentials.
           envFrom:
             - configMapRef: { name: aegis-config }
-            - secretRef: { name: aegis-secrets }
+            - secretRef: { name: aegis-migrate-secrets }

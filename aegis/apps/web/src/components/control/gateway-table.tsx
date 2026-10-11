@@ -33,7 +33,7 @@ export interface RequestRow {
 }
 
 const ALL = "__all__";
-const STATUSES = ["evaluating", "allowed", "denied", "pending_approval", "approved", "rejected", "expired", "executed", "failed"];
+const STATUSES = ["evaluating", "allowed", "denied", "pending_approval", "approved", "rejected", "expired", "executing", "executed", "failed", "unknown"];
 
 const columns: ColumnDef<RequestRow, unknown>[] = [
   { id: "time", header: "Time", enableHiding: false, cell: ({ row }) => <TimeAgo value={row.original.createdAt} />, meta: { width: 90 } },

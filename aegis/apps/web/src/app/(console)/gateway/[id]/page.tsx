@@ -18,6 +18,7 @@ import { Countdown } from "@/components/ui/countdown";
 import { Note } from "@/components/ui/note";
 import { SimpleTable, Td, Th, Tr } from "@/components/ui/simple-table";
 import { DecisionPanel, type Explanation } from "@/components/control/decision-trace";
+import { ExecutionControls } from "@/components/control/execution-controls";
 import { formatDateTime, formatMoney, timeAgo } from "@/lib/utils";
 import { statusLabel } from "@/lib/status";
 
@@ -177,8 +178,11 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
         ) : null}
 
         <Panel title="Execution" description="Grants are bound to the request hash; receipts come from the downstream system" className={req.approvals.length ? "" : "xl:col-span-2"}>
+          <div className="mb-3">
+            <ExecutionControls requestId={req.id} status={req.status} canControl={c.can("agents:control")} canDecide={c.can("approvals:decide")} downstreamKind={req.receipts[0]?.downstreamSystem?.endsWith("-sim") ? "simulated" : req.receipts[0] ? "sandbox" : null} />
+          </div>
           {req.grants.length === 0 && req.receipts.length === 0 ? (
-            <p className="text-xs text-fg-dim">Nothing executed. {req.status === "denied" ? "Denied requests never reach a downstream system." : req.status === "pending_approval" ? "Waiting for approval." : ""}</p>
+            <p className="text-xs text-fg-dim">Nothing executed. {req.status === "denied" ? "Denied requests never reach a downstream system." : req.status === "pending_approval" ? "Waiting for approval." : req.status === "approved" ? "Approved; execution has not started." : ""}</p>
           ) : (
             <div className="space-y-3">
               {req.grants.length ? (
@@ -197,7 +201,7 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
                         <Td mono>{g.id.slice(0, 8)}</Td>
                         <Td>{formatDateTime(g.createdAt)}</Td>
                         <Td>{formatDateTime(g.expiresAt)}</Td>
-                        <Td>{g.consumedAt ? <Badge tone="allow">consumed {timeAgo(g.consumedAt)}</Badge> : g.expiresAt < new Date() ? <Badge>expired unused</Badge> : <Badge tone="info">live</Badge>}</Td>
+                        <Td>{g.consumedAt ? <Badge tone="allow">consumed {timeAgo(g.consumedAt)}</Badge> : g.voidedAt ? <Badge tone="deny">voided: {g.voidReason ?? "withdrawn"}</Badge> : g.expiresAt < new Date() ? <Badge>expired unused</Badge> : <Badge tone="info">live</Badge>}</Td>
                       </Tr>
                     ))}
                   </tbody>
@@ -206,7 +210,8 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
               {req.receipts.map((r) => (
                 <div key={r.id} className="rounded-md border border-line bg-bg p-3 text-xs">
                   <div className="flex flex-wrap items-center gap-2">
-                    <StatusBadge status={r.status === "succeeded" ? "executed" : r.status} />
+                    <StatusBadge status={r.status === "succeeded" ? "executed" : r.status === "unknown" ? "unknown" : r.status} />
+                    {r.attempt > 1 ? <Badge>attempt {r.attempt}</Badge> : null}
                     <span className="text-fg-muted">via</span>
                     <span className="font-mono">{r.downstreamSystem}</span>
                     {r.downstreamReference ? (

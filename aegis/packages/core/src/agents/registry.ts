@@ -5,6 +5,7 @@ import type { OrgContext } from "../lib/context.js";
 import { conflict, notFound, validation } from "../lib/errors.js";
 import { pageSchema, skipTake, toPage, type PageInput } from "../lib/pagination.js";
 import { assertPermission, slugSchema } from "../orgs/orgs.js";
+import { voidLiveGrants } from "../gateway/grants.js";
 
 export const agentInputSchema = z.object({
   slug: slugSchema,
@@ -104,6 +105,10 @@ export async function transitionAgent(db: TenantDb, ctx: OrgContext, agentId: st
   if (!AGENT_TRANSITIONS[agent.status].includes(to)) throw validation(`Cannot move an agent from ${agent.status} to ${to}`);
   if ((to === "suspended" || to === "revoked") && reason.trim().length < 3) throw validation("A reason is required");
   const updated = await db.agent.update({ where: { id: agentId }, data: { status: to, statusReason: reason, statusChangedAt: new Date() } });
+  if (to === "suspended" || to === "revoked") {
+    // Outstanding execution grants die with the agent's authority; approved requests wait (suspended) or expire (revoked).
+    await voidLiveGrants(db, ctx, `agent ${to}: ${reason}`, { agentId });
+  }
   if (to === "revoked") {
     // Revocation kills every credential path immediately.
     await db.apiKey.updateMany({ where: { subjectType: "agent", subjectId: agentId, revokedAt: null }, data: { revokedAt: new Date() } });

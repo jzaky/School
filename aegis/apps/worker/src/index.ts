@@ -1,9 +1,10 @@
 import { withTenant, disconnectAll } from "@aegis/db";
-import { claimJobs, env, expireApproval, expireOverdueApprovals, installShield, logger, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, systemContext, writeCheckpoint } from "@aegis/core";
+import { assertApplicationProcess, claimJobs, env, expireApproval, expireOverdueApprovals, installShield, logger, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
 import { rawPrisma } from "@aegis/db";
 import { registerModuleHandlers } from "./handlers.js";
 
 const log = logger.child({ component: "worker" });
+assertApplicationProcess("worker");
 
 // ---- Core handlers ----
 registerJobHandler("approval.expire", async (payload) => {
@@ -19,6 +20,22 @@ registerJobHandler("approvals.sweep", async () => {
   }
 });
 
+/** Resolves an ambiguous downstream outcome from the downstream system's own records. */
+registerJobHandler("execution.reconcile", async (payload) => {
+  const { actionRequestId, orgId } = payload as { actionRequestId: string; orgId: string };
+  const out = await reconcileExecution((fn) => withTenant(orgId, fn), systemContext(orgId), actionRequestId);
+  log.info({ orgId, actionRequestId, status: out.requestStatus }, "execution reconciled");
+});
+
+/** Safety net for requests left `executing` by a crash between the downstream call and the receipt. */
+registerJobHandler("executions.sweep", async () => {
+  const orgs = await rawPrisma().organization.findMany({ select: { id: true } });
+  for (const o of orgs) {
+    const n = await sweepStuckExecutions((fn) => withTenant(o.id, fn), systemContext(o.id));
+    if (n) log.info({ orgId: o.id, reconciled: n }, "stuck executions reconciled");
+  }
+});
+
 registerJobHandler("evidence.checkpoint", async () => {
   const orgs = await rawPrisma().organization.findMany({ select: { id: true } });
   for (const o of orgs) await withTenant(o.id, (db) => writeCheckpoint(db, o.id));
@@ -31,6 +48,7 @@ async function scheduleRecurring() {
   const { enqueueJob } = await import("@aegis/core");
   const minute = Math.floor(Date.now() / 60_000);
   await enqueueJob({ type: "approvals.sweep", payload: {}, idempotencyKey: `approvals.sweep:${minute}`, runAt: new Date() });
+  await enqueueJob({ type: "executions.sweep", payload: {}, idempotencyKey: `executions.sweep:${minute}`, runAt: new Date() });
   await enqueueJob({ type: "evidence.checkpoint", payload: {}, idempotencyKey: `evidence.checkpoint:${Math.floor(minute / 5)}`, runAt: new Date() });
   await enqueueJob({ type: "monitoring.run", payload: {}, idempotencyKey: `monitoring.run:${minute}`, runAt: new Date() });
   await enqueueJob({ type: "audit.retention", payload: {}, idempotencyKey: `audit.retention:${Math.floor(minute / 1440)}`, runAt: new Date() });

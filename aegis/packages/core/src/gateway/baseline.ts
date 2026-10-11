@@ -2,7 +2,9 @@ import AjvModule, { type ValidateFunction } from "ajv";
 import addFormatsModule from "ajv-formats";
 
 // CommonJS interop under NodeNext: the default export may be wrapped.
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports -- ajv ships a CJS/ESM dual default; the inline type is the reliable spelling
 const Ajv = ((AjvModule as unknown as { default?: unknown }).default ?? AjvModule) as unknown as new (opts: object) => import("ajv").default;
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 const addFormats = ((addFormatsModule as unknown as { default?: unknown }).default ?? addFormatsModule) as unknown as (ajv: import("ajv").default) => void;
 import type { Agent, Integration, Resource, Tool } from "@aegis/db";
 import { hashObject } from "../lib/crypto.js";

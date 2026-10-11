@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { withTenant } from "@aegis/db";
 import { z } from "zod";
-import { actionRequestInputSchema, authorizeAndExecute, consumeGrant, executeRequest, forbidden, getActionRequest, hashObject, listActionRequests, requestListFilter, issueGrant, notFound, provideApprovalInfo } from "@aegis/core";
+import { actionRequestInputSchema, appendEvidence, authorizeAndExecute, consumeGrant, forbidden, getActionRequest, hashObject, issueGrantForRequest, listActionRequests, recordAgentExecution, requestListFilter, provideApprovalInfo } from "@aegis/core";
 
 /**
  * The Action Gateway. Agents call POST /v1/gateway/actions before doing anything protected.
@@ -30,35 +30,21 @@ export async function gatewayRoutes(app: FastifyInstance) {
     return withTenant(ctx.orgId, (db) => getActionRequest(db, ctx, id));
   });
 
-  /** Agent-mode execution: after approval, the agent fetches a grant to present downstream. */
+  /** Agent-mode: after allow or approval, the agent fetches its single execution grant to present downstream. */
   app.post("/actions/:id/grant", async (req) => {
     const ctx = await req.orgContext();
     if (ctx.actor.type !== "agent") throw forbidden("Use an agent API key");
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
-    return withTenant(ctx.orgId, async (db) => {
-      const r = await db.actionRequest.findUnique({ where: { id }, include: { agent: true, grants: { where: { consumedAt: null, expiresAt: { gt: new Date() } } } } });
-      if (!r || r.agentId !== ctx.actor.id) throw notFound("Action request");
-      if (!["allowed", "approved"].includes(r.status)) throw forbidden(`Request is ${r.status}`);
-      if (r.agent.status !== "active") throw forbidden(`Agent is ${r.agent.status}`);
-      // Grants bind the stored parameters (after Shield masking); the agent must execute exactly these.
-      const params = r.params as Record<string, unknown>;
-      const requestHash = hashObject({ toolKey: r.toolKey, action: r.action, params });
-      const g = await issueGrant(db, ctx.orgId, r.id, requestHash);
-      return { grant: g.token, expiresAt: g.grant.expiresAt, requestHash, params };
-    });
+    return withTenant(ctx.orgId, (db) => issueGrantForRequest(db, ctx, id));
   });
 
-  /** Agent-mode: the agent reports that it executed through its own channel (writes the receipt). */
+  /** Agent-mode: the agent reports the outcome of executing through its own channel (writes the receipt). */
   app.post("/actions/:id/execute", async (req) => {
     const ctx = await req.orgContext();
     if (ctx.actor.type !== "agent") throw forbidden("Use an agent API key");
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
-    const { grant } = z.object({ grant: z.string().min(10) }).parse(req.body);
-    return withTenant(ctx.orgId, async (db) => {
-      const r = await db.actionRequest.findUnique({ where: { id } });
-      if (!r || r.agentId !== ctx.actor.id) throw notFound("Action request");
-      return executeRequest(db, ctx, id, grant, r.params as Record<string, unknown>);
-    });
+    const body = z.object({ grant: z.string().min(10), outcome: z.enum(["succeeded", "failed"]).default("succeeded"), reference: z.string().max(200).nullable().optional(), summary: z.record(z.unknown()).optional() }).parse(req.body);
+    return withTenant(ctx.orgId, (db) => recordAgentExecution(db, ctx, id, body));
   });
 
   /**
@@ -69,7 +55,11 @@ export async function gatewayRoutes(app: FastifyInstance) {
     const ctx = await req.orgContext();
     if (ctx.actor.type !== "integration") throw forbidden("Use an integration API key");
     const body = z.object({ grant: z.string().min(10), toolKey: z.string(), action: z.string().default("execute"), params: z.record(z.unknown()) }).parse(req.body);
-    const result = await withTenant(ctx.orgId, (db) => consumeGrant(db, body.grant, hashObject({ toolKey: body.toolKey, action: body.action, params: body.params })));
+    const result = await withTenant(ctx.orgId, async (db) => {
+      const r = await consumeGrant(db, body.grant, hashObject({ toolKey: body.toolKey, action: body.action, params: body.params }));
+      await appendEvidence(db, ctx, { type: r.ok ? "gateway.grant_verified_downstream" : "gateway.grant_rejected_downstream", subjectType: "action_request", subjectId: r.ok ? r.actionRequestId : "unknown", payload: { tool: body.toolKey, ok: r.ok, reason: r.ok ? null : r.reason } });
+      return r;
+    });
     if (!result.ok) reply.status(403);
     return result;
   });

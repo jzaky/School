@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { withTenant } from "@aegis/db";
 import { z } from "zod";
-import { approvalListFilter, decideApproval, decideSchema, getApproval, listApprovals } from "@aegis/core";
+import { approvalListFilter, decideApprovalAndExecute, decideSchema, getApproval, listApprovals } from "@aegis/core";
 
 export async function approvalRoutes(app: FastifyInstance) {
   app.get("/", async (req) => {
@@ -17,6 +17,6 @@ export async function approvalRoutes(app: FastifyInstance) {
     const ctx = await req.orgContext();
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
     const body = decideSchema.parse(req.body);
-    return withTenant(ctx.orgId, (db) => decideApproval(db, ctx, id, body));
+    return decideApprovalAndExecute((fn) => withTenant(ctx.orgId, fn), ctx, id, body);
   });
 }

@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant } from "@aegis/db";
-import { forbidden, revokeAgentTool, revokeCredential, setIntegrationStatus, transitionAgent, updateOrganization } from "@aegis/core";
+import { executeApprovedRequest, forbidden, pauseGateway, reconcileExecution, resolveExecutionManually, resumeGateway, revokeAgentTool, revokeCredential, setIntegrationStatus, transitionAgent } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { activityFamily, subjectHref, type ActivityFamily } from "@/server/queries/control";
 import { actorLabel, evidenceLabels } from "@/server/queries/assurance";
@@ -23,8 +23,10 @@ export async function pauseGatewayAction(reason: string) {
     const c = await getConsoleContext();
     if (!c.can("org:admin")) throw forbidden("Missing permission org:admin");
     const r = reasonSchema.parse(reason);
-    await updateOrganization(c.ctx, { settings: { ...c.org.settings, gatewayPaused: true, gatewayPausedReason: r, gatewayPausedAt: new Date().toISOString(), gatewayPausedBy: c.session.user.name } });
+    const out = await withTenant(c.ctx.orgId, (db) => pauseGateway(db, { ...c.ctx, actor: { ...c.ctx.actor, label: c.session.user.name } }, r));
     revalidateGateway();
+    revalidatePath("/approvals");
+    return out;
   });
 }
 
@@ -33,12 +35,9 @@ export async function resumeGatewayAction(reason: string) {
     const c = await getConsoleContext();
     if (!c.can("org:admin")) throw forbidden("Missing permission org:admin");
     const r = z.string().max(1000).parse(reason ?? "");
-    const settings: Record<string, unknown> = { ...c.org.settings, gatewayPaused: false, gatewayResumedAt: new Date().toISOString(), gatewayResumeReason: r };
-    delete settings.gatewayPausedReason;
-    delete settings.gatewayPausedAt;
-    delete settings.gatewayPausedBy;
-    await updateOrganization(c.ctx, { settings });
+    await withTenant(c.ctx.orgId, (db) => resumeGateway(db, c.ctx, r));
     revalidateGateway();
+    revalidatePath("/approvals");
   });
 }
 
@@ -145,5 +144,46 @@ export async function activityFeedAction(input: unknown) {
       }));
       return { events, serverTime: new Date().toISOString() };
     });
+  });
+}
+
+/** Re-checks an executing or unresolved request against the downstream system's own records. */
+export async function reconcileExecutionAction(requestId: string) {
+  return act(async () => {
+    const c = await getConsoleContext();
+    if (!c.can("agents:control")) throw forbidden("Missing permission agents:control");
+    const id = uuid.parse(requestId);
+    const out = await reconcileExecution((fn) => withTenant(c.ctx.orgId, fn), c.ctx, id);
+    revalidateGateway();
+    revalidatePath(`/gateway/${id}`);
+    return { status: out.status, requestStatus: out.requestStatus, reference: out.reference };
+  });
+}
+
+/** A human settles an unresolved outcome after checking the downstream system directly. */
+export async function resolveExecutionAction(requestId: string, input: { outcome: "succeeded" | "failed"; reference: string; reason: string }) {
+  return act(async () => {
+    const c = await getConsoleContext();
+    if (!c.can("agents:control")) throw forbidden("Missing permission agents:control");
+    const id = uuid.parse(requestId);
+    const data = z.object({ outcome: z.enum(["succeeded", "failed"]), reference: z.string().max(200), reason: z.string().min(5).max(1000) }).parse(input);
+    const out = await withTenant(c.ctx.orgId, (db) => resolveExecutionManually(db, { ...c.ctx, actor: { ...c.ctx.actor, label: c.session.user.name } }, id, { outcome: data.outcome, reference: data.reference || null, reason: data.reason }));
+    revalidateGateway();
+    revalidatePath(`/gateway/${id}`);
+    return { status: out.status, requestStatus: out.requestStatus };
+  });
+}
+
+/** Runs an approved request whose execution never started (gateway paused in between, grant expired unused). */
+export async function executeApprovedAction(requestId: string) {
+  return act(async () => {
+    const c = await getConsoleContext();
+    if (!c.can("approvals:decide") && !c.can("agents:control")) throw forbidden("Missing permission approvals:decide");
+    const id = uuid.parse(requestId);
+    const out = await executeApprovedRequest((fn) => withTenant(c.ctx.orgId, fn), c.ctx, id);
+    revalidateGateway();
+    revalidatePath(`/gateway/${id}`);
+    revalidatePath("/approvals");
+    return { status: out.status, requestStatus: out.requestStatus, reference: out.reference };
   });
 }

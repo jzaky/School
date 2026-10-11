@@ -11,9 +11,9 @@ import { evaluatePolicies, type EvaluationResult } from "../policy/evaluate.js";
 import { resolvePoliciesForAgent } from "../policy/service.js";
 import { baselineChecks } from "./baseline.js";
 import { buildAuthorizationInput, extractDestinationDomain, type AuthorizationInput } from "./input.js";
-import { issueGrant } from "./grants.js";
+import { consumeGrant, EXECUTABLE_STATUSES, hashGrantToken, issueGrant, voidLiveGrants } from "./grants.js";
 import { getShieldInspector } from "./shield-hook.js";
-import { getDownstreamSystem } from "./simulators.js";
+import { getDownstreamSystem, readIntegrationCredential, type DownstreamContext } from "./simulators.js";
 
 export const actionRequestInputSchema = z.object({
   tool: z.string().min(1).max(80),
@@ -50,7 +50,7 @@ export function requestHashOf(toolKey: string, action: string, params: Record<st
 }
 
 /** Reads through the transaction client: never touch the shared pool from inside a tenant transaction (pool exhaustion under load). */
-async function gatewayPausedState(db: TenantDb, orgId: string): Promise<{ paused: boolean; reason?: string }> {
+export async function gatewayPausedState(db: TenantDb, orgId: string): Promise<{ paused: boolean; reason?: string }> {
   const org = await db.organization.findUnique({ where: { id: orgId }, select: { settings: true } });
   const s = (org?.settings ?? {}) as { gatewayPaused?: boolean; gatewayPausedReason?: string };
   return { paused: !!s.gatewayPaused, reason: s.gatewayPausedReason };
@@ -208,8 +208,10 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
   let grant: { token: string; expiresAt: Date } | null = null;
   if (decisionResult === "allow") {
     status = "allowed";
-    // The grant binds the parameters that will execute (after Shield masking), so the downstream check matches.
-    const g = await issueGrant(db, ctx.orgId, request.id, requestHashOf(input.tool, input.action, effectiveParams));
+    // The request becomes executable before its single grant is issued; the grant binds the parameters that will
+    // execute (after Shield masking), so the downstream check matches.
+    await db.actionRequest.update({ where: { id: request.id }, data: { status: "allowed", updatedAt: now } });
+    const g = await issueGrant(db, ctx.orgId, request.id, requestHashOf(input.tool, input.action, effectiveParams), { now });
     grant = { token: g.token, expiresAt: g.grant.expiresAt };
   } else if (decisionResult === "require_approval") {
     status = "pending_approval";
@@ -255,63 +257,302 @@ function toResponse(req: ActionRequest, decision: { result: string; policyVersio
   };
 }
 
+export type TenantRunner = <T>(fn: (db: TenantDb) => Promise<T>) => Promise<T>;
+
+export interface ExecutionOutcome {
+  status: string;
+  downstreamSystem: string;
+  reference: string | null;
+  summary: Record<string, unknown>;
+  /** The request's status after this call (executed, failed, executing, unknown). */
+  requestStatus: ActionRequest["status"];
+}
+
+/** How long an `executing` request may stay unresolved before the sweep forces reconciliation. */
+export const EXECUTION_RECONCILE_AFTER_MS = 30_000;
+/** Reconciliation attempts before an outcome is declared unknown and handed to a human. */
+export const EXECUTION_MAX_RECONCILE_ATTEMPTS = 6;
+
+function receiptView(r: { status: string; downstreamSystem: string; downstreamReference: string | null; responseSummary: unknown }, requestStatus: ActionRequest["status"]): ExecutionOutcome {
+  return { status: r.status, downstreamSystem: r.downstreamSystem, reference: r.downstreamReference, summary: (r.responseSummary ?? {}) as Record<string, unknown>, requestStatus };
+}
+
+function downstreamContext(run: TenantRunner, orgId: string, integrationId: string): DownstreamContext {
+  return {
+    orgId,
+    integrationId,
+    run,
+    credential: (name = "service-token") => run((db) => readIntegrationCredential(db, integrationId, name)),
+  };
+}
+
+async function recordOutcome(db: TenantDb, ctx: OrgContext, req: { id: string; correlationId: string; executionAttempts: number }, systemKey: string, result: { outcome: "succeeded" | "failed" | "unknown"; reference: string | null; summary: Record<string, unknown>; error?: string }, durationMs: number): Promise<ExecutionOutcome> {
+  const now = ctx.now ?? new Date();
+  const receipt = await db.executionReceipt.create({
+    data: { createdAt: now, orgId: ctx.orgId, actionRequestId: req.id, status: result.outcome, downstreamSystem: systemKey, downstreamReference: result.reference, responseSummary: { ...result.summary, ...(result.error ? { error: result.error } : {}) } as Prisma.InputJsonValue, durationMs, attempt: Math.max(1, req.executionAttempts) },
+  });
+  if (result.outcome === "unknown") {
+    // Ambiguous: the call may have happened. Keep `executing`, schedule reconciliation, never retry blindly.
+    await db.actionRequest.update({ where: { id: req.id }, data: { updatedAt: now } });
+    await enqueueJob({ type: "execution.reconcile", payload: { actionRequestId: req.id, orgId: ctx.orgId }, idempotencyKey: `execution.reconcile:${req.id}:${req.executionAttempts}`, orgId: ctx.orgId, runAt: new Date(now.getTime() + EXECUTION_RECONCILE_AFTER_MS), maxAttempts: EXECUTION_MAX_RECONCILE_ATTEMPTS }, db);
+    await appendEvidence(db, ctx, { type: "gateway.execution_outcome_unknown", subjectType: "action_request", subjectId: req.id, correlationId: req.correlationId, payload: { receiptId: receipt.id, downstreamSystem: systemKey, error: result.error ?? null, attempt: req.executionAttempts } });
+    return receiptView(receipt, "executing");
+  }
+  const status: ActionRequest["status"] = result.outcome === "succeeded" ? "executed" : "failed";
+  await db.actionRequest.update({ where: { id: req.id }, data: { status, completedAt: now, updatedAt: now } });
+  await appendEvidence(db, ctx, { type: result.outcome === "succeeded" ? "gateway.executed" : "gateway.execution_failed", subjectType: "action_request", subjectId: req.id, correlationId: req.correlationId, payload: { receiptId: receipt.id, downstreamSystem: systemKey, reference: result.reference, error: result.error ?? null, durationMs, attempt: req.executionAttempts } });
+  return receiptView(receipt, status);
+}
+
+const FINAL_RECEIPTS = new Set(["succeeded", "failed", "skipped"]);
+
 /**
  * Executes an allowed or approved request through the tool's integration (gateway mode).
- * Runs in its own transaction after the decision committed. The downstream simulator verifies
- * and consumes the grant before acting. Idempotent: a request with a receipt is never re-executed.
+ *
+ * Phase 1 (transaction): re-check the request, consume the grant (which moves the request to
+ * `executing`), record that execution started. Phase 2 (no transaction): the downstream call, with
+ * the stable idempotency key `aegis:<requestId>`. Phase 3 (transaction): the receipt and the final
+ * status. A crash between phases leaves an `executing` request with no final receipt; the sweep and
+ * the reconcile job resolve it from the downstream system's own records. Nothing is ever executed
+ * twice by the gateway: a second call for a request that already has a final receipt returns it.
  */
-export async function executeRequest(db: TenantDb, ctx: OrgContext, actionRequestId: string, grantToken: string, params: Record<string, unknown>): Promise<GatewayResponse["receipt"] & { status: string }> {
-  const req = await db.actionRequest.findUnique({ where: { id: actionRequestId }, include: { agent: true, receipts: true } });
-  if (!req) throw notFound("Action request");
-  if (req.receipts.length > 0) {
-    const r = req.receipts[0]!;
-    return { status: r.status, downstreamSystem: r.downstreamSystem, reference: r.downstreamReference, summary: (r.responseSummary ?? {}) as Record<string, unknown> };
-  }
-  if (!["allowed", "approved"].includes(req.status)) throw new AegisError("conflict", `Request is ${req.status}; only allowed or approved requests execute`);
-  if (req.agent.status !== "active") {
-    await db.actionRequest.update({ where: { id: req.id }, data: { status: "failed", completedAt: new Date() } });
-    await db.executionReceipt.create({ data: { orgId: ctx.orgId, actionRequestId: req.id, status: "skipped", downstreamSystem: "aegis-gateway", responseSummary: { error: `agent is ${req.agent.status}` } } });
-    await appendEvidence(db, ctx, { type: "gateway.execution_skipped", subjectType: "action_request", subjectId: req.id, correlationId: req.correlationId, payload: { reason: `agent ${req.agent.status}` } });
-    return { status: "skipped", downstreamSystem: "aegis-gateway", reference: null, summary: { error: `agent is ${req.agent.status}` } };
-  }
-  const tool = req.toolId ? await db.tool.findUnique({ where: { id: req.toolId }, include: { integration: true } }) : null;
-  const systemKey = tool?.integration?.key ?? "none";
-  const system = getDownstreamSystem(systemKey);
-  const started = Date.now();
-  let result: { ok: boolean; reference: string | null; summary: Record<string, unknown>; error?: string };
-  if (!system || !tool?.integration) {
-    result = { ok: false, reference: null, summary: {}, error: `no downstream system registered for ${systemKey}` };
-  } else if (tool.integration.status !== "active") {
-    result = { ok: false, reference: null, summary: {}, error: `integration ${systemKey} is disabled` };
-  } else {
-    try {
-      result = await system.execute(db, ctx.orgId, tool.integration.id, { grantToken, toolKey: req.toolKey, action: req.action, params, correlationId: req.correlationId, agentSlug: req.agent.slug });
-    } catch (e) {
-      result = { ok: false, reference: null, summary: {}, error: e instanceof Error ? e.message : "execution failed" };
+export async function executeRequest(run: TenantRunner, ctx: OrgContext, actionRequestId: string, grantToken: string, params: Record<string, unknown>): Promise<ExecutionOutcome> {
+  const prepared = await run(async (db) => {
+    const req = await db.actionRequest.findUnique({ where: { id: actionRequestId }, include: { agent: true, receipts: { orderBy: { createdAt: "desc" }, take: 1 } } });
+    if (!req) throw notFound("Action request");
+    const latest = req.receipts[0];
+    if (latest && FINAL_RECEIPTS.has(latest.status)) return { done: receiptView(latest, req.status) };
+    if (req.status === "executing" || req.status === "unknown") return { reconcile: true as const };
+    if (!(EXECUTABLE_STATUSES as readonly string[]).includes(req.status)) throw new AegisError("conflict", `Request is ${req.status}; only allowed or approved requests execute`);
+    const paused = await gatewayPausedState(db, ctx.orgId);
+    if (paused.paused) {
+      await appendEvidence(db, ctx, { type: "gateway.execution_blocked", subjectType: "action_request", subjectId: req.id, correlationId: req.correlationId, payload: { reason: `gateway paused: ${paused.reason ?? "emergency control"}` } });
+      throw conflict(`Gateway is paused: ${paused.reason ?? "emergency control"}. The approved action has not executed and will not until the gateway resumes.`);
     }
-  }
-  const receipt = await db.executionReceipt.create({
-    data: { createdAt: ctx.now ?? new Date(), orgId: ctx.orgId, actionRequestId: req.id, status: result.ok ? "succeeded" : "failed", downstreamSystem: systemKey, downstreamReference: result.reference, responseSummary: { ...result.summary, ...(result.error ? { error: result.error } : {}) } as Prisma.InputJsonValue, durationMs: Date.now() - started },
+    const now = ctx.now ?? new Date();
+    if (req.agent.status !== "active") {
+      await db.actionRequest.update({ where: { id: req.id }, data: { status: "failed", completedAt: now } });
+      const receipt = await db.executionReceipt.create({ data: { createdAt: now, orgId: ctx.orgId, actionRequestId: req.id, status: "skipped", downstreamSystem: "aegis-gateway", responseSummary: { error: `agent is ${req.agent.status}` } } });
+      await appendEvidence(db, ctx, { type: "gateway.execution_skipped", subjectType: "action_request", subjectId: req.id, correlationId: req.correlationId, payload: { reason: `agent ${req.agent.status}` } });
+      return { done: receiptView(receipt, "failed") };
+    }
+    const tool = req.toolId ? await db.tool.findUnique({ where: { id: req.toolId }, include: { integration: true } }) : null;
+    const systemKey = tool?.integration?.key ?? "none";
+    const system = getDownstreamSystem(systemKey);
+    const definitiveFailure = !system || !tool?.integration ? `no downstream system registered for ${systemKey}` : tool.integration.status !== "active" ? `integration ${systemKey} is disabled` : null;
+    // The grant is consumed before anything leaves the gateway; from here the request is `executing`.
+    const check = await consumeGrant(db, grantToken, requestHashOf(req.toolKey, req.action, params), { now });
+    if (!check.ok) {
+      const result = { outcome: "failed" as const, reference: null, summary: {}, error: `execution grant rejected: ${check.reason}` };
+      await db.actionRequest.update({ where: { id: req.id }, data: { status: "failed", completedAt: now, updatedAt: now } });
+      const receipt = await db.executionReceipt.create({ data: { createdAt: now, orgId: ctx.orgId, actionRequestId: req.id, status: "failed", downstreamSystem: systemKey, responseSummary: { error: result.error } as Prisma.InputJsonValue, attempt: Math.max(1, req.executionAttempts + 1) } });
+      await appendEvidence(db, ctx, { type: "gateway.execution_failed", subjectType: "action_request", subjectId: req.id, correlationId: req.correlationId, payload: { receiptId: receipt.id, downstreamSystem: systemKey, reference: null, error: result.error, durationMs: 0 } });
+      return { done: receiptView(receipt, "failed") };
+    }
+    const fresh = await db.actionRequest.findUniqueOrThrow({ where: { id: req.id }, select: { executionAttempts: true, downstreamIdempotencyKey: true } });
+    await appendEvidence(db, ctx, { type: "gateway.execution_started", subjectType: "action_request", subjectId: req.id, correlationId: req.correlationId, payload: { downstreamSystem: systemKey, idempotencyKey: fresh.downstreamIdempotencyKey, attempt: fresh.executionAttempts } });
+    if (definitiveFailure) {
+      const out = await recordOutcome(db, ctx, { id: req.id, correlationId: req.correlationId, executionAttempts: fresh.executionAttempts }, systemKey, { outcome: "failed", reference: null, summary: {}, error: definitiveFailure }, 0);
+      return { done: out };
+    }
+    const grantRow = await db.executionGrant.findFirstOrThrow({ where: { actionRequestId: req.id, consumedAt: { not: null } }, orderBy: { consumedAt: "desc" }, select: { requestHash: true, consumedAt: true } });
+    return {
+      call: {
+        systemKey,
+        system: system!,
+        integrationId: tool!.integration!.id,
+        req: { id: req.id, correlationId: req.correlationId, executionAttempts: fresh.executionAttempts },
+        downstream: { actionRequestId: req.id, idempotencyKey: fresh.downstreamIdempotencyKey ?? `aegis:${req.id}`, attempt: fresh.executionAttempts, toolKey: req.toolKey, action: req.action, params, correlationId: req.correlationId, agentSlug: req.agent.slug, grant: { requestHash: grantRow.requestHash, consumedAt: grantRow.consumedAt! } },
+      },
+    };
   });
-  await db.actionRequest.update({ where: { id: req.id }, data: { status: result.ok ? "executed" : "failed", completedAt: ctx.now ?? new Date(), updatedAt: ctx.now ?? new Date() } });
-  await appendEvidence(db, ctx, { type: result.ok ? "gateway.executed" : "gateway.execution_failed", subjectType: "action_request", subjectId: req.id, correlationId: req.correlationId, payload: { receiptId: receipt.id, downstreamSystem: systemKey, reference: result.reference, error: result.error ?? null, durationMs: receipt.durationMs } });
-  return { status: receipt.status, downstreamSystem: systemKey, reference: result.reference, summary: (receipt.responseSummary ?? {}) as Record<string, unknown> };
+  if ("done" in prepared && prepared.done) return prepared.done;
+  if ("reconcile" in prepared || !("call" in prepared)) return reconcileExecution(run, ctx, actionRequestId);
+
+  const { systemKey, system, integrationId, req, downstream } = prepared.call;
+  const started = Date.now();
+  let result: { outcome: "succeeded" | "failed" | "unknown"; reference: string | null; summary: Record<string, unknown>; error?: string };
+  try {
+    result = await system.execute(downstreamContext(run, ctx.orgId, integrationId), downstream);
+  } catch (e) {
+    // A thrown error after the call started is ambiguous by definition: record unknown, reconcile later.
+    result = { outcome: "unknown", reference: null, summary: {}, error: e instanceof Error ? e.message : "execution failed" };
+  }
+  return run((db) => recordOutcome(db, ctx, req, systemKey, result, Date.now() - started));
 }
 
 /**
- * Full gateway flow for API callers: decision in transaction 1, execution (gateway mode) in
- * transaction 2. The decision is durable before anything executes.
+ * Resolves an `executing` or `unknown` request from the downstream system's own records (by the
+ * idempotency key). Called by the reconcile job, the sweep, and the console's "reconcile now". When
+ * the system cannot tell and attempts are exhausted, the request becomes `unknown` and a security
+ * event asks a human to resolve it; it is never silently marked executed or failed.
+ */
+export async function reconcileExecution(run: TenantRunner, ctx: OrgContext, actionRequestId: string, opts: { force?: boolean } = {}): Promise<ExecutionOutcome> {
+  const prepared = await run(async (db) => {
+    const req = await db.actionRequest.findUnique({ where: { id: actionRequestId }, include: { agent: true, receipts: { orderBy: { createdAt: "desc" }, take: 1 }, grants: { where: { consumedAt: { not: null } }, orderBy: { consumedAt: "desc" }, take: 1 } } });
+    if (!req) throw notFound("Action request");
+    const latest = req.receipts[0];
+    if (latest && FINAL_RECEIPTS.has(latest.status)) return { done: receiptView(latest, req.status) };
+    if (req.status !== "executing" && req.status !== "unknown") throw conflict(`Request is ${req.status}; only executing or unknown requests reconcile`);
+    const tool = req.toolId ? await db.tool.findUnique({ where: { id: req.toolId }, include: { integration: true } }) : null;
+    const systemKey = tool?.integration?.key ?? "none";
+    const system = getDownstreamSystem(systemKey);
+    const grant = req.grants[0];
+    const attempts = await db.executionReceipt.count({ where: { actionRequestId: req.id, status: "unknown" } });
+    return { call: { systemKey, system, integrationId: tool?.integration?.id ?? null, attempts, req: { id: req.id, correlationId: req.correlationId, executionAttempts: req.executionAttempts, agentId: req.agentId, toolKey: req.toolKey }, downstream: { actionRequestId: req.id, idempotencyKey: req.downstreamIdempotencyKey ?? `aegis:${req.id}`, attempt: req.executionAttempts, toolKey: req.toolKey, action: req.action, params: req.params as Record<string, unknown>, correlationId: req.correlationId, agentSlug: req.agent.slug, grant: { requestHash: grant?.requestHash ?? "", consumedAt: grant?.consumedAt ?? new Date(0) } } } };
+  });
+  if ("done" in prepared && prepared.done) return prepared.done;
+  if (!("call" in prepared)) throw conflict("Nothing to reconcile");
+  const { systemKey, system, integrationId, attempts, req, downstream } = prepared.call;
+  const started = Date.now();
+  let result: { outcome: "succeeded" | "failed" | "unknown"; reference: string | null; summary: Record<string, unknown>; error?: string };
+  if (!system || !integrationId) result = { outcome: "unknown", reference: null, summary: {}, error: `no downstream system registered for ${systemKey}` };
+  else if (!system.reconcile) result = { outcome: "unknown", reference: null, summary: {}, error: `${systemKey} cannot look up earlier attempts` };
+  else {
+    try {
+      result = await system.reconcile(downstreamContext(run, ctx.orgId, integrationId), downstream);
+    } catch (e) {
+      result = { outcome: "unknown", reference: null, summary: {}, error: e instanceof Error ? e.message : "reconciliation failed" };
+    }
+  }
+  return run(async (db) => {
+    if (result.outcome !== "unknown") return recordOutcome(db, ctx, req, systemKey, { ...result, summary: { ...result.summary, reconciled: true } }, Date.now() - started);
+    const now = ctx.now ?? new Date();
+    const exhausted = opts.force || attempts + 1 >= EXECUTION_MAX_RECONCILE_ATTEMPTS;
+    const receipt = await db.executionReceipt.create({ data: { createdAt: now, orgId: ctx.orgId, actionRequestId: req.id, status: "unknown", downstreamSystem: systemKey, responseSummary: { reconciled: true, resolved: false, error: result.error ?? null } as Prisma.InputJsonValue, durationMs: Date.now() - started, attempt: Math.max(1, req.executionAttempts) } });
+    if (!exhausted) {
+      await enqueueJob({ type: "execution.reconcile", payload: { actionRequestId: req.id, orgId: ctx.orgId }, idempotencyKey: `execution.reconcile:${req.id}:${req.executionAttempts}:${attempts + 1}`, orgId: ctx.orgId, runAt: new Date(now.getTime() + EXECUTION_RECONCILE_AFTER_MS * (attempts + 2)), maxAttempts: 3 }, db);
+      await appendEvidence(db, ctx, { type: "gateway.execution_outcome_unknown", subjectType: "action_request", subjectId: req.id, correlationId: req.correlationId, payload: { receiptId: receipt.id, downstreamSystem: systemKey, error: result.error ?? null, reconcileAttempt: attempts + 1 } });
+      return receiptView(receipt, "executing");
+    }
+    await db.actionRequest.update({ where: { id: req.id }, data: { status: "unknown", updatedAt: now } });
+    await db.securityEvent.create({ data: { createdAt: now, orgId: ctx.orgId, type: "execution.outcome_unknown", severity: "high", title: `Execution outcome unresolved: ${req.toolKey}`, agentId: req.agentId, actionRequestId: req.id, detail: { downstreamSystem: systemKey, idempotencyKey: downstream.idempotencyKey, error: result.error ?? null, instructions: "Check the downstream system for this idempotency key and resolve the request manually." } as Prisma.InputJsonValue } as Prisma.SecurityEventUncheckedCreateInput });
+    await appendEvidence(db, ctx, { type: "gateway.execution_unresolved", subjectType: "action_request", subjectId: req.id, correlationId: req.correlationId, payload: { receiptId: receipt.id, downstreamSystem: systemKey, error: result.error ?? null, reconcileAttempts: attempts + 1 } });
+    return receiptView(receipt, "unknown");
+  });
+}
+
+/**
+ * A human settles an unresolved outcome after checking the downstream system directly. Requires
+ * gateway:control. The resolution is a receipt plus evidence naming who decided and why.
+ */
+export async function resolveExecutionManually(db: TenantDb, ctx: OrgContext, actionRequestId: string, input: { outcome: "succeeded" | "failed"; reference: string | null; reason: string }): Promise<ExecutionOutcome> {
+  if (!ctx.actor.permissions?.includes("*") && !ctx.actor.permissions?.includes("agents:control")) throw forbidden("Missing permission agents:control");
+  if (input.reason.trim().length < 5) throw new AegisError("validation", "Explain what you verified downstream");
+  const req = await db.actionRequest.findUnique({ where: { id: actionRequestId }, include: { receipts: { orderBy: { createdAt: "desc" }, take: 1 } } });
+  if (!req) throw notFound("Action request");
+  if (req.status !== "unknown" && req.status !== "executing") throw conflict(`Request is ${req.status}; only unresolved requests can be settled manually`);
+  const systemKey = req.receipts[0]?.downstreamSystem ?? "manual";
+  return recordOutcome(db, ctx, { id: req.id, correlationId: req.correlationId, executionAttempts: req.executionAttempts }, systemKey, { outcome: input.outcome, reference: input.reference, summary: { manualResolution: true, resolvedBy: ctx.actor.label ?? ctx.actor.id ?? "user", reason: input.reason } }, 0);
+}
+
+/**
+ * Executes an approved (or allowed) gateway-mode request whose earlier execution never started, for
+ * example because the gateway was paused between approval and execution. Issues the single grant and
+ * runs the normal phases. Refuses while a live grant is outstanding (an execution is in flight).
+ */
+export async function executeApprovedRequest(run: TenantRunner, ctx: OrgContext, actionRequestId: string): Promise<ExecutionOutcome> {
+  if (!ctx.actor.permissions?.includes("*") && !ctx.actor.permissions?.includes("agents:control") && !ctx.actor.permissions?.includes("approvals:decide")) throw forbidden("Missing permission approvals:decide");
+  const issued = await run(async (db) => {
+    const r = await db.actionRequest.findUnique({ where: { id: actionRequestId }, include: { receipts: { take: 1 } } });
+    if (!r) throw notFound("Action request");
+    if (r.receipts.length > 0 || !(EXECUTABLE_STATUSES as readonly string[]).includes(r.status)) throw conflict(`Request is ${r.status}; nothing to execute`);
+    const params = r.params as Record<string, unknown>;
+    const g = await issueGrant(db, ctx.orgId, r.id, requestHashOf(r.toolKey, r.action, params), { now: ctx.now });
+    await appendEvidence(db, ctx, { type: "gateway.execution_retried", subjectType: "action_request", subjectId: r.id, correlationId: r.correlationId, payload: { grantId: g.grant.id } });
+    return { token: g.token, params };
+  });
+  return executeRequest(run, ctx, actionRequestId, issued.token, issued.params);
+}
+
+/** Requests stuck in `executing` beyond the reconcile window (worker crashed between phases). */
+export async function sweepStuckExecutions(run: TenantRunner, ctx: OrgContext, olderThanMs = EXECUTION_RECONCILE_AFTER_MS * 2): Promise<number> {
+  const stuck = await run((db) => db.actionRequest.findMany({ where: { orgId: ctx.orgId, status: "executing", updatedAt: { lt: new Date(Date.now() - olderThanMs) } }, select: { id: true }, take: 50 }));
+  let n = 0;
+  for (const s of stuck) {
+    try {
+      await reconcileExecution(run, ctx, s.id);
+      n++;
+    } catch (e) {
+      logger.warn({ requestId: s.id, err: e instanceof Error ? e.message : String(e) }, "stuck execution reconcile failed");
+    }
+  }
+  return n;
+}
+
+/**
+ * Full gateway flow for API callers: decision in transaction 1, execution (gateway mode) in its own
+ * phases afterwards. The decision is durable before anything executes.
  */
 export async function authorizeAndExecute(withTenant: <T>(orgId: string, fn: (db: TenantDb) => Promise<T>) => Promise<T>, ctx: OrgContext, input: ActionRequestInput): Promise<GatewayResponse> {
-  const decision = await withTenant(ctx.orgId, (db) => submitActionRequest(db, ctx, input));
+  const run: TenantRunner = (fn) => withTenant(ctx.orgId, fn);
+  const decision = await run((db) => submitActionRequest(db, ctx, input));
   const pending = (decision as GatewayResponse & { __pendingExecution?: { grantToken: string; params: Record<string, unknown> } }).__pendingExecution;
   delete (decision as GatewayResponse & { __pendingExecution?: unknown }).__pendingExecution;
   if (pending && input.executionMode === "gateway" && !decision.duplicate) {
-    const receipt = await withTenant(ctx.orgId, (db) => executeRequest(db, ctx, decision.requestId, pending.grantToken, pending.params));
-    decision.receipt = receipt;
-    decision.status = receipt.status === "succeeded" ? "executed" : "failed";
+    const out = await executeRequest(run, ctx, decision.requestId, pending.grantToken, pending.params);
+    decision.receipt = { status: out.status, downstreamSystem: out.downstreamSystem, reference: out.reference, summary: out.summary };
+    decision.status = out.requestStatus;
   }
   return decision;
+}
+
+/** Emergency control: pauses the gateway for the organization and voids every live execution grant. */
+export async function pauseGateway(db: TenantDb, ctx: OrgContext, reason: string): Promise<{ voidedGrants: number }> {
+  if (!ctx.actor.permissions?.includes("*") && !ctx.actor.permissions?.includes("org:admin")) throw forbidden("Missing permission org:admin");
+  if (reason.trim().length < 3) throw new AegisError("validation", "A reason is required");
+  const now = ctx.now ?? new Date();
+  const org = await db.organization.findUniqueOrThrow({ where: { id: ctx.orgId }, select: { settings: true } });
+  const settings = { ...((org.settings ?? {}) as Record<string, unknown>), gatewayPaused: true, gatewayPausedReason: reason, gatewayPausedAt: now.toISOString(), gatewayPausedBy: ctx.actor.label ?? ctx.actor.id ?? "user" };
+  await db.organization.update({ where: { id: ctx.orgId }, data: { settings: settings as Prisma.InputJsonValue } });
+  const voidedGrants = await voidLiveGrants(db, ctx, `gateway paused: ${reason}`);
+  await appendEvidence(db, ctx, { type: "gateway.paused", subjectType: "organization", subjectId: ctx.orgId, payload: { reason, voidedGrants } });
+  return { voidedGrants };
+}
+
+export async function resumeGateway(db: TenantDb, ctx: OrgContext, reason: string): Promise<void> {
+  if (!ctx.actor.permissions?.includes("*") && !ctx.actor.permissions?.includes("org:admin")) throw forbidden("Missing permission org:admin");
+  const now = ctx.now ?? new Date();
+  const org = await db.organization.findUniqueOrThrow({ where: { id: ctx.orgId }, select: { settings: true } });
+  const settings: Record<string, unknown> = { ...((org.settings ?? {}) as Record<string, unknown>), gatewayPaused: false, gatewayResumedAt: now.toISOString(), gatewayResumeReason: reason };
+  delete settings.gatewayPausedReason;
+  delete settings.gatewayPausedAt;
+  delete settings.gatewayPausedBy;
+  await db.organization.update({ where: { id: ctx.orgId }, data: { settings: settings as Prisma.InputJsonValue } });
+  await appendEvidence(db, ctx, { type: "gateway.resumed", subjectType: "organization", subjectId: ctx.orgId, payload: { reason } });
+}
+
+/** Issues the agent-mode grant for an allowed or approved request (one live grant per request, see grants.ts). */
+export async function issueGrantForRequest(db: TenantDb, ctx: OrgContext, actionRequestId: string) {
+  const r = await db.actionRequest.findUnique({ where: { id: actionRequestId }, include: { agent: { select: { status: true } } } });
+  if (!r || (ctx.actor.type === "agent" && r.agentId !== ctx.actor.id)) throw notFound("Action request");
+  const params = r.params as Record<string, unknown>;
+  const requestHash = requestHashOf(r.toolKey, r.action, params);
+  const g = await issueGrant(db, ctx.orgId, r.id, requestHash, { now: ctx.now });
+  await appendEvidence(db, ctx, { type: "gateway.grant_issued", subjectType: "action_request", subjectId: r.id, correlationId: r.correlationId, payload: { grantId: g.grant.id, expiresAt: g.grant.expiresAt, mode: "agent" } });
+  return { grant: g.token, expiresAt: g.grant.expiresAt, requestHash, params };
+}
+
+/**
+ * Agent-mode completion: the agent (which executed through its own channel after the downstream
+ * system verified the grant) reports the outcome. The grant must be the consumed one for this
+ * request. Idempotent: a repeated report returns the recorded receipt.
+ */
+export async function recordAgentExecution(db: TenantDb, ctx: OrgContext, actionRequestId: string, input: { grant: string; outcome: "succeeded" | "failed"; reference?: string | null; summary?: Record<string, unknown> }): Promise<ExecutionOutcome> {
+  const req = await db.actionRequest.findUnique({ where: { id: actionRequestId }, include: { receipts: { orderBy: { createdAt: "desc" }, take: 1 } } });
+  if (!req || (ctx.actor.type === "agent" && req.agentId !== ctx.actor.id)) throw notFound("Action request");
+  const latest = req.receipts[0];
+  if (latest && FINAL_RECEIPTS.has(latest.status)) return receiptView(latest, req.status);
+  const grant = await db.executionGrant.findUnique({ where: { tokenHash: hashGrantToken(input.grant) } });
+  if (!grant || grant.actionRequestId !== req.id) throw forbidden("The grant does not belong to this request");
+  if (!grant.consumedAt) {
+    // The downstream system never verified this grant: consume it now so nothing else can.
+    const check = await consumeGrant(db, input.grant, requestHashOf(req.toolKey, req.action, req.params as Record<string, unknown>), { now: ctx.now });
+    if (!check.ok) throw conflict(`Grant cannot be used: ${check.reason}`);
+  } else if (req.status !== "executing") throw conflict(`Request is ${req.status}`);
+  const fresh = await db.actionRequest.findUniqueOrThrow({ where: { id: req.id }, select: { executionAttempts: true } });
+  const tool = req.toolId ? await db.tool.findUnique({ where: { id: req.toolId }, include: { integration: { select: { key: true } } } }) : null;
+  return recordOutcome(db, ctx, { id: req.id, correlationId: req.correlationId, executionAttempts: fresh.executionAttempts }, tool?.integration?.key ?? "agent-channel", { outcome: input.outcome, reference: input.reference ?? null, summary: { reportedByAgent: true, ...(input.summary ?? {}) } }, 0);
 }
 
 export function systemContextFor(orgId: string): OrgContext {
@@ -319,7 +560,7 @@ export function systemContextFor(orgId: string): OrgContext {
 }
 
 export async function getActionRequest(db: TenantDb, ctx: OrgContext, id: string) {
-  const req = await db.actionRequest.findUnique({ where: { id }, include: { agent: { select: { id: true, slug: true, name: true, status: true } }, decisions: { orderBy: { createdAt: "asc" } }, approvals: { include: { responses: { orderBy: { createdAt: "asc" } } }, orderBy: { createdAt: "asc" } }, receipts: true, grants: { select: { id: true, expiresAt: true, consumedAt: true, createdAt: true } } } });
+  const req = await db.actionRequest.findUnique({ where: { id }, include: { agent: { select: { id: true, slug: true, name: true, status: true } }, decisions: { orderBy: { createdAt: "asc" } }, approvals: { include: { responses: { orderBy: { createdAt: "asc" } } }, orderBy: { createdAt: "asc" } }, receipts: { orderBy: { createdAt: "asc" } }, grants: { select: { id: true, expiresAt: true, consumedAt: true, voidedAt: true, voidReason: true, createdAt: true }, orderBy: { createdAt: "asc" } } } });
   if (!req) throw notFound("Action request");
   if (ctx.actor.type === "agent" && req.agentId !== ctx.actor.id) throw notFound("Action request");
   const evidence = await db.evidenceEvent.findMany({ where: { orgId: ctx.orgId, correlationId: req.correlationId }, orderBy: { seq: "asc" } });

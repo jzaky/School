@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant } from "@aegis/db";
-import { decideApproval, decideSchema, forbidden, provideApprovalInfo } from "@aegis/core";
+import { decideApprovalAndExecute, decideSchema, forbidden, provideApprovalInfo } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { act } from "./util";
 
@@ -31,15 +31,12 @@ export async function decideApprovalAction(approvalId: string, input: unknown) {
     if (!c.can("approvals:decide")) throw forbidden("Missing permission approvals:decide");
     const id = uuid.parse(approvalId);
     const data = decideSchema.parse(input);
-    const r = await withTenant(c.ctx.orgId, async (db) => {
-      const out = await decideApproval(db, c.ctx, id, data);
-      const a = await db.approvalRequest.findUnique({ where: { id }, select: { actionRequestId: true } });
-      return { out, requestId: a?.actionRequestId };
-    });
-    revalidateApproval(id, r.requestId);
-    const out = r.out as DecisionOutcome & { grantToken?: string };
-    // The grant token is for the agent, never for the console.
-    return { status: out.status, executed: out.executed, approvalsSoFar: out.approvalsSoFar, receipt: out.receipt, grantIssued: !!out.grantToken };
+    const out = await decideApprovalAndExecute((fn) => withTenant(c.ctx.orgId, fn), c.ctx, id, data);
+    const a = await withTenant(c.ctx.orgId, (db) => db.approvalRequest.findUnique({ where: { id }, select: { actionRequestId: true, request: { select: { context: true } } } }), { readOnly: true });
+    revalidateApproval(id, a?.actionRequestId);
+    const agentMode = ((a?.request.context as { executionMode?: string } | null) ?? {}).executionMode === "agent";
+    const receipt = "receipt" in out && out.receipt ? { status: out.receipt.status, downstreamSystem: out.receipt.downstreamSystem, reference: out.receipt.reference, summary: out.receipt.summary } : undefined;
+    return { status: out.status, executed: out.executed, approvalsSoFar: "approvalsSoFar" in out ? out.approvalsSoFar : undefined, receipt, grantIssued: out.status === "approved" && agentMode };
   });
 }
 

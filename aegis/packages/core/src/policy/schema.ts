@@ -48,7 +48,7 @@ export const conditionSchema: z.ZodType<Condition> = z.lazy(() =>
     z.object({ any: z.array(conditionSchema).min(1) }).strict(),
     z.object({ not: conditionSchema }).strict(),
     z.object({ always: z.boolean() }).strict(),
-    z.object({ attr: z.string().min(1).max(120).regex(/^[a-zA-Z_][a-zA-Z0-9_.\-\[\]]*$/), op: operatorSchema, value: z.unknown().optional() }).strict(),
+    z.object({ attr: z.string().min(1).max(120).regex(/^[a-zA-Z_][a-zA-Z0-9_.\-[\]]*$/), op: operatorSchema, value: z.unknown().optional() }).strict(),
   ]),
 );
 

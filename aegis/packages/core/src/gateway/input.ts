@@ -32,6 +32,10 @@ export interface AuthorizationInput {
     destinationDomain: string | null;
     amount: number | null;
     currency: string | null;
+    /** Earlier requests (last 30 days, any agent) for the same tool and the same business reference (orderId, paymentIntentId, chargeId, invoiceId, reference, ticketId) that were executed, are executing, or are awaiting approval. Lets policies block duplicate refunds. */
+    priorRequestsSameReference: number;
+    /** The reference field that was matched, for approvers. */
+    duplicateReferenceKey: string | null;
     /** Caller supplied free-form context (never trusted for authorization unless policies choose to). */
     supplied: Record<string, unknown>;
   };
@@ -44,6 +48,17 @@ export interface AuthorizationInput {
 }
 
 const AMOUNT_KEYS = ["amount", "value", "total", "sum"];
+/** Business references that identify "the same operation" across requests. First present key wins. */
+export const REFERENCE_KEYS = ["orderId", "paymentIntentId", "chargeId", "invoiceId", "ticketId", "reference"];
+
+export function extractReference(params: Record<string, unknown>): { key: string; value: string } | null {
+  for (const k of REFERENCE_KEYS) {
+    const v = params[k];
+    if (typeof v === "string" && v.trim() !== "") return { key: k, value: v.trim() };
+    if (typeof v === "number" && Number.isFinite(v)) return { key: k, value: String(v) };
+  }
+  return null;
+}
 const DEST_KEYS = ["to", "destination", "url", "recipient", "email", "endpoint", "webhook"];
 
 export function extractAmount(params: Record<string, unknown>): { amount: number | null; currency: string | null } {
@@ -96,10 +111,15 @@ export async function buildAuthorizationInput(
 ): Promise<AuthorizationInput> {
   const now = args.now ?? new Date();
   const since = new Date(now.getTime() - 24 * 3600_000);
-  const [requestCount24h, deniedCount24h, approvalsPending] = await Promise.all([
+  const reference = extractReference(args.params);
+  const since30d = new Date(now.getTime() - 30 * 24 * 3600_000);
+  const [requestCount24h, deniedCount24h, approvalsPending, priorRequestsSameReference] = await Promise.all([
     db.actionRequest.count({ where: { agentId: args.agent.id, createdAt: { gte: since } } }),
     db.actionRequest.count({ where: { agentId: args.agent.id, createdAt: { gte: since }, status: "denied" } }),
     db.actionRequest.count({ where: { agentId: args.agent.id, status: "pending_approval" } }),
+    reference
+      ? db.actionRequest.count({ where: { orgId: args.agent.orgId, toolKey: args.tool.key, createdAt: { gte: since30d, lt: now }, status: { in: ["allowed", "pending_approval", "approved", "executing", "executed", "unknown"] }, params: { path: [reference.key], equals: reference.value } } })
+      : Promise.resolve(0),
   ]);
   const { amount, currency } = extractAmount(args.params);
   return {
@@ -133,6 +153,8 @@ export async function buildAuthorizationInput(
       destinationDomain: extractDestinationDomain(args.params),
       amount,
       currency,
+      priorRequestsSameReference,
+      duplicateReferenceKey: reference?.key ?? null,
       supplied: args.supplied ?? {},
     },
     shield: args.shield ?? { dataClasses: [], highestSeverity: null, injectionSignals: [], blocked: false },
