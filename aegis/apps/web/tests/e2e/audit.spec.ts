@@ -156,25 +156,26 @@ test.describe("auditor", () => {
   });
 
   test("remediation task moves from open to in progress", async ({ page }) => {
-    await page.goto("/audit/remediation?status=open");
+    // Use the default "active" filter so the task stays listed (and the sheet stays open) after it moves on.
+    await page.goto("/audit/remediation");
     await expect(page.getByRole("heading", { level: 1, name: "Remediation" })).toBeVisible();
     await expect(page.locator("table")).toBeVisible();
-    const rows = page.locator('tbody tr[role="link"]');
-    if ((await rows.count()) === 0) {
+    const openRow = () => page.locator('tbody tr[role="link"]', { has: page.getByText("Open", { exact: true }) }).first();
+    if ((await openRow().count()) === 0) {
       await page.getByRole("button", { name: "New task" }).click();
       const create = page.getByRole("dialog");
       await create.locator("#task-title").fill(`E2E remediation task ${Date.now()}`);
       await create.getByRole("button", { name: "Create task" }).click();
       await expect(create).toBeHidden();
-      await expect(page.locator("tbody tr").first()).toBeVisible();
+      await expect(openRow()).toBeVisible(SLOW);
     }
     const sheet = page.getByTestId("task-sheet");
-    await clickRowUntilVisible(page, page.locator('tbody tr[role="link"]').first(), sheet);
+    await clickRowUntilVisible(page, openRow(), sheet);
     await sheet.getByRole("button", { name: "Start work" }).click();
     await sheet.locator("#task-transition-note").fill("E2E: work started");
     await sheet.getByRole("button", { name: /Confirm: Start work/ }).click();
     await expect(page.getByText("Task moved to in progress")).toBeVisible(SLOW);
-    await expect(sheet.getByText("In progress").first()).toBeVisible();
+    await expect(sheet.getByText("In progress").first()).toBeVisible(SLOW);
     await expect(sheet.getByText("Open to In progress")).toBeVisible(SLOW);
   });
 });
