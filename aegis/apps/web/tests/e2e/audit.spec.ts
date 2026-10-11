@@ -16,6 +16,21 @@ async function login(page: Page, email: string) {
   await page.waitForURL(/\/(overview|no-organization|platform|mfa)/);
 }
 
+/** Rows are server rendered before React hydrates, so a click can land before the handler exists. Retry until the effect shows. */
+async function clickRowUntilUrl(page: Page, row: ReturnType<Page["locator"]>, url: RegExp) {
+  await expect(async () => {
+    await row.click();
+    await page.waitForURL(url, { timeout: 5_000 });
+  }).toPass({ timeout: 90_000 });
+}
+
+async function clickRowUntilVisible(row: ReturnType<Page["locator"]>, target: ReturnType<Page["locator"]>) {
+  await expect(async () => {
+    await row.click();
+    await expect(target).toBeVisible({ timeout: 5_000 });
+  }).toPass({ timeout: 90_000 });
+}
+
 async function pickSelect(page: Page, trigger: ReturnType<Page["locator"]>, optionText: string | RegExp) {
   await trigger.click();
   await page.getByRole("option", { name: optionText }).click();
@@ -70,9 +85,8 @@ test.describe("auditor", () => {
     await expect(row).toContainText("Parsed", SLOW);
 
     // Tidy up: open the sheet, confirm the chunk preview, delete the document.
-    await row.click();
     const sheet = page.getByRole("dialog");
-    await expect(sheet.getByText(/First chunks/)).toBeVisible();
+    await clickRowUntilVisible(row, sheet.getByText(/First chunks/));
     await expect(sheet.locator("pre").first()).toContainText("Access Control Procedure");
     await sheet.getByRole("button", { name: "Delete document" }).click();
     const confirm = page.getByRole("dialog").filter({ hasText: `Delete ${title}` });
@@ -93,8 +107,7 @@ test.describe("auditor", () => {
 
   test("assessment detail shows the disclaimer, a cited excerpt, and a finding can be validated", async ({ page }) => {
     await page.goto("/audit/assessments");
-    await page.locator("tbody tr", { hasText: "ISO/IEC 42001" }).first().click();
-    await page.waitForURL(/\/audit\/assessments\/[0-9a-f-]{36}/);
+    await clickRowUntilUrl(page, page.locator("tbody tr", { hasText: "ISO/IEC 42001" }).first(), /\/audit\/assessments\/[0-9a-f-]{36}/);
     await expect(page.getByTestId("assessment-disclaimer")).toContainText("Similarity is not proof of compliance");
     await page.getByRole("button", { name: "Expand all" }).click();
     const artifact = page.locator('[data-artifact="document"]').first();
@@ -116,8 +129,7 @@ test.describe("auditor", () => {
 
   test("generate a JSON report and download it", async ({ page }) => {
     await page.goto("/audit/assessments");
-    await page.locator("tbody tr", { hasText: "NIST AI RMF" }).first().click();
-    await page.waitForURL(/\/audit\/assessments\/[0-9a-f-]{36}/);
+    await clickRowUntilUrl(page, page.locator("tbody tr", { hasText: "NIST AI RMF" }).first(), /\/audit\/assessments\/[0-9a-f-]{36}/);
     const form = page.getByTestId("generate-report-form");
     await pickSelect(page, form.locator("#rep-kind"), "Gap report");
     await pickSelect(page, form.locator("#rep-format"), "JSON");
@@ -142,6 +154,7 @@ test.describe("auditor", () => {
   test("remediation task moves from open to in progress", async ({ page }) => {
     await page.goto("/audit/remediation?status=open");
     await expect(page.getByRole("heading", { level: 1, name: "Remediation" })).toBeVisible();
+    await expect(page.locator("table")).toBeVisible();
     const rows = page.locator("tbody tr");
     if ((await rows.count()) === 0) {
       await page.getByRole("button", { name: "New task" }).click();
@@ -151,9 +164,8 @@ test.describe("auditor", () => {
       await expect(create).toBeHidden();
       await expect(page.locator("tbody tr").first()).toBeVisible();
     }
-    await page.locator("tbody tr").first().click();
     const sheet = page.getByTestId("task-sheet");
-    await expect(sheet).toBeVisible();
+    await clickRowUntilVisible(page.locator("tbody tr").first(), sheet);
     await sheet.getByRole("button", { name: "Start work" }).click();
     await sheet.locator("#task-transition-note").fill("E2E: work started");
     await sheet.getByRole("button", { name: /Confirm: Start work/ }).click();

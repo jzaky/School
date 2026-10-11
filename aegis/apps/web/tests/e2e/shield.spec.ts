@@ -16,6 +16,14 @@ async function login(page: Page, email: string) {
   await page.waitForURL(/\/(overview|no-organization|platform|mfa)/);
 }
 
+/** Rows are server rendered before React hydrates, so a click can land before the handler exists. Retry until the effect shows. */
+async function clickRowUntilUrl(page: Page, row: ReturnType<Page["locator"]>, url: RegExp) {
+  await expect(async () => {
+    await row.click();
+    await page.waitForURL(url, { timeout: 5_000 });
+  }).toPass({ timeout: 90_000 });
+}
+
 async function pickSelect(page: Page, trigger: ReturnType<Page["locator"]>, optionText: string | RegExp) {
   await trigger.click();
   await page.getByRole("option", { name: optionText }).click();
@@ -37,8 +45,7 @@ test.describe("security analyst", () => {
     await page.goto("/security/events?status=open");
     const openRows = page.locator("tbody tr");
     await expect(openRows.first()).toBeVisible();
-    await openRows.first().click();
-    await page.waitForURL(/\/security\/events\/[0-9a-f-]{36}/);
+    await clickRowUntilUrl(page, openRows.first(), /\/security\/events\/[0-9a-f-]{36}/);
     await expect(page.getByText("Decision explanation")).toBeVisible();
     await page.getByRole("button", { name: "Triage", exact: true }).click();
     const dialog = page.getByRole("dialog");
@@ -95,6 +102,7 @@ test.describe("security analyst", () => {
   test("incident moves from open to investigating with a note", async ({ page }) => {
     await page.goto("/security/incidents?status=open");
     await expect(page.getByRole("heading", { level: 1, name: "Incident Center" })).toBeVisible();
+    await expect(page.locator("table")).toBeVisible();
     const rows = page.locator("tbody tr");
     if ((await rows.count()) === 0) {
       await page.getByRole("button", { name: "New incident" }).click();
@@ -103,8 +111,7 @@ test.describe("security analyst", () => {
       await create.getByRole("button", { name: "Open incident" }).click();
       await page.waitForURL(/\/security\/incidents\/[0-9a-f-]{36}/);
     } else {
-      await rows.first().click();
-      await page.waitForURL(/\/security\/incidents\/[0-9a-f-]{36}/);
+      await clickRowUntilUrl(page, rows.first(), /\/security\/incidents\/[0-9a-f-]{36}/);
     }
     const header = page.locator("h1").locator("..").locator("..");
     await expect(header.getByText("Open", { exact: true }).first()).toBeVisible();
@@ -126,8 +133,7 @@ test.describe("viewer", () => {
 
   test("triage is disabled with a permission tooltip", async ({ page }) => {
     await page.goto("/security/events");
-    await page.locator("tbody tr").first().click();
-    await page.waitForURL(/\/security\/events\/[0-9a-f-]{36}/);
+    await clickRowUntilUrl(page, page.locator("tbody tr").first(), /\/security\/events\/[0-9a-f-]{36}/);
     const triage = page.getByRole("button", { name: "Triage", exact: true });
     await expect(triage).toBeDisabled();
     await expect(async () => {
