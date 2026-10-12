@@ -1,0 +1,30 @@
+# systemd unit for the AEGIS api process on a single VM. Install:
+#   sudo cp deploy/systemd/aegis-api.service /etc/systemd/system/ && sudo systemctl daemon-reload && sudo systemctl enable --now aegis-api
+# Assumes the repository is checked out at /opt/aegis (so the monorepo root is /opt/aegis/aegis) and runs as user "aegis".
+# The .env file must NOT contain MIGRATION_DATABASE_URL or AEGIS_APP_PASSWORD: application processes refuse to start
+# with owner credentials in production. Pass those inline when running migrate and seed (see docs/DEPLOY_STEP_BY_STEP.md).
+[Unit]
+Description=AEGIS api
+After=network-online.target postgresql.service redis-server.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=aegis
+Group=aegis
+WorkingDirectory=/opt/aegis/aegis
+EnvironmentFile=/opt/aegis/aegis/.env
+Environment=NODE_ENV=production
+Environment=AEGIS_PROCESS=api
+Environment=AEGIS_STORAGE_DIR=/var/lib/aegis/uploads
+ExecStart=/usr/bin/env pnpm --filter @aegis/api start
+Restart=always
+RestartSec=5
+# Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/var/lib/aegis/uploads /opt/aegis/aegis/apps/web/.next
+
+[Install]
+WantedBy=multi-user.target

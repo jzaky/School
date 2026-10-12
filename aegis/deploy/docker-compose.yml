@@ -49,6 +49,19 @@ services:
     depends_on:
       postgres: { condition: service_healthy }
     restart: "no"
+  # One-off: seeds the synthetic demo tenant. Run after migrate:  docker compose -f deploy/docker-compose.yml run --rm seed
+  # The agent API keys are printed to the console at the end of the run (they are not written to a file you can reach).
+  seed:
+    build: { context: .., dockerfile: deploy/Dockerfile, target: migrate }
+    env_file: ../.env
+    environment:
+      MIGRATION_DATABASE_URL: postgresql://aegis_owner:${POSTGRES_OWNER_PASSWORD:-aegis_owner_dev}@postgres:5432/aegis
+      DATABASE_URL: postgresql://aegis_app:${POSTGRES_APP_PASSWORD:-aegis_app_dev}@postgres:5432/aegis
+      AEGIS_PROCESS: script
+    command: ["pnpm", "--filter", "@aegis/core", "seed"]
+    profiles: ["seed"]
+    depends_on:
+      postgres: { condition: service_healthy }
   api:
     build: { context: .., dockerfile: deploy/Dockerfile, target: api }
     env_file: ../.env
