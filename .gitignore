@@ -17,3 +17,6 @@ smoke.tmp.mjs
 *.tmp.mjs
 dump.rdb
 .claude/worktrees/
+
+# Built source archives (scripts/make-archive.sh output), never committed
+aegis-source.zip
