@@ -13,7 +13,6 @@ import {
   Database,
   FileCheck2,
   FileText,
-
   GitBranch,
   History,
   Landmark,
@@ -21,6 +20,7 @@ import {
   ListChecks,
   Lock,
   Plug,
+  Rocket,
   Scale,
   ScrollText,
   Server,
@@ -56,23 +56,27 @@ export interface NavGroup {
 
 export const NOT_READY_REASON = "Available in a later release of this build";
 
-export const NAV: NavGroup[] = [
-  {
-    label: "Overview",
-    items: [
-      { label: "Command Center", href: "/overview", icon: LayoutDashboard, ready: true },
-      { label: "Live Activity", href: "/activity", icon: Activity, ready: true, permission: "gateway:read" },
-      { label: "Alerts", href: "/alerts", icon: AlertTriangle, ready: true, permission: "monitoring:read" },
-    ],
-  },
+/** Shown above Overview only while onboarding is incomplete and not dismissed (see ShellData.onboarding). */
+export const GETTING_STARTED: NavItem = { label: "Getting started", href: "/getting-started", icon: Rocket, ready: true, permission: "org:read" };
+
+/** The five everyday sections, always visible in the sidebar. */
+export const PRIMARY_NAV: NavItem[] = [
+  { label: "Overview", href: "/overview", icon: LayoutDashboard, ready: true },
+  { label: "Agents", href: "/agents", icon: Bot, ready: true, permission: "agents:read" },
+  { label: "Approvals", href: "/approvals", icon: CheckSquare, ready: true, permission: "gateway:read", badge: "pendingApprovals" },
+  { label: "Activity", href: "/activity", icon: Activity, ready: true, permission: "gateway:read" },
+  { label: "Settings", href: "/org/settings", icon: Settings, ready: true, permission: "org:read" },
+];
+
+/** Specialist sections, collapsed under "More" by default. */
+export const SECONDARY_NAV: NavGroup[] = [
   {
     label: "Control",
     items: [
-      { label: "AI Agents", href: "/agents", icon: Bot, ready: true, permission: "agents:read" },
       { label: "Policies", href: "/policies", icon: Scale, ready: true, permission: "policies:read" },
       { label: "Action Gateway", href: "/gateway", icon: GitBranch, ready: true, permission: "gateway:read" },
-      { label: "Approvals", href: "/approvals", icon: CheckSquare, ready: true, permission: "gateway:read", badge: "pendingApprovals" },
       { label: "Integrations", href: "/integrations", icon: Plug, ready: true, permission: "integrations:read" },
+      { label: "Alerts", href: "/alerts", icon: AlertTriangle, ready: true, permission: "monitoring:read" },
     ],
   },
   {
@@ -85,7 +89,7 @@ export const NAV: NavGroup[] = [
     ],
   },
   {
-    label: "Shield",
+    label: "Security",
     items: [
       { label: "Security Events", href: "/security/events", icon: ShieldAlert, ready: true, permission: "security:read" },
       { label: "Data Protection", href: "/security/data-protection", icon: Lock, ready: true, permission: "security:read" },
@@ -109,7 +113,6 @@ export const NAV: NavGroup[] = [
       { label: "Users", href: "/org/users", icon: Users, ready: true, permission: "users:read" },
       { label: "Teams", href: "/org/teams", icon: UsersRound, ready: true, permission: "users:read" },
       { label: "Roles", href: "/org/roles", icon: ShieldCheck, ready: true, permission: "users:read" },
-      { label: "Settings", href: "/org/settings", icon: Settings, ready: true, permission: "org:read" },
       { label: "Billing", href: "/org/billing", icon: BadgeDollarSign, ready: true, permission: "org:read" },
     ],
   },
@@ -126,10 +129,18 @@ export const NAV: NavGroup[] = [
   },
 ];
 
+/** Every group, primary first, for consumers that want the flat structure (search, sitemaps). */
+export const NAV: NavGroup[] = [{ label: "Primary", items: [GETTING_STARTED, ...PRIMARY_NAV] }, ...SECONDARY_NAV];
+
 export const ALL_NAV_ITEMS: NavItem[] = NAV.flatMap((g) => g.items);
 
 export function isActivePath(pathname: string, href: string): boolean {
   if (href === "/overview") return pathname === "/overview";
   return pathname === href || pathname.startsWith(href + "/");
+}
+
+/** True when the current path belongs to one of the secondary groups (so "More" opens on its own). */
+export function isSecondaryPath(pathname: string): boolean {
+  return SECONDARY_NAV.some((g) => g.items.some((i) => isActivePath(pathname, i.href)));
 }
 

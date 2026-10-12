@@ -27,25 +27,56 @@ test.describe("owner", () => {
     await login(page, OWNER);
   });
 
-  test("Command Center shows stat panels with numbers and chain status", async ({ page }) => {
+  test("Overview leads with what needs attention, health, recent actions and next steps", async ({ page }) => {
     await page.goto("/overview");
-    await expect(page.getByRole("heading", { level: 1, name: "Command Center" })).toBeVisible();
-    for (const label of ["Registered agents", "Active agents", "Suspended agents", "Actions evaluated", "Allowed", "Denied", "Awaiting approval", "Open alerts", "Open incidents", "Evidence events", "Members"]) {
-      const panel = page.locator("div", { has: page.getByText(label, { exact: true }) }).filter({ hasText: /\d/ }).first();
-      await expect(panel, label).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Overview" })).toBeVisible();
+    await expect(page.getByTestId("needs-attention")).toBeVisible();
+    await expect(page.getByTestId("health")).toBeVisible();
+    await expect(page.getByTestId("health")).toContainText("Active agents");
+    await expect(page.getByTestId("health")).toContainText("Integrations");
+    const recent = page.getByTestId("recent-actions");
+    await expect(recent).toBeVisible();
+    for (const group of ["Allowed and executed", "Approval", "Blocked", "Failed or unresolved"]) {
+      await expect(recent.locator(`[data-outcome-group]`, { hasText: group }).first()).toBeVisible();
     }
-    await expect(page.getByText(/Chain valid|Chain broken at seq \d+/)).toBeVisible();
+    await expect(recent.locator("a[href^='/gateway/']").first()).toBeVisible();
+    await expect(page.getByTestId("chain-indicator")).toContainText(/Evidence chain valid|Evidence chain broken at seq \d+/);
     await expect(page.getByText("Demo data").first()).toBeVisible();
-    await expect(page.getByText("Recent evidence")).toBeVisible();
+    // The twelve-tile grid is gone.
+    await expect(page.getByText("Actions evaluated", { exact: true })).toHaveCount(0);
   });
 
-  test("navigation groups render and every item is a working link or a disabled item with a tooltip", async ({ page }) => {
+  test("sidebar shows five primary sections and a collapsed More area with the specialist groups", async ({ page }) => {
     await page.goto("/overview");
     const nav = page.getByRole("navigation", { name: "Main" });
-    for (const group of ["Overview", "Control", "Assurance", "Shield", "Audit", "Organization"]) {
+    const primary = ["/overview", "/agents", "/approvals", "/activity", "/org/settings"];
+    for (const href of primary) await expect(nav.locator(`[data-nav-item="${href}"]`)).toBeVisible();
+    const hrefs = await nav.locator("[data-nav-item]").evaluateAll((els) => els.map((e) => e.getAttribute("data-nav-item")));
+    const primaryOrder = hrefs.filter((h) => primary.includes(h ?? ""));
+    expect(primaryOrder).toEqual(primary);
+    // Collapsed by default: no specialist item is rendered until More is opened.
+    await expect(nav.locator('[data-nav-item="/policies"]')).toHaveCount(0);
+    const more = nav.locator("[data-nav-more]");
+    await expect(more).toHaveAttribute("aria-expanded", "false");
+    await more.click();
+    await expect(more).toHaveAttribute("aria-expanded", "true");
+    for (const group of ["Control", "Assurance", "Security", "Audit", "Organization"]) {
       await expect(nav.getByText(group, { exact: true })).toBeVisible();
     }
     await expect(nav.getByText("Platform Admin")).toHaveCount(0);
+    await expect(nav.locator('[data-nav-item="/policies"]')).toHaveAttribute("href", "/policies");
+    // The preference persists across navigation.
+    await page.goto("/agents");
+    await expect(nav.locator("[data-nav-more]")).toHaveAttribute("aria-expanded", "true");
+    await expect(nav.locator('[data-nav-item="/policies"]')).toBeVisible();
+    await nav.locator("[data-nav-more]").click();
+    await expect(nav.locator('[data-nav-item="/policies"]')).toHaveCount(0);
+  });
+
+  test("every navigation item is a working link or a disabled item with a tooltip", async ({ page }) => {
+    await page.goto("/overview");
+    const nav = page.getByRole("navigation", { name: "Main" });
+    await nav.locator("[data-nav-more]").click();
     await expect(nav.locator('[data-nav-item="/agents"]')).toHaveAttribute("href", "/agents");
     const items = nav.locator("[data-nav-item]");
     const count = await items.count();
@@ -67,6 +98,8 @@ test.describe("owner", () => {
         }).toPass({ timeout: 20_000 });
       }
     }
+    // Collapse More again so the stored preference does not leak into later tests.
+    await nav.locator("[data-nav-more]").click();
   });
 
   test("agents list shows 8 agents and filters by status", async ({ page }) => {
@@ -176,6 +209,7 @@ test.describe("viewer", () => {
     await expect(page.getByText("users:read")).toBeVisible();
     const nav = page.getByRole("navigation", { name: "Main" });
     await page.goto("/overview");
+    await nav.locator("[data-nav-more]").click();
     const roles = nav.locator('[data-nav-item="/org/roles"]');
     await expect(roles).toHaveAttribute("aria-disabled", "true");
     await expect(async () => {

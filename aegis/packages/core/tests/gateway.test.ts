@@ -32,7 +32,7 @@ describe("gateway: allow, deny, approval", () => {
     expect(r.status).toBe("executed");
     expect(r.receipt?.status).toBe("succeeded");
     expect(r.receipt?.reference).toMatch(/^RFD-/);
-    expect(r.matchedRuleIds).toContain("refund-authority/autonomous-under-500");
+    expect(r.matchedRuleIds).toContain("refund-authority/autonomous-band");
     expect((await f.ledger()).length).toBe(before + 1);
   });
 
@@ -42,7 +42,7 @@ describe("gateway: allow, deny, approval", () => {
     expect(r.decision).toBe("deny");
     expect(r.status).toBe("denied");
     expect(r.receipt).toBeUndefined();
-    expect(r.reasons.join(" ")).toMatch(/exceeds the agent's authority/);
+    expect(r.reasons.join(" ")).toMatch(/above AED 2,500|exceeds the agent's authority/);
     expect((await f.ledger()).length).toBe(before);
     const sec = await withTenant(f.orgId, (db) => db.securityEvent.findMany({ where: { actionRequestId: r.requestId } }));
     expect(sec).toHaveLength(1);

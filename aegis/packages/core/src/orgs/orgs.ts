@@ -31,6 +31,9 @@ export async function createOrganization(input: { name: string; slug: string; ow
     const ownerRole = roles.find((r) => r.key === "owner")!;
     await db.membership.create({ data: { orgId: org.id, userId: input.ownerUserId, roleId: ownerRole.id, status: "active" } });
     await appendEvidence(db, ctx, { type: "org.created", subjectType: "organization", subjectId: org.id, payload: { name: org.name, slug: org.slug } });
+    // Data protection works from day one: every tenant starts with the built-in data classes enabled.
+    const { ensureDefaultDataClasses } = await import("../shield/data-classes.js");
+    await ensureDefaultDataClasses(db, ctx);
   });
   return org;
 }

@@ -25,7 +25,8 @@ Build
 - Schedule a nightly reset: run the seed again (it is idempotent and rebuilds the tenant) so prospects always see a clean history.
 
 Test
-- Smoke: `GET /health`, `GET /ready`, sign in, run all three demo scenarios from Action Gateway > Demos, approve the transfer as Lina Mansour, verify the chain on Evidence Ledger.
+- Smoke: `GET /health`, `GET /ready`, then `AEGIS_API_URL=https://api.demo.example npx tsx scripts/smoke-refund-journey.mts` (12 checks over HTTP), then follow the seven steps on the public page `/site/demo` by hand: Getting started, the refund sample workflow, approving the AED 1,450 refund as Lina Mansour, the request receipt and evidence, the Thresholds form, the emergency pause drill, the evidence export.
+- The demo page shows the persona credentials only when `AEGIS_DEMO_MODE=true`; keep that flag off everywhere except the hosted demo.
 - Run the Playwright suite against the hosted URL: `E2E_BASE_URL=https://demo.example npx playwright test` after pointing `playwright.config.ts` at the URL (the config reads `E2E_BASE_URL` once that line is added; see the CI job for the pattern).
 - Load: `AEGIS_URL=https://api.demo.example PERF_SCENARIO=transfers npx tsx scripts/perf-gateway.mts 300 10` and compare with docs/PERFORMANCE.md.
 
@@ -33,6 +34,8 @@ Exit criteria
 - Three scenarios pass by hand and by Playwright on the hosted URL; nightly reset has run twice; error budget: zero 5xx in the API log over a day of demo traffic.
 
 ## Stage 2: staging with production configuration (one week)
+
+Stripe test mode belongs here: store a prospect's or your own `sk_test_` key on the Stripe (test mode) integration (live keys are refused), press Test connection, and run `STRIPE_TEST_SECRET_KEY=sk_test_... npx tsx scripts/stripe-sandbox-check.mts`. This is the first time the connector talks to real Stripe; record the output in `docs/CONNECTORS.md` under verification.
 
 Build
 - Kubernetes manifests from `deploy/k8s`; two API replicas, one worker, two web replicas; PgBouncer in front of PostgreSQL; `AEGIS_DEMO_MODE=false`.

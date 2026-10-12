@@ -3,7 +3,7 @@ import { withTenant } from "@aegis/db";
 import { addUserWithRole, makeTestTenant } from "./helpers.js";
 import { makeGatewayFixture, type GatewayFixture } from "./gateway-fixture.js";
 import { runDetectionEval, SECURITY_EVAL_CORPUS } from "../src/shield/eval/corpus.js";
-import { ensureDefaultDataClasses } from "../src/shield/data-classes.js";
+import { DEFAULT_DATA_CLASSES, ensureDefaultDataClasses } from "../src/shield/data-classes.js";
 import { installShield } from "../src/shield/inspector.js";
 
 /**
@@ -122,8 +122,9 @@ describe("tenant isolation of data classes", () => {
       await withTenant(a.orgId, (db) => ensureDefaultDataClasses(db, a.ownerCtx));
       const inB = await withTenant(b.orgId, (db) => db.dataClass.count({ where: { orgId: a.orgId } }));
       expect(inB).toBe(0);
+      // Every organization gets the built-in classes at creation; B sees only its own copies.
       const own = await withTenant(b.orgId, (db) => db.dataClass.count());
-      expect(own).toBe(0);
+      expect(own).toBe(DEFAULT_DATA_CLASSES.length);
     } finally {
       await a.cleanup();
       await b.cleanup();

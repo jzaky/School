@@ -88,10 +88,4 @@ export function subjectHref(subjectType: string | null | undefined, subjectId: s
   }
 }
 
-/** Params that approvers care about, pulled from tool parameters when present. */
-export function keyParams(params: unknown): { amount: number | null; currency: string | null; destination: string | null; orderId: string | null; toAccount: string | null } {
-  const p = (params && typeof params === "object" ? params : {}) as Record<string, unknown>;
-  const amount = typeof p.amount === "number" ? p.amount : typeof p.amount === "string" && p.amount.trim() !== "" && Number.isFinite(Number(p.amount)) ? Number(p.amount) : null;
-  const str = (k: string) => (typeof p[k] === "string" ? (p[k] as string) : null);
-  return { amount, currency: str("currency"), destination: str("destination") ?? str("to") ?? str("url"), orderId: str("orderId"), toAccount: str("toAccount") };
-}
+export { keyParams, type KeyParams } from "@/lib/describe-request";

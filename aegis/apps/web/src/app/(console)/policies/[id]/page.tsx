@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { withTenant } from "@aegis/db";
-import { getPolicy, isAegisError, listPolicyHistory, policyDocumentSchema, type PolicyDocument } from "@aegis/core";
+import { extractRefundSettings, getPolicy, isAegisError, listPolicyHistory, policyDocumentSchema, refundDocumentMatchesSettings, type PolicyDocument } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { userNames } from "@/server/queries/users";
 import { agentOptions, teamOptions, toolOptions } from "@/server/queries/control";
+import { approverRoleOptions } from "@/server/queries/policy-roles";
 import { PageHeader } from "@/components/ui/page-header";
 import { StatusBadge } from "@/components/ui/status";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +20,8 @@ import { PolicySimulator } from "@/components/control/policy-simulator";
 import { PolicyVersionsTable, type PolicyVersionRow } from "@/components/control/policy-versions";
 import { AssignPolicyDialog, AssignmentsTable } from "@/components/control/policy-assignments";
 import { PolicyActions } from "@/components/control/policy-actions";
+import { RefundThresholdsPanel } from "@/components/control/policy-thresholds";
+import { RefundTester } from "@/components/control/policy-refund-form";
 import { formatDateTime, timeAgo } from "@/lib/utils";
 import { statusLabel } from "@/lib/status";
 
@@ -46,15 +49,15 @@ export default async function PolicyDetailPage({ params, searchParams }: { param
   const data = await withTenant(c.ctx.orgId, async (db) => {
     try {
       const policy = await getPolicy(db, c.ctx, id);
-      const [agents, teams, tools, history] = await Promise.all([agentOptions(db, c.ctx.orgId), teamOptions(db, c.ctx.orgId), toolOptions(db, c.ctx.orgId), listPolicyHistory(db, c.ctx, { policyId: id, limit: 100 })]);
-      return { policy, agents, teams, tools, history };
+      const [agents, teams, tools, history, roles] = await Promise.all([agentOptions(db, c.ctx.orgId), teamOptions(db, c.ctx.orgId), toolOptions(db, c.ctx.orgId), listPolicyHistory(db, c.ctx, { policyId: id, limit: 100 }), approverRoleOptions(db, c.ctx.orgId)]);
+      return { policy, agents, teams, tools, history, roles };
     } catch (e) {
       if (isAegisError(e) && e.code === "not_found") return null;
       throw e;
     }
   });
   if (!data) notFound();
-  const { policy, agents, teams, tools, history } = data;
+  const { policy, agents, teams, tools, history, roles } = data;
   const names = await userNames([policy.createdBy, ...policy.versions.flatMap((x) => [x.createdBy, x.approvedBy]), ...history.map((h) => h.actorId)]);
   const selected = (v && policy.versions.find((x) => x.id === v)) || (policy.currentVersionId ? policy.versions.find((x) => x.id === policy.currentVersionId) : undefined) || policy.versions[0] || null;
   const parsed = selected ? policyDocumentSchema.safeParse(selected.document) : null;
@@ -69,6 +72,10 @@ export default async function PolicyDetailPage({ params, searchParams }: { param
   const defaultTool = doc?.appliesTo.tools[0] ?? tools[0]?.key ?? "issue-refund";
   const defaultParams = defaultTool === "initiate-transfer" ? '{\n  "amount": 250000,\n  "currency": "AED",\n  "toAccount": "AE45 0030 0000 9876 5432 100"\n}' : defaultTool === "issue-refund" ? '{\n  "amount": 1200,\n  "currency": "AED",\n  "orderId": "ORD-1001"\n}' : "{\n  \n}";
   const versionLabel = selected ? `v${selected.version} (${statusLabel(selected.state)})` : "no version";
+  // Guided refund policies: the template settings travel with the document under meta.template.
+  const refundSettings = doc ? extractRefundSettings(doc) : null;
+  const refundDiverged = refundSettings ? !refundDocumentMatchesSettings(doc) : false;
+  const toolsLite = tools.map((t) => ({ key: t.key, name: t.name }));
 
   const rulesTab = !selected ? (
     <Note tone="warning">This policy has no versions.</Note>
@@ -142,9 +149,23 @@ export default async function PolicyDetailPage({ params, searchParams }: { param
         label="Policy sections"
         initial={tab}
         tabs={[
+          ...(refundSettings && selected
+            ? [{ id: "thresholds", label: "Thresholds", content: <RefundThresholdsPanel policyId={policy.id} version={{ id: selected.id, version: selected.version, state: selected.state }} settings={refundSettings} diverged={refundDiverged} roles={roles} tools={toolsLite} canWrite={canWrite} /> }]
+            : []),
           { id: "rules", label: "Rules", count: doc?.rules.length, content: rulesTab },
           { id: "editor", label: "Editor", content: selected ? <PolicyEditor policyId={policy.id} version={{ id: selected.id, version: selected.version, state: selected.state, document: selected.document }} canWrite={canWrite} /> : <Note tone="warning">No version to edit.</Note> },
-          { id: "simulate", label: "Simulate", content: selected ? <PolicySimulator versionId={selected.id} versionLabel={versionLabel} tools={tools.map((t) => ({ key: t.key, name: t.name }))} agents={agents.map((a) => ({ id: a.id, name: a.name, slug: a.slug }))} defaultTool={defaultTool} defaultParams={defaultParams} /> : <Note tone="warning">No version to simulate.</Note> },
+          {
+            id: "simulate",
+            label: "Simulate",
+            content: selected ? (
+              <div className="space-y-4">
+                {refundSettings ? <RefundTester settings={refundSettings} versionId={selected.id} idPrefix="sim-try" description={`Plain-language check against ${versionLabel}. Nothing is recorded. The full simulator below accepts any tool and parameters.`} /> : null}
+                <PolicySimulator versionId={selected.id} versionLabel={versionLabel} tools={toolsLite} agents={agents.map((a) => ({ id: a.id, name: a.name, slug: a.slug }))} defaultTool={defaultTool} defaultParams={defaultParams} />
+              </div>
+            ) : (
+              <Note tone="warning">No version to simulate.</Note>
+            ),
+          },
           { id: "versions", label: "Versions", count: policy.versions.length, content: <PolicyVersionsTable policyId={policy.id} versions={versionRows} selectedId={selected?.id ?? ""} activeId={policy.currentVersionId} canActivate={canActivate} /> },
           { id: "assignments", label: "Assignments", count: policy.assignments.length, content: <AssignmentsTable policyId={policy.id} rows={assignmentRows} canActivate={canActivate} /> },
           { id: "history", label: "History", count: history.length, content: historyTab },

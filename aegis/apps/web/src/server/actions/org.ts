@@ -100,3 +100,29 @@ export async function updateOrganizationAction(input: unknown) {
     revalidatePath("/", "layout");
   });
 }
+
+/** Hides the onboarding checklist for everyone in the organization. Recorded as an org update. */
+export async function dismissOnboardingAction() {
+  return act(async () => {
+    const c = await getConsoleContext();
+    await updateOrganization(c.ctx, { settings: { ...c.org.settings, onboardingDismissedAt: new Date().toISOString() } });
+    revalidatePath("/getting-started");
+    revalidatePath("/org/settings");
+    revalidatePath("/overview");
+    revalidatePath("/", "layout");
+  });
+}
+
+/** Brings the onboarding checklist back after it was dismissed. */
+export async function restoreOnboardingAction() {
+  return act(async () => {
+    const c = await getConsoleContext();
+    const settings = { ...c.org.settings };
+    delete settings.onboardingDismissedAt;
+    await updateOrganization(c.ctx, { settings });
+    revalidatePath("/getting-started");
+    revalidatePath("/org/settings");
+    revalidatePath("/overview");
+    revalidatePath("/", "layout");
+  });
+}

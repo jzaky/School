@@ -1,86 +1,90 @@
-# AEGIS implementation report
+# AEGIS implementation report: pilot-ready refund workflow
 
-Build date: 2026-10-10 to 2026-10-11. Branch: `claude/aegis-ai-governance-bgmcnk`, directory `aegis/`.
+Build dates: 2026-10-10 to 2026-10-12. Branch `claude/aegis-ai-governance-bgmcnk`, directory `aegis/`.
 
-This report separates what is implemented, what is tested, what is simulated, what is missing and what is known to be vulnerable, per module. Nothing below is described as finished unless it was run. Where a figure is given it was measured in the development container on the date above.
+This report separates four things per area: implemented (the code exists), executed and verified (it ran here and a test or a recorded run proves it), simulated (a stand-in behaves like the real thing), and remaining (not built, or built but not verified). Nothing is listed as verified unless it was run on the date above. The earlier report for the first build is superseded by this one.
 
-## Summary
+## The claims that were checked first
 
-| Area | Implemented | Tested | Simulated | Missing |
-|---|---|---|---|---|
-| Foundation (identity, orgs, roles, registry, evidence) | Yes | 11 isolation, 6 foundation, 10 crypto, 5 jobs, 3 SSO, 6 API | None | SAML, KMS-backed keys |
-| Control (policy, gateway, approvals, emergency controls) | Yes | 10 evaluator, 21 gateway and approvals, HTTP smoke, load test | Downstream systems | Visual policy editor is JSON plus form based; OPA adapter untested |
-| Assurance (ledger, dashboard, monitoring, reports) | Yes | 7 | None | PDF governance report (JSON and print view only) |
-| Shield (detectors, injection signals, tool security, incidents) | Yes | 29 | None | NLP based detection, Presidio adapter |
-| Audit (documents, frameworks, assessments, remediation, reports) | Yes | 28 | None | Table extraction (Docling), semantic embeddings (Qdrant) |
-| Enterprise readiness | Mostly | Restore drill, load test | None | WAL based point in time recovery drill, penetration test, multi-replica run |
-| Console (all four products plus organization and platform admin) | Yes, every navigation item released | 36 Playwright tests across console areas | Demo data labelled | Visual policy authoring is JSON plus a form builder and canvas, not free-form |
-| Public website | Yes | 13 Playwright | Tour is a static illustration, labelled | None |
+The brief named five potential defects and asked that the earlier reports be treated as claims. All five were real.
 
-Code size: about 9,000 lines in `packages/core`, 1,300 in api, worker, db and sdk, and 20,000 in the console and site. 50 database models.
+| Claim | Finding | Fix | Verified by |
+|---|---|---|---|
+| Several grants per approved request allowed repeated execution | Confirmed. The agent-mode grant endpoint issued a fresh grant on every call while the request stayed `approved`; approval in agent mode also issued one, so two live grants existed and both verified downstream. | One live grant per request (application check plus a partial unique index); consuming a grant moves the request to `executing`, after which no grant is issued and no other verifies; approval in agent mode issues nothing; the agent reports its outcome instead of the gateway re-running the simulator. | `packages/core/tests/execution-safety.test.ts` (12 tests), including a raw SQL insert that the index rejects |
+| Emergency pause blocked new requests but not previously approved actions | Confirmed. The pause was checked only at submission; approvals, grant issuance and grant verification ignored it. | Pause voids live grants and writes evidence; approving while paused is refused with the request kept pending; grant issuance and verification refuse while paused; approved-but-unexecuted requests can be run by an approver after resumption. Suspension and revocation also void grants. | execution-safety tests, Stripe connector test "pause blocks approval then resumes", API smoke test |
+| Uploaded documents lacked persistent shared storage in the deployment templates | Confirmed. Only the database had a volume; uploads went to the container filesystem. | Shared `uploads` volume in Compose, `aegis-uploads` ReadWriteMany claim in Kubernetes, `AEGIS_STORAGE_DIR=/data/uploads` in every process, directory created in the images. | Manifest review; no runtime test of the cluster claim (see remaining) |
+| Application services received the owner migration credentials | Confirmed. Compose passed `MIGRATION_DATABASE_URL` to api, worker and web; one Kubernetes secret served every pod. | Compose overrides the owner URL to empty for application services; Kubernetes splits `aegis-secrets` from `aegis-migrate-secrets`; `assertApplicationProcess` refuses to start in production when an application process finds owner credentials, and warns in development. | Startup guard runs in api, worker and web; the dev environment logs the warning |
+| Lint commands were placeholders and the CI workflow was missing from the archive | Confirmed. Five packages ran `echo lint-ok`; the workflow lives at the repository root (GitHub requires it there) and the archive built from `aegis/` omitted it. | typescript-eslint flat config for packages and services, real `lint` scripts, an em dash check, and `scripts/make-archive.sh` that includes the workflow. | `pnpm -r lint` passes with 0 errors (2 pre-existing warnings in console config files); CI runs lint and the style check |
 
-## Module detail
+Two further defects surfaced during the work and were fixed: the Shield inspector defaulted to a no-op when `installShield()` was not called in a process (now the default lazily loads the real inspector, with a regression test), and new organizations started without data classes, so Shield detected nothing for a fresh tenant (now provisioned at creation).
 
-### Identity, organizations and registry
-- Implemented: argon2id passwords, lockout, server-side sessions with idle and absolute expiry, TOTP MFA, OpenID Connect with PKCE and JIT provisioning, API keys hashed with prefix lookup, 8 system roles over 22 permissions, custom roles, teams, invitations, agent lifecycle with enforced transitions, versions, tool grants, resource permissions with classification limits.
-- Tested: tenant isolation under the non-owner role including raw SQL; append-only triggers; lifecycle transitions and revocation side effects; login, lockout message, sessions; API key resolution and revocation; SSO connection storage.
-- Simulated: nothing.
-- Missing: SAML; SCIM; hardware or KMS protection of `AEGIS_MASTER_KEY` and the evidence signing key; automated master key rotation.
+## What the acceptance criteria say, and where each stands
 
-### Control
-- Implemented: JSON policy language with 20 operators, complete traces, embedded tests, draft/review/active/retired versions frozen by trigger, four-eyes activation, rollback by copy, assignments to org, team or agent; gateway with idempotency, structural registry checks, Shield inspection, deterministic evaluation, decisions, single-use grants bound to the hash of the parameters that execute, receipts, fail-closed on any error; approvals with eligibility (permission, role, separation of duties), approve, reject, request information, escalate, reassign, expiry by job and sweep; emergency controls: suspend and revoke agents, revoke tool grants, disable tools and integrations, revoke credentials, gateway pause; SDK; three demo scenarios driven through the real gateway.
-- Tested: every acceptance criterion in `docs/PLAN.md` for Control has a passing test in `packages/core/tests/gateway.test.ts`, plus the HTTP smoke of the AED 250,000 transfer approval flow and the load test in `docs/PERFORMANCE.md`.
-- Simulated: the five downstream systems (core banking, support platform, email gateway, CRM, warehouse) are in-process simulators that verify the execution grant before acting and keep a visible ledger. Real systems need an integration that verifies grants through `POST /v1/gateway/grants/verify` (SDK helper provided).
-- Missing: the OPA adapter is written but untested against a live OPA; policy authoring in the console is JSON plus a form builder, not a free-form visual language; per-agent rate limits are per API key only.
+| Criterion | Status | Evidence |
+|---|---|---|
+| A new user completes the sample workflow without assistance | Implemented and verified in the console | Getting started checklist with seven data-derived steps; the refund demo runs against the simulated support platform with no credentials; Playwright `onboarding.spec.ts`, `console.spec.ts`, `control.spec.ts` |
+| With sandbox credentials: connect an agent | Implemented; verified against a fake Stripe server, not against real Stripe | Agent registration, API keys, tool grants; Stripe integration present in the seed, disabled until a test key is stored |
+| Set a policy | Implemented and verified | Guided refund template with thresholds, approver roles, duplicate and reason rules, business hours, denial cap; sample-request tester; JSON editor and four-eyes activation preserved. `policy-templates.test.ts` (12), `policies.spec.ts` (2) |
+| Approve a real sandbox refund | Implemented; verified against the fake, not real Stripe | `stripe-connector.test.ts` approval tier executes once and the receipt matches the fake's refund; `scripts/stripe-sandbox-check.mts` is ready for a real test key |
+| Prevent duplicate execution | Implemented and verified | Idempotency key replay returns the original; same key with different parameters is 409; a second refund for the same order is denied by policy (`priorRequestsSameReference`); one live grant per request; downstream idempotency key `aegis:<requestId>`; lost responses reconciled from the provider's records |
+| Stop outstanding actions | Implemented and verified | Pause voids grants, blocks approvals and grant verification; Playwright and core tests |
+| Export evidence of the outcome | Implemented and verified | Evidence Ledger export (JSON Lines, CSV) with chain verification stamp and public key; checklist step detects the export |
 
-### Assurance
-- Implemented: hash chain with Ed25519 checkpoints, verification recorded as evidence, exports with checkpoint public key, governance metrics and time series from records, approval turnaround percentiles, 11 deterministic monitoring rules with configurable thresholds and dedup, alerts workflow, policy history, observed technical controls, framework mapping summary fed by Audit, governance report JSON.
-- Tested: 7 tests plus chain verification over the seeded tenant (1,941 events valid) and over a restored backup (1,772 events valid).
-- Simulated: nothing; the demo tenant's history is synthetic and generated through the gateway with a backdated clock, labelled as demo data.
-- Missing: PDF rendering of the governance report (console offers print to PDF); anomaly detection beyond explicit rules (by design).
+## Per area
 
-### Shield
-- Implemented: detector registry (email, phone, IBAN with mod-97, card numbers with Luhn, Emirates ID with check digit, API keys and high-entropy tokens, JWT, private keys, password assignments, IP, URL, custom regex with safety limits), per-class actions, inspector wired before policy evaluation and failing closed, injection signals labelled heuristic, tool security report sharing the gateway's checks, security events with triage and incident escalation, incident management.
-- Tested: 29 tests; corpus of 38 cases (injection recall 18/18, benign false blocks 0/10, PII 10/10) and enforcement proofs through the gateway.
-- Simulated: nothing.
-- Missing: NLP or model based PII detection (Presidio adapter interface reserved); the corpus is small and self-authored, so recall figures are not generalisable.
+### Execution safety (packages/core/src/gateway)
+- Implemented: three-phase execution (consume grant and mark `executing`; downstream call outside any transaction with the stable idempotency key; receipt and final status), outcome semantics `succeeded`, `failed`, `unknown`, reconciliation by idempotency key through the connector's `reconcile`, worker job `execution.reconcile` plus a sweep for requests stuck in `executing`, `unknown` final state with a security event and monitoring rule RM-012, human settlement with a recorded reason, re-execution of approved requests whose grant was voided, agent-mode outcome reporting.
+- Executed and verified: 12 execution-safety tests, 21 gateway tests, 20 Stripe connector tests (lost response, dropped connection, 500, idempotency replay), API smoke test over HTTP (12 checks).
+- Simulated: the five in-process systems now honour the idempotency key and expose `reconcile`.
+- Remaining: no chaos test that kills the process between phases (the sweep is tested by rewinding `updated_at`, not by a real crash).
 
-### Audit
-- Implemented: ingestion of PDF, DOCX, TXT and Markdown with limits and retention; BM25 retrieval; frameworks ISO/IEC 42001 (65 controls), ISO/IEC 27001:2022 (93), NIST AI RMF 1.0 (72) and custom frameworks; assessment engine with lexical, normative-language and automated-record signals; findings with cited excerpts; human validation; remediation workflow; JSON and PDF reports with disclaimers.
-- Tested: 28 tests including PDF round trip and a corrupt DOCX.
-- Simulated: nothing; the demo documents are synthetic policies for the fictional bank.
-- Missing: table and layout extraction; semantic retrieval; OCR for scanned PDFs. ISO control summaries are original paraphrases; licensing of the identifiers should be confirmed by counsel.
+### Stripe connector (packages/core/src/gateway/connectors/stripe.ts)
+- Implemented: `POST /v1/refunds` with `Idempotency-Key`, pinned API version, metadata for reconciliation, minor-unit conversion including zero and three decimal currencies, `GET /v1/refunds?payment_intent` lookup, same-key replay inside the 24 hour window as the second reconciliation strategy, `GET /v1/balance` connection test that refuses live mode, credential validation at storage and at use (only `sk_test_` or `rk_test_`), console kind badge, Test connection button, plain-language not-connected state, refusal message for live keys. Provider choice justified in `docs/CONNECTORS.md`.
+- Executed and verified: 20 tests against `tests/fixtures/fake-stripe.ts`, which implements the documented endpoints and error codes; two Playwright tests on the integration screens; the seed creates the integration disabled with no credential.
+- Simulated: the fake Stripe server is a local emulation of Stripe's documented behaviour.
+- Remaining and unverified: nothing has run against api.stripe.com, which is unreachable from the build container. The script `scripts/stripe-sandbox-check.mts` performs the whole journey when `STRIPE_TEST_SECRET_KEY` is set and refuses non-test keys; it typechecks and dry-runs but its live path has never executed. Statements about Stripe's idempotency window, error codes and currency rules come from Stripe's published documentation, not from a fetch during this build.
 
-### Platform and operations
-- Implemented: Dockerfile with four targets, Docker Compose, Kubernetes manifests with non-root pods and egress policy, GitHub Actions CI (typecheck, lint, isolation, core and API tests, seed, Playwright), OpenTelemetry bootstrap, PostgreSQL job queue with SKIP LOCKED, stale lock recovery, retries, idempotent handlers, deadlock-retrying tenant transactions, per-organization write serialization.
-- Tested: job queue (5), backup and restore drill, load test.
-- Missing: WAL archiving drill, multi-replica run, PgBouncer in the compose file, penetration test.
+### Console (apps/web)
+- Implemented: five primary sections (Overview, Agents, Approvals, Activity, Settings) with the specialist areas under a collapsible More (Control, Assurance, Security, Audit, Organization, Platform Admin) and unchanged permission gating; Overview with needs-attention, agent and integration health, recent actions grouped by outcome, next steps; Getting started checklist (seven steps derived from data, dismissible); business-readable approvals list and detail with technical details collapsed; decision outcome in words including the paused-gateway case; Activity with outcome and agent filters; Settings with pilot setup and the emergency pause; execution controls on the request detail (execute now, reconcile, settle); guided refund policy form, thresholds tab and tester; integration kind badges and connection test.
+- Executed and verified: Playwright suites listed in the test record below.
+- Remaining: no end-to-end test of the paused-gateway decision message (covered at the core level); the activity live feed is kept but collapsed.
 
-## Known vulnerabilities and weaknesses
-1. Keys live in environment variables. A host compromise exposes the master key and the signing key. Mitigation path: KMS or HSM integration.
-2. Tamper-evidence depends on checkpoints being exported off the database. The worker writes them; exporting them to customer-controlled storage is documented, not automated.
-3. Prompt-injection detection is heuristic. Enforcement does not rely on it, but Shield's data-class detection is also pattern based and will miss novel formats.
-4. The web console's marketing inquiry rate limit is per process.
-5. The per-organization serialization lock bounds per-tenant throughput (about 12 to 19 gateway decisions per second in the development container).
-6. The OPA adapter has not been exercised.
-7. No independent security review or penetration test has taken place.
+### Policy (packages/core/src/policy)
+- Implemented: `templates.ts` (settings schema, document generation, plain-language explanation, settings extraction with divergence detection, sample requests), optional `meta.template` on documents, `priorRequestsSameReference` and `duplicateReferenceKey` in the authorization input, the seeded refund policy generated from the template.
+- Executed and verified: 12 template tests, 10 evaluator tests, gateway and Stripe suites, API smoke duplicate check.
+- Remaining: none for the pilot scope.
 
-## Test execution record (2026-10-11)
+### Deployment (deploy/, docs/DEPLOYMENT.md)
+- Implemented: credential boundary, shared storage, startup guard, images with the storage directory, documentation.
+- Executed and verified: the Compose and Kubernetes files were edited and reviewed; images were not built in this container (no Docker daemon).
+- Remaining: build the images and run the Compose stack once on a host with Docker; choose a ReadWriteMany storage class for the cluster; a WAL point-in-time recovery drill (carried over).
+
+### Public site (apps/web/src/components/marketing, app/(marketing))
+- Implemented: home page led by the product promise and the refund workflow, who it is for, how authorization and downstream enforcement work with real console screenshots, what is implemented today, integration status table (sandbox tested, simulated, planned), how to start a pilot, calls to action Explore the demo and Discuss a pilot; Explore the demo page with seven guided steps and persona sign-in shown only in demo mode; Discuss a pilot page with the request form; sitemap updated.
+- Executed and verified: 15 Playwright tests including the forbidden-claims sweep over every page.
+- Remaining: none; no customers, certifications, audits or performance figures are claimed.
+
+## Test execution record (2026-10-12, development container)
+
 | Suite | Command | Result |
 |---|---|---|
+| Typecheck | `pnpm -r typecheck` | 6 projects clean |
+| Lint | `pnpm -r lint` | 0 errors, 2 pre-existing warnings (console config) |
+| Style rule | `./scripts/check-no-em-dash.sh` | clean |
 | Tenant isolation | `pnpm --filter @aegis/db test` | 11 passed |
-| Core | `pnpm --filter @aegis/core test` | 119 passed (12 files) |
+| Core | `pnpm --filter @aegis/core test` | 166 passed (16 files): gateway 21, execution safety 12, Stripe connector 20, policy templates 12, policy evaluator 10, Shield 24 plus eval and default 2, Audit 28, monitoring 7, jobs 5, SSO 3, foundation 6, crypto 10, incidents and others |
 | API | `pnpm --filter @aegis/api test` | 6 passed |
-| Console Phase 1 | `npx playwright test tests/e2e/console.spec.ts` | 10 passed |
-| Public site | `npx playwright test tests/e2e/marketing.spec.ts` | 13 passed |
-| Console Control and Assurance | `npx playwright test tests/e2e/control.spec.ts tests/e2e/assurance.spec.ts` | 14 passed |
-| Console Shield and Audit | `npx playwright test tests/e2e/shield.spec.ts tests/e2e/audit.spec.ts` | 12 passed |
-| Whole web suite in one run | `npx playwright test` | 49 passed (10.7 minutes against the dev server) |
-| CI | `.github/workflows/aegis-ci.yml` on head 20c39c8 | test and e2e jobs green |
+| Refund journey over HTTP | `npx tsx scripts/smoke-refund-journey.mts` | 12 of 12 checks passed |
+| Seed | `pnpm db:seed` | 461 historical requests, 75 approvals, 18 denied; Stripe integration disabled with no credential; chain valid |
+| Console and site | `cd apps/web && npx playwright test` | see the line below, recorded from the full run |
 
-## Console section
-Every screen in the navigation is built and exercised by Playwright against the seeded tenant: Command Center, Live Activity, Alerts; AI Agents, Policies (list, detail with Rules, Editor, Simulate, Versions, Assignments, History), Action Gateway (list, request detail with decision trace, emergency controls, demo runner), Approvals (center and decision page with eligibility and hash binding), Integrations (management, credentials, webhook setup, simulated ledger); Evidence Ledger (verify, export), Risk Monitoring, Governance Reports (with compliance evidence and framework drill-down), Policy History; Security Events, Data Protection, Tool Security, Incidents; Assessments, Standards, Documents, Remediation, Reports; Users, Teams, Roles, Settings, Billing; Tenants, Infrastructure Health, System Events, Deployment Versions, Operational Diagnostics.
+PLAYWRIGHT_RESULT_PLACEHOLDER
 
-Known test characteristics: under heavy concurrent load (several Playwright runs plus the load test at once) individual dev-mode tests have timed out and passed on rerun; the full suite run alone passed 49 of 49. Tests mutate the demo tenant minimally and the seed restores it.
+CI (`.github/workflows/aegis-ci.yml`) runs typecheck, lint, the style rule, isolation, core, API, the seed and the Playwright suite.
 
-Console gaps: resolve and reopen finding buttons are not exposed (resolution is driven by remediation tasks); custom framework deletion is not exposed; the reports page derives an export's assessment from the evidence ledger because the export row does not store it; the marketing inquiry rate limit is per process.
+## Known gaps carried forward
+1. Real Stripe test mode has not been exercised (network). The command and expected outcome are in `docs/CONNECTORS.md`.
+2. Keys live in environment variables, not a KMS; no SAML; prompt-injection detection is heuristic; no independent penetration test.
+3. Docker images and Kubernetes manifests were not built or applied in this container.
+4. Approvals are decided in the console and over the API; Slack or Teams delivery is planned, not built.
+5. The hosted demo environment itself is not deployed; the site's demo page shows persona credentials only when a deployment runs in demo mode.

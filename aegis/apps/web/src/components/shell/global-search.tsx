@@ -5,7 +5,7 @@ import { Search } from "lucide-react";
 import { globalSearchAction, type SearchHit } from "@/server/actions/search";
 import { CommandPalette, type PaletteGroup } from "@/components/ui/command-palette";
 import { ALL_NAV_ITEMS } from "@/lib/nav";
-import { navItemState } from "./sidebar-nav";
+import { navItemState, showGettingStarted } from "./sidebar-nav";
 import type { ShellData } from "./types";
 
 export function GlobalSearch({ data }: { data: ShellData }) {
@@ -72,7 +72,7 @@ export function GlobalSearch({ data }: { data: ShellData }) {
   }
 
   const lq = query.trim().toLowerCase();
-  const navItems = ALL_NAV_ITEMS.filter((i) => (!i.platformAdmin || data.user.isPlatformAdmin) && (!lq || i.label.toLowerCase().includes(lq) || i.href.includes(lq)))
+  const navItems = ALL_NAV_ITEMS.filter((i) => (i.href !== "/getting-started" || showGettingStarted(data)) && (!i.platformAdmin || data.user.isPlatformAdmin) && (!lq || i.label.toLowerCase().includes(lq) || i.href.includes(lq)))
     .slice(0, lq ? 8 : 12)
     .map((i) => {
       const st = navItemState(i, data);

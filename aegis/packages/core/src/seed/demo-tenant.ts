@@ -118,11 +118,28 @@ export async function seedDemoTenant(): Promise<SeededTenant> {
       { key: "data-warehouse-sim", name: "Data Warehouse (simulated)", type: "data", description: "Synthetic analytics store", baseUrl: "sim://warehouse" },
     ];
     for (const i of integrations) {
-      const row = await db.integration.create({ data: { orgId: org.id, ...i, webhookSecretEnc: encryptSecret(randomToken(24), `integration:${i.key}`), lastHealthAt: new Date(), lastHealthOk: true, settings: { simulated: true } } });
+      const row = await db.integration.create({ data: { orgId: org.id, ...i, webhookSecretEnc: encryptSecret(randomToken(24), `integration:${i.key}`), lastHealthAt: new Date(), lastHealthOk: true, settings: { kind: "simulated", simulated: true } } });
       out.integrations[i.key] = row.id;
       const cred = await storeCredential(db, engineerCtx, row.id, "service-token", `sim-token-${randomToken(12)}`, 90);
       await db.credential.update({ where: { id: cred.id }, data: { rotatedAt: new Date(Date.now() - 30 * 86400_000), rotationDueAt: new Date(Date.now() + 60 * 86400_000) } });
     }
+    // Sandbox connector: a real provider in its documented test mode. Disabled until an operator connects a
+    // test-mode key through the console; no credential is seeded and live keys are refused by the connector.
+    const stripe = await db.integration.create({
+      data: {
+        orgId: org.id,
+        key: "stripe-test",
+        name: "Stripe (test mode)",
+        type: "payments",
+        description: "Stripe refunds in test mode. Connect a test-mode secret key to enable. No live keys are accepted.",
+        baseUrl: "https://api.stripe.com",
+        webhookSecretEnc: encryptSecret(randomToken(24), `integration:stripe-test`),
+        status: "disabled",
+        statusReason: "No credential connected",
+        settings: { kind: "sandbox", simulated: false },
+      },
+    });
+    out.integrations["stripe-test"] = stripe.id;
 
     const resources = [
       { key: "payments-core", name: "Payments Core Ledger", type: "ledger", classification: "restricted" as const, ownerTeamId: team("payments-ops"), attributes: { system: "core-banking-sim", currency: "AED" } },
@@ -142,13 +159,14 @@ export async function seedDemoTenant(): Promise<SeededTenant> {
       { key: "query-crm", name: "Query CRM", description: "Reads customer records", integrationId: out.integrations["crm-sim"], riskLevel: "medium" as const, parameterSchema: { type: "object", required: ["customerId"], properties: { customerId: { type: "string" }, fields: { type: "array", items: { type: "string" } } } }, destinationRules: { allowedDomains: [], allowedResourceKeys: ["customer-accounts"] } },
       { key: "update-ticket", name: "Update ticket", description: "Updates a support ticket", integrationId: out.integrations["support-platform-sim"], riskLevel: "low" as const, parameterSchema: { type: "object", required: ["ticketId"], properties: { ticketId: { type: "string" }, status: { type: "string" }, note: { type: "string", maxLength: 2000 } } }, destinationRules: { allowedDomains: [], allowedResourceKeys: ["support-tickets"] } },
       { key: "http-request", name: "HTTP request", description: "Calls an external HTTP endpoint", integrationId: null, riskLevel: "high" as const, parameterSchema: { type: "object", required: ["url", "method"], properties: { url: { type: "string" }, method: { type: "string", enum: ["GET", "POST"] }, body: { type: "string", maxLength: 50000 } } }, destinationRules: { allowedDomains: ["api.meridian-demo.example"], allowedResourceKeys: [] } },
+      { key: "refund-payment", name: "Refund payment (Stripe)", description: "Refunds a Stripe payment intent through Stripe test mode", integrationId: out.integrations["stripe-test"], riskLevel: "high" as const, parameterSchema: { type: "object", required: ["paymentIntentId", "amount", "currency"], properties: { paymentIntentId: { type: "string", pattern: "^pi_" }, amount: { type: "number", minimum: 0.01 }, currency: { type: "string", enum: ["AED", "USD", "EUR", "GBP"] }, orderId: { type: "string", maxLength: 200 }, customerId: { type: "string", maxLength: 200 }, reason: { type: "string", enum: ["duplicate", "fraudulent", "requested_by_customer"] } }, additionalProperties: false }, destinationRules: { allowedDomains: [], allowedResourceKeys: ["support-tickets", "customer-accounts"] } },
       { key: "run-warehouse-query", name: "Run warehouse query", description: "Executes a read-only analytics query", integrationId: out.integrations["data-warehouse-sim"], riskLevel: "medium" as const, parameterSchema: { type: "object", required: ["sql"], properties: { sql: { type: "string", maxLength: 10000 } } }, destinationRules: { allowedDomains: [], allowedResourceKeys: ["analytics-warehouse"] } },
     ];
     for (const t of tools) out.tools[t.key] = (await upsertTool(db, engineerCtx, { ...t, description: t.description })).id;
 
     const agents = [
       { slug: "treasury-transfer-agent", name: "Treasury Transfer Agent", description: "Prepares and initiates intra-bank transfers requested by treasury analysts. Operates under AED limits with supervisor approval above threshold.", environment: "production" as const, modelProvider: "anthropic", modelId: "claude-opus-5-5", teamId: team("payments-ops"), businessOwnerId: users.governance_manager!.id, technicalOwnerId: users.engineer!.id, dataClassificationLimit: "restricted" as const, riskTier: "critical" as const, status: "active" as const, tools: ["initiate-transfer", "query-crm"], resources: [["payments-core", ["read", "transfer"]], ["customer-accounts", ["read"]]] as [string, string[]][] },
-      { slug: "support-refund-agent", name: "Customer Support Refund Agent", description: "Handles refund requests in the customer care queue. Issues small refunds autonomously, escalates larger ones.", environment: "production" as const, modelProvider: "anthropic", modelId: "claude-sonnet-5-5", teamId: team("customer-care"), businessOwnerId: users.governance_manager!.id, technicalOwnerId: users.engineer!.id, dataClassificationLimit: "confidential" as const, riskTier: "high" as const, status: "active" as const, tools: ["issue-refund", "update-ticket", "query-crm", "send-email"], resources: [["support-tickets", ["read", "write", "execute"]], ["customer-accounts", ["read"]]] as [string, string[]][] },
+      { slug: "support-refund-agent", name: "Customer Support Refund Agent", description: "Handles refund requests in the customer care queue. Issues small refunds autonomously, escalates larger ones.", environment: "production" as const, modelProvider: "anthropic", modelId: "claude-sonnet-5-5", teamId: team("customer-care"), businessOwnerId: users.governance_manager!.id, technicalOwnerId: users.engineer!.id, dataClassificationLimit: "confidential" as const, riskTier: "high" as const, status: "active" as const, tools: ["issue-refund", "refund-payment", "update-ticket", "query-crm", "send-email"], resources: [["support-tickets", ["read", "write", "execute"]], ["customer-accounts", ["read"]]] as [string, string[]][] },
       { slug: "marketing-outreach-agent", name: "Marketing Outreach Agent", description: "Drafts campaign emails and exports audience segments for approved campaigns.", environment: "production" as const, modelProvider: "openai", modelId: "gpt-5", teamId: team("customer-care"), businessOwnerId: users.governance_manager!.id, technicalOwnerId: users.engineer!.id, dataClassificationLimit: "internal" as const, riskTier: "high" as const, status: "active" as const, tools: ["send-email", "export-customer-records", "http-request"], resources: [["marketing-lists", ["read", "export"]]] as [string, string[]][] },
       { slug: "kyc-document-agent", name: "KYC Document Review Agent", description: "Extracts fields from onboarding documents and flags inconsistencies for analysts.", environment: "staging" as const, modelProvider: "anthropic", modelId: "claude-sonnet-5-5", teamId: team("ai-platform"), businessOwnerId: users.security_analyst!.id, technicalOwnerId: users.engineer!.id, dataClassificationLimit: "restricted" as const, riskTier: "high" as const, status: "active" as const, tools: ["query-crm", "update-ticket"], resources: [["customer-accounts", ["read"]]] as [string, string[]][] },
       { slug: "analytics-copilot", name: "Analytics Copilot", description: "Answers business questions over the warehouse with read-only SQL.", environment: "production" as const, modelProvider: "google", modelId: "gemini-3-pro", teamId: team("ai-platform"), businessOwnerId: users.governance_manager!.id, technicalOwnerId: users.engineer!.id, dataClassificationLimit: "restricted" as const, riskTier: "medium" as const, status: "active" as const, tools: ["run-warehouse-query"], resources: [["analytics-warehouse", ["read"]]] as [string, string[]][] },

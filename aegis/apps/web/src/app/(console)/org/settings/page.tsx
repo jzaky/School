@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { withTenant } from "@aegis/db";
 import { rawPrisma } from "@aegis/db";
+import { computeOnboarding, summarizeOnboarding } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { PageHeader } from "@/components/ui/page-header";
 import { DemoBadge } from "@/components/ui/demo-badge";
@@ -9,6 +10,10 @@ import { KeyValue } from "@/components/ui/key-value";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { OrganizationSettingsForm } from "@/components/org/settings-form";
+import { GatewayPauseControl } from "@/components/org/pilot-setup";
+import { OnboardingProgress } from "@/components/onboarding/checklist";
+import { OnboardingDismissButton } from "@/components/onboarding/dismiss-button";
+import { LinkButton } from "@/components/ui/link-button";
 import { formatDateTime } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Settings" };
@@ -17,12 +22,33 @@ export const dynamic = "force-dynamic";
 export default async function SettingsPage() {
   const c = await requirePermission("org:read");
   const org = await rawPrisma().organization.findUniqueOrThrow({ where: { id: c.org.id } });
-  const sso = await withTenant(c.ctx.orgId, (db) => db.ssoConnection.findFirst({ where: { orgId: c.ctx.orgId }, select: { enabled: true, issuer: true } }));
+  const { sso, steps } = await withTenant(c.ctx.orgId, async (db) => ({ sso: await db.ssoConnection.findFirst({ where: { orgId: c.ctx.orgId }, select: { enabled: true, issuer: true } }), steps: await computeOnboarding(db, c.ctx) }), { readOnly: true });
   const s = c.org.settings;
   const canAdmin = c.can("org:admin");
+  const onboarding = summarizeOnboarding(steps, s);
+  const gw = s as { gatewayPaused?: boolean; gatewayPausedReason?: string; gatewayPausedBy?: string };
   return (
     <div>
-      <PageHeader title="Settings" description="Organization identity, defaults and sign-in configuration." badges={<DemoBadge show={c.org.demoMode} />} />
+      <PageHeader title="Settings" description="Pilot setup, emergency controls, organization identity, defaults and sign-in configuration." badges={<DemoBadge show={c.org.demoMode} />} />
+      <div className="mb-4 grid gap-4 lg:grid-cols-2">
+        <Panel title="Pilot setup" description="Guided onboarding progress for this organization" data-testid="pilot-setup" actions={<OnboardingDismissButton dismissed={!!onboarding.dismissedAt} canAdmin={canAdmin} />}>
+          <OnboardingProgress summary={onboarding} />
+          <p className="mt-2 text-xs text-fg-muted">{onboarding.complete ? "Every step is done." : onboarding.next ? `Next: ${onboarding.next.title}.` : ""} {onboarding.dismissedAt ? `The checklist is hidden from the sidebar and Overview (since ${formatDateTime(onboarding.dismissedAt)}).` : "The checklist shows in the sidebar and on the Overview until every step is done or it is hidden."}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <LinkButton href="/getting-started" size="sm">
+              Open the checklist
+            </LinkButton>
+            {onboarding.next ? (
+              <LinkButton href={onboarding.next.href} size="sm" variant="primary">
+                {onboarding.next.title}
+              </LinkButton>
+            ) : null}
+          </div>
+        </Panel>
+        <Panel title="Emergency gateway pause" description="Stops every agent at once, recorded in evidence">
+          <GatewayPauseControl paused={!!gw.gatewayPaused} reason={gw.gatewayPausedReason ?? null} by={gw.gatewayPausedBy ?? null} canAdmin={canAdmin} />
+        </Panel>
+      </div>
       <div className="grid gap-4 lg:grid-cols-3">
         <Panel title="Organization" description="Editable with org:admin" className="lg:col-span-2">
           <OrganizationSettingsForm canAdmin={canAdmin} initial={{ name: org.name, currency: typeof s.currency === "string" ? s.currency : "AED", timezone: typeof s.timezone === "string" ? s.timezone : "Asia/Dubai", approvalDefaultExpiryMinutes: typeof s.approvalDefaultExpiryMinutes === "number" ? s.approvalDefaultExpiryMinutes : 240 }} />

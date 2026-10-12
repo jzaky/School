@@ -2,7 +2,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ArrowUpRight, CheckSquare } from "lucide-react";
+import { ArrowUpRight, CheckSquare, ChevronLeft, ChevronRight } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
@@ -11,9 +11,8 @@ import { Countdown } from "@/components/ui/countdown";
 import { EmptyState } from "@/components/ui/empty-state";
 import { TimeAgo } from "@/components/ui/time";
 import { IconButton } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { LinkButton } from "@/components/ui/link-button";
 import { formatMoney } from "@/lib/utils";
-import { statusTone } from "@/lib/status";
 
 export interface ApprovalRow {
   id: string;
@@ -25,13 +24,20 @@ export interface ApprovalRow {
   riskTier: string;
   toolKey: string;
   action: string;
+  /** Plain-language sentence: "Refund AED 1,450.00 for order ORD-55377 to customer CUST-88213". */
+  summary: string;
   targetSystem: string | null;
   amount: number | null;
   currency: string | null;
   destination: string | null;
   orderId: string | null;
+  customerId: string | null;
+  reason: string | null;
   toAccount: string | null;
   triggeringRule: string | null;
+  /** Why a person is needed, in words (the rule description). */
+  whyApproval: string | null;
+  policyName: string | null;
   riskIndicators: string[];
   justification: string;
   expiresAt: string;
@@ -51,7 +57,7 @@ const TABS = [
   { id: "all", label: "All" },
 ];
 
-export function ApprovalsList({ rows, status, mine, counts, pagination }: { rows: ApprovalRow[]; status: string; mine: boolean; counts: Record<string, number>; pagination: { page: number; pageSize: number; total: number } }) {
+export function ApprovalsList({ rows, status, mine, counts, pagination, canDecide }: { rows: ApprovalRow[]; status: string; mine: boolean; counts: Record<string, number>; pagination: { page: number; pageSize: number; total: number }; canDecide: boolean }) {
   const router = useRouter();
   const pathname = usePathname();
   const sp = useSearchParams();
@@ -82,68 +88,81 @@ export function ApprovalsList({ rows, status, mine, counts, pagination }: { rows
           Mine
         </label>
       </div>
-      <div className="mt-3 overflow-hidden rounded-panel border border-line bg-bg-elev">
+      <div className="mt-3 overflow-hidden rounded-panel border border-line bg-bg-elev" data-testid="approvals-list">
         {rows.length === 0 ? (
-          <EmptyState icon={CheckSquare} title={status === "pending" ? "Nothing waiting for a decision" : "No approvals in this state"} description={status === "pending" ? "Approval requests appear here the moment a policy requires a human." : undefined} />
+          <EmptyState
+            icon={CheckSquare}
+            title={status === "pending" ? "Nothing waiting for a decision" : "No approvals in this state"}
+            description={status === "pending" ? "Requests appear here the moment a policy requires a person. To see one now, run the sample refund workflow: it asks for approval of a mid-sized refund." : undefined}
+            action={status === "pending" ? <LinkButton href="/gateway/demos" size="sm">Explore a sample workflow</LinkButton> : undefined}
+          />
         ) : (
           <ul className="divide-y divide-line">
             {rows.map((r) => (
-              <li key={r.id}>
-                <Link href={`/approvals/${r.id}`} className="block px-4 py-3 transition-colors duration-150 hover:bg-bg-elev-2/60 focus-visible:bg-bg-elev-2 focus-visible:outline-none">
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <StatusBadge status={r.status} />
-                        <span className="text-sm font-medium text-fg">{r.agentName}</span>
-                        <span className="text-fg-dim">wants to</span>
-                        <span className="font-mono text-xs text-fg">
-                          {r.toolKey} / {r.action}
-                        </span>
-                        {r.targetSystem ? <span className="text-xs text-fg-muted">on {r.targetSystem}</span> : null}
-                        <Badge tone={statusTone(r.riskTier)}>{r.riskTier} risk agent</Badge>
-                      </div>
-                      <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-fg-muted">
-                        {r.amount !== null ? <span className="text-sm font-semibold tabular text-fg">{formatMoney(r.amount, r.currency ?? "AED")}</span> : null}
-                        {r.toAccount ? <span className="font-mono">to {r.toAccount}</span> : null}
-                        {r.destination ? <span className="font-mono">to {r.destination}</span> : null}
-                        {r.orderId ? <span className="font-mono">order {r.orderId}</span> : null}
-                        {r.triggeringRule ? <span className="font-mono">rule {r.triggeringRule}</span> : null}
-                      </div>
-                      {r.justification ? <p className="mt-1 truncate text-xs text-fg-muted">&ldquo;{r.justification}&rdquo;</p> : null}
-                      {r.riskIndicators.length ? (
-                        <div className="mt-1 flex flex-wrap gap-1">
-                          {r.riskIndicators.map((i) => (
-                            <Badge key={i} tone="approval" mono>
-                              {i}
-                            </Badge>
-                          ))}
-                        </div>
-                      ) : null}
+              <li key={r.id} className="px-4 py-3" data-approval-row={r.id}>
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <StatusBadge status={r.status} />
+                      <Link href={`/approvals/${r.id}`} className="text-sm font-medium text-fg hover:underline" data-testid="approval-summary">
+                        {r.summary}
+                      </Link>
                     </div>
-                    <div className="flex shrink-0 flex-col items-end gap-1 text-xs text-fg-muted">
-                      {open(r.status) ? (
-                        <span>
-                          Expires in <Countdown until={r.expiresAt} className="font-medium" />
-                        </span>
-                      ) : r.decidedAt ? (
-                        <span>
-                          Decided <TimeAgo value={r.decidedAt} />
-                        </span>
-                      ) : (
-                        <span>
-                          Expired <TimeAgo value={r.expiresAt} />
-                        </span>
-                      )}
-                      <span>
-                        Requested <TimeAgo value={r.createdAt} />
-                      </span>
-                      {r.escalatedTo ? <Badge tone="critical">escalated to {r.escalatedTo}</Badge> : r.assignedTo ? <Badge tone="info">assigned to {r.assignedTo}</Badge> : r.requiredRoles.length ? <span className="text-fg-dim">roles: {r.requiredRoles.join(", ")}</span> : null}
-                      <span className="inline-flex items-center gap-0.5 text-accent">
-                        Review <ArrowUpRight className="h-3 w-3" aria-hidden />
-                      </span>
-                    </div>
+                    <dl className="mt-1.5 grid gap-x-6 gap-y-1 text-xs sm:grid-cols-2">
+                      <div className="flex gap-2">
+                        <dt className="shrink-0 text-fg-dim">Asked by</dt>
+                        <dd className="text-fg">
+                          {r.agentName}
+                          {r.targetSystem ? <span className="text-fg-muted"> via {r.targetSystem}</span> : null}
+                        </dd>
+                      </div>
+                      <div className="flex gap-2">
+                        <dt className="shrink-0 text-fg-dim">Reason given</dt>
+                        <dd className="text-fg">{r.justification || r.reason || <span className="text-fg-dim">none</span>}</dd>
+                      </div>
+                      <div className="flex gap-2 sm:col-span-2">
+                        <dt className="shrink-0 text-fg-dim">Why approval</dt>
+                        <dd className="text-fg">
+                          {r.whyApproval ?? "Required by data protection settings"}
+                          {r.policyName ? <span className="text-fg-muted"> ({r.policyName})</span> : null}
+                        </dd>
+                      </div>
+                    </dl>
+                    {r.riskIndicators.length ? (
+                      <div className="mt-1.5 flex flex-wrap gap-1">
+                        {r.riskIndicators.map((i) => (
+                          <Badge key={i} tone="approval" mono>
+                            {i}
+                          </Badge>
+                        ))}
+                      </div>
+                    ) : null}
                   </div>
-                </Link>
+                  <div className="flex shrink-0 flex-col items-end gap-1.5 text-xs text-fg-muted">
+                    {r.amount !== null ? <span className="text-base font-semibold tabular text-fg">{formatMoney(r.amount, r.currency ?? "AED")}</span> : null}
+                    {open(r.status) ? (
+                      <span>
+                        Expires in <Countdown until={r.expiresAt} className="font-medium" />
+                      </span>
+                    ) : r.decidedAt ? (
+                      <span>
+                        Decided <TimeAgo value={r.decidedAt} />
+                      </span>
+                    ) : (
+                      <span>
+                        Expired <TimeAgo value={r.expiresAt} />
+                      </span>
+                    )}
+                    <span>
+                      Requested <TimeAgo value={r.createdAt} />
+                    </span>
+                    {r.escalatedTo ? <Badge tone="critical">escalated to {r.escalatedTo}</Badge> : r.assignedTo ? <Badge tone="info">assigned to {r.assignedTo}</Badge> : r.requiredRoles.length ? <span className="text-fg-dim">roles: {r.requiredRoles.join(", ")}</span> : null}
+                    <LinkButton href={`/approvals/${r.id}`} size="sm" variant={open(r.status) && canDecide ? "primary" : "secondary"} data-testid="approval-open">
+                      {open(r.status) && canDecide ? "Review and decide" : "Open"}
+                      <ArrowUpRight className="h-3 w-3" aria-hidden />
+                    </LinkButton>
+                  </div>
+                </div>
               </li>
             ))}
           </ul>

@@ -1,5 +1,6 @@
 import type { TenantDb } from "@aegis/db";
 import { decryptSecret, hashObject } from "../lib/crypto.js";
+import { stripeTestConnector } from "./connectors/stripe.js";
 
 /**
  * Downstream systems: the things the gateway executes against once a request is allowed or
@@ -58,6 +59,8 @@ export interface DownstreamSystem {
   reconcile?(ctx: DownstreamContext, req: DownstreamRequest): Promise<DownstreamResult>;
   /** Cheap authenticated call proving the credential and network path work. */
   testConnection?(ctx: DownstreamContext): Promise<{ ok: boolean; detail: string }>;
+  /** Vetoes a credential before it is stored (for example a live payments key). Returns a plain-language reason, or null to accept. */
+  validateCredential?(name: string, secret: string): string | null;
 }
 
 export async function readIntegrationCredential(db: TenantDb, integrationId: string, name = "service-token"): Promise<string> {
@@ -177,7 +180,9 @@ export const warehouseSimulator = simulator("data-warehouse-sim", "Data warehous
   return { entry: { type: "query" }, reference: `QRY-${ref}`, summary: { rows: 42, syntheticResult: true } };
 });
 
-const systems = new Map<string, DownstreamSystem>([coreBankingSimulator, supportPlatformSimulator, emailGatewaySimulator, crmSimulator, warehouseSimulator].map((s) => [s.key, s]));
+// The sandbox connectors are part of the default registry so every module instance (the Next.js console bundles
+// core separately from instrumentation.ts) resolves them; installConnectors() re-registers them explicitly.
+const systems = new Map<string, DownstreamSystem>([coreBankingSimulator, supportPlatformSimulator, emailGatewaySimulator, crmSimulator, warehouseSimulator, stripeTestConnector].map((s) => [s.key, s]));
 
 export function registerDownstreamSystem(s: DownstreamSystem) {
   systems.set(s.key, s);

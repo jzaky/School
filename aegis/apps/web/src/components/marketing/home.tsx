@@ -1,48 +1,57 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
-import { ButtonLink, ClosingCta, Pill, Pre, Section, SectionHeading } from "./primitives";
+import { ButtonLink, Note, Pill, Pre, Section, SectionHeading, Table } from "./primitives";
+import { Screenshot } from "./screenshot";
 
 export const homeMetadata: Metadata = {
-  title: "AEGIS | AI governance, authorization, security and assurance",
-  description: "Define what your AI agents may do. Enforce it before execution. Prove what happened. An enterprise platform for AI agent authorization, runtime enforcement, evidence and assessment, designed for regulated environments and private deployment.",
+  title: "AEGIS | Let AI agents handle routine work. Require human approval for risky actions.",
+  description: "AEGIS governs the actions AI agents take. Routine refunds run on their own, risky ones wait for a named approver, and every decision is recorded in a verifiable ledger. Built for customer-support refund workflows first.",
   alternates: { canonical: "/" },
 };
 
-const STEPS = [
-  { n: "01", title: "Agent requests", body: "Before a tool runs, the agent (or the framework around it) posts the intended action to the gateway with its scoped API key, the tool, the parameters and an idempotency key.", code: "POST /v1/gateway/actions" },
-  { n: "02", title: "Gateway evaluates", body: "Registry checks first: agent active, tool granted, schema valid, resource permitted, classification within limit, destination allowed. Then Shield inspects parameters. Then versioned policies are evaluated deterministically.", code: "registry -> shield -> policy" },
-  { n: "03", title: "Allow, approve or deny", body: "Deny wins, then approval, then allow; anything unmatched is denied by default. Approvals go to eligible humans with an expiry and a request hash. Nothing executes until a decision exists.", code: "200 | 202 | 403" },
-  { n: "04", title: "Evidence recorded", body: "The decision, the approval responses, the single-use execution grant and the downstream receipt are appended to a per-organization hash chain, in the same transaction as the decision.", code: "evidence_events seq, prev_hash, hash" },
+const PROMISE = ["Let AI agents handle routine work.", "Require human approval for risky actions.", "Keep a verifiable record of every decision."];
+
+const FOR = [
+  { who: "Heads of customer support and operations", why: "You want the support agent to issue small refunds without a queue, and you want to be the one who decides where \"small\" ends." },
+  { who: "Finance and risk", why: "You need a hard limit the model cannot talk its way past, a named approver above it, and proof afterwards of who allowed what." },
+  { who: "Engineering and platform teams", why: "You need one gateway in front of the refund API, a single-use grant per execution, and idempotency that survives lost responses, without rewriting the agent." },
 ];
 
-const MODULES = [
-  { id: "control", name: "Control", tag: "Authorization and the Action Gateway", body: "Agent registry with lifecycle, tools and resource permissions. Versioned JSON policies with embedded tests and four-eyes activation. The gateway that decides before anything executes, and the Approval Center that closes the loop.", points: ["Idempotent action requests, fail closed", "Approvals with expiry, separation of duties, hash binding", "Emergency controls: suspend, revoke, pause the gateway"] },
-  { id: "assurance", name: "Assurance", tag: "Evidence ledger, monitoring, governance reporting", body: "A per-organization hash chain of every decision, approval, grant and receipt with Ed25519 checkpoints. Deterministic monitoring rules with configurable thresholds. Governance dashboards computed from real records.", points: ["Chain verification and signed exports (JSON Lines, CSV)", "12 built-in monitoring rules, deduplicated alerts", "Approval turnaround percentiles, decision series"] },
-  { id: "shield", name: "Shield", tag: "Sensitive data, tool security, incidents", body: "A detector registry that classifies tool parameters (IBAN, card numbers, Emirates ID, API keys, private keys and more) and applies mask, redact, block or approval actions. Destination allowlists per tool. Heuristic prompt-injection signals that feed policy and security events.", points: ["Checksum-validated financial identifiers", "Per-tool destination rules on URLs and email domains", "Security events linked to incidents with a timeline"] },
-  { id: "audit", name: "Audit", tag: "Document assessment against governance frameworks", body: "Upload policies and procedures, assess them against framework control catalogs with lexical retrieval, attach automated evidence of controls that operated inside AEGIS, track remediation and export reports.", points: ["Shared catalogs for ISO/IEC 42001, ISO/IEC 27001 Annex A, NIST AI RMF", "Custom frameworks and controls per organization", "Findings, remediation tasks, PDF and JSON reports"] },
+const FLOW = [
+  { n: "01", title: "The agent asks first", body: "Before it touches the payment system, the support agent posts the intended refund (order, customer, amount, reason) to the gateway with its own scoped key. It never holds the payment credential." },
+  { n: "02", title: "Policy decides, deterministically", body: "Registry checks, data protection checks, then your refund policy: below the threshold allowed, between the thresholds approval required, above it denied, duplicates refused. Same input, same answer, full trace." },
+  { n: "03", title: "A human decides the risky ones", body: "An eligible approver sees the refund in plain language and approves, rejects, asks for information or escalates. Separation of duties applies and the approval is bound to the exact parameters and an expiry." },
+  { n: "04", title: "The gateway executes once", body: "A single live execution grant per request, consumed before the call. The payment system receives a stable idempotency key, so a lost response is reconciled from its own records instead of retried blindly." },
+  { n: "05", title: "Everything is on the record", body: "Decision, approval, grant and receipt are appended to a per-organization hash chain with signed checkpoints. Export it; anyone with the public key can verify it." },
 ];
 
-const RISKS = [
-  { title: "Unbounded transactions", risk: "An agent with a payments credential can move any amount, any time, as long as the model produces a plausible call. A prompt, a bug or a poisoned document is enough.", answer: "AEGIS evaluates amount, currency, resource, time of day and counterparty against versioned policy before the call. Above an autonomous limit the request waits for a named human; above an authority ceiling it is denied and a security event is raised. Illustrative example: autonomous below AED 50,000 in business hours, approval to AED 1,000,000, denied above." },
-  { title: "Data egress", risk: "Tools that send email, call HTTP endpoints or export records can carry customer data to a destination nobody approved, including when the instruction came from untrusted content the agent read.", answer: "Shield classifies parameters and finds IBANs, card numbers, identity numbers and credentials with checksum validation. Each tool has a destination allowlist. A policy can deny when restricted data classes intersect with an external domain, and the attempt becomes a security event with the evidence attached." },
-  { title: "Untraceable actions", risk: "After an incident, logs from the agent framework show what the model said, not what was authorized, by whom, under which policy version, and what the downstream system actually did.", answer: "Every request produces an action record, a decision with the full rule trace, any approval responses, the grant and the downstream receipt, hash-linked in one per-organization ledger. Verification recomputes the chain and checks the signed checkpoint, and exports carry the public key." },
+const TODAY = [
+  "Agent registry, tool grants, scoped API keys, lifecycle with suspend and revoke",
+  "Deterministic policy engine with a guided refund template (editable thresholds, approver roles, duplicate and reason rules) and the full JSON language underneath",
+  "Action Gateway with idempotency, single live grant per request, three-phase execution, ambiguous-outcome reconciliation and human settlement",
+  "Approval Center with eligibility, separation of duties, hash binding, expiry, escalation and reassignment",
+  "Emergency pause that also stops already-approved actions, plus agent suspension that voids outstanding grants",
+  "Tamper-evident evidence ledger with Ed25519 checkpoints, verification and export",
+  "Sensitive data detection on parameters, destination allowlists per tool, security events and incidents",
+  "Document assessment against ISO/IEC 42001, ISO/IEC 27001:2022 and NIST AI RMF catalogs",
+  "Guided onboarding checklist and a sample refund workflow that runs without any external credentials",
 ];
 
-const SECURITY = [
-  { title: "Fail closed", body: "Evaluation errors deny. Database unavailable returns 503 and nothing executes. If the evidence append fails, the transaction holding the decision rolls back." },
-  { title: "Tenant isolation in the database", body: "PostgreSQL row-level security is forced on every tenant table. The application role is a non-owner that cannot bypass RLS; each query runs with a transaction-local organization setting. An isolation test suite proves two organizations cannot see each other." },
-  { title: "Tamper-evident evidence", body: "Per-organization SHA-256 hash chain over canonical JSON. UPDATE and DELETE are rejected by trigger. Ed25519 checkpoints are signed with a key held outside the database and can be exported to customer storage." },
-  { title: "Private deployment", body: "Docker Compose or Kubernetes manifests, non-root containers, network policy for egress. No component calls an external AI provider. Uploaded documents stay on the configured volume." },
-  { title: "OpenID Connect SSO and MFA", body: "Per-organization OIDC with PKCE and just-in-time provisioning limited to allowed email domains, TOTP MFA, argon2id passwords, server-side sessions with idle and absolute limits, lockout after repeated failures." },
+const INTEGRATIONS: { system: string; status: "Sandbox tested" | "Simulated" | "Planned"; detail: string }[] = [
+  { system: "Stripe refunds (test mode)", status: "Sandbox tested", detail: "Connector implemented against Stripe's documented test mode with idempotency keys, metadata reconciliation and a connection test. Verified locally against a fake Stripe server; the live test-mode run needs a customer test key. Live keys are refused." },
+  { system: "Support platform refunds", status: "Simulated", detail: "In-process stand-in used by the sample workflow. Verifies grants and honours idempotency like a real system; keeps a visible ledger." },
+  { system: "Core banking transfers", status: "Simulated", detail: "In-process stand-in used by the banking scenario." },
+  { system: "Email gateway, CRM, data warehouse", status: "Simulated", detail: "In-process stand-ins used by the data egress scenario." },
+  { system: "Helpdesk refunds (Zendesk, Intercom), PayPal, Adyen", status: "Planned", detail: "Same connector interface. Not started." },
+  { system: "Approvals in Slack or Teams", status: "Planned", detail: "Approvals are decided in the console and over the API today." },
 ];
 
-const INDUSTRIES = [
-  { name: "Banking and payments", scenario: "A treasury agent prepares intra-bank transfers from analyst tickets. AEGIS allows small business-hours transfers, routes an AED 250,000 settlement to an approver who sees the beneficiary and ticket reference, and denies a transfer above the ceiling before the core ledger is touched." },
-  { name: "Insurance", scenario: "A claims agent settles low-value motor claims autonomously within a per-policy limit, requires an adjuster for amounts above it, and is blocked from exporting claimant records to a vendor domain that is not on the allowlist." },
-  { name: "Healthcare", scenario: "A scheduling agent can read appointment slots but any tool that writes to the patient record requires a clinician approval, and parameters containing identity numbers are blocked from leaving through email or HTTP tools." },
-  { name: "Government", scenario: "A citizen-services agent updates case status on an approved system of record only; destination rules and classification limits stop it from sending case files to external addresses, and every decision is exportable as signed evidence for oversight." },
-  { name: "Customer operations", scenario: "A support agent refunds below AED 500 on its own, needs a supervisor between AED 500 and 2,500 and is denied above. A retried request with the same idempotency key returns the original result, so the customer is never refunded twice." },
+const PILOT = [
+  { step: "Week 1", what: "Explore the hosted demo, then connect your Stripe test-mode key. Register your support agent through the SDK or REST API and set the refund thresholds you would actually use." },
+  { step: "Week 2", what: "Shadow mode: the agent asks the gateway for every refund but your existing process still executes. You compare what AEGIS would have allowed, held or refused." },
+  { step: "Weeks 3 to 4", what: "Enforce mode on test-mode refunds: approvers decide in the console, outstanding actions are stopped with the emergency pause when you drill it, and you export the evidence at the end." },
+  { step: "Exit", what: "A written report of every decision in the pilot, reconciled against Stripe's own records, and a list of what would need to change for production." },
 ];
 
 const HERO_RESPONSE = `HTTP/1.1 202 Accepted
@@ -50,14 +59,13 @@ const HERO_RESPONSE = `HTTP/1.1 202 Accepted
   "requestId": "0192f0c4-...-7f3a21c0",
   "status": "pending_approval",
   "decision": "require_approval",
-  "reasons": ["Manager approval required for transfers between AED 50,000 and 1,000,000"],
-  "riskIndicators": ["high_value"],
-  "matchedRuleIds": ["manager-50k-1m"],
+  "reasons": ["Refunds from AED 500.00 to AED 2,500.00 need approval"],
+  "matchedRuleIds": ["refund-authority/approval-band"],
   "approval": {
     "approvalRequestId": "0192f0c4-...-9b1d",
     "expiresAt": "2026-10-11T13:04:00.000Z",
     "requiredApprovals": 1,
-    "requiredRoles": ["approver", "owner"]
+    "requiredRoles": ["approver", "governance_manager", "owner"]
   }
 }`;
 
@@ -67,20 +75,26 @@ export function HomePage() {
       <Section dark className="!pt-16 !pb-16 md:!pt-24 md:!pb-24">
         <div className="grid items-start gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
-            <p className="mk-eyebrow mb-4">Enterprise AI governance, authorization, security and assurance</p>
-            <h1 className="mk-h1">Define what your AI agents may do. Enforce it before execution. Prove what happened.</h1>
-            <p className="mk-lead mt-5 max-w-xl">AEGIS sits between your agents and the systems they act on. Register each agent, write the policy that bounds it, route elevated actions to named humans, and keep a tamper-evident record of every decision and every downstream receipt.</p>
+            <p className="mk-eyebrow mb-4">Governance for AI agents that act</p>
+            <h1 className="mk-h1">
+              {PROMISE.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </h1>
+            <p className="mk-lead mt-5 max-w-xl">AEGIS sits between your AI customer-support agent and the refund system. Small refunds go through on their own. Larger ones wait for a named approver. Duplicates, wrong currencies and anything above the limit are refused. Every decision is recorded in a ledger you can verify.</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <ButtonLink href="/site/demo">Request a demo</ButtonLink>
-              <ButtonLink href="/site/tour" variant="secondary">
-                Explore the product tour
+              <ButtonLink href="/site/demo">Explore the demo</ButtonLink>
+              <ButtonLink href="/site/pilot" variant="secondary">
+                Discuss a pilot
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </ButtonLink>
             </div>
             <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-4 text-sm sm:grid-cols-4">
               {[
-                ["Decision path", "Deterministic, default deny"],
-                ["Isolation", "PostgreSQL row-level security"],
+                ["Decision", "Deterministic, default deny"],
+                ["Execution", "One grant, one call, reconciled"],
                 ["Evidence", "Hash chain, signed checkpoints"],
                 ["Deployment", "Private, no AI provider calls"],
               ].map(([k, v]) => (
@@ -97,100 +111,105 @@ export function HomePage() {
               <Pill tone="approval">Approval required</Pill>
             </div>
             <Pre>{HERO_RESPONSE}</Pre>
-            <p className="mk-hint mt-2">An AED 250,000 transfer from the synthetic banking scenario. Thresholds are illustrative and customer-configurable.</p>
+            <p className="mk-hint mt-2">An AED 1,450 refund from the sample workflow. Thresholds are yours to set; these are the demo values.</p>
           </div>
         </div>
       </Section>
 
-      <Section id="how-it-works">
-        <SectionHeading eyebrow="Runtime enforcement" title="How runtime enforcement works" lead="Four steps, one transaction boundary around the decision. Agents never hold the downstream credential; they hold a scoped key to the gateway." />
-        <ol className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {STEPS.map((s) => (
-            <li key={s.n} className="mk-card flex flex-col">
-              <span className="font-mono text-xs text-(--mk-accent)">{s.n}</span>
-              <h3 className="mk-h3 mt-2">{s.title}</h3>
-              <p className="mt-2 flex-1 text-sm text-(--mk-muted)">{s.body}</p>
-              <code className="mk-code mt-4 self-start whitespace-normal break-words text-[11px]">{s.code}</code>
-            </li>
-          ))}
-        </ol>
-      </Section>
-
-      <Section id="products" className="bg-(--mk-bg-2)">
-        <SectionHeading eyebrow="Four products, one platform" title="Control, Assurance, Shield and Audit share one identity model, one policy engine and one evidence ledger" />
-        <div className="mt-10 grid gap-4 md:grid-cols-2">
-          {MODULES.map((m) => (
-            <Link key={m.id} href={`/site/products#${m.id}`} className="mk-card group flex flex-col" data-module={m.id}>
-              <div className="flex items-center justify-between gap-3">
-                <h3 className="mk-h3">{m.name}</h3>
-                <ArrowRight className="h-4 w-4 text-(--mk-dim) transition-transform duration-150 group-hover:translate-x-0.5" aria-hidden />
-              </div>
-              <p className="mt-1 text-xs font-medium uppercase tracking-wider text-(--mk-accent)">{m.tag}</p>
-              <p className="mt-3 text-sm text-(--mk-muted)">{m.body}</p>
-              <ul className="mt-4 space-y-1.5 text-sm">
-                {m.points.map((p) => (
-                  <li key={p} className="flex gap-2">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-(--mk-allow)" aria-hidden />
-                    <span>{p}</span>
-                  </li>
-                ))}
-              </ul>
-            </Link>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="why">
-        <SectionHeading eyebrow="Why AI authorization matters" title="Agents act. Models cannot be trusted to bound their own actions." lead="Authorization has to live outside the model, in a component that sees the registered permissions, the policy and the parameters, and that fails closed." />
+      <Section id="for-whom">
+        <SectionHeading eyebrow="Who it is for" title="Teams putting an AI agent in front of real money" lead="The first workflow AEGIS supports end to end is refunds issued by an AI customer-support agent. The same machinery applies to transfers, exports and other consequential tool calls." />
         <div className="mt-10 grid gap-4 lg:grid-cols-3">
-          {RISKS.map((r) => (
-            <article key={r.title} className="mk-card">
-              <h3 className="mk-h3">{r.title}</h3>
-              <p className="mt-3 text-sm text-(--mk-muted)">
-                <span className="font-semibold text-(--mk-deny)">Risk. </span>
-                {r.risk}
-              </p>
-              <p className="mt-3 text-sm text-(--mk-muted)">
-                <span className="font-semibold text-(--mk-allow)">With AEGIS. </span>
-                {r.answer}
-              </p>
+          {FOR.map((f) => (
+            <article key={f.who} className="mk-card">
+              <h3 className="mk-h3">{f.who}</h3>
+              <p className="mt-3 text-sm text-(--mk-muted)">{f.why}</p>
             </article>
           ))}
         </div>
       </Section>
 
-      <Section id="security" dark>
-        <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
-          <div>
-            <SectionHeading eyebrow="Enterprise security" title="Designed for regulated environments" lead="Security properties are implemented in the database and the request path, not in documentation. The Security page lists what is built and what is still a gap." />
-            <ButtonLink href="/site/security" variant="secondary" className="mt-6">
-              Security details and known gaps
-            </ButtonLink>
-          </div>
-          <dl className="grid gap-4 sm:grid-cols-2">
-            {SECURITY.map((s) => (
-              <div key={s.title} className="rounded-xl border border-(--mk-line) bg-(--mk-bg-2) p-5 sm:[&:last-child]:col-span-2">
-                <dt className="font-semibold">{s.title}</dt>
-                <dd className="mt-2 text-sm text-(--mk-muted)">{s.body}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </Section>
-
-      <Section id="industries">
-        <SectionHeading eyebrow="Where it applies" title="Industry scenarios" lead="Each scenario is a pattern the policy language and the gateway support today. The figures are illustrative and customer-configurable; the demo tenant is synthetic." />
-        <div className="mt-10 divide-y divide-(--mk-line) border-y border-(--mk-line)">
-          {INDUSTRIES.map((i) => (
-            <div key={i.name} className="grid gap-2 py-5 md:grid-cols-[220px_1fr] md:gap-8">
-              <h3 className="font-semibold">{i.name}</h3>
-              <p className="text-sm text-(--mk-muted)">{i.scenario}</p>
-            </div>
+      <Section id="how-it-works" className="bg-(--mk-bg-2)">
+        <SectionHeading eyebrow="Agent authorization and downstream enforcement" title="How a refund moves through AEGIS" lead="The agent asks, policy decides, a human decides the risky ones, the gateway executes once, and the record is kept. Five steps, each with a transaction boundary where it matters." />
+        <ol className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+          {FLOW.map((s) => (
+            <li key={s.n} className="mk-card flex flex-col">
+              <span className="font-mono text-xs text-(--mk-accent)">{s.n}</span>
+              <h3 className="mk-h3 mt-2">{s.title}</h3>
+              <p className="mt-2 flex-1 text-sm text-(--mk-muted)">{s.body}</p>
+            </li>
           ))}
+        </ol>
+        <div className="mt-10 grid gap-6 lg:grid-cols-2">
+          <Screenshot screen="approvalDetail" caption="An approver sees the refund in words: what, how much, for which order, why, and which rule asked for a human. The JSON and the trace sit behind a details section." priority />
+          <Screenshot screen="requestDetail" caption="After approval: the single execution grant, the downstream receipt with the provider reference, and the evidence entries for this request." />
         </div>
       </Section>
 
-      <ClosingCta />
+      <Section id="today">
+        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+          <div>
+            <SectionHeading eyebrow="What is implemented today" title="Built and tested, not planned" lead="Everything below runs in the current build and is covered by automated tests. The status page in the implementation report separates implemented, verified, simulated and remaining work." />
+            <ul className="mt-6 space-y-2 text-sm">
+              {TODAY.map((t) => (
+                <li key={t} className="flex gap-2">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-(--mk-allow)" aria-hidden />
+                  <span>{t}</span>
+                </li>
+              ))}
+            </ul>
+            <Note className="mt-6">No customers or certifications are claimed. AEGIS has not been through an independent security audit or penetration test. The hosted demo runs on synthetic data and is labelled as such.</Note>
+          </div>
+          <div className="space-y-6">
+            <Screenshot screen="overview" caption="The Overview leads with what needs a decision, then agent and integration health, then recent actions grouped by outcome." />
+            <Screenshot screen="policyThresholds" caption="The guided refund policy: thresholds, approver roles and prohibited conditions in a form, with the outcome of sample requests shown live. The JSON stays editable." />
+          </div>
+        </div>
+      </Section>
+
+      <Section id="integrations" className="bg-(--mk-bg-2)">
+        <SectionHeading eyebrow="Integrations" title="Which systems are simulated, sandbox-tested or planned" lead="Every integration is labelled in the console. Simulated systems are in-process stand-ins that behave like real ones (they verify grants and honour idempotency). Sandbox-tested means a real provider in its documented test mode." />
+        <div className="mt-8">
+          <Table
+            caption="Integration status"
+            head={["System", "Status", "Detail"]}
+            rows={INTEGRATIONS.map((i) => [
+              <span key="s" className="font-medium">
+                {i.system}
+              </span>,
+              <Pill key="p" tone={i.status === "Sandbox tested" ? "allow" : i.status === "Simulated" ? "approval" : "neutral"}>
+                {i.status}
+              </Pill>,
+              <span key="d" className="text-(--mk-muted)">
+                {i.detail}
+              </span>,
+            ])}
+          />
+        </div>
+        <div className="mt-8">
+          <Screenshot screen="integrations" caption="Integrations in the console: the kind badge, connection test and credential rules for the Stripe test-mode sandbox." />
+        </div>
+      </Section>
+
+      <Section id="pilot">
+        <SectionHeading eyebrow="How to start a pilot" title="Four weeks, test-mode money only" lead="A pilot runs against your provider's test mode. Live payment keys are refused by the connector, so nothing in a pilot can move real money." />
+        <ol className="mt-10 divide-y divide-(--mk-line) border-y border-(--mk-line)">
+          {PILOT.map((p) => (
+            <li key={p.step} className="grid gap-2 py-5 md:grid-cols-[160px_1fr] md:gap-8">
+              <h3 className="font-semibold">{p.step}</h3>
+              <p className="text-sm text-(--mk-muted)">{p.what}</p>
+            </li>
+          ))}
+        </ol>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <ButtonLink href="/site/pilot">Discuss a pilot</ButtonLink>
+          <ButtonLink href="/site/demo" variant="secondary">
+            Explore the demo first
+          </ButtonLink>
+          <Link href="/site/products" className="mk-nav-link self-center">
+            All four products
+          </Link>
+        </div>
+      </Section>
     </>
   );
 }

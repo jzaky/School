@@ -185,9 +185,9 @@ export function BankingWalkthrough() {
 }
 
 const REFUND_RULES = [
-  { id: "autonomous-under-500", effect: "allow" as const, test: (a: number) => a > 0 && a < 500, when: "params.amount > 0 and params.amount < 500", reason: "Within autonomous refund limit (below AED 500)", outcome: "200 executed through the support platform, receipt recorded" },
-  { id: "supervisor-500-2500", effect: "require_approval" as const, test: (a: number) => a >= 500 && a <= 2500, when: "params.amount between [500, 2500]", reason: "Supervisor approval required for refunds between AED 500 and 2,500", outcome: "202 approval required; approver role, 240 minute expiry, separation of duties" },
-  { id: "deny-over-2500", effect: "deny" as const, test: (a: number) => a > 2500, when: "params.amount > 2500", reason: "Refund exceeds the agent's authority (above AED 2,500)", outcome: "403 denied; security event with severity medium; risk indicator authority_exceeded" },
+  { id: "autonomous-band", effect: "allow" as const, test: (a: number) => a > 0 && a < 500, when: "params.amount > 0 and params.amount < 500", reason: "Within autonomous refund limit (below AED 500)", outcome: "200 executed through the support platform, receipt recorded" },
+  { id: "approval-band", effect: "require_approval" as const, test: (a: number) => a >= 500 && a <= 2500, when: "params.amount between [500, 2500]", reason: "Supervisor approval required for refunds between AED 500 and 2,500", outcome: "202 approval required; approver role, 240 minute expiry, separation of duties" },
+  { id: "above-limit", effect: "deny" as const, test: (a: number) => a > 2500, when: "params.amount > 2500", reason: "Refund exceeds the agent's authority (above AED 2,500)", outcome: "403 denied; security event with severity medium; risk indicator authority_exceeded" },
 ];
 
 export function RefundSlider() {

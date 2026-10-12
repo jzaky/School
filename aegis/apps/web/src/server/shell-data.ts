@@ -1,14 +1,25 @@
 import "server-only";
 import { withTenant } from "@aegis/db";
-import { listUserMemberships, unreadCount, type SessionInfo } from "@aegis/core";
+import { computeOnboarding, listUserMemberships, summarizeOnboarding, unreadCount, type SessionInfo } from "@aegis/core";
 import type { ShellData } from "@/components/shell/types";
 import { getConsoleContext, type ConsoleContext } from "./session";
 
 export async function shellDataFromContext(c: ConsoleContext): Promise<ShellData> {
   let unread = 0;
   let pendingApprovals = 0;
+  let onboarding: ShellData["onboarding"];
   try {
-    [unread, pendingApprovals] = await withTenant(c.ctx.orgId, async (db) => Promise.all([unreadCount(db, c.ctx, c.session.user.id), c.can("gateway:read") ? db.approvalRequest.count({ where: { orgId: c.ctx.orgId, status: { in: ["pending", "more_info", "escalated"] } } }) : 0]));
+    const [u, p, steps] = await withTenant(
+      c.ctx.orgId,
+      async (db) => Promise.all([unreadCount(db, c.ctx, c.session.user.id), c.can("gateway:read") ? db.approvalRequest.count({ where: { orgId: c.ctx.orgId, status: { in: ["pending", "more_info", "escalated"] } } }) : 0, c.can("org:read") ? computeOnboarding(db, c.ctx) : null]),
+      { readOnly: true },
+    );
+    unread = u;
+    pendingApprovals = p;
+    if (steps) {
+      const summary = summarizeOnboarding(steps, c.org.settings);
+      onboarding = { done: summary.done, total: summary.total, dismissed: !!summary.dismissedAt };
+    }
   } catch {
     unread = 0;
     pendingApprovals = 0;
@@ -21,6 +32,7 @@ export async function shellDataFromContext(c: ConsoleContext): Promise<ShellData
     permissions: c.membership.permissions,
     unread,
     pendingApprovals,
+    onboarding,
   };
 }
 

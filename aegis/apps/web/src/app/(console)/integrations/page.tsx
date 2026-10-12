@@ -11,6 +11,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Tooltip } from "@/components/ui/tooltip";
 import { SimpleTable, Td, Th, Tr } from "@/components/ui/simple-table";
 import { CreateIntegrationDialog } from "@/components/control/integration-dialogs";
+import { integrationKind, KindBadge } from "@/components/control/integration-kind";
 import { formatDateTime, timeAgo } from "@/lib/utils";
 import { Plug } from "lucide-react";
 
@@ -24,12 +25,13 @@ export default async function IntegrationsPage() {
   const soon = now + 14 * 86400_000;
   return (
     <div>
-      <PageHeader title="Integrations" description="Downstream systems the Action Gateway can reach: tools, encrypted credentials with rotation, webhook signing and the simulated activity ledger." badges={<DemoBadge show={c.org.demoMode} />} actions={<CreateIntegrationDialog canWrite={c.can("integrations:write")} />} />
+      <PageHeader title="Integrations" description="Downstream systems the Action Gateway can reach: simulated systems for the demonstrations and sandbox connectors against real providers in test mode. Tools, encrypted credentials with rotation, webhook signing and connection tests." badges={<DemoBadge show={c.org.demoMode} />} actions={<CreateIntegrationDialog canWrite={c.can("integrations:write")} />} />
       <SimpleTable caption="Integrations">
         <thead>
           <tr>
             <Th>Name</Th>
             <Th>Type</Th>
+            <Th>Kind</Th>
             <Th>Status</Th>
             <Th>Health</Th>
             <Th align="end">Credentials</Th>
@@ -40,7 +42,7 @@ export default async function IntegrationsPage() {
         <tbody>
           {rows.length === 0 ? (
             <tr>
-              <td colSpan={7}>
+              <td colSpan={8}>
                 <EmptyState icon={Plug} title="No integrations" description="Register a downstream system to attach tools and credentials." />
               </td>
             </tr>
@@ -62,6 +64,9 @@ export default async function IntegrationsPage() {
                     </Link>
                   </Td>
                   <Td>{i.type}</Td>
+                  <Td>
+                    <KindBadge kind={integrationKind(i)} />
+                  </Td>
                   <Td>
                     {i.statusReason ? (
                       <Tooltip content={i.statusReason}>

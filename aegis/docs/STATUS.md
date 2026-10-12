@@ -1,6 +1,15 @@
 # AEGIS status
 
-Updated at the end of each phase. See the implementation report at the bottom for the per-module breakdown.
+Updated at the end of each phase. `docs/IMPLEMENTATION_REPORT.md` has the current per-area breakdown (implemented, executed and verified, simulated, remaining).
+
+## Phase 8: pilot-ready refund workflow (2026-10-11 to 2026-10-12): complete
+- Execution safety: one live grant per request (partial unique index), `executing` and `unknown` request states, three-phase execution with the downstream idempotency key `aegis:<requestId>`, reconciliation job and sweep, human settlement, monitoring rule RM-012. Pause voids grants and blocks approvals; suspension voids grants. 12 regression tests.
+- Deployment: owner credentials only in the migrate job (Compose overrides, split Kubernetes secrets, startup guard), shared uploads storage, real typescript-eslint lint, em dash check, archive script that includes the CI workflow.
+- Stripe test-mode refund connector with a fake Stripe server (20 tests), credential validation that refuses live keys, connection test, `scripts/stripe-sandbox-check.mts` for the real test-mode run (not yet executed: no network from the build container).
+- Console: Overview, Agents, Approvals, Activity, Settings as primary sections, specialist areas under More; Getting started checklist; business-readable approvals; execution controls; Stripe integration screens.
+- Guided refund policy template (thresholds, approver roles, duplicate and reason rules, business hours, denial cap) with live explanation and a request tester; the seeded refund policy is generated from it.
+- Public site refocused on the refund workflow with real console screenshots, the integration status table, Explore the demo and Discuss a pilot pages.
+- Shield default inspector now fails safe (lazy load) and every new organization gets the built-in data classes.
 
 ## Phase 0: complete
 Research, ADRs 0001 to 0005, architecture, database design, threat model, design system, plan.

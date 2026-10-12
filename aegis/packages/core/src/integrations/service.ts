@@ -6,6 +6,7 @@ import type { OrgContext } from "../lib/context.js";
 import { decryptSecret, encryptSecret, randomToken } from "../lib/crypto.js";
 import { notFound, validation } from "../lib/errors.js";
 import { assertPermission, slugSchema } from "../orgs/orgs.js";
+import { getDownstreamSystem, readIntegrationCredential, type DownstreamContext } from "../gateway/simulators.js";
 
 export async function listIntegrations(db: TenantDb, ctx: OrgContext) {
   assertPermission(ctx, "integrations:read");
@@ -41,6 +42,11 @@ export async function setIntegrationStatus(db: TenantDb, ctx: OrgContext, id: st
 
 export async function storeCredential(db: TenantDb, ctx: OrgContext, integrationId: string, name: string, secret: string, rotationDays = 90) {
   assertPermission(ctx, "integrations:write");
+  // The downstream system may veto the secret before it reaches the vault (for example a live payments key).
+  const integ = await db.integration.findUnique({ where: { id: integrationId }, select: { key: true } });
+  if (!integ) throw notFound("Integration");
+  const veto = getDownstreamSystem(integ.key)?.validateCredential?.(name, secret);
+  if (veto) throw validation(veto);
   const existing = await db.credential.findUnique({ where: { integrationId_name: { integrationId, name } } });
   if (existing) {
     const row = await db.credential.update({ where: { id: existing.id }, data: { secretEnc: encryptSecret(secret, `credential:${existing.id}:${name}`), version: { increment: 1 }, rotatedAt: new Date(), rotationDueAt: new Date(Date.now() + rotationDays * 86400_000), revokedAt: null } });
@@ -112,6 +118,46 @@ export async function webhookSecretFor(db: TenantDb, ctx: OrgContext, integratio
 
 export async function recordIntegrationHealth(db: TenantDb, integrationId: string, ok: boolean) {
   await db.integration.update({ where: { id: integrationId }, data: { lastHealthAt: new Date(), lastHealthOk: ok } });
+}
+
+export type IntegrationRunner = <T>(fn: (db: TenantDb) => Promise<T>) => Promise<T>;
+
+export interface ConnectionTestResult {
+  ok: boolean;
+  detail: string;
+  systemKey: string;
+  kind: "simulated" | "sandbox" | "live" | null;
+  testedAt: string;
+}
+
+/**
+ * Runs the downstream system's connection check for an integration, records the health flag and
+ * writes evidence. Three phases like the gateway: a short transaction to load the integration, the
+ * network call outside any transaction (so the org's evidence lock is never held across I/O), then a
+ * short transaction for health and evidence. Never throws for a failing connection; it reports it.
+ */
+export async function testIntegrationConnection(run: IntegrationRunner, ctx: OrgContext, integrationId: string): Promise<ConnectionTestResult> {
+  assertPermission(ctx, "integrations:write");
+  const integ = await run((db) => db.integration.findUnique({ where: { id: integrationId }, select: { id: true, key: true, orgId: true } }));
+  if (!integ || integ.orgId !== ctx.orgId) throw notFound("Integration");
+  const system = getDownstreamSystem(integ.key);
+  const downstream: DownstreamContext = { orgId: ctx.orgId, integrationId: integ.id, run, credential: (name = "service-token") => run((db) => readIntegrationCredential(db, integ.id, name)) };
+  let result: { ok: boolean; detail: string };
+  if (!system) result = { ok: false, detail: `No downstream system is registered for ${integ.key}` };
+  else if (!system.testConnection) result = { ok: false, detail: `${system.label} does not support connection tests` };
+  else {
+    try {
+      result = await system.testConnection(downstream);
+    } catch (e) {
+      result = { ok: false, detail: e instanceof Error ? e.message : "connection test failed" };
+    }
+  }
+  const testedAt = new Date();
+  await run(async (db) => {
+    await recordIntegrationHealth(db, integ.id, result.ok);
+    await appendEvidence(db, ctx, { type: "integration.connection_tested", subjectType: "integration", subjectId: integ.id, payload: { key: integ.key, ok: result.ok, detail: result.detail, system: system?.key ?? null, kind: system?.kind ?? null } });
+  });
+  return { ok: result.ok, detail: result.detail, systemKey: integ.key, kind: system?.kind ?? null, testedAt: testedAt.toISOString() };
 }
 
 export type { Prisma };

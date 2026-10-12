@@ -15,4 +15,6 @@ export interface ShellData {
   unread: number;
   /** Approvals waiting for a decision, shown on the Approvals nav item. */
   pendingApprovals?: number;
+  /** Onboarding progress; the Getting started link shows while steps remain and nobody dismissed it. */
+  onboarding?: { done: number; total: number; dismissed: boolean };
 }

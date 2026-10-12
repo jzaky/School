@@ -1,34 +1,36 @@
 import { test, expect } from "@playwright/test";
 
-const PAGES = ["/", "/site", "/site/products", "/site/tour", "/site/architecture", "/site/security", "/site/open-source", "/site/pricing", "/site/contact", "/site/demo", "/site/privacy", "/site/terms"];
+const PAGES = ["/", "/site", "/site/products", "/site/tour", "/site/architecture", "/site/security", "/site/open-source", "/site/pricing", "/site/contact", "/site/demo", "/site/pilot", "/site/privacy", "/site/terms"];
 const FORBIDDEN = ["certified", "SOC 2", "customers trust", "guarantee"];
 
 test.describe("marketing site", () => {
-  test("home renders the hero and four module cards", async ({ page }) => {
+  test("home leads with the product promise, the refund workflow and the two calls to action", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Define what your AI agents may do. Enforce it before execution. Prove what happened.");
-    await expect(page.getByRole("link", { name: "Request a demo" }).first()).toHaveAttribute("href", "/site/demo");
-    await expect(page.getByRole("link", { name: /Explore the product tour/ })).toHaveAttribute("href", "/site/tour");
-    for (const m of ["control", "assurance", "shield", "audit"]) {
-      await expect(page.locator(`[data-module="${m}"]`)).toHaveAttribute("href", `/site/products#${m}`);
-    }
-    await expect(page.locator("[data-module]")).toHaveCount(4);
-    await expect(page.getByRole("heading", { name: "How runtime enforcement works" })).toBeVisible();
-    await expect(page.getByText("No customers or certifications are claimed")).toBeVisible();
+    const h1 = page.getByRole("heading", { level: 1 });
+    await expect(h1).toContainText("Let AI agents handle routine work.");
+    await expect(h1).toContainText("Require human approval for risky actions.");
+    await expect(h1).toContainText("Keep a verifiable record of every decision.");
+    await expect(page.getByRole("link", { name: "Explore the demo", exact: true }).first()).toHaveAttribute("href", "/site/demo");
+    await expect(page.getByRole("link", { name: /Discuss a pilot/ }).first()).toHaveAttribute("href", "/site/pilot");
+    await expect(page.getByRole("heading", { name: "How a refund moves through AEGIS" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Which systems are simulated, sandbox-tested or planned" })).toBeVisible();
+    await expect(page.getByRole("cell", { name: "Stripe refunds (test mode)" })).toBeVisible();
+    await expect(page.getByText("No customers or certifications are claimed").first()).toBeVisible();
+    await expect(page.getByRole("img", { name: /An approver sees|Approval detail/ }).first()).toBeVisible();
   });
 
   test("/site renders the same home page", async ({ page }) => {
     await page.goto("/site");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Define what your AI agents may do");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Let AI agents handle routine work");
   });
 
   test("header navigation reaches every page", async ({ page }) => {
     const expected: [string, RegExp][] = [
       ["Products", /Four modules, one enforcement path/],
-      ["Tour", /One transfer, start to finish/],
+      ["Demo", /A refund, end to end, in the console/],
+      ["Pilot", /Four weeks on test-mode money/],
       ["Architecture", /A modular monolith/],
       ["Security", /Fail closed, least privilege/],
-      ["Open source", /What AEGIS builds on/],
       ["Pricing", /Enterprise licensing/],
       ["Contact", /Talk to the team/],
     ];
@@ -41,8 +43,17 @@ test.describe("marketing site", () => {
     await page.getByRole("banner").getByRole("link", { name: "Sign in" }).click();
     await page.waitForURL(/\/login/);
     await page.goto("/");
-    await page.getByRole("banner").getByRole("link", { name: "Request a demo" }).click();
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/See the gateway decide/);
+    await page.getByRole("banner").getByRole("link", { name: "Discuss a pilot" }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Four weeks on test-mode money/);
+  });
+
+  test("footer links reach the tour and open source pages", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("contentinfo").getByRole("link", { name: "Product tour" }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/One transfer, start to finish/);
+    await page.goto("/");
+    await page.getByRole("contentinfo").getByRole("link", { name: "Open source and licensing" }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/What AEGIS builds on/);
   });
 
   test("footer links reach legal pages", async ({ page }) => {
@@ -61,13 +72,13 @@ test.describe("marketing site", () => {
     const rule = page.getByTestId("refund-rule");
     const outcome = page.getByTestId("refund-outcome");
     await slider.fill("300");
-    await expect(rule).toHaveText("autonomous-under-500");
+    await expect(rule).toHaveText("autonomous-band");
     await expect(outcome).toContainText("Allowed");
     await slider.fill("1200");
-    await expect(rule).toHaveText("supervisor-500-2500");
+    await expect(rule).toHaveText("approval-band");
     await expect(outcome).toContainText("Approval required");
     await slider.fill("5000");
-    await expect(rule).toHaveText("deny-over-2500");
+    await expect(rule).toHaveText("above-limit");
     await expect(outcome).toContainText("Denied");
   });
 
@@ -83,8 +94,8 @@ test.describe("marketing site", () => {
     await page.waitForURL(/\/login/);
   });
 
-  test("demo form submits and shows a confirmation", async ({ page }) => {
-    await page.goto("/site/demo");
+  test("pilot form submits and shows a confirmation", async ({ page }) => {
+    await page.goto("/site/pilot");
     await page.getByLabel("Full name").fill("Playwright Tester");
     await page.getByLabel("Work email").fill(`e2e-${Date.now()}@example.com`);
     await page.getByLabel("Organization").fill("E2E Test Organization");
@@ -93,10 +104,10 @@ test.describe("marketing site", () => {
     await page.getByLabel("Deployment preference").selectOption("Private deployment (Kubernetes)");
     await page.getByLabel("Preferred dates").fill("Week of 3 November, mornings");
     await page.getByLabel(/Message/).fill("Automated end-to-end test submission.");
-    await page.getByRole("button", { name: "Request a demo" }).click();
+    await page.getByRole("button", { name: "Discuss a pilot" }).click();
     const confirmation = page.getByTestId("form-confirmation");
     await expect(confirmation).toBeVisible();
-    await expect(confirmation).toContainText("Demo request received");
+    await expect(confirmation).toContainText("Pilot request received");
     await expect(confirmation).toContainText("A person will reply by email");
     await expect(confirmation).toContainText(/Your reference is [0-9A-F]{8}\./);
   });
@@ -138,6 +149,7 @@ test.describe("marketing site", () => {
     const sitemap = await request.get("/sitemap.xml");
     expect(sitemap.status()).toBe(200);
     expect(await sitemap.text()).toContain("/site/tour");
+    expect(await sitemap.text()).toContain("/site/pilot");
   });
 
   test("robots.txt is served", async ({ request }) => {
@@ -148,6 +160,14 @@ test.describe("marketing site", () => {
     test.skip(robots.status() === 307, "robots.txt is redirected to /login by middleware; add /robots.txt to PUBLIC_PREFIXES");
     expect(robots.status()).toBe(200);
     expect(await robots.text()).toContain("sitemap.xml");
+  });
+
+  test("demo page lists the guided steps and the personas in demo mode", async ({ page }) => {
+    await page.goto("/site/demo");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/A refund, end to end, in the console/);
+    await expect(page.locator("[data-demo-step]")).toHaveCount(7);
+    await expect(page.getByRole("link", { name: "Sign in to the demo console" })).toHaveAttribute("href", "/login");
+    await expect(page.getByRole("cell", { name: "lina.mansour@meridian-demo.example" })).toBeVisible();
   });
 
   test("home is usable at 360px wide", async ({ page }) => {

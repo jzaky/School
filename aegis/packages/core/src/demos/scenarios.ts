@@ -83,25 +83,31 @@ export async function runRefundDemo(a: Actors): Promise<DemoRun> {
   const ctx = agentCtx(a, "support-refund-agent", correlationId);
   const steps: DemoStep[] = [];
   const base = { tool: "issue-refund", action: "execute", resource: "support-tickets", principal: { type: "customer" as const, ref: "CUST-88213" }, context: { channel: "chat" }, executionMode: "gateway" as const };
+  // Order ids are unique per run so the duplicate-refund rule fires only where the scenario intends it to.
+  const run = correlationId.slice(-6).toUpperCase();
+  const order = (n: number) => `ORD-${n}-${run}`;
 
-  const auto = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: "ORD-55120", customerId: "CUST-88213", amount: 180, currency: "AED", reason: "Damaged packaging" }, idempotencyKey: `${correlationId}-auto`, justification: "Customer reported damaged packaging with photos" });
+  const auto = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: order(55120), customerId: "CUST-88213", amount: 180, currency: "AED", reason: "Damaged packaging" }, idempotencyKey: `${correlationId}-auto`, justification: "Customer reported damaged packaging with photos" });
   steps.push({ title: "AED 180 refund issued automatically", detail: "Below the AED 500 autonomous limit", requestId: auto.requestId, outcome: summarize(auto), ok: auto.status === "executed" });
 
-  const dup = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: "ORD-55120", customerId: "CUST-88213", amount: 180, currency: "AED", reason: "Damaged packaging" }, idempotencyKey: `${correlationId}-auto`, justification: "Retry after timeout" });
+  const dup = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: order(55120), customerId: "CUST-88213", amount: 180, currency: "AED", reason: "Damaged packaging" }, idempotencyKey: `${correlationId}-auto`, justification: "Retry after timeout" });
   steps.push({ title: "Duplicate request with the same idempotency key", detail: "The gateway returns the original decision and the support platform is not called twice", requestId: dup.requestId, outcome: summarize(dup), ok: dup.duplicate === true });
 
-  const mid = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: "ORD-55377", customerId: "CUST-88213", amount: 1450, currency: "AED", reason: "Late delivery compensation" }, idempotencyKey: `${correlationId}-mid`, justification: "Customer escalated twice; goodwill compensation" });
+  const dupOrder = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: order(55120), customerId: "CUST-88213", amount: 95, currency: "AED", reason: "Customer asked again" }, idempotencyKey: `${correlationId}-dup-order`, justification: "Second request for the same order" });
+  steps.push({ title: "Second refund for the same order is refused", detail: "A new request for an order that was already refunded is denied by the duplicate-refund rule, even though the amount is within the autonomous band", requestId: dupOrder.requestId, outcome: summarize(dupOrder), ok: dupOrder.status === "denied" });
+
+  const mid = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: order(55377), customerId: "CUST-88213", amount: 1450, currency: "AED", reason: "Late delivery compensation" }, idempotencyKey: `${correlationId}-mid`, justification: "Customer escalated twice; goodwill compensation" });
   steps.push({ title: "AED 1,450 refund needs a supervisor", detail: "Between AED 500 and 2,500: approval required, nothing executes yet", requestId: mid.requestId, outcome: summarize(mid), ok: mid.status === "pending_approval" });
   if (mid.status === "pending_approval" && a.autoApprove) {
     const d = await approve(a, mid.requestId, "Order verified, compensation agreed with team lead");
     steps.push({ title: "Supervisor approves the AED 1,450 refund", detail: "Executed once through the support platform", requestId: mid.requestId, outcome: d.executed ? "Approved and executed" : d.status, ok: d.executed });
   }
 
-  const big = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: "ORD-55390", customerId: "CUST-88213", amount: 6200, currency: "AED", reason: "Full order refund" }, idempotencyKey: `${correlationId}-big`, justification: "Customer demands full refund" });
+  const big = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: order(55390), customerId: "CUST-88213", amount: 6200, currency: "AED", reason: "Full order refund" }, idempotencyKey: `${correlationId}-big`, justification: "Customer demands full refund" });
   steps.push({ title: "AED 6,200 refund is prohibited", detail: "Above AED 2,500: denied, security event recorded", requestId: big.requestId, outcome: summarize(big), ok: big.status === "denied" });
 
   // Expired approval: create a pending approval and expire it.
-  const stale = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: "ORD-55401", customerId: "CUST-88213", amount: 900, currency: "AED", reason: "Wrong item" }, idempotencyKey: `${correlationId}-stale`, justification: "Wrong item shipped" });
+  const stale = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: order(55401), customerId: "CUST-88213", amount: 900, currency: "AED", reason: "Wrong item" }, idempotencyKey: `${correlationId}-stale`, justification: "Wrong item shipped" });
   if (stale.status === "pending_approval") {
     const { expireApproval } = await import("../approvals/service.js");
     await withTenant(a.orgId, async (db) => {
@@ -122,7 +128,7 @@ export async function runRefundDemo(a: Actors): Promise<DemoRun> {
   // Modified parameters after approval: reuse the idempotency key with a different amount.
   let modified: string;
   try {
-    await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: "ORD-55377", customerId: "CUST-88213", amount: 2450, currency: "AED", reason: "Late delivery compensation" }, idempotencyKey: `${correlationId}-mid`, justification: "Adjusted amount" });
+    await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: order(55377), customerId: "CUST-88213", amount: 2450, currency: "AED", reason: "Late delivery compensation" }, idempotencyKey: `${correlationId}-mid`, justification: "Adjusted amount" });
     modified = "Unexpected: accepted";
   } catch (e) {
     modified = `Rejected: ${e instanceof Error ? e.message : "conflict"}`;

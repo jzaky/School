@@ -136,9 +136,11 @@ describe("data classes service", () => {
     await t.cleanup();
   });
 
-  it("seeds defaults idempotently", async () => {
+  it("seeds defaults idempotently (and every new organization already has them)", async () => {
+    // createOrganization provisions the built-in classes, so a fresh tenant reports nothing new to create.
     const first = await withTenant(t.orgId, (db) => ensureDefaultDataClasses(db, analyst.ctx));
-    expect(first.created.length).toBe(DEFAULT_DATA_CLASSES.length);
+    expect(first.created).toEqual([]);
+    expect(first.all.filter((c) => c.isSystem).length).toBe(DEFAULT_DATA_CLASSES.length);
     const second = await withTenant(t.orgId, (db) => ensureDefaultDataClasses(db, analyst.ctx));
     expect(second.created).toEqual([]);
     expect(second.all.every((c) => c.isSystem)).toBe(true);

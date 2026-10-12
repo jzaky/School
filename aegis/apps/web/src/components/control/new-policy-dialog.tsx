@@ -3,14 +3,19 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
+import { buildRefundPolicyDocument, explainRefundPolicy } from "@aegis/core/policy/templates";
 import { createPolicyAction } from "@/server/actions/policies";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import { Field, FormError, Input, Textarea } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
+import { Panel } from "@/components/ui/panel";
 import { POLICY_CATEGORIES, POLICY_TEMPLATES } from "./policy-templates";
+import { defaultRefundFormValues, parseRefundForm, RefundExplanation, RefundSamplePreview, RefundSettingsForm, type RoleOption, type ToolOptionLite } from "./policy-refund-form";
 
-export function NewPolicyDialog({ canWrite }: { canWrite: boolean }) {
+const GUIDED_REFUND = "refund-guided";
+
+export function NewPolicyDialog({ canWrite, roles = [], tools = [] }: { canWrite: boolean; roles?: RoleOption[]; tools?: ToolOptionLite[] }) {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [pending, setPending] = React.useState(false);
@@ -19,8 +24,12 @@ export function NewPolicyDialog({ canWrite }: { canWrite: boolean }) {
   const [key, setKey] = React.useState("");
   const [keyTouched, setKeyTouched] = React.useState(false);
   const [category, setCategory] = React.useState("authorization");
-  const [template, setTemplate] = React.useState("empty");
+  const [template, setTemplate] = React.useState(GUIDED_REFUND);
   const [description, setDescription] = React.useState("");
+  const [refund, setRefund] = React.useState(defaultRefundFormValues);
+  const guided = template === GUIDED_REFUND;
+  const parsedRefund = React.useMemo(() => (guided ? parseRefundForm(refund) : { settings: null, errors: {} }), [guided, refund]);
+  const explanation = React.useMemo(() => (parsedRefund.settings ? explainRefundPolicy(parsedRefund.settings) : []), [parsedRefund.settings]);
 
   React.useEffect(() => {
     if (!keyTouched) setKey(name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48));
@@ -28,19 +37,33 @@ export function NewPolicyDialog({ canWrite }: { canWrite: boolean }) {
   React.useEffect(() => {
     const t = POLICY_TEMPLATES.find((x) => x.id === template);
     if (t && t.id !== "empty") setCategory(t.category);
+    if (template === GUIDED_REFUND) setCategory("authorization");
   }, [template]);
+
+  const templateOptions = [{ value: GUIDED_REFUND, label: "Refund policy (guided)" }, ...POLICY_TEMPLATES.map((t) => ({ value: t.id, label: t.name }))];
+  const submitBlocked = name.trim().length < 2 || key.length < 2 ? "Name and key are required" : guided && !parsedRefund.settings ? "Fix the highlighted threshold fields" : undefined;
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    const t = POLICY_TEMPLATES.find((x) => x.id === template)!;
+    if (submitBlocked) return;
     setPending(true);
     setError(null);
-    const r = await createPolicyAction({ key, name, description, category, document: t.document, changeNote: `Initial draft from the ${t.name.toLowerCase()} template` });
+    let document: unknown;
+    let changeNote: string;
+    if (guided) {
+      document = buildRefundPolicyDocument(parsedRefund.settings!);
+      changeNote = "Initial draft from the guided refund template";
+    } else {
+      const t = POLICY_TEMPLATES.find((x) => x.id === template)!;
+      document = t.document;
+      changeNote = `Initial draft from the ${t.name.toLowerCase()} template`;
+    }
+    const r = await createPolicyAction({ key, name, description, category, document, changeNote });
     setPending(false);
     if (!r.ok) return setError(r.error);
     toast.success(`${name} created as draft v1`);
     setOpen(false);
-    router.push(`/policies/${r.data.id}?tab=editor`);
+    router.push(`/policies/${r.data.id}?tab=${guided ? "thresholds" : "editor"}`);
   }
 
   return (
@@ -59,12 +82,13 @@ export function NewPolicyDialog({ canWrite }: { canWrite: boolean }) {
       title="New policy"
       description="Creates the policy with a draft version 1. Nothing is enforced until a version is reviewed and activated by a second person."
       size="lg"
+      className={guided ? "max-w-5xl" : undefined}
       footer={
         <>
           <Button variant="ghost" onClick={() => setOpen(false)} disabled={pending}>
             Cancel
           </Button>
-          <Button form="new-policy-form" type="submit" variant="primary" loading={pending} disabled={name.trim().length < 2 || key.length < 2} disabledReason="Name and key are required">
+          <Button form="new-policy-form" type="submit" variant="primary" loading={pending} disabled={!!submitBlocked} disabledReason={submitBlocked}>
             Create draft
           </Button>
         </>
@@ -94,9 +118,26 @@ export function NewPolicyDialog({ canWrite }: { canWrite: boolean }) {
           <Select id="policy-category" value={category} onValueChange={setCategory} options={POLICY_CATEGORIES} />
         </Field>
         <Field label="Starting document" htmlFor="policy-template">
-          <Select id="policy-template" value={template} onValueChange={setTemplate} options={POLICY_TEMPLATES.map((t) => ({ value: t.id, label: t.name }))} />
+          <Select id="policy-template" value={template} onValueChange={setTemplate} options={templateOptions} />
         </Field>
-        <p className="text-xs text-fg-muted md:col-span-2">{POLICY_TEMPLATES.find((t) => t.id === template)?.description} Thresholds in templates are placeholders to edit, not recommendations.</p>
+        {guided ? (
+          <>
+            <p className="text-xs text-fg-muted md:col-span-2">Answer a few business questions and the policy rules, reasons, approver instructions and embedded tests are generated for you. The result is ordinary policy JSON you can still edit.</p>
+            <div className="grid gap-4 md:col-span-2 xl:grid-cols-2">
+              <Panel title="Settings" padded>
+                <RefundSettingsForm values={refund} onChange={setRefund} errors={parsedRefund.errors} roles={roles} tools={tools} idPrefix="np" />
+              </Panel>
+              <div className="space-y-4">
+                <Panel title="What this policy will do">{explanation.length ? <RefundExplanation lines={explanation} /> : <p className="text-xs text-deny">Fix the highlighted fields to see the explanation.</p>}</Panel>
+                <Panel title="Sample requests" description="Dry runs against the generated document.">
+                  <RefundSamplePreview settings={parsedRefund.settings} />
+                </Panel>
+              </div>
+            </div>
+          </>
+        ) : (
+          <p className="text-xs text-fg-muted md:col-span-2">{POLICY_TEMPLATES.find((t) => t.id === template)?.description} Thresholds in templates are placeholders to edit, not recommendations.</p>
+        )}
         <div className="md:col-span-2">
           <FormError error={error} />
         </div>

@@ -113,13 +113,13 @@ export function ClosingCta({ title, body }: { title?: string; body?: string }) {
     <Section dark>
       <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div className="max-w-2xl">
-          <h2 className="mk-h2">{title ?? "See the gateway decide, in your environment or ours."}</h2>
-          <p className="mk-lead mt-3">{body ?? "A demo walks through the synthetic banking tenant end to end: request, decision, approval, receipt, evidence. Private deployment reviews are available for security teams."}</p>
+          <h2 className="mk-h2">{title ?? "See a refund go through the gateway, then run a pilot on test-mode money."}</h2>
+          <p className="mk-lead mt-3">{body ?? "The hosted demo walks the refund workflow end to end on a synthetic tenant: request, decision, approval, receipt, evidence. A pilot connects your own test-mode payment account."}</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <ButtonLink href="/site/demo">Request a demo</ButtonLink>
-          <ButtonLink href="/site/architecture" variant="secondary">
-            Read the architecture
+          <ButtonLink href="/site/demo">Explore the demo</ButtonLink>
+          <ButtonLink href="/site/pilot" variant="secondary">
+            Discuss a pilot
           </ButtonLink>
         </div>
       </div>

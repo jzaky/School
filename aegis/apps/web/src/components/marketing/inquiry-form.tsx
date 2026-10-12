@@ -6,7 +6,8 @@ import { CheckCircle2 } from "lucide-react";
 import { submitMarketingForm, type MarketingResult } from "@/server/actions/marketing";
 import { DEPLOYMENTS, INTERESTS } from "./form-options";
 
-export function InquiryForm({ kind, submitLabel }: { kind: "inquiry" | "demo_request"; submitLabel?: string }) {
+export function InquiryForm({ kind, submitLabel }: { kind: "inquiry" | "demo_request" | "pilot_request"; submitLabel?: string }) {
+  const scheduled = kind === "demo_request" || kind === "pilot_request";
   const id = useId();
   const pathname = usePathname();
   const [pending, start] = useTransition();
@@ -30,14 +31,14 @@ export function InquiryForm({ kind, submitLabel }: { kind: "inquiry" | "demo_req
         <div className="flex items-start gap-3">
           <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-(--mk-allow)" aria-hidden />
           <div>
-            <h3 className="mk-h3">{kind === "demo_request" ? "Demo request received" : "Message received"}</h3>
+            <h3 className="mk-h3">{kind === "pilot_request" ? "Pilot request received" : kind === "demo_request" ? "Demo request received" : "Message received"}</h3>
             <p className="mt-2 text-sm text-(--mk-muted)">Thank you. A person will reply by email, usually within two working days. {result.data.reference !== "received" ? `Your reference is ${result.data.reference}.` : ""} Nothing else is sent automatically.</p>
             <p className="mt-3 text-sm">
               Meanwhile, the{" "}
-              <Link href="/site/tour" className="underline underline-offset-2">
-                product tour
+              <Link href="/site/demo" className="underline underline-offset-2">
+                guided demo
               </Link>{" "}
-              walks through the synthetic banking scenario.
+              walks through the refund workflow on the synthetic tenant.
             </p>
           </div>
         </div>
@@ -72,7 +73,7 @@ export function InquiryForm({ kind, submitLabel }: { kind: "inquiry" | "demo_req
           </label>
           <input id={f("role")} name="role" className="mk-input" autoComplete="organization-title" required maxLength={120} />
         </div>
-        <div className={kind === "demo_request" ? "" : "sm:col-span-2"}>
+        <div className={scheduled ? "" : "sm:col-span-2"}>
           <label htmlFor={f("interest")} className="mk-label">
             Area of interest
           </label>
@@ -87,7 +88,7 @@ export function InquiryForm({ kind, submitLabel }: { kind: "inquiry" | "demo_req
             ))}
           </select>
         </div>
-        {kind === "demo_request" ? (
+        {scheduled ? (
           <>
             <div>
               <label htmlFor={f("deploymentPreference")} className="mk-label">
@@ -117,7 +118,7 @@ export function InquiryForm({ kind, submitLabel }: { kind: "inquiry" | "demo_req
           <label htmlFor={f("message")} className="mk-label">
             Message <span className="font-normal text-(--mk-dim)">(optional)</span>
           </label>
-          <textarea id={f("message")} name="message" className="mk-input" maxLength={4000} placeholder={kind === "demo_request" ? "Which agents or systems you want to see governed, who will attend, anything specific to cover." : "How can we help?"} />
+          <textarea id={f("message")} name="message" className="mk-input" maxLength={4000} placeholder={kind === "pilot_request" ? "Which agent issues refunds today, which payment or support system it uses, who would approve, and when you could start." : kind === "demo_request" ? "Which agents or systems you want to see governed, who will attend, anything specific to cover." : "How can we help?"} />
         </div>
       </div>
       {/* Honeypot: hidden from people and assistive technology, filled only by bots. */}
@@ -139,7 +140,7 @@ export function InquiryForm({ kind, submitLabel }: { kind: "inquiry" | "demo_req
           .
         </p>
         <button type="submit" className="mk-btn mk-btn-primary" disabled={pending}>
-          {pending ? "Sending" : submitLabel ?? (kind === "demo_request" ? "Request a demo" : "Send message")}
+          {pending ? "Sending" : submitLabel ?? (kind === "pilot_request" ? "Discuss a pilot" : kind === "demo_request" ? "Request a demo" : "Send message")}
         </button>
       </div>
     </form>

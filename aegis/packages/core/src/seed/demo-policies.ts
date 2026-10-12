@@ -1,31 +1,35 @@
 import type { TenantDb } from "@aegis/db";
 import type { OrgContext } from "../lib/context.js";
 import { activateVersion, assignPolicy, createPolicy, submitForReview } from "../policy/service.js";
+import { buildRefundPolicyDocument } from "../policy/templates.js";
 
 /** Illustrative, customer-configurable thresholds. Not universal governance rules. */
 export const DEMO_POLICIES = [
   {
     key: "refund-authority",
     name: "Customer refund authority",
-    description: "Support agents may refund up to AED 500 autonomously. AED 500 to 2,500 needs an Approver. Above AED 2,500 is denied. Illustrative thresholds.",
+    description: "Support agents may refund up to AED 500 autonomously. AED 500 to 2,500 needs an Approver. Above AED 2,500 is denied. A second refund for the same order is refused. Generated from the guided refund template; illustrative thresholds.",
     category: "authorization" as const,
-    document: {
-      version: 1,
-      appliesTo: { tools: ["issue-refund"] },
-      rules: [
-        { id: "aed-only", description: "Refunds are issued in AED only", effect: "deny", when: { attr: "params.currency", op: "neq", value: "AED" }, reason: "Refunds must be in AED" },
-        { id: "autonomous-under-500", description: "Autonomous refunds below AED 500", effect: "allow", when: { all: [{ attr: "params.amount", op: "gt", value: 0 }, { attr: "params.amount", op: "lt", value: 500 }] }, reason: "Within autonomous refund limit (below AED 500)" },
-        { id: "supervisor-500-2500", description: "Supervisor approval between AED 500 and 2,500", effect: "require_approval", when: { attr: "params.amount", op: "between", value: [500, 2500] }, approval: { roles: ["approver", "governance_manager", "owner"], minApprovers: 1, expiresInMinutes: 240, separationOfDuties: true, instructions: "Confirm the order exists and the customer is entitled to the refund." }, reason: "Supervisor approval required for refunds between AED 500 and 2,500", riskIndicators: ["elevated_amount"] },
-        { id: "deny-over-2500", description: "Refunds above AED 2,500 are outside agent authority", effect: "deny", when: { attr: "params.amount", op: "gt", value: 2500 }, reason: "Refund exceeds the agent's authority (above AED 2,500)", riskIndicators: ["authority_exceeded"], securityEventSeverity: "medium" },
-        { id: "velocity", description: "Too many denied attempts today", effect: "deny", when: { attr: "context.deniedCount24h", op: "gte", value: 10 }, reason: "Agent exceeded the daily denied-attempt threshold", riskIndicators: ["repeated_denials"], securityEventSeverity: "high" },
-      ],
-      tests: [
-        { name: "AED 120 allowed", input: { action: { tool: "issue-refund" }, params: { amount: 120, currency: "AED" }, context: { deniedCount24h: 0 } }, expect: "allow" },
-        { name: "AED 1,200 approval", input: { action: { tool: "issue-refund" }, params: { amount: 1200, currency: "AED" }, context: { deniedCount24h: 0 } }, expect: "require_approval" },
-        { name: "AED 9,000 denied", input: { action: { tool: "issue-refund" }, params: { amount: 9000, currency: "AED" }, context: { deniedCount24h: 0 } }, expect: "deny" },
-        { name: "USD denied", input: { action: { tool: "issue-refund" }, params: { amount: 10, currency: "USD" }, context: { deniedCount24h: 0 } }, expect: "deny" },
-      ],
-    },
+    // Generated from the guided template so the console opens it in the Thresholds form. Everything the
+    // hand-written version expressed is here: currency allowlist, autonomous band, approval band with
+    // named roles and separation of duties, hard ceiling with a security event, duplicate refusal and
+    // a daily denial cap. Reasons are optional for the demo agent; the form can require them.
+    document: buildRefundPolicyDocument({
+      tools: ["issue-refund", "refund-payment"],
+      currency: "AED",
+      allowedCurrencies: [],
+      autoApproveBelow: 500,
+      approvalUpTo: 2500,
+      approverRoles: ["approver", "governance_manager", "owner"],
+      minApprovers: 1,
+      approvalExpiresMinutes: 240,
+      separationOfDuties: true,
+      blockDuplicates: true,
+      duplicateHandling: "deny",
+      requireReason: false,
+      businessHoursOnly: { enabled: false, startHourUtc: 4, endHourUtc: 14 },
+      maxDailyDeniedAttempts: 10,
+    }),
     assign: { targetType: "agent" as const, agentSlug: "support-refund-agent" },
   },
   {

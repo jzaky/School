@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant } from "@aegis/db";
-import { activateVersion, assignPolicy, assignmentSchema, createPolicy, createPolicyVersion, deactivatePolicy, forbidden, isAegisError, notFound, policyDocumentSchema, policyInputSchema, rollbackToVersion, simulatePolicy, submitForReview, unassignPolicy, updateDraftVersion, updatePolicyMeta, validation, type EvaluationResult } from "@aegis/core";
+import { activateVersion, assignPolicy, assignmentSchema, buildRefundPolicyDocument, createPolicy, createPolicyVersion, deactivatePolicy, explainRefundPolicy, forbidden, isAegisError, notFound, policyDocumentSchema, policyInputSchema, refundSampleRequests, refundTemplateSchema, rollbackToVersion, simulatePolicy, submitForReview, unassignPolicy, updateDraftVersion, updatePolicyMeta, validation, type EvaluationResult, type PolicyDocument, type RefundSampleId } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { act } from "./util";
 
@@ -164,7 +164,55 @@ const simulateSchema = z.object({
   params: z.unknown(),
   hour: z.coerce.number().int().min(0).max(23).optional(),
   deniedCount24h: z.coerce.number().int().min(0).optional(),
+  /** Earlier requests for the same tool and business reference (context.priorRequestsSameReference). */
+  priorRequestsSameReference: z.coerce.number().int().min(0).optional(),
 });
+
+interface SimAgentShape {
+  id: string | null;
+  slug: string;
+  status: string;
+  environment: string;
+  riskTier: string;
+  dataClassificationLimit: string;
+  teamId: string | null;
+  tools: string[];
+  version: number;
+}
+
+/** Builds the input document a dry run evaluates, shaped like the gateway's real input. */
+function buildSimulationInput(args: { tool: string; action: string; params: Record<string, unknown>; agent: SimAgentShape; riskLevel: string; integration: string | null; resource: Record<string, unknown> | null; hour?: number; deniedCount24h?: number; priorRequestsSameReference?: number; now?: Date }): Record<string, unknown> {
+  const now = args.now ?? new Date();
+  const params = args.params;
+  const amount = typeof params.amount === "number" ? params.amount : typeof params.amount === "string" && Number.isFinite(Number(params.amount)) ? Number(params.amount) : null;
+  const prior = args.priorRequestsSameReference ?? 0;
+  const referenceKey = ["orderId", "paymentIntentId", "chargeId", "invoiceId", "ticketId", "reference"].find((k) => params[k] !== undefined && params[k] !== null && params[k] !== "") ?? null;
+  return {
+    agent: args.agent,
+    principal: { type: "none", userId: null, ref: null },
+    action: { tool: args.tool, name: args.action, riskLevel: args.riskLevel, integration: args.integration },
+    resource: args.resource,
+    params,
+    context: {
+      time: now.toISOString(),
+      hour: args.hour ?? now.getUTCHours(),
+      weekday: now.getUTCDay(),
+      ip: null,
+      requestCount24h: 0,
+      deniedCount24h: args.deniedCount24h ?? 0,
+      approvalsPending: 0,
+      destinationDomain: null,
+      amount,
+      currency: typeof params.currency === "string" ? params.currency : null,
+      priorRequestsSameReference: prior,
+      duplicateReferenceKey: prior > 0 ? referenceKey : null,
+      supplied: {},
+    },
+    shield: { dataClasses: [], highestSeverity: null, injectionSignals: [], blocked: false },
+  };
+}
+
+const GENERIC_AGENT = (tool: string): SimAgentShape => ({ id: null, slug: "simulation", status: "active", environment: "production", riskTier: "medium", dataClassificationLimit: "internal", teamId: null, tools: [tool], version: 1 });
 
 export interface SimulationOutput {
   result: EvaluationResult["result"];
@@ -199,29 +247,81 @@ export async function simulatePolicyAction(input: unknown) {
       return { document, agent, tool, resource };
     });
     policyDocumentSchema.parse(document);
-    const now = new Date();
-    const hour = data.hour ?? now.getUTCHours();
-    const amount = typeof params.amount === "number" ? params.amount : typeof params.amount === "string" && Number.isFinite(Number(params.amount)) ? Number(params.amount) : null;
-    const simInput: Record<string, unknown> = {
-      agent: agent ? { id: agent.id, slug: agent.slug, status: agent.status, environment: agent.environment, riskTier: agent.riskTier, dataClassificationLimit: agent.dataClassificationLimit, teamId: agent.teamId, tools: agent.tools.map((t) => t.tool.key), version: agent.currentVersion } : { id: null, slug: "simulation", status: "active", environment: "production", riskTier: "medium", dataClassificationLimit: "internal", teamId: null, tools: [data.tool], version: 1 },
-      principal: { type: "none", userId: null, ref: null },
-      action: { tool: data.tool, name: data.action, riskLevel: tool?.riskLevel ?? "medium", integration: tool?.integration?.key ?? null },
-      resource: resource ? { key: resource.key, type: resource.type, classification: resource.classification, permittedActions: [] } : data.resource ? { key: data.resource, type: null, classification: null, permittedActions: [] } : null,
+    const simInput = buildSimulationInput({
+      tool: data.tool,
+      action: data.action,
       params,
-      context: { time: now.toISOString(), hour, weekday: now.getUTCDay(), ip: null, requestCount24h: 0, deniedCount24h: data.deniedCount24h ?? 0, approvalsPending: 0, destinationDomain: null, amount, currency: typeof params.currency === "string" ? params.currency : null, supplied: {} },
-      shield: { dataClasses: [], highestSeverity: null, injectionSignals: [], blocked: false },
-    };
-    const r = simulatePolicy(document, simInput);
-    const show = (v: unknown) => (v === undefined ? "undefined" : typeof v === "string" ? v : JSON.stringify(v));
-    return {
-      result: r.result,
-      defaultDeny: r.defaultDeny,
-      decidingRule: r.decidingRule ? { ruleId: r.decidingRule.ruleId, effect: r.decidingRule.effect, description: r.decidingRule.description, reason: r.decidingRule.reason } : null,
-      reasons: r.reasons,
-      riskIndicators: r.riskIndicators,
-      skipped: r.skippedPolicies,
-      trace: r.trace.map((t) => ({ ruleId: t.ruleId, effect: t.effect, matched: t.matched, comparisons: t.comparisons.map((cmp) => ({ attr: cmp.attr, op: cmp.op, expected: show(cmp.expected), actual: show(cmp.actual), result: cmp.result })) })),
-      input: simInput,
-    };
+      agent: agent ? { id: agent.id, slug: agent.slug, status: agent.status, environment: agent.environment, riskTier: agent.riskTier, dataClassificationLimit: agent.dataClassificationLimit, teamId: agent.teamId, tools: agent.tools.map((t) => t.tool.key), version: agent.currentVersion } : GENERIC_AGENT(data.tool),
+      riskLevel: tool?.riskLevel ?? "medium",
+      integration: tool?.integration?.key ?? null,
+      resource: resource ? { key: resource.key, type: resource.type, classification: resource.classification, permittedActions: [] } : data.resource ? { key: data.resource, type: null, classification: null, permittedActions: [] } : null,
+      hour: data.hour,
+      deniedCount24h: data.deniedCount24h,
+      priorRequestsSameReference: data.priorRequestsSameReference,
+    });
+    return toSimulationOutput(simulatePolicy(document, simInput), simInput);
+  });
+}
+
+function toSimulationOutput(r: EvaluationResult, simInput: Record<string, unknown>): SimulationOutput {
+  const show = (v: unknown) => (v === undefined ? "undefined" : typeof v === "string" ? v : JSON.stringify(v));
+  return {
+    result: r.result,
+    defaultDeny: r.defaultDeny,
+    decidingRule: r.decidingRule ? { ruleId: r.decidingRule.ruleId, effect: r.decidingRule.effect, description: r.decidingRule.description, reason: r.decidingRule.reason } : null,
+    reasons: r.reasons,
+    riskIndicators: r.riskIndicators,
+    skipped: r.skippedPolicies,
+    trace: r.trace.map((t) => ({ ruleId: t.ruleId, effect: t.effect, matched: t.matched, comparisons: t.comparisons.map((cmp) => ({ attr: cmp.attr, op: cmp.op, expected: show(cmp.expected), actual: show(cmp.actual), result: cmp.result })) })),
+    input: simInput,
+  };
+}
+
+export interface RefundSampleOutcome {
+  id: RefundSampleId;
+  name: string;
+  description: string;
+  amount: number | null;
+  currency: string | null;
+  expected: EvaluationResult["result"];
+  result: EvaluationResult["result"];
+  decidingRule: { ruleId: string; description: string; reason: string } | null;
+  reasons: string[];
+}
+
+export interface RefundTemplatePreview {
+  document: PolicyDocument;
+  explanation: string[];
+  samples: RefundSampleOutcome[];
+}
+
+/**
+ * Compiles guided refund settings into a document and dry-runs the template's sample requests
+ * against it. Pure computation: nothing is stored. Requires policies:read like the simulator.
+ */
+export async function previewRefundTemplateAction(input: unknown) {
+  return act(async (): Promise<RefundTemplatePreview> => {
+    const c = await getConsoleContext();
+    if (!c.can("policies:read")) throw forbidden("Missing permission policies:read");
+    const settings = refundTemplateSchema.parse(input ?? {});
+    const document = buildRefundPolicyDocument(settings);
+    const explanation = explainRefundPolicy(settings);
+    const now = new Date();
+    const samples = refundSampleRequests(settings).map((sample): RefundSampleOutcome => {
+      const simInput = buildSimulationInput({ tool: sample.tool, action: "execute", params: sample.params, agent: GENERIC_AGENT(sample.tool), riskLevel: "high", integration: null, resource: null, hour: sample.hour, deniedCount24h: sample.deniedCount24h, priorRequestsSameReference: sample.priorRequestsSameReference, now });
+      const r = simulatePolicy(document, simInput);
+      return {
+        id: sample.id,
+        name: sample.name,
+        description: sample.description,
+        amount: typeof sample.params.amount === "number" ? sample.params.amount : null,
+        currency: typeof sample.params.currency === "string" ? sample.params.currency : null,
+        expected: sample.expected,
+        result: r.result,
+        decidingRule: r.decidingRule ? { ruleId: r.decidingRule.ruleId, description: r.decidingRule.description, reason: r.decidingRule.reason } : null,
+        reasons: r.reasons,
+      };
+    });
+    return { document, explanation, samples };
   });
 }

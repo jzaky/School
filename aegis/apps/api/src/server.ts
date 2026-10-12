@@ -1,10 +1,11 @@
-import { assertApplicationProcess, env, installShield, logger, startTelemetry } from "@aegis/core";
+import { assertApplicationProcess, env, installConnectors, installShield, logger, startTelemetry } from "@aegis/core";
 import { buildApp } from "./app.js";
 
 assertApplicationProcess("api");
 
 const telemetry = await startTelemetry("api");
 installShield();
+installConnectors();
 
 const app = await buildApp();
 const port = env().API_PORT;

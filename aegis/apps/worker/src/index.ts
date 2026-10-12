@@ -1,5 +1,5 @@
 import { withTenant, disconnectAll } from "@aegis/db";
-import { assertApplicationProcess, claimJobs, env, expireApproval, expireOverdueApprovals, installShield, logger, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
+import { assertApplicationProcess, claimJobs, env, expireApproval, expireOverdueApprovals, installConnectors, installShield, logger, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
 import { rawPrisma } from "@aegis/db";
 import { registerModuleHandlers } from "./handlers.js";
 
@@ -79,6 +79,7 @@ async function loop() {
 
 const telemetry = await startTelemetry("worker");
 installShield();
+installConnectors();
 log.info({ env: env().NODE_ENV }, "aegis-worker starting");
 void loop();
 for (const sig of ["SIGINT", "SIGTERM"] as const) {

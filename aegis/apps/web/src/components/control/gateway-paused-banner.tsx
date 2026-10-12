@@ -13,8 +13,8 @@ export async function GatewayPausedBanner() {
       <span className="font-semibold text-deny">Action Gateway paused.</span>
       <span className="text-fg-muted">Every new agent request is denied.{s.gatewayPausedReason ? ` Reason: ${s.gatewayPausedReason}.` : ""}{s.gatewayPausedBy ? ` Paused by ${s.gatewayPausedBy}.` : ""}</span>
       {c.can("org:admin") ? (
-        <Link href="/gateway" className="ms-auto text-accent hover:underline">
-          Resume from the gateway page
+        <Link href="/org/settings" className="ms-auto text-accent hover:underline">
+          Resume from Settings
         </Link>
       ) : null}
     </div>

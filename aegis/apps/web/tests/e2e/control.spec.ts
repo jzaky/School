@@ -29,18 +29,19 @@ test.describe("control as owner", () => {
     await login(page, OWNER);
   });
 
-  test("policies list shows 5 policies with active versions", async ({ page }) => {
+  test("policies list shows the seeded policies with active versions", async ({ page }) => {
     await page.goto("/policies");
     await expect(page.getByRole("heading", { level: 1, name: "Policies" })).toBeVisible();
-    await expect(page.locator("tbody tr")).toHaveCount(5);
-    await expect(page.locator("tbody tr", { hasText: "Customer refund authority" })).toContainText("v1");
+    // Five seeded policies; templates created from the console add to them.
+    expect(await page.locator("tbody tr").count()).toBeGreaterThanOrEqual(5);
+    await expect(page.locator("tbody tr", { hasText: "Customer refund authority" })).toContainText(/v\d+/);
     await expect(page.getByRole("button", { name: "New policy" })).toBeEnabled();
   });
 
   test("policy detail renders rules and the simulator returns approval required for AED 1,200", async ({ page }) => {
     await openPolicy(page, "Customer refund authority");
     const tabs = page.getByRole("tablist", { name: "Policy sections" });
-    await expect(page.getByRole("tabpanel")).toContainText("supervisor-500-2500");
+    await expect(page.getByRole("tabpanel")).toContainText("approval-band");
     await expect(page.getByRole("tabpanel")).toContainText("params.amount");
     await expect(page.getByRole("tabpanel").getByText("Require approval").first()).toBeVisible();
     await tabs.getByRole("tab", { name: /^Simulate/ }).click();
@@ -49,7 +50,7 @@ test.describe("control as owner", () => {
     await expect(panel.locator("#sim-params")).toContainText("1200");
     await panel.getByRole("button", { name: "Simulate" }).click();
     await expect(panel.getByText("Approval required").first()).toBeVisible();
-    await expect(panel.getByText(/Deciding rule/)).toContainText("supervisor-500-2500");
+    await expect(panel.getByText(/Deciding rule/)).toContainText("approval-band");
     await expect(panel.getByRole("table", { name: "Evaluation trace" })).toContainText("between");
   });
 
@@ -80,9 +81,9 @@ test.describe("control as owner", () => {
     await expect(page.getByRole("button", { name: "Revoke credential" })).toBeEnabled();
   });
 
-  test("approvals pending shows the AED 250,000 transfer", async ({ page }) => {
+  test("approvals pending shows the AED 250,000 transfer in business language", async ({ page }) => {
     await page.goto("/approvals");
-    await expect(page.getByRole("heading", { level: 1, name: "Human Approval Center" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Approvals" })).toBeVisible();
     if ((await page.getByText("AED 250,000.00").count()) === 0) {
       // The seeded approval expires four hours after seeding; recreate it through the real gateway.
       await page.goto("/gateway/demos");
@@ -93,6 +94,55 @@ test.describe("control as owner", () => {
     }
     await expect(page.getByText("AED 250,000.00").first()).toBeVisible();
     await expect(page.getByRole("tab", { name: /^Pending/ })).toHaveAttribute("data-state", "active");
+    const row = page.locator("[data-approval-row]", { hasText: "AED 250,000.00" }).first();
+    await expect(row.getByTestId("approval-summary")).toHaveText(/^Transfer AED\s250,000\.00 to account AE45/);
+    await expect(row).toContainText("Asked by");
+    await expect(row).toContainText("Treasury Transfer Agent");
+    await expect(row).toContainText("Reason given");
+    await expect(row).toContainText("Why approval");
+    await expect(row).toContainText("Expires in");
+    await expect(row.getByTestId("approval-open")).toBeVisible();
+    // No raw tool keys in the list.
+    await expect(row).not.toContainText("initiate-transfer");
+  });
+
+  test("approval detail leads with a summary and keeps technical details collapsed", async ({ page }) => {
+    await page.goto("/approvals");
+    const row = page.locator("[data-approval-row]").first();
+    await expect(row).toBeVisible();
+    await row.getByTestId("approval-open").click();
+    await page.waitForURL(/\/approvals\/[0-9a-f-]{36}/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(/^Requested (transfer|refund|action|data export|message)/);
+    await expect(page.getByTestId("approval-sentence")).toContainText(/AED/);
+    await expect(page.getByTestId("approval-why")).toBeVisible();
+    await expect(page.getByTestId("decision-panel")).toBeVisible();
+    const details = page.getByTestId("technical-details");
+    await expect(details).toBeVisible();
+    await expect(details).not.toHaveAttribute("open", "");
+    await expect(details.getByText(/request hash [0-9a-f]{64}/)).toBeHidden();
+    await details.locator("summary").click();
+    await expect(details).toHaveAttribute("open", "");
+    await expect(details.getByText(/request hash [0-9a-f]{64}/)).toBeVisible();
+    await expect(details.locator("pre").first()).toBeVisible();
+    await expect(details.getByRole("heading", { name: "Evidence" })).toBeVisible();
+  });
+
+  test("activity lists recent actions with readable outcomes and filters by outcome", async ({ page }) => {
+    await page.goto("/activity");
+    await expect(page.getByRole("heading", { level: 1, name: "Activity" })).toBeVisible();
+    const list = page.getByTestId("activity-list");
+    await expect(list.locator("tbody tr").first()).toBeVisible();
+    await expect(list.locator("thead")).toContainText("Agent");
+    await expect(list.locator("thead")).toContainText("Outcome");
+    await page.getByRole("button", { name: "Blocked", exact: true }).click();
+    await page.waitForURL(/outcome=blocked/);
+    const rows = page.getByTestId("activity-list").locator("tbody tr");
+    await expect(rows.first()).toBeVisible();
+    const groups = await rows.evaluateAll((els) => els.map((e) => e.getAttribute("data-outcome-group")));
+    expect(new Set(groups)).toEqual(new Set(["blocked"]));
+    await expect(rows.first().locator("a[href^='/gateway/']")).toBeVisible();
+    await page.getByRole("button", { name: "Clear", exact: true }).click();
+    await page.waitForURL(/\/activity$/);
   });
 
   test("integrations list links to a detail page with credentials and webhook setup", async ({ page }) => {
@@ -139,6 +189,7 @@ test.describe("control as approver", () => {
     const reference = page.getByTestId("receipt-reference");
     await expect(reference).toBeVisible({ timeout: 30_000 });
     await expect(reference).toContainText(/^TRF-/);
+    await expect(page.getByTestId("decision-outcome")).toContainText(/^Approved and executed\./);
     await page.getByRole("link", { name: "Open the action request" }).first().click();
     await page.waitForURL(/\/gateway\/[0-9a-f-]{36}/);
     await expect(page.locator("h1 ~ *").getByText("Executed").first().or(page.getByText("Executed").first())).toBeVisible();

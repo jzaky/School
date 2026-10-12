@@ -18,18 +18,24 @@ export interface ShieldInspection {
 
 export type ShieldInspector = (db: TenantDb, orgId: string, args: { params: Record<string, unknown>; toolKey: string; destinationDomain: string | null; agentId: string }) => Promise<ShieldInspection>;
 
-let inspector: ShieldInspector = async (_db, _orgId, args) => ({
-  shield: { dataClasses: [], highestSeverity: null, injectionSignals: [], blocked: false },
-  params: args.params,
-  findings: [],
-  blockReason: null,
-  requireApproval: false,
-});
+let inspector: ShieldInspector | null = null;
+
+const lazyDefault: ShieldInspector = async (db, orgId, args) => {
+  // Dynamic import avoids a static cycle (shield/inspector imports registerShieldInspector from here).
+  const mod = await import("../shield/inspector.js");
+  if (inspector === null) inspector = mod.shieldInspector;
+  return mod.shieldInspector(db, orgId, args);
+};
 
 export function registerShieldInspector(fn: ShieldInspector) {
   inspector = fn;
 }
 
 export function getShieldInspector(): ShieldInspector {
-  return inspector;
+  return inspector ?? lazyDefault;
+}
+
+/** True once a real or stand-in inspector is registered (the lazy default counts after its first use). */
+export function isShieldInspectorRegistered(): boolean {
+  return inspector !== null;
 }

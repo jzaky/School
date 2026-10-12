@@ -94,6 +94,10 @@ if (approvalId) {
   check("exactly one receipt and one consumed grant on the approved request", receipts.length === 1 && grants.length === 1 && !!grants[0]?.consumedAt, `receipts=${receipts.length}, grants=${grants.length}`);
 }
 
+// 3b. a second refund for the same order (new idempotency key) is refused by the duplicate rule
+const dupOrder = await refund({ ...base, orderId: `ORD-${run}-A`, amount: 95 }, `smoke-${run}-dup-order`);
+check("second refund for the same order is denied", dupOrder.status === 403 && /already/.test(((dupOrder.body.reasons as string[] | undefined) ?? []).join(" ")), `HTTP ${dupOrder.status}, ${(dupOrder.body.reasons as string[] | undefined)?.[0] ?? ""}`);
+
 // 4. over limit
 const big = await refund({ ...base, orderId: `ORD-${run}-C`, amount: 6200 }, `smoke-${run}-big`);
 check("refund above the limit is denied", big.status === 403 && big.body.status === "denied", `HTTP ${big.status}, ${(big.body.reasons as string[] | undefined)?.[0] ?? ""}`);

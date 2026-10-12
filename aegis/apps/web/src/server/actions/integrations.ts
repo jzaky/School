@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant } from "@aegis/db";
-import { createIntegration, forbidden, integrationInputSchema, revokeCredential, rotateCredential, setIntegrationStatus, storeCredential, webhookSecretFor } from "@aegis/core";
+import { createIntegration, forbidden, integrationInputSchema, revokeCredential, rotateCredential, setIntegrationStatus, storeCredential, testIntegrationConnection, webhookSecretFor } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { act } from "./util";
 
@@ -39,6 +39,7 @@ export async function setIntegrationStatusAction(integrationId: string, status: 
 
 const credentialSchema = z.object({ name: z.string().min(2).max(80).regex(/^[a-zA-Z0-9_.-]+$/, "letters, digits, dot, underscore, hyphen"), secret: z.string().min(8).max(4000), rotationDays: z.coerce.number().int().min(1).max(3650).default(90) });
 
+/** The downstream system may refuse the secret (for example a live Stripe key); its message is returned as the error. */
 export async function storeCredentialAction(integrationId: string, input: unknown) {
   return act(async () => {
     const c = await getConsoleContext();
@@ -77,5 +78,19 @@ export async function revealWebhookSecretAction(integrationId: string) {
     const secret = await withTenant(c.ctx.orgId, (db) => webhookSecretFor(db, c.ctx, id));
     revalidateIntegration(id);
     return { secret };
+  });
+}
+
+/**
+ * Runs the downstream system's connection check (for Stripe: GET /v1/balance in test mode), records
+ * the health flag and an evidence event. The network call runs outside any tenant transaction.
+ */
+export async function testIntegrationConnectionAction(integrationId: string) {
+  return act(async () => {
+    const c = await getConsoleContext();
+    const id = uuid.parse(integrationId);
+    const result = await testIntegrationConnection((fn) => withTenant(c.ctx.orgId, fn), c.ctx, id);
+    revalidateIntegration(id);
+    return result;
   });
 }

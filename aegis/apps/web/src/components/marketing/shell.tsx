@@ -4,10 +4,10 @@ import { MobileNav, NavLinks } from "./nav";
 
 export const NAV = [
   { href: "/site/products", label: "Products" },
-  { href: "/site/tour", label: "Tour" },
+  { href: "/site/demo", label: "Demo" },
+  { href: "/site/pilot", label: "Pilot" },
   { href: "/site/architecture", label: "Architecture" },
   { href: "/site/security", label: "Security" },
-  { href: "/site/open-source", label: "Open source" },
   { href: "/site/pricing", label: "Pricing" },
   { href: "/site/contact", label: "Contact" },
 ];
@@ -36,8 +36,8 @@ export function SiteHeader() {
           <Link href="/login" className="mk-nav-link">
             Sign in
           </Link>
-          <Link href="/site/demo" className="mk-btn mk-btn-primary mk-btn-sm">
-            Request a demo
+          <Link href="/site/pilot" className="mk-btn mk-btn-primary mk-btn-sm">
+            Discuss a pilot
           </Link>
         </div>
         <MobileNav items={NAV} />
@@ -49,7 +49,7 @@ export function SiteHeader() {
 const FOOTER_GROUPS: { title: string; links: { href: string; label: string }[] }[] = [
   { title: "Platform", links: [{ href: "/site/products#control", label: "Control" }, { href: "/site/products#assurance", label: "Assurance" }, { href: "/site/products#shield", label: "Shield" }, { href: "/site/products#audit", label: "Audit" }, { href: "/site/tour", label: "Product tour" }] },
   { title: "Technical", links: [{ href: "/site/architecture", label: "Architecture" }, { href: "/site/architecture#fail-closed", label: "Fail-closed behaviour" }, { href: "/site/security", label: "Security" }, { href: "/site/security#known-gaps", label: "Known gaps" }, { href: "/site/open-source", label: "Open source and licensing" }] },
-  { title: "Company", links: [{ href: "/site/pricing", label: "Enterprise licensing" }, { href: "/site/demo", label: "Request a demo" }, { href: "/site/contact", label: "Contact" }, { href: "/login", label: "Console sign in" }] },
+  { title: "Company", links: [{ href: "/site/pricing", label: "Enterprise licensing" }, { href: "/site/demo", label: "Explore the demo" }, { href: "/site/pilot", label: "Discuss a pilot" }, { href: "/site/contact", label: "Contact" }, { href: "/login", label: "Console sign in" }] },
   { title: "Legal", links: [{ href: "/site/privacy", label: "Privacy" }, { href: "/site/terms", label: "Terms" }] },
 ];
 

@@ -106,6 +106,21 @@ export const policyDocumentSchema = z
         }),
       )
       .default([]),
+    /**
+     * Optional metadata that does not affect evaluation. Guided templates record the settings a
+     * document was generated from under `meta.template` so the console can reopen the guided form.
+     */
+    meta: z
+      .object({
+        template: z
+          .object({
+            id: z.string().min(1).max(64),
+            settings: z.record(z.unknown()),
+          })
+          .optional(),
+      })
+      .passthrough()
+      .optional(),
   })
   .superRefine((doc, ctx) => {
     const ids = new Set<string>();

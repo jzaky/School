@@ -90,7 +90,7 @@ export function AgentsTable({ rows, pagination, filters }: { rows: AgentRow[]; p
       pagination={pagination}
       storageKey="agents"
       caption="AI agents"
-      emptyState={<EmptyState icon={Bot} title={hasFilters ? "No agents match these filters" : "No agents registered"} description={hasFilters ? "Try clearing the filters." : "Register the first agent to start governing its actions."} action={hasFilters ? <Button size="sm" onClick={() => router.push(pathname)}>Clear filters</Button> : undefined} />}
+      emptyState={<EmptyState icon={Bot} title={hasFilters ? "No agents match these filters" : "No agents registered"} description={hasFilters ? "Try clearing the filters." : "Register the first agent and assign its owner to start governing its actions. The Getting started checklist walks you through it."} action={hasFilters ? <Button size="sm" onClick={() => router.push(pathname)}>Clear filters</Button> : <Button size="sm" onClick={() => router.push("/getting-started")}>Open Getting started</Button>} />}
       toolbar={
         <>
           <form

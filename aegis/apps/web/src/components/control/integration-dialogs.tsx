@@ -2,8 +2,8 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Eye, KeyRound, Plus, Power, RefreshCw, Trash2 } from "lucide-react";
-import { createIntegrationAction, revealWebhookSecretAction, revokeCredentialAction, rotateCredentialAction, setIntegrationStatusAction, storeCredentialAction } from "@/server/actions/integrations";
+import { Activity, Eye, KeyRound, Plus, Power, RefreshCw, Trash2 } from "lucide-react";
+import { createIntegrationAction, revealWebhookSecretAction, revokeCredentialAction, rotateCredentialAction, setIntegrationStatusAction, storeCredentialAction, testIntegrationConnectionAction } from "@/server/actions/integrations";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -157,12 +157,12 @@ export function IntegrationStatusButton({ integrationId, status, canWrite, canCo
   );
 }
 
-export function StoreCredentialDialog({ integrationId, canWrite, existingNames }: { integrationId: string; canWrite: boolean; existingNames: string[] }) {
+export function StoreCredentialDialog({ integrationId, canWrite, existingNames, defaultName, sandboxHint }: { integrationId: string; canWrite: boolean; existingNames: string[]; defaultName?: string; sandboxHint?: string }) {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  const [name, setName] = React.useState("");
+  const [name, setName] = React.useState(defaultName ?? "");
   const [secret, setSecret] = React.useState("");
   const [days, setDays] = React.useState("90");
   const replaces = existingNames.includes(name);
@@ -175,7 +175,7 @@ export function StoreCredentialDialog({ integrationId, canWrite, existingNames }
     if (!r.ok) return setError(r.error);
     toast.success(replaces ? `${name} rotated to version ${r.data.version}` : `${name} stored`);
     setOpen(false);
-    setName("");
+    setName(defaultName ?? "");
     setSecret("");
     router.refresh();
   }
@@ -193,7 +193,7 @@ export function StoreCredentialDialog({ integrationId, canWrite, existingNames }
         </Button>
       }
       title="Store a credential"
-      description="The secret is encrypted with the organization master key and never shown again. Storing under an existing name rotates it."
+      description={sandboxHint ?? "The secret is encrypted with the organization master key and never shown again. Storing under an existing name rotates it."}
       size="sm"
       footer={
         <>
@@ -223,13 +223,13 @@ export function StoreCredentialDialog({ integrationId, canWrite, existingNames }
   );
 }
 
-export function CredentialActions({ integrationId, credential, canWrite, canControl }: { integrationId: string; credential: { id: string; name: string; revoked: boolean }; canWrite: boolean; canControl: boolean }) {
+export function CredentialActions({ integrationId, credential, canWrite, canControl, sandbox = false }: { integrationId: string; credential: { id: string; name: string; revoked: boolean }; canWrite: boolean; canControl: boolean; sandbox?: boolean }) {
   const router = useRouter();
   const [rotate, setRotate] = React.useState(false);
   const [revoke, setRevoke] = React.useState(false);
   return (
     <div className="flex justify-end gap-1">
-      <Button size="sm" variant="ghost" onClick={() => setRotate(true)} disabled={!canWrite || credential.revoked} disabledReason={credential.revoked ? "Revoked credentials are replaced by storing a new secret" : "Requires integrations:write"}>
+      <Button size="sm" variant="ghost" onClick={() => setRotate(true)} disabled={!canWrite || credential.revoked || sandbox} disabledReason={sandbox ? "Sandbox keys come from the provider: store the new key under the same name to rotate it" : credential.revoked ? "Revoked credentials are replaced by storing a new secret" : "Requires integrations:write"}>
         <RefreshCw className="h-3.5 w-3.5" aria-hidden />
         Rotate
       </Button>
@@ -301,5 +301,42 @@ export function RevealWebhookSecret({ integrationId, canWrite }: { integrationId
         }}
       />
     </>
+  );
+}
+
+/** Runs the downstream system's connection check and shows the answer inline. Recorded as evidence by the core service. */
+export function TestConnectionButton({ integrationId, canWrite }: { integrationId: string; canWrite: boolean }) {
+  const router = useRouter();
+  const [pending, setPending] = React.useState(false);
+  const [result, setResult] = React.useState<{ ok: boolean; detail: string } | null>(null);
+  async function run() {
+    setPending(true);
+    const r = await testIntegrationConnectionAction(integrationId);
+    setPending(false);
+    if (!r.ok) {
+      setResult({ ok: false, detail: r.error });
+      toast.error(r.error);
+      return;
+    }
+    setResult({ ok: r.data.ok, detail: r.data.detail });
+    if (r.data.ok) toast.success("Connection test passed");
+    else toast.error("Connection test failed");
+    router.refresh();
+  }
+  return (
+    <div className="flex flex-col items-end gap-1">
+      <Button onClick={run} loading={pending} disabled={!canWrite} disabledReason="Requires integrations:write">
+        <Activity className="h-3.5 w-3.5" aria-hidden />
+        Test connection
+      </Button>
+      {result ? (
+        <span role="status" className="inline-flex max-w-[360px] items-center gap-2 text-xs text-fg-muted">
+          <Badge tone={result.ok ? "allow" : "deny"}>{result.ok ? "Reachable" : "Failed"}</Badge>
+          <span className="truncate" title={result.detail}>
+            {result.detail}
+          </span>
+        </span>
+      ) : null}
+    </div>
   );
 }

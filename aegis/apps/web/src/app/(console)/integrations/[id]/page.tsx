@@ -13,7 +13,8 @@ import { KeyValue } from "@/components/ui/key-value";
 import { CodeBlock } from "@/components/ui/code-block";
 import { Note } from "@/components/ui/note";
 import { SimpleTable, Td, Th, Tr } from "@/components/ui/simple-table";
-import { CredentialActions, IntegrationStatusButton, RevealWebhookSecret, StoreCredentialDialog } from "@/components/control/integration-dialogs";
+import { CredentialActions, IntegrationStatusButton, RevealWebhookSecret, StoreCredentialDialog, TestConnectionButton } from "@/components/control/integration-dialogs";
+import { integrationKind, KindBadge } from "@/components/control/integration-kind";
 import { formatDateTime, timeAgo } from "@/lib/utils";
 import { statusLabel, statusTone } from "@/lib/status";
 
@@ -24,6 +25,16 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   return { title: `Integration ${id.slice(0, 8)}` };
 }
+
+/** Per-connector copy for sandbox integrations. Keyed by integration key; generic text otherwise. */
+const SANDBOX_COPY: Record<string, { credentialName: string; connect: string; storeHint: string; records: string }> = {
+  "stripe-test": {
+    credentialName: "secret-key",
+    connect: "Connect your Stripe test-mode secret key to enable this integration. Only test keys are accepted. Get one from the Stripe dashboard in test mode.",
+    storeHint: "Store the Stripe test-mode secret key (sk_test_ or rk_test_) under the name secret-key. Live keys are refused so no real money can move. The key is encrypted with the organization master key and never shown again.",
+    records: "Stripe holds the record of every refund. Each gateway receipt carries the Stripe refund id (re_...) and the minor-unit amount, and reconciliation looks refunds up by the AEGIS request id stored in Stripe metadata. The connection test calls GET /v1/balance in test mode.",
+  },
+};
 
 export default async function IntegrationDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const c = await requirePermission("integrations:read");
@@ -41,6 +52,11 @@ export default async function IntegrationDetailPage({ params }: { params: Promis
   const canWrite = c.can("integrations:write");
   const canControl = c.can("agents:control");
   const now = Date.now();
+  const kind = integrationKind(i);
+  const sandbox = kind === "sandbox";
+  const copy = SANDBOX_COPY[i.key] ?? { credentialName: "api-key", connect: "Connect a sandbox credential to enable this integration. Only the provider's test-mode credentials are accepted.", storeHint: "Store the provider's test-mode credential. It is encrypted with the organization master key and never shown again.", records: "The provider holds the record of every action. Each gateway receipt carries the provider's reference." };
+  const liveCredentials = i.credentials.filter((cr) => !cr.revokedAt);
+  const needsCredential = sandbox && !liveCredentials.some((cr) => cr.name === copy.credentialName);
   const ledger = i.ledger.slice(0, 50);
   const webhookExample = `timestamp=$(date +%s000)\nbody='{"event":"refund.settled","reference":"RF-1001"}'\nsig=$(printf '%s.%s' "$timestamp" "$body" | openssl dgst -sha256 -hmac "$WEBHOOK_SECRET" | sed 's/^.* //')\ncurl -X POST "$API_URL/v1/webhooks/${i.key}" \\\n  -H "Authorization: Bearer $INTEGRATION_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -H "X-Aegis-Timestamp: $timestamp" \\\n  -H "X-Aegis-Signature: $sig" \\\n  --data "$body"`;
   return (
@@ -52,13 +68,23 @@ export default async function IntegrationDetailPage({ params }: { params: Promis
           <>
             <StatusBadge status={i.status === "active" ? "active" : "disabled"} />
             <Badge>{i.type}</Badge>
-            {i.baseUrl?.startsWith("sim://") ? <Badge tone="approval">Simulated system</Badge> : null}
+            <KindBadge kind={kind} />
             <DemoBadge show={c.org.demoMode} />
           </>
         }
         description={i.description || <span className="font-mono text-xs">{i.key}</span>}
-        actions={<IntegrationStatusButton integrationId={i.id} status={i.status} canWrite={canWrite} canControl={canControl} />}
+        actions={
+          <div className="flex flex-wrap items-start justify-end gap-2">
+            <TestConnectionButton integrationId={i.id} canWrite={canWrite} />
+            <IntegrationStatusButton integrationId={i.id} status={i.status} canWrite={canWrite} canControl={canControl} />
+          </div>
+        }
       />
+      {needsCredential ? (
+        <Note tone="info" className="mb-4">
+          <strong>Not connected.</strong> {copy.connect}
+        </Note>
+      ) : null}
       {i.status === "disabled" ? (
         <Note tone="danger" className="mb-4">
           <strong>Disabled.</strong> {i.statusReason ? `Reason: ${i.statusReason}. ` : ""}Every tool behind this integration is denied at the gateway.
@@ -69,6 +95,7 @@ export default async function IntegrationDetailPage({ params }: { params: Promis
           <KeyValue
             items={[
               { label: "Key", value: i.key, mono: true },
+              { label: "Kind", value: sandbox ? "Sandbox: a real provider in its documented test mode. No live transactions." : "Simulated: an in-process stand-in used by the demonstrations." },
               { label: "Base URL", value: i.baseUrl, mono: true },
               { label: "Health", value: i.lastHealthAt ? <span className="inline-flex items-center gap-2"><Badge tone={i.lastHealthOk ? "allow" : "deny"}>{i.lastHealthOk ? "Healthy" : "Failing"}</Badge><span className="text-xs text-fg-dim">{timeAgo(i.lastHealthAt)}</span></span> : <Badge>Not checked</Badge> },
               { label: "Registered", value: formatDateTime(i.createdAt) },
@@ -112,9 +139,9 @@ export default async function IntegrationDetailPage({ params }: { params: Promis
             </SimpleTable>
           )}
         </Panel>
-        <Panel title="Credentials" description="Encrypted at rest; rotation due dates raise RM-011 alerts" className="xl:col-span-2" actions={<StoreCredentialDialog integrationId={i.id} canWrite={canWrite} existingNames={i.credentials.map((cr) => cr.name)} />} padded={false}>
+        <Panel title="Credentials" description={sandbox ? "Encrypted at rest; the connector checks the key again before every call" : "Encrypted at rest; rotation due dates raise RM-011 alerts"} className="xl:col-span-2" actions={<StoreCredentialDialog integrationId={i.id} canWrite={canWrite} existingNames={i.credentials.map((cr) => cr.name)} defaultName={sandbox ? copy.credentialName : undefined} sandboxHint={sandbox ? copy.storeHint : undefined} />} padded={false}>
           {i.credentials.length === 0 ? (
-            <p className="px-4 py-6 text-center text-xs text-fg-dim">No credentials stored. Execution against a real system needs one.</p>
+            <p className="px-4 py-6 text-center text-xs text-fg-dim">{sandbox ? `No credential stored. ${copy.connect}` : "No credentials stored. Execution against a real system needs one."}</p>
           ) : (
             <SimpleTable caption="Credentials" className="rounded-none border-0">
               <thead>
@@ -139,7 +166,7 @@ export default async function IntegrationDetailPage({ params }: { params: Promis
                       <Td>{dueBadge}</Td>
                       <Td>{cr.revokedAt ? <StatusCell status="revoked" /> : <StatusCell status="active" />}</Td>
                       <Td align="end">
-                        <CredentialActions integrationId={i.id} credential={{ id: cr.id, name: cr.name, revoked: !!cr.revokedAt }} canWrite={canWrite} canControl={canControl} />
+                        <CredentialActions integrationId={i.id} credential={{ id: cr.id, name: cr.name, revoked: !!cr.revokedAt }} canWrite={canWrite} canControl={canControl} sandbox={sandbox} />
                       </Td>
                     </Tr>
                   );
@@ -165,53 +192,59 @@ export default async function IntegrationDetailPage({ params }: { params: Promis
             <RevealWebhookSecret integrationId={i.id} canWrite={canWrite} />
           </div>
         </Panel>
-        <Panel title="Simulated system activity" description="Ledger written by the simulated downstream system when it verifies a grant and executes" className="xl:col-span-3" padded={false}>
-          <div className="px-4 pt-3">
-            <Badge tone="approval">Simulated system activity</Badge>
-          </div>
-          {ledger.length === 0 ? (
-            <p className="px-4 py-6 text-center text-xs text-fg-dim">No activity recorded by the simulated system yet.</p>
-          ) : (
-            <SimpleTable caption="Simulated ledger" className="mt-3 rounded-none border-0">
-              <thead>
-                <tr>
-                  <Th>When</Th>
-                  <Th>Reference</Th>
-                  <Th>Type</Th>
-                  <Th>Agent</Th>
-                  <Th>Correlation</Th>
-                  <Th>Detail</Th>
-                </tr>
-              </thead>
-              <tbody>
-                {ledger.map((e, idx) => {
-                  const at = typeof e.at === "string" ? e.at : typeof e.timestamp === "string" ? e.timestamp : null;
-                  const rest = Object.fromEntries(Object.entries(e).filter(([k]) => !["at", "timestamp", "reference", "type", "toolKey", "agentSlug", "agent", "correlationId"].includes(k)));
-                  return (
-                    <Tr key={idx}>
-                      <Td className="text-xs">{at ? formatDateTime(at) : <span className="text-fg-dim">unknown</span>}</Td>
-                      <Td mono>{String(e.reference ?? "")}</Td>
-                      <Td mono>{String(e.type ?? e.toolKey ?? "")}</Td>
-                      <Td mono>{String(e.agentSlug ?? e.agent ?? "")}</Td>
-                      <Td mono>
-                        {typeof e.correlationId === "string" ? (
-                          <Link href={`/gateway?q=${encodeURIComponent(e.correlationId)}`} className="text-accent hover:underline">
-                            {e.correlationId.slice(0, 18)}
-                          </Link>
-                        ) : (
-                          ""
-                        )}
-                      </Td>
-                      <Td className="max-w-[360px] truncate font-mono text-[11px] text-fg-muted" title={JSON.stringify(rest)}>
-                        {JSON.stringify(rest)}
-                      </Td>
-                    </Tr>
-                  );
-                })}
-              </tbody>
-            </SimpleTable>
-          )}
-        </Panel>
+        {sandbox ? (
+          <Panel title="Downstream records" description="Where the record of each action lives for a sandbox connector" className="xl:col-span-3">
+            <Note tone="info">{copy.records}</Note>
+          </Panel>
+        ) : (
+          <Panel title="Simulated system activity" description="Ledger written by the simulated downstream system when it verifies a grant and executes" className="xl:col-span-3" padded={false}>
+            <div className="px-4 pt-3">
+              <Badge tone="approval">Simulated system activity</Badge>
+            </div>
+            {ledger.length === 0 ? (
+              <p className="px-4 py-6 text-center text-xs text-fg-dim">No activity recorded by the simulated system yet.</p>
+            ) : (
+              <SimpleTable caption="Simulated ledger" className="mt-3 rounded-none border-0">
+                <thead>
+                  <tr>
+                    <Th>When</Th>
+                    <Th>Reference</Th>
+                    <Th>Type</Th>
+                    <Th>Agent</Th>
+                    <Th>Correlation</Th>
+                    <Th>Detail</Th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ledger.map((e, idx) => {
+                    const at = typeof e.at === "string" ? e.at : typeof e.timestamp === "string" ? e.timestamp : null;
+                    const rest = Object.fromEntries(Object.entries(e).filter(([k]) => !["at", "timestamp", "reference", "type", "toolKey", "agentSlug", "agent", "correlationId"].includes(k)));
+                    return (
+                      <Tr key={idx}>
+                        <Td className="text-xs">{at ? formatDateTime(at) : <span className="text-fg-dim">unknown</span>}</Td>
+                        <Td mono>{String(e.reference ?? "")}</Td>
+                        <Td mono>{String(e.type ?? e.toolKey ?? "")}</Td>
+                        <Td mono>{String(e.agentSlug ?? e.agent ?? "")}</Td>
+                        <Td mono>
+                          {typeof e.correlationId === "string" ? (
+                            <Link href={`/gateway?q=${encodeURIComponent(e.correlationId)}`} className="text-accent hover:underline">
+                              {e.correlationId.slice(0, 18)}
+                            </Link>
+                          ) : (
+                            ""
+                          )}
+                        </Td>
+                        <Td className="max-w-[360px] truncate font-mono text-[11px] text-fg-muted" title={JSON.stringify(rest)}>
+                          {JSON.stringify(rest)}
+                        </Td>
+                      </Tr>
+                    );
+                  })}
+                </tbody>
+              </SimpleTable>
+            )}
+          </Panel>
+        )}
       </div>
     </div>
   );

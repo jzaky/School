@@ -3,7 +3,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { ArrowUpRight, Check, MessageSquare, Share2, UserRound, X } from "lucide-react";
+import { ArrowUpRight, Check, MessageSquare, OctagonPause, Share2, UserRound, X } from "lucide-react";
 import { decideApprovalAction, provideApprovalInfoAction, type DecisionOutcome } from "@/server/actions/approvals";
 import { Button } from "@/components/ui/button";
 import { Field, FormError, Textarea } from "@/components/ui/input";
@@ -12,11 +12,37 @@ import { Panel } from "@/components/ui/panel";
 import { Note } from "@/components/ui/note";
 import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/ui/status";
-import { CodeBlock } from "@/components/ui/code-block";
 
 type Decision = "approve" | "reject" | "request_info" | "escalate" | "reassign";
 
-export function ApprovalDecisionForm({ approvalId, requestId, requestHash, canDecide, eligibilityReasons, canReassign, approvers, status, isOpen }: { approvalId: string; requestId: string; requestHash: string; canDecide: boolean; eligibilityReasons: string[]; canReassign: boolean; approvers: { userId: string; name: string; roleName: string }[]; status: string; isOpen: boolean }) {
+/** Plain-language sentence for what a recorded decision led to. */
+export function outcomeSentence(o: DecisionOutcome, summary?: string): string {
+  const what = summary ? summary.charAt(0).toLowerCase() + summary.slice(1) : "the action";
+  if (o.status === "rejected") return `Rejected. The agent will not ${what}; nothing ran.`;
+  if (o.status === "more_info") return "Information requested. The agent's owners were notified and the request stays pending until they answer.";
+  if (o.status === "escalated") return "Escalated. The person you chose must now decide; nothing runs until they do.";
+  if (o.status === "pending" && o.approvalsSoFar) return `Approved by you (${o.approvalsSoFar} so far). More approvals are needed before anything runs.`;
+  if (o.status === "pending") return "Reassigned. The new approver has been notified.";
+  if (o.status === "approved" && o.receipt) {
+    const ref = o.receipt.reference ? ` ${o.receipt.downstreamSystem} reference ${o.receipt.reference}.` : "";
+    if (o.receipt.status === "succeeded") return `Approved and executed.${ref}`;
+    if (o.receipt.status === "failed") return `Approved, but the call to ${o.receipt.downstreamSystem} failed. Nothing changed downstream; open the action request to retry or settle it.`;
+    if (o.receipt.status === "unknown") return `Approved, but ${o.receipt.downstreamSystem} did not confirm the outcome. Check the system, then settle the result from the action request.`;
+    return `Approved, but the call to ${o.receipt.downstreamSystem} was skipped.${ref}`;
+  }
+  if (o.status === "approved" && o.grantIssued) return "Approved. The agent may now collect its single execution grant and run the action itself.";
+  if (o.status === "approved") return "Approved. Executing...";
+  return `Recorded: ${o.status}.`;
+}
+
+function pausedMessage(error: string): string | null {
+  if (!/paused/i.test(error)) return null;
+  const m = error.match(/paused\s*\(([^)]*)\)/i) ?? error.match(/paused:\s*([^.]*)/i);
+  const reason = m?.[1]?.trim();
+  return `Approved, but the gateway is paused${reason ? ` (${reason})` : ""}: the action will not run until an administrator resumes the gateway from Settings. Your approval is recorded; decide again after it resumes.`;
+}
+
+export function ApprovalDecisionForm({ approvalId, requestId, requestHash, canDecide, eligibilityReasons, canReassign, approvers, status, isOpen, summary }: { approvalId: string; requestId: string; requestHash: string; canDecide: boolean; eligibilityReasons: string[]; canReassign: boolean; approvers: { userId: string; name: string; roleName: string }[]; status: string; isOpen: boolean; summary?: string }) {
   const router = useRouter();
   const [decision, setDecision] = React.useState<Decision>("approve");
   const [comment, setComment] = React.useState("");
@@ -25,6 +51,7 @@ export function ApprovalDecisionForm({ approvalId, requestId, requestHash, canDe
   const [error, setError] = React.useState<string | null>(null);
   const [outcome, setOutcome] = React.useState<DecisionOutcome | null>(null);
   const [info, setInfo] = React.useState("");
+  const [paused, setPaused] = React.useState<string | null>(null);
 
   const needsComment = decision !== "approve" && decision !== "reassign";
   const needsTarget = decision === "escalate" || decision === "reassign";
@@ -38,9 +65,17 @@ export function ApprovalDecisionForm({ approvalId, requestId, requestHash, canDe
     setError(null);
     const r = await decideApprovalAction(approvalId, { decision, comment, targetUserId: target ?? undefined, requestHash });
     setPending(false);
-    if (!r.ok) return setError(r.error);
+    if (!r.ok) {
+      const p = decision === "approve" ? pausedMessage(r.error) : null;
+      if (p) {
+        setPaused(p);
+        router.refresh();
+        return;
+      }
+      return setError(/changed since it was presented/i.test(r.error) ? `${r.error} Nothing was decided.` : `${r.error} Nothing was decided. Check the request and try again; if it keeps failing, ask an administrator.`);
+    }
     setOutcome(r.data);
-    toast.success(r.data.executed ? "Approved and executed" : `Recorded: ${r.data.status}`);
+    toast.success(outcomeSentence(r.data));
     router.refresh();
   }
   async function sendInfo(e: React.FormEvent) {
@@ -55,33 +90,46 @@ export function ApprovalDecisionForm({ approvalId, requestId, requestHash, canDe
     router.refresh();
   }
 
+  if (paused) {
+    return (
+      <Panel title="Decision recorded" className="border-deny">
+        <div className="flex items-start gap-2 text-sm text-fg" data-testid="decision-outcome">
+          <OctagonPause className="mt-0.5 h-4 w-4 shrink-0 text-deny" aria-hidden />
+          <p>{paused}</p>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Link href="/org/settings" className="inline-flex items-center gap-0.5 text-sm text-accent hover:underline">
+            Open Settings <ArrowUpRight className="h-3 w-3" aria-hidden />
+          </Link>
+          <Link href={`/gateway/${requestId}`} className="inline-flex items-center gap-0.5 text-sm text-accent hover:underline">
+            Open the action request <ArrowUpRight className="h-3 w-3" aria-hidden />
+          </Link>
+        </div>
+      </Panel>
+    );
+  }
+
   if (outcome) {
+    const tone = outcome.status === "rejected" || outcome.receipt?.status === "failed" ? "text-deny" : outcome.executed ? "text-allow" : "text-fg";
     return (
       <Panel title="Decision recorded">
-        <div className="flex flex-wrap items-center gap-2">
+        <p className={`text-sm font-medium ${tone}`} data-testid="decision-outcome">
+          {outcomeSentence(outcome, summary)}
+        </p>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
           <StatusBadge status={outcome.status} />
           {outcome.executed ? <Badge tone="allow">executed downstream</Badge> : null}
           {outcome.approvalsSoFar ? <Badge tone="approval">{outcome.approvalsSoFar} approval(s) so far</Badge> : null}
           {outcome.grantIssued ? <Badge tone="info">grant issued for the agent</Badge> : null}
+          {outcome.receipt?.reference ? (
+            <span className="text-xs text-fg-muted">
+              {outcome.receipt.downstreamSystem} reference{" "}
+              <span className="font-mono text-fg" data-testid="receipt-reference">
+                {outcome.receipt.reference}
+              </span>
+            </span>
+          ) : null}
         </div>
-        {outcome.receipt ? (
-          <div className="mt-3 rounded-md border border-line bg-bg p-3 text-xs">
-            <div className="flex flex-wrap items-center gap-2">
-              <StatusBadge status={outcome.receipt.status === "succeeded" ? "executed" : outcome.receipt.status} />
-              <span className="text-fg-muted">via</span>
-              <span className="font-mono">{outcome.receipt.downstreamSystem}</span>
-              {outcome.receipt.reference ? (
-                <>
-                  <span className="text-fg-muted">reference</span>
-                  <span className="font-mono text-fg" data-testid="receipt-reference">
-                    {outcome.receipt.reference}
-                  </span>
-                </>
-              ) : null}
-            </div>
-            <CodeBlock className="mt-2" code={JSON.stringify(outcome.receipt.summary, null, 2)} copy={false} />
-          </div>
-        ) : null}
         <div className="mt-3 flex flex-wrap gap-2">
           <Link href={`/gateway/${requestId}`} className="inline-flex items-center gap-0.5 text-sm text-accent hover:underline">
             Open the action request <ArrowUpRight className="h-3 w-3" aria-hidden />
@@ -105,11 +153,11 @@ export function ApprovalDecisionForm({ approvalId, requestId, requestHash, canDe
   }
 
   return (
-    <Panel title="Your decision" description="Approval executes the exact parameters shown; the request hash is checked again before anything runs.">
+    <Panel title="Your decision" description="Approving runs exactly what is described above, once, right away. The request hash is checked again before anything runs." data-testid="decision-panel">
       {!canDecide ? (
         <Note tone="warning" className="mb-3">
           <strong>You cannot decide this request.</strong>
-          <ul className="mt-1 list-inside list-disc">
+          <ul className="mt-1 list-inside list-disc" data-testid="eligibility-reasons">
             {eligibilityReasons.map((r) => (
               <li key={r}>{r}</li>
             ))}

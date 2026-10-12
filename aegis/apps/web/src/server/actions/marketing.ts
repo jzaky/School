@@ -49,10 +49,12 @@ const demoSchema = z.object({
   preferredDates: z.string().trim().min(2, "Suggest one or two dates or a week").max(300),
   deploymentPreference: z.enum(DEPLOYMENTS, { errorMap: () => ({ message: "Choose a deployment preference" }) }),
 });
-const schema = z.discriminatedUnion("kind", [inquirySchema, demoSchema]);
+const pilotSchema = demoSchema.extend({ kind: z.literal("pilot_request") });
+const schema = z.discriminatedUnion("kind", [inquirySchema, demoSchema, pilotSchema]);
 
+export type MarketingKind = "inquiry" | "demo_request" | "pilot_request";
 export type MarketingSubmission = z.input<typeof schema>;
-export type MarketingResult = ActionResult<{ reference: string; kind: "inquiry" | "demo_request" }>;
+export type MarketingResult = ActionResult<{ reference: string; kind: MarketingKind }>;
 
 function fieldErrors(e: z.ZodError): string {
   return e.issues.map((i) => i.message).join(". ");
@@ -80,12 +82,12 @@ export async function submitMarketingForm(input: unknown): Promise<MarketingResu
     interest: data.interest,
     message: data.message,
   };
-  if (data.kind === "demo_request") {
+  if (data.kind !== "inquiry") {
     detail.preferredDates = data.preferredDates;
     detail.deploymentPreference = data.deploymentPreference;
   }
   try {
-    const row = await rawPrisma().platformEvent.create({ data: { type: data.kind === "inquiry" ? "marketing.inquiry" : "marketing.demo_request", detail: detail as Prisma.InputJsonValue }, select: { id: true } });
+    const row = await rawPrisma().platformEvent.create({ data: { type: `marketing.${data.kind}`, detail: detail as Prisma.InputJsonValue }, select: { id: true } });
     return { ok: true, data: { reference: row.id.slice(0, 8).toUpperCase(), kind: data.kind } };
   } catch (e) {
     // Log the error class only; the payload holds contact details.
