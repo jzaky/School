@@ -6,9 +6,9 @@ import { SITE_URL } from "@/components/marketing/primitives";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: "AEGIS", template: "%s | AEGIS" },
+  title: { default: "AEGIS by Nexus AI Assurance", template: "%s | AEGIS by Nexus AI Assurance" },
   description: "Enterprise AI governance, authorization, security and assurance. Define what your AI agents may do, enforce it before execution and prove what happened.",
-  openGraph: { type: "website", siteName: "AEGIS", images: [{ url: "/assets/og.svg", width: 1200, height: 630, alt: "AEGIS: define, enforce, prove" }] },
+  openGraph: { type: "website", siteName: "AEGIS by Nexus AI Assurance", images: [{ url: "/assets/og.svg", width: 1200, height: 630, alt: "AEGIS: define, enforce, prove" }] },
   twitter: { card: "summary_large_image" },
   robots: { index: true, follow: true },
 };

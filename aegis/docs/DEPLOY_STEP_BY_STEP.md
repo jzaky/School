@@ -8,6 +8,13 @@ Everything below uses the synthetic demo tenant. No real money can move: the onl
 
 What you need: an Ubuntu 22.04 or 24.04 VM with 2 CPUs, 4 GB RAM, 20 GB disk, a public IP, and two DNS names pointed at it. The templates assume the product lives under the owner's existing domain as `aegis.nexusai.ae` (site and console) and `aegis-api.nexusai.ae` (API): add two A records with those names at the registrar, pointing at the VM's IP. The main nexusai.ae website is a separate site and is not affected. Root or sudo access on the VM.
 
+### 0. Before touching the server: DNS and the machine
+
+1. At the registrar or DNS host for nexusai.ae, add two records of type A. Name `aegis`, value: the server's public IP. Name `aegis-api`, value: the same IP. Leave the TTL at its default. Nothing else on nexusai.ae changes.
+2. Rent one Ubuntu 24.04 server (2 vCPU, 4 GB RAM, 20 GB disk) from any provider, with a public IPv4 address and SSH access. Put that IP into the two records above.
+3. Open ports 22, 80 and 443 in the provider's firewall. Caddy needs 80 and 443 to obtain certificates.
+4. Check from your laptop: `nslookup aegis.nexusai.ae` and `nslookup aegis-api.nexusai.ae` must both answer with the server IP before you run step 8.
+
 ### 1. Install the runtime
 
 ```

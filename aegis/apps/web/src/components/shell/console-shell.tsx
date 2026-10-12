@@ -49,7 +49,7 @@ export function ConsoleShell({ data, children }: { data: ShellData; children: Re
       {!collapsed ? (
         <span className="min-w-0">
           <span className="block text-sm font-semibold tracking-tight text-fg">AEGIS</span>
-          <span className="block truncate text-[10px] uppercase tracking-wide text-fg-dim">Governance console</span>
+          <span className="block truncate text-[10px] uppercase tracking-wide text-fg-dim">by Nexus AI Assurance</span>
         </span>
       ) : null}
     </Link>
@@ -78,7 +78,10 @@ export function ConsoleShell({ data, children }: { data: ShellData; children: Re
               <div className="flex items-center justify-between border-b border-line pe-2">
                 <Link href="/overview" className="flex h-14 items-center gap-2.5 px-3">
                   <span className="grid h-7 w-7 place-items-center rounded-md bg-accent/15 text-sm font-semibold text-accent">A</span>
-                  <span className="text-sm font-semibold tracking-tight">AEGIS</span>
+                  <span className="min-w-0">
+                    <span className="block text-sm font-semibold tracking-tight">AEGIS</span>
+                    <span className="block text-[10px] uppercase tracking-wide text-fg-dim">by Nexus AI Assurance</span>
+                  </span>
                 </Link>
                 <RD.Close asChild>
                   <IconButton label="Close navigation" size="sm">

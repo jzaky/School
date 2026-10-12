@@ -1,4 +1,4 @@
-# AEGIS
+# AEGIS by Nexus AI Assurance
 
 Let AI agents handle routine work. Require human approval for risky actions. Keep a verifiable record of every decision.
 

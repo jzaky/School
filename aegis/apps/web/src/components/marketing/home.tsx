@@ -5,7 +5,7 @@ import { ButtonLink, Note, Pill, Pre, Section, SectionHeading, Table } from "./p
 import { Screenshot } from "./screenshot";
 
 export const homeMetadata: Metadata = {
-  title: "AEGIS | Let AI agents handle routine work. Require human approval for risky actions.",
+  title: "AEGIS by Nexus AI Assurance | Let AI agents handle routine work. Require human approval for risky actions.",
   description: "AEGIS governs the actions AI agents take. Routine refunds run on their own, risky ones wait for a named approver, and every decision is recorded in a verifiable ledger. Built for customer-support refund workflows first.",
   alternates: { canonical: "/" },
 };

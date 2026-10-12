@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "AEGIS", template: "%s | AEGIS" },
+  title: { default: "AEGIS by Nexus AI Assurance", template: "%s | AEGIS by Nexus AI Assurance" },
   description: "Enterprise AI governance, authorization, security and assurance.",
 };
 

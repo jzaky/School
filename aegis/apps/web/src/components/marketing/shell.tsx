@@ -13,12 +13,15 @@ export const NAV = [
 
 export function Wordmark({ className }: { className?: string }) {
   return (
-    <Link href="/" className={`inline-flex items-center gap-2.5 ${className ?? ""}`} aria-label="AEGIS home">
+    <Link href="/" className={`inline-flex items-center gap-2.5 ${className ?? ""}`} aria-label="AEGIS by Nexus AI Assurance, home">
       <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
         <path d="M16 2 L28 7 V16 C28 23 22.5 28 16 30 C9.5 28 4 23 4 16 V7 Z" fill="none" stroke="var(--mk-accent)" strokeWidth="2.2" strokeLinejoin="round" />
         <path d="M16 9 L22 20 H10 Z" fill="var(--mk-accent)" />
       </svg>
-      <span className="text-[17px] font-semibold tracking-[0.12em]">AEGIS</span>
+      <span className="flex flex-col leading-none">
+        <span className="text-[17px] font-semibold tracking-[0.12em]">AEGIS</span>
+        <span className="mt-1 text-[10px] uppercase tracking-[0.14em] text-(--mk-muted)">by Nexus AI Assurance</span>
+      </span>
     </Link>
   );
 }
@@ -84,7 +87,7 @@ export function SiteFooter() {
             </Link>{" "}
             for known gaps. Demo data is synthetic. Thresholds shown are illustrative and customer-configurable.
           </p>
-          <p>AEGIS platform, pre-release build.</p>
+          <p>AEGIS by Nexus AI Assurance. Pre-release build.</p>
         </div>
       </div>
     </footer>
