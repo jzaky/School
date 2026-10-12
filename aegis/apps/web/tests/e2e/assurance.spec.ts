@@ -81,7 +81,9 @@ test.describe("assurance as owner", () => {
 
   test("live activity shows new rows after running the refund demo", async ({ page, context }) => {
     await page.goto("/activity");
-    await expect(page.getByRole("heading", { level: 1, name: "Live Activity" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Activity" })).toBeVisible();
+    // The live ledger feed sits behind a collapsed details block on the redesigned Activity page.
+    await page.getByTestId("ledger-feed").locator("summary").click();
     await expect(page.getByText(/Live, every 5 seconds/)).toBeVisible();
     const first = page.locator("li[data-seq]").first();
     await expect(first).toBeVisible();

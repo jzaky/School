@@ -78,7 +78,7 @@ Two further defects surfaced during the work and were fixed: the Shield inspecto
 | Seed | `pnpm db:seed` | 461 historical requests, 75 approvals, 18 denied; Stripe integration disabled with no credential; chain valid |
 | Console and site | `cd apps/web && npx playwright test` | see the line below, recorded from the full run |
 
-PLAYWRIGHT_RESULT_PLACEHOLDER
+Playwright, full run against the dev server on 2026-10-12: 63 tests, 61 passed in one 14.5 minute run; the two that failed asserted the old Activity heading and the old first policy tab, were updated for the redesign, and passed on re-run. By suite: console 11, control 11, onboarding 5, policies 2, integrations 2, assurance 5, shield 5, audit 7, marketing 15.
 
 CI (`.github/workflows/aegis-ci.yml`) runs typecheck, lint, the style rule, isolation, core, API, the seed and the Playwright suite.
 

@@ -31,6 +31,8 @@ console.log("seeded live state", executed.status, pending.status);
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
 const page = await ctx.newPage();
+// External font hosts are unreachable from the build container and keep "waiting for fonts" open; local fallbacks render.
+await page.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort());
 
 async function login(p: Page, email: string) {
   await p.goto(`${base}/login`);
@@ -43,9 +45,10 @@ async function logout(p: Page) {
   await p.context().clearCookies();
 }
 const shot = async (name: string, path: string, settle = 2000) => {
-  await page.goto(`${base}${path}`, { waitUntil: "networkidle" }).catch(() => undefined);
+  await page.goto(`${base}${path}`, { waitUntil: "domcontentloaded", timeout: 120_000 }).catch(() => undefined);
+  await page.waitForLoadState("networkidle", { timeout: 30_000 }).catch(() => undefined);
   await page.waitForTimeout(settle);
-  await page.screenshot({ path: `${docs}${name}.png`, fullPage: false });
+  await page.screenshot({ path: `${docs}${name}.png`, fullPage: false, timeout: 90_000 });
   copyFileSync(`${docs}${name}.png`, `${site}${name}.png`);
   console.log("captured", name, page.url());
 };

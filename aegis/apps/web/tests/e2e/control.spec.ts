@@ -41,6 +41,8 @@ test.describe("control as owner", () => {
   test("policy detail renders rules and the simulator returns approval required for AED 1,200", async ({ page }) => {
     await openPolicy(page, "Customer refund authority");
     const tabs = page.getByRole("tablist", { name: "Policy sections" });
+    // The template-generated policy opens on Thresholds; the rule list is on the Rules tab.
+    await tabs.getByRole("tab", { name: /^Rules/ }).click();
     await expect(page.getByRole("tabpanel")).toContainText("approval-band");
     await expect(page.getByRole("tabpanel")).toContainText("params.amount");
     await expect(page.getByRole("tabpanel").getByText("Require approval").first()).toBeVisible();
