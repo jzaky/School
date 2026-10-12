@@ -31,7 +31,6 @@ test.describe("marketing site", () => {
       ["Pilot", /Four weeks on test-mode money/],
       ["Architecture", /A modular monolith/],
       ["Security", /Fail closed, least privilege/],
-      ["Pricing", /Enterprise licensing/],
       ["Contact", /Talk to the team/],
     ];
     await page.goto("/");
@@ -54,6 +53,9 @@ test.describe("marketing site", () => {
     await page.goto("/");
     await page.getByRole("contentinfo").getByRole("link", { name: "Open source and licensing" }).click();
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(/What AEGIS builds on/);
+    await page.goto("/");
+    await page.getByRole("contentinfo").getByRole("link", { name: "Enterprise licensing" }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Enterprise licensing/);
   });
 
   test("footer links reach legal pages", async ({ page }) => {

@@ -134,7 +134,8 @@ test.describe("viewer", () => {
   });
 
   test("triage is disabled with a permission tooltip", async ({ page }) => {
-    await page.goto("/security/events");
+    // Only an open event offers the Triage control; the newest event in the seed may already be triaged.
+    await page.goto("/security/events?status=open");
     await clickRowUntilUrl(page, page.locator('tbody tr[role="link"]').first(), /\/security\/events\/[0-9a-f-]{36}/);
     const triage = page.getByRole("button", { name: "Triage", exact: true });
     await expect(triage).toBeDisabled();

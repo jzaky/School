@@ -8,7 +8,6 @@ export const NAV = [
   { href: "/site/pilot", label: "Pilot" },
   { href: "/site/architecture", label: "Architecture" },
   { href: "/site/security", label: "Security" },
-  { href: "/site/pricing", label: "Pricing" },
   { href: "/site/contact", label: "Contact" },
 ];
 
