@@ -6,7 +6,7 @@ Everything below uses the synthetic demo tenant. No real money can move: the onl
 
 ## Route A: one Linux VM (verified path)
 
-What you need: an Ubuntu 22.04 or 24.04 VM with 2 CPUs, 4 GB RAM, 20 GB disk, a public IP, and two DNS names pointed at it (for example `console.yourdomain.com` and `api.yourdomain.com`). Root or sudo access.
+What you need: an Ubuntu 22.04 or 24.04 VM with 2 CPUs, 4 GB RAM, 20 GB disk, a public IP, and two DNS names pointed at it. The templates assume the product lives under the owner's existing domain as `aegis.nexusai.ae` (site and console) and `aegis-api.nexusai.ae` (API): add two A records with those names at the registrar, pointing at the VM's IP. The main nexusai.ae website is a separate site and is not affected. Root or sudo access on the VM.
 
 ### 1. Install the runtime
 
@@ -56,9 +56,9 @@ This writes `.env` with three freshly generated secrets. Open `.env` and set:
 |---|---|
 | `DATABASE_URL` | `postgresql://aegis_app:APP_PASSWORD@127.0.0.1:5432/aegis` |
 | `REDIS_URL` | `redis://127.0.0.1:6379` |
-| `API_PUBLIC_URL` | `https://api.yourdomain.com` |
-| `WEB_PUBLIC_URL` | `https://console.yourdomain.com` |
-| `API_CORS_ORIGINS` | `https://console.yourdomain.com` |
+| `API_PUBLIC_URL` | `https://aegis-api.nexusai.ae` |
+| `WEB_PUBLIC_URL` | `https://aegis.nexusai.ae` |
+| `API_CORS_ORIGINS` | `https://aegis.nexusai.ae` |
 | `AEGIS_DEMO_MODE` | `true` for the hosted demo (shows the demo personas on the site), `false` for a pilot tenant |
 | `NODE_ENV` | `production` |
 
@@ -101,7 +101,7 @@ sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https
 curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
 curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
 sudo apt update && sudo apt install -y caddy
-sudo cp deploy/Caddyfile /etc/caddy/Caddyfile      # then replace the two example hostnames with yours
+sudo cp deploy/Caddyfile /etc/caddy/Caddyfile      # already set to aegis.nexusai.ae and aegis-api.nexusai.ae
 sudo systemctl reload caddy
 ```
 
@@ -109,13 +109,13 @@ Caddy obtains the certificates automatically on the first request. The API and c
 
 ### 9. Prove it works
 
-1. Open `https://console.yourdomain.com/login` and sign in as `nadia.haddad@meridian-demo.example` with the password printed by the seed (`AegisDemo2026!`).
+1. Open `https://aegis.nexusai.ae/login` and sign in as `nadia.haddad@meridian-demo.example` with the password printed by the seed (`AegisDemo2026!`).
 2. Open Getting started and press Explore a sample workflow, then Run on the Refunds scenario. Expect six steps including one refund executed, one waiting for approval, one refused as a duplicate and one denied.
 3. Sign out, sign in as `lina.mansour@meridian-demo.example`, open Approvals, approve the AED 1,450 refund. Expect "Approved and executed" with a reference.
 4. From the VM, run the HTTP smoke test:
 
 ```
-cd /opt/aegis/aegis && AEGIS_API_URL=https://api.yourdomain.com npx tsx scripts/smoke-refund-journey.mts
+cd /opt/aegis/aegis && AEGIS_API_URL=https://aegis-api.nexusai.ae npx tsx scripts/smoke-refund-journey.mts
 ```
 
 Expect `12/12 checks passed`.

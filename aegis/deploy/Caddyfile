@@ -1,12 +1,15 @@
-# Reverse proxy with automatic HTTPS for a single-VM deployment. Replace the two hostnames.
+# Reverse proxy with automatic HTTPS for a single-VM deployment under nexusai.ae.
 # Install Caddy (https://caddyserver.com/docs/install), copy this file to /etc/caddy/Caddyfile, then: sudo systemctl reload caddy
-# Point DNS A records for both hostnames at the VM first; Caddy obtains certificates on first request.
-console.example.com {
+# DNS first: at the registrar for nexusai.ae, add two A records pointing at the server's public IP:
+#   aegis       -> SERVER_IP   (public site and console at https://aegis.nexusai.ae)
+#   aegis-api   -> SERVER_IP   (gateway API at https://aegis-api.nexusai.ae)
+# Caddy obtains the certificates on the first request. The main nexusai.ae website is not touched.
+aegis.nexusai.ae {
 	reverse_proxy 127.0.0.1:3000
 	encode gzip
 }
 
-api.example.com {
+aegis-api.nexusai.ae {
 	reverse_proxy 127.0.0.1:4000
 	encode gzip
 }
