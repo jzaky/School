@@ -65,7 +65,8 @@ test.describe("control as owner", () => {
     await page.waitForURL(/page=2/);
     await expect(page.getByText(/26 to 50 of \d+/)).toBeVisible();
     await page.goto("/gateway?status=denied");
-    const row = page.locator("tbody tr").first();
+    // A refund denial is decided by policy and therefore carries a trace; a destination or grant denial stops at the registry stage.
+    const row = page.locator("tbody tr", { hasText: "issue-refund" }).first();
     await expect(row).toBeVisible();
     await row.click();
     await page.waitForURL(/\/gateway\/[0-9a-f-]{36}/);
