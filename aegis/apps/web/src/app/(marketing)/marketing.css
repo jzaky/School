@@ -171,6 +171,7 @@ a.mk-card:hover {
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
+  flex-shrink: 0;
   transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
   cursor: pointer;
 }
@@ -234,7 +235,8 @@ a.mk-card:hover {
   border-radius: 10px;
   padding: 14px 16px;
   overflow-x: auto;
-  white-space: pre;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 .mk-dark .mk-pre {
   background: #0d1320;

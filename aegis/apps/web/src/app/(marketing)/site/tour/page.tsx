@@ -32,7 +32,7 @@ export default function TourPage() {
         </div>
       </Section>
       <Section dark>
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <h2 className="mk-h2">Run it for real</h2>
             <p className="mk-lead mt-3">The console runs these scenarios through the gateway, the policy engine, the approval service and the simulated downstream systems, and shows the evidence chain as it grows. Demo data is synthetic and labelled.</p>

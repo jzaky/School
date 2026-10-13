@@ -119,7 +119,7 @@ export function DataTable<T>({ columns, data, pagination, getRowId, onRowClick, 
           ) : null}
         </div>
       ) : null}
-      <div className="overflow-auto rounded-panel border border-line bg-bg-elev">
+      <div className="relative overflow-auto rounded-panel border border-line bg-bg-elev">
         <table className="w-full border-collapse text-[13px]">
           {caption ? <caption className="sr-only">{caption}</caption> : null}
           <thead className="sticky top-0 z-10 bg-bg-elev-2/95 backdrop-blur">

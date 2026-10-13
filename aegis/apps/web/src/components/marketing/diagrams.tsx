@@ -79,8 +79,8 @@ export function SystemShapeDiagram() {
         <Arrow x1={690} y1={137} x2={738} y2={137} />
         <Arrow x1={690} y1={272} x2={738} y2={272} />
         <Arrow x1={690} y1={358} x2={738} y2={358} />
-        <text x={330} y={178} fontSize={11} fill={C.dim} textAnchor="middle">
-          two database roles: aegis_app (non-owner, NOBYPASSRLS) for runtime, owner only for migrations
+        <text x={480} y={412} fontSize={11} fill={C.dim} textAnchor="middle">
+          Two database roles: aegis_app (non-owner, NOBYPASSRLS) for runtime, owner only for migrations
         </text>
       </svg>
     </Scroll>

@@ -58,7 +58,7 @@ export default function ArchitecturePage() {
             "Every step appends an evidence_events row to the hash chain in the same transaction.",
           ].map((t, i) => (
             <li key={i} className="flex gap-3 rounded-lg border border-(--mk-line) bg-(--mk-bg) p-3">
-              <span className="font-mono text-xs text-(--mk-accent)">{String(i + 1).padStart(2, "0")}</span>
+              <span className="shrink-0 font-mono text-xs text-(--mk-accent)">{String(i + 1).padStart(2, "0")}</span>
               <span className="text-(--mk-muted)">{t}</span>
             </li>
           ))}

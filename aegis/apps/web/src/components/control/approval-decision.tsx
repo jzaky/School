@@ -177,7 +177,7 @@ export function ApprovalDecisionForm({ approvalId, requestId, requestHash, canDe
         </form>
       ) : null}
       <form onSubmit={submit} className="space-y-3">
-        <div role="radiogroup" aria-label="Decision" className="grid gap-2 sm:grid-cols-5">
+        <div role="radiogroup" aria-label="Decision" className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-2 2xl:grid-cols-3">
           {(
             [
               { id: "approve", label: "Approve", icon: Check, cls: "data-[on=true]:border-allow data-[on=true]:text-allow" },

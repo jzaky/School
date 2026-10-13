@@ -147,7 +147,7 @@ export function BankingWalkthrough() {
         {STEPS.map((s, idx) => (
           <li key={s.title} className="shrink-0">
             <button type="button" onClick={() => setI(idx)} aria-current={idx === i ? "step" : undefined} className={`flex w-full items-start gap-3 rounded-lg border px-3 py-2.5 text-start text-sm transition-colors duration-150 ${idx === i ? "border-(--mk-accent) bg-(--mk-accent-soft)" : "border-(--mk-line) hover:bg-(--mk-bg-2)"}`}>
-              <span className="mt-0.5 font-mono text-xs text-(--mk-dim)">{String(idx + 1).padStart(2, "0")}</span>
+              <span className="mt-0.5 shrink-0 font-mono text-xs text-(--mk-dim)">{String(idx + 1).padStart(2, "0")}</span>
               <span className="hidden lg:inline">{s.title}</span>
               <span className="lg:hidden">{s.badge}</span>
             </button>
@@ -295,7 +295,7 @@ export function EgressBlock() {
   const [tab, setTab] = useState<"export" | "email">("export");
   return (
     <div className="mk-card">
-      <div role="tablist" aria-label="Egress attempts" className="flex gap-2">
+      <div role="tablist" aria-label="Egress attempts" className="flex flex-wrap gap-2">
         {(["export", "email"] as const).map((t) => (
           <button key={t} role="tab" type="button" aria-selected={tab === t} id={`egress-tab-${t}`} aria-controls={`egress-panel-${t}`} onClick={() => setTab(t)} className={`mk-btn mk-btn-sm ${tab === t ? "mk-btn-primary" : "mk-btn-secondary"}`}>
             {t === "export" ? "Bulk export to an external URL" : "Email with card and IBAN data"}
@@ -320,9 +320,9 @@ export function EgressBlock() {
 
 export function TourFooterLinks() {
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="flex shrink-0 flex-wrap gap-3">
       <Link href="/login" className="mk-btn mk-btn-primary">
-        Sign in to the console for the live demo
+        Sign in for the live demo
       </Link>
       <Link href="/site/demo" className="mk-btn mk-btn-secondary">
         Request a guided session

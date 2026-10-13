@@ -92,7 +92,7 @@ test.describe("marketing site", () => {
     await expect(page.getByRole("heading", { level: 3, name: /202: approval required/ })).toBeVisible();
     await steps.nth(4).click();
     await expect(page.getByText("TRF-0192F0C4")).toBeVisible();
-    await page.getByRole("link", { name: "Sign in to the console for the live demo" }).click();
+    await page.getByRole("link", { name: "Sign in for the live demo" }).click();
     await page.waitForURL(/\/login/);
   });
 

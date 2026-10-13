@@ -63,6 +63,7 @@ export function ActivityTable({ rows, total, agents, outcome, agentId, currency 
         {rows.length === 0 ? (
           <EmptyState icon={Activity} title={filtered ? "No actions match these filters" : "No actions recorded yet"} description={filtered ? "Try another outcome or agent." : "Every request an agent makes lands here with its outcome. Run the sample refund workflow to see allowed, approved and blocked actions."} action={filtered ? <Button size="sm" onClick={() => apply({ outcome: null, agentId: null })}>Clear filters</Button> : <LinkButton href="/gateway/demos" size="sm">Explore a sample workflow</LinkButton>} />
         ) : (
+          <div className="relative overflow-x-auto">
           <table className="w-full text-sm">
             <caption className="sr-only">Recent actions</caption>
             <thead className="bg-bg-elev-2/60 text-start text-xs text-fg-muted">
@@ -121,6 +122,7 @@ export function ActivityTable({ rows, total, agents, outcome, agentId, currency 
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
       <p className="text-[11px] text-fg-dim">

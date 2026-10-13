@@ -47,18 +47,18 @@ export default async function MonitoringPage() {
         </div>
         <div className="space-y-4">
           <Panel title="Alert status" description="All time">
-            <dl className="grid grid-cols-3 gap-2 text-center">
-              <div className="rounded-md border border-line bg-bg p-2">
-                <dt className="text-[11px] uppercase tracking-wide text-fg-dim">Open</dt>
-                <dd className="text-xl font-semibold tabular text-approval">{open}</dd>
+            <dl className="divide-y divide-line rounded-md border border-line bg-bg">
+              <div className="flex items-center justify-between gap-3 px-3 py-2">
+                <dt className="text-xs text-fg-muted">Open</dt>
+                <dd className="text-lg font-semibold tabular text-approval">{open}</dd>
               </div>
-              <div className="rounded-md border border-line bg-bg p-2">
-                <dt className="text-[11px] uppercase tracking-wide text-fg-dim">Acknowledged</dt>
-                <dd className="text-xl font-semibold tabular text-info">{acknowledged}</dd>
+              <div className="flex items-center justify-between gap-3 px-3 py-2">
+                <dt className="text-xs text-fg-muted">Acknowledged</dt>
+                <dd className="text-lg font-semibold tabular text-info">{acknowledged}</dd>
               </div>
-              <div className="rounded-md border border-line bg-bg p-2">
-                <dt className="text-[11px] uppercase tracking-wide text-fg-dim">Resolved</dt>
-                <dd className="text-xl font-semibold tabular text-allow">{resolved}</dd>
+              <div className="flex items-center justify-between gap-3 px-3 py-2">
+                <dt className="text-xs text-fg-muted">Resolved</dt>
+                <dd className="text-lg font-semibold tabular text-allow">{resolved}</dd>
               </div>
             </dl>
             <ul className="mt-3 space-y-1.5">

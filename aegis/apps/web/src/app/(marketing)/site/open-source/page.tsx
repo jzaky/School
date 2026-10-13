@@ -42,7 +42,7 @@ export default function OpenSourcePage() {
         <ol className="mt-6 grid gap-3 text-sm md:grid-cols-2">
           {["One deterministic authorization path. Two policy engines in the request path would double the failure surface and make deny-on-failure harder to prove.", "The first version is a TypeScript modular monolith. Anything forcing a Python or JVM sidecar into the critical path is deferred unless there is no credible alternative.", "Every dependency must be MIT, Apache-2.0, BSD or ISC. Projects with enterprise or commercial folders are acceptable only if nothing is imported from those folders.", "Nothing from AGPL or GPL repositories is copied. Patterns may be studied from public documentation."].map((t, i) => (
             <li key={i} className="flex gap-3 rounded-lg border border-(--mk-line) p-3">
-              <span className="font-mono text-xs text-(--mk-accent)">{i + 1}</span>
+              <span className="shrink-0 font-mono text-xs text-(--mk-accent)">{i + 1}</span>
               <span className="text-(--mk-muted)">{t}</span>
             </li>
           ))}

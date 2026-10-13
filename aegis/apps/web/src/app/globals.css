@@ -39,6 +39,13 @@ body {
   border-color: var(--color-line);
 }
 
+/* Grid and flex items default to min-width: auto, which lets a wide table or code block push the whole page
+   wider than the viewport. Let them shrink; the table wrappers scroll on their own. */
+main .grid > *,
+main .flex > .flex-1 {
+  min-width: 0;
+}
+
 .tabular {
   font-variant-numeric: tabular-nums;
 }

@@ -202,7 +202,7 @@ export default async function ApprovalDetailPage({ params }: { params: Promise<{
                 <h3 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Parameters</h3>
                 <p className="mb-1 text-xs text-fg-muted">Exactly what will execute. The hash is bound to the decision.</p>
                 <CodeBlock code={JSON.stringify(a.request.params, null, 2)} />
-                <p className="mt-2 font-mono text-[11px] text-fg-dim">request hash {a.requestHash}</p>
+                <p className="mt-2 break-all font-mono text-[11px] text-fg-dim">request hash {a.requestHash}</p>
               </div>
               {decision ? (
                 <div>

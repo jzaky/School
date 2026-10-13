@@ -111,12 +111,12 @@ export function PageIntro({ eyebrow, title, lead, children }: { eyebrow: string;
 export function ClosingCta({ title, body }: { title?: string; body?: string }) {
   return (
     <Section dark>
-      <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-2xl">
           <h2 className="mk-h2">{title ?? "See a refund go through the gateway, then run a pilot on test-mode money."}</h2>
           <p className="mk-lead mt-3">{body ?? "The hosted demo walks the refund workflow end to end on a synthetic tenant: request, decision, approval, receipt, evidence. A pilot connects your own test-mode payment account."}</p>
         </div>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex shrink-0 flex-wrap gap-3">
           <ButtonLink href="/site/demo">Explore the demo</ButtonLink>
           <ButtonLink href="/site/pilot" variant="secondary">
             Discuss a pilot

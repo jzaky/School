@@ -78,7 +78,7 @@ export default function DemoPage() {
             <li key={s.n} className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-start" data-demo-step={s.n}>
               <div>
                 <div className="flex items-center gap-3">
-                  <span className="font-mono text-xs text-(--mk-accent)">{String(s.n).padStart(2, "0")}</span>
+                  <span className="shrink-0 font-mono text-xs text-(--mk-accent)">{String(s.n).padStart(2, "0")}</span>
                   <Pill tone="neutral">{s.where}</Pill>
                 </div>
                 <h3 className="mk-h3 mt-3">{s.title}</h3>

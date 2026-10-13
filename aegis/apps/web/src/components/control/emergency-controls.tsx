@@ -115,7 +115,7 @@ export function EmergencyControls({ paused, pausedReason, pausedBy, canAdmin, ca
           <strong>Gateway paused.</strong> {pausedReason ? `Reason: ${pausedReason}.` : ""} {pausedBy ? `By ${pausedBy}.` : ""} All new requests are denied.
         </Note>
       ) : null}
-      <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="flex flex-wrap gap-2">
         {paused ? (
           <Button variant="primary" onClick={() => open("resume")} disabled={!canAdmin} disabledReason={adminReason}>
             <Play className="h-3.5 w-3.5" aria-hidden />

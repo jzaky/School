@@ -133,7 +133,7 @@ export function HomePage() {
         <ol className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
           {FLOW.map((s) => (
             <li key={s.n} className="mk-card flex flex-col">
-              <span className="font-mono text-xs text-(--mk-accent)">{s.n}</span>
+              <span className="shrink-0 font-mono text-xs text-(--mk-accent)">{s.n}</span>
               <h3 className="mk-h3 mt-2">{s.title}</h3>
               <p className="mt-2 flex-1 text-sm text-(--mk-muted)">{s.body}</p>
             </li>
