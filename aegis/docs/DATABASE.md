@@ -3,7 +3,7 @@
 PostgreSQL 16. Schema managed by Prisma migrations in `packages/db/prisma`. Row-level security policies in `packages/db/prisma/rls.sql` are applied by `pnpm db:migrate` after every migration.
 
 ## Roles
-- `aegis_owner`: owns all objects. Used only for migrations (`MIGRATION_DATABASE_URL`) and the platform-admin module.
+- `aegis_owner`: owns all objects. Used only for migrations and the seed (`MIGRATION_DATABASE_URL`). Application processes refuse to start in production if they find it.
 - `aegis_app`: the application role (`DATABASE_URL`). Not owner, not superuser, `NOBYPASSRLS`. Has SELECT, INSERT, UPDATE, DELETE on tenant tables except where triggers forbid writes (evidence).
 
 ## Tenant isolation

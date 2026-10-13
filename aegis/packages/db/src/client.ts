@@ -23,7 +23,9 @@ export function rawPrisma(): PrismaClient {
 
 /**
  * Owner connection (MIGRATION_DATABASE_URL). Bypasses RLS because the owner owns the tables.
- * Allowed only in migrations, seeds, isolation tests and the platform-admin module.
+ * Allowed only in migrations, seeds and isolation tests. Application processes (api, web, worker) never
+ * hold this credential in production; platform admin reads global tables through rawPrisma and tenant
+ * counts through withTenant.
  */
 export function ownerPrisma(): PrismaClient {
   if (!globalThis.__aegisOwnerPrisma) {

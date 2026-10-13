@@ -1,26 +1,28 @@
 "use client";
 import * as React from "react";
-import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { toast } from "sonner";
 import { Download, Printer } from "lucide-react";
 import { downloadReportAction } from "@/server/actions/assurance";
 import { Button } from "@/components/ui/button";
 import { downloadText } from "@/components/ui/download";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
+/** Period choice as plain links: the report is a server page keyed by ?days, so a link is the reliable way to change it (works before hydration too). */
 export function PeriodSelector({ days }: { days: number }) {
-  const router = useRouter();
   const pathname = usePathname();
   return (
-    <Tabs value={String(days)} onValueChange={(v) => router.push(`${pathname}?days=${v}`)}>
-      <TabsList aria-label="Report period" className="mb-0 border-b-0">
-        {[7, 30, 90].map((d) => (
-          <TabsTrigger key={d} value={String(d)}>
+    <nav aria-label="Report period" className="flex flex-wrap gap-1">
+      {[7, 30, 90].map((d) => {
+        const active = d === days;
+        return (
+          <Link key={d} href={`${pathname}?days=${d}`} prefetch={false} aria-current={active ? "page" : undefined} className={cn("inline-flex h-9 items-center border-b-2 px-3 text-sm transition-colors duration-150 hover:text-fg focus-visible:bg-bg-elev-2", active ? "border-accent text-fg" : "border-transparent text-fg-muted")}>
             {d} days
-          </TabsTrigger>
-        ))}
-      </TabsList>
-    </Tabs>
+          </Link>
+        );
+      })}
+    </nav>
   );
 }
 

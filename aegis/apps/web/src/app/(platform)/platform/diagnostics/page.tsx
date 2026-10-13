@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ownerPrisma } from "@aegis/db";
+import { rawPrisma } from "@aegis/db";
 import { env } from "@aegis/core";
 import { requirePlatformAdmin } from "@/server/session";
 import { PageHeader } from "@/components/ui/page-header";
@@ -25,7 +25,7 @@ function dbTarget(url: string | undefined): string {
 export default async function DiagnosticsPage() {
   await requirePlatformAdmin();
   const e = env();
-  const orgs = await ownerPrisma().organization.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true, slug: true } });
+  const orgs = await rawPrisma().organization.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true, slug: true } });
   return (
     <div>
       <PageHeader title="Operational Diagnostics" description="Configuration summary for this web process. Secrets are never displayed." badges={<Badge tone="info">Platform admin</Badge>} />

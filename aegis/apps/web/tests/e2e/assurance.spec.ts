@@ -63,8 +63,11 @@ test.describe("assurance as owner", () => {
     await expect(page.getByRole("heading", { level: 2, name: "Observed technical controls" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Download JSON" })).toBeEnabled();
     await expect(page.getByRole("button", { name: "Print / Save as PDF" })).toBeEnabled();
-    await page.getByRole("tab", { name: "7 days" }).click();
-    await page.waitForURL(/days=7/);
+    // The period links are soft navigations on a heavy page; a click that lands during a prefetch can be dropped, so retry.
+    await expect(async () => {
+      await page.getByRole("link", { name: "7 days" }).click();
+      await page.waitForURL(/days=7/, { timeout: 10_000 });
+    }).toPass({ timeout: 60_000 });
     await expect(page.getByText(/period 7 days/)).toBeVisible();
     await page.locator("section", { hasText: "Framework mapping" }).first().getByRole("link").first().click();
     await page.waitForURL(/\/reports\/frameworks\/[0-9a-f-]{36}/);

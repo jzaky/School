@@ -1,4 +1,4 @@
-import { ownerPrisma, rawPrisma, withTenant, type Prisma, type TenantDb } from "@aegis/db";
+import { rawPrisma, withTenant, type Prisma, type TenantDb } from "@aegis/db";
 import { z } from "zod";
 import { appendEvidence } from "../evidence/ledger.js";
 import { makeContext, type OrgContext } from "../lib/context.js";
@@ -194,14 +194,20 @@ export async function acceptInvitation(token: string, userId: string) {
   return { orgId: inv.org_id, orgName: inv.org_name };
 }
 
-/** Platform admin only: lists every organization (owner connection, logged as a platform event). */
+/**
+ * Platform admin only: lists every organization, logged as a platform event. Uses the application
+ * connection: organizations and platform_events are global tables outside row-level security, and the
+ * per-tenant counts are read inside each tenant's own context. No owner credential is needed, so the
+ * page works in production where application processes must not hold one.
+ */
 export async function platformListOrganizations(actorUserId: string) {
-  const owner = ownerPrisma();
-  await owner.platformEvent.create({ data: { type: "platform.tenants_listed", actorId: actorUserId } });
-  const orgs = await owner.organization.findMany({ orderBy: { createdAt: "asc" } });
-  const agentCounts = await owner.agent.groupBy({ by: ["orgId"], _count: { _all: true } });
-  const memberCounts = await owner.membership.groupBy({ by: ["orgId"], _count: { _all: true } });
-  const a = new Map(agentCounts.map((c) => [c.orgId, c._count._all]));
-  const m = new Map(memberCounts.map((c) => [c.orgId, c._count._all]));
-  return orgs.map((o) => ({ ...o, agentCount: a.get(o.id) ?? 0, memberCount: m.get(o.id) ?? 0 }));
+  const db = rawPrisma();
+  await db.platformEvent.create({ data: { type: "platform.tenants_listed", actorId: actorUserId } });
+  const orgs = await db.organization.findMany({ orderBy: { createdAt: "asc" } });
+  const out = [];
+  for (const o of orgs) {
+    const counts = await withTenant(o.id, async (t) => ({ agentCount: await t.agent.count(), memberCount: await t.membership.count() }), { readOnly: true, lock: "lazy" });
+    out.push({ ...o, ...counts });
+  }
+  return out;
 }

@@ -71,7 +71,7 @@ A single-use grant is therefore not a claim of exactly-once execution. The guara
 
 ## Tenant isolation
 
-Every tenant table has `org_id`. PostgreSQL row-level security is enabled and forced on every tenant table. The application role `aegis_app` is not the table owner and cannot bypass RLS. `tenantDb(orgId)` runs each query inside a transaction that sets `app.current_org`. Platform-admin code uses a separate owner connection and is confined to `packages/core/src/platform`. The isolation test suite inserts rows for two organizations and proves that reads, writes and raw SQL through the app role see only one.
+Every tenant table has `org_id`. PostgreSQL row-level security is enabled and forced on every tenant table. The application role `aegis_app` is not the table owner and cannot bypass RLS. `tenantDb(orgId)` runs each query inside a transaction that sets `app.current_org`. Platform-admin code reads the global tables (organizations, platform_events, users) through the application connection and takes per-tenant counts inside each tenant context; no application process holds the owner credential. The isolation test suite inserts rows for two organizations and proves that reads, writes and raw SQL through the app role see only one.
 
 ## Evidence integrity
 

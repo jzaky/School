@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ownerPrisma } from "@aegis/db";
+import { rawPrisma } from "@aegis/db";
 import { requirePlatformAdmin } from "@/server/session";
 import { PageHeader } from "@/components/ui/page-header";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +13,7 @@ export default async function PlatformEventsPage({ searchParams }: { searchParam
   const sp = await searchParams;
   const page = Math.max(1, Number(sp.page) || 1);
   const pageSize = Math.min(200, Math.max(1, Number(sp.pageSize) || 25));
-  const owner = ownerPrisma();
+  const owner = rawPrisma(); // platform_events and organizations are global tables, outside row-level security
   const [rows, total] = await Promise.all([owner.platformEvent.findMany({ orderBy: { createdAt: "desc" }, skip: (page - 1) * pageSize, take: pageSize }), owner.platformEvent.count()]);
   const orgIds = [...new Set(rows.map((r) => r.orgId).filter((x): x is string => !!x))];
   const orgs = orgIds.length ? await owner.organization.findMany({ where: { id: { in: orgIds } }, select: { id: true, name: true } }) : [];

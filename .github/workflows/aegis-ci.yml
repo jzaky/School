@@ -97,15 +97,17 @@ jobs:
       - run: pnpm --filter @aegis/db generate && pnpm --filter @aegis/db migrate && pnpm --filter @aegis/core seed
       - run: npx playwright install --with-deps chromium
         working-directory: aegis/apps/web
+      # The console runs as a production build, as it does in a deployment: no on-demand compilation, so
+      # pages answer at once and the server does not restart under load. Production processes refuse the
+      # owner credentials, so they are dropped from the environment of the two servers (migrate and seed
+      # above still use them).
+      - name: Build the console
+        run: pnpm --filter @aegis/web build
       - name: Start API and web
         run: |
-          (pnpm --filter @aegis/api start &) ; (pnpm --filter @aegis/web dev &)
+          (env -u MIGRATION_DATABASE_URL -u AEGIS_APP_PASSWORD pnpm --filter @aegis/api start &)
+          (env -u MIGRATION_DATABASE_URL -u AEGIS_APP_PASSWORD pnpm --filter @aegis/web start &)
           for i in $(seq 1 60); do curl -sf http://localhost:3000/login >/dev/null && curl -sf http://localhost:4000/health >/dev/null && break; sleep 2; done
-      - name: Warm public pages (dev server compiles on first visit)
-        run: |
-          for p in / /site/products /site/tour /site/architecture /site/security /site/open-source /site/pricing /site/contact /site/demo /site/pilot /site/privacy /site/terms /login; do
-            curl -s -o /dev/null -w "%{http_code} $p\n" --max-time 120 "http://localhost:3000$p" || true
-          done
       - run: npx playwright test --reporter=list
         working-directory: aegis/apps/web
       - uses: actions/upload-artifact@v4

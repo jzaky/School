@@ -118,7 +118,8 @@ test.describe("marketing site", () => {
   test("contact form validates required fields", async ({ page }) => {
     await page.goto("/site/contact");
     await page.getByRole("button", { name: "Send message" }).click();
-    await expect(page.getByRole("alert")).toBeVisible();
+    // Next's route announcer is also role=alert in production builds; pick the form's own message.
+    await expect(page.getByRole("alert").filter({ hasText: /Enter/ })).toBeVisible();
     await expect(page.getByTestId("form-confirmation")).toHaveCount(0);
   });
 
