@@ -109,7 +109,12 @@ export async function extractText(mime: string, buffer: Buffer): Promise<Extract
           }
           return out + "\f";
         });
-      const result = await parsePdf(buffer, { pagerender: pagerender as unknown as (pageData: unknown) => string });
+      // pdf.js (bundled in pdf-parse) reads the Buffer's whole underlying ArrayBuffer rather than the
+      // Buffer's own window. Small Node Buffers share an 8 KB pool, so neighbouring bytes (often an
+      // earlier copy of the same file) are parsed as part of the document and the trailer lookup
+      // lands on a stale offset ("bad XRef entry"). A standalone exact-size array avoids the pool.
+      const exact = new Uint8Array(buffer);
+      const result = await parsePdf(exact as unknown as Buffer, { pagerender: pagerender as unknown as (pageData: unknown) => string });
       const text = normaliseWhitespace(result.text.replace(/\f\s*$/, ""));
       return { text, pageCount: result.numpages };
     }

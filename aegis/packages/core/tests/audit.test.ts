@@ -32,6 +32,17 @@ afterAll(async () => {
 });
 
 describe("document ingestion", () => {
+  it("parses small PDFs whatever their position in the Node buffer pool", async () => {
+    // pdf.js reads a Buffer's whole underlying ArrayBuffer; small Buffers share a pool, so this failed
+    // intermittently ("bad XRef entry") depending on allocation history until the exact-size copy.
+    for (let i = 0; i < 12; i++) {
+      const pdf = await makePdf([`Pool position ${i}. Access rights are reviewed quarterly.`, "Second page."]);
+      const extracted = await extractText("application/pdf", pdf);
+      expect(extracted.pageCount, `pdf ${i}`).toBe(2);
+      expect(extracted.text, `pdf ${i}`).toContain("reviewed quarterly");
+    }
+  });
+
   it("stores and parses markdown, text, PDF and DOCX into chunks", async () => {
     const md = await readFile(join(FIXTURE_DIR, "sample-policy.md"));
     const mdDoc = await withTenant(t.orgId, (db) => storeDocument(db, t.ownerCtx, { title: "Sample IR procedure", filename: "sample-policy.md", mime: "text/markdown", buffer: md }));
