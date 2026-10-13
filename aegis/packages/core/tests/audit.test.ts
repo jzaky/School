@@ -40,7 +40,7 @@ describe("document ingestion", () => {
     expect(mdDoc.storageKey).toBe(`${t.orgId}/documents/${mdDoc.id}.md`);
     await stat(join(storageRoot(), mdDoc.storageKey));
     const parsedMd = await withTenant(t.orgId, (db) => parseDocument(db, t.ownerCtx, mdDoc.id));
-    expect(parsedMd.status).toBe("parsed");
+    expect(parsedMd.status, parsedMd.error ?? "").toBe("parsed");
     expect(parsedMd.chunkCount).toBeGreaterThan(0);
     mdDocId = mdDoc.id;
 
@@ -48,14 +48,14 @@ describe("document ingestion", () => {
     const txtDoc = await withTenant(t.orgId, (db) => storeDocument(db, t.ownerCtx, { title: "Backup standard", filename: "backup.txt", mime: "text/plain; charset=utf-8", buffer: txt }));
     expect(txtDoc.mime).toBe("text/plain");
     const parsedTxt = await withTenant(t.orgId, (db) => parseDocument(db, t.ownerCtx, txtDoc.id));
-    expect(parsedTxt.status).toBe("parsed");
+    expect(parsedTxt.status, parsedTxt.error ?? "").toBe("parsed");
     expect(parsedTxt.chunkCount).toBeGreaterThan(0);
 
     const pdf = await makePdf(["Access control policy. Access rights shall be reviewed quarterly and approved by asset owners. Multi-factor authentication is mandatory for privileged access.", "Second page. Logging of privileged actions is retained for seven years."]);
     expect(pdf.subarray(0, 5).toString()).toBe("%PDF-");
     const pdfDoc = await withTenant(t.orgId, (db) => storeDocument(db, t.ownerCtx, { title: "Access control policy", filename: "access.pdf", mime: "application/pdf", buffer: pdf }));
     const parsedPdf = await withTenant(t.orgId, (db) => parseDocument(db, t.ownerCtx, pdfDoc.id), { timeout: 60_000 });
-    expect(parsedPdf.status).toBe("parsed");
+    expect(parsedPdf.status, parsedPdf.error ?? "").toBe("parsed");
     expect(parsedPdf.pageCount).toBe(2);
     expect(parsedPdf.chunkCount).toBeGreaterThan(0);
     pdfDocId = pdfDoc.id;
