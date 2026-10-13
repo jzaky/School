@@ -2,10 +2,11 @@
 import { useActionState } from "react";
 import { mfaAction, type ActionState } from "@/server/actions/auth";
 
-export function MfaForm() {
+export function MfaForm({ next }: { next?: string }) {
   const [state, action, pending] = useActionState<ActionState, FormData>(mfaAction, {});
   return (
     <form action={action} className="space-y-4 rounded-panel border border-line bg-bg-elev p-6">
+      {next ? <input type="hidden" name="next" value={next} /> : null}
       <div>
         <label htmlFor="code" className="mb-1 block text-xs font-medium text-fg-muted">
           Authenticator code

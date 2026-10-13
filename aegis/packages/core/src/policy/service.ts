@@ -113,6 +113,8 @@ export async function activateVersion(db: TenantDb, ctx: OrgContext, versionId: 
   if (!v) throw notFound("Policy version");
   if (v.state === "active") throw validation("Version is already active");
   if (v.state === "retired") throw validation("Retired versions cannot be reactivated. Use rollback to create a new version from it.");
+  // A draft has not run its embedded tests or been reviewed: it must be submitted first.
+  if (v.state !== "review") throw validation("Submit the version for review first; its embedded tests run on submission");
   if ((opts.fourEyes ?? true) && v.createdBy && v.createdBy === ctx.actor.id) throw validation("Four-eyes rule: the author of a version cannot activate it");
   const now = new Date();
   if (v.policy.currentVersionId && v.policy.currentVersionId !== versionId) {
@@ -142,6 +144,9 @@ export async function rollbackToVersion(db: TenantDb, ctx: OrgContext, targetVer
   assertPermission(ctx, "policies:activate");
   const target = await db.policyVersion.findUnique({ where: { id: targetVersionId }, include: { policy: { include: { versions: { orderBy: { version: "desc" }, take: 1 } } } } });
   if (!target) throw notFound("Policy version");
+  // Rollback restores a version that was reviewed and in force before; it never activates an unreviewed draft.
+  if (!target.activatedAt) throw validation("Only a version that was active before can be rolled back to. Submit and activate a new version instead.");
+  if (reason.trim().length < 5) throw validation("Explain why you are rolling back");
   const latest = target.policy.versions[0]!;
   const now = new Date();
   const copy = await db.policyVersion.create({

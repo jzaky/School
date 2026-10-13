@@ -1,7 +1,7 @@
 "use server";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { isAegisError, isProduction, loginSchema, loginWithPassword, markMfaPassed, revokeSession, SESSION_COOKIE, setSessionOrg, verifyMfaCode, listUserMemberships } from "@aegis/core";
+import { isAegisError, isProduction, loginSchema, loginWithPassword, markMfaPassed, revokeSession, SESSION_COOKIE, setSessionOrg, verifySessionMfa, listUserMemberships } from "@aegis/core";
 import { getSession } from "@/server/session";
 
 export interface ActionState {
@@ -17,7 +17,8 @@ export async function loginAction(_prev: ActionState, formData: FormData): Promi
   try {
     const r = await loginWithPassword(parsed.data, { ip: h.get("x-forwarded-for") ?? undefined, userAgent: h.get("user-agent") ?? undefined });
     (await cookies()).set(SESSION_COOKIE, r.token, cookieOpts);
-    redirect(r.mfaRequired ? "/mfa" : safeNext(formData.get("next")));
+    const next = safeNext(formData.get("next"));
+    redirect(r.mfaRequired ? `/mfa${next !== "/overview" ? `?next=${encodeURIComponent(next)}` : ""}` : next);
   } catch (e) {
     if (isRedirect(e)) throw e;
     return { error: isAegisError(e) ? e.message : "Sign in failed" };
@@ -28,9 +29,12 @@ export async function mfaAction(_prev: ActionState, formData: FormData): Promise
   const s = await getSession();
   if (!s) redirect("/login");
   const code = String(formData.get("code") ?? "");
-  if (!(await verifyMfaCode(s.user.id, code))) return { error: "Invalid code" };
-  await markMfaPassed(s.id);
-  redirect("/overview");
+  const r = await verifySessionMfa(s.id, s.user.id, code);
+  if (!r.ok) {
+    if (r.revoked) redirect("/login?error=mfa_locked");
+    return { error: `Invalid code. ${r.remaining} attempt${r.remaining === 1 ? "" : "s"} left before you must sign in again.` };
+  }
+  redirect(safeNext(formData.get("next")));
 }
 
 export async function logoutAction(): Promise<void> {

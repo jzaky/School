@@ -4,9 +4,18 @@ import { env } from "@aegis/core";
 
 export const metadata: Metadata = { title: "Sign in" };
 
-export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
+/** Known sign-in problems, in plain words. Anything else shows a generic line: the URL is never echoed. */
+const ERRORS: Record<string, string> = {
+  mfa_locked: "Too many wrong authenticator codes. Sign in again to get a new set of attempts.",
+  sso_failed: "Single sign-on did not complete. Try again, or sign in with your password.",
+  sso_not_member: "Your account exists but is not a member of that organization. Ask one of its administrators to invite you.",
+  sso_disabled: "Single sign-on is not turned on for that organization.",
+};
+
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string; error?: string }> }) {
   const demo = env().AEGIS_DEMO_MODE;
-  const { next } = await searchParams;
+  const { next, error } = await searchParams;
+  const errorText = error ? (ERRORS[error] ?? "Sign-in did not complete. Try again.") : null;
   return (
     <main className="grid min-h-screen place-items-center p-6">
       <div className="w-full max-w-sm">
@@ -17,6 +26,11 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             <div className="text-xs text-fg-muted">AI governance console</div>
           </div>
         </div>
+        {errorText ? (
+          <p role="alert" className="mb-4 rounded-md border border-deny/30 bg-deny/10 px-3 py-2 text-sm text-fg">
+            {errorText}
+          </p>
+        ) : null}
         <LoginForm demo={demo} next={next} />
         <p className="mt-4 text-center text-[11px] text-fg-dim">Tamper-evident evidence. Signals, not guarantees.</p>
       </div>

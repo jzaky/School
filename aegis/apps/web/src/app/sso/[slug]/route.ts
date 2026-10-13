@@ -12,6 +12,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
     return res;
   } catch (e) {
     const message = isAegisError(e) ? e.message : "Single sign-on is unavailable";
-    return NextResponse.redirect(`${env().WEB_PUBLIC_URL}/login?error=${encodeURIComponent(message)}`);
+    return NextResponse.redirect(`${env().WEB_PUBLIC_URL}/login?error=${/not enabled/.test(message) ? "sso_disabled" : "sso_failed"}`);
   }
 }

@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
-import { createSession, isProduction, listUserMemberships, loginSchema, loginWithPassword, markMfaPassed, revokeSession, SESSION_COOKIE, setSessionOrg, unauthorized, verifyMfaCode } from "@aegis/core";
+import { createSession, isProduction, listUserMemberships, loginSchema, loginWithPassword, revokeSession, SESSION_COOKIE, setSessionOrg, unauthorized, verifySessionMfa } from "@aegis/core";
 import { requireUser } from "../plugins/auth.js";
 
 export async function authRoutes(app: FastifyInstance) {
@@ -16,8 +16,8 @@ export async function authRoutes(app: FastifyInstance) {
   app.post("/mfa", { config: { rateLimit: { max: 10, timeWindow: "1 minute" } } }, async (req) => {
     const s = requireUser(req);
     const { code } = z.object({ code: z.string().length(6) }).parse(req.body);
-    if (!(await verifyMfaCode(s.user.id, code))) throw unauthorized("Invalid code");
-    await markMfaPassed(s.id);
+    const r = await verifySessionMfa(s.id, s.user.id, code);
+    if (!r.ok) throw unauthorized(r.revoked ? "Too many wrong codes; this session is closed. Sign in again." : `Invalid code (${r.remaining} attempts left)`);
     return { ok: true };
   });
 

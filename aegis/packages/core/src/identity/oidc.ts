@@ -4,7 +4,7 @@ import { rawPrisma, withTenant, type TenantDb } from "@aegis/db";
 import { z } from "zod";
 import { appendEvidence } from "../evidence/ledger.js";
 import { makeContext, type OrgContext } from "../lib/context.js";
-import { decryptSecret, encryptSecret, hmacHex, randomToken } from "../lib/crypto.js";
+import { decryptSecret, encryptSecret, constantTimeEqual, hmacHex, randomToken } from "../lib/crypto.js";
 import { env } from "../env.js";
 import { forbidden, notFound, unauthorized, validation } from "../lib/errors.js";
 import { assertPermission } from "../orgs/orgs.js";
@@ -16,8 +16,26 @@ import { createSession } from "./sessions.js";
  * connection and receive the organization's default role ("viewer") until an admin changes it.
  * Tokens are verified against the issuer's JWKS with `jose`. SAML is not implemented.
  */
+/**
+ * Issuers are fetched by the server (discovery, keys, token exchange), so they must be public https
+ * endpoints: no plain http, no IP literals, no localhost or internal names.
+ */
+export function issuerIsSafe(issuer: string): boolean {
+  let u: URL;
+  try {
+    u = new URL(issuer);
+  } catch {
+    return false;
+  }
+  if (u.protocol !== "https:" || u.username || u.password) return false;
+  const host = u.hostname.toLowerCase();
+  if (/^[\d.]+$/.test(host) || host.includes(":") || host.startsWith("[")) return false;
+  if (host === "localhost" || !host.includes(".") || /\.(local|localhost|internal|lan|home|corp)$/.test(host)) return false;
+  return true;
+}
+
 export const ssoConnectionSchema = z.object({
-  issuer: z.string().url(),
+  issuer: z.string().url().refine((v) => issuerIsSafe(v) || process.env.AEGIS_ALLOW_INSECURE_SSO_ISSUER === "true", "The issuer must be a public https address"),
   clientId: z.string().min(1).max(200),
   clientSecret: z.string().min(1).max(500).optional(),
   emailDomains: z.array(z.string().min(3).max(100)).min(1),
@@ -65,7 +83,7 @@ function signState(payload: Record<string, string>): string {
 }
 function readState(state: string): Record<string, string> {
   const [body, sig] = state.split(".");
-  if (!body || !sig || hmacHex(env().AEGIS_SESSION_SECRET, `sso-state:${body}`) !== sig) throw unauthorized("Invalid SSO state");
+  if (!body || !sig || !constantTimeEqual(hmacHex(env().AEGIS_SESSION_SECRET, `sso-state:${body}`), sig)) throw unauthorized("Invalid SSO state");
   const parsed = JSON.parse(Buffer.from(body, "base64url").toString("utf8")) as Record<string, string> & { exp: number };
   if (parsed.exp < Date.now()) throw unauthorized("SSO state expired");
   return parsed;
@@ -110,12 +128,20 @@ export async function completeSsoLogin(params: { code: string; state: string; ve
   const { payload } = await jwtVerify(tokens.id_token, jwks, { issuer: disc.issuer || conn.issuer, audience: conn.clientId });
   if (payload.nonce !== st.nonce) throw unauthorized("Nonce mismatch");
   const email = typeof payload.email === "string" ? payload.email.toLowerCase() : null;
-  if (!email || (payload.email_verified === false)) throw unauthorized("Identity provider did not return a verified email");
+  // The provider must assert that it verified the address; a missing claim is not a verification.
+  if (!email || payload.email_verified !== true) throw unauthorized("Identity provider did not return a verified email");
   const domain = email.split("@")[1] ?? "";
   if (!conn.emailDomains.includes(domain)) throw forbidden(`Email domain ${domain} is not allowed for this organization`);
   const name = typeof payload.name === "string" ? payload.name : email;
   let user = await rawPrisma().user.findUnique({ where: { email } });
-  if (!user) user = await rawPrisma().user.create({ data: { email, name, passwordHash: null } });
+  if (user) {
+    // An organization's identity provider vouches only for its own members. An account that exists for
+    // another organization is never taken over by matching its email: it must be invited here first.
+    const member = await withTenant(orgId, (db) => db.membership.findUnique({ where: { orgId_userId: { orgId, userId: user!.id } } }));
+    if (!member) throw forbidden("An AEGIS account with this email already exists. Ask an administrator of this organization to invite it, then sign in with single sign-on.");
+  } else {
+    user = await rawPrisma().user.create({ data: { email, name, passwordHash: null } });
+  }
   if (user.status !== "active") throw forbidden("Account disabled");
   await withTenant(orgId, async (db) => {
     const ctx = makeContext(orgId, { type: "user", id: user!.id });
@@ -129,6 +155,6 @@ export async function completeSsoLogin(params: { code: string; state: string; ve
   });
   await rawPrisma().user.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } });
   // SSO logins satisfy MFA when the provider enforces it; we still honour a user's own TOTP flag.
-  const { token, session } = await createSession(user.id, { ip: params.ip, userAgent: params.userAgent, activeOrgId: orgId, mfaPassed: !user.mfaEnabled });
+  const { token, session } = await createSession(user.id, { ip: params.ip, userAgent: params.userAgent, activeOrgId: orgId, ssoOrgId: orgId, mfaPassed: !user.mfaEnabled });
   return { token, sessionId: session.id, userId: user.id, orgId, mfaRequired: user.mfaEnabled };
 }

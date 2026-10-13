@@ -4,7 +4,7 @@ import { decryptSecret, encryptSecret } from "../lib/crypto.js";
 import { AegisError, unauthorized, validation } from "../lib/errors.js";
 import { hashPassword, passwordPolicyIssues, verifyPassword } from "./password.js";
 import { createSession } from "./sessions.js";
-import { generateTotpSecret, totpUri, verifyTotp } from "./totp.js";
+import { generateTotpSecret, totpUri, matchTotpStep, verifyTotp } from "./totp.js";
 import { listUserMemberships } from "./memberships.js";
 
 const MAX_FAILED = 8;
@@ -69,8 +69,10 @@ export async function changePassword(userId: string, current: string, next: stri
 /** Step 1 of MFA enrolment: creates a secret (stored encrypted, not yet enabled) and returns the otpauth URI. */
 export async function beginMfaEnrolment(userId: string) {
   const user = await rawPrisma().user.findUniqueOrThrow({ where: { id: userId } });
+  // Replacing an active second factor would switch it off without proof; turning it off needs a current code.
+  if (user.mfaEnabled) throw validation("Two-factor authentication is already on. Turn it off with a current code before enrolling a new device.");
   const secret = generateTotpSecret();
-  await rawPrisma().user.update({ where: { id: userId }, data: { mfaSecretEnc: encryptSecret(secret, `mfa:${userId}`), mfaEnabled: false } });
+  await rawPrisma().user.update({ where: { id: userId }, data: { mfaSecretEnc: encryptSecret(secret, `mfa:${userId}`), mfaEnabled: false, mfaLastStep: null } });
   return { secret, uri: totpUri(secret, user.email) };
 }
 
@@ -83,10 +85,40 @@ export async function confirmMfaEnrolment(userId: string, code: string) {
   await rawPrisma().user.update({ where: { id: userId }, data: { mfaEnabled: true } });
 }
 
+/**
+ * Checks a TOTP code. Each code is accepted once: the matched time step must be later than the last
+ * accepted one, and the update is conditional, so two concurrent uses of the same code cannot both pass.
+ */
 export async function verifyMfaCode(userId: string, code: string): Promise<boolean> {
   const user = await rawPrisma().user.findUniqueOrThrow({ where: { id: userId } });
   if (!user.mfaEnabled || !user.mfaSecretEnc) return false;
-  return verifyTotp(decryptSecret(user.mfaSecretEnc, `mfa:${userId}`), code);
+  const step = matchTotpStep(decryptSecret(user.mfaSecretEnc, `mfa:${userId}`), code);
+  if (step === null) return false;
+  const claimed = await rawPrisma().user.updateMany({ where: { id: userId, OR: [{ mfaLastStep: null }, { mfaLastStep: { lt: BigInt(step) } }] }, data: { mfaLastStep: BigInt(step) } });
+  return claimed.count === 1;
+}
+
+/** Wrong codes allowed in one session before it is revoked and the user must sign in again. */
+export const MFA_MAX_FAILURES = 5;
+
+/**
+ * MFA step of a sign-in. Counts wrong codes per session and revokes the session at the limit, so a
+ * six-digit code cannot be guessed by repeated tries. On success the session is marked MFA-passed.
+ */
+export async function verifySessionMfa(sessionId: string, userId: string, code: string): Promise<{ ok: true } | { ok: false; revoked: boolean; remaining: number }> {
+  const session = await rawPrisma().session.findUnique({ where: { id: sessionId } });
+  if (!session || session.revokedAt || session.userId !== userId) return { ok: false, revoked: true, remaining: 0 };
+  if (session.mfaFailures >= MFA_MAX_FAILURES) return { ok: false, revoked: true, remaining: 0 };
+  if (await verifyMfaCode(userId, code)) {
+    await rawPrisma().session.update({ where: { id: sessionId }, data: { mfaPassed: true, mfaFailures: 0 } });
+    return { ok: true };
+  }
+  const updated = await rawPrisma().session.update({ where: { id: sessionId }, data: { mfaFailures: { increment: 1 } } });
+  if (updated.mfaFailures >= MFA_MAX_FAILURES) {
+    await rawPrisma().session.update({ where: { id: sessionId }, data: { revokedAt: new Date() } });
+    return { ok: false, revoked: true, remaining: 0 };
+  }
+  return { ok: false, revoked: false, remaining: MFA_MAX_FAILURES - updated.mfaFailures };
 }
 
 export async function disableMfa(userId: string, code: string) {

@@ -3,7 +3,7 @@ import { z } from "zod";
 import { appendEvidence } from "../evidence/ledger.js";
 import { makeContext, type OrgContext } from "../lib/context.js";
 import { conflict, forbidden, notFound, validation } from "../lib/errors.js";
-import { hasPermission, SYSTEM_ROLES, type Permission } from "../identity/permissions.js";
+import { ALL_PERMISSIONS, hasPermission, SYSTEM_ROLES, type Permission } from "../identity/permissions.js";
 import { randomToken, sha256Hex } from "../lib/crypto.js";
 
 export const slugSchema = z
@@ -67,12 +67,26 @@ export async function listMembers(db: TenantDb, ctx: OrgContext) {
   return rows.map((m) => ({ ...m, user: byId.get(m.userId) ?? null }));
 }
 
+/** A person can hand out only permissions they hold themselves. Owners ("*") hold all. */
+function assertCanGrant(ctx: OrgContext, permissions: string[], what: string) {
+  if (ctx.actor.type === "system") return;
+  const held = ctx.actor.permissions ?? [];
+  if (held.includes("*")) return;
+  const beyond = permissions.filter((p) => p === "*" || !held.includes(p));
+  if (beyond.length) throw forbidden(`You cannot ${what} with permissions you do not hold: ${beyond.join(", ")}`);
+}
+
 export async function changeMemberRole(db: TenantDb, ctx: OrgContext, membershipId: string, roleId: string) {
   assertPermission(ctx, "users:write");
   const m = await db.membership.findUnique({ where: { id: membershipId }, include: { role: true } });
   if (!m) throw notFound("Membership");
   const role = await db.role.findUnique({ where: { id: roleId } });
   if (!role) throw notFound("Role");
+  if (ctx.actor.type === "user" && m.userId === ctx.actor.id) throw forbidden("You cannot change your own role");
+  // Both the new role and the role being taken away must lie within what the actor holds, so an
+  // administrator can neither create an owner nor demote one.
+  assertCanGrant(ctx, role.permissions, "assign a role");
+  assertCanGrant(ctx, m.role.permissions, "change the role of a member");
   if (m.role.key === "owner") {
     const owners = await db.membership.count({ where: { orgId: ctx.orgId, role: { key: "owner" }, status: "active" } });
     if (owners <= 1 && role.key !== "owner") throw validation("The organization must keep at least one Owner");
@@ -104,9 +118,16 @@ export async function listRoles(db: TenantDb, ctx: OrgContext) {
 
 export const roleInputSchema = z.object({ key: slugSchema, name: z.string().min(2).max(80), description: z.string().max(300).default(""), permissions: z.array(z.string()).max(50) });
 
+function assertKnownPermissions(perms: string[]) {
+  const unknown = perms.filter((p) => !(ALL_PERMISSIONS as string[]).includes(p));
+  if (unknown.length) throw validation(`Unknown permissions: ${unknown.join(", ")}`);
+}
+
 export async function createRole(db: TenantDb, ctx: OrgContext, input: z.infer<typeof roleInputSchema>) {
   assertPermission(ctx, "users:write");
   if (input.permissions.includes("*")) throw validation("Custom roles cannot hold the wildcard permission");
+  assertKnownPermissions(input.permissions);
+  assertCanGrant(ctx, input.permissions, "create a role");
   const role = await db.role.create({ data: { orgId: ctx.orgId, ...input, isSystem: false } });
   await appendEvidence(db, ctx, { type: "role.created", subjectType: "role", subjectId: role.id, payload: { key: role.key, permissions: role.permissions } });
   return role;
@@ -118,6 +139,10 @@ export async function updateRole(db: TenantDb, ctx: OrgContext, roleId: string, 
   if (!role) throw notFound("Role");
   if (role.isSystem) throw validation("System roles cannot be edited. Create a custom role instead.");
   if (patch.permissions?.includes("*")) throw validation("Custom roles cannot hold the wildcard permission");
+  if (patch.permissions) {
+    assertKnownPermissions(patch.permissions);
+    assertCanGrant(ctx, [...patch.permissions, ...role.permissions], "edit a role");
+  }
   const updated = await db.role.update({ where: { id: roleId }, data: patch });
   await appendEvidence(db, ctx, { type: "role.updated", subjectType: "role", subjectId: roleId, payload: { fields: Object.keys(patch), permissions: updated.permissions } });
   return updated;

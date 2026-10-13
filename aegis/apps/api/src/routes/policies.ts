@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { withTenant } from "@aegis/db";
 import { z } from "zod";
-import { activateVersion, assignPolicy, assignmentSchema, createPolicy, createPolicyVersion, deactivatePolicy, getPolicy, listPolicies, listPolicyHistory, policyInputSchema, rollbackToVersion, simulatePolicy, submitForReview } from "@aegis/core";
+import { activateVersion, assignPolicy, assignmentSchema, createPolicy, createPolicyVersion, deactivatePolicy, getPolicy, listPolicies, listPolicyHistory, policyInputSchema, rollbackToVersion, simulatePolicy, submitForReview, getOrganization } from "@aegis/core";
 
 export async function policyRoutes(app: FastifyInstance) {
   app.get("/", async (req) => {
@@ -41,7 +41,10 @@ export async function policyRoutes(app: FastifyInstance) {
   app.post("/versions/:versionId/activate", async (req) => {
     const ctx = await req.orgContext();
     const { versionId } = z.object({ versionId: z.string().uuid() }).parse(req.params);
-    return withTenant(ctx.orgId, (db) => activateVersion(db, ctx, versionId));
+    // Honour the organization's four-eyes setting, as the console does: on unless explicitly turned off.
+    const org = await getOrganization(ctx.orgId);
+    const fourEyes = ((org.settings ?? {}) as { policyFourEyes?: boolean }).policyFourEyes !== false;
+    return withTenant(ctx.orgId, (db) => activateVersion(db, ctx, versionId, { fourEyes }));
   });
   app.post("/versions/:versionId/rollback", async (req) => {
     const ctx = await req.orgContext();

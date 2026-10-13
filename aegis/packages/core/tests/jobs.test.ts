@@ -32,7 +32,7 @@ describe("durable job queue", () => {
     expect(row.status).toBe("pending");
     expect(row.lastError).toBe("transient");
     expect(row.runAt.getTime()).toBeGreaterThan(Date.now());
-    await rawPrisma().job.update({ where: { id: row.id }, data: { runAt: new Date() } });
+    await rawPrisma().job.update({ where: { id: row.id }, data: { runAt: EPOCH } });
     const again = (await claimJobs(50)).find((j) => j.id === row.id)!;
     await runJob(again);
     row = await rawPrisma().job.findUniqueOrThrow({ where: { id: row.id } });

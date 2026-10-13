@@ -1,7 +1,7 @@
 import { rawPrisma, type User } from "@aegis/db";
 import { hmacHex, randomToken } from "../lib/crypto.js";
 import { env } from "../env.js";
-import { unauthorized } from "../lib/errors.js";
+import { forbidden, unauthorized } from "../lib/errors.js";
 
 export const SESSION_COOKIE = "aegis_session";
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000; // 12 hours absolute
@@ -19,7 +19,7 @@ export interface SessionInfo {
   expiresAt: Date;
 }
 
-export async function createSession(userId: string, opts: { ip?: string; userAgent?: string; activeOrgId?: string | null; mfaPassed: boolean }) {
+export async function createSession(userId: string, opts: { ip?: string; userAgent?: string; activeOrgId?: string | null; mfaPassed: boolean; ssoOrgId?: string | null }) {
   const token = randomToken(32);
   const row = await rawPrisma().session.create({
     data: {
@@ -28,6 +28,7 @@ export async function createSession(userId: string, opts: { ip?: string; userAge
       ip: opts.ip,
       userAgent: opts.userAgent?.slice(0, 300),
       activeOrgId: opts.activeOrgId ?? null,
+      ssoOrgId: opts.ssoOrgId ?? null,
       mfaPassed: opts.mfaPassed,
       expiresAt: new Date(Date.now() + SESSION_TTL_MS),
     },
@@ -68,7 +69,13 @@ export async function revokeAllSessions(userId: string, exceptSessionId?: string
   await rawPrisma().session.updateMany({ where: { userId, revokedAt: null, ...(exceptSessionId ? { id: { not: exceptSessionId } } : {}) }, data: { revokedAt: new Date() } });
 }
 
+/**
+ * Changes the session's active organization. A single sign-on session stays in the organization whose
+ * identity provider issued it: that provider vouched for the user there and nowhere else.
+ */
 export async function setSessionOrg(sessionId: string, orgId: string | null) {
+  const s = await rawPrisma().session.findUnique({ where: { id: sessionId }, select: { ssoOrgId: true } });
+  if (s?.ssoOrgId && orgId !== s.ssoOrgId) throw forbidden("This session was opened through another organization's single sign-on. Sign in again to use a different organization.");
   await rawPrisma().session.update({ where: { id: sessionId }, data: { activeOrgId: orgId } });
 }
 

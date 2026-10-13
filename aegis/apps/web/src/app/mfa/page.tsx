@@ -7,7 +7,8 @@ import { MfaForm } from "./mfa-form";
 export const metadata: Metadata = { title: "Two-factor authentication" };
 export const dynamic = "force-dynamic";
 
-export default async function MfaPage() {
+export default async function MfaPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
+  const { next } = await searchParams;
   const s = await getSession();
   if (!s) redirect("/login");
   if (!s.user.mfaEnabled || s.mfaPassed) redirect("/overview");
@@ -21,7 +22,7 @@ export default async function MfaPage() {
             <div className="text-xs text-fg-muted">Signed in as {s.user.email}</div>
           </div>
         </div>
-        <MfaForm />
+        <MfaForm next={next} />
         <form action={logoutAction} className="mt-3 text-center">
           <button type="submit" className="text-xs text-fg-muted hover:text-fg">
             Use a different account

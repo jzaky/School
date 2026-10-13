@@ -52,12 +52,18 @@ export function totpCode(secretBase32: string, time = Date.now(), step = 30, dig
 }
 
 export function verifyTotp(secretBase32: string, code: string, window = 1, time = Date.now()): boolean {
-  if (!/^\d{6}$/.test(code)) return false;
+  return matchTotpStep(secretBase32, code, window, time) !== null;
+}
+
+/** The 30-second time step the code belongs to, or null. Used to accept each code only once. */
+export function matchTotpStep(secretBase32: string, code: string, window = 1, time = Date.now()): number | null {
+  if (!/^\d{6}$/.test(code)) return null;
   for (let i = -window; i <= window; i++) {
-    const candidate = totpCode(secretBase32, time + i * 30_000);
-    if (candidate.length === code.length && timingSafeEqual(Buffer.from(candidate), Buffer.from(code))) return true;
+    const t = time + i * 30_000;
+    const candidate = totpCode(secretBase32, t);
+    if (candidate.length === code.length && timingSafeEqual(Buffer.from(candidate), Buffer.from(code))) return Math.floor(t / 30_000);
   }
-  return false;
+  return null;
 }
 
 export function totpUri(secretBase32: string, account: string, issuer = "AEGIS"): string {
