@@ -1,4 +1,4 @@
-import { createPrivateKey, createPublicKey, sign, verify } from "node:crypto";
+import { createPrivateKey, createPublicKey, sign, verify, type KeyObject } from "node:crypto";
 import type { Prisma, TenantDb } from "@aegis/db";
 import { env } from "../env.js";
 import { canonicalJson, canonicalValue, sha256Hex } from "../lib/crypto.js";
@@ -100,7 +100,7 @@ export interface VerifyResult {
 }
 
 /** Recomputes every hash in the chain and validates checkpoint signatures. */
-export async function verifyChain(db: TenantDb, orgId: string, opts: { fromSeq?: bigint; limit?: number } = {}): Promise<VerifyResult> {
+export async function verifyChain(db: TenantDb, orgId: string, opts: { fromSeq?: bigint; limit?: number; ring?: EvidenceKeyRing } = {}): Promise<VerifyResult> {
   const rows = await db.evidenceEvent.findMany({
     where: { orgId, ...(opts.fromSeq ? { seq: { gte: opts.fromSeq } } : {}) },
     orderBy: { seq: "asc" },
@@ -131,55 +131,96 @@ export async function verifyChain(db: TenantDb, orgId: string, opts: { fromSeq?:
   let allCpValid = true;
   for (const cp of checkpoints) {
     const ev = await db.evidenceEvent.findUnique({ where: { orgId_seq: { orgId, seq: cp.throughSeq } }, select: { hash: true } });
-    const ok = !!ev && ev.hash === cp.hash && verifyCheckpointSignature(cp.hash, cp.throughSeq, orgId, cp.signature);
+    const ok = !!ev && ev.hash === cp.hash && verifyCheckpointSignature(cp.hash, cp.throughSeq, orgId, cp.signature, cp.keyId, opts.ring);
     if (!ok) allCpValid = false;
     cpResults.push({ throughSeq: cp.throughSeq.toString(), valid: ok });
   }
   return { valid: allCpValid, checked: rows.length, firstBadSeq: null, reason: allCpValid ? null : "checkpoint signature or hash mismatch", lastHash: rows.at(-1)?.hash ?? null, checkpoints: cpResults };
 }
 
-function signingKey() {
-  const raw = env().EVIDENCE_SIGNING_KEY;
-  if (!raw) return null;
-  const pem = Buffer.from(raw, "base64").toString("utf8");
-  return createPrivateKey(pem);
+/**
+ * Evidence signing keys (S9). EVIDENCE_SIGNING_KEY is the current Ed25519 private key (PKCS8 PEM,
+ * base64); it signs new checkpoints. EVIDENCE_VERIFY_KEYS lists retired public keys (SPKI PEM, base64,
+ * comma separated) so checkpoints signed before a rotation still verify. Each checkpoint records the id
+ * of the key that signed it, and verification uses exactly that key: a checkpoint whose key is unknown
+ * fails verification instead of being silently skipped.
+ */
+export interface EvidenceKeyRing {
+  current: { keyId: string; privateKey: KeyObject; publicKey: KeyObject } | null;
+  /** Every key that may verify, by key id: the current public key and the retired ones. */
+  verify: Map<string, KeyObject>;
 }
 
-export function signingKeyId(): string {
-  const key = signingKey();
-  if (!key) return "none";
-  const pub = createPublicKey(key).export({ type: "spki", format: "der" });
-  return sha256Hex(pub).slice(0, 16);
+export function keyIdOf(publicKey: KeyObject): string {
+  return sha256Hex(publicKey.export({ type: "spki", format: "der" })).slice(0, 16);
+}
+
+export function loadKeyRing(signingKeyB64: string | undefined, verifyKeysB64: string | undefined): EvidenceKeyRing {
+  const verifyKeys = new Map<string, KeyObject>();
+  let current: EvidenceKeyRing["current"] = null;
+  if (signingKeyB64) {
+    const privateKey = createPrivateKey(Buffer.from(signingKeyB64, "base64").toString("utf8"));
+    if (privateKey.asymmetricKeyType !== "ed25519") throw new Error("EVIDENCE_SIGNING_KEY must be an Ed25519 private key");
+    const publicKey = createPublicKey(privateKey);
+    current = { keyId: keyIdOf(publicKey), privateKey, publicKey };
+    verifyKeys.set(current.keyId, publicKey);
+  }
+  for (const part of (verifyKeysB64 ?? "").split(",").map((x) => x.trim()).filter(Boolean)) {
+    const publicKey = createPublicKey(Buffer.from(part, "base64").toString("utf8"));
+    if (publicKey.asymmetricKeyType !== "ed25519") throw new Error("EVIDENCE_VERIFY_KEYS must hold Ed25519 public keys");
+    verifyKeys.set(keyIdOf(publicKey), publicKey);
+  }
+  return { current, verify: verifyKeys };
+}
+
+let cachedRing: { source: string; ring: EvidenceKeyRing } | null = null;
+/** The key ring from the environment, rebuilt only when the configured values change. */
+export function evidenceKeyRing(): EvidenceKeyRing {
+  const e = env();
+  const source = `${e.EVIDENCE_SIGNING_KEY ?? ""}|${e.EVIDENCE_VERIFY_KEYS ?? ""}`;
+  if (!cachedRing || cachedRing.source !== source) cachedRing = { source, ring: loadKeyRing(e.EVIDENCE_SIGNING_KEY, e.EVIDENCE_VERIFY_KEYS) };
+  return cachedRing.ring;
+}
+
+export function signingKeyId(ring: EvidenceKeyRing = evidenceKeyRing()): string {
+  return ring.current?.keyId ?? "none";
 }
 
 export function checkpointMessage(hash: string, throughSeq: bigint, orgId: string): Buffer {
   return Buffer.from(canonicalJson({ v: 1, orgId, throughSeq: throughSeq.toString(), hash }));
 }
 
-export function verifyCheckpointSignature(hash: string, throughSeq: bigint, orgId: string, signature: string): boolean {
-  const key = signingKey();
+/** Verifies with the key that signed the checkpoint (by its recorded key id). Unknown key ids fail. */
+export function verifyCheckpointSignature(hash: string, throughSeq: bigint, orgId: string, signature: string, keyId: string, ring: EvidenceKeyRing = evidenceKeyRing()): boolean {
+  const key = ring.verify.get(keyId);
   if (!key) return false;
   try {
-    return verify(null, checkpointMessage(hash, throughSeq, orgId), createPublicKey(key), Buffer.from(signature, "base64"));
+    return verify(null, checkpointMessage(hash, throughSeq, orgId), key, Buffer.from(signature, "base64"));
   } catch {
     return false;
   }
 }
 
 /** Signs the latest hash. Returns null when no signing key is configured or nothing new happened. */
-export async function writeCheckpoint(db: TenantDb, orgId: string) {
-  const key = signingKey();
+export async function writeCheckpoint(db: TenantDb, orgId: string, ring: EvidenceKeyRing = evidenceKeyRing()) {
+  const key = ring.current;
   if (!key) return null;
   const last = await db.evidenceEvent.findFirst({ where: { orgId }, orderBy: { seq: "desc" }, select: { seq: true, hash: true } });
   if (!last) return null;
   const existing = await db.evidenceCheckpoint.findUnique({ where: { orgId_throughSeq: { orgId, throughSeq: last.seq } } });
   if (existing) return existing;
-  const signature = sign(null, checkpointMessage(last.hash, last.seq, orgId), key).toString("base64");
-  return db.evidenceCheckpoint.create({ data: { orgId, throughSeq: last.seq, hash: last.hash, signature, keyId: signingKeyId() } });
+  const signature = sign(null, checkpointMessage(last.hash, last.seq, orgId), key.privateKey).toString("base64");
+  return db.evidenceCheckpoint.create({ data: { orgId, throughSeq: last.seq, hash: last.hash, signature, keyId: key.keyId } });
 }
 
+/** Public keys that verify checkpoints, current first. Publish these so anyone can check exported evidence. */
+export function exportCheckpointPublicKeys(ring: EvidenceKeyRing = evidenceKeyRing()): { keyId: string; current: boolean; pem: string }[] {
+  return [...ring.verify.entries()]
+    .map(([keyId, k]) => ({ keyId, current: keyId === ring.current?.keyId, pem: k.export({ type: "spki", format: "pem" }).toString() }))
+    .sort((a, b) => Number(b.current) - Number(a.current) || a.keyId.localeCompare(b.keyId));
+}
+
+/** The current public key, or null when no signing key is configured. */
 export function exportCheckpointPublicKey(): string | null {
-  const key = signingKey();
-  if (!key) return null;
-  return createPublicKey(key).export({ type: "spki", format: "pem" }).toString();
+  return exportCheckpointPublicKeys().find((k) => k.current)?.pem ?? null;
 }

@@ -33,6 +33,7 @@ export default async function AgentsPage({ searchParams }: { searchParams: Promi
     status: a.status,
     posture: postures.get(a.id)?.posture ?? "restricted",
     postureSentence: postures.get(a.id)?.sentence ?? "",
+    autonomyLevel: a.autonomyLevel,
     environment: a.environment,
     riskTier: a.riskTier,
     modelProvider: a.modelProvider,

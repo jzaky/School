@@ -2,6 +2,7 @@
 import { headers } from "next/headers";
 import { z } from "zod";
 import { rawPrisma, type Prisma } from "@aegis/db";
+import { consumeRateLimit } from "@aegis/core";
 import type { ActionResult } from "@/lib/action-result";
 import { DEPLOYMENTS, INTERESTS } from "@/components/marketing/form-options";
 
@@ -10,25 +11,9 @@ import { DEPLOYMENTS, INTERESTS } from "@/components/marketing/form-options";
  * email. No tenant data is involved, so the global connection is appropriate here.
  */
 
+// Shared across replicas (S14, S15): ten submissions per network address per hour.
 const RATE_LIMIT = 10;
 const WINDOW_MS = 60 * 60 * 1000;
-const hits = new Map<string, number[]>();
-
-function rateLimited(ip: string): boolean {
-  const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
-  if (recent.length >= RATE_LIMIT) {
-    hits.set(ip, recent);
-    return true;
-  }
-  recent.push(now);
-  hits.set(ip, recent);
-  if (hits.size > 5000) {
-    for (const [k, v] of hits) if (v.every((t) => now - t >= WINDOW_MS)) hits.delete(k);
-  }
-  return false;
-}
-
 
 const base = {
   name: z.string().trim().min(2, "Enter your name").max(120),
@@ -70,7 +55,7 @@ export async function submitMarketingForm(input: unknown): Promise<MarketingResu
 
   const h = await headers();
   const ip = (h.get("x-forwarded-for") ?? "").split(",")[0]?.trim() || h.get("x-real-ip") || "unknown";
-  if (rateLimited(ip)) return { ok: false, error: "Too many submissions from this network in the last hour. Please try again later or email us directly." };
+  if (!(await consumeRateLimit(`marketing:${ip}`, RATE_LIMIT, WINDOW_MS)).allowed) return { ok: false, error: "Too many submissions from this network in the last hour. Please try again later or email us directly." };
 
   const detail: Record<string, unknown> = {
     source: "public_site",

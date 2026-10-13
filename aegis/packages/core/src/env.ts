@@ -21,6 +21,8 @@ const schema = z.object({
   AEGIS_MASTER_KEY: z.string().min(32, "AEGIS_MASTER_KEY must be 32 random bytes, base64"),
   AEGIS_SESSION_SECRET: z.string().min(32),
   EVIDENCE_SIGNING_KEY: z.string().optional(),
+  /** Retired evidence public keys (SPKI PEM, base64, comma separated) kept so old checkpoints still verify after a rotation. */
+  EVIDENCE_VERIFY_KEYS: z.string().optional(),
   API_PORT: z.coerce.number().default(4000),
   API_PUBLIC_URL: z.string().default("http://localhost:4000"),
   WEB_PUBLIC_URL: z.string().default("http://localhost:3000"),

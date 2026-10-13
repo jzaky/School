@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { withTenant } from "@aegis/db";
-import { AGENT_TRANSITIONS, agentPosture, getAgent, isAegisError, leastPrivilegeRecommendations, listAccessRequests, listDelegations, listResources, listTools } from "@aegis/core";
+import { AGENT_TRANSITIONS, agentPosture, getAgent, getAgentAutonomy, isAegisError, leastPrivilegeRecommendations, listAccessRequests, listDelegations, listResources, listTools } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { userNames } from "@/server/queries/users";
 import { PageHeader } from "@/components/ui/page-header";
@@ -22,6 +22,7 @@ import { PermissionsTab } from "@/components/agents/permissions-tab";
 import { VersionsTab } from "@/components/agents/versions-tab";
 import { ApiKeysTab } from "@/components/agents/api-keys-tab";
 import { AccessTab } from "@/components/agents/access-tab";
+import { AutonomyTab } from "@/components/agents/autonomy-tab";
 import type { AgentCaps } from "@/components/agents/types";
 import { formatDateTime, timeAgo } from "@/lib/utils";
 import { statusLabel, statusTone } from "@/lib/status";
@@ -43,7 +44,7 @@ export default async function AgentDetailPage({ params, searchParams }: { params
   const data = await withTenant(c.ctx.orgId, async (db) => {
     try {
       const agent = await getAgent(db, c.ctx, id);
-      const [tools, resources, team, evidence, posture, accessRequests, delegations, recommendations, otherAgents] = await Promise.all([
+      const [tools, resources, team, evidence, posture, accessRequests, delegations, recommendations, otherAgents, autonomy] = await Promise.all([
         listTools(db, c.ctx),
         listResources(db, c.ctx),
         agent.teamId ? db.team.findUnique({ where: { id: agent.teamId }, select: { id: true, name: true, key: true } }) : null,
@@ -53,15 +54,16 @@ export default async function AgentDetailPage({ params, searchParams }: { params
         listDelegations(db, c.ctx, { agentId: id }),
         leastPrivilegeRecommendations(db, c.ctx, { agentId: id }),
         db.agent.findMany({ where: { orgId: c.ctx.orgId, id: { not: id }, status: "active" }, select: { id: true, name: true }, orderBy: { name: "asc" } }),
+        getAgentAutonomy(db, c.ctx, id),
       ]);
-      return { agent, tools, resources, team, evidence, posture, accessRequests, delegations, recommendations, otherAgents };
+      return { agent, tools, resources, team, evidence, posture, accessRequests, delegations, recommendations, otherAgents, autonomy };
     } catch (e) {
       if (isAegisError(e) && e.code === "not_found") return null;
       throw e;
     }
   });
   if (!data) notFound();
-  const { agent, tools, resources, team, evidence, posture, accessRequests, delegations, recommendations, otherAgents } = data;
+  const { agent, tools, resources, team, evidence, posture, accessRequests, delegations, recommendations, otherAgents, autonomy } = data;
   const names = await userNames([agent.businessOwnerId, agent.technicalOwnerId, ...agent.versions.map((v) => v.createdBy), ...evidence.filter((e) => e.actorType === "user").map((e) => e.actorId), ...accessRequests.map((r) => r.requestedBy)]);
   const toolKeyById = new Map(tools.map((t) => [t.id, t.key]));
   const resourceKeyById = new Map(resources.map((r) => [r.id, r.key]));
@@ -93,6 +95,14 @@ export default async function AgentDetailPage({ params, searchParams }: { params
             { label: "Technical owner", value: names.get(agent.technicalOwnerId ?? "") ?? null },
             { label: "Team", value: team ? (c.can("users:read") ? <Link href="/org/teams" className="text-accent hover:underline">{team.name}</Link> : team.name) : null },
             { label: "Status", value: <StatusBadge status={agent.status} /> },
+            {
+              label: "Autonomy level",
+              value: (
+                <span className="block text-end" data-testid="agent-autonomy-level" data-level={autonomy.level}>
+                  <Badge tone={autonomy.level >= 3 ? "allow" : autonomy.level >= 1 ? "approval" : "deny"}>{`Level ${autonomy.level}: ${autonomy.info.name}`}</Badge>
+                </span>
+              ),
+            },
             {
               label: "Autonomy posture",
               value: (
@@ -267,6 +277,26 @@ export default async function AgentDetailPage({ params, searchParams }: { params
                 accessRequests={accessRequests.map((r) => ({ id: r.id, target: (r.toolId ? toolKeyById.get(r.toolId) : r.resourceId ? resourceKeyById.get(r.resourceId) : null) ?? "unknown", actions: r.actions, reason: r.reason, durationHours: r.durationHours, status: r.status, requestedBy: names.get(r.requestedBy) ?? "someone", requestedById: r.requestedBy, expiresAt: r.expiresAt?.toISOString() ?? null, createdAt: r.createdAt.toISOString() }))}
                 delegations={delegations.map((d) => ({ id: d.id, direction: d.delegatorAgentId === agent.id ? "given" : "received", other: d.delegatorAgentId === agent.id ? d.delegate.name : d.delegator.name, toolKeys: d.toolKeys, maxAmount: typeof (d.constraints as { maxAmount?: unknown }).maxAmount === "number" ? ((d.constraints as { maxAmount: number }).maxAmount) : null, expiresAt: d.expiresAt.toISOString(), revokedAt: d.revokedAt?.toISOString() ?? null, reason: d.reason }))}
                 recommendations={recommendations.map((r) => ({ kind: r.kind, detail: r.detail, suggestion: r.suggestion }))}
+              />
+            ),
+          },
+          {
+            id: "autonomy",
+            label: "Autonomy",
+            count: autonomy.requests.filter((r) => r.status === "pending").length || undefined,
+            content: (
+              <AutonomyTab
+                agentId={agent.id}
+                agentStatus={agent.status}
+                currency={typeof c.org.settings.currency === "string" ? c.org.settings.currency : "AED"}
+                canControl={caps.canControl}
+                currentUserId={c.session.user.id}
+                level={autonomy.level}
+                ceiling={autonomy.ceiling}
+                changedAt={autonomy.changedAt?.toISOString() ?? null}
+                history={autonomy.history.map((h) => ({ id: h.id, fromLevel: h.fromLevel, toLevel: h.toLevel, kind: h.kind, reason: h.reason, actorName: h.actorName, actorType: h.actorType, createdAt: h.createdAt.toISOString() }))}
+                requests={autonomy.requests.map((r) => ({ id: r.id, fromLevel: r.fromLevel, toLevel: r.toLevel, ceilingAmount: r.ceilingAmount, reason: r.reason, status: r.status, requestedBy: r.requestedBy, requestedByName: r.requestedByName, decidedByName: r.decidedByName, decisionNote: r.decisionNote, expiresAt: r.expiresAt.toISOString(), createdAt: r.createdAt.toISOString() }))}
+                eligibility={{ eligible: autonomy.eligibility.eligible, checks: autonomy.eligibility.checks }}
               />
             ),
           },

@@ -2,8 +2,8 @@ import Fastify, { type FastifyBaseLogger, type FastifyInstance } from "fastify";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import cookie from "@fastify/cookie";
-import rateLimit from "@fastify/rate-limit";
-import { env, isAegisError, logger } from "@aegis/core";
+import rateLimit, { type FastifyRateLimitStoreCtor } from "@fastify/rate-limit";
+import { env, isAegisError, logger, secretBucketKey, SharedRateLimitStore } from "@aegis/core";
 import { ZodError } from "zod";
 import { authPlugin } from "./plugins/auth.js";
 import { healthRoutes } from "./routes/health.js";
@@ -34,7 +34,10 @@ export async function buildApp(): Promise<FastifyInstance> {
     global: true,
     max: 600,
     timeWindow: "1 minute",
-    keyGenerator: (req) => (req.headers.authorization ? `key:${req.headers.authorization.slice(-16)}` : `ip:${req.ip}`),
+    // Counters are shared by every replica (PostgreSQL), so limits do not multiply with the replica count.
+    store: SharedRateLimitStore as unknown as FastifyRateLimitStoreCtor,
+    // Bucket per full credential (hashed), never a guessable fragment of it; per client address otherwise.
+    keyGenerator: (req) => (req.headers.authorization ? secretBucketKey("key", req.headers.authorization) : `ip:${req.ip}`),
   });
   await app.register(authPlugin);
 

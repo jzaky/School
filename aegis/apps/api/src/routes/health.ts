@@ -10,8 +10,10 @@ export async function healthRoutes(app: FastifyInstance) {
       const jobs = await jobStats();
       return { ok: true, database: "up", jobs };
     } catch (e) {
+      // The cause goes to the server log only; the public response never carries database errors.
+      app.log.error({ err: e }, "readiness check failed");
       reply.status(503);
-      return { ok: false, database: "down", error: e instanceof Error ? e.message : "unknown" };
+      return { ok: false, database: "down" };
     }
   });
 }

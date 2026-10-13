@@ -9,7 +9,11 @@
 | migrate | packages/db | none | Runs once per release with owner credentials, then applies `prisma/rls.sql`. |
 
 ## Environment
-See `.env.example`. Required secrets: `AEGIS_MASTER_KEY` (32 bytes base64, encrypts credentials, SSO secrets and MFA secrets), `AEGIS_SESSION_SECRET`, `EVIDENCE_SIGNING_KEY` (Ed25519 PKCS8 PEM, base64). Generate all three with `pnpm --filter @aegis/core keygen`. Rotating `AEGIS_MASTER_KEY` requires re-encrypting stored secrets (not automated in this version; documented gap). Rotating the signing key keeps old checkpoints verifiable only if the old public key is retained; export it first (`exportCheckpointPublicKey`).
+See `.env.example`. Required secrets: `AEGIS_MASTER_KEY` (32 bytes base64, encrypts credentials, SSO secrets and MFA secrets), `AEGIS_SESSION_SECRET`, `EVIDENCE_SIGNING_KEY` (Ed25519 PKCS8 PEM, base64). Generate all three with `pnpm --filter @aegis/core keygen`. Rotating `AEGIS_MASTER_KEY` requires re-encrypting stored secrets (not automated in this version; documented gap). Production processes refuse to start without `EVIDENCE_SIGNING_KEY`. Each checkpoint records the id of the key that signed it, and verification uses exactly that key; a checkpoint whose key is unknown fails verification. To rotate the signing key: export the current public key (`exportCheckpointPublicKeys`), add it (base64 of the SPKI PEM) to `EVIDENCE_VERIFY_KEYS`, then replace `EVIDENCE_SIGNING_KEY` with the new private key. Old checkpoints keep verifying with the retired public key; new ones are signed with the new key.
+
+Shared rate limits: API and web request limits are counted in PostgreSQL (`rate_limit_buckets`), so they hold across replicas instead of multiplying with them. The worker deletes windows older than a day every hour.
+
+Demo seed: the platform administrator account gets `AEGIS_PLATFORM_ADMIN_PASSWORD` or a random password written only to the gitignored `.demo-keys.json` (file mode 0600). It never shares the published demo password, which belongs to the demo-mode personas only.
 
 Two database URLs: `DATABASE_URL` for the non-owner `aegis_app` role and `MIGRATION_DATABASE_URL` for the owner. The app role must not own tables or RLS would not apply to it.
 

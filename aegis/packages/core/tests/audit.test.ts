@@ -5,7 +5,7 @@ import { addUserWithRole, makeTestTenant, withTenant, type TestTenant } from "./
 import { makePdf } from "./fixtures/make-pdf.js";
 import { makeDocx } from "./fixtures/make-docx.js";
 import { applyRetention, deleteDocument, extractText, getDocument, listDocuments, parseDocument, storeDocument } from "../src/audit/documents.js";
-import { storageRoot } from "../src/audit/storage.js";
+import { storagePath, storageRoot } from "../src/audit/storage.js";
 import { addControl, createCustomFramework, getFramework, listFrameworks } from "../src/audit/frameworks.js";
 import { assessmentDashboard, createAssessment, getAssessment, listControlMappings, refreshControlMappings, runAssessment, validateFinding } from "../src/audit/assessments.js";
 import { createTask, listTasks, transition } from "../src/audit/remediation.js";
@@ -214,8 +214,12 @@ describe("assessment engine", () => {
   });
 
   it("writes JSON and PDF reports with matching hashes", async () => {
+    // Viewers hold reports:read but not audit:write, so they cannot generate (S13).
+    await expect(withTenant(t.orgId, (db) => generateReport(db, viewer.ctx, { assessmentId, kind: "detailed", format: "json" }))).rejects.toThrow(/Missing permission audit:write/);
     const json = await withTenant(t.orgId, (db) => generateReport(db, auditor.ctx, { assessmentId, kind: "detailed", format: "json" }));
-    const jsonBytes = await readFile(json.path);
+    // The server's file path is never part of the result (S13).
+    expect(json).not.toHaveProperty("path");
+    const jsonBytes = await readFile(storagePath(json.storageKey));
     expect(jsonBytes.length).toBe(json.bytes);
     expect(sha256Hex(jsonBytes)).toBe(json.sha256);
     const content = JSON.parse(jsonBytes.toString("utf8")) as { findings: { code: string; conclusionLabel: string; evidence: unknown[] }[]; disclaimer: string; coverage: { humanValidated: number } };
@@ -226,7 +230,7 @@ describe("assessment engine", () => {
 
     for (const kind of ["executive_summary", "detailed", "evidence_inventory", "gap_report", "remediation_plan"] as const) {
       const pdf = await withTenant(t.orgId, (db) => generateReport(db, auditor.ctx, { assessmentId, kind, format: "pdf" }));
-      const bytes = await readFile(pdf.path);
+      const bytes = await readFile(storagePath(pdf.storageKey));
       expect(bytes.subarray(0, 5).toString()).toBe("%PDF-");
       expect(sha256Hex(bytes)).toBe(pdf.sha256);
       expect(bytes.length).toBe(pdf.bytes);
@@ -235,6 +239,7 @@ describe("assessment engine", () => {
     expect(exports).toHaveLength(6);
     const download = await withTenant(t.orgId, (db) => readExport(db, viewer.ctx, json.exportId));
     expect(download.contentType).toBe("application/json");
+    expect(download).not.toHaveProperty("path");
     expect(download.buffer.equals(jsonBytes)).toBe(true);
     await expect(withTenant(t.orgId, (db) => readExport(db, { ...viewer.ctx, actor: { ...viewer.ctx.actor, permissions: ["org:read"] } }, json.exportId))).rejects.toThrow(/Missing permission reports:read/);
   });

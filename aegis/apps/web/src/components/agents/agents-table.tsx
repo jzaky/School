@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { AUTONOMY_LEVEL_INFO, type AutonomyLevel } from "@aegis/core/autonomy/levels";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Search, X } from "lucide-react";
@@ -21,6 +22,7 @@ export interface AgentRow {
   status: string;
   posture: string;
   postureSentence: string;
+  autonomyLevel: number;
   environment: string;
   riskTier: string;
   modelProvider: string;
@@ -55,6 +57,18 @@ const columns: ColumnDef<AgentRow, unknown>[] = [
         <Badge tone={statusTone(row.original.posture)}>{statusLabel(row.original.posture)}</Badge>
       </span>
     ),
+  },
+  {
+    id: "autonomy",
+    header: "Autonomy",
+    cell: ({ row }) => {
+      const l = row.original.autonomyLevel as AutonomyLevel;
+      return (
+        <span title={`Level ${l}: ${AUTONOMY_LEVEL_INFO[l]?.name ?? ""}. ${AUTONOMY_LEVEL_INFO[l]?.enforces ?? ""}`} data-testid="agent-autonomy" data-level={l}>
+          <Badge tone={l >= 3 ? "allow" : l >= 1 ? "approval" : "deny"}>{`Level ${l}`}</Badge>
+        </span>
+      );
+    },
   },
   { id: "environment", header: "Environment", cell: ({ row }) => statusLabel(row.original.environment) },
   { id: "riskTier", header: "Risk tier", cell: ({ row }) => <Badge tone={statusTone(row.original.riskTier)}>{statusLabel(row.original.riskTier)}</Badge> },

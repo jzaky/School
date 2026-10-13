@@ -1,13 +1,14 @@
 import type { FastifyInstance } from "fastify";
+import { personOnlyForWrites, requireScope } from "../plugins/auth.js";
 import { withTenant } from "@aegis/db";
 import { z } from "zod";
 import { accessRequestSchema, createDelegation, createDelegationSchema, decideAccessRequest, emergencyRevokeAgent, leastPrivilegeRecommendations, listAccessRequests, listDelegations, listDiscoveredAgents, observationSchema, recordAgentObservation, resolveDiscoveredAgent, requestAccess, revokeAccess, revokeDelegation } from "@aegis/core";
-import { requireScope } from "../plugins/auth.js";
 
 const uuid = z.object({ id: z.string().uuid() });
 
 /** Agent identity and access: discovery, temporary access, delegation, least privilege, emergency revocation. */
 export async function identityRoutes(app: FastifyInstance) {
+  personOnlyForWrites(app, ["/discovery/agents"]);
   // Integrations and pipelines report agents they see; people review them in the console.
   app.post("/discovery/agents", async (req) => {
     requireScope(req, "discovery:report");

@@ -1,6 +1,7 @@
 import { afterAll, describe, expect, it } from "vitest";
 import { rawPrisma, disconnectAll } from "@aegis/db";
-import { claimJobs, enqueueJob, recoverStaleJobs, registerJobHandler, runJob } from "../src/jobs/queue.js";
+import { claimJobs, enqueueJob, recoverStaleJobs, registerJobHandler, runJob, scopedJobKey } from "../src/jobs/queue.js";
+import { consumeRateLimit, purgeRateLimitBuckets, secretBucketKey } from "../src/platform/rate-limit.js";
 
 const stamp = Date.now().toString(36);
 /** Test jobs sort before any due job a stopped local worker left behind, so the test never depends on an empty queue. */
@@ -62,5 +63,58 @@ describe("durable job queue", () => {
     const claimed = (await claimJobs(50)).find((x) => x.id === j.id)!;
     await runJob(claimed);
     expect((await rawPrisma().job.findUniqueOrThrow({ where: { id: j.id } })).status).toBe("failed");
+  });
+  it("stores an organization's key scoped to that organization, so two organizations never collide", async () => {
+    const orgA = "00000000-0000-7000-8000-00000000000a";
+    const orgB = "00000000-0000-7000-8000-00000000000b";
+    const a = await enqueueJob({ type: `test.${stamp}.scoped`, payload: {}, idempotencyKey: `same-${stamp}`, orgId: orgA, runAt: new Date(Date.now() + 3_600_000) });
+    const b = await enqueueJob({ type: `test.${stamp}.scoped`, payload: {}, idempotencyKey: `same-${stamp}`, orgId: orgB, runAt: new Date(Date.now() + 3_600_000) });
+    expect(a.id).not.toBe(b.id);
+    expect(a.idempotencyKey).toBe(scopedJobKey(`same-${stamp}`, orgA));
+    expect(b.orgId).toBe(orgB);
+  });
+  it("refuses to enqueue a job whose payload names a different organization", async () => {
+    await expect(enqueueJob({ type: `test.${stamp}.mismatch`, payload: { orgId: "00000000-0000-7000-8000-00000000000b" }, idempotencyKey: `mismatch-${stamp}`, orgId: "00000000-0000-7000-8000-00000000000a" })).rejects.toThrow(/different organization/);
+  });
+  it("the worker refuses a job whose payload organization differs from the job row, without running it", async () => {
+    let ran = false;
+    registerJobHandler(`test.${stamp}.tampered`, async () => {
+      ran = true;
+    });
+    const j = await rawPrisma().job.create({ data: { type: `test.${stamp}.tampered`, payload: { orgId: "00000000-0000-7000-8000-00000000000b" }, idempotencyKey: `tampered-${stamp}`, orgId: "00000000-0000-7000-8000-00000000000a", runAt: EPOCH } });
+    const claimed = (await claimJobs(50)).find((x) => x.id === j.id)!;
+    await runJob(claimed);
+    const after = await rawPrisma().job.findUniqueOrThrow({ where: { id: j.id } });
+    expect(ran).toBe(false);
+    expect(after.status).toBe("failed");
+    expect(after.lastError).toMatch(/does not match/);
+  });
+});
+
+describe("shared rate limits (S14)", () => {
+  afterAll(async () => {
+    await rawPrisma().rateLimitBucket.deleteMany({ where: { key: { startsWith: `test:${stamp}` } } });
+  });
+  it("counts across callers in one window and refuses past the limit", async () => {
+    const now = Date.UTC(2026, 0, 1, 10, 0, 30);
+    const results = [];
+    for (let i = 0; i < 4; i++) results.push(await consumeRateLimit(`test:${stamp}:a`, 3, 60_000, now));
+    expect(results.map((r) => r.allowed)).toEqual([true, true, true, false]);
+    expect(results[3]!.count).toBe(4);
+    expect(results[0]!.resetInMs).toBe(30_000);
+  });
+  it("starts a fresh count in the next window", async () => {
+    const r = await consumeRateLimit(`test:${stamp}:a`, 3, 60_000, Date.UTC(2026, 0, 1, 10, 1, 5));
+    expect(r).toMatchObject({ allowed: true, count: 1 });
+  });
+  it("buckets a credential by its hash, never by a fragment of it", () => {
+    const k1 = secretBucketKey("key", "Bearer aegis_live_aaaaaaaaaaaaaaaaaaaaSAMESUFFIX");
+    const k2 = secretBucketKey("key", "Bearer aegis_live_bbbbbbbbbbbbbbbbbbbbSAMESUFFIX");
+    expect(k1).not.toBe(k2);
+    expect(k1).not.toContain("SAMESUFFIX");
+  });
+  it("purges windows that ended long ago", async () => {
+    const n = await purgeRateLimitBuckets(60_000, Date.UTC(2026, 0, 2));
+    expect(n).toBeGreaterThanOrEqual(2);
   });
 });

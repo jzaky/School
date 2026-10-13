@@ -1,9 +1,11 @@
 import type { FastifyInstance } from "fastify";
+import { personOnlyForWrites } from "../plugins/auth.js";
 import { withTenant } from "@aegis/db";
 import { z } from "zod";
 import { approvalListFilter, decideApprovalAndExecute, decideSchema, getApproval, listApprovals } from "@aegis/core";
 
 export async function approvalRoutes(app: FastifyInstance) {
+  personOnlyForWrites(app);
   app.get("/", async (req) => {
     const ctx = await req.orgContext();
     return withTenant(ctx.orgId, (db) => listApprovals(db, ctx, approvalListFilter.parse(req.query)));

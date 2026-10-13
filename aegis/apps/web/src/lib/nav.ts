@@ -33,6 +33,7 @@ import {
   UsersRound,
   Wrench,
   Radar,
+  Gauge,
 } from "lucide-react";
 
 export interface NavItem {
@@ -77,6 +78,7 @@ export const SECONDARY_NAV: NavGroup[] = [
       { label: "Policies", href: "/policies", icon: Scale, ready: true, permission: "policies:read" },
       { label: "Action Gateway", href: "/gateway", icon: GitBranch, ready: true, permission: "gateway:read" },
       { label: "Integrations", href: "/integrations", icon: Plug, ready: true, permission: "integrations:read" },
+      { label: "Autonomy", href: "/agents/autonomy", icon: Gauge, ready: true, permission: "agents:read" },
       { label: "Agent Discovery", href: "/agents/discovery", icon: Radar, ready: true, permission: "agents:read" },
       { label: "Alerts", href: "/alerts", icon: AlertTriangle, ready: true, permission: "monitoring:read" },
     ],

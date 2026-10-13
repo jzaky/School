@@ -13,7 +13,7 @@ import { notFound, validation } from "../lib/errors.js";
 import { sha256Hex } from "../lib/crypto.js";
 import { assertPermission } from "../orgs/orgs.js";
 import { ASSESSMENT_DISCLAIMER, ASSESSMENT_ENGINE, conclusionLabel } from "./assessments.js";
-import { readStoredFile, storageKeyFor, storagePath, writeStoredFile } from "./storage.js";
+import { readStoredFile, storageKeyFor, writeStoredFile } from "./storage.js";
 
 export const REPORT_KINDS = ["executive_summary", "detailed", "evidence_inventory", "gap_report", "remediation_plan"] as const;
 export type ReportKind = (typeof REPORT_KINDS)[number];
@@ -357,6 +357,8 @@ export function reportFilename(content: ReportContent, format: ReportFormat): st
 
 /** Generates the report, writes it to storage and records an AuditExport with its sha256. */
 export async function generateReport(db: TenantDb, ctx: OrgContext, input: z.input<typeof generateReportSchema>) {
+  // Generating writes a stored file and an evidence event, so it needs audit:write, not only reports:read (S13).
+  assertPermission(ctx, "audit:write");
   const data = generateReportSchema.parse(input);
   const content = await buildReportContent(db, ctx, data.assessmentId, data.kind);
   const bytes = data.format === "pdf" ? await renderPdf(content) : Buffer.from(JSON.stringify(content, null, 2), "utf8");
@@ -364,10 +366,11 @@ export async function generateReport(db: TenantDb, ctx: OrgContext, input: z.inp
   const now = ctx.now ?? new Date();
   const row = await db.auditExport.create({ data: { orgId: ctx.orgId, kind: data.kind, format: data.format, storageKey: "pending", size: bytes.length, sha256, createdBy: ctx.actor.type === "user" ? ctx.actor.id : null, createdAt: now } });
   const storageKey = storageKeyFor(ctx.orgId, "exports", row.id, data.format);
-  const path = await writeStoredFile(storageKey, bytes);
+  await writeStoredFile(storageKey, bytes);
   await db.auditExport.update({ where: { id: row.id }, data: { storageKey } });
   await appendEvidence(db, ctx, { type: "report.generated", subjectType: "audit_export", subjectId: row.id, payload: { assessmentId: data.assessmentId, kind: data.kind, format: data.format, size: bytes.length, sha256 } });
-  return { exportId: row.id, path, bytes: bytes.length, sha256, storageKey, filename: reportFilename(content, data.format), assessmentId: data.assessmentId, kind: data.kind, format: data.format };
+  // The server's file path is never returned to callers (S13); the export id and storage key identify the file.
+  return { exportId: row.id, bytes: bytes.length, sha256, storageKey, filename: reportFilename(content, data.format), assessmentId: data.assessmentId, kind: data.kind, format: data.format };
 }
 
 export async function listExports(db: TenantDb, ctx: OrgContext, limit = 50) {
@@ -383,5 +386,5 @@ export async function readExport(db: TenantDb, ctx: OrgContext, exportId: string
   const buffer = await readStoredFile(row.storageKey);
   if (sha256Hex(buffer) !== row.sha256) throw validation("Stored export does not match its recorded hash");
   await appendEvidence(db, ctx, { type: "report.downloaded", subjectType: "audit_export", subjectId: row.id, payload: { kind: row.kind, format: row.format, sha256: row.sha256 } });
-  return { export: row, buffer, contentType: row.format === "pdf" ? "application/pdf" : "application/json", filename: `${row.kind}-${row.createdAt.toISOString().slice(0, 10)}-${row.id.slice(0, 8)}.${row.format}`, path: storagePath(row.storageKey) };
+  return { export: row, buffer, contentType: row.format === "pdf" ? "application/pdf" : "application/json", filename: `${row.kind}-${row.createdAt.toISOString().slice(0, 10)}-${row.id.slice(0, 8)}.${row.format}` };
 }

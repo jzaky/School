@@ -108,3 +108,66 @@ MIT); `xml-crypto` 6.1.2 as a test-only dependency. Logged in `docs/THIRD_PARTY.
 
 Known limitations: see the end of `docs/AGENT_IDENTITY.md`. Live verification with Entra ID, Okta
 and a production SAML provider needs real tenants.
+
+## Founder direction and security fixes (14 October 2026)
+
+Founder's direction of 13 October 2026:
+- The full roadmap continues.
+- DNRS is not used as a reference for any part of AEGIS.
+- The six open security findings are fixed first.
+
+Recorded in `docs/PROVENANCE.md`, which lists the earlier work flagged for counsel's review and the public foundations for Phases 3 to 5.
+
+**The six findings, each with regression tests (details in `docs/AEGIS_FULL_PLATFORM_AUDIT.md` section 4):**
+- **S8:** row-level security on users, sessions, organizations, jobs, platform events and deployment versions. Job keys are scoped per organization, and the worker refuses a job whose payload names another organization.
+- **S9:** an evidence signing key ring with rotation. Unknown keys fail verification, and production refuses to start without a key.
+- **S10:** the demo reset no longer disables append-only triggers. The platform administrator has its own password.
+- **S13:** report generation needs `audit:write`, and no server paths are returned.
+- **S14:** shared rate limits in PostgreSQL across replicas, with credentials bucketed by hash.
+- **S15:** the public form uses the shared limiter, and the readiness endpoint no longer exposes database errors.
+
+**Also fixed:** the demo reset failed after Phase 2 because it did not clean the agent delegation, access request and discovery tables.
+
+**Database migration:** `20261014090000_platform_rls_rate_limits`.
+
+**Tests added:**
+
+| Suite | Tests |
+|---|---|
+| Database | 11 |
+| Core | 12 (job queue and rate limits 7, evidence signing 5) |
+| Core, changed | The audit report test now asserts the permission and the absence of a path |
+
+## Phase 3: managed autonomy (14 October 2026)
+
+**Built:** autonomy levels 0 to 4 per agent, enforced by the gateway after policy and data protection.
+- **Monotonic.** A level can only make a decision stricter, and a property test checks this over 2,000 random inputs.
+- **Lowering** is immediate and voids unused grants.
+- **Raising** needs a second person.
+- **Automatic downgrades** run on severe security events, bursts of refusals and unconfirmed executions. They are off by default.
+- **Records.** Transitions are append-only rows with evidence.
+- **Measurement.** Readiness measures for a raise, a 30-day simulation at another level, and organization analytics.
+- **Lockout of API keys.** Every governance-changing API route now refuses API keys before reading the request, so no agent can change its own autonomy, policies, approvals, access, delegations or revocation.
+- **Console.** An Autonomy page (levels, agents, changes, open raises, downgrade rules), an Autonomy tab on each agent, and an Autonomy column on the agents list.
+
+Full description: `docs/MANAGED_AUTONOMY.md`.
+
+**Database migration:** `20261014100000_managed_autonomy`. It adds agent columns with a range check, plus `autonomy_transitions` (append-only) and `autonomy_change_requests`.
+
+**API endpoints added:**
+- `/v1/autonomy/analytics`
+- `/v1/autonomy/settings` (PUT)
+- `/v1/autonomy/agents/:id`, with `/lower`, `/raise-requests` and `/simulate`
+- `/v1/autonomy/raise-requests/:id/decision` and `/cancel`
+
+**Tests added:**
+
+| Suite | Tests |
+|---|---|
+| Core | 14 |
+| API | 13 |
+| Browser | 4 |
+
+**External dependency:** `fast-check` 3.23.2 (MIT), a test-only dependency of core that was already in the lockfile.
+
+**Known limitations:** no per-tool levels, and no time-boxed raises. The demo keeps automatic downgrades off.

@@ -1,6 +1,6 @@
 # Third-party inventory
 
-Generated on 2026-10-11 from `pnpm licenses list -P` over production dependencies of every workspace package (428 packages after deduplication). Development-only tooling (TypeScript, Vitest, Playwright, ESLint, Prettier, tsx) is MIT or Apache-2.0 and is not shipped.
+Generated on 2026-10-11 from `pnpm licenses list -P` over production dependencies of every workspace package (428 packages after deduplication). Development-only tooling (TypeScript, Vitest, Playwright, ESLint, Prettier, tsx, fast-check for property tests, xml-crypto for SAML test fixtures) is MIT or Apache-2.0 and is not shipped.
 
 ## Direct dependencies and why they are used
 

@@ -1,5 +1,5 @@
 import fp from "fastify-plugin";
-import type { FastifyReply, FastifyRequest } from "fastify";
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { effectiveScopes, forbidden, getOrganization, getUserMembership, makeContext, resolveApiKey, resolveSession, SESSION_COOKIE, unauthorized, type OrgContext, type ResolvedApiKey, type SessionInfo } from "@aegis/core";
 
 declare module "fastify" {
@@ -52,6 +52,27 @@ export const authPlugin = fp(async (app) => {
  * Key-authenticated calls must carry the scope for the route. Session (console) users are governed by
  * their role permissions instead, checked in the core services.
  */
+/**
+ * Governance changes (policies, approvals, autonomy, access, delegations, revocation) are made by people.
+ * API keys, which agents and integrations hold, are refused before the request body is even read.
+ */
+export function requirePerson(req: FastifyRequest) {
+  if (req.apiKey) throw forbidden("Governance changes need a signed-in person; API keys cannot make them");
+}
+
+/**
+ * Adds a hook to a route module: every write (anything but GET and HEAD) needs a person, except the listed
+ * route paths (suffixes of the registered path), which keep their own scope checks.
+ */
+export function personOnlyForWrites(app: FastifyInstance, exceptions: string[] = []) {
+  app.addHook("preHandler", async (req) => {
+    if (req.method === "GET" || req.method === "HEAD") return;
+    const route = req.routeOptions.url ?? "";
+    if (exceptions.some((e) => route.endsWith(e))) return;
+    requirePerson(req);
+  });
+}
+
 export function requireScope(req: FastifyRequest, scope: string) {
   if (!req.apiKey) return;
   if (!effectiveScopes(req.apiKey).includes(scope)) throw forbidden(`This API key lacks the scope ${scope}`);

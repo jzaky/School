@@ -337,6 +337,16 @@ Dead
 | S14 | Rate limits per process (replicas multiply them); API key suffix as bucket key | `apps/api/src/app.ts:37` | 14 |
 | S15 | Public marketing form unthrottled; `/ready` leaks DB errors | `marketing.ts:90`, `health.ts:14` | 13 |
 
+**Status of the six findings left open after Phase 2 (fixed 2026-10-14, with regression tests):**
+- **S8:** row-level security now covers users, sessions, organizations, jobs, platform events and deployment versions. Inside a tenant transaction each is confined to that organization; platform code outside a tenant context is unchanged. The cross-tenant membership lookup answers only outside a tenant transaction. Job keys are stored scoped to the organization, and the worker refuses a job whose payload names a different organization from the job row (`packages/db/tests/platform-isolation.test.ts`, `packages/core/tests/jobs.test.ts`).
+- **S9:** evidence signing uses a key ring. The current key signs, retired public keys verify by key id, unknown key ids fail verification, and production refuses to start without a signing key (`packages/core/tests/evidence-signing.test.ts`).
+- **S10:** the demo reset no longer disables append-only triggers. The trigger lets the table owner delete only the organization named in a transaction-local setting, never updates, and never for the application role. The platform administrator has its own password (`platform-isolation.test.ts`).
+- **S13:** generating a report requires `audit:write`, and no result returns a server file path (`packages/core/tests/audit.test.ts`).
+- **S14:** request limits are counted in PostgreSQL and shared by every replica. Credentials are bucketed by hash, never by a fragment (`jobs.test.ts`).
+- **S15:** the public form uses the shared limiter, and the readiness endpoint no longer returns database error text.
+
+**Still open from the audit:** org consistency of child rows (a child row referencing a parent id from another organization) has no database constraint. Row-level security prevents reading the other organization's parent, which limits the impact. Tracked for Phase 13.
+
 ## 5. External credentials and infrastructure
 - [credentials] Stripe test key, Alpaca paper key (scripts exist, never run), every Phase 8
   system (Entra ID, Okta, Slack, Teams, Datadog, Splunk, AWS, Azure, GCP, Salesforce, ServiceNow,

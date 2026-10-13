@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { test, expect, type Page } from "@playwright/test";
 
 const PASSWORD = "AegisDemo2026!";
@@ -5,10 +7,17 @@ const OWNER = "nadia.haddad@meridian-demo.example";
 const VIEWER = "sara.khalil@meridian-demo.example";
 const PLATFORM_ADMIN = "admin@aegis.local";
 
+/** The platform administrator has its own password (never the demo password), written by the seed to .demo-keys.json. */
+function platformAdminPassword(): string {
+  const keys = JSON.parse(readFileSync(join(process.cwd(), "..", "..", ".demo-keys.json"), "utf8")) as { platformAdmin?: { password?: string } };
+  if (!keys.platformAdmin?.password) throw new Error("Run pnpm db:seed first: .demo-keys.json has no platform admin password");
+  return keys.platformAdmin.password;
+}
+
 async function login(page: Page, email: string) {
   await page.goto("/login");
   await page.fill("#email", email);
-  await page.fill("#password", PASSWORD);
+  await page.fill("#password", email === PLATFORM_ADMIN ? platformAdminPassword() : PASSWORD);
   await page.click("button[type=submit]");
   await page.waitForURL(/\/(overview|no-organization|platform|mfa)/);
 }

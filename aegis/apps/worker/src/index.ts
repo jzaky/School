@@ -1,14 +1,21 @@
 import { withTenant, disconnectAll } from "@aegis/db";
-import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
+import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, purgeRateLimitBuckets, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
 import { rawPrisma } from "@aegis/db";
 import { registerModuleHandlers } from "./handlers.js";
+
+/** Organization jobs act for the organization on the job row; a job without one is refused. */
+function requireOrg(ctx: { orgId: string | null }): string {
+  if (!ctx.orgId) throw new Error("job has no organization");
+  return ctx.orgId;
+}
 
 const log = logger.child({ component: "worker" });
 assertApplicationProcess("worker");
 
 // ---- Core handlers ----
-registerJobHandler("approval.expire", async (payload) => {
-  const { approvalRequestId, orgId } = payload as { approvalRequestId: string; orgId: string };
+registerJobHandler("approval.expire", async (payload, ctx) => {
+  const { approvalRequestId } = payload as { approvalRequestId: string };
+  const orgId = requireOrg(ctx);
   await withTenant(orgId, (db) => expireApproval(db, systemContext(orgId), approvalRequestId));
 });
 
@@ -25,14 +32,16 @@ registerJobHandler("approvals.sweep", async () => {
 });
 
 /** A quarantined request or one waiting for more information whose window has passed. */
-registerJobHandler("request.expire", async (payload) => {
-  const { actionRequestId, orgId } = payload as { actionRequestId: string; orgId: string };
+registerJobHandler("request.expire", async (payload, ctx) => {
+  const { actionRequestId } = payload as { actionRequestId: string };
+  const orgId = requireOrg(ctx);
   await withTenant(orgId, (db) => expireHeldRequest(db, systemContext(orgId), actionRequestId));
 });
 
 /** Resolves an ambiguous downstream outcome from the downstream system's own records. */
-registerJobHandler("execution.reconcile", async (payload) => {
-  const { actionRequestId, orgId } = payload as { actionRequestId: string; orgId: string };
+registerJobHandler("execution.reconcile", async (payload, ctx) => {
+  const { actionRequestId } = payload as { actionRequestId: string };
+  const orgId = requireOrg(ctx);
   const out = await reconcileExecution((fn) => withTenant(orgId, fn), systemContext(orgId), actionRequestId);
   log.info({ orgId, actionRequestId, status: out.requestStatus }, "execution reconciled");
 });
@@ -65,6 +74,12 @@ registerJobHandler("enforcement.audit", async () => {
   }
 });
 
+/** Deletes shared rate-limit windows that ended more than a day ago. */
+registerJobHandler("rate-limits.purge", async () => {
+  const n = await purgeRateLimitBuckets();
+  if (n) log.info({ deleted: n }, "expired rate-limit windows deleted");
+});
+
 registerModuleHandlers();
 
 /** Recurring jobs are re-scheduled by key so there is always exactly one pending instance. */
@@ -77,6 +92,7 @@ async function scheduleRecurring() {
   await enqueueJob({ type: "monitoring.run", payload: {}, idempotencyKey: `monitoring.run:${minute}`, runAt: new Date() });
   await enqueueJob({ type: "audit.retention", payload: {}, idempotencyKey: `audit.retention:${Math.floor(minute / 1440)}`, runAt: new Date() });
   await enqueueJob({ type: "enforcement.audit", payload: {}, idempotencyKey: `enforcement.audit:${Math.floor(minute / 60)}`, runAt: new Date() });
+  await enqueueJob({ type: "rate-limits.purge", payload: {}, idempotencyKey: `rate-limits.purge:${Math.floor(minute / 60)}`, runAt: new Date() });
 }
 
 let stopping = false;

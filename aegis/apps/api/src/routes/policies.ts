@@ -1,9 +1,11 @@
 import type { FastifyInstance } from "fastify";
+import { personOnlyForWrites } from "../plugins/auth.js";
 import { withTenant } from "@aegis/db";
 import { z } from "zod";
 import { activateVersion, assignPolicy, assignmentSchema, createPolicy, createPolicyVersion, deactivatePolicy, getPolicy, listPolicies, listPolicyHistory, policyInputSchema, rollbackToVersion, simulatePolicy, submitForReview, getOrganization } from "@aegis/core";
 
 export async function policyRoutes(app: FastifyInstance) {
+  personOnlyForWrites(app, ["/simulate"]);
   app.get("/", async (req) => {
     const ctx = await req.orgContext();
     return withTenant(ctx.orgId, (db) => listPolicies(db, ctx));

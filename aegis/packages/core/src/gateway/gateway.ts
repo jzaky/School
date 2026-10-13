@@ -16,6 +16,8 @@ import { baselineChecks, type BaselineFailure } from "./baseline.js";
 import { buildAuthorizationInput, extractAmount, extractDestinationDomain, type AuthorizationInput } from "./input.js";
 import { consumeGrant, EXECUTABLE_STATUSES, hashGrantToken, issueGrant, parseGrantToken, voidLiveGrants } from "./grants.js";
 import { applyRestrictions } from "./restrictions.js";
+import { applyAutonomyLevel, isAutonomyLevel, stricterAutonomy, type AutonomyLevel } from "../autonomy/levels.js";
+import { applyAutomaticDowngrade, checkDenialBurst } from "../autonomy/service.js";
 import { getShieldInspector } from "./shield-hook.js";
 import { getDownstreamSystem, readIntegrationCredential, type DownstreamContext } from "./simulators.js";
 
@@ -189,6 +191,7 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
   let restrictApplied: string[] = [];
   let securitySeverity: Severity | null = null;
   let securityType: string | null = null;
+  let autonomyRecord: { level: number; ceiling: number | null; policyOutcome: string; effect: string; code: string | null } | null = null;
 
   try {
     const destinationDomain = extractDestinationDomain(input.params);
@@ -231,8 +234,8 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
         now,
       });
       // Under a delegation both agents' policies apply: the union with deny-overrides is never looser than either alone.
-      const own = await resolvePoliciesForAgent(db, ctx.orgId, agent);
-      const policies = delegation ? mergePolicies(own, await resolvePoliciesForAgent(db, ctx.orgId, delegation.delegator)) : own;
+      const ownPolicies = await resolvePoliciesForAgent(db, ctx.orgId, agent);
+      const policies = delegation ? mergePolicies(ownPolicies, await resolvePoliciesForAgent(db, ctx.orgId, delegation.delegator)) : ownPolicies;
       evaluation = evaluatePolicies(policies, authzInput);
       decisionResult = evaluation.result;
       if (decisionResult === "restrict") {
@@ -244,8 +247,30 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
         decisionResult = "require_approval";
         evaluation = { ...evaluation, result: "require_approval", approval: { roles: [], minApprovers: 1, expiresInMinutes: 240, separationOfDuties: true, escalateToRoles: [], instructions: "Sensitive data detected in parameters" }, reasons: [...evaluation.reasons, "Sensitive data detected; approval required by data protection settings"] };
       }
+      // Managed autonomy (Phase 3): the agent's level is applied after policy and data protection and can only
+      // make the outcome stricter. Under a delegation the stricter of the two agents' settings applies.
+      const policyOutcome = decisionResult;
+      const own = { level: autonomyLevelOf(agent.autonomyLevel), ceiling: agent.autonomyCeilingAmount === null ? null : Number(agent.autonomyCeilingAmount) };
+      const autonomySetting = delegation ? stricterAutonomy(own, { level: autonomyLevelOf(delegation.delegator.autonomyLevel), ceiling: delegation.delegator.autonomyCeilingAmount === null ? null : Number(delegation.delegator.autonomyCeilingAmount) }) : own;
+      const orgCurrency = await organizationCurrency(db, ctx.orgId);
+      const autonomy = applyAutonomyLevel({
+        level: autonomySetting.level,
+        policyOutcome,
+        toolRisk: tool.riskLevel,
+        amount: authzInput.context.amount,
+        ceiling: autonomySetting.ceiling,
+        currencyMismatch: !!authzInput.context.currency && authzInput.context.currency !== orgCurrency,
+      });
+      if (autonomy.effect === "observe_only") {
+        decisionResult = "deny";
+        evaluation = { ...evaluation, result: "deny", reasons: [...evaluation.reasons, autonomy.reason ?? "Autonomy level 0: observe only"] };
+      } else if (autonomy.effect === "approval_required") {
+        decisionResult = "require_approval";
+        evaluation = { ...evaluation, result: "require_approval", approval: { roles: [], minApprovers: 1, expiresInMinutes: 240, separationOfDuties: true, escalateToRoles: [], instructions: autonomy.reason ?? "" }, reasons: [...evaluation.reasons, autonomy.reason ?? "Autonomy level requires approval"] };
+      }
+      autonomyRecord = { level: autonomySetting.level, ceiling: autonomySetting.ceiling, policyOutcome, effect: autonomy.effect, code: autonomy.code };
       reasons = evaluation.reasons;
-      riskIndicators = [...evaluation.riskIndicators, ...shield.findings.map((f) => `data:${f.dataClass}`), ...(restrictApplied.length ? ["restricted"] : []), ...(delegation ? ["delegated"] : [])];
+      riskIndicators = [...evaluation.riskIndicators, ...(autonomy.effect !== "unchanged" ? [`autonomy:level-${autonomySetting.level}`] : []), ...shield.findings.map((f) => `data:${f.dataClass}`), ...(restrictApplied.length ? ["restricted"] : []), ...(delegation ? ["delegated"] : [])];
       policyVersionIds = [...new Set(evaluation.trace.map((t) => t.policyVersionId))];
       matchedRuleIds = evaluation.matchedRules.map((m) => `${m.policyKey}/${m.ruleId}`);
       approvalSpec = evaluation.approval;
@@ -261,7 +286,8 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
         restrictNote: evaluation.restrict.map((r) => r.note).filter(Boolean).join(" "),
         moreInformation: evaluation.moreInformation,
         quarantine: evaluation.quarantine,
-        delegation: delegation ? { id: delegation.row.id, onBehalfOf: delegation.delegator.slug, policiesFromDelegator: policies.length - own.length } : null,
+        delegation: delegation ? { id: delegation.row.id, onBehalfOf: delegation.delegator.slug, policiesFromDelegator: policies.length - ownPolicies.length } : null,
+        autonomy: autonomyRecord,
         inputSummary: { amount: authzInput.context.amount, currency: authzInput.context.currency, destinationDomain: authzInput.context.destinationDomain, resource: authzInput.resource?.key ?? null, requestCount24h: authzInput.context.requestCount24h, deniedCount24h: authzInput.context.deniedCount24h, hour: authzInput.context.hour, priorRequestsSameReference: authzInput.context.priorRequestsSameReference, duplicateReferenceKey: authzInput.context.duplicateReferenceKey },
       };
       if (decisionResult === "deny" && evaluation.securityEventSeverity) {
@@ -293,6 +319,7 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
     // Through the Shield module so critical and repeated high events open or join an incident.
     const created = await createSecurityEvent(db, ctx, { type: securityType, severity: securitySeverity ?? "medium", title: `${securityType.replace(/[._]/g, " ")}: ${agent.slug} ${input.tool}`, agentId, actionRequestId: request.id, detail: { reasons, tool: input.tool, action: input.action, resource: input.resource ?? null, destinationDomain: extractDestinationDomain(input.params), onBehalfOf: input.onBehalfOf?.agentId ?? null } });
     securityEventId = created.event.id;
+    await applyAutomaticDowngrade(db, { ...systemContextFor(ctx.orgId), now }, agentId, { rule: "security_event", severity: securitySeverity ?? "medium", securityEventType: securityType, actionRequestId: request.id });
   }
 
   let status: ActionRequest["status"];
@@ -338,6 +365,7 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
   }
   const updated = await db.actionRequest.update({ where: { id: request.id }, data: { status, riskIndicators, expiresAt: approvalRow?.expiresAt ?? holdExpiresAt, completedAt: status === "denied" ? now : null, params: effectiveParams as Prisma.InputJsonValue, updatedAt: now } });
   await db.agent.update({ where: { id: agentId }, data: { lastActivityAt: now } });
+  if (status === "denied") await checkDenialBurst(db, { ...systemContextFor(ctx.orgId), now }, agentId, request.id);
 
   const response = toResponse(updated, decision, approvalRow, null, false);
   response.reasons = reasons;
@@ -413,6 +441,8 @@ async function recordOutcome(db: TenantDb, ctx: OrgContext, req: { id: string; c
     await db.actionRequest.update({ where: { id: req.id }, data: { updatedAt: now } });
     await enqueueJob({ type: "execution.reconcile", payload: { actionRequestId: req.id, orgId: ctx.orgId }, idempotencyKey: `execution.reconcile:${req.id}:${req.executionAttempts}`, orgId: ctx.orgId, runAt: new Date(now.getTime() + EXECUTION_RECONCILE_AFTER_MS), maxAttempts: EXECUTION_MAX_RECONCILE_ATTEMPTS }, db);
     await appendEvidence(db, ctx, { type: "gateway.execution_outcome_unknown", subjectType: "action_request", subjectId: req.id, correlationId: req.correlationId, payload: { receiptId: receipt.id, downstreamSystem: systemKey, error: result.error ?? null, attempt: req.executionAttempts } });
+    const owner = await db.actionRequest.findUnique({ where: { id: req.id }, select: { agentId: true } });
+    if (owner) await applyAutomaticDowngrade(db, { ...systemContextFor(ctx.orgId), now }, owner.agentId, { rule: "unknown_outcome", actionRequestId: req.id });
     return receiptView(receipt, "executing");
   }
   const status: ActionRequest["status"] = result.outcome === "succeeded" ? "executed" : "failed";
@@ -775,4 +805,15 @@ export async function releaseQuarantine(db: TenantDb, ctx: OrgContext, actionReq
   await appendEvidence(db, ctx, { type: "gateway.quarantine_released", subjectType: "action_request", subjectId: req.id, correlationId: req.correlationId, payload: { reason: input.reason, approvalRequestId: approvalRow.id, releasedBy: ctx.actor.id } });
   await appendEvidence(db, ctx, { type: "approval.requested", subjectType: "approval_request", subjectId: approvalRow.id, correlationId: req.correlationId, payload: { actionRequestId: req.id, expiresAt, requiredApprovals: 1, requiredRoles: [], source: "quarantine_release" } });
   return { status: "pending_approval", approvalRequestId: approvalRow.id };
+}
+
+/** A stored level outside 0 to 4 is treated as level 0: an unreadable setting never grants autonomy. */
+function autonomyLevelOf(v: number): AutonomyLevel {
+  return isAutonomyLevel(v) ? v : 0;
+}
+
+async function organizationCurrency(db: TenantDb, orgId: string): Promise<string> {
+  const org = await db.organization.findUnique({ where: { id: orgId }, select: { settings: true } });
+  const c = (org?.settings as { currency?: unknown } | null)?.currency;
+  return typeof c === "string" && c ? c.toUpperCase() : "AED";
 }

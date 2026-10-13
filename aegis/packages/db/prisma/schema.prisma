@@ -255,6 +255,11 @@ model Agent {
   riskTier                String             @default("medium") @map("risk_tier")
   /// What the agent is for, in business terms. Shown to approvers and used for objective alignment.
   purpose                 String             @default("")
+  /// Managed autonomy level 0 to 4 enforced by the gateway (docs/MANAGED_AUTONOMY.md). 4 applies policy as written.
+  autonomyLevel           Int                @default(4) @map("autonomy_level")
+  /// Largest amount the agent may act on without a person at levels 2 and 3 (organization currency). Null: amount-bearing actions need approval at level 2.
+  autonomyCeilingAmount   Decimal?           @map("autonomy_ceiling_amount") @db.Decimal(18, 2)
+  autonomyChangedAt       DateTime?          @map("autonomy_changed_at")
   /// Domains this agent may send data or requests to, across all its tools. Empty means only the tools' own rules apply.
   allowedDestinations     String[]           @default([]) @map("allowed_destinations")
   /// After this time the agent's authority lapses until someone re-certifies it. Null means no expiry.
@@ -1229,6 +1234,7 @@ model Job {
   orgId          String?   @map("org_id") @db.Uuid
   type           String
   payload        Json      @default("{}")
+  /// Stored scoped to the organization ("org:<id>:<key>") so one tenant cannot collide with another's keys.
   idempotencyKey String    @unique @map("idempotency_key")
   runAt          DateTime  @default(now()) @map("run_at")
   attempts       Int       @default(0)
@@ -1326,4 +1332,72 @@ model DiscoveredAgent {
   @@unique([orgId, source, externalId])
   @@index([orgId, status])
   @@map("discovered_agents")
+}
+
+/// Fixed-window request counters shared by every API and web replica (one row per key per window).
+model RateLimitBucket {
+  key         String
+  windowStart DateTime @map("window_start")
+  count       Int      @default(0)
+
+  @@id([key, windowStart])
+  @@index([windowStart])
+  @@map("rate_limit_buckets")
+}
+
+enum AutonomyTransitionKind {
+  lowered
+  raised
+  automatic_downgrade
+}
+
+enum AutonomyChangeStatus {
+  pending
+  approved
+  rejected
+  expired
+  cancelled
+}
+
+/// Every change of an agent's autonomy level. Append-only (database trigger).
+model AutonomyTransition {
+  id              String                 @id @default(uuid(7)) @db.Uuid
+  orgId           String                 @map("org_id") @db.Uuid
+  agentId         String                 @map("agent_id") @db.Uuid
+  fromLevel       Int                    @map("from_level")
+  toLevel         Int                    @map("to_level")
+  kind            AutonomyTransitionKind
+  reason          String
+  /// For automatic downgrades: the rule and the facts that triggered it.
+  trigger         Json?
+  actorType       String                 @map("actor_type")
+  actorId         String?                @map("actor_id")
+  changeRequestId String?                @map("change_request_id") @db.Uuid
+  createdAt       DateTime               @default(now()) @map("created_at")
+
+  @@index([orgId, agentId, createdAt])
+  @@index([orgId, createdAt])
+  @@map("autonomy_transitions")
+}
+
+/// A request to raise an agent's autonomy. Raising needs a second person with agents:control.
+model AutonomyChangeRequest {
+  id           String               @id @default(uuid(7)) @db.Uuid
+  orgId        String               @map("org_id") @db.Uuid
+  agentId      String               @map("agent_id") @db.Uuid
+  fromLevel    Int                  @map("from_level")
+  toLevel      Int                  @map("to_level")
+  ceilingAmount Decimal?            @map("ceiling_amount") @db.Decimal(18, 2)
+  reason       String
+  status       AutonomyChangeStatus @default(pending)
+  requestedBy  String               @map("requested_by") @db.Uuid
+  decidedBy    String?              @map("decided_by") @db.Uuid
+  decidedAt    DateTime?            @map("decided_at")
+  decisionNote String?              @map("decision_note")
+  expiresAt    DateTime             @map("expires_at")
+  createdAt    DateTime             @default(now()) @map("created_at")
+
+  @@index([orgId, status])
+  @@index([orgId, agentId])
+  @@map("autonomy_change_requests")
 }

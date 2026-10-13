@@ -10,6 +10,7 @@ import { installShield } from "../shield/inspector.js";
 import { seedDemoDataClasses, seedDemoShield } from "./demo-shield.js";
 import { seedDemoAudit, seedSharedFrameworks } from "./demo-audit.js";
 import { seedDemoIdentity } from "./demo-identity.js";
+import { seedDemoAutonomy } from "./demo-autonomy.js";
 import { withTenant } from "@aegis/db";
 
 export async function runSeed() {
@@ -26,6 +27,7 @@ export async function runSeed() {
   await runSensitiveDataDemo(actors);
   await runOutcomesDemo(actors);
   await seedDemoIdentity(t);
+  await seedDemoAutonomy(t);
   await withTenant(t.orgId, (db) => seedDemoShield(db, t.users.security_analyst!.ctx, t.agents));
   await seedSharedFrameworks();
   const audit = await withTenant(t.orgId, (db) => seedDemoAudit(db, t.users.owner!.ctx, { ownerUserId: t.users.owner!.id, auditorUserId: t.users.auditor!.id }), { timeout: 180_000, lock: "lazy" });
@@ -46,13 +48,13 @@ export async function runSeed() {
   // Demo agent API keys are needed by the SDK examples and the live demo runner. Written to a
   // gitignored file in the monorepo root; never printed to logs.
   const keysPath = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "..", ".demo-keys.json");
-  writeFileSync(keysPath, JSON.stringify({ orgId: t.orgId, generatedAt: new Date().toISOString(), agents: t.apiKeys }, null, 2));
+  writeFileSync(keysPath, JSON.stringify({ orgId: t.orgId, generatedAt: new Date().toISOString(), agents: t.apiKeys, platformAdmin: { email: PLATFORM_ADMIN.email, password: t.platformAdminPassword } }, null, 2), { mode: 0o600 });
   console.log(`Demo agent API keys written to ${keysPath}`);
   console.log(`Seeded demo tenant ${t.orgId} in ${Date.now() - started}ms`);
   console.log(`Agents: ${Object.keys(t.agents).length}, tools: ${Object.keys(t.tools).length}, resources: ${Object.keys(t.resources).length}`);
   console.log(`Sign in with any demo user (password ${DEMO_PASSWORD}):`);
   for (const u of DEMO_USERS) console.log(`  ${u.email}  (${u.role})`);
-  console.log(`Platform admin: ${PLATFORM_ADMIN.email}`);
+  console.log(`Platform admin: ${PLATFORM_ADMIN.email} (its own password, in ${keysPath}; never the demo password)`);
   return t;
 }
 

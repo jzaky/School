@@ -21,12 +21,22 @@ export function registerJobHandler(type: string, handler: JobHandler) {
  */
 export async function enqueueJob(input: { type: string; payload: Record<string, unknown>; idempotencyKey: string; orgId?: string | null; runAt?: Date; maxAttempts?: number }, tx?: Prisma.TransactionClient) {
   const client = tx ?? rawPrisma();
-  // jobs has no RLS (platform table); it only carries ids, never content.
+  const orgId = input.orgId ?? null;
+  // An organization's job may only name that organization in its payload; the worker refuses a mismatch.
+  if (orgId && typeof input.payload.orgId === "string" && input.payload.orgId !== orgId) throw new Error("job payload names a different organization");
+  // Jobs carry ids, never content. Row-level security confines a tenant transaction to its own jobs, and the
+  // key is stored scoped to the organization so tenants can never collide with each other's keys.
+  const key = scopedJobKey(input.idempotencyKey, orgId);
   return client.job.upsert({
-    where: { idempotencyKey: input.idempotencyKey },
-    create: { type: input.type, payload: input.payload as Prisma.InputJsonValue, idempotencyKey: input.idempotencyKey, orgId: input.orgId ?? null, runAt: input.runAt ?? new Date(), maxAttempts: input.maxAttempts ?? 5 },
+    where: { idempotencyKey: key },
+    create: { type: input.type, payload: input.payload as Prisma.InputJsonValue, idempotencyKey: key, orgId, runAt: input.runAt ?? new Date(), maxAttempts: input.maxAttempts ?? 5 },
     update: {},
   });
+}
+
+/** The stored idempotency key: platform jobs keep the key as given, organization jobs are prefixed with the organization. */
+export function scopedJobKey(idempotencyKey: string, orgId: string | null): string {
+  return orgId ? `org:${orgId}:${idempotencyKey}` : idempotencyKey;
 }
 
 const workerId = `${hostname()}:${process.pid}`;
@@ -55,8 +65,15 @@ export async function runJob(job: { id: string; type: string; payload: unknown; 
     await db.job.update({ where: { id: job.id }, data: { status: "failed", lastError: `no handler for ${job.type}`, lockedAt: null, lockedBy: null } });
     return;
   }
+  const payload = (job.payload ?? {}) as Record<string, unknown>;
+  // The organization a job acts for is the job row's org_id (written under row-level security by the
+  // enqueuing transaction), never a value in the payload. A payload that disagrees is refused unrun.
+  if ("orgId" in payload && payload.orgId !== job.orgId) {
+    await db.job.update({ where: { id: job.id }, data: { status: "failed", lastError: "payload organization does not match the job's organization", lockedAt: null, lockedBy: null } });
+    return;
+  }
   try {
-    await handler((job.payload ?? {}) as Record<string, unknown>, { jobId: job.id, orgId: job.orgId, attempt: job.attempts });
+    await handler(payload, { jobId: job.id, orgId: job.orgId, attempt: job.attempts });
     await db.job.update({ where: { id: job.id }, data: { status: "done", lockedAt: null, lockedBy: null, lastError: null } });
   } catch (err) {
     const message = err instanceof Error ? err.message.slice(0, 1000) : String(err);

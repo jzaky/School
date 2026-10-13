@@ -38,38 +38,50 @@ export interface SeededTenant {
   resources: Record<string, string>;
   integrations: Record<string, string>;
   apiKeys: Record<string, string>;
+  /** Generated or configured; written only to the gitignored .demo-keys.json, never to logs. */
+  platformAdminPassword?: string;
 }
 
 export async function resetDemoTenant(): Promise<void> {
   const owner = ownerPrisma();
   const existing = await owner.organization.findUnique({ where: { slug: DEMO_SLUG } });
   if (existing) {
-    await owner.$executeRawUnsafe(`DELETE FROM jobs WHERE org_id = $1::uuid`, existing.id);
-    // Append-only tables refuse DELETE through triggers; the owner disables them for the reset only.
-    for (const t of ["evidence_events", "evidence_checkpoints", "authorization_decisions", "approval_responses", "execution_receipts", "policy_events", "policy_versions"]) {
-      await owner.$executeRawUnsafe(`ALTER TABLE ${t} DISABLE TRIGGER USER`);
-    }
-    try {
-      await owner.$executeRawUnsafe(`DELETE FROM evidence_checkpoints WHERE org_id = $1::uuid`, existing.id);
-      await owner.$executeRawUnsafe(`DELETE FROM evidence_events WHERE org_id = $1::uuid`, existing.id);
-      // Dependents first; tables without FK cascades to organizations are cleaned explicitly.
-      for (const t of ["team_members", "teams", "invitations", "sso_connections", "api_keys", "memberships", "roles", "notifications", "alerts", "monitoring_rules", "security_events", "incidents", "action_requests", "policies", "agents", "tools", "integrations", "resources", "control_mappings", "data_classes", "remediation_tasks", "assessments", "documents", "audit_exports", "frameworks"]) {
-        await owner.$executeRawUnsafe(`DELETE FROM ${t} WHERE org_id = $1::uuid`, existing.id);
-      }
-      await owner.organization.delete({ where: { id: existing.id } });
-    } finally {
-      for (const t of ["evidence_events", "evidence_checkpoints", "authorization_decisions", "approval_responses", "execution_receipts", "policy_events", "policy_versions"]) {
-        await owner.$executeRawUnsafe(`ALTER TABLE ${t} ENABLE TRIGGER USER`);
-      }
-    }
+    // One owner transaction. The append-only triggers stay enabled for every table and every tenant; the
+    // transaction-local aegis.purge_org setting lets the owner delete this one organization's rows (S10).
+    await owner.$transaction(
+      async (tx) => {
+        await tx.$executeRawUnsafe(`SELECT set_config('aegis.purge_org', $1, true)`, existing.id);
+        await tx.$executeRawUnsafe(`DELETE FROM jobs WHERE org_id = $1::uuid`, existing.id);
+        await tx.$executeRawUnsafe(`DELETE FROM evidence_checkpoints WHERE org_id = $1::uuid`, existing.id);
+        await tx.$executeRawUnsafe(`DELETE FROM evidence_events WHERE org_id = $1::uuid`, existing.id);
+        // Dependents first; tables without FK cascades to organizations are cleaned explicitly.
+        for (const t of ["team_members", "teams", "invitations", "sso_connections", "api_keys", "memberships", "roles", "notifications", "alerts", "monitoring_rules", "security_events", "incidents", "access_requests", "agent_delegations", "discovered_agents", "platform_events", "autonomy_change_requests", "autonomy_transitions", "action_requests", "policies", "agents", "tools", "integrations", "resources", "control_mappings", "data_classes", "remediation_tasks", "assessments", "documents", "audit_exports", "frameworks"]) {
+          await tx.$executeRawUnsafe(`DELETE FROM ${t} WHERE org_id = $1::uuid`, existing.id);
+        }
+        await tx.organization.delete({ where: { id: existing.id } });
+      },
+      { timeout: 300_000, maxWait: 30_000 },
+    );
   }
   await owner.user.deleteMany({ where: { email: { in: [...DEMO_USERS.map((u) => u.email), PLATFORM_ADMIN.email] } } });
+}
+
+/**
+ * The platform administrator never shares the published demo password (S10): it comes from
+ * AEGIS_PLATFORM_ADMIN_PASSWORD, or is generated at random and written only to the gitignored
+ * .demo-keys.json file.
+ */
+export function platformAdminPassword(): string {
+  const configured = process.env.AEGIS_PLATFORM_ADMIN_PASSWORD;
+  if (configured && configured.length >= 12) return configured;
+  return `Adm-${randomToken(18)}`;
 }
 
 export async function seedDemoTenant(): Promise<SeededTenant> {
   await resetDemoTenant();
   const passwordHash = await hashPassword(DEMO_PASSWORD);
-  const admin = await rawPrisma().user.create({ data: { email: PLATFORM_ADMIN.email, name: PLATFORM_ADMIN.name, passwordHash, isPlatformAdmin: true } });
+  const adminPassword = platformAdminPassword();
+  const admin = await rawPrisma().user.create({ data: { email: PLATFORM_ADMIN.email, name: PLATFORM_ADMIN.name, passwordHash: await hashPassword(adminPassword), isPlatformAdmin: true } });
   const created = [] as { id: string; email: string; role: string; title: string }[];
   for (const u of DEMO_USERS) {
     const row = await rawPrisma().user.create({ data: { email: u.email, name: u.name, passwordHash, lastLoginAt: new Date(Date.now() - Math.random() * 3 * 86400_000) } });
@@ -214,7 +226,7 @@ export async function seedDemoTenant(): Promise<SeededTenant> {
   await withTenant(org.id, (db) => seedDemoPolicies(db, users.governance_manager!.ctx, ownerCtx, out.agents));
   await withTenant(org.id, (db) => ensureDefaultMonitoringRules(db, ownerCtx));
   void admin;
-  return out;
+  return { ...out, platformAdminPassword: adminPassword };
 }
 
 export async function demoTenantDb<T>(fn: (db: TenantDb) => Promise<T>): Promise<T> {

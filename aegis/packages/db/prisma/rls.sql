@@ -59,9 +59,56 @@ BEGIN
   END;
 END $$;
 
--- Integrity triggers: append-only records.
-CREATE OR REPLACE FUNCTION aegis_forbid_mutation() RETURNS trigger AS $$
+-- Platform tables (S8). These hold identities and platform state, so they have no NOT NULL org_id.
+-- Rule: with no organization context (platform code: sign-in, sessions, the worker's queue, platform
+-- administration) the rows are reachable as before. Inside a tenant transaction (app.current_org set)
+-- each table is confined to that organization: its members, their sessions, its own row, its jobs
+-- and events. Deployment records are platform-only.
+DO $$
+DECLARE
+  no_org text := 'NULLIF(current_setting(''app.current_org'', true), '''') IS NULL';
+  cur_org text := 'NULLIF(current_setting(''app.current_org'', true), '''')::uuid';
+  t text;
 BEGIN
+  FOREACH t IN ARRAY ARRAY['users','sessions','organizations','jobs','platform_events','deployment_versions']
+  LOOP
+    EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY', t);
+    EXECUTE format('ALTER TABLE public.%I NO FORCE ROW LEVEL SECURITY', t);
+    EXECUTE format('DROP POLICY IF EXISTS platform_or_tenant ON public.%I', t);
+  END LOOP;
+
+  -- Users: members of the current organization. Creating a user row (an invitation for someone new)
+  -- reveals nothing, so inserts are allowed in either context.
+  EXECUTE format('CREATE POLICY platform_or_tenant ON public.users USING (%s OR EXISTS (SELECT 1 FROM public.memberships m WHERE m.user_id = users.id AND m.org_id = %s)) WITH CHECK (true)', no_org, cur_org);
+  EXECUTE format('CREATE POLICY platform_or_tenant ON public.sessions USING (%s OR EXISTS (SELECT 1 FROM public.memberships m WHERE m.user_id = sessions.user_id AND m.org_id = %s)) WITH CHECK (%s OR EXISTS (SELECT 1 FROM public.memberships m WHERE m.user_id = sessions.user_id AND m.org_id = %s))', no_org, cur_org, no_org, cur_org);
+  EXECUTE format('CREATE POLICY platform_or_tenant ON public.organizations USING (%s OR id = %s) WITH CHECK (%s OR id = %s)', no_org, cur_org, no_org, cur_org);
+  EXECUTE format('CREATE POLICY platform_or_tenant ON public.jobs USING (%s OR org_id = %s) WITH CHECK (%s OR org_id = %s)', no_org, cur_org, no_org, cur_org);
+  EXECUTE format('CREATE POLICY platform_or_tenant ON public.platform_events USING (%s OR org_id = %s) WITH CHECK (%s OR org_id = %s)', no_org, cur_org, no_org, cur_org);
+  EXECUTE format('CREATE POLICY platform_or_tenant ON public.deployment_versions USING (%s) WITH CHECK (%s)', no_org, no_org);
+END $$;
+
+-- Shared rate-limit counters (S14) carry no tenant data and are reached only by platform code.
+DO $$
+BEGIN
+  ALTER TABLE public.rate_limit_buckets ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE public.rate_limit_buckets NO FORCE ROW LEVEL SECURITY;
+  DROP POLICY IF EXISTS platform_only ON public.rate_limit_buckets;
+  CREATE POLICY platform_only ON public.rate_limit_buckets
+    USING (NULLIF(current_setting('app.current_org', true), '') IS NULL)
+    WITH CHECK (NULLIF(current_setting('app.current_org', true), '') IS NULL);
+END $$;
+
+-- Integrity triggers: append-only records.
+-- One narrow exception (S10): the table owner may DELETE the rows of one organization, named in the
+-- transaction-local setting aegis.purge_org, to reset the demo tenant. Every other tenant stays protected
+-- throughout, the application role can never use it (it is not the table owner), and UPDATE is never allowed.
+CREATE OR REPLACE FUNCTION aegis_forbid_mutation() RETURNS trigger AS $$
+DECLARE purge text := NULLIF(current_setting('aegis.purge_org', true), '');
+BEGIN
+  IF TG_OP = 'DELETE' AND purge IS NOT NULL AND OLD.org_id::text = purge
+     AND current_user = (SELECT tableowner FROM pg_tables WHERE schemaname = TG_TABLE_SCHEMA AND tablename = TG_TABLE_NAME) THEN
+    RETURN OLD;
+  END IF;
   RAISE EXCEPTION 'AEGIS: % rows are append-only (% not permitted)', TG_TABLE_NAME, TG_OP
     USING ERRCODE = 'integrity_constraint_violation';
 END $$ LANGUAGE plpgsql;
@@ -69,7 +116,7 @@ END $$ LANGUAGE plpgsql;
 DO $$
 DECLARE t text;
 BEGIN
-  FOREACH t IN ARRAY ARRAY['evidence_events','evidence_checkpoints','authorization_decisions','approval_responses','execution_receipts','policy_events']
+  FOREACH t IN ARRAY ARRAY['evidence_events','evidence_checkpoints','authorization_decisions','approval_responses','execution_receipts','policy_events','autonomy_transitions']
   LOOP
     EXECUTE format('DROP TRIGGER IF EXISTS forbid_mutation ON public.%I', t);
     EXECUTE format('CREATE TRIGGER forbid_mutation BEFORE UPDATE OR DELETE ON public.%I FOR EACH ROW EXECUTE FUNCTION aegis_forbid_mutation()', t);
@@ -112,7 +159,10 @@ RETURNS TABLE (membership_id uuid, org_id uuid, org_slug text, org_name text, or
 LANGUAGE sql SECURITY DEFINER SET search_path = public AS $$
   SELECT m.id, m.org_id, o.slug, o.name, o.demo_mode, r.id, r.key, r.name, r.permissions, m.status
   FROM memberships m JOIN organizations o ON o.id = m.org_id JOIN roles r ON r.id = m.role_id
-  WHERE m.user_id = p_user_id ORDER BY o.name;
+  WHERE m.user_id = p_user_id
+    -- Platform context only: inside a tenant transaction this cross-tenant lookup returns nothing.
+    AND NULLIF(current_setting('app.current_org', true), '') IS NULL
+  ORDER BY o.name;
 $$;
 
 CREATE OR REPLACE FUNCTION aegis_invitation_by_hash(p_hash text)
