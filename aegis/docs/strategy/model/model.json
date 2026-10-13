@@ -1,0 +1,525 @@
+{
+  "status": "PROPOSED - NOT APPROVED FOR IMPLEMENTATION",
+  "generatedBy": "docs/strategy/model/build-model.mjs",
+  "currency": "AED",
+  "openingCash": 1000000,
+  "protectedReserve": 50000,
+  "facts": [
+    "No revenue, customers, pilots, investors or financial history are recorded anywhere in the repository.",
+    "Opening cash of AED 1,000,000 assumes the proposed raise closes in full before month 1; it is not secured."
+  ],
+  "aiUsage": {
+    "low": {
+      "claude": 1000,
+      "agentExecution": 500,
+      "note": "Development on subscriptions only; agents run a few research tasks a week"
+    },
+    "expected": {
+      "claude": 2000,
+      "agentExecution": 1000,
+      "note": "Development plus three internal agents on light daily schedules"
+    },
+    "high": {
+      "claude": 6000,
+      "agentExecution": 3000,
+      "note": "Heavy API use by agents (long research runs, repository-wide analysis) and pilot support"
+    }
+  },
+  "scenarios": [
+    {
+      "key": "conservative",
+      "label": "Conservative",
+      "story": "Buyer interest is slower than hoped, no pilot pays within 12 months, procurement runs past month 12, security findings need a second retest, no hiring.",
+      "aiUsage": "expected",
+      "totals": {
+        "spend": 750000,
+        "collected": 0,
+        "signed": 0,
+        "contractedArrMonth12": 0,
+        "endingCash": 250000,
+        "endingCashExcludingReserve": 200000,
+        "averageMonthlyGrossBurn": 62500,
+        "averageMonthlyNetBurn": 62500,
+        "runRateMonthlyCostAfterMonth12": 30250,
+        "recurringRevenueMonthlyAfterMonth12": 0,
+        "netRunRateAfterMonth12": 30250,
+        "runwayMonthsAfterMonth12ExcludingReserve": 6.6,
+        "headcount": {
+          "founderFte": 1,
+          "fractionalCtoFte": 0.25,
+          "salesAdviserFte": 0,
+          "customerSuccessContractorFte": 0
+        },
+        "agentOperatingCostYear": 36000,
+        "salesAndPartnershipSpend": 38000,
+        "payingCustomers": 0,
+        "customerAcquisitionCostPerPayingCustomer": null,
+        "pilotGrossMarginPercent": null,
+        "annualContractGrossMarginPercentAssumed": null
+      },
+      "byCategory": {
+        "Founder compensation": 150000,
+        "Fractional CTO and specialist engineering": 160000,
+        "Enterprise sales and partnerships": 38000,
+        "Independent security validation": 155000,
+        "Legal and intellectual property": 102000,
+        "AI agents and infrastructure": 80004,
+        "Customer pilots and onboarding": 15000,
+        "Operations (excluding reserve)": 49996,
+        "Customer delivery beyond the plan": 0
+      },
+      "quarters": [
+        223000,
+        251500,
+        149750,
+        125750
+      ],
+      "planQuarters": [
+        210000,
+        230000,
+        270000,
+        240000
+      ],
+      "months": [
+        {
+          "month": 1,
+          "spend": 97000,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 97000,
+          "cash": 903000,
+          "contractedArr": 0
+        },
+        {
+          "month": 2,
+          "spend": 61000,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 61000,
+          "cash": 842000,
+          "contractedArr": 0
+        },
+        {
+          "month": 3,
+          "spend": 65000,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 65000,
+          "cash": 777000,
+          "contractedArr": 0
+        },
+        {
+          "month": 4,
+          "spend": 110000,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 110000,
+          "cash": 667000,
+          "contractedArr": 0
+        },
+        {
+          "month": 5,
+          "spend": 50250,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 50250,
+          "cash": 616750,
+          "contractedArr": 0
+        },
+        {
+          "month": 6,
+          "spend": 91250,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 91250,
+          "cash": 525500,
+          "contractedArr": 0
+        },
+        {
+          "month": 7,
+          "spend": 40250,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 40250,
+          "cash": 485250,
+          "contractedArr": 0
+        },
+        {
+          "month": 8,
+          "spend": 63250,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 63250,
+          "cash": 422000,
+          "contractedArr": 0
+        },
+        {
+          "month": 9,
+          "spend": 46250,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 46250,
+          "cash": 375750,
+          "contractedArr": 0
+        },
+        {
+          "month": 10,
+          "spend": 45250,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 45250,
+          "cash": 330500,
+          "contractedArr": 0
+        },
+        {
+          "month": 11,
+          "spend": 50250,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 50250,
+          "cash": 280250,
+          "contractedArr": 0
+        },
+        {
+          "month": 12,
+          "spend": 30250,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 30250,
+          "cash": 250000,
+          "contractedArr": 0
+        }
+      ]
+    },
+    {
+      "key": "base",
+      "label": "Base",
+      "story": "The founder's targets: three paid pilots and two annual contracts at AED 150,000, with procurement timing that is realistic for regulated buyers.",
+      "aiUsage": "expected",
+      "totals": {
+        "spend": 922500,
+        "collected": 240000,
+        "signed": 390000,
+        "contractedArrMonth12": 300000,
+        "endingCash": 317500,
+        "endingCashExcludingReserve": 267500,
+        "averageMonthlyGrossBurn": 76875,
+        "averageMonthlyNetBurn": 56875,
+        "runRateMonthlyCostAfterMonth12": 42500,
+        "recurringRevenueMonthlyAfterMonth12": 25000,
+        "netRunRateAfterMonth12": 17500,
+        "runwayMonthsAfterMonth12ExcludingReserve": 15.3,
+        "headcount": {
+          "founderFte": 1,
+          "fractionalCtoFte": 0.25,
+          "salesAdviserFte": 0.25,
+          "customerSuccessContractorFte": 0
+        },
+        "agentOperatingCostYear": 36000,
+        "salesAndPartnershipSpend": 150500,
+        "payingCustomers": 3,
+        "customerAcquisitionCostPerPayingCustomer": 50167,
+        "pilotGrossMarginPercent": 22,
+        "annualContractGrossMarginPercentAssumed": 75
+      },
+      "byCategory": {
+        "Founder compensation": 150000,
+        "Fractional CTO and specialist engineering": 160000,
+        "Enterprise sales and partnerships": 150500,
+        "Independent security validation": 140000,
+        "Legal and intellectual property": 112000,
+        "AI agents and infrastructure": 80004,
+        "Customer pilots and onboarding": 70000,
+        "Operations (excluding reserve)": 49996,
+        "Customer delivery beyond the plan": 10000
+      },
+      "quarters": [
+        223000,
+        306250,
+        221750,
+        171500
+      ],
+      "planQuarters": [
+        210000,
+        230000,
+        270000,
+        240000
+      ],
+      "months": [
+        {
+          "month": 1,
+          "spend": 97000,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 97000,
+          "cash": 903000,
+          "contractedArr": 0
+        },
+        {
+          "month": 2,
+          "spend": 61000,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 61000,
+          "cash": 842000,
+          "contractedArr": 0
+        },
+        {
+          "month": 3,
+          "spend": 65000,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 65000,
+          "cash": 777000,
+          "contractedArr": 0
+        },
+        {
+          "month": 4,
+          "spend": 138000,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 138000,
+          "cash": 639000,
+          "contractedArr": 0
+        },
+        {
+          "month": 5,
+          "spend": 76000,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 76000,
+          "cash": 563000,
+          "contractedArr": 0
+        },
+        {
+          "month": 6,
+          "spend": 92250,
+          "collected": 0,
+          "signedThisMonth": 30000,
+          "netBurn": 92250,
+          "cash": 470750,
+          "contractedArr": 0
+        },
+        {
+          "month": 7,
+          "spend": 62750,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 62750,
+          "cash": 408000,
+          "contractedArr": 0
+        },
+        {
+          "month": 8,
+          "spend": 80750,
+          "collected": 30000,
+          "signedThisMonth": 30000,
+          "netBurn": 50750,
+          "cash": 357250,
+          "contractedArr": 0
+        },
+        {
+          "month": 9,
+          "spend": 78250,
+          "collected": 0,
+          "signedThisMonth": 30000,
+          "netBurn": 78250,
+          "cash": 279000,
+          "contractedArr": 0
+        },
+        {
+          "month": 10,
+          "spend": 62000,
+          "collected": 30000,
+          "signedThisMonth": 150000,
+          "netBurn": 32000,
+          "cash": 247000,
+          "contractedArr": 150000
+        },
+        {
+          "month": 11,
+          "spend": 60500,
+          "collected": 30000,
+          "signedThisMonth": 0,
+          "netBurn": 30500,
+          "cash": 216500,
+          "contractedArr": 150000
+        },
+        {
+          "month": 12,
+          "spend": 49000,
+          "collected": 150000,
+          "signedThisMonth": 150000,
+          "netBurn": -101000,
+          "cash": 317500,
+          "contractedArr": 300000
+        }
+      ]
+    },
+    {
+      "key": "upside",
+      "label": "Upside",
+      "story": "A partner brings deals early: five paid pilots and four annual contracts, more delivery work and a customer success contractor from month 9.",
+      "aiUsage": "high",
+      "totals": {
+        "spend": 1186500,
+        "collected": 650000,
+        "signed": 800000,
+        "contractedArrMonth12": 600000,
+        "endingCash": 463500,
+        "endingCashExcludingReserve": 413500,
+        "averageMonthlyGrossBurn": 98875,
+        "averageMonthlyNetBurn": 44708,
+        "runRateMonthlyCostAfterMonth12": 64000,
+        "recurringRevenueMonthlyAfterMonth12": 50000,
+        "netRunRateAfterMonth12": 14000,
+        "runwayMonthsAfterMonth12ExcludingReserve": 29.5,
+        "headcount": {
+          "founderFte": 1,
+          "fractionalCtoFte": 0.25,
+          "salesAdviserFte": 0.25,
+          "customerSuccessContractorFte": 0.5
+        },
+        "agentOperatingCostYear": 108000,
+        "salesAndPartnershipSpend": 240000,
+        "payingCustomers": 5,
+        "customerAcquisitionCostPerPayingCustomer": 48000,
+        "pilotGrossMarginPercent": 50,
+        "annualContractGrossMarginPercentAssumed": 75
+      },
+      "byCategory": {
+        "Founder compensation": 150000,
+        "Fractional CTO and specialist engineering": 160000,
+        "Enterprise sales and partnerships": 240000,
+        "Independent security validation": 140000,
+        "Legal and intellectual property": 122000,
+        "AI agents and infrastructure": 152004,
+        "Customer pilots and onboarding": 100000,
+        "Operations (excluding reserve)": 49996,
+        "Customer delivery beyond the plan": 72500
+      },
+      "quarters": [
+        255000,
+        338000,
+        303500,
+        290000
+      ],
+      "planQuarters": [
+        210000,
+        230000,
+        270000,
+        240000
+      ],
+      "months": [
+        {
+          "month": 1,
+          "spend": 103000,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 103000,
+          "cash": 897000,
+          "contractedArr": 0
+        },
+        {
+          "month": 2,
+          "spend": 67000,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 67000,
+          "cash": 830000,
+          "contractedArr": 0
+        },
+        {
+          "month": 3,
+          "spend": 85000,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 85000,
+          "cash": 745000,
+          "contractedArr": 0
+        },
+        {
+          "month": 4,
+          "spend": 148500,
+          "collected": 0,
+          "signedThisMonth": 0,
+          "netBurn": 148500,
+          "cash": 596500,
+          "contractedArr": 0
+        },
+        {
+          "month": 5,
+          "spend": 96000,
+          "collected": 0,
+          "signedThisMonth": 40000,
+          "netBurn": 96000,
+          "cash": 500500,
+          "contractedArr": 0
+        },
+        {
+          "month": 6,
+          "spend": 93500,
+          "collected": 0,
+          "signedThisMonth": 40000,
+          "netBurn": 93500,
+          "cash": 407000,
+          "contractedArr": 0
+        },
+        {
+          "month": 7,
+          "spend": 89000,
+          "collected": 40000,
+          "signedThisMonth": 40000,
+          "netBurn": 49000,
+          "cash": 358000,
+          "contractedArr": 0
+        },
+        {
+          "month": 8,
+          "spend": 100000,
+          "collected": 40000,
+          "signedThisMonth": 190000,
+          "netBurn": 60000,
+          "cash": 298000,
+          "contractedArr": 150000
+        },
+        {
+          "month": 9,
+          "spend": 114500,
+          "collected": 40000,
+          "signedThisMonth": 190000,
+          "netBurn": 74500,
+          "cash": 223500,
+          "contractedArr": 300000
+        },
+        {
+          "month": 10,
+          "spend": 87500,
+          "collected": 190000,
+          "signedThisMonth": 150000,
+          "netBurn": -102500,
+          "cash": 326000,
+          "contractedArr": 450000
+        },
+        {
+          "month": 11,
+          "spend": 103000,
+          "collected": 190000,
+          "signedThisMonth": 0,
+          "netBurn": -87000,
+          "cash": 413000,
+          "contractedArr": 450000
+        },
+        {
+          "month": 12,
+          "spend": 99500,
+          "collected": 150000,
+          "signedThisMonth": 150000,
+          "netBurn": -50500,
+          "cash": 463500,
+          "contractedArr": 600000
+        }
+      ]
+    }
+  ]
+}
