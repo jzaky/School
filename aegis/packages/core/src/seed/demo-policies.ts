@@ -1,6 +1,7 @@
 import type { TenantDb } from "@aegis/db";
 import type { OrgContext } from "../lib/context.js";
 import { activateVersion, assignPolicy, createPolicy, submitForReview } from "../policy/service.js";
+import { buildScoreBandPolicyDocument } from "../policy/score-band.js";
 import { buildRefundPolicyDocument } from "../policy/templates.js";
 
 /** Illustrative, customer-configurable thresholds. Not universal governance rules. */
@@ -97,6 +98,14 @@ export const DEMO_POLICIES = [
     document: { version: 1, rules: [{ id: "not-active", effect: "deny", when: { attr: "agent.status", op: "neq", value: "active" }, reason: "Agent is not active" }] },
     assign: { targetType: "org" as const },
   },
+  {
+    key: "refund-fraud-score",
+    name: "Refund fraud score routing (example)",
+    description: "Guided score-band example: routes the fraud model's score sent with each refund into clear, review, hold and block. Not assigned to any agent until yours sends a score.",
+    category: "authorization" as const,
+    document: buildScoreBandPolicyDocument({ tools: ["issue-refund", "refund-payment"], scoreSource: "context", scoreAttribute: "fraudScore", scale: "unit", reviewFrom: 0.4, holdFrom: 0.55, blockFrom: 0.7, missingScore: "deny", approverRoles: ["approver", "governance_manager", "owner"], minApprovers: 1, approvalExpiresMinutes: 240, holdExpiresMinutes: 60, holdEscalateToRoles: ["governance_manager"], separationOfDuties: true }),
+    assign: null,
+  },
 ];
 
 export async function seedDemoPolicies(db: TenantDb, authorCtx: OrgContext, activatorCtx: OrgContext, agentsBySlug: Record<string, string>) {
@@ -105,8 +114,10 @@ export async function seedDemoPolicies(db: TenantDb, authorCtx: OrgContext, acti
     const { policy, version } = await createPolicy(db, authorCtx, { key: p.key, name: p.name, description: p.description, category: p.category, document: p.document, changeNote: "Initial version" });
     await submitForReview(db, authorCtx, version.id);
     await activateVersion(db, activatorCtx, version.id);
-    const target = p.assign.targetType === "agent" ? agentsBySlug[p.assign.agentSlug] : null;
-    await assignPolicy(db, activatorCtx, policy.id, { targetType: p.assign.targetType, targetId: target ?? null, priority: 100 });
+    if (p.assign) {
+      const target = p.assign.targetType === "agent" ? agentsBySlug[p.assign.agentSlug] : null;
+      await assignPolicy(db, activatorCtx, policy.id, { targetType: p.assign.targetType, targetId: target ?? null, priority: 100 });
+    }
     ids[p.key] = policy.id;
   }
   return ids;

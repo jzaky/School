@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant } from "@aegis/db";
-import { activateVersion, assignPolicy, assignmentSchema, buildRefundPolicyDocument, createPolicy, createPolicyVersion, deactivatePolicy, explainRefundPolicy, forbidden, isAegisError, notFound, policyDocumentSchema, policyInputSchema, refundSampleRequests, refundTemplateSchema, rollbackToVersion, simulatePolicy, submitForReview, unassignPolicy, updateDraftVersion, updatePolicyMeta, validation, type EvaluationResult, type PolicyDocument, type RefundSampleId } from "@aegis/core";
+import { activateVersion, assignPolicy, assignmentSchema, buildRefundPolicyDocument, createPolicy, createPolicyVersion, deactivatePolicy, explainRefundPolicy, forbidden, isAegisError, notFound, policyDocumentSchema, policyInputSchema, refundSampleRequests, refundTemplateSchema, rollbackToVersion, simulatePolicy, submitForReview, unassignPolicy, updateDraftVersion, updatePolicyMeta, validation, type EvaluationResult, type PolicyDocument, type RefundSampleId, buildScoreBandPolicyDocument, explainScoreBandPolicy, scoreBandSampleRequests, scoreBandTemplateSchema, type ScoreBandSampleId } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { act } from "./util";
 
@@ -181,7 +181,7 @@ interface SimAgentShape {
 }
 
 /** Builds the input document a dry run evaluates, shaped like the gateway's real input. */
-function buildSimulationInput(args: { tool: string; action: string; params: Record<string, unknown>; agent: SimAgentShape; riskLevel: string; integration: string | null; resource: Record<string, unknown> | null; hour?: number; deniedCount24h?: number; priorRequestsSameReference?: number; now?: Date }): Record<string, unknown> {
+function buildSimulationInput(args: { tool: string; action: string; params: Record<string, unknown>; agent: SimAgentShape; riskLevel: string; integration: string | null; resource: Record<string, unknown> | null; hour?: number; deniedCount24h?: number; priorRequestsSameReference?: number; supplied?: Record<string, unknown>; now?: Date }): Record<string, unknown> {
   const now = args.now ?? new Date();
   const params = args.params;
   const amount = typeof params.amount === "number" ? params.amount : typeof params.amount === "string" && Number.isFinite(Number(params.amount)) ? Number(params.amount) : null;
@@ -206,7 +206,7 @@ function buildSimulationInput(args: { tool: string; action: string; params: Reco
       currency: typeof params.currency === "string" ? params.currency : null,
       priorRequestsSameReference: prior,
       duplicateReferenceKey: prior > 0 ? referenceKey : null,
-      supplied: {},
+      supplied: args.supplied ?? {},
     },
     shield: { dataClasses: [], highestSeverity: null, injectionSignals: [], blocked: false },
   };
@@ -316,6 +316,56 @@ export async function previewRefundTemplateAction(input: unknown) {
         description: sample.description,
         amount: typeof sample.params.amount === "number" ? sample.params.amount : null,
         currency: typeof sample.params.currency === "string" ? sample.params.currency : null,
+        expected: sample.expected,
+        result: r.result,
+        decidingRule: r.decidingRule ? { ruleId: r.decidingRule.ruleId, description: r.decidingRule.description, reason: r.decidingRule.reason } : null,
+        reasons: r.reasons,
+      };
+    });
+    return { document, explanation, samples };
+  });
+}
+
+export interface ScoreBandSampleOutcome {
+  id: ScoreBandSampleId;
+  name: string;
+  description: string;
+  score: number | null;
+  expected: EvaluationResult["result"];
+  result: EvaluationResult["result"];
+  decidingRule: { ruleId: string; description: string; reason: string } | null;
+  reasons: string[];
+}
+
+export interface ScoreBandTemplatePreview {
+  document: PolicyDocument;
+  explanation: string[];
+  samples: ScoreBandSampleOutcome[];
+}
+
+/**
+ * Compiles guided score-band settings into a document and dry-runs the template's sample requests
+ * against it. Pure computation: nothing is stored. Requires policies:read like the simulator.
+ */
+export async function previewScoreBandTemplateAction(input: unknown) {
+  return act(async (): Promise<ScoreBandTemplatePreview> => {
+    const c = await getConsoleContext();
+    if (!c.can("policies:read")) throw forbidden("Missing permission policies:read");
+    const settings = scoreBandTemplateSchema.parse(input ?? {});
+    const document = buildScoreBandPolicyDocument(settings);
+    const explanation = explainScoreBandPolicy(settings);
+    const now = new Date();
+    const samples = scoreBandSampleRequests(settings).map((sample): ScoreBandSampleOutcome => {
+      const scored = sample.score === null ? {} : { [settings.scoreAttribute]: sample.score };
+      const params = settings.scoreSource === "params" ? { ...sample.params, ...scored } : sample.params;
+      const supplied = settings.scoreSource === "context" ? scored : {};
+      const simInput = buildSimulationInput({ tool: sample.tool, action: "execute", params, agent: GENERIC_AGENT(sample.tool), riskLevel: "high", integration: null, resource: null, supplied, now });
+      const r = simulatePolicy(document, simInput);
+      return {
+        id: sample.id,
+        name: sample.name,
+        description: sample.description,
+        score: sample.score,
         expected: sample.expected,
         result: r.result,
         decidingRule: r.decidingRule ? { ruleId: r.decidingRule.ruleId, description: r.decidingRule.description, reason: r.decidingRule.reason } : null,

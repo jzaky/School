@@ -36,6 +36,7 @@ const TODAY = [
   "Sensitive data detection on parameters, destination allowlists per tool, security events and incidents",
   "Document assessment against ISO/IEC 42001, ISO/IEC 27001:2022 and NIST AI RMF catalogs",
   "Guided onboarding checklist and a sample refund workflow that runs without any external credentials",
+  "Guided score-band template: route the score your own fraud or risk model produces into clear, review, hold and block bands, with approvals and holds generated for you",
   "Optional continuous governance: automatic, evidence-recorded responses to monitoring alerts (suspend the agent, pause the gateway, disable the integration), chosen per rule and reversible by a person",
 ];
 

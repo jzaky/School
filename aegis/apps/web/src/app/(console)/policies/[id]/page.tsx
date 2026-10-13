@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { withTenant } from "@aegis/db";
-import { extractRefundSettings, getPolicy, isAegisError, listPolicyHistory, policyDocumentSchema, refundDocumentMatchesSettings, type PolicyDocument } from "@aegis/core";
+import { extractRefundSettings, extractScoreBandSettings, getPolicy, isAegisError, listPolicyHistory, policyDocumentSchema, refundDocumentMatchesSettings, scoreBandDocumentMatchesSettings, type PolicyDocument } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { userNames } from "@/server/queries/users";
 import { agentOptions, teamOptions, toolOptions } from "@/server/queries/control";
@@ -21,6 +21,7 @@ import { PolicyVersionsTable, type PolicyVersionRow } from "@/components/control
 import { AssignPolicyDialog, AssignmentsTable } from "@/components/control/policy-assignments";
 import { PolicyActions } from "@/components/control/policy-actions";
 import { RefundThresholdsPanel } from "@/components/control/policy-thresholds";
+import { ScoreBandThresholdsPanel } from "@/components/control/policy-score-band-thresholds";
 import { RefundTester } from "@/components/control/policy-refund-form";
 import { formatDateTime, timeAgo } from "@/lib/utils";
 import { statusLabel } from "@/lib/status";
@@ -75,6 +76,9 @@ export default async function PolicyDetailPage({ params, searchParams }: { param
   // Guided refund policies: the template settings travel with the document under meta.template.
   const refundSettings = doc ? extractRefundSettings(doc) : null;
   const refundDiverged = refundSettings ? !refundDocumentMatchesSettings(doc) : false;
+  // Guided score-band policies: same mechanism, a different template id.
+  const scoreSettings = doc && !refundSettings ? extractScoreBandSettings(doc) : null;
+  const scoreDiverged = scoreSettings ? !scoreBandDocumentMatchesSettings(doc) : false;
   const toolsLite = tools.map((t) => ({ key: t.key, name: t.name }));
 
   const rulesTab = !selected ? (
@@ -151,7 +155,9 @@ export default async function PolicyDetailPage({ params, searchParams }: { param
         tabs={[
           ...(refundSettings && selected
             ? [{ id: "thresholds", label: "Thresholds", content: <RefundThresholdsPanel policyId={policy.id} version={{ id: selected.id, version: selected.version, state: selected.state }} settings={refundSettings} diverged={refundDiverged} roles={roles} tools={toolsLite} canWrite={canWrite} /> }]
-            : []),
+            : scoreSettings && selected
+              ? [{ id: "thresholds", label: "Score bands", content: <ScoreBandThresholdsPanel policyId={policy.id} version={{ id: selected.id, version: selected.version, state: selected.state }} settings={scoreSettings} diverged={scoreDiverged} roles={roles} tools={toolsLite} canWrite={canWrite} /> }]
+              : []),
           { id: "rules", label: "Rules", count: doc?.rules.length, content: rulesTab },
           { id: "editor", label: "Editor", content: selected ? <PolicyEditor policyId={policy.id} version={{ id: selected.id, version: selected.version, state: selected.state, document: selected.document }} canWrite={canWrite} /> : <Note tone="warning">No version to edit.</Note> },
           {

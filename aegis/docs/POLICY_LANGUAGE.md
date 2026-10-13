@@ -93,3 +93,28 @@ In evaluation order: `invalid-amount` (deny: amount missing or not positive), `w
 ### Plain language, round trip and editing
 
 `explainRefundPolicy(settings)` returns the bullet points shown in the console ("Refunds below AED 500 run automatically", "Refunds from AED 500 to AED 2,500 need one Approver within 4 hours", "Refunds above AED 2,500 are refused", "A second refund for the same order or payment is refused"). The settings are stored in the document under `meta.template = { id: "refund-v1", settings }`; `meta` is an optional top-level field that the evaluator ignores, so existing documents remain valid. `extractRefundSettings(document)` recognises a generated document and reopens the guided form. The JSON remains fully editable in the Editor tab: hand edits are kept, and the Thresholds tab warns that saving from the form would regenerate the rules. Saving from either tab goes through the same draft, review (embedded tests) and four-eyes activation flow.
+
+## Score-band policy template
+
+`packages/core/src/policy/score-band.ts`. The customer's own fraud, risk or confidence model scores each request; the agent sends that score with the request and the template routes it into four bands the business owns. AEGIS never calls the model.
+
+### Settings (`scoreBandTemplateSchema`)
+
+| Setting | Default | Meaning |
+|---|---|---|
+| `tools` | `["issue-refund"]` | Tool keys in scope |
+| `scoreSource` | `context` | Where the agent puts the score: `context.supplied.<attribute>` (the request's free-form `context`) or `params.<attribute>` |
+| `scoreAttribute` | `riskScore` | Field name |
+| `scale` | `unit` | `unit` is 0 to 1, `percent` is 0 to 100 |
+| `reviewFrom`, `holdFrom`, `blockFrom` | 0.40, 0.55, 0.70 | Band boundaries, non-decreasing, within the scale |
+| `missingScore` | `deny` | `deny` or `require_approval` when no score is sent |
+| `approverRoles`, `minApprovers`, `approvalExpiresMinutes`, `separationOfDuties` | as the refund template | Review band approval |
+| `holdExpiresMinutes`, `holdEscalateToRoles` | 60, `[]` | Hold band approvals expire sooner and can escalate |
+
+### Generated rules
+
+`score-missing` (effect per `missingScore`), `score-out-of-range` (deny), `clear-band` (allow, score below `reviewFrom`), `review-band` (require_approval), `hold-band` (require_approval with risk indicators `score_hold` and `hold`, a low security event, shorter expiry and escalation roles; the approver instructions say to place a hold), `block-band` (deny, medium security event). Bands are inclusive at their lower boundary and exclusive at the upper one. A non-numeric score matches no band and falls to the default deny.
+
+### Samples and round trip
+
+`scoreBandSampleRequests` produces one request per band plus missing and out-of-range; they become the document's embedded tests and the console's live preview. `extractScoreBandSettings` reopens the guided form from `meta.template`; `scoreBandDocumentMatchesSettings` detects hand edits. The demo tenant seeds "Refund fraud score routing (example)" active but unassigned, so no demo agent is refused for lacking a score.

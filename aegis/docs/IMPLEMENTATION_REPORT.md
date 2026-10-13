@@ -67,6 +67,11 @@ Two further defects surfaced during the work and were fixed: the Shield inspecto
 - Simulated: nothing; the responses call the same service functions the console buttons call.
 - Remaining: request-scoped responses, time-boxed responses and a dry-run mode (listed in the document as planned).
 
+### Score-band policy template (packages/core/src/policy/score-band.ts, added 2026-10-13)
+- Implemented: guided template that routes the customer's own model score (from request context or tool parameters, 0 to 1 or 0 to 100) into clear, review, hold and block bands with per-band approvals, missing-score handling and range checks; console support in the New policy dialog and a Score bands tab with live sample outcomes; seeded example policy (unassigned). Documented in `docs/POLICY_LANGUAGE.md`.
+- Executed and verified: 7 core tests (defaults and validation, every band, boundary edges, params source on a percent scale, missing and non-numeric scores, embedded tests for five settings, explanation); 2 Playwright tests (create from the dialog with custom bands and verify every dry run, seeded example opens on its tab).
+- Remaining: a tester for arbitrary scores on the detail page (the refund template has one; the preview covers the six samples), replay calibration (next item).
+
 ### Public site (apps/web/src/components/marketing, app/(marketing))
 - Implemented: home page led by the product promise and the refund workflow, who it is for, how authorization and downstream enforcement work with real console screenshots, what is implemented today, integration status table (sandbox tested, simulated, planned), how to start a pilot, calls to action Explore the demo and Discuss a pilot; Explore the demo page with seven guided steps and persona sign-in shown only in demo mode; Discuss a pilot page with the request form; sitemap updated.
 - Executed and verified: 15 Playwright tests including the forbidden-claims sweep over every page.
@@ -86,6 +91,7 @@ Two further defects surfaced during the work and were fixed: the Shield inspecto
 | Seed | `pnpm db:seed` | 461 historical requests, 75 approvals, 18 denied; Stripe integration disabled with no credential; chain valid |
 | Console and site | `cd apps/web && npx playwright test` | see the line below, recorded from the full run |
 | Layout scan (2026-10-13) | `node tests/overlap-scan.mjs` | 0 findings over 30 pages at 390, 768, 1024, 1280 and 1440 px after the fixes in commit d9df1e6 |
+| Score-band template (2026-10-13) | `npx vitest run tests/score-band.test.ts`, `npx playwright test tests/e2e/score-band.spec.ts` | 7 passed, 2 passed |
 | Continuous governance (2026-10-13) | `npx vitest run tests/continuous-governance.test.ts`, `npx playwright test tests/e2e/governance.spec.ts` | 4 passed, 2 passed; full core suite 170 passed |
 
 Playwright, full run against the dev server on 2026-10-12: 63 tests, 61 passed in one 14.5 minute run; the two that failed asserted the old Activity heading and the old first policy tab, were updated for the redesign, and passed on re-run. By suite: console 11, control 11, onboarding 5, policies 2, integrations 2, assurance 5, shield 5, audit 7, marketing 15.

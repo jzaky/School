@@ -2,6 +2,10 @@
 
 Updated at the end of each phase. `docs/IMPLEMENTATION_REPORT.md` has the current per-area breakdown (implemented, executed and verified, simulated, remaining).
 
+## Phase 10: DNRS follow-ups (2026-10-13): in progress
+- Done: score-band policy template (core 7 tests, browser 2 tests, seeded example). CI runs the browser suite against a production build; two production-only defects fixed (platform admin owner credential, report period navigation).
+- Next: replay calibration, autonomy posture and boundary sentence, AEGIS Trading (needs an Alpaca paper key), framework catalogs, free checker, Proof page.
+
 ## Phase 9: layout clean-up and continuous governance (2026-10-13): complete
 - Layout scan tool and fixes for every text collision and sideways-scrolling page found at five widths (commit d9df1e6).
 - Continuous governance mode: per-rule automatic responses (suspend agent, pause gateway, disable integration) with evidence, notifications and reversal by a person. Core 4 tests, Playwright 2 tests. See docs/CONTINUOUS_GOVERNANCE.md.
