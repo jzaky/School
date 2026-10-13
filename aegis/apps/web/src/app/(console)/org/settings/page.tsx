@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { withTenant } from "@aegis/db";
 import { rawPrisma } from "@aegis/db";
-import { computeOnboarding, summarizeOnboarding } from "@aegis/core";
+import { DEFAULT_AUTO_RESPONSES, computeOnboarding, listMonitoringRules, readContinuousGovernance, responseOptionsForRule, summarizeOnboarding } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { PageHeader } from "@/components/ui/page-header";
 import { DemoBadge } from "@/components/ui/demo-badge";
@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { OrganizationSettingsForm } from "@/components/org/settings-form";
 import { GatewayPauseControl } from "@/components/org/pilot-setup";
+import { ContinuousGovernancePanel } from "@/components/org/continuous-governance";
 import { OnboardingProgress } from "@/components/onboarding/checklist";
 import { OnboardingDismissButton } from "@/components/onboarding/dismiss-button";
 import { LinkButton } from "@/components/ui/link-button";
@@ -22,11 +23,13 @@ export const dynamic = "force-dynamic";
 export default async function SettingsPage() {
   const c = await requirePermission("org:read");
   const org = await rawPrisma().organization.findUniqueOrThrow({ where: { id: c.org.id } });
-  const { sso, steps } = await withTenant(c.ctx.orgId, async (db) => ({ sso: await db.ssoConnection.findFirst({ where: { orgId: c.ctx.orgId }, select: { enabled: true, issuer: true } }), steps: await computeOnboarding(db, c.ctx) }), { readOnly: true });
+  const { sso, steps, rules } = await withTenant(c.ctx.orgId, async (db) => ({ sso: await db.ssoConnection.findFirst({ where: { orgId: c.ctx.orgId }, select: { enabled: true, issuer: true } }), steps: await computeOnboarding(db, c.ctx), rules: await listMonitoringRules(db, c.ctx) }), { readOnly: true });
   const s = c.org.settings;
   const canAdmin = c.can("org:admin");
   const onboarding = summarizeOnboarding(steps, s);
   const gw = s as { gatewayPaused?: boolean; gatewayPausedReason?: string; gatewayPausedBy?: string };
+  const governance = readContinuousGovernance(s);
+  const governanceRules = rules.filter((r) => r.enabled).map((r) => ({ key: r.key, name: r.name, description: r.description, severity: r.severity, options: responseOptionsForRule(r.key) }));
   return (
     <div>
       <PageHeader title="Settings" description="Pilot setup, emergency controls, organization identity, defaults and sign-in configuration." badges={<DemoBadge show={c.org.demoMode} />} />
@@ -49,6 +52,9 @@ export default async function SettingsPage() {
           <GatewayPauseControl paused={!!gw.gatewayPaused} reason={gw.gatewayPausedReason ?? null} by={gw.gatewayPausedBy ?? null} canAdmin={canAdmin} />
         </Panel>
       </div>
+      <Panel title="Continuous governance" description="Optional: let AEGIS respond to monitoring alerts on its own, with the response you choose per rule" className="mb-4">
+        <ContinuousGovernancePanel initial={governance} rules={governanceRules} defaults={DEFAULT_AUTO_RESPONSES} canAdmin={canAdmin} />
+      </Panel>
       <div className="grid gap-4 lg:grid-cols-3">
         <Panel title="Organization" description="Editable with org:admin" className="lg:col-span-2">
           <OrganizationSettingsForm canAdmin={canAdmin} initial={{ name: org.name, currency: typeof s.currency === "string" ? s.currency : "AED", timezone: typeof s.timezone === "string" ? s.timezone : "Asia/Dubai", approvalDefaultExpiryMinutes: typeof s.approvalDefaultExpiryMinutes === "number" ? s.approvalDefaultExpiryMinutes : 240 }} />

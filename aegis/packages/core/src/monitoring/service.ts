@@ -6,6 +6,7 @@ import { notFound, validation } from "../lib/errors.js";
 import { notifyUsers, userIdsWithPermission } from "../notify/notifications.js";
 import { assertPermission } from "../orgs/orgs.js";
 import { DEFAULT_RULES, evaluateRule, ruleDefinitionSchema, type RuleDefinition } from "./rules.js";
+import { applyAutoResponses, type NewAlert } from "../governance/continuous.js";
 
 export async function ensureDefaultMonitoringRules(db: TenantDb, ctx: OrgContext) {
   for (const r of DEFAULT_RULES) {
@@ -53,11 +54,11 @@ export async function deleteMonitoringRule(db: TenantDb, ctx: OrgContext, ruleId
 }
 
 /** Runs every enabled rule once. Idempotent: alerts dedupe on (org, dedupeKey). Returns new alert count. */
-export async function runMonitoring(db: TenantDb, ctx: OrgContext, now = new Date()): Promise<{ evaluated: number; newAlerts: number; errors: string[] }> {
+export async function runMonitoring(db: TenantDb, ctx: OrgContext, now = new Date()): Promise<{ evaluated: number; newAlerts: number; autoResponses: number; errors: string[] }> {
   const rules = await db.monitoringRule.findMany({ where: { orgId: ctx.orgId, enabled: true } });
   let newAlerts = 0;
   const errors: string[] = [];
-  const created: { id: string; title: string; severity: string }[] = [];
+  const created: NewAlert[] = [];
   for (const rule of rules) {
     const parsed = ruleDefinitionSchema.safeParse(rule.definition);
     if (!parsed.success) {
@@ -70,7 +71,7 @@ export async function runMonitoring(db: TenantDb, ctx: OrgContext, now = new Dat
         const existing = await db.alert.findUnique({ where: { orgId_dedupeKey: { orgId: ctx.orgId, dedupeKey: f.dedupeKey } } });
         if (existing) continue;
         const alert = await db.alert.create({ data: { orgId: ctx.orgId, ruleId: rule.id, severity: rule.severity, title: `${rule.key}: ${f.title}`, detail: { ...f.detail, rule: rule.key, definition: parsed.data } as Prisma.InputJsonValue, agentId: f.agentId, dedupeKey: f.dedupeKey, createdAt: now, updatedAt: now } });
-        created.push({ id: alert.id, title: alert.title, severity: alert.severity });
+        created.push({ id: alert.id, ruleKey: rule.key, title: alert.title, severity: alert.severity, agentId: alert.agentId, detail: alert.detail as Record<string, unknown> });
         newAlerts++;
         await appendEvidence(db, ctx, { type: "monitoring.alert_raised", subjectType: "alert", subjectId: alert.id, payload: { rule: rule.key, severity: rule.severity, agentId: f.agentId, detail: f.detail } });
       }
@@ -85,7 +86,16 @@ export async function runMonitoring(db: TenantDb, ctx: OrgContext, now = new Dat
       await notifyUsers(db, ctx, { userIds: recipients, type: "alert.raised", title: a.title, link: `/alerts?focus=${a.id}`, idempotencyKey: `alert.raised:${a.id}` });
     }
   }
-  return { evaluated: rules.length, newAlerts, errors };
+  // Continuous governance: the organization may have delegated a containment response per rule (see governance/continuous.ts).
+  let autoResponses = 0;
+  if (created.length) {
+    try {
+      autoResponses = (await applyAutoResponses(db, ctx, created, now)).filter((r) => r.outcome === "applied").length;
+    } catch (e) {
+      errors.push(`auto-responses: ${e instanceof Error ? e.message : "error"}`);
+    }
+  }
+  return { evaluated: rules.length, newAlerts, autoResponses, errors };
 }
 
 export const alertFilter = z.object({ status: z.enum(["open", "acknowledged", "resolved", "all"]).default("open"), severity: z.string().optional(), agentId: z.string().uuid().optional(), page: z.coerce.number().int().min(1).default(1), pageSize: z.coerce.number().int().min(1).max(200).default(50) });

@@ -49,6 +49,10 @@ AEGIS is one platform with four products that share one database, one identity s
 - Assess them against ISO/IEC 42001 (65 controls), ISO/IEC 27001:2022 (93), NIST AI RMF (72 subcategories) or a custom framework. The engine retrieves relevant passages, checks for normative language, and where possible confirms the control automatically from live AEGIS records (for example, "is there an approval workflow" is answered from the approvals table, not from the document).
 - Each control is rated covered, partial, ambiguous or missing with cited excerpts and a confidence figure. Humans validate findings. Gaps become remediation tasks with owners and due dates. Reports export as JSON and PDF with a disclaimer that this is a static document assessment, not certification.
 
+## Continuous governance (optional mode)
+
+By default AEGIS tells people when a monitoring rule fires and leaves the response to them. With continuous governance switched on in Settings, the organization picks a response per rule in advance (suspend the agent, pause the gateway, disable the integration) and AEGIS applies it the moment the alert is raised, records it in the evidence ledger and notifies the administrators. Responses only reduce what agents may do and a person can reverse each one. Details in docs/CONTINUOUS_GOVERNANCE.md.
+
 ## What the demonstrations show
 
 Three scenarios run end to end through the real gateway against a synthetic bank, Meridian Gulf Bank. All people and data are fictional and the console says so.

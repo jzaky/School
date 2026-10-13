@@ -35,6 +35,7 @@ export * from "./demos/scenarios.js";
 export { DEMO_SLUG, DEMO_USERS, DEMO_PASSWORD, PLATFORM_ADMIN } from "./seed/demo-tenant.js";
 export * from "./monitoring/rules.js";
 export * from "./monitoring/service.js";
+export * from "./governance/continuous.js";
 export * from "./assurance/dashboard.js";
 export * from "./assurance/evidence-service.js";
 export * from "./assurance/compliance.js";

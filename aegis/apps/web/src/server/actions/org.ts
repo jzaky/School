@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant } from "@aegis/db";
-import { changeMemberRole, createRole, createTeam, deleteRole, env, inviteUser, roleInputSchema, setMemberStatus, setTeamMembers, slugSchema, updateOrganization, updateRole } from "@aegis/core";
+import { changeMemberRole, createRole, createTeam, deleteRole, env, forbidden, inviteUser, roleInputSchema, setContinuousGovernance, setMemberStatus, setTeamMembers, slugSchema, updateOrganization, updateRole } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { act } from "./util";
 
@@ -124,5 +124,17 @@ export async function restoreOnboardingAction() {
     revalidatePath("/org/settings");
     revalidatePath("/overview");
     revalidatePath("/", "layout");
+  });
+}
+
+/** Continuous governance: mode and the automatic response per monitoring rule. Recorded in evidence. */
+export async function setContinuousGovernanceAction(input: unknown) {
+  return act(async () => {
+    const c = await getConsoleContext();
+    if (!c.can("org:admin")) throw forbidden("Missing permission org:admin");
+    const data = await setContinuousGovernance({ ...c.ctx, actor: { ...c.ctx.actor, label: c.session.user.name } }, input);
+    revalidatePath("/org/settings");
+    revalidatePath("/", "layout");
+    return data;
   });
 }

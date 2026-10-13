@@ -61,6 +61,12 @@ Two further defects surfaced during the work and were fixed: the Shield inspecto
 - Executed and verified: the Compose and Kubernetes files were edited and reviewed; images were not built in this container (no Docker daemon).
 - Remaining: build the images and run the Compose stack once on a host with Docker; choose a ReadWriteMany storage class for the cluster; a WAL point-in-time recovery drill (carried over).
 
+### Continuous governance (packages/core/src/governance, added 2026-10-13)
+- Implemented: an optional organization mode, off by default, in which AEGIS runs a chosen containment response when a monitoring rule raises an alert: suspend the agent the alert names, pause the gateway, or disable the integration the alert names. Per-rule configuration in Settings with a shipped starting point, system-actor execution inside the monitoring run, result stored on the alert, evidence event `governance.auto_response`, administrator notifications, skips recorded with a reason, mode changes recorded as `governance.mode_changed`. Alerts show the response on the row and in the detail. Documented in `docs/CONTINUOUS_GOVERNANCE.md`; offered on the pricing page as an option on every tier.
+- Executed and verified: 4 core tests (defaults and validation, assisted mode takes no action, suspend once with evidence and notification then a human resumes, pause once and skip when already paused); 2 Playwright tests (switch on, persist, evidence, switch off; viewer cannot change).
+- Simulated: nothing; the responses call the same service functions the console buttons call.
+- Remaining: request-scoped responses, time-boxed responses and a dry-run mode (listed in the document as planned).
+
 ### Public site (apps/web/src/components/marketing, app/(marketing))
 - Implemented: home page led by the product promise and the refund workflow, who it is for, how authorization and downstream enforcement work with real console screenshots, what is implemented today, integration status table (sandbox tested, simulated, planned), how to start a pilot, calls to action Explore the demo and Discuss a pilot; Explore the demo page with seven guided steps and persona sign-in shown only in demo mode; Discuss a pilot page with the request form; sitemap updated.
 - Executed and verified: 15 Playwright tests including the forbidden-claims sweep over every page.
@@ -79,6 +85,8 @@ Two further defects surfaced during the work and were fixed: the Shield inspecto
 | Refund journey over HTTP | `npx tsx scripts/smoke-refund-journey.mts` | 12 of 12 checks passed |
 | Seed | `pnpm db:seed` | 461 historical requests, 75 approvals, 18 denied; Stripe integration disabled with no credential; chain valid |
 | Console and site | `cd apps/web && npx playwright test` | see the line below, recorded from the full run |
+| Layout scan (2026-10-13) | `node tests/overlap-scan.mjs` | 0 findings over 30 pages at 390, 768, 1024, 1280 and 1440 px after the fixes in commit d9df1e6 |
+| Continuous governance (2026-10-13) | `npx vitest run tests/continuous-governance.test.ts`, `npx playwright test tests/e2e/governance.spec.ts` | 4 passed, 2 passed; full core suite 170 passed |
 
 Playwright, full run against the dev server on 2026-10-12: 63 tests, 61 passed in one 14.5 minute run; the two that failed asserted the old Activity heading and the old first policy tab, were updated for the redesign, and passed on re-run. By suite: console 11, control 11, onboarding 5, policies 2, integrations 2, assurance 5, shield 5, audit 7, marketing 15.
 
@@ -90,3 +98,4 @@ CI (`.github/workflows/aegis-ci.yml`) runs typecheck, lint, the style rule, isol
 3. Docker images and Kubernetes manifests were not built or applied in this container.
 4. Approvals are decided in the console and over the API; Slack or Teams delivery is planned, not built.
 5. The hosted demo environment itself is not deployed; the site's demo page shows persona credentials only when a deployment runs in demo mode.
+6. Docker Compose: the owner reports running the stack locally on 2026-10-13 and reaching the console; that run was not observed from the build environment, so it is recorded as reported, not verified here.

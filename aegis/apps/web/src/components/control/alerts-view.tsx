@@ -37,6 +37,7 @@ export interface AlertRow {
   detail: string;
   requestIds: string[];
   approvalRequestId: string | null;
+  autoResponse: { action: string; outcome: string; note: string } | null;
 }
 
 const TABS = [
@@ -176,8 +177,15 @@ export function AlertsView({ rows, status, severity, counts, pagination, canWrit
                   <span className="block font-mono text-xs">{a.ruleKey ?? "deleted rule"}</span>
                   <span className="block truncate text-xs text-fg-muted">{a.ruleName}</span>
                 </Td>
-                <Td className="max-w-[360px] truncate" title={a.title}>
-                  {a.title}
+                <Td className="max-w-[360px]">
+                  <span className="block truncate" title={a.title}>
+                    {a.title}
+                  </span>
+                  {a.autoResponse ? (
+                    <Badge tone={a.autoResponse.outcome === "applied" ? "allow" : "neutral"} className="mt-0.5">
+                      {a.autoResponse.outcome === "applied" ? "Automatic response applied" : "Automatic response skipped"}
+                    </Badge>
+                  ) : null}
                 </Td>
                 <Td>{a.agentId ? <Link href={`/agents/${a.agentId}`} className="text-accent hover:underline" data-no-row-click>{a.agentName ?? "agent"}</Link> : <span className="text-fg-dim">none</span>}</Td>
                 <Td>
@@ -242,6 +250,11 @@ export function AlertsView({ rows, status, severity, counts, pagination, canWrit
                   </Link>
                 ) : null}
               </div>
+            ) : null}
+            {open.autoResponse ? (
+              <Note tone={open.autoResponse.outcome === "applied" ? "warning" : "info"}>
+                <strong>Automatic response {open.autoResponse.outcome}.</strong> {open.autoResponse.note} Recorded in evidence as governance.auto_response.
+              </Note>
             ) : null}
             <CodeBlock label="Detail (definition that produced it, counts and references)" code={open.detail} wrap />
             <Note>Rules are deterministic: the definition above with the stored counts reproduces this alert. No scoring or prediction is involved.</Note>

@@ -10,6 +10,10 @@ const TIERS = [
   ["Enterprise", "Unlimited agents", "Multi-deployment, private deployment assistance, architecture and threat-model review sessions, named contact"],
 ];
 
+const OPTIONS = [
+  ["Continuous governance", "Any tier", "AEGIS responds to monitoring alerts on its own, with a response you set per rule: suspend the agent, pause the gateway or disable the integration. Every automatic response is recorded in evidence, notifies your administrators and can be reversed by a person. Off by default; alerts then only notify people."],
+];
+
 export default function PricingPage() {
   return (
     <>
@@ -32,6 +36,9 @@ export default function PricingPage() {
         </div>
         <div className="mt-8">
           <Table head={["Tier", "Registered agents", "Includes"]} rows={TIERS} caption="License tiers by registered agent count" />
+        </div>
+        <div className="mt-8">
+          <Table head={["Option", "Available on", "What it adds"]} rows={OPTIONS} caption="Optional modes available on every tier" />
         </div>
         <Note title="What a license does not include" className="mt-6">
           AEGIS does not include model access, agent frameworks or hosting. Automated evidence from AEGIS shows that controls operated inside AEGIS; it does not establish organizational conformance with any standard, and no certification is provided or implied.

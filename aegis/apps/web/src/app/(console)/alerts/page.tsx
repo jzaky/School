@@ -52,6 +52,7 @@ export default async function AlertsPage({ searchParams }: { searchParams: Promi
       detail: JSON.stringify(a.detail ?? {}, null, 2),
       requestIds: Array.isArray(d.requestIds) ? (d.requestIds as unknown[]).filter((x): x is string => typeof x === "string").slice(0, 10) : [],
       approvalRequestId: typeof d.approvalRequestId === "string" ? d.approvalRequestId : null,
+      autoResponse: d.autoResponse && typeof d.autoResponse === "object" ? (d.autoResponse as { action: string; outcome: string; note: string }) : null,
     };
   });
   return (
