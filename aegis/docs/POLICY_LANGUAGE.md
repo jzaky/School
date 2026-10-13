@@ -118,3 +118,9 @@ In evaluation order: `invalid-amount` (deny: amount missing or not positive), `w
 ### Samples and round trip
 
 `scoreBandSampleRequests` produces one request per band plus missing and out-of-range; they become the document's embedded tests and the console's live preview. `extractScoreBandSettings` reopens the guided form from `meta.template`; `scoreBandDocumentMatchesSettings` detects hand edits. The demo tenant seeds "Refund fraud score routing (example)" active but unassigned, so no demo agent is refused for lacking a score.
+
+## Replay calibration
+
+`packages/core/src/policy/replay.ts`, `replayPolicy(db, ctx, { policyId, document, options: { days, limit } })`. Before activating a draft, see what it would have done: every recorded request for the draft's tools in the last 7, 30 or 90 days (up to a limit, most recent first) is re-evaluated with today's active policy set, the policy being edited replaced by the draft (or the draft added, for a new policy). The result gives counts per outcome before and after, the number of changed outcomes, approvals per day before and after, and the most recent 50 changed requests with the deciding rule. Nothing is written.
+
+Stated approximations: agents are taken as they are today; counts over 24 hours and 30 days (requests, denials, duplicates) are recomputed as of each request's own time; requests refused before policy evaluation are skipped; Shield findings are not replayed. In the console: the Replay tab of a policy (selected version), and a replay panel under both guided forms that uses the unsaved settings when they differ from the stored version.

@@ -12,6 +12,7 @@ import { Field, FormError, Textarea } from "@/components/ui/input";
 import { Panel } from "@/components/ui/panel";
 import { Note } from "@/components/ui/note";
 import { parseRefundForm, RefundExplanation, RefundSamplePreview, RefundSettingsForm, RefundTester, valuesFromSettings, type RoleOption, type ToolOptionLite } from "./policy-refund-form";
+import { PolicyReplayPanel } from "./policy-replay";
 
 export interface ThresholdsVersion {
   id: string;
@@ -106,6 +107,7 @@ export function RefundThresholdsPanel({ policyId, version, settings, diverged, r
         </div>
       </div>
       {parsed.settings ? <RefundTester settings={parsed.settings} document={document} idPrefix="th-try" description={dirty ? "Runs against the unsaved thresholds above. Nothing is recorded." : `Runs against v${version.version} as shown above. Nothing is recorded.`} /> : null}
+      <PolicyReplayPanel policyId={policyId} versionId={version.id} versionLabel={`v${version.version}`} document={dirty ? document : undefined} title="What would these thresholds have done?" description={dirty ? "Replays recent requests against the unsaved thresholds above. Nothing is recorded." : `Replays recent requests against v${version.version}. Change a threshold above to compare a draft. Nothing is recorded.`} />
 
       <Dialog
         open={newVersionOpen}

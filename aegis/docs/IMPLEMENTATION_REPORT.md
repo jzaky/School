@@ -72,6 +72,11 @@ Two further defects surfaced during the work and were fixed: the Shield inspecto
 - Executed and verified: 7 core tests (defaults and validation, every band, boundary edges, params source on a percent scale, missing and non-numeric scores, embedded tests for five settings, explanation); 2 Playwright tests (create from the dialog with custom bands and verify every dry run, seeded example opens on its tab).
 - Remaining: a tester for arbitrary scores on the detail page (the refund template has one; the preview covers the six samples), replay calibration (next item).
 
+### Replay calibration (packages/core/src/policy/replay.ts, added 2026-10-13)
+- Implemented: read-only replay of recent requests against a draft policy document (replacing the edited policy inside today's active set, or added for a new policy), with before and after counts, changed outcomes, approvals per day and the changed requests with their deciding rule; console Replay tab per version and a replay panel under both guided forms for unsaved settings. Documented in `docs/POLICY_LANGUAGE.md` with its stated approximations.
+- Executed and verified: 4 core tests (active document changes nothing and skips pre-policy refusals, stricter draft moves requests between bands with the deciding rule, new policy replayed as an addition, permission and window validation); 1 Playwright test (active refund policy replays with no change, an unsaved AED 50 limit lists the refunds that would need approval).
+- Remaining: Shield findings and historical agent state are not replayed (stated in the result).
+
 ### Public site (apps/web/src/components/marketing, app/(marketing))
 - Implemented: home page led by the product promise and the refund workflow, who it is for, how authorization and downstream enforcement work with real console screenshots, what is implemented today, integration status table (sandbox tested, simulated, planned), how to start a pilot, calls to action Explore the demo and Discuss a pilot; Explore the demo page with seven guided steps and persona sign-in shown only in demo mode; Discuss a pilot page with the request form; sitemap updated.
 - Executed and verified: 15 Playwright tests including the forbidden-claims sweep over every page.
@@ -91,6 +96,7 @@ Two further defects surfaced during the work and were fixed: the Shield inspecto
 | Seed | `pnpm db:seed` | 461 historical requests, 75 approvals, 18 denied; Stripe integration disabled with no credential; chain valid |
 | Console and site | `cd apps/web && npx playwright test` | see the line below, recorded from the full run |
 | Layout scan (2026-10-13) | `node tests/overlap-scan.mjs` | 0 findings over 30 pages at 390, 768, 1024, 1280 and 1440 px after the fixes in commit d9df1e6 |
+| Replay calibration (2026-10-13) | `npx vitest run tests/policy-replay.test.ts`, `npx playwright test tests/e2e/replay.spec.ts` | 4 passed, 1 passed |
 | Score-band template (2026-10-13) | `npx vitest run tests/score-band.test.ts`, `npx playwright test tests/e2e/score-band.spec.ts` | 7 passed, 2 passed |
 | Continuous governance (2026-10-13) | `npx vitest run tests/continuous-governance.test.ts`, `npx playwright test tests/e2e/governance.spec.ts` | 4 passed, 2 passed; full core suite 170 passed |
 

@@ -22,6 +22,7 @@ export * from "./policy/evaluate.js";
 export * from "./policy/service.js";
 export * from "./policy/templates.js";
 export * from "./policy/score-band.js";
+export * from "./policy/replay.js";
 export * from "./policy/opa-adapter.js";
 export * from "./gateway/input.js";
 export * from "./gateway/baseline.js";

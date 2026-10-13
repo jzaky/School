@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant } from "@aegis/db";
-import { activateVersion, assignPolicy, assignmentSchema, buildRefundPolicyDocument, createPolicy, createPolicyVersion, deactivatePolicy, explainRefundPolicy, forbidden, isAegisError, notFound, policyDocumentSchema, policyInputSchema, refundSampleRequests, refundTemplateSchema, rollbackToVersion, simulatePolicy, submitForReview, unassignPolicy, updateDraftVersion, updatePolicyMeta, validation, type EvaluationResult, type PolicyDocument, type RefundSampleId, buildScoreBandPolicyDocument, explainScoreBandPolicy, scoreBandSampleRequests, scoreBandTemplateSchema, type ScoreBandSampleId } from "@aegis/core";
+import { activateVersion, assignPolicy, assignmentSchema, buildRefundPolicyDocument, createPolicy, createPolicyVersion, deactivatePolicy, explainRefundPolicy, forbidden, isAegisError, notFound, policyDocumentSchema, policyInputSchema, refundSampleRequests, refundTemplateSchema, rollbackToVersion, simulatePolicy, submitForReview, unassignPolicy, updateDraftVersion, updatePolicyMeta, validation, type EvaluationResult, type PolicyDocument, type RefundSampleId, buildScoreBandPolicyDocument, explainScoreBandPolicy, scoreBandSampleRequests, scoreBandTemplateSchema, type ScoreBandSampleId, replayPolicy, type ReplayResult } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { act } from "./util";
 
@@ -373,5 +373,35 @@ export async function previewScoreBandTemplateAction(input: unknown) {
       };
     });
     return { document, explanation, samples };
+  });
+}
+
+const replaySchema = z.object({
+  policyId: z.string().uuid().nullable().optional(),
+  versionId: z.string().uuid().optional(),
+  document: z.unknown().optional(),
+  days: z.coerce.number().int().min(1).max(90).default(30),
+});
+
+/**
+ * Replay calibration: re-evaluates the organization's recent requests with a draft document in place
+ * of the policy (or added, for a new policy). Read-only; nothing is recorded. Requires policies:read.
+ */
+export async function replayPolicyAction(input: unknown) {
+  return act(async (): Promise<ReplayResult> => {
+    const c = await getConsoleContext();
+    if (!c.can("policies:read")) throw forbidden("Missing permission policies:read");
+    const data = replaySchema.parse(input);
+    return withTenant(c.ctx.orgId, async (db) => {
+      let document: unknown = data.document;
+      if (data.versionId) {
+        const v = await db.policyVersion.findUnique({ where: { id: data.versionId }, select: { document: true, policyId: true } });
+        if (!v) throw notFound("Policy version");
+        document = v.document;
+        if (data.policyId && v.policyId !== data.policyId) throw validation("The version does not belong to this policy");
+      }
+      if (document === undefined) throw validation("A version or a document is required");
+      return replayPolicy(db, c.ctx, { policyId: data.policyId ?? null, document, options: { days: data.days } });
+    }, { readOnly: true, timeout: 120_000 });
   });
 }

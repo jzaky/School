@@ -22,6 +22,7 @@ import { AssignPolicyDialog, AssignmentsTable } from "@/components/control/polic
 import { PolicyActions } from "@/components/control/policy-actions";
 import { RefundThresholdsPanel } from "@/components/control/policy-thresholds";
 import { ScoreBandThresholdsPanel } from "@/components/control/policy-score-band-thresholds";
+import { PolicyReplayPanel } from "@/components/control/policy-replay";
 import { RefundTester } from "@/components/control/policy-refund-form";
 import { formatDateTime, timeAgo } from "@/lib/utils";
 import { statusLabel } from "@/lib/status";
@@ -159,6 +160,7 @@ export default async function PolicyDetailPage({ params, searchParams }: { param
               ? [{ id: "thresholds", label: "Score bands", content: <ScoreBandThresholdsPanel policyId={policy.id} version={{ id: selected.id, version: selected.version, state: selected.state }} settings={scoreSettings} diverged={scoreDiverged} roles={roles} tools={toolsLite} canWrite={canWrite} /> }]
               : []),
           { id: "rules", label: "Rules", count: doc?.rules.length, content: rulesTab },
+          { id: "replay", label: "Replay", content: selected ? <PolicyReplayPanel policyId={policy.id} versionId={selected.id} versionLabel={`v${selected.version}`} /> : <Note tone="warning">No version to replay.</Note> },
           { id: "editor", label: "Editor", content: selected ? <PolicyEditor policyId={policy.id} version={{ id: selected.id, version: selected.version, state: selected.state, document: selected.document }} canWrite={canWrite} /> : <Note tone="warning">No version to edit.</Note> },
           {
             id: "simulate",
