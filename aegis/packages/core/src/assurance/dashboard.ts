@@ -12,7 +12,7 @@ export async function governanceMetrics(db: TenantDb, ctx: OrgContext, windowDay
   assertPermission(ctx, "gateway:read");
   const since = new Date(Date.now() - windowDays * 86400_000);
   const [agentsByStatus, requestsByStatus, decisionsByResult, pendingApprovals, openAlerts, openIncidents, securityBySeverity, failedReceipts, evidenceCount, lastEvidence, integrations, policies] = await Promise.all([
-    db.agent.groupBy({ by: ["status"], where: { orgId: ctx.orgId }, _count: { _all: true } }),
+    db.agent.groupBy({ by: ["status"], where: { isLab: false, orgId: ctx.orgId }, _count: { _all: true } }),
     db.actionRequest.groupBy({ by: ["status"], where: { orgId: ctx.orgId, createdAt: { gte: since } }, _count: { _all: true } }),
     db.authorizationDecision.groupBy({ by: ["result"], where: { orgId: ctx.orgId, createdAt: { gte: since } }, _count: { _all: true } }),
     db.approvalRequest.count({ where: { orgId: ctx.orgId, status: { in: ["pending", "escalated", "more_info"] } } }),

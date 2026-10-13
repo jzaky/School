@@ -20,7 +20,7 @@ export async function loadOverview(c: ConsoleContext) {
     orgId,
     async (db) => {
       const [agentsByStatus, openApprovals, staleRequests, alerts, suspended, integrations, recent, steps, evidenceCount] = await Promise.all([
-        db.agent.groupBy({ by: ["status"], where: { orgId }, _count: { _all: true } }),
+        db.agent.groupBy({ by: ["status"], where: { isLab: false, orgId }, _count: { _all: true } }),
         canGateway
           ? db.approvalRequest.findMany({
               where: { orgId, status: { in: ["pending", "more_info", "escalated"] }, expiresAt: { gt: now } },
@@ -33,7 +33,7 @@ export async function loadOverview(c: ConsoleContext) {
           ? db.actionRequest.findMany({ where: { orgId, OR: [{ status: "unknown" }, { status: "executing", updatedAt: { lt: staleBefore } }] }, orderBy: { updatedAt: "asc" }, take: 10, select: { id: true, status: true, toolKey: true, action: true, params: true, updatedAt: true, agent: { select: { id: true, name: true } } } })
           : [],
         canMonitoring ? db.alert.findMany({ where: { orgId, status: "open", severity: { in: ["high", "critical"] } }, orderBy: { createdAt: "desc" }, take: 10, select: { id: true, severity: true, title: true, createdAt: true, agentId: true } }) : [],
-        db.agent.findMany({ where: { orgId, status: "suspended" }, orderBy: { statusChangedAt: "desc" }, take: 10, select: { id: true, name: true, statusReason: true, statusChangedAt: true } }),
+        db.agent.findMany({ where: { isLab: false, orgId, status: "suspended" }, orderBy: { statusChangedAt: "desc" }, take: 10, select: { id: true, name: true, statusReason: true, statusChangedAt: true } }),
         canIntegrations ? db.integration.findMany({ where: { orgId }, orderBy: { name: "asc" }, select: { id: true, name: true, status: true, settings: true, lastHealthAt: true, lastHealthOk: true, credentials: { where: { revokedAt: null }, select: { id: true } } } }) : [],
         canGateway ? db.actionRequest.findMany({ where: { orgId }, orderBy: { createdAt: "desc" }, take: 20, select: { id: true, status: true, toolKey: true, action: true, params: true, createdAt: true, agent: { select: { id: true, name: true } }, approvals: { select: { id: true }, take: 1 }, receipts: { orderBy: { createdAt: "desc" }, take: 1, select: { status: true, downstreamReference: true } } } }) : [],
         computeOnboarding(db, c.ctx),

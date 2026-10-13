@@ -12,6 +12,7 @@ import { scimRoutes } from "./scim.js";
 import { autonomyRoutes } from "./autonomy.js";
 import { uncertaintyRoutes } from "./uncertainty.js";
 import { decisionRoutes } from "./decisions.js";
+import { labRoutes } from "./lab.js";
 
 /** Module route registrations added phase by phase. */
 export async function registerModuleRoutes(app: FastifyInstance): Promise<void> {
@@ -28,4 +29,5 @@ export async function registerModuleRoutes(app: FastifyInstance): Promise<void> 
   await app.register(autonomyRoutes, { prefix: "/v1/autonomy" });
   await app.register(uncertaintyRoutes, { prefix: "/v1/uncertainty" });
   await app.register(decisionRoutes, { prefix: "/v1/decisions" });
+  await app.register(labRoutes, { prefix: "/v1/lab" });
 }

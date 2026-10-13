@@ -24,7 +24,7 @@ export async function leastPrivilegeRecommendations(db: TenantDb, ctx: OrgContex
   assertPermission(ctx, "agents:read");
   const days = opts.days ?? 30;
   const since = new Date((ctx.now ?? new Date()).getTime() - days * 86400_000);
-  const agents = await db.agent.findMany({ where: { orgId: ctx.orgId, status: "active", ...(opts.agentId ? { id: opts.agentId } : {}) }, include: { tools: { where: { enabled: true, revokedAt: null }, include: { tool: true } }, permissions: { where: { revokedAt: null } } } });
+  const agents = await db.agent.findMany({ where: { isLab: false, orgId: ctx.orgId, status: "active", ...(opts.agentId ? { id: opts.agentId } : {}) }, include: { tools: { where: { enabled: true, revokedAt: null }, include: { tool: true } }, permissions: { where: { revokedAt: null } } } });
   const out: PrivilegeRecommendation[] = [];
   for (const a of agents) {
     const used = await db.actionRequest.groupBy({ by: ["toolKey", "resourceKey", "action"], where: { agentId: a.id, createdAt: { gte: since } }, _count: { _all: true } });

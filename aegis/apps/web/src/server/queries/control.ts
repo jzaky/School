@@ -14,7 +14,7 @@ export interface AgentOption {
 
 /** Agents with their active tool grants, for pickers (assignments, simulation, emergency controls). */
 export async function agentOptions(db: TenantDb, orgId: string): Promise<AgentOption[]> {
-  const rows = await db.agent.findMany({ where: { orgId }, orderBy: { name: "asc" }, select: { id: true, slug: true, name: true, status: true, teamId: true, tools: { where: { revokedAt: null }, select: { toolId: true, tool: { select: { key: true, name: true } } } } } });
+  const rows = await db.agent.findMany({ where: { isLab: false, orgId }, orderBy: { name: "asc" }, select: { id: true, slug: true, name: true, status: true, teamId: true, tools: { where: { revokedAt: null }, select: { toolId: true, tool: { select: { key: true, name: true } } } } } });
   return rows.map((a) => ({ id: a.id, slug: a.slug, name: a.name, status: a.status, teamId: a.teamId, tools: a.tools.map((t) => ({ toolId: t.toolId, key: t.tool.key, name: t.tool.name })) }));
 }
 

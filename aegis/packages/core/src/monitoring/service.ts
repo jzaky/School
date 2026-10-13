@@ -60,7 +60,7 @@ export async function runMonitoring(db: TenantDb, ctx: OrgContext, now = new Dat
   const errors: string[] = [];
   const created: NewAlert[] = [];
   // Attack Simulation Lab agents exist only to be refused; their traffic never raises monitoring alerts.
-  const labAgents = new Set((await db.agent.findMany({ where: { metadata: { path: ["lab"], equals: true } }, select: { id: true } })).map((a) => a.id));
+  const labAgents = new Set((await db.agent.findMany({ where: { isLab: true }, select: { id: true } })).map((a) => a.id));
   for (const rule of rules) {
     const parsed = ruleDefinitionSchema.safeParse(rule.definition);
     if (!parsed.success) {

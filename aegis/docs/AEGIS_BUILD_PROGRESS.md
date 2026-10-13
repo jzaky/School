@@ -231,3 +231,41 @@ Full description: `docs/REASONING_GOVERNANCE.md`.
 | Browser | 2 |
 
 **Known limitations:** checks are structural, not semantic, and counterfactuals cover single comparisons only.
+
+## Phase 6: AI security and the Attack Simulation Lab (14 October 2026)
+
+**Built:**
+- **Attack Simulation Lab.** Clones an active agent (grants, permissions, team, limits, autonomy, agent policies) into a temporary lab agent. It then sends a control request and 18 attack scenarios through the real gateway, decision-only, and tears the clone down.
+  - Outcomes: defended, gap (with what closes it), inconclusive or error.
+  - Each scenario carries OWASP Top 10 for LLM Applications 2025 and MITRE ATLAS references.
+- **Lab isolation.** Lab agents are kept out of agent lists and counts, monitoring alerts, automatic incidents, autonomy downgrades and notifications. Their traffic stays on the evidence record.
+- **Injection response.** A new organization setting turns Shield's heuristic injection signals into an approval, a quarantine or a refusal.
+  - Off by default and monotonic (property-tested).
+  - Raises `injection.detected` security events.
+  - Added because the lab found that no policy acted on the signals.
+- **Console:** Security, Attack Simulation Lab (runs, scenarios, run detail with links to each request), and the injection response on Data Protection.
+
+Full description: `docs/ATTACK_SIMULATION_LAB.md`.
+
+**Database migration:** `20261014160000_attack_simulation_lab`:
+- `agents.is_lab`;
+- `attack_simulation_runs`;
+- `attack_simulation_results`, which is append-only.
+
+**API endpoints added:** `/v1/lab/scenarios`, `/v1/lab/runs` (GET and POST) and `/v1/lab/runs/:id`. All need a signed-in person, reads included.
+
+**Tests added:**
+
+| Suite | Tests |
+|---|---|
+| Core | 10 |
+| API | 2 |
+| Browser | 2 |
+
+**Demo:** the seeded lab runs show the refund agent going from 5 gaps to 3 after the injection response is set to hold for review. The 3 remaining gaps are real configuration gaps, left visible.
+
+**Status:** implemented and tested locally. Not a penetration test, not independently reviewed, and not verified in a customer deployment.
+
+**Known limitations:**
+- Scenarios are fixed and runs are manual.
+- Injection detection is heuristic and has not been evaluated against an independent adversarial corpus.

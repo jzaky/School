@@ -13,6 +13,9 @@ import { seedDemoIdentity } from "./demo-identity.js";
 import { seedDemoAutonomy } from "./demo-autonomy.js";
 import { seedDemoUncertainty } from "./demo-uncertainty.js";
 import { withTenant } from "@aegis/db";
+import { runAttackSimulation } from "../security/lab.js";
+import type { TenantRunner } from "../gateway/gateway.js";
+import { updateInjectionResponse } from "../shield/injection-response.js";
 
 export async function runSeed() {
   const started = Date.now();
@@ -32,6 +35,13 @@ export async function runSeed() {
   const uncertainty = await seedDemoUncertainty(t);
   console.log(`Uncertainty: ${uncertainty.labels} outcome labels`);
   await withTenant(t.orgId, (db) => seedDemoShield(db, t.users.security_analyst!.ctx, t.agents));
+  // Attack Simulation Lab: a run against the refund agent with injection signals only recorded, then the
+  // security analyst sets the organization to hold them for review and runs the lab again.
+  const labRunner: TenantRunner = (fn) => withTenant(t.orgId, fn);
+  const before = await runAttackSimulation(labRunner, t.users.security_analyst!.ctx, { targetAgentId: t.agents["support-refund-agent"]! });
+  await withTenant(t.orgId, (db) => updateInjectionResponse(db, t.users.security_analyst!.ctx, { response: "quarantine", signals: [] }));
+  const after = await runAttackSimulation(labRunner, t.users.security_analyst!.ctx, { targetAgentId: t.agents["support-refund-agent"]! });
+  console.log(`Attack Simulation Lab: before ${JSON.stringify(before.counts)}, after ${JSON.stringify(after.counts)}`);
   await seedSharedFrameworks();
   const audit = await withTenant(t.orgId, (db) => seedDemoAudit(db, t.users.owner!.ctx, { ownerUserId: t.users.owner!.id, auditorUserId: t.users.auditor!.id }), { timeout: 180_000, lock: "lazy" });
   console.log(`Audit: ${audit.documents.length} documents, ${audit.assessments.length} assessments, ${audit.tasks.length} tasks`);

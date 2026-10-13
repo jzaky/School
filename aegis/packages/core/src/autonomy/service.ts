@@ -366,7 +366,7 @@ export async function autonomyAnalytics(db: TenantDb, ctx: OrgContext, days = 30
   const now = ctx.now ?? new Date();
   const since = new Date(now.getTime() - Math.min(Math.max(days, 1), 180) * 86_400_000);
   const [agents, transitions, pending, decisions] = await Promise.all([
-    db.agent.findMany({ where: { status: { notIn: ["revoked", "archived"] } }, select: { id: true, name: true, status: true, autonomyLevel: true, autonomyCeilingAmount: true, autonomyChangedAt: true }, orderBy: { name: "asc" } }),
+    db.agent.findMany({ where: { isLab: false, status: { notIn: ["revoked", "archived"] } }, select: { id: true, name: true, status: true, autonomyLevel: true, autonomyCeilingAmount: true, autonomyChangedAt: true }, orderBy: { name: "asc" } }),
     db.autonomyTransition.findMany({ where: { createdAt: { gte: since } }, orderBy: { createdAt: "desc" }, take: 200 }),
     db.autonomyChangeRequest.findMany({ where: { status: "pending" }, orderBy: { createdAt: "asc" } }),
     db.authorizationDecision.findMany({ where: { createdAt: { gte: since } }, select: { result: true, explanation: true } }),

@@ -68,4 +68,9 @@ Every item below was implemented from AEGIS's own engine and code. None was buil
 - **Decision records.** W3C PROV-DM (2013) provenance data model for the structure of entities, activities and agents in a decision record.
 - **Scope.** AEGIS governs observable artifacts only: inputs, cited evidence, tool calls, policy results and the stated rationale an agent submits. It does not claim access to hidden model reasoning.
 
+### Phase 6: AI security and the Attack Simulation Lab
+- **Threat taxonomies.** OWASP Top 10 for Large Language Model Applications, 2025 edition (LLM01 Prompt Injection, LLM02 Sensitive Information Disclosure, LLM06 Excessive Agency, LLM09 Misinformation), and MITRE ATLAS (Adversarial Threat Landscape for Artificial-Intelligence Systems) technique identifiers. Both are public catalogs, used only to label scenarios; the mapping is AEGIS's own.
+- **Test data.** The card number is the widely published test number 4111 1111 1111 1111, and the IBAN is a checksum-valid example. Neither belongs to anyone.
+- **Method.** Regression testing of the organization's own configuration through the production code path (decision-only), which is standard software testing practice, with no external source.
+
 Later phases add their foundations here.

@@ -64,6 +64,7 @@ describe("an agent key cannot change its own governance", () => {
     ["grade its own outcomes", "/v1/uncertainty/labels", () => ({ actionRequestId: randomUUID(), correct: true })],
     ["relax a tool's uncertainty requirements", "/v1/uncertainty/tools/:random/policy", () => ({ enabled: false })],
     ["relax a tool's rationale requirements", "/v1/decisions/tools/:random/reasoning-policy", () => ({ enabled: false })],
+    ["start an attack simulation", "/v1/lab/runs", () => ({ targetAgentId: agentId })],
   ];
   for (const [what, path, body] of attempts) {
     it(`cannot ${what}`, async () => {
@@ -102,5 +103,16 @@ describe("the decision inspector over the API", () => {
     expect(res.statusCode).toBe(403);
     const record = await app.inject({ method: "GET", url: `/v1/decisions/${requestId}/record`, headers: { authorization: `Bearer ${agentKey}` } });
     expect(record.statusCode).toBe(403);
+  });
+});
+
+describe("the Attack Simulation Lab over the API", () => {
+  it("is for people: an agent key cannot list scenarios, read runs or start one", async () => {
+    for (const url of ["/v1/lab/scenarios", "/v1/lab/runs", `/v1/lab/runs/${randomUUID()}`]) {
+      const res = await app.inject({ method: "GET", url, headers: { authorization: `Bearer ${agentKey}` } });
+      expect({ url, status: res.statusCode }).toEqual({ url, status: 403 });
+    }
+    const runs = await withTenant(orgId, (db) => db.attackSimulationRun.count());
+    expect(runs).toBe(0);
   });
 });

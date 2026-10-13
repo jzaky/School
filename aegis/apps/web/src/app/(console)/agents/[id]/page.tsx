@@ -53,7 +53,7 @@ export default async function AgentDetailPage({ params, searchParams }: { params
         listAccessRequests(db, c.ctx, { agentId: id }),
         listDelegations(db, c.ctx, { agentId: id }),
         leastPrivilegeRecommendations(db, c.ctx, { agentId: id }),
-        db.agent.findMany({ where: { orgId: c.ctx.orgId, id: { not: id }, status: "active" }, select: { id: true, name: true }, orderBy: { name: "asc" } }),
+        db.agent.findMany({ where: { isLab: false, orgId: c.ctx.orgId, id: { not: id }, status: "active" }, select: { id: true, name: true }, orderBy: { name: "asc" } }),
         getAgentAutonomy(db, c.ctx, id),
       ]);
       return { agent, tools, resources, team, evidence, posture, accessRequests, delegations, recommendations, otherAgents, autonomy };

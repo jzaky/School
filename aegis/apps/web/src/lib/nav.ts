@@ -13,6 +13,7 @@ import {
   Database,
   FileCheck2,
   FileText,
+  FlaskConical,
   GitBranch,
   History,
   Landmark,
@@ -101,6 +102,7 @@ export const SECONDARY_NAV: NavGroup[] = [
       { label: "Data Protection", href: "/security/data-protection", icon: Lock, ready: true, permission: "security:read" },
       { label: "Tool Security", href: "/security/tools", icon: Wrench, ready: true, permission: "security:read" },
       { label: "Incidents", href: "/security/incidents", icon: Siren, ready: true, permission: "security:read" },
+      { label: "Attack Simulation Lab", href: "/security/lab", icon: FlaskConical, ready: true, permission: "security:read" },
     ],
   },
   {

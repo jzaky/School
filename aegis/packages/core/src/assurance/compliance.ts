@@ -23,7 +23,7 @@ export async function observedTechnicalControls(db: TenantDb, ctx: OrgContext) {
     db.credential.count({ where: { orgId: ctx.orgId, rotatedAt: { gte: new Date(Date.now() - 90 * 86400_000) } } }),
     verifyChain(db, ctx.orgId, { limit: 5000 }),
     db.apiKey.count({ where: { orgId: ctx.orgId, revokedAt: null } }),
-    db.agent.count({ where: { orgId: ctx.orgId, status: { in: ["suspended", "revoked"] } } }),
+    db.agent.count({ where: { isLab: false, orgId: ctx.orgId, status: { in: ["suspended", "revoked"] } } }),
   ]);
   const mfa = Number(mfaUsers[0]?.n ?? 0);
   return [

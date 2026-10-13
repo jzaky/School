@@ -231,7 +231,7 @@ export async function platformListOrganizations(actorUserId: string) {
   const orgs = await db.organization.findMany({ orderBy: { createdAt: "asc" } });
   const out = [];
   for (const o of orgs) {
-    const counts = await withTenant(o.id, async (t) => ({ agentCount: await t.agent.count(), memberCount: await t.membership.count() }), { readOnly: true, lock: "lazy" });
+    const counts = await withTenant(o.id, async (t) => ({ agentCount: await t.agent.count({ where: { isLab: false } }), memberCount: await t.membership.count() }), { readOnly: true, lock: "lazy" });
     out.push({ ...o, ...counts });
   }
   return out;

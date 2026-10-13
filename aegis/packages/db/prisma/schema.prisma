@@ -25,7 +25,7 @@ model User {
   passwordHash    String?    @map("password_hash")
   mfaSecretEnc    String?    @map("mfa_secret_enc")
   /// Last accepted TOTP time step: a code is accepted once.
-  mfaLastStep  BigInt?  @map("mfa_last_step")
+  mfaLastStep     BigInt?    @map("mfa_last_step")
   mfaEnabled      Boolean    @default(false) @map("mfa_enabled")
   isPlatformAdmin Boolean    @default(false) @map("is_platform_admin")
   status          UserStatus @default(active)
@@ -42,21 +42,21 @@ model User {
 }
 
 model Session {
-  id         String    @id @default(uuid(7)) @db.Uuid
-  userId     String    @map("user_id") @db.Uuid
-  tokenHash  String    @unique @map("token_hash")
-  activeOrgId String?  @map("active_org_id") @db.Uuid
+  id          String    @id @default(uuid(7)) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  tokenHash   String    @unique @map("token_hash")
+  activeOrgId String?   @map("active_org_id") @db.Uuid
   /// Set for single sign-on sessions: the session may act only in the organization whose identity provider issued it.
-  ssoOrgId   String?   @map("sso_org_id") @db.Uuid
-  mfaPassed  Boolean   @default(false) @map("mfa_passed")
+  ssoOrgId    String?   @map("sso_org_id") @db.Uuid
+  mfaPassed   Boolean   @default(false) @map("mfa_passed")
   /// Wrong MFA codes entered in this session; the session is revoked at the limit.
-  mfaFailures Int      @default(0) @map("mfa_failures")
-  ip         String?
-  userAgent  String?   @map("user_agent")
-  expiresAt  DateTime  @map("expires_at")
-  revokedAt  DateTime? @map("revoked_at")
-  createdAt  DateTime  @default(now()) @map("created_at")
-  lastSeenAt DateTime  @default(now()) @map("last_seen_at")
+  mfaFailures Int       @default(0) @map("mfa_failures")
+  ip          String?
+  userAgent   String?   @map("user_agent")
+  expiresAt   DateTime  @map("expires_at")
+  revokedAt   DateTime? @map("revoked_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  lastSeenAt  DateTime  @default(now()) @map("last_seen_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -266,16 +266,19 @@ model Agent {
   credentialExpiresAt     DateTime?          @map("credential_expires_at")
   currentVersion          Int                @default(1) @map("current_version")
   metadata                Json               @default("{}")
+  /// A temporary clone made by the Attack Simulation Lab. Lab agents are kept out of agent lists, counts,
+  /// monitoring alerts, incidents and notifications; their requests stay on the evidence record.
+  isLab                   Boolean            @default(false) @map("is_lab")
   statusReason            String?            @map("status_reason")
   statusChangedAt         DateTime?          @map("status_changed_at")
   lastActivityAt          DateTime?          @map("last_activity_at")
   createdAt               DateTime           @default(now()) @map("created_at")
   updatedAt               DateTime           @updatedAt @map("updated_at")
 
-  versions    AgentVersion[]
-  tools       AgentTool[]
-  permissions Permission[]
-  requests    ActionRequest[]
+  versions            AgentVersion[]
+  tools               AgentTool[]
+  permissions         Permission[]
+  requests            ActionRequest[]
   delegationsGiven    AgentDelegation[] @relation("delegator")
   delegationsReceived AgentDelegation[] @relation("delegate")
 
@@ -335,24 +338,24 @@ enum IntegrationStatus {
 }
 
 model Integration {
-  id               String            @id @default(uuid(7)) @db.Uuid
-  orgId            String            @map("org_id") @db.Uuid
-  key              String
-  name             String
-  type             String
-  description      String            @default("")
-  baseUrl          String?           @map("base_url")
-  status           IntegrationStatus @default(active)
-  statusReason     String?           @map("status_reason")
-  webhookSecretEnc String?           @map("webhook_secret_enc")
-  settings         Json              @default("{}")
-  lastHealthAt     DateTime?         @map("last_health_at")
-  lastHealthOk     Boolean?          @map("last_health_ok")
+  id                     String            @id @default(uuid(7)) @db.Uuid
+  orgId                  String            @map("org_id") @db.Uuid
+  key                    String
+  name                   String
+  type                   String
+  description            String            @default("")
+  baseUrl                String?           @map("base_url")
+  status                 IntegrationStatus @default(active)
+  statusReason           String?           @map("status_reason")
+  webhookSecretEnc       String?           @map("webhook_secret_enc")
+  settings               Json              @default("{}")
+  lastHealthAt           DateTime?         @map("last_health_at")
+  lastHealthOk           Boolean?          @map("last_health_ok")
   /// Last enforcement-path audit: downstream records compared with gateway receipts (see gateway/enforcement.ts).
-  lastEnforcementAuditAt DateTime?   @map("last_enforcement_audit_at")
-  enforcementSummary     Json        @default("{}") @map("enforcement_summary")
-  createdAt        DateTime          @default(now()) @map("created_at")
-  updatedAt        DateTime          @updatedAt @map("updated_at")
+  lastEnforcementAuditAt DateTime?         @map("last_enforcement_audit_at")
+  enforcementSummary     Json              @default("{}") @map("enforcement_summary")
+  createdAt              DateTime          @default(now()) @map("created_at")
+  updatedAt              DateTime          @updatedAt @map("updated_at")
 
   tools       Tool[]
   credentials Credential[]
@@ -384,23 +387,23 @@ model Credential {
 }
 
 model Tool {
-  id               String      @id @default(uuid(7)) @db.Uuid
-  orgId            String      @map("org_id") @db.Uuid
-  key              String
-  name             String
-  description      String      @default("")
-  integrationId    String?     @map("integration_id") @db.Uuid
-  parameterSchema  Json        @default("{}") @map("parameter_schema")
-  destinationRules Json        @default("{}") @map("destination_rules")
-  riskLevel        String      @default("medium") @map("risk_level")
+  id                String   @id @default(uuid(7)) @db.Uuid
+  orgId             String   @map("org_id") @db.Uuid
+  key               String
+  name              String
+  description       String   @default("")
+  integrationId     String?  @map("integration_id") @db.Uuid
+  parameterSchema   Json     @default("{}") @map("parameter_schema")
+  destinationRules  Json     @default("{}") @map("destination_rules")
+  riskLevel         String   @default("medium") @map("risk_level")
   /// Uncertainty requirements for this tool (docs/UNCERTAINTY_GOVERNANCE.md). Empty: only contradictions escalate.
-  uncertaintyPolicy Json       @default("{}") @map("uncertainty_policy")
+  uncertaintyPolicy Json     @default("{}") @map("uncertainty_policy")
   /// Rationale requirements for this tool (docs/REASONING_GOVERNANCE.md). Empty: only integrity failures escalate.
-  reasoningPolicy  Json        @default("{}") @map("reasoning_policy")
-  enabled          Boolean     @default(true)
-  disabledReason   String?     @map("disabled_reason")
-  createdAt        DateTime    @default(now()) @map("created_at")
-  updatedAt        DateTime    @updatedAt @map("updated_at")
+  reasoningPolicy   Json     @default("{}") @map("reasoning_policy")
+  enabled           Boolean  @default(true)
+  disabledReason    String?  @map("disabled_reason")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 
   integration Integration? @relation(fields: [integrationId], references: [id])
   agentTools  AgentTool[]
@@ -411,17 +414,17 @@ model Tool {
 }
 
 model AgentTool {
-  id             String    @id @default(uuid(7)) @db.Uuid
-  orgId          String    @map("org_id") @db.Uuid
-  agentId        String    @map("agent_id") @db.Uuid
-  toolId         String    @map("tool_id") @db.Uuid
-  enabled        Boolean   @default(true)
-  revokedAt      DateTime? @map("revoked_at")
+  id            String    @id @default(uuid(7)) @db.Uuid
+  orgId         String    @map("org_id") @db.Uuid
+  agentId       String    @map("agent_id") @db.Uuid
+  toolId        String    @map("tool_id") @db.Uuid
+  enabled       Boolean   @default(true)
+  revokedAt     DateTime? @map("revoked_at")
   /// Time-limited grants end here; the gateway refuses the tool afterwards.
   expiresAt     DateTime? @map("expires_at")
-  revokedReason  String?   @map("revoked_reason")
-  scope          Json      @default("{}")
-  createdAt      DateTime  @default(now()) @map("created_at")
+  revokedReason String?   @map("revoked_reason")
+  scope         Json      @default("{}")
+  createdAt     DateTime  @default(now()) @map("created_at")
 
   agent Agent @relation(fields: [agentId], references: [id], onDelete: Cascade)
   tool  Tool  @relation(fields: [toolId], references: [id], onDelete: Cascade)
@@ -580,44 +583,44 @@ enum ActionRequestStatus {
 }
 
 model ActionRequest {
-  id              String              @id @default(uuid(7)) @db.Uuid
-  orgId           String              @map("org_id") @db.Uuid
-  agentId         String              @map("agent_id") @db.Uuid
-  toolId          String?             @map("tool_id") @db.Uuid
-  toolKey         String              @map("tool_key")
-  action          String
-  resourceKey     String?             @map("resource_key")
-  params          Json                @default("{}")
-  paramsHash      String              @map("params_hash")
-  idempotencyKey  String              @map("idempotency_key")
-  correlationId   String              @map("correlation_id")
-  traceId         String?             @map("trace_id")
-  principalUserId String?             @map("principal_user_id") @db.Uuid
-  principalRef    String?             @map("principal_ref")
-  environment     Environment         @default(development)
-  status          ActionRequestStatus @default(evaluating)
-  justification   String              @default("")
-  riskIndicators  Json                @default("[]") @map("risk_indicators")
-  context         Json                @default("{}")
-  expiresAt       DateTime?           @map("expires_at")
-  completedAt     DateTime?           @map("completed_at")
+  id                       String              @id @default(uuid(7)) @db.Uuid
+  orgId                    String              @map("org_id") @db.Uuid
+  agentId                  String              @map("agent_id") @db.Uuid
+  toolId                   String?             @map("tool_id") @db.Uuid
+  toolKey                  String              @map("tool_key")
+  action                   String
+  resourceKey              String?             @map("resource_key")
+  params                   Json                @default("{}")
+  paramsHash               String              @map("params_hash")
+  idempotencyKey           String              @map("idempotency_key")
+  correlationId            String              @map("correlation_id")
+  traceId                  String?             @map("trace_id")
+  principalUserId          String?             @map("principal_user_id") @db.Uuid
+  principalRef             String?             @map("principal_ref")
+  environment              Environment         @default(development)
+  status                   ActionRequestStatus @default(evaluating)
+  justification            String              @default("")
+  riskIndicators           Json                @default("[]") @map("risk_indicators")
+  context                  Json                @default("{}")
+  expiresAt                DateTime?           @map("expires_at")
+  completedAt              DateTime?           @map("completed_at")
   /// Set when a grant is consumed and the downstream call begins. Cleared never: it dates the first attempt.
-  executionStartedAt DateTime?        @map("execution_started_at")
-  executionAttempts  Int              @default(0) @map("execution_attempts")
+  executionStartedAt       DateTime?           @map("execution_started_at")
+  executionAttempts        Int                 @default(0) @map("execution_attempts")
   /// Stable key handed to the downstream system so repeats of one request are one operation there.
-  downstreamIdempotencyKey String?    @map("downstream_idempotency_key")
+  downstreamIdempotencyKey String?             @map("downstream_idempotency_key")
   /// Set when the request is made under an agent-to-agent delegation; the delegating agent's limits also apply.
-  delegationId      String?           @map("delegation_id") @db.Uuid
-  onBehalfOfAgentId String?           @map("on_behalf_of_agent_id") @db.Uuid
-  createdAt       DateTime            @default(now()) @map("created_at")
-  updatedAt       DateTime            @updatedAt @map("updated_at")
+  delegationId             String?             @map("delegation_id") @db.Uuid
+  onBehalfOfAgentId        String?             @map("on_behalf_of_agent_id") @db.Uuid
+  createdAt                DateTime            @default(now()) @map("created_at")
+  updatedAt                DateTime            @updatedAt @map("updated_at")
 
-  agent     Agent                   @relation(fields: [agentId], references: [id])
-  delegation AgentDelegation?       @relation(fields: [delegationId], references: [id])
-  decisions AuthorizationDecision[]
-  approvals ApprovalRequest[]
-  grants    ExecutionGrant[]
-  receipts  ExecutionReceipt[]
+  agent      Agent                   @relation(fields: [agentId], references: [id])
+  delegation AgentDelegation?        @relation(fields: [delegationId], references: [id])
+  decisions  AuthorizationDecision[]
+  approvals  ApprovalRequest[]
+  grants     ExecutionGrant[]
+  receipts   ExecutionReceipt[]
 
   @@unique([orgId, idempotencyKey])
   @@index([orgId, status])
@@ -812,17 +815,17 @@ model EvidenceCheckpoint {
 }
 
 model MonitoringRule {
-  id          String   @id @default(uuid(7)) @db.Uuid
-  orgId       String   @map("org_id") @db.Uuid
+  id          String    @id @default(uuid(7)) @db.Uuid
+  orgId       String    @map("org_id") @db.Uuid
   key         String
   name        String
-  description String   @default("")
+  description String    @default("")
   definition  Json
-  severity    String   @default("medium")
-  enabled     Boolean  @default(true)
+  severity    String    @default("medium")
+  enabled     Boolean   @default(true)
   lastRunAt   DateTime? @map("last_run_at")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
 
   alerts Alert[]
 
@@ -1002,7 +1005,7 @@ model Framework {
   isCustom    Boolean  @default(false) @map("is_custom")
   createdAt   DateTime @default(now()) @map("created_at")
 
-  controls Control[]
+  controls    Control[]
   assessments Assessment[]
 
   @@unique([key, orgId])
@@ -1010,15 +1013,15 @@ model Framework {
 }
 
 model Control {
-  id          String   @id @default(uuid(7)) @db.Uuid
-  frameworkId String   @map("framework_id") @db.Uuid
-  code        String
-  title       String
-  summary     String   @default("")
-  category    String   @default("")
-  keywords    String[] @default([])
-  automatedEvidenceType String? @map("automated_evidence_type")
-  sortOrder   Int      @default(0) @map("sort_order")
+  id                    String   @id @default(uuid(7)) @db.Uuid
+  frameworkId           String   @map("framework_id") @db.Uuid
+  code                  String
+  title                 String
+  summary               String   @default("")
+  category              String   @default("")
+  keywords              String[] @default([])
+  automatedEvidenceType String?  @map("automated_evidence_type")
+  sortOrder             Int      @default(0) @map("sort_order")
 
   framework Framework        @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
   mappings  ControlMapping[]
@@ -1112,21 +1115,21 @@ enum FindingStatus {
 }
 
 model Finding {
-  id           String        @id @default(uuid(7)) @db.Uuid
-  orgId        String        @map("org_id") @db.Uuid
-  assessmentId String        @map("assessment_id") @db.Uuid
-  controlId    String        @map("control_id") @db.Uuid
-  status       FindingStatus
-  confidence   Float         @default(0)
-  rationale    String        @default("")
-  recommendation String      @default("")
-  humanStatus  FindingStatus? @map("human_status")
-  validatedBy  String?       @map("validated_by") @db.Uuid
-  validatedAt  DateTime?     @map("validated_at")
-  validationNote String      @default("") @map("validation_note")
-  resolvedAt   DateTime?     @map("resolved_at")
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @updatedAt @map("updated_at")
+  id             String         @id @default(uuid(7)) @db.Uuid
+  orgId          String         @map("org_id") @db.Uuid
+  assessmentId   String         @map("assessment_id") @db.Uuid
+  controlId      String         @map("control_id") @db.Uuid
+  status         FindingStatus
+  confidence     Float          @default(0)
+  rationale      String         @default("")
+  recommendation String         @default("")
+  humanStatus    FindingStatus? @map("human_status")
+  validatedBy    String?        @map("validated_by") @db.Uuid
+  validatedAt    DateTime?      @map("validated_at")
+  validationNote String         @default("") @map("validation_note")
+  resolvedAt     DateTime?      @map("resolved_at")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
 
   assessment  Assessment         @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
   control     Control            @relation(fields: [controlId], references: [id])
@@ -1174,19 +1177,19 @@ enum RemediationStatus {
 }
 
 model RemediationTask {
-  id          String            @id @default(uuid(7)) @db.Uuid
-  orgId       String            @map("org_id") @db.Uuid
-  findingId   String?           @map("finding_id") @db.Uuid
-  title       String
-  description String            @default("")
-  ownerId     String?           @map("owner_id") @db.Uuid
-  dueAt       DateTime?         @map("due_at")
-  status      RemediationStatus @default(open)
-  evidenceDocumentIds String[]  @default([]) @map("evidence_document_ids") @db.Uuid
-  history     Json              @default("[]")
-  createdBy   String?           @map("created_by") @db.Uuid
-  createdAt   DateTime          @default(now()) @map("created_at")
-  updatedAt   DateTime          @updatedAt @map("updated_at")
+  id                  String            @id @default(uuid(7)) @db.Uuid
+  orgId               String            @map("org_id") @db.Uuid
+  findingId           String?           @map("finding_id") @db.Uuid
+  title               String
+  description         String            @default("")
+  ownerId             String?           @map("owner_id") @db.Uuid
+  dueAt               DateTime?         @map("due_at")
+  status              RemediationStatus @default(open)
+  evidenceDocumentIds String[]          @default([]) @map("evidence_document_ids") @db.Uuid
+  history             Json              @default("[]")
+  createdBy           String?           @map("created_by") @db.Uuid
+  createdAt           DateTime          @default(now()) @map("created_at")
+  updatedAt           DateTime          @updatedAt @map("updated_at")
 
   finding Finding? @relation(fields: [findingId], references: [id])
 
@@ -1388,20 +1391,20 @@ model AutonomyTransition {
 
 /// A request to raise an agent's autonomy. Raising needs a second person with agents:control.
 model AutonomyChangeRequest {
-  id           String               @id @default(uuid(7)) @db.Uuid
-  orgId        String               @map("org_id") @db.Uuid
-  agentId      String               @map("agent_id") @db.Uuid
-  fromLevel    Int                  @map("from_level")
-  toLevel      Int                  @map("to_level")
-  ceilingAmount Decimal?            @map("ceiling_amount") @db.Decimal(18, 2)
-  reason       String
-  status       AutonomyChangeStatus @default(pending)
-  requestedBy  String               @map("requested_by") @db.Uuid
-  decidedBy    String?              @map("decided_by") @db.Uuid
-  decidedAt    DateTime?            @map("decided_at")
-  decisionNote String?              @map("decision_note")
-  expiresAt    DateTime             @map("expires_at")
-  createdAt    DateTime             @default(now()) @map("created_at")
+  id            String               @id @default(uuid(7)) @db.Uuid
+  orgId         String               @map("org_id") @db.Uuid
+  agentId       String               @map("agent_id") @db.Uuid
+  fromLevel     Int                  @map("from_level")
+  toLevel       Int                  @map("to_level")
+  ceilingAmount Decimal?             @map("ceiling_amount") @db.Decimal(18, 2)
+  reason        String
+  status        AutonomyChangeStatus @default(pending)
+  requestedBy   String               @map("requested_by") @db.Uuid
+  decidedBy     String?              @map("decided_by") @db.Uuid
+  decidedAt     DateTime?            @map("decided_at")
+  decisionNote  String?              @map("decision_note")
+  expiresAt     DateTime             @map("expires_at")
+  createdAt     DateTime             @default(now()) @map("created_at")
 
   @@index([orgId, status])
   @@index([orgId, agentId])
@@ -1446,4 +1449,49 @@ model CalibrationProfile {
 
   @@unique([orgId, agentId, toolKey])
   @@map("calibration_profiles")
+}
+
+/// One Attack Simulation Lab run: a set of attack scenarios submitted through the gateway by a temporary
+/// clone of a target agent, decision-only (nothing executes downstream). docs/ATTACK_SIMULATION_LAB.md
+model AttackSimulationRun {
+  id            String    @id @default(uuid(7)) @db.Uuid
+  orgId         String    @map("org_id") @db.Uuid
+  targetAgentId String    @map("target_agent_id") @db.Uuid
+  labAgentId    String?   @map("lab_agent_id") @db.Uuid
+  /// running, completed or failed.
+  status        String    @default("running")
+  scenarioKeys  String[]  @default([]) @map("scenario_keys")
+  /// Counts by outcome and the baseline decision.
+  summary       Json      @default("{}")
+  error         String?
+  startedBy     String?   @map("started_by") @db.Uuid
+  startedAt     DateTime  @default(now()) @map("started_at")
+  completedAt   DateTime? @map("completed_at")
+
+  results AttackSimulationResult[]
+
+  @@index([orgId, startedAt])
+  @@map("attack_simulation_runs")
+}
+
+/// The result of one scenario in a lab run. Append-only.
+model AttackSimulationResult {
+  id               String              @id @default(uuid(7)) @db.Uuid
+  orgId            String              @map("org_id") @db.Uuid
+  runId            String              @map("run_id") @db.Uuid
+  scenarioKey      String              @map("scenario_key")
+  category         String
+  /// defended, gap, inconclusive or error.
+  outcome          String
+  expected         String
+  observed         String
+  /// Public taxonomy identifiers (OWASP Top 10 for LLM Applications 2025, MITRE ATLAS).
+  references       String[]            @default([])
+  actionRequestIds String[]            @default([]) @map("action_request_ids") @db.Uuid
+  detail           Json                @default("{}")
+  createdAt        DateTime            @default(now()) @map("created_at")
+  run              AttackSimulationRun @relation(fields: [runId], references: [id], onDelete: Restrict)
+
+  @@index([orgId, runId])
+  @@map("attack_simulation_results")
 }

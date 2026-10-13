@@ -47,6 +47,8 @@ export async function listAgents(db: TenantDb, ctx: OrgContext, filter: z.infer<
   assertPermission(ctx, "agents:read");
   const where: Prisma.AgentWhereInput = {
     orgId: ctx.orgId,
+    // Attack Simulation Lab agents are temporary clones; the lab shows them with its runs.
+    isLab: false,
     ...(filter.status ? { status: filter.status } : {}),
     ...(filter.environment ? { environment: filter.environment } : {}),
     ...(filter.riskTier ? { riskTier: filter.riskTier } : {}),

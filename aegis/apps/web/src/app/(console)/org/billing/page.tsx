@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 export default async function BillingPage() {
   const c = await requirePermission("org:read");
   const org = await rawPrisma().organization.findUniqueOrThrow({ where: { id: c.org.id }, select: { plan: true } });
-  const [members, agents] = await withTenant(c.ctx.orgId, (db) => Promise.all([db.membership.count({ where: { orgId: c.ctx.orgId, status: "active" } }), db.agent.count({ where: { orgId: c.ctx.orgId, status: { not: "archived" } } })]));
+  const [members, agents] = await withTenant(c.ctx.orgId, (db) => Promise.all([db.membership.count({ where: { orgId: c.ctx.orgId, status: "active" } }), db.agent.count({ where: { isLab: false, orgId: c.ctx.orgId, status: { not: "archived" } } })]));
   return (
     <div>
       <PageHeader title="Billing" description="Plan, usage and commercial contact." badges={<DemoBadge show={c.org.demoMode} />} actions={<Button disabled disabledReason="There is no billing provider connected in this deployment, so there is no portal to open">Manage billing portal</Button>} />

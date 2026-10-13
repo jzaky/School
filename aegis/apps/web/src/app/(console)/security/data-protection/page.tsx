@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { withTenant } from "@aegis/db";
-import { listDataClasses } from "@aegis/core";
+import { getInjectionResponse, listDataClasses } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { toolPicks } from "@/server/queries/shield";
 import { PageHeader } from "@/components/ui/page-header";
@@ -12,6 +12,7 @@ import { CreateDataClassDialog } from "@/components/shield/create-data-class-dia
 import { SampleTestPanel } from "@/components/shield/sample-test-panel";
 import { InjectionPanel } from "@/components/shield/injection-panel";
 import { SecurityEvalPanel } from "@/components/shield/security-eval-panel";
+import { InjectionResponseForm } from "@/components/shield/injection-response-form";
 
 export const metadata: Metadata = { title: "Data Protection" };
 export const dynamic = "force-dynamic";
@@ -19,11 +20,11 @@ export const dynamic = "force-dynamic";
 export default async function DataProtectionPage() {
   const c = await requirePermission("security:read");
   const canWrite = c.can("security:write");
-  const { classes, tools } = await withTenant(
+  const { classes, tools, injection } = await withTenant(
     c.ctx.orgId,
     async (db) => {
-      const [classes, tools] = await Promise.all([listDataClasses(db, c.ctx), toolPicks(db, c.ctx.orgId)]);
-      return { classes, tools };
+      const [classes, tools, injection] = await Promise.all([listDataClasses(db, c.ctx), toolPicks(db, c.ctx.orgId), getInjectionResponse(db, c.ctx.orgId)]);
+      return { classes, tools, injection };
     },
     { readOnly: true },
   );
@@ -41,6 +42,9 @@ export default async function DataProtectionPage() {
           <SampleTestPanel tools={tools.map((t) => ({ key: t.key, name: t.name }))} />
           <InjectionPanel />
         </div>
+        <Panel title="Response to prompt injection" description="Shield looks for injection signals in every request's text (instruction overrides, role changes, hidden characters, encoded payloads). The detector is pattern-based: it can miss an attack and can flag honest text. Signals are always recorded and policies can use them; this setting adds a response for the whole organization, and it can only make a decision stricter.">
+          <InjectionResponseForm initial={injection.response} canWrite={canWrite} />
+        </Panel>
         <SecurityEvalPanel />
       </div>
     </div>

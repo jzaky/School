@@ -26,7 +26,7 @@ export interface AgentPick {
 }
 
 export async function agentPicks(db: TenantDb, orgId: string): Promise<AgentPick[]> {
-  return db.agent.findMany({ where: { orgId }, orderBy: { name: "asc" }, select: { id: true, slug: true, name: true, status: true } });
+  return db.agent.findMany({ where: { isLab: false, orgId }, orderBy: { name: "asc" }, select: { id: true, slug: true, name: true, status: true } });
 }
 
 export async function agentNames(db: TenantDb, ids: (string | null | undefined)[]): Promise<Map<string, AgentPick>> {

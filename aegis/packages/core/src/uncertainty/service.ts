@@ -145,7 +145,7 @@ export async function uncertaintyOverview(db: TenantDb, ctx: OrgContext, days = 
   const [decisions, profiles, agents, labels] = await Promise.all([
     db.authorizationDecision.findMany({ where: { createdAt: { gte: since, lte: now }, uncertaintyLevel: { not: null } }, select: { uncertaintyLevel: true, result: true, explanation: true, actionRequestId: true } }),
     db.calibrationProfile.findMany({ orderBy: [{ agentId: "asc" }, { toolKey: "asc" }] }),
-    db.agent.findMany({ select: { id: true, name: true } }),
+    db.agent.findMany({ where: { isLab: false }, select: { id: true, name: true } }),
     db.outcomeLabel.count({ where: { createdAt: { gte: since, lte: now } } }),
   ]);
   const byLevel: Record<UncertaintyLevel, number> = { low: 0, elevated: 0, high: 0, unknown: 0 };

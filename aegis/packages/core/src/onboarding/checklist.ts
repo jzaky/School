@@ -77,7 +77,7 @@ export async function computeOnboarding(db: TenantDb, ctx: OrgContext): Promise<
     db.agent.findFirst({ where: { orgId, status: "active", OR: [{ businessOwnerId: { not: null } }, { technicalOwnerId: { not: null } }] }, select: { id: true } }),
     db.policyAssignment.findFirst({ where: { orgId, targetType: "agent", policy: { archived: false, versions: { some: { state: "active" } } } }, select: { id: true } }),
     db.membership.findMany({ where: { orgId, status: "active" }, select: { userId: true, role: { select: { permissions: true } } } }),
-    db.agent.findMany({ where: { orgId, status: { not: "archived" } }, select: { businessOwnerId: true, technicalOwnerId: true } }),
+    db.agent.findMany({ where: { isLab: false, orgId, status: { not: "archived" } }, select: { businessOwnerId: true, technicalOwnerId: true } }),
     db.actionRequest.findFirst({ where: { orgId, status: "executed", createdAt: { gte: since } }, select: { id: true } }),
     db.actionRequest.findFirst({ where: { orgId, status: "denied", createdAt: { gte: since } }, select: { id: true } }),
     db.approvalRequest.findFirst({ where: { orgId, status: { in: ["approved", "rejected"] }, decidedAt: { gte: since } }, select: { id: true } }),

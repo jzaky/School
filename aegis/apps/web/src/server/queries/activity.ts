@@ -45,7 +45,7 @@ export async function loadActivity(db: TenantDb, orgId: string, f: { outcome: Ou
   const [rows, total, agents] = await Promise.all([
     db.actionRequest.findMany({ where, orderBy: { createdAt: "desc" }, take: f.limit, select: { id: true, status: true, toolKey: true, action: true, params: true, justification: true, createdAt: true, agent: { select: { id: true, name: true } }, approvals: { select: { id: true }, take: 1 }, receipts: { orderBy: { createdAt: "desc" }, take: 1, select: { downstreamReference: true } } } }),
     db.actionRequest.count({ where }),
-    db.agent.findMany({ where: { orgId, status: { not: "archived" } }, orderBy: { name: "asc" }, select: { id: true, name: true } }),
+    db.agent.findMany({ where: { isLab: false, orgId, status: { not: "archived" } }, orderBy: { name: "asc" }, select: { id: true, name: true } }),
   ]);
   const now = Date.now();
   const items: ActivityRow[] = rows.map((r) => {

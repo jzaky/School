@@ -23,6 +23,7 @@ import { ambiguityIndicator, assessForRequest } from "../uncertainty/service.js"
 import { assessReasoning, escalateForReasoning, readReasoningPolicy, type ReasoningAssessment, type ReasoningOutcome } from "../reasoning/assess.js";
 import { precedentIndicator } from "../reasoning/service.js";
 import { getShieldInspector } from "./shield-hook.js";
+import { escalateForInjection, getInjectionResponse } from "../shield/injection-response.js";
 import { getDownstreamSystem, readIntegrationCredential, type DownstreamContext } from "./simulators.js";
 
 export const actionRequestInputSchema = z.object({
@@ -200,6 +201,7 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
   let uncertaintyEscalated = false;
   let reasoning: ReasoningAssessment | null = null;
   let reasoningEscalated = false;
+  let injectionEscalated: { response: string; signals: string[] } | null = null;
   /** What the policies alone decided, before data protection, uncertainty and autonomy (used by replay). */
   let policyOnlyResult: string | null = null;
 
@@ -310,6 +312,24 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
           evaluation = { ...evaluation, result: "deny", reasons: [...evaluation.reasons, why] };
         }
       }
+      // Injection response (Phase 6): an organization setting turns Shield's heuristic injection signals into a
+      // stricter outcome. Monotonic; off by default, when the signals only inform policies.
+      const injectionSetting = await getInjectionResponse(db, ctx.orgId);
+      const injection = escalateForInjection(decisionResult, injectionSetting, shield.shield.injectionSignals);
+      if (injection.escalated) {
+        const why = `Possible prompt injection in the parameters (heuristic signals: ${injection.triggering.join(", ")})`;
+        injectionEscalated = { response: injectionSetting.response, signals: injection.triggering };
+        if (injection.outcome === "require_approval") {
+          decisionResult = "require_approval";
+          evaluation = { ...evaluation, result: "require_approval", approval: { roles: [], minApprovers: 1, expiresInMinutes: 240, separationOfDuties: true, escalateToRoles: [], instructions: why }, reasons: [...evaluation.reasons, why] };
+        } else if (injection.outcome === "quarantine") {
+          decisionResult = "quarantine";
+          evaluation = { ...evaluation, result: "quarantine", quarantine: { severity: "high", reviewRoles: [], expiresInMinutes: 24 * 60, note: why }, reasons: [...evaluation.reasons, why] };
+        } else {
+          decisionResult = "deny";
+          evaluation = { ...evaluation, result: "deny", reasons: [...evaluation.reasons, why] };
+        }
+      }
       // Managed autonomy (Phase 3): the agent's level is applied after policy and data protection and can only
       // make the outcome stricter. Under a delegation the stricter of the two agents' settings applies.
       const policyOutcome = decisionResult;
@@ -354,6 +374,7 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
         autonomy: autonomyRecord,
         uncertainty: { ...uncertainty, escalated: uncertaintyEscalated },
         reasoning: reasoning ? { ...reasoning, escalated: reasoningEscalated } : null,
+        injection: { signals: shield.shield.injectionSignals, escalated: injectionEscalated },
         inputSummary: { amount: authzInput.context.amount, currency: authzInput.context.currency, destinationDomain: authzInput.context.destinationDomain, resource: authzInput.resource?.key ?? null, requestCount24h: authzInput.context.requestCount24h, deniedCount24h: authzInput.context.deniedCount24h, hour: authzInput.context.hour, priorRequestsSameReference: authzInput.context.priorRequestsSameReference, duplicateReferenceKey: authzInput.context.duplicateReferenceKey },
       };
       if (decisionResult === "deny" && evaluation.securityEventSeverity) {
@@ -363,6 +384,10 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
       if (decisionResult === "quarantine") {
         securitySeverity = evaluation.quarantine?.severity ?? "high";
         securityType = "policy.quarantine";
+      }
+      if (injectionEscalated && (decisionResult === "deny" || decisionResult === "quarantine")) {
+        securitySeverity = "high";
+        securityType = "injection.detected";
       }
     }
   } catch (err) {
@@ -380,11 +405,11 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
   });
   await appendEvidence(db, ctx, { type: `gateway.decision.${decisionResult}`, subjectType: "action_request", subjectId: request.id, correlationId, payload: { decisionId: decision.id, result: decisionResult, reasons, policyVersionIds, matchedRuleIds, riskIndicators, restrictions: restrictApplied, latencyMs: decision.latencyMs } });
 
+  // Attack Simulation Lab agents exist to be refused: their events are recorded but open no incident, change no level and notify nobody.
+  const isLab = agent.isLab;
   let securityEventId: string | null = null;
   if (securityType) {
     // Through the Shield module so critical and repeated high events open or join an incident.
-    // Attack Simulation Lab agents exist to be refused: their events are recorded but open no incident and change no level.
-    const isLab = (agent.metadata as { lab?: unknown } | null)?.lab === true;
     const created = await createSecurityEvent(db, ctx, { type: securityType, severity: securitySeverity ?? "medium", title: `${isLab ? "[lab] " : ""}${securityType.replace(/[._]/g, " ")}: ${agent.slug} ${input.tool}`, agentId, actionRequestId: request.id, escalate: isLab ? false : undefined, detail: { reasons, tool: input.tool, action: input.action, resource: input.resource ?? null, destinationDomain: extractDestinationDomain(input.params), onBehalfOf: input.onBehalfOf?.agentId ?? null, ...(isLab ? { lab: true } : {}) } });
     securityEventId = created.event.id;
     if (!isLab) await applyAutomaticDowngrade(db, { ...systemContextFor(ctx.orgId), now }, agentId, { rule: "security_event", severity: securitySeverity ?? "medium", securityEventType: securityType, actionRequestId: request.id });
@@ -411,16 +436,16 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
       data: { createdAt: now, updatedAt: now, orgId: ctx.orgId, actionRequestId: request.id, requiredApprovals: spec.minApprovers, requiredRoles: spec.roles, requestHash: effectiveHash, triggeringRuleId: evaluation?.decidingRule ? `${evaluation.decidingRule.policyKey}/${evaluation.decidingRule.ruleId}` : null, policyVersionId: evaluation?.decidingRule?.policyVersionId ?? null, reason: spec.instructions || reasons.join("; "), expiresAt },
     });
     await enqueueJob({ type: "approval.expire", payload: { approvalRequestId: approvalRow.id, orgId: ctx.orgId }, idempotencyKey: `approval.expire:${approvalRow.id}`, orgId: ctx.orgId, runAt: expiresAt }, db);
-    const approvers = await userIdsWithPermission(db, ctx, "approvals:decide");
-    await notifyUsers(db, ctx, { userIds: approvers, type: "approval.requested", title: `Approval needed: ${agent.name} wants to ${input.tool}`, body: reasons.join("; "), link: `/approvals/${approvalRow.id}`, idempotencyKey: `approval.requested:${approvalRow.id}` });
+    const approvers = isLab ? [] : await userIdsWithPermission(db, ctx, "approvals:decide");
+    if (approvers.length) await notifyUsers(db, ctx, { userIds: approvers, type: "approval.requested", title: `Approval needed: ${agent.name} wants to ${input.tool}`, body: reasons.join("; "), link: `/approvals/${approvalRow.id}`, idempotencyKey: `approval.requested:${approvalRow.id}` });
     await appendEvidence(db, ctx, { type: "approval.requested", subjectType: "approval_request", subjectId: approvalRow.id, correlationId, payload: { actionRequestId: request.id, expiresAt, requiredApprovals: spec.minApprovers, requiredRoles: spec.roles } });
   } else if (decisionResult === "quarantine") {
     status = "quarantined";
     const spec = evaluation?.quarantine ?? DEFAULT_QUARANTINE;
     holdExpiresAt = new Date(now.getTime() + spec.expiresInMinutes * 60_000);
     await enqueueJob({ type: "request.expire", payload: { actionRequestId: request.id, orgId: ctx.orgId }, idempotencyKey: `request.expire:${request.id}:${holdExpiresAt.getTime()}`, orgId: ctx.orgId, runAt: holdExpiresAt }, db);
-    const reviewers = await userIdsWithPermission(db, ctx, "security:write");
-    await notifyUsers(db, ctx, { userIds: reviewers, type: "gateway.quarantined", title: `Quarantined: ${agent.name} ${input.tool}`, body: reasons.join("; ") || spec.note, link: `/gateway/${request.id}`, idempotencyKey: `gateway.quarantined:${request.id}:${holdExpiresAt.getTime()}` });
+    const reviewers = isLab ? [] : await userIdsWithPermission(db, ctx, "security:write");
+    if (reviewers.length) await notifyUsers(db, ctx, { userIds: reviewers, type: "gateway.quarantined", title: `Quarantined: ${agent.name} ${input.tool}`, body: reasons.join("; ") || spec.note, link: `/gateway/${request.id}`, idempotencyKey: `gateway.quarantined:${request.id}:${holdExpiresAt.getTime()}` });
     await appendEvidence(db, ctx, { type: "gateway.quarantined", subjectType: "action_request", subjectId: request.id, correlationId, payload: { securityEventId, expiresAt: holdExpiresAt, reviewRoles: spec.reviewRoles, severity: spec.severity } });
   } else if (decisionResult === "request_more_information") {
     status = "awaiting_information";
@@ -433,7 +458,7 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
   }
   const updated = await db.actionRequest.update({ where: { id: request.id }, data: { status, riskIndicators, expiresAt: approvalRow?.expiresAt ?? holdExpiresAt, completedAt: status === "denied" ? now : null, params: effectiveParams as Prisma.InputJsonValue, updatedAt: now } });
   await db.agent.update({ where: { id: agentId }, data: { lastActivityAt: now } });
-  if (status === "denied") await checkDenialBurst(db, { ...systemContextFor(ctx.orgId), now }, agentId, request.id);
+  if (status === "denied" && !isLab) await checkDenialBurst(db, { ...systemContextFor(ctx.orgId), now }, agentId, request.id);
 
   const response = toResponse(updated, decision, approvalRow, null, false);
   response.reasons = reasons;

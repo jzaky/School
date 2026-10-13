@@ -67,7 +67,7 @@ export async function runAutomatedCheck(db: TenantDb, ctx: OrgContext, type: str
       return { type, present: rules > 0, reference: `aegis:monitoring_rules:count=${rules};alerts:count=${alerts}`, detail: `${rules} enabled monitoring rules have produced ${alerts} alerts.` };
     }
     case "agent_inventory": {
-      const [agents, active] = await Promise.all([db.agent.count({ where: { orgId } }), db.agent.count({ where: { orgId, status: "active" } })]);
+      const [agents, active] = await Promise.all([db.agent.count({ where: { isLab: false, orgId } }), db.agent.count({ where: { isLab: false, orgId, status: "active" } })]);
       return { type, present: agents > 0, reference: `aegis:agents:count=${agents};active=${active}`, detail: `${agents} AI agents registered with owners, risk tiers and tool permissions (${active} active).` };
     }
     case "data_protection": {

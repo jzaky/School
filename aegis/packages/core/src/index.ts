@@ -69,3 +69,4 @@ export * from "./uncertainty/calibration.js";
 export * from "./uncertainty/service.js";
 export * from "./reasoning/assess.js";
 export * from "./reasoning/service.js";
+export * from "./security/lab.js";
