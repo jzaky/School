@@ -297,8 +297,8 @@ export function EgressBlock() {
     <div className="mk-card">
       <div role="tablist" aria-label="Attempts to move customer data out" className="flex flex-wrap gap-2">
         {(["export", "email"] as const).map((t) => (
-          <button key={t} role="tab" type="button" aria-selected={tab === t} id={`egress-tab-${t}`} aria-controls={`egress-panel-${t}`} onClick={() => setTab(t)} className={`mk-btn mk-btn-sm ${tab === t ? "mk-btn-primary" : "mk-btn-secondary"}`}>
-            {t === "export" ? "Bulk export to an outside website" : "Email containing a card number and a bank account number"}
+          <button key={t} role="tab" type="button" aria-selected={tab === t} id={`egress-tab-${t}`} aria-controls={`egress-panel-${t}`} onClick={() => setTab(t)} className={`mk-btn mk-btn-sm max-w-full ${tab === t ? "mk-btn-primary" : "mk-btn-secondary"}`}>
+            {t === "export" ? "Bulk export to an outside site" : "Email with card and account numbers"}
           </button>
         ))}
       </div>
