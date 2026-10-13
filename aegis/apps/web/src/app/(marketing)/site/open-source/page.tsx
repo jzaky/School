@@ -36,11 +36,11 @@ const PROJECTS: string[][] = [
 export default function OpenSourcePage() {
   return (
     <>
-      <PageIntro eyebrow="Open source and licensing" title="What AEGIS builds on" lead="Every dependency is MIT, Apache-2.0, BSD or ISC. Patterns were studied from public documentation; no source code was copied from any third-party repository, and nothing was taken from AGPL or GPL projects." />
+      <PageIntro eyebrow="Open source and licensing" title="What AEGIS builds on" lead="This page lists the open-source software AEGIS is built on and how its licenses are handled, so legal and procurement teams can check them. Every dependency is under one of four permissive licenses: MIT, Apache-2.0, BSD or ISC. Patterns were studied from public documentation; no source code was copied from any third-party repository, and nothing was taken from AGPL or GPL projects." />
       <Section>
         <SectionHeading title="Guiding constraints" />
         <ol className="mt-6 grid gap-3 text-sm md:grid-cols-2">
-          {["One deterministic authorization path. Two policy engines in the request path would double the failure surface and make deny-on-failure harder to prove.", "The first version is a TypeScript modular monolith. Anything forcing a Python or JVM sidecar into the critical path is deferred unless there is no credible alternative.", "Every dependency must be MIT, Apache-2.0, BSD or ISC. Projects with enterprise or commercial folders are acceptable only if nothing is imported from those folders.", "Nothing from AGPL or GPL repositories is copied. Patterns may be studied from public documentation."].map((t, i) => (
+          {["One deterministic authorization path (the same request always gets the same answer). Two policy engines in the request path would double the failure surface and make deny-on-failure harder to prove.", "The first version is a TypeScript modular monolith. Anything forcing a Python or JVM sidecar into the critical path is deferred unless there is no credible alternative.", "Every dependency must be MIT, Apache-2.0, BSD or ISC. Projects with enterprise or commercial folders are acceptable only if nothing is imported from those folders.", "Nothing from AGPL or GPL repositories is copied. Patterns may be studied from public documentation."].map((t, i) => (
             <li key={i} className="flex gap-3 rounded-lg border border-(--mk-line) p-3">
               <span className="shrink-0 font-mono text-xs text-(--mk-accent)">{i + 1}</span>
               <span className="text-(--mk-muted)">{t}</span>
@@ -49,13 +49,13 @@ export default function OpenSourcePage() {
         </ol>
       </Section>
       <Section className="bg-(--mk-bg-2)">
-        <SectionHeading title="The chosen stack" lead="Summary of the research record kept in the repository." />
+        <SectionHeading title="The chosen stack" lead="For each technical need, this is what AEGIS uses today and whether it is built, partly built or deferred. Summary of the research record kept in the repository." />
         <div className="mt-8">
           <Table head={["Concern", "Choice", "Status"]} rows={STACK} caption="Chosen stack by concern" />
         </div>
       </Section>
       <Section>
-        <SectionHeading title="Projects evaluated" lead="Adopt means run or depend on it. Adapt means reimplement public patterns in our own code. Defer means a good fit later. Reject means not used." />
+        <SectionHeading title="Projects evaluated" lead="These are the projects we looked at, what we decided about each one and why. Adopt means run or depend on it. Adapt means reimplement public patterns in our own code. Defer means a good fit later. Reject means not used." />
         <div className="mt-8">
           <Table head={["Project", "License", "Decision", "Why"]} rows={PROJECTS} caption="Open-source projects evaluated for AEGIS" />
         </div>

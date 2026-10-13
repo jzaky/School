@@ -12,16 +12,16 @@ const BLOCKS: { id: string; title: string; items: string[] }[] = [
       "Console users: argon2id password hashes, lockout after 8 failures, server-side sessions (12 hour absolute, 2 hour idle) in HttpOnly Secure SameSite=Lax cookies, TOTP MFA (RFC 6238).",
       "Per-organization OpenID Connect with PKCE and just-in-time provisioning limited to allowed email domains. SAML is not implemented.",
       "Agents and integrations: API keys aegis_ak_<prefix>_<secret>, SHA-256 hashed at rest, shown once, scoped to one subject, revocable, revoked automatically when an agent is revoked.",
-      "Roles: 8 system roles over 22 explicit permissions; custom roles cannot hold the wildcard. Four-eyes rule on policy activation. Separation of duties on approvals (owners of an agent cannot approve its requests).",
+      "Roles: 8 system roles over 22 explicit permissions; custom roles cannot hold the wildcard. Four-eyes rule on policy activation (a second person must switch it on). Separation of duties on approvals (the people who own an agent cannot approve its requests).",
     ],
   },
   {
     id: "authorization",
     title: "Authorization path",
     items: [
-      "Registry checks (agent active, tool granted and enabled, integration active, parameter schema, resource permission, classification, destination allowlist, gateway pause), then Shield inspection, then deterministic policy evaluation with default deny.",
+      "Registry checks (agent active, tool granted and enabled, integration active, parameter schema, resource permission, classification, destination allowlist, gateway pause), then Shield inspection, then deterministic policy evaluation with default deny (the same request always gets the same answer, and when no rule matches the answer is no).",
       "Decisions, approvals and receipts are written in the same transaction as the evidence event; an evidence failure rolls back the decision.",
-      "Execution grants are single use, five minutes, bound to the SHA-256 of tool, action and parameters; downstream systems verify them.",
+      "Execution grants (a one-time permission slip the downstream system checks before acting) are single use, five minutes, bound to the SHA-256 of tool, action and parameters; downstream systems verify them.",
     ],
   },
   {
@@ -37,12 +37,12 @@ const BLOCKS: { id: string; title: string; items: string[] }[] = [
   {
     id: "isolation",
     title: "Tenant isolation",
-    items: ["Row-level security on every tenant table, application role NOBYPASSRLS and non-owner, transaction-local app.current_org, three SECURITY DEFINER functions for the only cross-tenant lookups (API key by hash, memberships by user, invitation by hash).", "Covered by the isolation test suite (11 tests) that proves two organizations cannot see each other through reads, writes or raw SQL."],
+    items: ["Row-level security on every tenant table (each customer's data is kept apart inside the database), application role NOBYPASSRLS and non-owner, transaction-local app.current_org, three SECURITY DEFINER functions for the only cross-tenant lookups (API key by hash, memberships by user, invitation by hash).", "Covered by the isolation test suite (11 tests) that proves two organizations cannot see each other through reads, writes or raw SQL."],
   },
   {
     id: "integrity",
     title: "Integrity",
-    items: ["Per-organization SHA-256 hash chain over canonical JSON, UPDATE and DELETE rejected by trigger, Ed25519 checkpoints with the key outside the database, verification API and exports with the public key.", "Tamper-evident, not immutable: an attacker with the owner role and the signing key could rewrite history; externally stored checkpoints make that detectable."],
+    items: ["Per-organization SHA-256 hash chain over canonical JSON (a record that cannot be edited without it showing), UPDATE and DELETE rejected by trigger, Ed25519 checkpoints (signed markers that show whether the record has been edited since) with the key outside the database, verification API and exports with the public key.", "Tamper-evident, not immutable: an attacker with the owner role and the signing key could rewrite history; externally stored checkpoints make that detectable."],
   },
   {
     id: "network",
@@ -64,7 +64,7 @@ const GAPS: string[][] = [
 export default function SecurityPage() {
   return (
     <>
-      <PageIntro eyebrow="Security" title="Fail closed, least privilege, every action attributable" lead="What is built into the request path and the database, in the same words as the internal security architecture document, followed by the gaps we know about." />
+      <PageIntro eyebrow="Security" title="Fail closed, least privilege, every action attributable" lead="This page sets out how AEGIS protects your data and your systems, and where it still falls short. If anything inside AEGIS fails, nothing happens in your systems, and every action can be traced to who or what asked for it. The controls are listed in the same words as the internal security architecture document, followed by the gaps we know about." />
       <Section>
         <div className="grid gap-x-10 gap-y-12 lg:grid-cols-2">
           {BLOCKS.map((b) => (
@@ -85,13 +85,13 @@ export default function SecurityPage() {
         </div>
       </Section>
       <Section id="known-gaps" className="bg-(--mk-bg-2)">
-        <SectionHeading eyebrow="Honesty" title="Known gaps" lead="Also recorded in the threat model. We would rather you read these here than discover them in a review." />
+        <SectionHeading eyebrow="Honesty" title="Known gaps" lead="These are the things AEGIS does not do yet, or does only in a basic way. Also recorded in the threat model. We would rather you read these here than discover them in a review." />
         <div className="mt-8">
           <Table head={["Gap", "Detail"]} rows={GAPS} caption="Known security gaps in the current build" />
         </div>
       </Section>
       <Section id="deployment">
-        <SectionHeading eyebrow="Private deployment" title="Everything runs inside your boundary" lead="Four processes: api, web, worker and a one-shot migrate job that applies migrations and the row-level security script with owner credentials." />
+        <SectionHeading eyebrow="Private deployment" title="Everything runs inside your boundary" lead="You run AEGIS on your own servers, inside your own security boundary, with the pieces listed here. Four processes: api, web, worker and a one-shot migrate job that applies migrations and the row-level security script with owner credentials." />
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           <div className="mk-card">
             <h3 className="mk-h3">Docker Compose</h3>
