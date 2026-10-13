@@ -3,14 +3,14 @@
 Updated at the end of each phase. `docs/IMPLEMENTATION_REPORT.md` has the current per-area breakdown (implemented, executed and verified, simulated, remaining).
 
 ## Phase 10: DNRS follow-ups (2026-10-13): in progress
-- Done: score-band policy template (core 7 tests, browser 2 tests, seeded example); replay calibration (core 4 tests, browser 1 test); autonomy posture per agent and the boundary sentence on approvals (core 6 tests, browser 2 tests); AEGIS Trading (trading mandate template, simulated brokerage, Alpaca paper connector refusing live keys, demo scenario; core 13 tests, browser 4 tests; the paper-account run still needs an Alpaca paper key). CI runs the browser suite against a production build; two production-only defects fixed (platform admin owner credential, report period navigation).
+- Done: score-band policy template (core 7 tests, browser 2 tests, seeded example); replay calibration (core 4 tests, browser 1 test); autonomy posture per agent and the boundary sentence on approvals (core 6 tests, browser 2 tests); AEGIS Trading (trading mandate template, simulated brokerage, Alpaca paper connector refusing live keys, demo scenario; core 13 tests, browser 4 tests; the paper-account run still needs an Alpaca paper key); ten further framework catalogs, the free public checker and the Proof page (core 3 tests, browser 2 tests). CI runs the browser suite against a production build; two production-only defects fixed (platform admin owner credential, report period navigation).
 - Next: autonomy posture and boundary sentence, AEGIS Trading (needs an Alpaca paper key), framework catalogs, free checker, Proof page.
 
 ## Phase 9: layout clean-up and continuous governance (2026-10-13): complete
 - Layout scan tool and fixes for every text collision and sideways-scrolling page found at five widths (commit d9df1e6).
 - Continuous governance mode: per-rule automatic responses (suspend agent, pause gateway, disable integration) with evidence, notifications and reversal by a person. Core 4 tests, Playwright 2 tests. See docs/CONTINUOUS_GOVERNANCE.md.
 - DNRS.ai public pages and demo sites read and compared: docs/COMPARISON_DNRS.md (ideas to take on our own terms, what not to take, suggested order).
-- Open: AEGIS Trading paper-account run (needs an Alpaca paper key), plain-language copy pass for non-technical users, framework catalogs (DESC ISR, EU AI Act, further ISO) with a public checker and Proof page.
+- Open: AEGIS Trading paper-account run (needs an Alpaca paper key), plain-language copy pass for non-technical users, a plain-language copy pass.
 
 ## Phase 8: pilot-ready refund workflow (2026-10-11 to 2026-10-12): complete
 - Execution safety: one live grant per request (partial unique index), `executing` and `unknown` request states, three-phase execution with the downstream idempotency key `aegis:<requestId>`, reconciliation job and sweep, human settlement, monitoring rule RM-012. Pause voids grants and blocks approvals; suspension voids grants. 12 regression tests.
@@ -60,7 +60,7 @@ Research, ADRs 0001 to 0005, architecture, database design, threat model, design
 
 ## Phase 5: complete (core and API), console in progress
 - Document ingestion for PDF, DOCX, TXT and Markdown with size and type limits, chunking, retention; files stored under the configured directory with opaque names; no content ever leaves the deployment.
-- Frameworks: ISO/IEC 42001 (65 controls), ISO/IEC 27001:2022 (93 Annex A controls), NIST AI RMF 1.0 (72 subcategories), custom frameworks with CSV import. ISO entries reference identifiers with original one-sentence summaries only.
+- Frameworks: 13 shared catalogs, 383 controls: ISO/IEC 42001 (65), ISO/IEC 27001:2022 (93), NIST AI RMF 1.0 (72), EU AI Act (28), GDPR (25), UAE PDPL (17, by principle), Dubai DESC ISR v3 (15, by domain under AEGIS identifiers), ISO/IEC 23894 (14), 27701 (15), 27017 (10), 27018 (11), 42005 (10), 38507 (8); custom frameworks with CSV import. Every entry references identifiers with original one-sentence summaries only. A free public checker (/site/checker) and a Proof page (/site/proof) are on the website.
 - Assessment engine: BM25 lexical retrieval plus deterministic checks and 10 automated evidence types drawn from AEGIS records; findings covered, partial, ambiguous or missing with confidence, rationale, cited excerpts and recommendations; every conclusion labelled automated or human validated; control mappings refreshed per run for Assurance.
 - Remediation tasks with owner, due date, evidence attachments, review workflow and history. Reports in JSON and PDF (executive summary, detailed, evidence inventory, gap report, remediation plan) with disclaimers on every page.
 - Tests: 28 (retrieval 16, audit 12).

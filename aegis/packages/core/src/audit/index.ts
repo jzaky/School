@@ -6,3 +6,4 @@ export * from "./automated-checks.js";
 export * from "./assessments.js";
 export * from "./remediation.js";
 export * from "./reports.js";
+export * from "./checker.js";

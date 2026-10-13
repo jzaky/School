@@ -104,7 +104,9 @@ describe("frameworks", () => {
   it("seeds the shared catalog idempotently and exposes it to tenants read-only", async () => {
     const first = await seedSharedFrameworks();
     const again = await seedSharedFrameworks();
-    expect(first.frameworks.map((f) => [f.key, f.controls])).toEqual([["iso-42001", 65], ["iso-27001-2022", 93], ["nist-ai-rmf-1.0", 72]]);
+    expect(first.frameworks.slice(0, 3).map((f) => [f.key, f.controls])).toEqual([["iso-42001", 65], ["iso-27001-2022", 93], ["nist-ai-rmf-1.0", 72]]);
+    expect(first.frameworks).toHaveLength(13);
+    expect(first.frameworks.map((f) => f.key)).toContain("eu-ai-act");
     expect(again.frameworks.map((f) => f.id)).toEqual(first.frameworks.map((f) => f.id));
     const list = await withTenant(t.orgId, (db) => listFrameworks(db, viewer.ctx));
     const iso = list.find((f) => f.key === "iso-42001")!;

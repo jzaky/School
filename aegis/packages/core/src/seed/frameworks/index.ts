@@ -8,12 +8,17 @@ import { ownerPrisma } from "@aegis/db";
 import { ISO_42001 } from "./iso-42001.js";
 import { ISO_27001 } from "./iso-27001.js";
 import { NIST_AI_RMF } from "./nist-ai-rmf.js";
+import { EU_AI_ACT } from "./eu-ai-act.js";
+import { GDPR } from "./gdpr.js";
+import { UAE_PDPL } from "./uae-pdpl.js";
+import { DESC_ISR } from "./desc-isr.js";
+import { ISO_23894, ISO_27017, ISO_27018, ISO_27701, ISO_38507, ISO_42005 } from "./iso-extra.js";
 import type { FrameworkSeed } from "./types.js";
 
-export { ISO_42001, ISO_27001, NIST_AI_RMF };
+export { ISO_42001, ISO_27001, NIST_AI_RMF, EU_AI_ACT, GDPR, UAE_PDPL, DESC_ISR, ISO_23894, ISO_27017, ISO_27018, ISO_27701, ISO_38507, ISO_42005 };
 export type { FrameworkSeed, ControlSeed } from "./types.js";
 
-export const SHARED_FRAMEWORKS: FrameworkSeed[] = [ISO_42001, ISO_27001, NIST_AI_RMF];
+export const SHARED_FRAMEWORKS: FrameworkSeed[] = [ISO_42001, ISO_27001, NIST_AI_RMF, EU_AI_ACT, GDPR, UAE_PDPL, DESC_ISR, ISO_23894, ISO_27701, ISO_27017, ISO_27018, ISO_42005, ISO_38507];
 
 export interface SeedFrameworksResult {
   frameworks: { key: string; id: string; controls: number }[];

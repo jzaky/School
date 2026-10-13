@@ -8,6 +8,7 @@ export const NAV = [
   { href: "/site/pilot", label: "Pilot" },
   { href: "/site/architecture", label: "Architecture" },
   { href: "/site/security", label: "Security" },
+  { href: "/site/proof", label: "Proof" },
   { href: "/site/contact", label: "Contact" },
 ];
 
@@ -49,8 +50,8 @@ export function SiteHeader() {
 }
 
 const FOOTER_GROUPS: { title: string; links: { href: string; label: string }[] }[] = [
-  { title: "Platform", links: [{ href: "/site/products#control", label: "Control" }, { href: "/site/products#assurance", label: "Assurance" }, { href: "/site/products#shield", label: "Shield" }, { href: "/site/products#audit", label: "Audit" }, { href: "/site/tour", label: "Product tour" }] },
-  { title: "Technical", links: [{ href: "/site/architecture", label: "Architecture" }, { href: "/site/architecture#fail-closed", label: "Fail-closed behaviour" }, { href: "/site/security", label: "Security" }, { href: "/site/security#known-gaps", label: "Known gaps" }, { href: "/site/open-source", label: "Open source and licensing" }] },
+  { title: "Platform", links: [{ href: "/site/products#control", label: "Control" }, { href: "/site/products#assurance", label: "Assurance" }, { href: "/site/products#shield", label: "Shield" }, { href: "/site/products#audit", label: "Audit" }, { href: "/site/tour", label: "Product tour" }, { href: "/site/checker", label: "Free governance checker" }] },
+  { title: "Technical", links: [{ href: "/site/architecture", label: "Architecture" }, { href: "/site/architecture#fail-closed", label: "Fail-closed behaviour" }, { href: "/site/security", label: "Security" }, { href: "/site/security#known-gaps", label: "Known gaps" }, { href: "/site/open-source", label: "Open source and licensing" }, { href: "/site/proof", label: "Proof: what is verified" }] },
   { title: "Company", links: [{ href: "/site/pricing", label: "Enterprise licensing" }, { href: "/site/demo", label: "Explore the demo" }, { href: "/site/pilot", label: "Discuss a pilot" }, { href: "/site/contact", label: "Contact" }, { href: "/login", label: "Console sign in" }] },
   { title: "Legal", links: [{ href: "/site/privacy", label: "Privacy" }, { href: "/site/terms", label: "Terms" }] },
 ];

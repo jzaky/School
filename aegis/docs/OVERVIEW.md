@@ -34,7 +34,7 @@ AEGIS is one platform with four products that share one database, one identity s
 - Governance dashboard. Live metrics computed from the records, not from a separate counter: decisions by outcome, approval turnaround, agents by state, open alerts, chain status.
 - Risk monitoring. Eleven deterministic rules (for example, repeated denials for one agent, approvals expiring unanswered, credentials near expiry, unusual volume) that raise alerts with a dedupe key so the same condition does not spam.
 - Policy history. Who changed what, when, and which version was live at any moment.
-- Compliance evidence mapping. AEGIS records are mapped to controls in ISO/IEC 42001, ISO/IEC 27001:2022 and NIST AI RMF, so an auditor can be shown the control and the evidence behind it. Governance reports can be exported as JSON with a verification stamp.
+- Compliance evidence mapping. AEGIS records are mapped to controls in ISO/IEC 42001, ISO/IEC 27001:2022, NIST AI RMF and ten further catalogs (EU AI Act, GDPR, UAE PDPL, Dubai DESC ISR, ISO/IEC 23894, 27701, 27017, 27018, 42005, 38507), so an auditor can be shown the control and the evidence behind it. Governance reports can be exported as JSON with a verification stamp.
 
 ### 3. AEGIS Shield: protect data and resist manipulation
 
@@ -46,7 +46,7 @@ AEGIS is one platform with four products that share one database, one identity s
 ### 4. AEGIS Audit: assess the paperwork
 
 - Upload policies and procedures (PDF, DOCX, TXT, Markdown).
-- Assess them against ISO/IEC 42001 (65 controls), ISO/IEC 27001:2022 (93), NIST AI RMF (72 subcategories) or a custom framework. The engine retrieves relevant passages, checks for normative language, and where possible confirms the control automatically from live AEGIS records (for example, "is there an approval workflow" is answered from the approvals table, not from the document).
+- Assess them against ISO/IEC 42001 (65 controls), ISO/IEC 27001:2022 (93), NIST AI RMF (72 subcategories), the EU AI Act (28 articles), GDPR (25), the UAE PDPL (17 principles), Dubai DESC ISR (15 domains), ISO/IEC 23894, 27701, 27017, 27018, 42005 and 38507, or a custom framework. The engine retrieves relevant passages, checks for normative language, and where possible confirms the control automatically from live AEGIS records (for example, "is there an approval workflow" is answered from the approvals table, not from the document).
 - Each control is rated covered, partial, ambiguous or missing with cited excerpts and a confidence figure. Humans validate findings. Gaps become remediation tasks with owners and due dates. Reports export as JSON and PDF with a disclaimer that this is a static document assessment, not certification.
 
 ## Continuous governance (optional mode)
@@ -78,7 +78,7 @@ Screenshots of every screen are in `docs/screens/`.
 | Database models | 50 |
 | Automated tests passing | 186 (120 core, 11 isolation, 6 API, 49 browser) |
 | Console screens | 31 navigation items, all functional |
-| Compliance controls encoded | 230 across three frameworks |
+| Compliance controls encoded | 383 across 13 frameworks |
 | Shield evaluation corpus | 38 cases, 18/18 injections caught, 0/10 benign blocked |
 | Evidence events verified in the demo tenant | about 1,900, chain valid |
 

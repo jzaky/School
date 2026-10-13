@@ -102,10 +102,10 @@ test.describe("owner", () => {
     await nav.locator("[data-nav-more]").click();
   });
 
-  test("agents list shows 8 agents and filters by status", async ({ page }) => {
+  test("agents list shows 9 agents and filters by status", async ({ page }) => {
     await page.goto("/agents");
-    await expect(page.locator("tbody tr")).toHaveCount(8);
-    await expect(page.getByText("1 to 8 of 8")).toBeVisible();
+    await expect(page.locator("tbody tr")).toHaveCount(9);
+    await expect(page.getByText("1 to 9 of 9")).toBeVisible();
     await page.goto("/agents?status=suspended");
     await expect(page.locator("tbody tr")).toHaveCount(1);
     await expect(page.locator("tbody tr").first()).toContainText("IT Helpdesk Agent");
