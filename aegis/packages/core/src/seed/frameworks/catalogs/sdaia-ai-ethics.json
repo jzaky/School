@@ -1,0 +1,17 @@
+{
+  "key": "sdaia-ai-ethics",
+  "name": "SDAIA AI Ethics Principles (Saudi Arabia)",
+  "version": "2023 (principle summary)",
+  "publisher": "Saudi Data and AI Authority (summarised by AEGIS)",
+  "licenseNote": "The AI Ethics Principles are published by the Saudi Data and AI Authority. AEGIS summarises the principles in original wording under its own identifiers and does not reproduce the document's text. Mapping an AEGIS record to a principle here is not a conformance statement.",
+  "description": "The seven AI ethics principles Saudi Arabia expects organizations developing or using AI to apply, with the AEGIS records that evidence each for agents that take actions.",
+  "controls": [
+    { "code": "SDAIA-1", "title": "Fairness", "summary": "AI systems treat people and groups equitably, and bias in data, models and outcomes is sought out, measured and reduced.", "category": "Principles", "keywords": ["fairness", "bias", "equity", "non-discrimination"] },
+    { "code": "SDAIA-2", "title": "Privacy and security", "summary": "Personal data used or produced by AI is protected, processed lawfully and secured against misuse, with what an agent may send outside controlled.", "category": "Principles", "keywords": ["privacy", "security", "personal data", "data protection", "egress"], "automatedEvidenceType": "data_protection" },
+    { "code": "SDAIA-3", "title": "Humanity", "summary": "AI respects human dignity, rights and autonomy, and people keep meaningful control over decisions that affect them.", "category": "Principles", "keywords": ["human dignity", "human control", "rights", "autonomy"], "automatedEvidenceType": "approval_workflow" },
+    { "code": "SDAIA-4", "title": "Social and environmental benefits", "summary": "AI is developed and used for outcomes that benefit society and the environment, and harms are anticipated and avoided.", "category": "Principles", "keywords": ["social benefit", "environment", "harm avoidance", "impact"] },
+    { "code": "SDAIA-5", "title": "Reliability and safety", "summary": "AI systems perform as intended, are tested, limited to what they are authorised to do and can be stopped, so that failures do not cause harm.", "category": "Principles", "keywords": ["reliability", "safety", "testing", "limits", "stop", "kill switch"], "automatedEvidenceType": "agent_inventory" },
+    { "code": "SDAIA-6", "title": "Transparency and explainability", "summary": "People can know when AI is used and obtain an understandable explanation of how a decision affecting them was reached.", "category": "Principles", "keywords": ["transparency", "explainability", "disclosure", "explanation"], "automatedEvidenceType": "evidence_ledger" },
+    { "code": "SDAIA-7", "title": "Accountability and responsibility", "summary": "Named people and organizations are answerable for AI systems and their outcomes, with records that make decisions traceable and reviewable.", "category": "Principles", "keywords": ["accountability", "responsibility", "traceability", "records", "audit"], "automatedEvidenceType": "evidence_ledger" }
+  ]
+}

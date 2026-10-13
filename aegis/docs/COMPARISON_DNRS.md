@@ -79,4 +79,4 @@ DNRS.ai is ahead on: research publications behind the narrative; breadth of doma
 1. Score-band policy template and the replay calibration screen (items 1 and 2). Done 2026-10-13.
 2. Autonomy posture and the decision dossier line (items 3 and 4). Done 2026-10-13: posture column and row, boundary sentence on every approval.
 3. AEGIS Trading with the Alpaca paper connector (item 8). Built 2026-10-13 against a fake Alpaca server; the real paper-account run waits for the owner's paper key.
-4. DESC ISR v3.0 and EU AI Act catalogs, then the free public checker and the Proof page (items 5, 6, 7). Done 2026-10-13, plus GDPR, UAE PDPL and six further ISO/IEC catalogs: 13 catalogs, 383 controls.
+4. DESC ISR v3.0 and EU AI Act catalogs, then the free public checker and the Proof page (items 5, 6, 7). Done 2026-10-13, plus GDPR, UAE PDPL and six further ISO/IEC catalogs: 20 catalogs, 472 controls, with JSON drop-in catalogs so more can be added without code.

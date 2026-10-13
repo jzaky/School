@@ -13,12 +13,47 @@ import { GDPR } from "./gdpr.js";
 import { UAE_PDPL } from "./uae-pdpl.js";
 import { DESC_ISR } from "./desc-isr.js";
 import { ISO_23894, ISO_27017, ISO_27018, ISO_27701, ISO_38507, ISO_42005 } from "./iso-extra.js";
-import type { FrameworkSeed } from "./types.js";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { frameworkSeedSchema, type FrameworkSeed } from "./types.js";
 
 export { ISO_42001, ISO_27001, NIST_AI_RMF, EU_AI_ACT, GDPR, UAE_PDPL, DESC_ISR, ISO_23894, ISO_27017, ISO_27018, ISO_27701, ISO_38507, ISO_42005 };
 export type { FrameworkSeed, ControlSeed } from "./types.js";
 
-export const SHARED_FRAMEWORKS: FrameworkSeed[] = [ISO_42001, ISO_27001, NIST_AI_RMF, EU_AI_ACT, GDPR, UAE_PDPL, DESC_ISR, ISO_23894, ISO_27701, ISO_27017, ISO_27018, ISO_42005, ISO_38507];
+/** Catalogs written in TypeScript. */
+const CODED_FRAMEWORKS: FrameworkSeed[] = [ISO_42001, ISO_27001, NIST_AI_RMF, EU_AI_ACT, GDPR, UAE_PDPL, DESC_ISR, ISO_23894, ISO_27701, ISO_27017, ISO_27018, ISO_42005, ISO_38507];
+
+const CATALOG_DIR = resolve(dirname(fileURLToPath(import.meta.url)), "catalogs");
+
+/**
+ * Drop-in catalogs: every `*.json` file in ./catalogs is a FrameworkSeed (see types.ts and
+ * docs/FRAMEWORKS.md). Files are validated and sorted by name; a duplicate key is an error.
+ * `scripts/new-catalog.mjs` scaffolds a file.
+ */
+export function loadJsonCatalogs(dir = CATALOG_DIR): FrameworkSeed[] {
+  if (!existsSync(dir)) return [];
+  const out: FrameworkSeed[] = [];
+  for (const file of readdirSync(dir).filter((f) => f.endsWith(".json")).sort()) {
+    const raw = JSON.parse(readFileSync(join(dir, file), "utf8")) as unknown;
+    const parsed = frameworkSeedSchema.safeParse(raw);
+    if (!parsed.success) throw new Error(`Catalog ${file} is invalid: ${parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ")}`);
+    out.push(parsed.data);
+  }
+  return out;
+}
+
+export const JSON_FRAMEWORKS: FrameworkSeed[] = loadJsonCatalogs();
+
+export const SHARED_FRAMEWORKS: FrameworkSeed[] = (() => {
+  const all = [...CODED_FRAMEWORKS, ...JSON_FRAMEWORKS];
+  const seen = new Set<string>();
+  for (const f of all) {
+    if (seen.has(f.key)) throw new Error(`Duplicate framework key ${f.key}`);
+    seen.add(f.key);
+  }
+  return all;
+})();
 
 export interface SeedFrameworksResult {
   frameworks: { key: string; id: string; controls: number }[];

@@ -8,7 +8,7 @@
  *   node scripts/proof-check.mjs          check
  *   node scripts/proof-check.mjs --print  print the live figures (to copy into proof.ts)
  */
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -31,8 +31,10 @@ const e2eTests = e2eFiles.reduce((n, f) => n + count(f, /^\s*test\(/gm), 0);
 // Catalog controls: one `c(` call per control in the seed files.
 const catalogDir = join(ROOT, "packages/core/src/seed/frameworks");
 const catalogFiles = files(catalogDir, ".ts").filter((f) => !/\/(index|types)\.ts$/.test(f));
-const controls = catalogFiles.reduce((n, f) => n + count(f, /^\s*c\(/gm), 0);
-const catalogs = catalogFiles.reduce((n, f) => n + count(f, /^export const [A-Z0-9_]+: FrameworkSeed = \{/gm), 0);
+const jsonDir = join(catalogDir, "catalogs");
+const jsonCatalogs = existsSync(jsonDir) ? files(jsonDir, ".json").map((f) => JSON.parse(readFileSync(f, "utf8"))) : [];
+const controls = catalogFiles.reduce((n, f) => n + count(f, /^\s*c\(/gm), 0) + jsonCatalogs.reduce((n, c) => n + (Array.isArray(c.controls) ? c.controls.length : 0), 0);
+const catalogs = catalogFiles.reduce((n, f) => n + count(f, /^export const [A-Z0-9_]+: FrameworkSeed = \{/gm), 0) + jsonCatalogs.length;
 
 const live = { coreTests, dbTests, e2eFiles: e2eFiles.length, e2eTests, catalogs, controls };
 
