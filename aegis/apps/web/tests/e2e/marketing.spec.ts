@@ -37,7 +37,8 @@ test.describe("marketing site", () => {
     const nav = page.getByRole("navigation", { name: "Primary" }).first();
     for (const [label, heading] of expected) {
       await nav.getByRole("link", { name: label, exact: true }).click();
-      await expect(page.getByRole("heading", { level: 1 })).toHaveText(heading);
+      // First visit compiles the page in the dev server; the architecture page carries large diagrams.
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(heading, { timeout: 60_000 });
     }
     await page.getByRole("banner").getByRole("link", { name: "Sign in" }).click();
     await page.waitForURL(/\/login/);
