@@ -201,7 +201,10 @@ export async function startFakeStripe(): Promise<FakeStripe> {
     refunds: () => refunds.slice(),
     paymentIntents: () => [...intents.values()],
     seedPaymentIntent(amount, currency = "aed", id) {
-      const pi: FakePaymentIntent = { id: id ?? `pi_${randomBytes(12).toString("hex")}`, amount, currency: currency.toLowerCase(), charge: `ch_${randomBytes(12).toString("hex")}` };
+      // Letters only: a random hex id occasionally holds 13 to 19 digits in a row that pass the Luhn check, which
+      // Shield (rightly, it is strict) reports as a card number and refuses. That made tests fail about once in
+      // thirty runs. Real Stripe ids are base62 and could do the same; this fixture avoids it on purpose.
+      const pi: FakePaymentIntent = { id: id ?? `pi_${fakeId()}`, amount, currency: currency.toLowerCase(), charge: `ch_${fakeId()}` };
       intents.set(pi.id, pi);
       return pi;
     },
@@ -219,4 +222,9 @@ export async function startFakeStripe(): Promise<FakeStripe> {
       }),
   };
   return fake;
+}
+
+/** 24 random lowercase letters (no digits), for fake object ids. */
+function fakeId(): string {
+  return randomBytes(12).toString("hex").replace(/[0-9]/g, (d) => "ghijklmnop"[Number(d)]!);
 }

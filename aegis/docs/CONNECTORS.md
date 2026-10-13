@@ -234,3 +234,7 @@ response reconciled to the existing order, server error reconciled to failed, li
 store time, connection test. The real paper-account run (`scripts/alpaca-paper-check.mts`) needs a
 paper key from the owner and has not been made.
 
+
+## Known interaction: identifiers that look like card numbers
+
+Shield's card-number detector is deliberately strict. A run of 13 to 19 digits that passes the Luhn check is treated as a card number even inside a longer identifier, because exempting identifier-shaped text would let anyone hide a card number behind a prefix. A real Stripe id (base62) can, rarely, contain such a run, and the request is then refused as carrying cardholder data. This came to light as an intermittent test failure, fixed in the test fixture on 14 October 2026; the product behaviour was left strict on purpose. If it affects a deployment, exempt the specific parameter from the card-number data class for that tool, which is a recorded, reviewable change.
