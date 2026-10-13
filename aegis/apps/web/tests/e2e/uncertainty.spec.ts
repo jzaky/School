@@ -34,7 +34,7 @@ test.describe("uncertainty governance", () => {
     await expect(profile).toContainText(/Calibrated on \d+ outcomes/);
     await expect(profile).toContainText("Expected calibration error");
     await expect(page.getByTestId("uncertainty-tool-form")).toBeVisible();
-    await page.getByLabel("Tool", { exact: true }).click();
+    await page.locator("#unc-tool").click();
     await page.getByRole("option", { name: /\(issue-refund\)/ }).click();
     await expect(page.locator("#unc-required")).toHaveValue("params.orderId");
     await expect(page.locator("#unc-conf")).toHaveValue("0.7");
@@ -43,7 +43,7 @@ test.describe("uncertainty governance", () => {
   test("evidence that contradicts a request sends it to a person, and a reviewer can record the outcome", async ({ page, request }) => {
     const res = await request.post(`${API}/v1/gateway/actions`, {
       headers: { authorization: `Bearer ${refundAgentKey()}` },
-      data: { tool: "issue-refund", action: "execute", resource: "support-tickets", idempotencyKey: `e2e-unc-${randomUUID()}`, params: { orderId: "ORD-E2E-1", customerId: "CUST-1", amount: 240, currency: "AED", reason: "Damaged item" }, context: { confidence: 0.92, evidence: [{ field: "amount", value: 24, source: "orders-db", observedAt: new Date().toISOString() }] }, principal: { type: "customer", ref: "CUST-1" }, justification: "e2e" },
+      data: { tool: "issue-refund", action: "execute", resource: "support-tickets", idempotencyKey: `e2e-unc-${randomUUID()}`, params: { orderId: `ORD-E2E-${randomUUID().slice(0, 8)}`, customerId: "CUST-1", amount: 240, currency: "AED", reason: "Damaged item" }, context: { confidence: 0.92, evidence: [{ field: "amount", value: 24, source: "orders-db", observedAt: new Date().toISOString() }] }, principal: { type: "customer", ref: "CUST-1" }, justification: "e2e" },
     });
     expect(res.status()).toBe(202);
     const body = (await res.json()) as { requestId: string; decision: string };

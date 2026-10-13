@@ -63,11 +63,12 @@ describe("an agent key cannot change its own governance", () => {
     ["change organization autonomy settings", "/v1/autonomy/settings", () => ({ automaticDowngrades: false, onSecurityEvents: false, denialBurst: null, onUnknownOutcome: false })],
     ["grade its own outcomes", "/v1/uncertainty/labels", () => ({ actionRequestId: randomUUID(), correct: true })],
     ["relax a tool's uncertainty requirements", "/v1/uncertainty/tools/:random/policy", () => ({ enabled: false })],
+    ["relax a tool's rationale requirements", "/v1/decisions/tools/:random/reasoning-policy", () => ({ enabled: false })],
   ];
   for (const [what, path, body] of attempts) {
     it(`cannot ${what}`, async () => {
       const url = path.replace(":agent", agentId).replace(":random", randomUUID());
-      const method = path === "/v1/autonomy/settings" || path.endsWith("/policy") ? "PUT" : "POST";
+      const method = path === "/v1/autonomy/settings" || path.endsWith("/policy") || path.endsWith("-policy") ? "PUT" : "POST";
       const res = await app.inject({ method, url, headers: { authorization: `Bearer ${agentKey}` }, payload: body() });
       expect([401, 403]).toContain(res.statusCode);
     });
@@ -92,5 +93,14 @@ describe("outcome labels from customer systems", () => {
     const withScope = await app.inject({ method: "POST", url: "/v1/uncertainty/labels", headers: { authorization: `Bearer ${outcomesKey}` }, payload: { actionRequestId: requestId, correct: false, note: "charged back" } });
     expect(withScope.statusCode).toBe(201);
     expect(withScope.json()).toMatchObject({ source: "system", correct: false });
+  });
+});
+
+describe("the decision inspector over the API", () => {
+  it("is for people: an agent key cannot inspect or export decision records", async () => {
+    const res = await app.inject({ method: "GET", url: `/v1/decisions/${requestId}`, headers: { authorization: `Bearer ${agentKey}` } });
+    expect(res.statusCode).toBe(403);
+    const record = await app.inject({ method: "GET", url: `/v1/decisions/${requestId}/record`, headers: { authorization: `Bearer ${agentKey}` } });
+    expect(record.statusCode).toBe(403);
   });
 });

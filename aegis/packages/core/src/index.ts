@@ -67,3 +67,5 @@ export * from "./autonomy/service.js";
 export * from "./uncertainty/assess.js";
 export * from "./uncertainty/calibration.js";
 export * from "./uncertainty/service.js";
+export * from "./reasoning/assess.js";
+export * from "./reasoning/service.js";

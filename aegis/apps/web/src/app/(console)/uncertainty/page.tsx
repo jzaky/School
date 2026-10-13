@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { withTenant } from "@aegis/db";
-import { MIN_CALIBRATION_SAMPLES, readUncertaintyPolicy, uncertaintyOverview } from "@aegis/core";
+import { MIN_CALIBRATION_SAMPLES, readReasoningPolicy, readUncertaintyPolicy, uncertaintyOverview } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { PageHeader } from "@/components/ui/page-header";
 import { Panel } from "@/components/ui/panel";
@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Note } from "@/components/ui/note";
 import { RecomputeCalibrationButton, ToolRequirementsEditor } from "@/components/control/uncertainty-tools";
 import { BASIS_TEXT } from "@/components/control/uncertainty-panel";
+import { ReasoningRequirementsEditor } from "@/components/control/reasoning-tools";
 import { formatDateTime } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Uncertainty" };
@@ -22,7 +23,7 @@ export default async function UncertaintyPage() {
     c.ctx.orgId,
     async (db) => ({
       overview: await uncertaintyOverview(db, c.ctx, 30),
-      tools: await db.tool.findMany({ where: { orgId: c.ctx.orgId }, select: { id: true, key: true, name: true, uncertaintyPolicy: true }, orderBy: { name: "asc" } }),
+      tools: await db.tool.findMany({ where: { orgId: c.ctx.orgId }, select: { id: true, key: true, name: true, uncertaintyPolicy: true, reasoningPolicy: true }, orderBy: { name: "asc" } }),
     }),
     { readOnly: true },
   );
@@ -114,7 +115,10 @@ export default async function UncertaintyPage() {
           <Panel title="Tool requirements" description="What a request must carry before AEGIS treats its facts as known. Unknown is never treated as safe.">
             <ToolRequirementsEditor canWrite={c.can("agents:write")} tools={tools.map((t) => ({ id: t.id, key: t.key, name: t.name, policy: readUncertaintyPolicy(t.uncertaintyPolicy) }))} />
           </Panel>
-          <Note tone="info">Agents send evidence as context.evidence (field, value, source, observedAt), their confidence as context.confidence between 0 and 1, and anything they could not determine as context.missing.</Note>
+          <Panel title="Rationale requirements" description="Whether an agent must state why it acts, and cite its evidence. AEGIS checks only what the agent states; it has no access to a model's internal reasoning.">
+            <ReasoningRequirementsEditor canWrite={c.can("agents:write")} tools={tools.map((t) => ({ id: t.id, key: t.key, name: t.name, policy: readReasoningPolicy(t.reasoningPolicy) }))} />
+          </Panel>
+          <Note tone="info">Agents send evidence as context.evidence (field, value, source, observedAt), their confidence as context.confidence between 0 and 1, and anything they could not determine as context.missing, and their reasons as context.rationale (summary, steps with citations, assumptions, the policies they rely on).</Note>
         </div>
       </div>
     </div>

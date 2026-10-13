@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant } from "@aegis/db";
-import { labelOutcome, labelSchema, recomputeCalibration, uncertaintyPolicySchema, updateToolUncertaintyPolicy, forbidden } from "@aegis/core";
+import { labelOutcome, labelSchema, reasoningPolicySchema, recomputeCalibration, uncertaintyPolicySchema, updateToolReasoningPolicy, updateToolUncertaintyPolicy, forbidden } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { act } from "./util";
 
@@ -32,5 +32,14 @@ export async function recomputeCalibrationAction() {
     const written = await withTenant(c.ctx.orgId, (db) => recomputeCalibration(db, c.ctx), { lock: "lazy", timeout: 60_000 });
     revalidatePath("/uncertainty");
     return { profiles: written.length };
+  });
+}
+
+export async function updateToolReasoningPolicyAction(toolId: string, input: unknown) {
+  return act(async () => {
+    const c = await getConsoleContext();
+    const data = reasoningPolicySchema.parse(input);
+    await withTenant(c.ctx.orgId, (db) => updateToolReasoningPolicy(db, c.ctx, z.string().uuid().parse(toolId), data));
+    revalidatePath("/uncertainty");
   });
 }

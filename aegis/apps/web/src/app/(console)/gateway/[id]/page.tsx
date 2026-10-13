@@ -7,6 +7,7 @@ import { requirePermission } from "@/server/session";
 import { userNames } from "@/server/queries/users";
 import { keyParams } from "@/server/queries/control";
 import { PageHeader } from "@/components/ui/page-header";
+import { LinkButton } from "@/components/ui/link-button";
 import { StatusBadge, StatusCell } from "@/components/ui/status";
 import { Badge } from "@/components/ui/badge";
 import { DemoBadge } from "@/components/ui/demo-badge";
@@ -93,6 +94,11 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
             </Link>
             {kp.amount !== null ? <span className="ms-2 font-medium text-fg">{formatMoney(kp.amount, kp.currency ?? "AED")}</span> : null}
           </>
+        }
+        actions={
+          <LinkButton href={`/gateway/${req.id}/inspect`} size="sm">
+            Open in Decision Inspector
+          </LinkButton>
         }
       />
       <div className="grid gap-4 xl:grid-cols-3">

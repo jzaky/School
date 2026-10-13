@@ -2,6 +2,7 @@ import { withTenant } from "@aegis/db";
 import { createHash } from "node:crypto";
 import type { OrgContext } from "../lib/context.js";
 import { labelOutcome, recomputeCalibration, updateToolUncertaintyPolicy } from "../uncertainty/service.js";
+import { updateToolReasoningPolicy } from "../reasoning/service.js";
 import type { SeededTenant } from "./demo-tenant.js";
 
 /**
@@ -29,6 +30,7 @@ export async function seedDemoUncertainty(t: SeededTenant): Promise<{ labels: nu
       // Shown in the console; left off so the demo scenarios behave exactly as their policies describe.
       await updateToolUncertaintyPolicy(db, t.users.owner!.ctx, tool.id, { enabled: false, requiredContext: ["params.orderId"], requireEvidenceFor: ["amount"], maxEvidenceAgeMinutes: 60, trustedSources: ["orders-db"], minConfidence: 0.7, onHigh: "require_approval" });
     }
+    if (tool) await updateToolReasoningPolicy(db, t.users.owner!.ctx, tool.id, { enabled: false, requireRationale: true, requireCitations: true, onFailure: "require_approval" });
     await recomputeCalibration(db, t.users.owner!.ctx);
   }, { timeout: 120_000, lock: "lazy" });
   return { labels };

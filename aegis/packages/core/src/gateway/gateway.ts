@@ -20,6 +20,8 @@ import { applyAutonomyLevel, isAutonomyLevel, stricterAutonomy, type AutonomyLev
 import { applyAutomaticDowngrade, checkDenialBurst } from "../autonomy/service.js";
 import { escalateForUncertainty, levelOf, readUncertaintyPolicy, type EscalationOutcome, type UncertaintyAssessment } from "../uncertainty/assess.js";
 import { ambiguityIndicator, assessForRequest } from "../uncertainty/service.js";
+import { assessReasoning, escalateForReasoning, readReasoningPolicy, type ReasoningAssessment, type ReasoningOutcome } from "../reasoning/assess.js";
+import { precedentIndicator } from "../reasoning/service.js";
 import { getShieldInspector } from "./shield-hook.js";
 import { getDownstreamSystem, readIntegrationCredential, type DownstreamContext } from "./simulators.js";
 
@@ -196,6 +198,8 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
   let autonomyRecord: { level: number; ceiling: number | null; policyOutcome: string; effect: string; code: string | null } | null = null;
   let uncertainty: UncertaintyAssessment | null = null;
   let uncertaintyEscalated = false;
+  let reasoning: ReasoningAssessment | null = null;
+  let reasoningEscalated = false;
   /** What the policies alone decided, before data protection, uncertainty and autonomy (used by replay). */
   let policyOnlyResult: string | null = null;
 
@@ -278,6 +282,34 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
           evaluation = { ...evaluation, result: "deny", reasons: [...evaluation.reasons, why] };
         }
       }
+      // Reasoning governance (Phase 5): the agent's own stated reasons, if it gave any, are checked against what it
+      // asked for, the evidence it cited and the policies that applied. Observable artifacts only; never model internals.
+      const reasoningPolicy = readReasoningPolicy(tool.reasoningPolicy);
+      const precedent = await precedentIndicator(db, { requestId: request.id, toolKey: input.tool, amount: authzInput.context.amount, policyVersionIds: [...new Set(evaluation.trace.map((t) => t.policyVersionId))], policyResult: policyOnlyResult ?? decisionResult, now });
+      reasoning = assessReasoning({
+        tool: input.tool,
+        action: input.action,
+        params: input.params,
+        supplied: (input.context ?? {}) as Record<string, unknown>,
+        policy: reasoningPolicy,
+        evaluated: policies.map((p) => ({ policyKey: p.policyKey, matched: evaluation!.matchedRules.some((m) => m.policyKey === p.policyKey) })),
+        extra: precedent ? [precedent] : [],
+      });
+      const reasoningEscalation = escalateForReasoning(decisionResult as ReasoningOutcome, reasoning, reasoningPolicy);
+      if (reasoningEscalation.outcome !== decisionResult) {
+        reasoningEscalated = true;
+        const why = reasoningEscalation.reason ?? "The stated reasons require a stricter outcome";
+        if (reasoningEscalation.outcome === "require_approval") {
+          decisionResult = "require_approval";
+          evaluation = { ...evaluation, result: "require_approval", approval: { roles: [], minApprovers: 1, expiresInMinutes: 240, separationOfDuties: true, escalateToRoles: [], instructions: why.slice(0, 500) }, reasons: [...evaluation.reasons, why] };
+        } else if (reasoningEscalation.outcome === "request_more_information") {
+          decisionResult = "request_more_information";
+          evaluation = { ...evaluation, result: "request_more_information", moreInformation: { fields: reasoningEscalation.fields, message: why.slice(0, 500), expiresInMinutes: 60 }, reasons: [...evaluation.reasons, why] };
+        } else {
+          decisionResult = "deny";
+          evaluation = { ...evaluation, result: "deny", reasons: [...evaluation.reasons, why] };
+        }
+      }
       // Managed autonomy (Phase 3): the agent's level is applied after policy and data protection and can only
       // make the outcome stricter. Under a delegation the stricter of the two agents' settings applies.
       const policyOutcome = decisionResult;
@@ -321,6 +353,7 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
         policyResult: policyOnlyResult,
         autonomy: autonomyRecord,
         uncertainty: { ...uncertainty, escalated: uncertaintyEscalated },
+        reasoning: reasoning ? { ...reasoning, escalated: reasoningEscalated } : null,
         inputSummary: { amount: authzInput.context.amount, currency: authzInput.context.currency, destinationDomain: authzInput.context.destinationDomain, resource: authzInput.resource?.key ?? null, requestCount24h: authzInput.context.requestCount24h, deniedCount24h: authzInput.context.deniedCount24h, hour: authzInput.context.hour, priorRequestsSameReference: authzInput.context.priorRequestsSameReference, duplicateReferenceKey: authzInput.context.duplicateReferenceKey },
       };
       if (decisionResult === "deny" && evaluation.securityEventSeverity) {

@@ -201,3 +201,33 @@ Full description: `docs/UNCERTAINTY_GOVERNANCE.md`.
 | Browser | 3 |
 
 **Known limitations:** binning is the only calibration method, labels are binary, and evidence is not re-fetched from source systems.
+
+## Phase 5: reasoning governance and the Decision Inspector (14 October 2026)
+
+**Built:**
+- **Stated reasons.** An optional structured rationale per request (summary, stated action, steps with citations, assumptions, policies relied on), checked against the request, the supplied evidence and the policies that applied.
+- **Integrity failures always go to a person:** a stated action that differs from the request, citations to evidence that was not supplied, and assumptions the request or evidence contradicts.
+- **Tool requirements** for a rationale and citations, with the tool's chosen response.
+- **Precedent heuristic.** Flags similar requests decided differently by the same policy versions; it never changes a decision.
+- **Decision Inspector:**
+  - Stage-by-stage reconstruction.
+  - Counterfactuals from recorded numeric comparisons only.
+  - Recheck against today's policies.
+  - A W3C PROV-structured decision record with a SHA-256 hash, written to the evidence record on export.
+- **No claims about model internals,** in code, API or console.
+
+Full description: `docs/REASONING_GOVERNANCE.md`.
+
+**Database migration:** `20261014140000_reasoning` (`tools.reasoning_policy`).
+
+**API endpoints added:** `/v1/decisions/:id`, `/:id/recheck`, `/:id/record` and `/tools/:id/reasoning-policy`.
+
+**Tests added:**
+
+| Suite | Tests |
+|---|---|
+| Core | 12 |
+| API | 3 |
+| Browser | 2 |
+
+**Known limitations:** checks are structural, not semantic, and counterfactuals cover single comparisons only.

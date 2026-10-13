@@ -395,6 +395,8 @@ model Tool {
   riskLevel        String      @default("medium") @map("risk_level")
   /// Uncertainty requirements for this tool (docs/UNCERTAINTY_GOVERNANCE.md). Empty: only contradictions escalate.
   uncertaintyPolicy Json       @default("{}") @map("uncertainty_policy")
+  /// Rationale requirements for this tool (docs/REASONING_GOVERNANCE.md). Empty: only integrity failures escalate.
+  reasoningPolicy  Json        @default("{}") @map("reasoning_policy")
   enabled          Boolean     @default(true)
   disabledReason   String?     @map("disabled_reason")
   createdAt        DateTime    @default(now()) @map("created_at")
