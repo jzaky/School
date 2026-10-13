@@ -19,6 +19,7 @@ import { Note } from "@/components/ui/note";
 import { SimpleTable, Td, Th, Tr } from "@/components/ui/simple-table";
 import { DecisionPanel, type Explanation } from "@/components/control/decision-trace";
 import { ExecutionControls } from "@/components/control/execution-controls";
+import { HeldRequestPanel } from "@/components/control/held-request";
 import { formatDateTime, formatMoney, timeAgo } from "@/lib/utils";
 import { statusLabel } from "@/lib/status";
 
@@ -178,7 +179,8 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
         ) : null}
 
         <Panel title="Execution" description="A one-time permission slip (grant) is tied to this exact request before anything runs, and the receipt comes back from the other system" className={req.approvals.length ? "" : "xl:col-span-2"}>
-          <div className="mb-3">
+          <div className="mb-3 space-y-3">
+            <HeldRequestPanel requestId={req.id} status={req.status} decision={decision?.result ?? ""} restrictions={((decision?.explanation ?? {}) as { restrictions?: string[] }).restrictions ?? []} moreInformation={((decision?.explanation ?? {}) as { moreInformation?: { fields: string[]; message: string } | null }).moreInformation ?? null} canRelease={c.can("security:write")} />
             <ExecutionControls requestId={req.id} status={req.status} canControl={c.can("agents:control")} canDecide={c.can("approvals:decide")} downstreamKind={req.receipts[0]?.downstreamSystem?.endsWith("-sim") ? "simulated" : req.receipts[0] ? "sandbox" : null} />
           </div>
           {req.grants.length === 0 && req.receipts.length === 0 ? (

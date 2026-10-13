@@ -115,6 +115,27 @@ export const DEMO_POLICIES = [
     document: buildScoreBandPolicyDocument({ tools: ["issue-refund", "refund-payment"], scoreSource: "context", scoreAttribute: "fraudScore", scale: "unit", reviewFrom: 0.4, holdFrom: 0.55, blockFrom: 0.7, missingScore: "deny", approverRoles: ["approver", "governance_manager", "owner"], minApprovers: 1, approvalExpiresMinutes: 240, holdExpiresMinutes: 60, holdEscalateToRoles: ["governance_manager"], separationOfDuties: true }),
     assign: null,
   },
+  {
+    key: "refund-review-guards",
+    name: "Refund review guards",
+    description: "Goodwill refunds are capped at AED 250 and still go through. Refunds taken on a phone call need the support ticket before AEGIS decides. A refund for an account flagged for suspected takeover is held for security review. Illustrative rules.",
+    category: "authorization" as const,
+    document: {
+      version: 1,
+      appliesTo: { tools: ["issue-refund"], actions: [], environments: [] },
+      rules: [
+        { id: "goodwill-cap", description: "Goodwill refunds are capped at AED 250", effect: "restrict", when: { attr: "context.supplied.goodwill", op: "eq", value: true }, restrict: { capNumeric: { amount: 250 }, setParams: {}, removeParams: [], note: "Goodwill refunds are capped at AED 250" }, reason: "Goodwill refund reduced to the AED 250 cap", riskIndicators: ["goodwill"] },
+        { id: "voice-needs-ticket", description: "Phone refunds need the support ticket reference", effect: "request_more_information", when: { all: [{ attr: "context.supplied.channel", op: "eq", value: "voice" }, { attr: "context.supplied.ticketRef", op: "missing" }] }, moreInformation: { fields: ["ticketRef"], message: "Give the support ticket that records the customer's call.", expiresInMinutes: 240 }, reason: "Support ticket reference missing for a phone refund", riskIndicators: [] },
+        { id: "takeover-hold", description: "Accounts flagged for suspected takeover are held for security review", effect: "quarantine", when: { attr: "context.supplied.riskSignal", op: "eq", value: "account_takeover_suspected" }, quarantine: { severity: "high", reviewRoles: [], expiresInMinutes: 24 * 60, note: "The customer account is flagged for suspected takeover" }, reason: "Held: the customer account is flagged for suspected takeover", riskIndicators: ["account_takeover"] },
+      ],
+      tests: [
+        { name: "goodwill refund is narrowed", input: { action: { tool: "issue-refund", name: "execute" }, params: { amount: 400 }, context: { supplied: { goodwill: true } } }, expect: "restrict" },
+        { name: "phone refund without ticket asks for it", input: { action: { tool: "issue-refund", name: "execute" }, params: { amount: 100 }, context: { supplied: { channel: "voice" } } }, expect: "request_more_information" },
+        { name: "takeover flag quarantines", input: { action: { tool: "issue-refund", name: "execute" }, params: { amount: 100 }, context: { supplied: { riskSignal: "account_takeover_suspected" } } }, expect: "quarantine" },
+      ],
+    },
+    assign: { targetType: "agent" as const, agentSlug: "support-refund-agent" },
+  },
 ];
 
 export async function seedDemoPolicies(db: TenantDb, authorCtx: OrgContext, activatorCtx: OrgContext, agentsBySlug: Record<string, string>) {

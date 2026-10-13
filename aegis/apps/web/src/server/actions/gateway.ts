@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant } from "@aegis/db";
-import { executeApprovedRequest, forbidden, pauseGateway, reconcileExecution, resolveExecutionManually, resumeGateway, revokeAgentTool, revokeCredential, setIntegrationStatus, transitionAgent } from "@aegis/core";
+import { auditEnforcementPath, executeApprovedRequest, forbidden, pauseGateway, releaseQuarantine, releaseQuarantineSchema, reconcileExecution, resolveExecutionManually, resumeGateway, revokeAgentTool, revokeCredential, setIntegrationStatus, transitionAgent } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { activityFamily, subjectHref, type ActivityFamily } from "@/server/queries/control";
 import { actorLabel, evidenceLabels } from "@/server/queries/assurance";
@@ -185,5 +185,33 @@ export async function executeApprovedAction(requestId: string) {
     revalidatePath(`/gateway/${id}`);
     revalidatePath("/approvals");
     return { status: out.status, requestStatus: out.requestStatus, reference: out.reference };
+  });
+}
+
+/** Security review of a quarantined request: refuse it, or send it to a person for approval. */
+export async function releaseQuarantineAction(requestId: string, input: { action: "refuse" | "to_approval"; reason: string }) {
+  return act(async () => {
+    const c = await getConsoleContext();
+    if (!c.can("security:write")) throw forbidden("Missing permission security:write");
+    const id = uuid.parse(requestId);
+    const data = releaseQuarantineSchema.parse(input);
+    const out = await withTenant(c.ctx.orgId, (db) => releaseQuarantine(db, c.ctx, id, data));
+    revalidateGateway();
+    revalidatePath(`/gateway/${id}`);
+    revalidatePath("/approvals");
+    return out;
+  });
+}
+
+/** Compares an integration's own records with what AEGIS authorized, looking for actions taken around the gateway. */
+export async function auditEnforcementAction(integrationId: string) {
+  return act(async () => {
+    const c = await getConsoleContext();
+    if (!c.can("integrations:write") && !c.can("security:write")) throw forbidden("Missing permission integrations:write");
+    const id = uuid.parse(integrationId);
+    const out = await auditEnforcementPath((fn) => withTenant(c.ctx.orgId, fn), c.ctx, id);
+    revalidatePath(`/integrations/${id}`);
+    revalidatePath("/security/events");
+    return { observable: out.observable, operations: out.operations, matched: out.matched, outside: out.findings.length, error: out.error };
   });
 }

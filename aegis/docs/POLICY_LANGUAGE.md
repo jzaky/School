@@ -32,7 +32,32 @@ Policies are JSON documents validated by `packages/core/src/policy/schema.ts` an
 The thresholds above are illustrative and customer-configurable. They are not universal governance rules.
 
 ## Combining algorithm
-Every rule of every applicable policy is evaluated (the trace is complete, not short-circuited). Then: any matching `deny` wins; otherwise any matching `require_approval` wins; otherwise a matching `allow` permits; otherwise the result is `deny` (default deny). Policies whose `appliesTo` scope does not match are skipped and listed in the explanation.
+Every rule of every applicable policy is evaluated (the trace is complete, not short-circuited). Then the strictest matching effect decides, in this order:
+
+| Effect | What happens |
+| --- | --- |
+| `deny` | Refused. Nothing executes. |
+| `quarantine` | Held for security review and a security event is raised (critical events open an incident). A reviewer with `security:write` (and one of `quarantine.reviewRoles` when set) refuses it or sends it to a normal human approval. Nothing executes from quarantine. |
+| `require_approval` | A person decides; execution follows only an approval. |
+| `request_more_information` | Sent back to the agent naming `moreInformation.fields`. The agent resubmits with the same idempotency key and AEGIS decides again. The request expires after `expiresInMinutes`. |
+| `restrict` | Allowed after narrowing the parameters with every matching rule's `restrict` block: the smallest `capNumeric` per field, then `setParams`, then `removeParams`. The execution grant binds the narrowed parameters and the agent is told what changed. |
+| `allow` | Executes as requested. |
+
+With no matching rule the result is `deny` (default deny). Policies whose `appliesTo` scope does not match are skipped and listed in the explanation. Restrict paths may not contain `__proto__`, `constructor` or `prototype`.
+
+Example rules:
+
+```json
+{ "id": "goodwill-cap", "effect": "restrict", "when": { "attr": "context.supplied.goodwill", "op": "eq", "value": true },
+  "restrict": { "capNumeric": { "amount": 250 }, "setParams": {}, "removeParams": [], "note": "Goodwill refunds are capped at AED 250" } }
+{ "id": "voice-needs-ticket", "effect": "request_more_information",
+  "when": { "all": [ { "attr": "context.supplied.channel", "op": "eq", "value": "voice" }, { "attr": "context.supplied.ticketRef", "op": "missing" } ] },
+  "moreInformation": { "fields": ["ticketRef"], "message": "Give the support ticket.", "expiresInMinutes": 240 } }
+{ "id": "takeover-hold", "effect": "quarantine", "when": { "attr": "context.supplied.riskSignal", "op": "eq", "value": "account_takeover_suspected" },
+  "quarantine": { "severity": "high", "reviewRoles": [], "expiresInMinutes": 1440, "note": "Account flagged" } }
+```
+
+Under an agent-to-agent delegation the policies of both agents are evaluated together, so a delegated request is never treated more loosely than either agent alone.
 
 ## Conditions
 - `{ "all": [...] }`, `{ "any": [...] }`, `{ "not": ... }`, `{ "always": true|false }`

@@ -1,5 +1,5 @@
 import { withTenant, disconnectAll } from "@aegis/db";
-import { assertApplicationProcess, claimJobs, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
+import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
 import { rawPrisma } from "@aegis/db";
 import { registerModuleHandlers } from "./handlers.js";
 
@@ -49,6 +49,20 @@ registerJobHandler("evidence.checkpoint", async () => {
   for (const o of orgs) await withTenant(o.id, (db) => writeCheckpoint(db, o.id));
 });
 
+/** Looks for actions taken around the gateway on every observable integration. */
+registerJobHandler("enforcement.audit", async () => {
+  const orgs = await rawPrisma().organization.findMany({ select: { id: true } });
+  for (const o of orgs) {
+    try {
+      const results = await auditAllEnforcementPaths((fn) => withTenant(o.id, fn), systemContext(o.id), { windowHours: 2 });
+      const outside = results.reduce((n, r) => n + r.findings.length, 0);
+      if (outside) log.warn({ orgId: o.id, outside }, "actions outside the gateway detected");
+    } catch (e) {
+      log.error({ orgId: o.id, err: e instanceof Error ? e.message : String(e) }, "enforcement audit failed");
+    }
+  }
+});
+
 registerModuleHandlers();
 
 /** Recurring jobs are re-scheduled by key so there is always exactly one pending instance. */
@@ -60,6 +74,7 @@ async function scheduleRecurring() {
   await enqueueJob({ type: "evidence.checkpoint", payload: {}, idempotencyKey: `evidence.checkpoint:${Math.floor(minute / 5)}`, runAt: new Date() });
   await enqueueJob({ type: "monitoring.run", payload: {}, idempotencyKey: `monitoring.run:${minute}`, runAt: new Date() });
   await enqueueJob({ type: "audit.retention", payload: {}, idempotencyKey: `audit.retention:${Math.floor(minute / 1440)}`, runAt: new Date() });
+  await enqueueJob({ type: "enforcement.audit", payload: {}, idempotencyKey: `enforcement.audit:${Math.floor(minute / 60)}`, runAt: new Date() });
 }
 
 let stopping = false;

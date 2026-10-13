@@ -16,7 +16,7 @@ export interface DemoStep {
   ok: boolean;
 }
 export interface DemoRun {
-  scenario: "banking" | "refunds" | "sensitive-data" | "trading";
+  scenario: "banking" | "refunds" | "sensitive-data" | "trading" | "outcomes";
   correlationId: string;
   steps: DemoStep[];
   startedAt: string;
@@ -39,6 +39,9 @@ function agentCtx(a: Actors, slug: string, correlationId: string): OrgContext {
 }
 
 function summarize(r: GatewayResponse): string {
+  if (r.decision === "restrict" && r.status === "executed") return `Executed with limits: ${r.restrictions?.applied.join("; ") ?? "narrowed"} (${r.receipt?.reference ?? "receipt"})`;
+  if (r.status === "quarantined") return "Quarantined for security review";
+  if (r.status === "awaiting_information") return `More information needed: ${r.moreInformation?.fields.join(", ") ?? "details"}`;
   if (r.status === "executed") return `Executed (${r.receipt?.reference ?? "receipt"})`;
   if (r.status === "pending_approval") return `Approval required (${r.matchedRuleIds.join(", ") || "policy"})`;
   if (r.status === "denied") return `Denied: ${r.reasons[0] ?? "policy"}`;
@@ -189,3 +192,26 @@ export async function runTradingDemo(a: Actors): Promise<DemoRun> {
   return { scenario: "trading", correlationId, steps, startedAt, finishedAt: new Date().toISOString() };
 }
 
+
+/** Demo 5: the three outcomes between allow and deny: narrowed, held for more information, quarantined. */
+export async function runOutcomesDemo(a: Actors): Promise<DemoRun> {
+  const startedAt = new Date().toISOString();
+  const correlationId = `demo-outcomes-${Date.now().toString(36)}`;
+  const ctx = agentCtx(a, "support-refund-agent", correlationId);
+  const steps: DemoStep[] = [];
+  const tag = correlationId.slice(-6).toUpperCase();
+  const base = { tool: "issue-refund", action: "execute", resource: "support-tickets", principal: { type: "customer" as const, ref: "CUST-44120" }, executionMode: "gateway" as const };
+
+  const goodwill = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: `ORD-61002-${tag}`, customerId: "CUST-44120", amount: 420, currency: "AED", reason: "Goodwill after a late delivery" }, idempotencyKey: `${correlationId}-goodwill`, justification: "Customer waited nine days for delivery", context: { goodwill: true, channel: "chat" } });
+  steps.push({ title: "AED 420 goodwill refund is reduced to AED 250, then runs", detail: "Rule goodwill-cap narrows the amount; the one-time permission slip covers only the reduced refund", requestId: goodwill.requestId, outcome: summarize(goodwill), ok: goodwill.decision === "restrict" && goodwill.status === "executed" });
+
+  const voiceKey = `${correlationId}-voice`;
+  const voice = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: `ORD-61017-${tag}`, customerId: "CUST-44120", amount: 140, currency: "AED", reason: "Item missing from parcel" }, idempotencyKey: voiceKey, justification: "Customer called the support line", context: { channel: "voice" } });
+  steps.push({ title: "Phone refund without a ticket waits for one", detail: "Rule voice-needs-ticket returns the request to the agent naming the missing field; nothing runs", requestId: voice.requestId, outcome: summarize(voice), ok: voice.status === "awaiting_information" });
+  const resubmitted = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: `ORD-61017-${tag}`, customerId: "CUST-44120", amount: 140, currency: "AED", reason: "Item missing from parcel" }, idempotencyKey: voiceKey, justification: "Customer called the support line", context: { channel: "voice", ticketRef: `SUP-${tag}` } });
+  steps.push({ title: "The agent resubmits with the ticket and the refund runs", detail: "Same idempotency key, now with the ticket reference: AEGIS decides again", requestId: resubmitted.requestId, outcome: summarize(resubmitted), ok: resubmitted.status === "executed" });
+
+  const takeover = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: `ORD-61033-${tag}`, customerId: "CUST-90871", amount: 310, currency: "AED", reason: "Customer requests refund to a new card" }, idempotencyKey: `${correlationId}-takeover`, justification: "Refund to a card added yesterday", context: { channel: "chat", riskSignal: "account_takeover_suspected" } });
+  steps.push({ title: "Refund on an account flagged for suspected takeover is quarantined", detail: "Rule takeover-hold raises a security event; a security reviewer must refuse it or send it to an approver", requestId: takeover.requestId, outcome: summarize(takeover), ok: takeover.status === "quarantined" });
+  return { scenario: "outcomes", correlationId, steps, startedAt, finishedAt: new Date().toISOString() };
+}

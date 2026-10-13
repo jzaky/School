@@ -270,6 +270,13 @@ export const stripeTestConnector: DownstreamSystem = {
    * idempotency key is still fresh, the original POST is replayed with the same key, which Stripe
    * resolves to at most one refund (the original if it exists, otherwise a single new one).
    */
+  async listRecentOperations(ctx, since) {
+    const c = await clientFor(ctx);
+    if ("refused" in c) throw new Error(c.refused);
+    const r = await stripeRequest<StripeList<StripeRefund>>(c.client, "GET", "/v1/refunds", { query: { limit: 100, "created[gte]": Math.floor(since.getTime() / 1000) } });
+    if (r.kind !== "ok") throw new Error(r.kind === "transport" ? r.error : `Stripe ${r.status}: ${r.error.message ?? "list failed"}`);
+    return r.body.data.map((x) => ({ reference: x.id, aegisRequestId: x.metadata?.aegis_request_id ?? null, at: new Date(x.created * 1000), summary: { amountMinor: x.amount, currency: x.currency, status: x.status } }));
+  },
   async reconcile(ctx: DownstreamContext, req: DownstreamRequest): Promise<DownstreamResult> {
     const parsed = refundParamsSchema.safeParse(req.params);
     if (!parsed.success) return failed("invalid refund parameters; nothing could have been sent");

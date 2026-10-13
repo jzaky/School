@@ -9,6 +9,7 @@ import { DemoBadge } from "@/components/ui/demo-badge";
 import { Badge } from "@/components/ui/badge";
 import { StatusBadge, StatusCell } from "@/components/ui/status";
 import { Panel } from "@/components/ui/panel";
+import { EnforcementPanel, type EnforcementSummary } from "@/components/control/enforcement-panel";
 import { KeyValue } from "@/components/ui/key-value";
 import { CodeBlock } from "@/components/ui/code-block";
 import { Note } from "@/components/ui/note";
@@ -180,6 +181,9 @@ export default async function IntegrationDetailPage({ params }: { params: Promis
               </tbody>
             </SimpleTable>
           )}
+        </Panel>
+        <Panel title="Actions outside AEGIS" description="Checks this system's own records against what AEGIS authorized" className="xl:col-span-3">
+          <EnforcementPanel integrationId={i.id} summary={(i.enforcementSummary ?? {}) as EnforcementSummary} lastAuditAt={i.lastEnforcementAuditAt ? i.lastEnforcementAuditAt.toISOString() : null} canRun={canWrite || c.can("security:write")} />
         </Panel>
         <Panel title="Webhook setup" description="How this system sends notifications back to AEGIS (webhooks), signed so they cannot be forged">
           <ol className="list-inside list-decimal space-y-1 text-xs text-fg-muted">

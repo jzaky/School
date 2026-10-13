@@ -63,6 +63,13 @@ jobs:
         run: pnpm --filter @aegis/core test
       - name: API tests
         run: pnpm --filter @aegis/api test
+      - name: SDK adapter tests (TypeScript, fail-closed and framework wrappers)
+        run: pnpm --filter @aegis/sdk test
+      - name: MCP gateway tests (against a real stdio MCP server process)
+        run: pnpm --filter @aegis/mcp-gateway test
+      - name: Python SDK tests (standard library only)
+        working-directory: aegis/packages/sdk-python
+        run: python3 -m unittest discover -s tests -t .
       - name: Dependency vulnerability scan
         run: pnpm audit --audit-level high
         continue-on-error: true

@@ -2,11 +2,11 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant } from "@aegis/db";
-import { forbidden, runBankingDemo, runRefundDemo, runSensitiveDataDemo, runTradingDemo, validation, type DemoRun } from "@aegis/core";
+import { forbidden, runBankingDemo, runOutcomesDemo, runRefundDemo, runSensitiveDataDemo, runTradingDemo, validation, type DemoRun } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { act } from "./util";
 
-const runSchema = z.object({ scenario: z.enum(["banking", "refunds", "sensitive-data", "trading"]), autoApprove: z.boolean().default(false) });
+const runSchema = z.object({ scenario: z.enum(["banking", "refunds", "sensitive-data", "trading", "outcomes"]), autoApprove: z.boolean().default(false) });
 
 export interface DemoRunOutput extends DemoRun {
   approvals: Record<string, string>;
@@ -28,7 +28,7 @@ export async function runDemoAction(input: unknown) {
       return Object.fromEntries(rows.map((r) => [r.slug, r.id]));
     });
     const actors = { orgId: c.ctx.orgId, agentIds, approverCtx: c.ctx, autoApprove: data.autoApprove };
-    const run = data.scenario === "banking" ? await runBankingDemo(actors, { decision: data.autoApprove ? "approve" : "leave" }) : data.scenario === "refunds" ? await runRefundDemo(actors) : data.scenario === "trading" ? await runTradingDemo(actors) : await runSensitiveDataDemo(actors);
+    const run = data.scenario === "banking" ? await runBankingDemo(actors, { decision: data.autoApprove ? "approve" : "leave" }) : data.scenario === "refunds" ? await runRefundDemo(actors) : data.scenario === "trading" ? await runTradingDemo(actors) : data.scenario === "outcomes" ? await runOutcomesDemo(actors) : await runSensitiveDataDemo(actors);
     const requestIds = [...new Set(run.steps.map((s) => s.requestId).filter((x): x is string => !!x))];
     const approvals = await withTenant(c.ctx.orgId, async (db) => {
       const rows = requestIds.length ? await db.approvalRequest.findMany({ where: { actionRequestId: { in: requestIds } }, select: { id: true, actionRequestId: true } }) : [];

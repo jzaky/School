@@ -426,5 +426,18 @@ describe("stripe-test connector: key safety and connection test", () => {
     const v = await run((db) => verifyChain(db, t.orgId));
     expect(v.valid).toBe(true);
   });
+
+  it("the enforcement-path audit matches every Stripe refund to an authorized request, and flags one made directly", async () => {
+    const { auditEnforcementPath } = await import("../src/gateway/enforcement.js");
+    const clean = await auditEnforcementPath(run, t.ownerCtx, integrationId);
+    expect(clean.observable).toBe(true);
+    expect(clean.findings).toEqual([]);
+    expect(clean.matched).toBe(fake.refunds().length);
+    // A refund created with the Stripe key directly, without the gateway, carries no AEGIS request id.
+    const direct = await fetch(`${fake.url}/v1/refunds`, { method: "POST", headers: { authorization: `Bearer ${TEST_KEY}`, "content-type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ payment_intent: fake.refunds()[0]!.payment_intent!, amount: "1" }) });
+    expect(direct.ok).toBe(true);
+    const audited = await auditEnforcementPath(run, t.ownerCtx, integrationId);
+    expect(audited.findings.map((x) => x.kind)).toEqual(["bypass"]);
+  });
 });
 

@@ -10,8 +10,8 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "echo no-tests",
-    "lint": "eslint src examples"
+    "test": "vitest run",
+    "lint": "eslint src examples tests"
   },
   "devDependencies": {
     "typescript": "5.9.3"

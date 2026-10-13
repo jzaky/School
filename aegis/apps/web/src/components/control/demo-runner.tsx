@@ -13,7 +13,7 @@ import { Note } from "@/components/ui/note";
 import { cn } from "@/lib/utils";
 
 export interface Scenario {
-  id: "banking" | "refunds" | "sensitive-data" | "trading";
+  id: "banking" | "refunds" | "sensitive-data" | "trading" | "outcomes";
   title: string;
   agent: string;
   summary: string;
@@ -41,6 +41,13 @@ export const SCENARIOS: Scenario[] = [
     agent: "Portfolio Trading Agent",
     summary: "Six orders decided by the trading-mandate policy and sent to the simulated brokerage. No trading strategy runs here; the agent's orders are given and the mandate decides what may go through.",
     steps: ["USD 2,600 SPY order runs on its own inside market hours (outside, a person decides)", "USD 13,800 AAPL order waits for an approver, who has 30 minutes", "USD 72,000 NVDA order is refused: above the ceiling", "GME is refused: not on the instrument list", "A repeat of an order reference is refused", "After a USD 2,600 day loss, further orders are refused"],
+  },
+  {
+    id: "outcomes",
+    title: "Between allow and deny: limits, missing information, quarantine",
+    agent: "Customer Support Refund Agent",
+    summary: "Three refunds that AEGIS neither simply allows nor simply refuses, decided by the refund-review-guards policy.",
+    steps: ["AED 420 goodwill refund is reduced to the AED 250 cap and then runs", "A phone refund without a support ticket is sent back to the agent; once the agent resubmits with the ticket it runs", "A refund on an account flagged for suspected takeover is held for a security reviewer"],
   },
   {
     id: "sensitive-data",
@@ -91,6 +98,7 @@ export function DemoRunner({ canDecide, userName, enabled = true }: { canDecide:
           return (
             <Panel
               key={s.id}
+              data-scenario={s.id}
               title={s.title}
               description={`${s.agent}. ${s.summary}`}
               actions={

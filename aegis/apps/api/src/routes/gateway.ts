@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { withTenant } from "@aegis/db";
 import { z } from "zod";
-import { actionRequestInputSchema, appendEvidence, authorizeAndExecute, consumeGrant, forbidden, getActionRequest, hashObject, issueGrantForRequest, listActionRequests, recordAgentExecution, releaseQuarantine, releaseQuarantineSchema, requestListFilter, provideApprovalInfo } from "@aegis/core";
+import { actionRequestInputSchema, appendEvidence, auditEnforcementPath, authorizeAndExecute, enforcementCoverage, consumeGrant, forbidden, getActionRequest, hashObject, issueGrantForRequest, listActionRequests, recordAgentExecution, releaseQuarantine, releaseQuarantineSchema, requestListFilter, provideApprovalInfo } from "@aegis/core";
 
 /**
  * The Action Gateway. Agents call POST /v1/gateway/actions before doing anything protected.
@@ -73,6 +73,20 @@ export async function gatewayRoutes(app: FastifyInstance) {
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
     const body = releaseQuarantineSchema.parse(req.body);
     return withTenant(ctx.orgId, (db) => releaseQuarantine(db, ctx, id, body));
+  });
+
+  /** How each agent's tools are enforced, and what the last enforcement-path audit found. */
+  app.get("/enforcement/coverage", async (req) => {
+    const ctx = await req.orgContext();
+    return withTenant(ctx.orgId, (db) => enforcementCoverage(db, ctx));
+  });
+
+  /** Compares an integration's own recent operations with what AEGIS authorized. */
+  app.post("/enforcement/:integrationId/audit", async (req) => {
+    const ctx = await req.orgContext();
+    const { integrationId } = z.object({ integrationId: z.string().uuid() }).parse(req.params);
+    const { windowHours } = z.object({ windowHours: z.number().int().min(1).max(24 * 30).default(24) }).parse(req.body ?? {});
+    return auditEnforcementPath((fn) => withTenant(ctx.orgId, fn), ctx, integrationId, { windowHours });
   });
 
   app.post("/approvals/:id/info", async (req) => {

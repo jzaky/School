@@ -36,6 +36,7 @@ export * from "./gateway/shield-hook.js";
 export * from "./gateway/simulators.js";
 export * from "./gateway/connectors/index.js";
 export * from "./gateway/gateway.js";
+export * from "./gateway/enforcement.js";
 export * from "./approvals/service.js";
 export * from "./integrations/service.js";
 export * from "./demos/scenarios.js";

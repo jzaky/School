@@ -62,6 +62,18 @@ export interface DownstreamSystem {
   testConnection?(ctx: DownstreamContext): Promise<{ ok: boolean; detail: string }>;
   /** Vetoes a credential before it is stored (for example a live payments key). Returns a plain-language reason, or null to accept. */
   validateCredential?(name: string, secret: string): string | null;
+  /**
+   * Lists the system's own recent operations so AEGIS can compare them with what it authorized.
+   * `aegisRequestId` is the action request the operation carries (through its idempotency key or
+   * metadata), or null when it carries none: an operation made around the gateway.
+   */
+  listRecentOperations?(ctx: DownstreamContext, since: Date): Promise<{ reference: string; aegisRequestId: string | null; at: Date; summary: Record<string, unknown> }[]>;
+}
+
+const AEGIS_KEY = /^aegis:([0-9a-f-]{36})$/i;
+/** The request id inside a gateway idempotency key (`aegis:<uuid>`), or null. */
+export function requestIdFromIdempotencyKey(key: unknown): string | null {
+  return typeof key === "string" ? (AEGIS_KEY.exec(key)?.[1] ?? null) : null;
 }
 
 export async function readIntegrationCredential(db: TenantDb, integrationId: string, name = "service-token"): Promise<string> {
@@ -135,6 +147,12 @@ function simulator(key: string, label: string, act: (req: DownstreamRequest, req
       return { outcome: "succeeded", reference: entry.reference, summary: { ...planned.summary, ...(duplicate ? { idempotentReplay: true } : {}) } };
     },
     reconcile: (ctx, req) => lookupLedger(ctx, req),
+    async listRecentOperations(ctx, since) {
+      const { ledger } = await ctx.run((db) => readLedger(db, ctx.integrationId));
+      return ledger
+        .map((e) => ({ reference: String(e.reference), aegisRequestId: requestIdFromIdempotencyKey(e.idempotencyKey), at: new Date(String(e.at)), summary: { type: e.type ?? null } }))
+        .filter((e) => !Number.isNaN(e.at.getTime()) && e.at >= since);
+    },
     async testConnection(ctx) {
       try {
         await ctx.credential();

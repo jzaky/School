@@ -4,7 +4,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { seedDemoTenant, DEMO_PASSWORD, DEMO_USERS, PLATFORM_ADMIN } from "./demo-tenant.js";
 import { seedDemoHistory } from "./demo-history.js";
-import { runBankingDemo, runRefundDemo, runSensitiveDataDemo } from "../demos/scenarios.js";
+import { runBankingDemo, runOutcomesDemo, runRefundDemo, runSensitiveDataDemo } from "../demos/scenarios.js";
 import { runMonitoring, acknowledgeAlert, resolveAlert } from "../monitoring/service.js";
 import { installShield } from "../shield/inspector.js";
 import { seedDemoDataClasses, seedDemoShield } from "./demo-shield.js";
@@ -23,6 +23,7 @@ export async function runSeed() {
   await runBankingDemo(actors, { decision: "leave" });
   await runRefundDemo(actors);
   await runSensitiveDataDemo(actors);
+  await runOutcomesDemo(actors);
   await withTenant(t.orgId, (db) => seedDemoShield(db, t.users.security_analyst!.ctx, t.agents));
   await seedSharedFrameworks();
   const audit = await withTenant(t.orgId, (db) => seedDemoAudit(db, t.users.owner!.ctx, { ownerUserId: t.users.owner!.id, auditorUserId: t.users.auditor!.id }), { timeout: 180_000, lock: "lazy" });

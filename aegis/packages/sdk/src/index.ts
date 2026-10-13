@@ -19,6 +19,8 @@ export interface AuthorizeInput {
   principal?: { type: "user" | "customer" | "system" | "none"; ref?: string; userId?: string };
   context?: Record<string, unknown>;
   executionMode?: "gateway" | "agent";
+  /** Act for another agent under an active delegation. */
+  onBehalfOf?: { agentId: string; delegationId?: string };
 }
 
 export interface Decision {
@@ -106,13 +108,18 @@ export class AegisClient {
     return r.ok ? r.data : null;
   }
 
-  /** Polls until the request leaves the pending state or the deadline passes. */
-  async waitForApproval(requestId: string, opts: { intervalMs?: number; timeoutMs?: number } = {}): Promise<{ status: string; receipt?: Record<string, unknown> | null }> {
+  /**
+   * Polls until the request leaves the pending state or the deadline passes. In gateway mode an approved
+   * request executes at once, so "approved" is still in flight; agent-mode callers pass
+   * `stopAtApproved` because they execute themselves after approval.
+   */
+  async waitForApproval(requestId: string, opts: { intervalMs?: number; timeoutMs?: number; stopAtApproved?: boolean } = {}): Promise<{ status: string; receipt?: Record<string, unknown> | null }> {
     const deadline = Date.now() + (opts.timeoutMs ?? 5 * 60_000);
+    const inFlight = ["pending_approval", "evaluating", "executing", "quarantined", ...(opts.stopAtApproved ? [] : ["approved"])];
     while (Date.now() < deadline) {
       const r = await this.getRequest(requestId);
       const status = (r?.status as string | undefined) ?? "unknown";
-      if (!["pending_approval", "approved", "evaluating", "executing", "quarantined"].includes(status)) {
+      if (!inFlight.includes(status)) {
         const receipts = (r?.receipts as Record<string, unknown>[] | undefined) ?? [];
         return { status, receipt: receipts[0] ?? null };
       }
@@ -158,3 +165,6 @@ export async function verifyGrantDownstream(opts: { baseUrl: string; integration
     return { ok: false, reason: e instanceof Error ? e.message : "network error" };
   }
 }
+
+export * from "./guard.js";
+export * from "./adapters.js";
