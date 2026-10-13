@@ -66,7 +66,7 @@ Nothing here invents a document that does not exist.
 | Pilot opportunities and letters of intent | Missing | None exist |
 | Pricing assumptions | Partial | Hypotheses only. Pricing page with tiers and no prices. |
 | Revenue model | Available | Per-deployment licence by agent count, plus pilots and services |
-| Competition | Partial | `docs/COMPARISON_DNRS.md`, plus section 2 of the go-to-market document. Needs fuller research. |
+| Competition | Partial | Section 2 of the go-to-market document. Needs fuller research. `docs/COMPARISON_DNRS.md` is history only and is not used as a reference (`docs/PROVENANCE.md`). |
 | Customer contracts | Missing | Counsel in Q1 |
 
 ## Financial

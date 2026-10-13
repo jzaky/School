@@ -27,7 +27,7 @@ The directive's status line uses an em dash. The repository forbids em dashes (`
 ## Existing documents these build on
 - `docs/AEGIS_FULL_PLATFORM_AUDIT.md`: technical audit and security findings.
 - `docs/IMPLEMENTATION_REPORT.md`: implemented versus simulated.
-- `docs/COMPARISON_DNRS.md`: competitor comparison from public pages.
+- `docs/PROVENANCE.md`: development provenance record, independent foundations and work flagged for review.
 - `docs/DEMO_TO_PRODUCTION.md`: path from demo to pilot.
 - `docs/THIRD_PARTY.md`: open source inventory.
 - `apps/web/src/content/proof.ts`: approved public claims.
@@ -43,6 +43,16 @@ The directive's status line uses an em dash. The repository forbids em dashes (`
    - Defer the finance agent.
 5. **Legal first.** The DNRS NDA, IP assignment and repository ownership are settled before closing and before more work on autonomy-related phases.
 6. **Budget gaps.** Trademark, insurance and customer hosting are missing or underfunded.
+
+## Founder decisions recorded
+
+**2026-10-13:**
+- The complete technical roadmap continues, including Phases 3 to 5. It is not held for the NDA review.
+- DNRS is not used as a technical, product, research or commercial reference for any part of AEGIS.
+- The six known security findings are fixed first.
+- Counsel's review of the existing NDA is still recommended, because independent development does not remove obligations under an agreement already signed.
+
+This supersedes the proposal to hold Phases 3 to 5 in `AEGIS_MASTER_BUSINESS_PLAN.md` section 5. The proposal is kept there as written.
 
 ## Approval
 

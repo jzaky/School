@@ -1,5 +1,7 @@
 # DNRS.ai and AEGIS: what they say, what we have, what to take from it
 
+> **Notice (2026-10-13).** Under the founder's direction of 2026-10-13, DNRS is no longer used as a technical, product, research or commercial reference for AEGIS. This document is kept unchanged below as part of the development history. Work that followed it is flagged for independent review in `docs/PROVENANCE.md`. Do not use it to guide new work.
+
 Read on 2026-10-13 from the public pages of dnrs.ai and its demo sites (smartautonomydemos.com, smartaiden.com). Every DNRS statement below is their public wording or a paraphrase of it. This document compares positioning and public ideas only. The brief forbids reproducing DNRS.ai or SMARt proprietary technology, so nothing here is an implementation specification taken from them; the "take from it" section describes AEGIS features designed on our own terms.
 
 ## 1. What DNRS.ai is, in their words

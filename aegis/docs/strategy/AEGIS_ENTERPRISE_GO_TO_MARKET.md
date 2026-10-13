@@ -47,7 +47,7 @@ Verify the current offerings before using any of this in sales material.
 - **Platform vendors** are adding agent governance inside their own ecosystems: identity providers, CRM platforms, IT service management platforms and cloud AI platforms. Their controls tend to stop at their own platform boundary.
 - **AI security vendors** focus on prompt and model-level protection, such as input and output filtering and model scanning, more than on action authorization with approvals and evidence.
 - **API gateways and policy engines** can enforce rules on calls but do not provide agent identity, approvals, execution grants and an evidence ledger designed for agents.
-- **Consulting-led frameworks**, such as DNRS (see `docs/COMPARISON_DNRS.md`), sell governance as an engagement.
+- **Consulting-led frameworks** sell governance as an engagement rather than as installable software.
 
 **The AEGIS position to test:**
 - It works across agent frameworks and platforms.
