@@ -1,4 +1,5 @@
 import type { ApprovalDecision, Prisma, TenantDb } from "@aegis/db";
+import { labelFromApprovalDecision } from "../uncertainty/service.js";
 import { z } from "zod";
 import { appendEvidence } from "../evidence/ledger.js";
 import type { OrgContext } from "../lib/context.js";
@@ -114,6 +115,8 @@ export async function decideApproval(db: TenantDb, ctx: OrgContext, approvalId: 
     case "reject": {
       await db.approvalRequest.update({ where: { id: a.id }, data: { status: "rejected", decidedAt: now, updatedAt: now } });
       await db.actionRequest.update({ where: { id: a.actionRequestId }, data: { status: "rejected", completedAt: now, updatedAt: now } });
+      // An approver's rejection is an outcome label for calibrating the agent's confidence (when it gave one).
+      await labelFromApprovalDecision(db, ctx, a.actionRequestId, false);
       await notifyUsers(db, ctx, { userIds: agentOwners, type: "approval.rejected", title: `Rejected: ${a.request.agent.name} ${a.request.toolKey}`, body: input.comment, link: `/approvals/${a.id}`, idempotencyKey: `approval.rejected:${a.id}` });
       return { status: "rejected" as const, executed: false };
     }
@@ -152,6 +155,7 @@ export async function decideApproval(db: TenantDb, ctx: OrgContext, approvalId: 
       }
       await db.approvalRequest.update({ where: { id: a.id }, data: { status: "approved", decidedAt: now, updatedAt: now } });
       await db.actionRequest.update({ where: { id: a.actionRequestId }, data: { status: "approved", updatedAt: now } });
+      await labelFromApprovalDecision(db, ctx, a.actionRequestId, true);
       await appendEvidence(db, ctx, { type: "approval.granted", subjectType: "approval_request", subjectId: a.id, correlationId: a.request.correlationId, payload: { actionRequestId: a.actionRequestId, approvals, approverIds: [...a.responses.filter((r) => r.decision === "approve").map((r) => r.userId), ctx.actor.id] } });
       const mode = ((a.request.context as { executionMode?: string }) ?? {}).executionMode ?? "gateway";
       if (mode === "agent") {

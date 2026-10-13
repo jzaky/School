@@ -132,6 +132,8 @@ export async function replayPolicy(db: TenantDb, ctx: OrgContext, input: { polic
     const stored = (r.context ?? {}) as Record<string, unknown>;
     const { executionMode: _mode, ip, ...supplied } = stored;
     const params = (r.params ?? {}) as Record<string, unknown>;
+    const exp = decision.explanation as { policyResult?: string; uncertainty?: { level?: string; missing?: string[]; contradictions?: string[]; confidence?: { value?: number; calibratedAccuracy?: number | null; basis?: string } | null } };
+    const u = exp.uncertainty;
     const authzInput = await buildAuthorizationInput(db, {
       agent,
       tool,
@@ -141,6 +143,8 @@ export async function replayPolicy(db: TenantDb, ctx: OrgContext, input: { polic
       principal: { type: r.principalUserId ? "user" : "service", userId: r.principalUserId, ref: r.principalRef },
       ip: typeof ip === "string" ? ip : null,
       supplied,
+      // The uncertainty recorded with the decision, so a draft that refers to it replays against what was known then.
+      uncertainty: u ? { level: u.level ?? "low", missing: u.missing ?? [], contradictions: u.contradictions ?? [], confidence: u.confidence?.calibratedAccuracy ?? u.confidence?.value ?? null, confidenceBasis: u.confidence?.basis ?? null } : undefined,
       now: r.createdAt,
     });
     if (!policySets.has(r.agentId)) policySets.set(r.agentId, await resolvePoliciesForAgent(db, ctx.orgId, agent));
@@ -148,7 +152,9 @@ export async function replayPolicy(db: TenantDb, ctx: OrgContext, input: { polic
     const draftEntry: PolicyToEvaluate = { policyKey: policyKey ?? "draft", policyVersionId: "draft", policyVersion: 0, document: draft };
     const set = policyKey && active.some((p) => p.policyKey === policyKey) ? active.map((p) => (p.policyKey === policyKey ? draftEntry : p)) : [...active, draftEntry];
     const evaluation = evaluatePolicies(set, authzInput);
-    const was = asEffect(decision.result);
+    // Compare with what the policies alone decided then: data protection, uncertainty and autonomy act after policy
+    // and are not what a draft policy changes. Decisions recorded before this field existed carry only their result.
+    const was = asEffect(exp.policyResult ?? decision.result);
     const is = evaluation.result;
     before[was] += 1;
     after[is] += 1;

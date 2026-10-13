@@ -171,3 +171,33 @@ Full description: `docs/MANAGED_AUTONOMY.md`.
 **External dependency:** `fast-check` 3.23.2 (MIT), a test-only dependency of core that was already in the lockfile.
 
 **Known limitations:** no per-tool levels, and no time-boxed raises. The demo keeps automatic downgrades off.
+
+## Phase 4: uncertainty governance (14 October 2026)
+
+**Built:**
+- **Per-request assessment.** Checks for malformed evidence, contradictions, gaps the agent reports, required fields, evidence backing, freshness, trusted sources, confidence against a minimum, policy ambiguity and recent changes. Each check is labelled as a measured fact, a heuristic, the agent's own figure or a calibrated estimate.
+- **Levels.** Low, elevated, high or unknown, where unknown is never treated as safe.
+- **Monotonic escalation**, property-tested:
+  - Contradictions always go to a person.
+  - Reported gaps ask the agent for the missing fields.
+  - Under a tool's requirements, high or unknown follows the tool's choice.
+- **Policy references.** Policies can refer to `uncertainty.*`.
+- **Calibration of self-reported confidence** against outcome labels from approvers, reviewers and customer systems, using reliability bins, expected calibration error and the Brier score. A figure is called calibrated only with 50 or more outcomes, and the worker recomputes hourly.
+- **Replay fix.** Policy replay now compares a draft with what the policies alone decided, not with the final outcome after data protection, uncertainty and autonomy.
+- **SDK.** The TypeScript SDK types the uncertainty fields.
+
+Full description: `docs/UNCERTAINTY_GOVERNANCE.md`.
+
+**Database migration:** `20261014120000_uncertainty`.
+
+**API endpoints added:** `/v1/uncertainty/overview`, `/agents/:id/calibration`, `/labels`, `/tools/:id/policy` and `/calibration/recompute`. There is a new API key scope, `outcomes:report`, which agents can never hold.
+
+**Tests added:**
+
+| Suite | Tests |
+|---|---|
+| Core | 16 |
+| API | 3 (including outcomes by scope) |
+| Browser | 3 |
+
+**Known limitations:** binning is the only calibration method, labels are binary, and evidence is not re-fetched from source systems.

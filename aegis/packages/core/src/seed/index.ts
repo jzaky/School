@@ -11,6 +11,7 @@ import { seedDemoDataClasses, seedDemoShield } from "./demo-shield.js";
 import { seedDemoAudit, seedSharedFrameworks } from "./demo-audit.js";
 import { seedDemoIdentity } from "./demo-identity.js";
 import { seedDemoAutonomy } from "./demo-autonomy.js";
+import { seedDemoUncertainty } from "./demo-uncertainty.js";
 import { withTenant } from "@aegis/db";
 
 export async function runSeed() {
@@ -28,6 +29,8 @@ export async function runSeed() {
   await runOutcomesDemo(actors);
   await seedDemoIdentity(t);
   await seedDemoAutonomy(t);
+  const uncertainty = await seedDemoUncertainty(t);
+  console.log(`Uncertainty: ${uncertainty.labels} outcome labels`);
   await withTenant(t.orgId, (db) => seedDemoShield(db, t.users.security_analyst!.ctx, t.agents));
   await seedSharedFrameworks();
   const audit = await withTenant(t.orgId, (db) => seedDemoAudit(db, t.users.owner!.ctx, { ownerUserId: t.users.owner!.id, auditorUserId: t.users.auditor!.id }), { timeout: 180_000, lock: "lazy" });

@@ -18,6 +18,8 @@ import { consumeGrant, EXECUTABLE_STATUSES, hashGrantToken, issueGrant, parseGra
 import { applyRestrictions } from "./restrictions.js";
 import { applyAutonomyLevel, isAutonomyLevel, stricterAutonomy, type AutonomyLevel } from "../autonomy/levels.js";
 import { applyAutomaticDowngrade, checkDenialBurst } from "../autonomy/service.js";
+import { escalateForUncertainty, levelOf, readUncertaintyPolicy, type EscalationOutcome, type UncertaintyAssessment } from "../uncertainty/assess.js";
+import { ambiguityIndicator, assessForRequest } from "../uncertainty/service.js";
 import { getShieldInspector } from "./shield-hook.js";
 import { getDownstreamSystem, readIntegrationCredential, type DownstreamContext } from "./simulators.js";
 
@@ -192,6 +194,10 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
   let securitySeverity: Severity | null = null;
   let securityType: string | null = null;
   let autonomyRecord: { level: number; ceiling: number | null; policyOutcome: string; effect: string; code: string | null } | null = null;
+  let uncertainty: UncertaintyAssessment | null = null;
+  let uncertaintyEscalated = false;
+  /** What the policies alone decided, before data protection, uncertainty and autonomy (used by replay). */
+  let policyOnlyResult: string | null = null;
 
   try {
     const destinationDomain = extractDestinationDomain(input.params);
@@ -220,6 +226,9 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
       securitySeverity = (shield.shield.highestSeverity as Severity | null) ?? "high";
       securityType = "data_protection.blocked";
     } else {
+      // Uncertainty (Phase 4): assessed from what the request carries before policies run, so policies can refer to it.
+      uncertainty = await assessForRequest(db, { agent, tool, params: input.params, supplied: (input.context ?? {}) as Record<string, unknown>, now });
+      const uncertaintyPolicy = readUncertaintyPolicy(tool.uncertaintyPolicy);
       authzInput = await buildAuthorizationInput(db, {
         agent,
         tool,
@@ -231,6 +240,7 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
         supplied: input.context,
         shield: shield.shield,
         delegation: delegation ? { id: delegation.row.id, delegatorAgentId: delegation.delegator.id, delegatorSlug: delegation.delegator.slug, toolKeys: delegation.row.toolKeys, constraints: (delegation.row.constraints ?? {}) as Record<string, unknown> } : null,
+        uncertainty: { level: uncertainty.level, missing: uncertainty.missing, contradictions: uncertainty.contradictions, confidence: uncertainty.confidence?.calibratedAccuracy ?? uncertainty.confidence?.value ?? null, confidenceBasis: uncertainty.confidence?.basis ?? null },
         now,
       });
       // Under a delegation both agents' policies apply: the union with deny-overrides is never looser than either alone.
@@ -238,6 +248,7 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
       const policies = delegation ? mergePolicies(ownPolicies, await resolvePoliciesForAgent(db, ctx.orgId, delegation.delegator)) : ownPolicies;
       evaluation = evaluatePolicies(policies, authzInput);
       decisionResult = evaluation.result;
+      policyOnlyResult = evaluation.result;
       if (decisionResult === "restrict") {
         const narrowed = applyRestrictions(effectiveParams, evaluation.restrict);
         effectiveParams = narrowed.params;
@@ -246,6 +257,26 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
       if (shield.requireApproval && (decisionResult === "allow" || decisionResult === "restrict")) {
         decisionResult = "require_approval";
         evaluation = { ...evaluation, result: "require_approval", approval: { roles: [], minApprovers: 1, expiresInMinutes: 240, separationOfDuties: true, escalateToRoles: [], instructions: "Sensitive data detected in parameters" }, reasons: [...evaluation.reasons, "Sensitive data detected; approval required by data protection settings"] };
+      }
+      // Rules that matched with different effects make the outcome rest on precedence (a heuristic signal).
+      const ambiguity = ambiguityIndicator(evaluation.matchedRules.map((m) => ({ effect: m.effect, ruleId: m.ruleId, policyKey: m.policyKey })));
+      if (ambiguity) uncertainty = { ...uncertainty, indicators: [...uncertainty.indicators, ambiguity], level: levelOf([...uncertainty.indicators, ambiguity]) };
+      // Uncertainty can only make an allowed action stricter: contradictions always go to a person, other high or
+      // unknown results follow the tool's requirements when they are on. Unknown is never treated as safe.
+      const escalation = escalateForUncertainty(decisionResult as EscalationOutcome, uncertainty, uncertaintyPolicy);
+      if (escalation.outcome !== decisionResult) {
+        uncertaintyEscalated = true;
+        const why = escalation.reason ?? "Uncertainty requires a stricter outcome";
+        if (escalation.outcome === "require_approval") {
+          decisionResult = "require_approval";
+          evaluation = { ...evaluation, result: "require_approval", approval: { roles: [], minApprovers: 1, expiresInMinutes: 240, separationOfDuties: true, escalateToRoles: [], instructions: why }, reasons: [...evaluation.reasons, why] };
+        } else if (escalation.outcome === "request_more_information") {
+          decisionResult = "request_more_information";
+          evaluation = { ...evaluation, result: "request_more_information", moreInformation: { fields: escalation.fields.slice(0, 20).map((f) => f.slice(0, 80)), message: why.slice(0, 500), expiresInMinutes: 60 }, reasons: [...evaluation.reasons, why] };
+        } else {
+          decisionResult = "deny";
+          evaluation = { ...evaluation, result: "deny", reasons: [...evaluation.reasons, why] };
+        }
       }
       // Managed autonomy (Phase 3): the agent's level is applied after policy and data protection and can only
       // make the outcome stricter. Under a delegation the stricter of the two agents' settings applies.
@@ -287,7 +318,9 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
         moreInformation: evaluation.moreInformation,
         quarantine: evaluation.quarantine,
         delegation: delegation ? { id: delegation.row.id, onBehalfOf: delegation.delegator.slug, policiesFromDelegator: policies.length - ownPolicies.length } : null,
+        policyResult: policyOnlyResult,
         autonomy: autonomyRecord,
+        uncertainty: { ...uncertainty, escalated: uncertaintyEscalated },
         inputSummary: { amount: authzInput.context.amount, currency: authzInput.context.currency, destinationDomain: authzInput.context.destinationDomain, resource: authzInput.resource?.key ?? null, requestCount24h: authzInput.context.requestCount24h, deniedCount24h: authzInput.context.deniedCount24h, hour: authzInput.context.hour, priorRequestsSameReference: authzInput.context.priorRequestsSameReference, duplicateReferenceKey: authzInput.context.duplicateReferenceKey },
       };
       if (decisionResult === "deny" && evaluation.securityEventSeverity) {
@@ -310,7 +343,7 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
   }
 
   const decision = await db.authorizationDecision.create({
-    data: { createdAt: now, orgId: ctx.orgId, actionRequestId: request.id, result: decisionResult, policyVersionIds, matchedRuleIds, explanation: explanation as Prisma.InputJsonValue, inputHash: authzInput ? hashObject(authzInput) : paramsHash, latencyMs: Date.now() - started },
+    data: { createdAt: now, orgId: ctx.orgId, actionRequestId: request.id, result: decisionResult, policyVersionIds, matchedRuleIds, explanation: explanation as Prisma.InputJsonValue, inputHash: authzInput ? hashObject(authzInput) : paramsHash, latencyMs: Date.now() - started, uncertaintyLevel: uncertainty?.level ?? null },
   });
   await appendEvidence(db, ctx, { type: `gateway.decision.${decisionResult}`, subjectType: "action_request", subjectId: request.id, correlationId, payload: { decisionId: decision.id, result: decisionResult, reasons, policyVersionIds, matchedRuleIds, riskIndicators, restrictions: restrictApplied, latencyMs: decision.latencyMs } });
 

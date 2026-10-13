@@ -47,6 +47,12 @@ export interface AuthorizationInput {
   };
   /** Set when the request is made on behalf of another agent under an active delegation. */
   delegation: { id: string; delegatorAgentId: string; delegatorSlug: string; toolKeys: string[]; constraints: Record<string, unknown> } | null;
+  /**
+   * The uncertainty assessment made before policies run (docs/UNCERTAINTY_GOVERNANCE.md). Policies may refer to
+   * uncertainty.level (low, elevated, high, unknown), uncertainty.missing, uncertainty.contradictions,
+   * uncertainty.confidence and uncertainty.confidenceBasis (self_reported or calibrated).
+   */
+  uncertainty: { level: string; missing: string[]; contradictions: string[]; confidence: number | null; confidenceBasis: string | null };
 }
 
 const AMOUNT_KEYS = ["amount", "value", "total", "sum"];
@@ -109,6 +115,7 @@ export async function buildAuthorizationInput(
     supplied?: Record<string, unknown>;
     shield?: AuthorizationInput["shield"];
     delegation?: AuthorizationInput["delegation"];
+    uncertainty?: AuthorizationInput["uncertainty"];
     now?: Date;
   },
 ): Promise<AuthorizationInput> {
@@ -163,5 +170,6 @@ export async function buildAuthorizationInput(
     },
     shield: args.shield ?? { dataClasses: [], highestSeverity: null, injectionSignals: [], blocked: false },
     delegation: args.delegation ?? null,
+    uncertainty: args.uncertainty ?? { level: "low", missing: [], contradictions: [], confidence: null, confidenceBasis: null },
   };
 }

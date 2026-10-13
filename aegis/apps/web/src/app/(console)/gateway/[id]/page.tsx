@@ -20,6 +20,7 @@ import { SimpleTable, Td, Th, Tr } from "@/components/ui/simple-table";
 import { DecisionPanel, type Explanation } from "@/components/control/decision-trace";
 import { ExecutionControls } from "@/components/control/execution-controls";
 import { HeldRequestPanel } from "@/components/control/held-request";
+import { UncertaintyPanel, type UncertaintyView } from "@/components/control/uncertainty-panel";
 import { formatDateTime, formatMoney, timeAgo } from "@/lib/utils";
 import { statusLabel } from "@/lib/status";
 
@@ -48,14 +49,15 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
       const versionIds = [...new Set(req.decisions.flatMap((d) => d.policyVersionIds))];
       const versions = versionIds.length ? await db.policyVersion.findMany({ where: { id: { in: versionIds } }, select: { id: true, version: true, policyId: true, policy: { select: { key: true } } } }) : [];
       const tool = req.toolId ? await db.tool.findUnique({ where: { id: req.toolId }, select: { name: true, integration: { select: { id: true, name: true, key: true } } } }) : null;
-      return { req, versions, tool };
+      const labels = await db.outcomeLabel.findMany({ where: { actionRequestId: id }, orderBy: { createdAt: "desc" }, select: { correct: true, source: true } });
+      return { req, versions, tool, labels };
     } catch (e) {
       if (isAegisError(e) && e.code === "not_found") return null;
       throw e;
     }
   });
   if (!data) notFound();
-  const { req, versions, tool } = data;
+  const { req, versions, tool, labels } = data;
   const names = await userNames([req.principalUserId, ...req.approvals.flatMap((a) => [a.assignedUserId, a.escalatedToUserId, ...a.responses.map((r) => r.userId)]), ...req.evidence.filter((e) => e.actorType === "user").map((e) => e.actorId)]);
   const policyLinks = new Map(versions.map((v) => [v.id, { policyId: v.policyId, key: v.policy.key, version: v.version }]));
   const decision = req.decisions.at(-1) ?? null;
@@ -129,6 +131,12 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
         <Panel title="Decision" description="The same request always gets the same answer, and every rule and comparison that led to it is recorded" className="xl:col-span-3">
           {decision ? <DecisionPanel result={decision.result} explanation={explanation} reasons={reasons} policyVersionIds={decision.policyVersionIds} policyLinks={policyLinks} latencyMs={decision.latencyMs} /> : <Note tone="warning">No decision recorded for this request.</Note>}
         </Panel>
+
+        {(explanation as { uncertainty?: UncertaintyView }).uncertainty ? (
+          <Panel title="Uncertainty" description="What AEGIS could check about the facts behind this request, and what each check rests on" className="xl:col-span-3">
+            <UncertaintyPanel u={(explanation as { uncertainty: UncertaintyView }).uncertainty} requestId={req.id} canLabel={c.can("monitoring:write")} label={labels[0] ?? null} />
+          </Panel>
+        ) : null}
 
         {req.approvals.length ? (
           <Panel title="Approval" className="xl:col-span-2">

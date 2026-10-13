@@ -64,3 +64,6 @@ export * from "./lib/otel.js";
 export * from "./identity/oidc.js";
 export * from "./autonomy/levels.js";
 export * from "./autonomy/service.js";
+export * from "./uncertainty/assess.js";
+export * from "./uncertainty/calibration.js";
+export * from "./uncertainty/service.js";

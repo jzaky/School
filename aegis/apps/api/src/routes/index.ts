@@ -10,6 +10,7 @@ import { auditRoutes } from "./audit.js";
 import { identityRoutes } from "./identity.js";
 import { scimRoutes } from "./scim.js";
 import { autonomyRoutes } from "./autonomy.js";
+import { uncertaintyRoutes } from "./uncertainty.js";
 
 /** Module route registrations added phase by phase. */
 export async function registerModuleRoutes(app: FastifyInstance): Promise<void> {
@@ -24,4 +25,5 @@ export async function registerModuleRoutes(app: FastifyInstance): Promise<void> 
   await app.register(identityRoutes, { prefix: "/v1/identity" });
   await app.register(scimRoutes, { prefix: "/scim/v2" });
   await app.register(autonomyRoutes, { prefix: "/v1/autonomy" });
+  await app.register(uncertaintyRoutes, { prefix: "/v1/uncertainty" });
 }

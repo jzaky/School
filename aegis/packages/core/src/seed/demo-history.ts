@@ -17,6 +17,14 @@ function rng(seed: number) {
   };
 }
 
+/**
+ * The refund agent's self-reported confidence for a seeded request: a fixed function of the day and the
+ * request, so the shared random sequence (and every other seeded value) is unchanged. Synthetic.
+ */
+export function demoConfidence(d: number, i: number): number {
+  return Math.round((0.55 + ((d * 37 + i * 11) % 45) / 100) * 100) / 100;
+}
+
 export async function seedDemoHistory(t: SeededTenant, days = 75) {
   const rand = rng(42);
   const pick = <T>(arr: T[]): T => arr[Math.floor(rand() * arr.length)]!;
@@ -36,7 +44,7 @@ export async function seedDemoHistory(t: SeededTenant, days = 75) {
       if (kind < 0.5) {
         const amount = rand() < 0.75 ? Math.round(20 + rand() * 470) : rand() < 0.85 ? Math.round(500 + rand() * 1900) : Math.round(2600 + rand() * 5000);
         const ctx = makeContext(t.orgId, { type: "agent", id: t.agents["support-refund-agent"]! }, { now, requestId: `hist-rf-${d}-${i}` });
-        const r = await authorizeAndExecute(withTenant, ctx, { tool: "issue-refund", action: "execute", resource: "support-tickets", params: { orderId: `ORD-${50000 + d * 20 + i}`, customerId: `CUST-${10000 + Math.floor(rand() * 900)}`, amount, currency: "AED", reason: pick(["Damaged item", "Late delivery", "Wrong size", "Duplicate charge", "Goodwill"]) }, idempotencyKey: `hist-rf-${d}-${i}`, justification: pick(["Customer provided photos", "Verified in order system", "Team lead agreed", "Standard policy"]), principal: { type: "customer", ref: `CUST-${10000 + i}` }, context: { channel: pick(["chat", "email", "phone"]) }, executionMode: "gateway" });
+        const r = await authorizeAndExecute(withTenant, ctx, { tool: "issue-refund", action: "execute", resource: "support-tickets", params: { orderId: `ORD-${50000 + d * 20 + i}`, customerId: `CUST-${10000 + Math.floor(rand() * 900)}`, amount, currency: "AED", reason: pick(["Damaged item", "Late delivery", "Wrong size", "Duplicate charge", "Goodwill"]) }, idempotencyKey: `hist-rf-${d}-${i}`, justification: pick(["Customer provided photos", "Verified in order system", "Team lead agreed", "Standard policy"]), principal: { type: "customer", ref: `CUST-${10000 + i}` }, context: { channel: pick(["chat", "email", "phone"]), confidence: demoConfidence(d, i), evidence: [{ field: "amount", value: amount, source: "orders-db", observedAt: new Date(now.getTime() - 4 * 60_000).toISOString() }] }, executionMode: "gateway" });
         stats.requests++;
         if (r.status === "pending_approval") {
           stats.approvals++;

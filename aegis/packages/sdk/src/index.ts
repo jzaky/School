@@ -17,7 +17,12 @@ export interface AuthorizeInput {
   correlationId?: string;
   justification?: string;
   principal?: { type: "user" | "customer" | "system" | "none"; ref?: string; userId?: string };
-  context?: Record<string, unknown>;
+  /**
+   * Free-form context. Uncertainty governance reads three optional fields: `evidence` (the facts the agent relied on),
+   * `confidence` (its own figure between 0 and 1, never treated as calibrated without labelled outcomes) and `missing`
+   * (what it could not determine). See docs/UNCERTAINTY_GOVERNANCE.md.
+   */
+  context?: Record<string, unknown> & UncertaintyContext;
   executionMode?: "gateway" | "agent";
   /** Act for another agent under an active delegation. */
   onBehalfOf?: { agentId: string; delegationId?: string };
@@ -168,3 +173,19 @@ export async function verifyGrantDownstream(opts: { baseUrl: string; integration
 
 export * from "./guard.js";
 export * from "./adapters.js";
+
+/** One fact the agent relied on. AEGIS compares it with the request and with other evidence for the same field. */
+export interface EvidenceItem {
+  field: string;
+  value: string | number | boolean | null;
+  source: string;
+  /** ISO 8601 time the source observed the value; needed when the tool limits evidence age. */
+  observedAt?: string;
+  ref?: string;
+}
+
+export interface UncertaintyContext {
+  evidence?: EvidenceItem[];
+  confidence?: number;
+  missing?: string[];
+}

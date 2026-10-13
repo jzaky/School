@@ -1,5 +1,5 @@
 import { withTenant, disconnectAll } from "@aegis/db";
-import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, purgeRateLimitBuckets, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
+import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, purgeRateLimitBuckets, recomputeCalibration, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
 import { rawPrisma } from "@aegis/db";
 import { registerModuleHandlers } from "./handlers.js";
 
@@ -74,6 +74,15 @@ registerJobHandler("enforcement.audit", async () => {
   }
 });
 
+/** Recomputes every agent's calibration from its labelled outcomes (last 90 days). */
+registerJobHandler("uncertainty.calibrate", async () => {
+  const orgs = await rawPrisma().organization.findMany({ select: { id: true } });
+  for (const o of orgs) {
+    const written = await withTenant(o.id, (db) => recomputeCalibration(db, systemContext(o.id)), { lock: "lazy", timeout: 60_000 });
+    if (written.length) log.info({ orgId: o.id, profiles: written.length }, "calibration recomputed");
+  }
+});
+
 /** Deletes shared rate-limit windows that ended more than a day ago. */
 registerJobHandler("rate-limits.purge", async () => {
   const n = await purgeRateLimitBuckets();
@@ -93,6 +102,7 @@ async function scheduleRecurring() {
   await enqueueJob({ type: "audit.retention", payload: {}, idempotencyKey: `audit.retention:${Math.floor(minute / 1440)}`, runAt: new Date() });
   await enqueueJob({ type: "enforcement.audit", payload: {}, idempotencyKey: `enforcement.audit:${Math.floor(minute / 60)}`, runAt: new Date() });
   await enqueueJob({ type: "rate-limits.purge", payload: {}, idempotencyKey: `rate-limits.purge:${Math.floor(minute / 60)}`, runAt: new Date() });
+  await enqueueJob({ type: "uncertainty.calibrate", payload: {}, idempotencyKey: `uncertainty.calibrate:${Math.floor(minute / 60)}`, runAt: new Date() });
 }
 
 let stopping = false;

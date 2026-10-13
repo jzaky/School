@@ -393,6 +393,8 @@ model Tool {
   parameterSchema  Json        @default("{}") @map("parameter_schema")
   destinationRules Json        @default("{}") @map("destination_rules")
   riskLevel        String      @default("medium") @map("risk_level")
+  /// Uncertainty requirements for this tool (docs/UNCERTAINTY_GOVERNANCE.md). Empty: only contradictions escalate.
+  uncertaintyPolicy Json       @default("{}") @map("uncertainty_policy")
   enabled          Boolean     @default(true)
   disabledReason   String?     @map("disabled_reason")
   createdAt        DateTime    @default(now()) @map("created_at")
@@ -646,6 +648,8 @@ model AuthorizationDecision {
   evaluator        String         @default("aegis-deterministic")
   inputHash        String         @map("input_hash")
   latencyMs        Int            @default(0) @map("latency_ms")
+  /// low, elevated, high or unknown; null for decisions made before uncertainty was assessed or refused before policy.
+  uncertaintyLevel String?        @map("uncertainty_level")
   createdAt        DateTime       @default(now()) @map("created_at")
 
   request ActionRequest @relation(fields: [actionRequestId], references: [id], onDelete: Cascade)
@@ -1400,4 +1404,44 @@ model AutonomyChangeRequest {
   @@index([orgId, status])
   @@index([orgId, agentId])
   @@map("autonomy_change_requests")
+}
+
+/// Whether an action turned out to be right, recorded by a person, an approver's decision or a customer system.
+/// The ground truth for calibrating agents' self-reported confidence.
+model OutcomeLabel {
+  id              String   @id @default(uuid(7)) @db.Uuid
+  orgId           String   @map("org_id") @db.Uuid
+  actionRequestId String   @map("action_request_id") @db.Uuid
+  agentId         String   @map("agent_id") @db.Uuid
+  toolKey         String   @map("tool_key")
+  /// The confidence the agent reported with the request, copied here so calibration needs no join.
+  confidence      Float?
+  correct         Boolean
+  /// approver (from an approval decision), reviewer (a person), system (a customer system with an integration key)
+  source          String
+  labelledBy      String?  @map("labelled_by")
+  note            String   @default("")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@unique([actionRequestId, source])
+  @@index([orgId, agentId, createdAt])
+  @@map("outcome_labels")
+}
+
+/// Calibration of one agent's confidence (per tool, or across tools when toolKey is "*"), recomputed by the worker.
+model CalibrationProfile {
+  id         String   @id @default(uuid(7)) @db.Uuid
+  orgId      String   @map("org_id") @db.Uuid
+  agentId    String   @map("agent_id") @db.Uuid
+  toolKey    String   @map("tool_key")
+  sampleSize Int      @map("sample_size")
+  ece        Float?
+  brier      Float?
+  accuracy   Float?
+  bins       Json     @default("[]")
+  windowDays Int      @map("window_days")
+  computedAt DateTime @default(now()) @map("computed_at")
+
+  @@unique([orgId, agentId, toolKey])
+  @@map("calibration_profiles")
 }

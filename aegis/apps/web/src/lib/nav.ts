@@ -34,6 +34,7 @@ import {
   Wrench,
   Radar,
   Gauge,
+  CircleHelp,
 } from "lucide-react";
 
 export interface NavItem {
@@ -88,6 +89,7 @@ export const SECONDARY_NAV: NavGroup[] = [
     items: [
       { label: "Evidence Ledger", href: "/evidence", icon: ScrollText, ready: true, permission: "evidence:read" },
       { label: "Risk Monitoring", href: "/monitoring", icon: BarChart3, ready: true, permission: "monitoring:read" },
+      { label: "Uncertainty", href: "/uncertainty", icon: CircleHelp, ready: true, permission: "monitoring:read" },
       { label: "Governance Reports", href: "/reports", icon: FileText, ready: true, permission: "reports:read" },
       { label: "Policy History", href: "/policy-history", icon: History, ready: true, permission: "policies:read" },
     ],

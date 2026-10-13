@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { FastifyInstance } from "fastify";
 import { randomUUID } from "node:crypto";
 import { withTenant, rawPrisma, ownerPrisma, disconnectAll } from "@aegis/db";
-import { createOrganization, registerUser, listUserMemberships, makeContext, issueApiKey, createAgent, transitionAgent } from "@aegis/core";
+import { createOrganization, createIntegration, registerUser, listUserMemberships, makeContext, issueApiKey, createAgent, transitionAgent } from "@aegis/core";
 import { buildApp } from "../src/app.js";
 
 // An agent's own key can never change what governs it: its autonomy, policies, its or another agent's
@@ -11,6 +11,9 @@ let app: FastifyInstance;
 let orgId = "";
 let agentId = "";
 let agentKey = "";
+let integrationKey = "";
+let outcomesKey = "";
+let requestId = "";
 const stamp = `selfgov-${Date.now().toString(36)}`;
 const domain = `${stamp}.example`;
 
@@ -26,7 +29,13 @@ beforeAll(async () => {
     await transitionAgent(db, ctx, agent.id, "active", "ok");
     agentId = agent.id;
     agentKey = (await issueApiKey(db, ctx, { name: "default", subjectType: "agent", subjectId: agent.id })).key;
+    const { integration } = await createIntegration(db, ctx, { key: "orders", name: "Order system", type: "custom", description: "" });
+    integrationKey = (await issueApiKey(db, ctx, { name: "default", subjectType: "integration", subjectId: integration.id })).key;
+    outcomesKey = (await issueApiKey(db, ctx, { name: "outcomes", subjectType: "integration", subjectId: integration.id, scopes: ["outcomes:report"] })).key;
   });
+  // A decided request to label: an unknown tool is refused by the gateway, which is still a decision.
+  const submitted = await app.inject({ method: "POST", url: "/v1/gateway/actions", headers: { authorization: `Bearer ${agentKey}` }, payload: { tool: "unknown-tool", idempotencyKey: "selfgov-label-1", params: {} } });
+  requestId = submitted.json().requestId;
 });
 
 afterAll(async () => {
@@ -52,11 +61,13 @@ describe("an agent key cannot change its own governance", () => {
     ["create a delegation", "/v1/identity/delegations", () => ({ delegatorAgentId: agentId, delegateAgentId: randomUUID(), toolKeys: [], reason: "x", expiresAt: new Date(Date.now() + 3_600_000).toISOString() })],
     ["emergency-revoke an agent", "/v1/identity/agents/:agent/emergency-revoke", () => ({ reason: "agent revoking" })],
     ["change organization autonomy settings", "/v1/autonomy/settings", () => ({ automaticDowngrades: false, onSecurityEvents: false, denialBurst: null, onUnknownOutcome: false })],
+    ["grade its own outcomes", "/v1/uncertainty/labels", () => ({ actionRequestId: randomUUID(), correct: true })],
+    ["relax a tool's uncertainty requirements", "/v1/uncertainty/tools/:random/policy", () => ({ enabled: false })],
   ];
   for (const [what, path, body] of attempts) {
     it(`cannot ${what}`, async () => {
       const url = path.replace(":agent", agentId).replace(":random", randomUUID());
-      const method = path === "/v1/autonomy/settings" ? "PUT" : "POST";
+      const method = path === "/v1/autonomy/settings" || path.endsWith("/policy") ? "PUT" : "POST";
       const res = await app.inject({ method, url, headers: { authorization: `Bearer ${agentKey}` }, payload: body() });
       expect([401, 403]).toContain(res.statusCode);
     });
@@ -70,5 +81,16 @@ describe("an agent key cannot change its own governance", () => {
     expect(policies).toBe(0);
     const transitions = await withTenant(orgId, (db) => db.autonomyTransition.count({ where: { agentId } }));
     expect(transitions).toBe(0);
+  });
+});
+
+describe("outcome labels from customer systems", () => {
+  it("need the outcomes:report scope, and are recorded as system labels", async () => {
+    expect(requestId).toMatch(/^[0-9a-f-]{36}$/);
+    const without = await app.inject({ method: "POST", url: "/v1/uncertainty/labels", headers: { authorization: `Bearer ${integrationKey}` }, payload: { actionRequestId: requestId, correct: true } });
+    expect(without.statusCode).toBe(403);
+    const withScope = await app.inject({ method: "POST", url: "/v1/uncertainty/labels", headers: { authorization: `Bearer ${outcomesKey}` }, payload: { actionRequestId: requestId, correct: false, note: "charged back" } });
+    expect(withScope.statusCode).toBe(201);
+    expect(withScope.json()).toMatchObject({ source: "system", correct: false });
   });
 });
