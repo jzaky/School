@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant } from "@aegis/db";
-import { changeMemberRole, createRole, createTeam, deleteRole, env, forbidden, inviteUser, roleInputSchema, setContinuousGovernance, setMemberStatus, setTeamMembers, slugSchema, updateOrganization, updateRole } from "@aegis/core";
+import { changeMemberRole, createRole, createTeam, deleteRole, env, forbidden, inviteUser, roleInputSchema, setContinuousGovernance, setMemberStatus, setTeamMembers, slugSchema, ssoConnectionSchema, updateOrganization, updateRole, upsertSsoConnection } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { act } from "./util";
 
@@ -138,5 +138,16 @@ export async function setContinuousGovernanceAction(input: unknown) {
     revalidatePath("/org/settings");
     revalidatePath("/", "layout");
     return data;
+  });
+}
+
+/** Creates or updates the organization's single sign-on connection (OIDC or SAML). Requires org:admin. */
+export async function saveSsoConnectionAction(input: unknown) {
+  return act(async () => {
+    const c = await getConsoleContext();
+    if (!c.can("org:admin")) throw forbidden("Missing permission org:admin");
+    const data = ssoConnectionSchema.parse(input);
+    await withTenant(c.ctx.orgId, (db) => upsertSsoConnection(db, c.ctx, data));
+    revalidatePath("/org/settings");
   });
 }

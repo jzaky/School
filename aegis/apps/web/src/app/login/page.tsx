@@ -32,6 +32,17 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           </p>
         ) : null}
         <LoginForm demo={demo} next={next} />
+        <form action="/sso/start" method="get" className="mt-4 rounded-panel border border-line bg-bg-elev p-4" aria-label="Sign in with single sign-on">
+          <label htmlFor="sso-org" className="mb-1 block text-xs font-medium text-fg-muted">
+            Single sign-on: your organization&apos;s short name
+          </label>
+          <div className="flex gap-2">
+            <input id="sso-org" name="org" required pattern="[a-z0-9][a-z0-9-]{1,62}" placeholder="for example meridian" className="h-9 min-w-0 flex-1 rounded-md border border-line bg-bg px-3 text-sm text-fg outline-none focus:border-accent" />
+            <button type="submit" className="h-9 shrink-0 rounded-md border border-line-strong px-3 text-sm text-fg hover:bg-bg-elev-2">
+              Continue
+            </button>
+          </div>
+        </form>
         <p className="mt-4 text-center text-[11px] text-fg-dim">Tamper-evident evidence. Signals, not guarantees.</p>
       </div>
     </main>

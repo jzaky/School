@@ -20,6 +20,7 @@ export * from "./agents/revocation.js";
 export * from "./agents/least-privilege.js";
 export * from "./agents/discovery.js";
 export * from "./identity/scim.js";
+export * from "./identity/saml.js";
 export * from "./evidence/ledger.js";
 export * from "./jobs/queue.js";
 export * from "./process-guard.js";

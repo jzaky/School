@@ -35,6 +35,10 @@ export function issuerIsSafe(issuer: string): boolean {
 }
 
 export const ssoConnectionSchema = z.object({
+  protocol: z.enum(["oidc", "saml"]).default("oidc"),
+  /** SAML: the identity provider's single sign-on URL and its signing certificate. */
+  samlEntryPoint: z.string().url().refine((v) => issuerIsSafe(v) || process.env.AEGIS_ALLOW_INSECURE_SSO_ISSUER === "true", "The SAML sign-on URL must be a public https address").optional(),
+  samlIdpCert: z.string().min(100).max(20_000).optional(),
   issuer: z.string().url().refine((v) => issuerIsSafe(v) || process.env.AEGIS_ALLOW_INSECURE_SSO_ISSUER === "true", "The issuer must be a public https address"),
   clientId: z.string().min(1).max(200),
   clientSecret: z.string().min(1).max(500).optional(),
@@ -42,13 +46,15 @@ export const ssoConnectionSchema = z.object({
   enabled: z.boolean().default(false),
 });
 
-export async function upsertSsoConnection(db: TenantDb, ctx: OrgContext, input: z.infer<typeof ssoConnectionSchema>) {
+export async function upsertSsoConnection(db: TenantDb, ctx: OrgContext, input: z.input<typeof ssoConnectionSchema>) {
   assertPermission(ctx, "org:admin");
   const existing = await db.ssoConnection.findUnique({ where: { orgId: ctx.orgId } });
-  if (!existing && !input.clientSecret) throw validation("Client secret is required for a new connection");
-  const data = { issuer: input.issuer.replace(/\/$/, ""), clientId: input.clientId, emailDomains: input.emailDomains.map((d) => d.toLowerCase()), enabled: input.enabled, ...(input.clientSecret ? { clientSecretEnc: encryptSecret(input.clientSecret, `sso:${ctx.orgId}`) } : {}) };
-  const row = existing ? await db.ssoConnection.update({ where: { id: existing.id }, data }) : await db.ssoConnection.create({ data: { orgId: ctx.orgId, ...data, clientSecretEnc: data.clientSecretEnc! } });
-  await appendEvidence(db, ctx, { type: "sso.connection_updated", subjectType: "sso_connection", subjectId: row.id, payload: { issuer: row.issuer, enabled: row.enabled, domains: row.emailDomains, secretRotated: !!input.clientSecret } });
+  if (!existing && !input.clientSecret && (input.protocol ?? "oidc") === "oidc") throw validation("Client secret is required for a new OIDC connection");
+  const protocol = input.protocol ?? "oidc";
+  if (protocol === "saml" && (!input.samlEntryPoint || !input.samlIdpCert)) throw validation("SAML needs the identity provider's sign-on URL and signing certificate");
+  const data = { protocol, issuer: input.issuer.replace(/\/$/, ""), clientId: input.clientId, emailDomains: input.emailDomains.map((d) => d.toLowerCase()), enabled: input.enabled, samlEntryPoint: protocol === "saml" ? input.samlEntryPoint! : null, samlIdpCert: protocol === "saml" ? input.samlIdpCert! : null, ...(input.clientSecret ? { clientSecretEnc: encryptSecret(input.clientSecret, `sso:${ctx.orgId}`) } : {}) };
+  const row = existing ? await db.ssoConnection.update({ where: { id: existing.id }, data }) : await db.ssoConnection.create({ data: { orgId: ctx.orgId, ...data, clientSecretEnc: data.clientSecretEnc ?? encryptSecret("", `sso:${ctx.orgId}`) } });
+  await appendEvidence(db, ctx, { type: "sso.connection_updated", subjectType: "sso_connection", subjectId: row.id, payload: { protocol: row.protocol, issuer: row.issuer, enabled: row.enabled, domains: row.emailDomains, secretRotated: !!input.clientSecret } });
   return { ...row, clientSecretEnc: undefined };
 }
 
@@ -95,6 +101,7 @@ export async function beginSsoLogin(orgSlug: string, redirectUri: string): Promi
   if (!org) throw notFound("Organization");
   const conn = await withTenant(org.id, (db) => db.ssoConnection.findUnique({ where: { orgId: org.id } }));
   if (!conn || !conn.enabled) throw forbidden("Single sign-on is not enabled for this organization");
+  if (conn.protocol !== "oidc") throw forbidden("This organization signs in with SAML");
   const disc = await discover(conn.issuer);
   const verifier = randomToken(48);
   const challenge = createHash("sha256").update(verifier).digest("base64url");
@@ -118,6 +125,7 @@ export async function completeSsoLogin(params: { code: string; state: string; ve
   const orgId = st.orgId!;
   const conn = await withTenant(orgId, (db) => db.ssoConnection.findUnique({ where: { orgId } }));
   if (!conn || !conn.enabled) throw forbidden("Single sign-on is not enabled");
+  if (conn.protocol !== "oidc") throw forbidden("This organization signs in with SAML");
   const disc = await discover(conn.issuer);
   const body = new URLSearchParams({ grant_type: "authorization_code", code: params.code, redirect_uri: st.redirectUri!, client_id: conn.clientId, client_secret: decryptSecret(conn.clientSecretEnc, `sso:${orgId}`), code_verifier: params.verifier });
   const tokenRes = await fetch(disc.token_endpoint, { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body, signal: AbortSignal.timeout(8000) });
@@ -130,9 +138,18 @@ export async function completeSsoLogin(params: { code: string; state: string; ve
   const email = typeof payload.email === "string" ? payload.email.toLowerCase() : null;
   // The provider must assert that it verified the address; a missing claim is not a verification.
   if (!email || payload.email_verified !== true) throw unauthorized("Identity provider did not return a verified email");
+  return finishSsoLogin(conn, orgId, { email, name: typeof payload.name === "string" ? payload.name : email, ip: params.ip, userAgent: params.userAgent });
+}
+
+/**
+ * Shared end of every single sign-on login (OIDC and SAML), after the identity provider's answer has
+ * been verified: domain check, no takeover of accounts outside this organization, provisioning as a
+ * viewer, evidence, and a session bound to this organization.
+ */
+export async function finishSsoLogin(conn: { issuer: string; emailDomains: string[]; protocol?: string }, orgId: string, who: { email: string; name: string; ip?: string; userAgent?: string }) {
+  const email = who.email.toLowerCase();
   const domain = email.split("@")[1] ?? "";
   if (!conn.emailDomains.includes(domain)) throw forbidden(`Email domain ${domain} is not allowed for this organization`);
-  const name = typeof payload.name === "string" ? payload.name : email;
   let user = await rawPrisma().user.findUnique({ where: { email } });
   if (user) {
     // An organization's identity provider vouches only for its own members. An account that exists for
@@ -140,7 +157,7 @@ export async function completeSsoLogin(params: { code: string; state: string; ve
     const member = await withTenant(orgId, (db) => db.membership.findUnique({ where: { orgId_userId: { orgId, userId: user!.id } } }));
     if (!member) throw forbidden("An AEGIS account with this email already exists. Ask an administrator of this organization to invite it, then sign in with single sign-on.");
   } else {
-    user = await rawPrisma().user.create({ data: { email, name, passwordHash: null } });
+    user = await rawPrisma().user.create({ data: { email, name: who.name, passwordHash: null } });
   }
   if (user.status !== "active") throw forbidden("Account disabled");
   await withTenant(orgId, async (db) => {
@@ -149,12 +166,25 @@ export async function completeSsoLogin(params: { code: string; state: string; ve
     if (!m) {
       const viewer = await db.role.findUniqueOrThrow({ where: { orgId_key: { orgId, key: "viewer" } } });
       await db.membership.create({ data: { orgId, userId: user!.id, roleId: viewer.id, status: "active" } });
-      await appendEvidence(db, ctx, { type: "sso.user_provisioned", subjectType: "membership", subjectId: user!.id, payload: { domain, role: "viewer" } });
+      await appendEvidence(db, ctx, { type: "sso.user_provisioned", subjectType: "membership", subjectId: user!.id, payload: { domain, role: "viewer", protocol: conn.protocol ?? "oidc" } });
+    } else if (m.status !== "active") {
+      throw forbidden("Your membership in this organization is suspended");
     }
-    await appendEvidence(db, ctx, { type: "sso.login", subjectType: "user", subjectId: user!.id, payload: { issuer: conn.issuer } });
+    await appendEvidence(db, ctx, { type: "sso.login", subjectType: "user", subjectId: user!.id, payload: { issuer: conn.issuer, protocol: conn.protocol ?? "oidc" } });
   });
   await rawPrisma().user.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } });
   // SSO logins satisfy MFA when the provider enforces it; we still honour a user's own TOTP flag.
-  const { token, session } = await createSession(user.id, { ip: params.ip, userAgent: params.userAgent, activeOrgId: orgId, ssoOrgId: orgId, mfaPassed: !user.mfaEnabled });
+  const { token, session } = await createSession(user.id, { ip: who.ip, userAgent: who.userAgent, activeOrgId: orgId, ssoOrgId: orgId, mfaPassed: !user.mfaEnabled });
   return { token, sessionId: session.id, userId: user.id, orgId, mfaRequired: user.mfaEnabled };
+}
+
+export { signState as signSsoState, readState as readSsoState };
+
+/** Which sign-in protocol an organization uses, or null when single sign-on is off. */
+export async function ssoProtocolForOrg(orgSlug: string): Promise<"oidc" | "saml" | null> {
+  const org = await rawPrisma().organization.findUnique({ where: { slug: orgSlug } });
+  if (!org) return null;
+  const conn = await withTenant(org.id, (db) => db.ssoConnection.findUnique({ where: { orgId: org.id }, select: { enabled: true, protocol: true } }));
+  if (!conn?.enabled) return null;
+  return conn.protocol === "saml" ? "saml" : "oidc";
 }

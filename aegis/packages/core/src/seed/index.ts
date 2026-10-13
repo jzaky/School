@@ -9,6 +9,7 @@ import { runMonitoring, acknowledgeAlert, resolveAlert } from "../monitoring/ser
 import { installShield } from "../shield/inspector.js";
 import { seedDemoDataClasses, seedDemoShield } from "./demo-shield.js";
 import { seedDemoAudit, seedSharedFrameworks } from "./demo-audit.js";
+import { seedDemoIdentity } from "./demo-identity.js";
 import { withTenant } from "@aegis/db";
 
 export async function runSeed() {
@@ -24,6 +25,7 @@ export async function runSeed() {
   await runRefundDemo(actors);
   await runSensitiveDataDemo(actors);
   await runOutcomesDemo(actors);
+  await seedDemoIdentity(t);
   await withTenant(t.orgId, (db) => seedDemoShield(db, t.users.security_analyst!.ctx, t.agents));
   await seedSharedFrameworks();
   const audit = await withTenant(t.orgId, (db) => seedDemoAudit(db, t.users.owner!.ctx, { ownerUserId: t.users.owner!.id, auditorUserId: t.users.auditor!.id }), { timeout: 180_000, lock: "lazy" });

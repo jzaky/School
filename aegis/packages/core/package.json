@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@aegis/db": "workspace:*",
+    "@node-saml/node-saml": "5.1.0",
     "@opentelemetry/api": "^1.9.1",
     "@opentelemetry/exporter-metrics-otlp-http": "^0.57.2",
     "@opentelemetry/exporter-trace-otlp-http": "^0.57.2",
@@ -42,6 +43,7 @@
     "@types/pdfkit": "^0.17.6",
     "tsx": "^4.23.15",
     "typescript": "5.9.3",
-    "vitest": "^3.2.7"
+    "vitest": "^3.2.7",
+    "xml-crypto": "6.1.2"
   }
 }

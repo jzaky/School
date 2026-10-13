@@ -171,9 +171,14 @@ model Invitation {
 model SsoConnection {
   id              String   @id @default(uuid(7)) @db.Uuid
   orgId           String   @map("org_id") @db.Uuid
+  /// "oidc" or "saml".
+  protocol        String   @default("oidc")
   issuer          String
   clientId        String   @map("client_id")
   clientSecretEnc String   @map("client_secret_enc")
+  /// SAML: the identity provider's single sign-on URL and signing certificate (PEM or base64 body).
+  samlEntryPoint  String?  @map("saml_entry_point")
+  samlIdpCert     String?  @map("saml_idp_cert")
   emailDomains    String[] @default([]) @map("email_domains")
   enabled         Boolean  @default(false)
   createdAt       DateTime @default(now()) @map("created_at")

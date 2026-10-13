@@ -73,3 +73,38 @@ Known limitations
 
 External dependencies: none added. Credentials needed for live verification: framework API keys,
 each enterprise system's sandbox credentials.
+
+## Phase 2: agent identity and access management (13 October 2026)
+
+Completed
+- The three high identity findings from the audit are closed: SSO cross-organization takeover,
+  administrator self-escalation, and policy activation without review. Also: MFA codes accepted once,
+  five wrong codes close the session, MFA re-enrolment needs MFA off first, the return path survives
+  the MFA step, sign-in errors reach the login page as codes.
+- Registry: purpose, allowed destinations and re-certification date per agent, enforced by the
+  gateway; workload identity shown per agent.
+- Temporary access with second-person approval, automatic end and early revocation.
+- One-step emergency revocation with a report of what was stopped and what was already running.
+- Least-privilege suggestions; agent discovery with security events for unregistered agents.
+- SAML 2.0 next to OIDC, an SSO configuration dialog replacing the dead button, a single sign-in
+  link per organization, SCIM 2.0 provisioning, enforced API key scopes, an organization switch that
+  requires MFA for every member.
+- Console: Access tab on each agent, Agent Discovery page, SSO dialog, login-page SSO entry.
+
+Database migrations: `20261013200000_identity_hardening`, `20261013210000_agent_identity`,
+`20261013220000_saml`.
+
+API endpoints added: `/v1/identity/discovery/agents` (POST report, GET list, POST resolve),
+`/v1/identity/access-requests` (GET, POST, decide, revoke), `/v1/identity/delegations` (GET, POST,
+revoke), `/v1/identity/agents/:id/least-privilege`, `/v1/identity/agents/:id/emergency-revoke`,
+`/scim/v2/ServiceProviderConfig`, `/scim/v2/Users` (GET, POST, GET/PUT/PATCH/DELETE by id),
+`/scim/v2/Groups` (GET, PATCH by role key). Web routes: `/sso/start`, `/sso/saml/[slug]/login`,
+`/sso/saml/[slug]/metadata`, `/sso/saml/acs`.
+
+Tests added: core 22 (identity hardening 9, agent identity 9, SAML 4), API 7, browser 5.
+
+External dependencies: `@node-saml/node-saml` 5.1.0 (MIT; xml-crypto, xmldom, xml2js, xpath, all
+MIT); `xml-crypto` 6.1.2 as a test-only dependency. Logged in `docs/THIRD_PARTY.md`.
+
+Known limitations: see the end of `docs/AGENT_IDENTITY.md`. Live verification with Entra ID, Okta
+and a production SAML provider needs real tenants.

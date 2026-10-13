@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { withTenant } from "@aegis/db";
-import { AGENT_TRANSITIONS, agentPosture, getAgent, isAegisError, listResources, listTools } from "@aegis/core";
+import { AGENT_TRANSITIONS, agentPosture, getAgent, isAegisError, leastPrivilegeRecommendations, listAccessRequests, listDelegations, listResources, listTools } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { userNames } from "@/server/queries/users";
 import { PageHeader } from "@/components/ui/page-header";
@@ -21,6 +21,7 @@ import { ToolsTab } from "@/components/agents/tools-tab";
 import { PermissionsTab } from "@/components/agents/permissions-tab";
 import { VersionsTab } from "@/components/agents/versions-tab";
 import { ApiKeysTab } from "@/components/agents/api-keys-tab";
+import { AccessTab } from "@/components/agents/access-tab";
 import type { AgentCaps } from "@/components/agents/types";
 import { formatDateTime, timeAgo } from "@/lib/utils";
 import { statusLabel, statusTone } from "@/lib/status";
@@ -42,22 +43,28 @@ export default async function AgentDetailPage({ params, searchParams }: { params
   const data = await withTenant(c.ctx.orgId, async (db) => {
     try {
       const agent = await getAgent(db, c.ctx, id);
-      const [tools, resources, team, evidence, posture] = await Promise.all([
+      const [tools, resources, team, evidence, posture, accessRequests, delegations, recommendations, otherAgents] = await Promise.all([
         listTools(db, c.ctx),
         listResources(db, c.ctx),
         agent.teamId ? db.team.findUnique({ where: { id: agent.teamId }, select: { id: true, name: true, key: true } }) : null,
         canEvidence ? db.evidenceEvent.findMany({ where: { orgId: c.ctx.orgId, subjectType: "agent", subjectId: id }, orderBy: { seq: "desc" }, take: 50 }) : [],
         agentPosture(db, c.ctx, agent),
+        listAccessRequests(db, c.ctx, { agentId: id }),
+        listDelegations(db, c.ctx, { agentId: id }),
+        leastPrivilegeRecommendations(db, c.ctx, { agentId: id }),
+        db.agent.findMany({ where: { orgId: c.ctx.orgId, id: { not: id }, status: "active" }, select: { id: true, name: true }, orderBy: { name: "asc" } }),
       ]);
-      return { agent, tools, resources, team, evidence, posture };
+      return { agent, tools, resources, team, evidence, posture, accessRequests, delegations, recommendations, otherAgents };
     } catch (e) {
       if (isAegisError(e) && e.code === "not_found") return null;
       throw e;
     }
   });
   if (!data) notFound();
-  const { agent, tools, resources, team, evidence, posture } = data;
-  const names = await userNames([agent.businessOwnerId, agent.technicalOwnerId, ...agent.versions.map((v) => v.createdBy), ...evidence.filter((e) => e.actorType === "user").map((e) => e.actorId)]);
+  const { agent, tools, resources, team, evidence, posture, accessRequests, delegations, recommendations, otherAgents } = data;
+  const names = await userNames([agent.businessOwnerId, agent.technicalOwnerId, ...agent.versions.map((v) => v.createdBy), ...evidence.filter((e) => e.actorType === "user").map((e) => e.actorId), ...accessRequests.map((r) => r.requestedBy)]);
+  const toolKeyById = new Map(tools.map((t) => [t.id, t.key]));
+  const resourceKeyById = new Map(resources.map((r) => [r.id, r.key]));
   const caps: AgentCaps = { canWrite: c.can("agents:write"), canControl: c.can("agents:control"), editable: agent.status !== "revoked" && agent.status !== "archived", status: agent.status };
   const activeTools = agent.tools.filter((t) => !t.revokedAt).length;
   const activePerms = agent.permissions.filter((p) => !p.revokedAt).length;
@@ -240,6 +247,29 @@ export default async function AgentDetailPage({ params, searchParams }: { params
           { id: "versions", label: "Versions", count: agent.versions.length, content: <VersionsTab agentId={agent.id} caps={caps} versions={agent.versions.map((v) => ({ id: v.id, version: v.version, manifest: JSON.stringify(v.manifest ?? {}), notes: v.notes, deployedAt: v.deployedAt?.toISOString() ?? null, createdAt: v.createdAt.toISOString(), createdBy: names.get(v.createdBy ?? "") ?? "system", current: v.version === agent.currentVersion }))} /> },
           { id: "policies", label: "Policies", count: agent.assignments.length, content: policies },
           { id: "activity", label: "Activity", count: agent.recentRequests.length, content: activity },
+          {
+            id: "access",
+            label: "Access",
+            count: accessRequests.filter((r) => r.status === "pending").length || undefined,
+            content: (
+              <AccessTab
+                agentId={agent.id}
+                workloadId={`spiffe://aegis/${c.org.slug}/agent/${agent.slug}`}
+                canWrite={caps.canWrite}
+                canControl={caps.canControl}
+                editable={caps.editable}
+                currentUserId={c.session.user.id}
+                identity={{ purpose: agent.purpose, allowedDestinations: agent.allowedDestinations, credentialExpiresAt: agent.credentialExpiresAt?.toISOString() ?? null }}
+                tools={tools.map((t) => ({ id: t.id, key: t.key, name: t.name }))}
+                resources={resources.map((r) => ({ id: r.id, key: r.key, name: r.name }))}
+                otherAgents={otherAgents}
+                heldToolKeys={agent.tools.filter((t) => t.enabled && !t.revokedAt).map((t) => t.tool.key)}
+                accessRequests={accessRequests.map((r) => ({ id: r.id, target: (r.toolId ? toolKeyById.get(r.toolId) : r.resourceId ? resourceKeyById.get(r.resourceId) : null) ?? "unknown", actions: r.actions, reason: r.reason, durationHours: r.durationHours, status: r.status, requestedBy: names.get(r.requestedBy) ?? "someone", requestedById: r.requestedBy, expiresAt: r.expiresAt?.toISOString() ?? null, createdAt: r.createdAt.toISOString() }))}
+                delegations={delegations.map((d) => ({ id: d.id, direction: d.delegatorAgentId === agent.id ? "given" : "received", other: d.delegatorAgentId === agent.id ? d.delegate.name : d.delegator.name, toolKeys: d.toolKeys, maxAmount: typeof (d.constraints as { maxAmount?: unknown }).maxAmount === "number" ? ((d.constraints as { maxAmount: number }).maxAmount) : null, expiresAt: d.expiresAt.toISOString(), revokedAt: d.revokedAt?.toISOString() ?? null, reason: d.reason }))}
+                recommendations={recommendations.map((r) => ({ kind: r.kind, detail: r.detail, suggestion: r.suggestion }))}
+              />
+            ),
+          },
           { id: "keys", label: "API keys", count: activeKeys, content: <ApiKeysTab agentId={agent.id} caps={caps} keys={agent.apiKeys.map((k) => ({ id: k.id, name: k.name, prefix: k.prefix, createdAt: k.createdAt.toISOString(), lastUsedAt: k.lastUsedAt?.toISOString() ?? null, expiresAt: k.expiresAt?.toISOString() ?? null, revokedAt: k.revokedAt?.toISOString() ?? null }))} /> },
           { id: "evidence", label: "Evidence", count: canEvidence ? evidence.length : undefined, content: evidenceTab },
         ]}

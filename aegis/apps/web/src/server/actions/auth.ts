@@ -1,7 +1,7 @@
 "use server";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { isAegisError, isProduction, loginSchema, loginWithPassword, markMfaPassed, revokeSession, SESSION_COOKIE, setSessionOrg, verifySessionMfa, listUserMemberships } from "@aegis/core";
+import { isAegisError, isProduction, loginSchema, loginWithPassword, revokeSession, SESSION_COOKIE, setSessionOrg, verifySessionMfa, listUserMemberships } from "@aegis/core";
 import { getSession } from "@/server/session";
 
 export interface ActionState {

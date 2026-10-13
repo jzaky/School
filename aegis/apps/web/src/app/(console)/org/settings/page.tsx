@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { withTenant } from "@aegis/db";
 import { rawPrisma } from "@aegis/db";
-import { DEFAULT_AUTO_RESPONSES, computeOnboarding, listMonitoringRules, readContinuousGovernance, responseOptionsForRule, summarizeOnboarding } from "@aegis/core";
+import { DEFAULT_AUTO_RESPONSES, computeOnboarding, env, listMonitoringRules, readContinuousGovernance, responseOptionsForRule, samlAcsUrl, samlEntityId, summarizeOnboarding } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { PageHeader } from "@/components/ui/page-header";
 import { DemoBadge } from "@/components/ui/demo-badge";
 import { Panel } from "@/components/ui/panel";
 import { KeyValue } from "@/components/ui/key-value";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { OrganizationSettingsForm } from "@/components/org/settings-form";
+import { SsoDialog } from "@/components/org/sso-dialog";
 import { GatewayPauseControl } from "@/components/org/pilot-setup";
 import { ContinuousGovernancePanel } from "@/components/org/continuous-governance";
 import { OnboardingProgress } from "@/components/onboarding/checklist";
@@ -23,7 +23,7 @@ export const dynamic = "force-dynamic";
 export default async function SettingsPage() {
   const c = await requirePermission("org:read");
   const org = await rawPrisma().organization.findUniqueOrThrow({ where: { id: c.org.id } });
-  const { sso, steps, rules } = await withTenant(c.ctx.orgId, async (db) => ({ sso: await db.ssoConnection.findFirst({ where: { orgId: c.ctx.orgId }, select: { enabled: true, issuer: true } }), steps: await computeOnboarding(db, c.ctx), rules: await listMonitoringRules(db, c.ctx) }), { readOnly: true });
+  const { sso, steps, rules } = await withTenant(c.ctx.orgId, async (db) => ({ sso: await db.ssoConnection.findFirst({ where: { orgId: c.ctx.orgId }, select: { enabled: true, issuer: true, protocol: true, clientId: true, emailDomains: true, samlEntryPoint: true, samlIdpCert: true } }), steps: await computeOnboarding(db, c.ctx), rules: await listMonitoringRules(db, c.ctx) }), { readOnly: true });
   const s = c.org.settings;
   const canAdmin = c.can("org:admin");
   const onboarding = summarizeOnboarding(steps, s);
@@ -72,11 +72,9 @@ export default async function SettingsPage() {
             />
           </Panel>
           <Panel title="Single sign-on" description="Sign in through your company identity provider (OIDC or SAML)">
-            <KeyValue items={[{ label: "Status", value: sso?.enabled ? <Badge tone="allow">Enabled</Badge> : <Badge>Not configured</Badge> }, { label: "Issuer", value: sso?.issuer ?? null, mono: true }]} />
+            <KeyValue items={[{ label: "Status", value: sso?.enabled ? <Badge tone="allow">Enabled</Badge> : sso ? <Badge>Off</Badge> : <Badge>Not configured</Badge> }, { label: "Protocol", value: sso ? (sso.protocol === "saml" ? "SAML 2.0" : "OpenID Connect") : null }, { label: "Issuer", value: sso?.issuer ?? null, mono: true }, { label: "Sign-in link", value: `${env().WEB_PUBLIC_URL}/sso/start?org=${org.slug}`, mono: true }]} />
             <div className="mt-3">
-              <Button disabled disabledReason="Single sign-on is not available yet; it arrives in the Enterprise Readiness release">
-                Configure SSO
-              </Button>
+              <SsoDialog canAdmin={canAdmin} spEntityId={samlEntityId(org.slug)} acsUrl={samlAcsUrl()} oidcRedirectUri={`${env().WEB_PUBLIC_URL}/sso/callback`} initial={sso ? { protocol: sso.protocol === "saml" ? "saml" : "oidc", issuer: sso.issuer, clientId: sso.clientId, emailDomains: sso.emailDomains, enabled: sso.enabled, samlEntryPoint: sso.samlEntryPoint ?? "", hasSecret: sso.protocol === "oidc", hasCert: !!sso.samlIdpCert } : null} />
             </div>
           </Panel>
         </div>
