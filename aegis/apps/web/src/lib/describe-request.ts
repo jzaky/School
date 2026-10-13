@@ -42,6 +42,7 @@ const TOOL_VERBS: { match: RegExp; verb: string }[] = [
 /** A short noun for the kind of action, used in headings ("Requested refund"). */
 export function actionNoun(toolKey: string): string {
   if (/refund/i.test(toolKey)) return "refund";
+  if (/order|trade/i.test(toolKey)) return "order";
   if (/transfer|payment|payout/i.test(toolKey)) return "transfer";
   if (/export/i.test(toolKey)) return "data export";
   if (/email|send/i.test(toolKey)) return "message";
@@ -53,6 +54,8 @@ export function actionNoun(toolKey: string): string {
  * "Refund AED 1,450.00 for order ORD-55377 to customer CUST-88213".
  */
 export function describeRequest(toolKey: string, action: string, params: unknown, fallbackCurrency = "AED"): string {
+  const order = describeOrder(params);
+  if (order) return order;
   const kp = keyParams(params);
   const verb = TOOL_VERBS.find((t) => t.match.test(toolKey))?.verb ?? humanize(toolKey);
   const parts: string[] = [verb];
@@ -71,6 +74,18 @@ export function describeRequest(toolKey: string, action: string, params: unknown
     return extra.length ? `${verb} (${action}): ${extra.join(", ")}` : `${verb} (${action})`;
   }
   return parts.join(" ");
+}
+
+/** Trading orders: "Buy 60 AAPL at a limit of USD 230.00 (USD 13,800.00)". */
+function describeOrder(params: unknown): string | null {
+  const p = (params && typeof params === "object" ? params : {}) as Record<string, unknown>;
+  if (typeof p.symbol !== "string" || typeof p.side !== "string" || typeof p.qty !== "number") return null;
+  const currency = typeof p.currency === "string" ? p.currency : "USD";
+  const side = p.side === "sell" ? "Sell" : "Buy";
+  const qty = new Intl.NumberFormat("en-US", { maximumFractionDigits: 6 }).format(p.qty);
+  const price = p.type === "limit" && typeof p.limitPrice === "number" ? ` at a limit of ${formatMoney(p.limitPrice, currency)}` : " at market";
+  const value = typeof p.notional === "number" ? ` (${formatMoney(p.notional, currency)})` : "";
+  return `${side} ${qty} ${p.symbol}${price}${value}`;
 }
 
 function humanize(key: string): string {

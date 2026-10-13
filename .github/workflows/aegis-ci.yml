@@ -55,6 +55,8 @@ jobs:
         run: pnpm -r lint
       - name: Project style rule (no em dashes)
         run: ./scripts/check-no-em-dash.sh
+      - name: Proof page figures match the repository
+        run: node scripts/proof-check.mjs
       - name: Tenant isolation tests
         run: pnpm --filter @aegis/db test
       - name: Core tests (authorization, approvals, monitoring, shield, audit)

@@ -111,11 +111,12 @@ test.describe("control as owner", () => {
 
   test("approval detail leads with a summary and keeps technical details collapsed", async ({ page }) => {
     await page.goto("/approvals");
-    const row = page.locator("[data-approval-row]").first();
+    // A money request: trading orders (USD) also appear here and have their own wording.
+    const row = page.locator("[data-approval-row]", { hasText: "AED" }).first();
     await expect(row).toBeVisible();
     await row.getByTestId("approval-open").click();
     await page.waitForURL(/\/approvals\/[0-9a-f-]{36}/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText(/^Requested (transfer|refund|action|data export|message)/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(/^Requested (transfer|refund|order|action|data export|message)/);
     await expect(page.getByTestId("approval-sentence")).toContainText(/AED/);
     await expect(page.getByTestId("approval-why")).toBeVisible();
     await expect(page.getByTestId("decision-panel")).toBeVisible();

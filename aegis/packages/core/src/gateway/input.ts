@@ -114,8 +114,9 @@ export async function buildAuthorizationInput(
   const reference = extractReference(args.params);
   const since30d = new Date(now.getTime() - 30 * 24 * 3600_000);
   const [requestCount24h, deniedCount24h, approvalsPending, priorRequestsSameReference] = await Promise.all([
-    db.actionRequest.count({ where: { agentId: args.agent.id, createdAt: { gte: since } } }),
-    db.actionRequest.count({ where: { agentId: args.agent.id, createdAt: { gte: since }, status: "denied" } }),
+    // Bounded above so a replay as of an earlier time does not count requests that came later.
+    db.actionRequest.count({ where: { agentId: args.agent.id, createdAt: { gte: since, lte: now } } }),
+    db.actionRequest.count({ where: { agentId: args.agent.id, createdAt: { gte: since, lte: now }, status: "denied" } }),
     db.actionRequest.count({ where: { agentId: args.agent.id, status: "pending_approval" } }),
     reference
       ? db.actionRequest.count({ where: { orgId: args.agent.orgId, toolKey: args.tool.key, createdAt: { gte: since30d, lt: now }, status: { in: ["allowed", "pending_approval", "approved", "executing", "executed", "unknown"] }, params: { path: [reference.key], equals: reference.value } } })

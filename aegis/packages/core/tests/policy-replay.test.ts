@@ -63,6 +63,16 @@ describe("replay calibration", () => {
     expect(r.changes.some((c) => c.amount === 100 && c.after === "require_approval" && c.decidingRule === "draft/all-refunds-need-a-person")).toBe(true);
   });
 
+  it("later refusals do not change the replay of earlier requests (24-hour counters are bounded at the request's own time)", async () => {
+    // The seeded refund policy stops the agent after 10 refused attempts in 24 hours. Twelve refusals
+    // after the recorded requests must not make the earlier 100 refund replay as refused.
+    for (let i = 0; i < 12; i++) await f.call({ amount: 9000 });
+    const active = DEMO_POLICIES.find((p) => p.key === "refund-authority")!.document;
+    const r = await withTenant(f.orgId, (db) => replayPolicy(db, f.ownerCtx, { policyId: f.refundPolicyId, document: active, options: { days: 7 } }));
+    expect(r.changed).toBe(0);
+    expect(r.before).toEqual(r.after);
+  });
+
   it("requires policies:read and validates the window", async () => {
     const active = DEMO_POLICIES.find((p) => p.key === "refund-authority")!.document;
     await expect(withTenant(f.orgId, (db) => replayPolicy(db, f.ownerCtx, { document: active, options: { days: 400 } }))).rejects.toThrow();
