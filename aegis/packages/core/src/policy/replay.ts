@@ -88,7 +88,9 @@ export async function replayPolicy(db: TenantDb, ctx: OrgContext, input: { polic
     where: { orgId: ctx.orgId, createdAt: { gte: from, lte: now }, ...(tools.length ? { toolKey: { in: tools } } : {}) },
     orderBy: { createdAt: "desc" },
     take: opts.limit,
-    include: { decisions: { orderBy: { createdAt: "asc" }, take: 1 }, agent: { select: { name: true } } },
+    // The latest decision belongs to the stored parameters and context: a request resubmitted after
+    // request_more_information carries the resubmitted values, not the first ones.
+    include: { decisions: { orderBy: { createdAt: "desc" }, take: 1 }, agent: { select: { name: true } } },
   });
 
   const agents = new Map<string, Awaited<ReturnType<typeof loadAgent>>>();
