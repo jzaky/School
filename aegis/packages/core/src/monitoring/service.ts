@@ -59,6 +59,8 @@ export async function runMonitoring(db: TenantDb, ctx: OrgContext, now = new Dat
   let newAlerts = 0;
   const errors: string[] = [];
   const created: NewAlert[] = [];
+  // Attack Simulation Lab agents exist only to be refused; their traffic never raises monitoring alerts.
+  const labAgents = new Set((await db.agent.findMany({ where: { metadata: { path: ["lab"], equals: true } }, select: { id: true } })).map((a) => a.id));
   for (const rule of rules) {
     const parsed = ruleDefinitionSchema.safeParse(rule.definition);
     if (!parsed.success) {
@@ -66,7 +68,7 @@ export async function runMonitoring(db: TenantDb, ctx: OrgContext, now = new Dat
       continue;
     }
     try {
-      const findings = await evaluateRule(db, ctx.orgId, parsed.data, now);
+      const findings = (await evaluateRule(db, ctx.orgId, parsed.data, now)).filter((f) => !f.agentId || !labAgents.has(f.agentId));
       for (const f of findings) {
         const existing = await db.alert.findUnique({ where: { orgId_dedupeKey: { orgId: ctx.orgId, dedupeKey: f.dedupeKey } } });
         if (existing) continue;
