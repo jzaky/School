@@ -28,7 +28,10 @@ export interface BaselineFailure {
     | "permission_expired"
     | "invalid_parameters"
     | "destination_not_allowed"
-    | "gateway_paused";
+    | "gateway_paused"
+    | "delegation_invalid"
+    | "delegation_not_permitted"
+    | "delegation_limit_exceeded";
   message: string;
   details?: unknown;
 }
@@ -65,9 +68,12 @@ export function baselineChecks(args: {
   params: Record<string, unknown>;
   destinationDomain: string | null;
   gatewayPaused: { paused: boolean; reason?: string };
+  /** The request clock (replays pass the original time). */
+  now?: Date;
 }): { failures: BaselineFailure[]; permittedActions: string[] } {
   const failures: BaselineFailure[] = [];
   const { agent, tool, resource } = args;
+  const now = args.now ?? new Date();
   if (args.gatewayPaused.paused) failures.push({ code: "gateway_paused", message: `Gateway is paused: ${args.gatewayPaused.reason ?? "emergency control"}` });
   if (agent.status !== "active") failures.push({ code: "agent_not_active", message: `Agent is ${agent.status}` });
   if (!tool) {
@@ -87,12 +93,17 @@ export function baselineChecks(args: {
   if (resource) {
     const perm = agent.permissions.find((p) => p.resourceId === resource.id && !p.revokedAt);
     if (!perm) failures.push({ code: "resource_not_permitted", message: `Agent has no permission on resource ${resource.key}` });
-    else if (perm.expiresAt && perm.expiresAt < new Date()) failures.push({ code: "permission_expired", message: `Permission on ${resource.key} expired` });
+    else if (perm.expiresAt && perm.expiresAt < now) failures.push({ code: "permission_expired", message: `Permission on ${resource.key} expired` });
     else {
       permittedActions = perm.actions;
       if (!perm.actions.includes(args.action) && !perm.actions.includes("*")) failures.push({ code: "action_not_permitted", message: `Action ${args.action} is not permitted on ${resource.key} (permitted: ${perm.actions.join(", ") || "none"})` });
     }
-    if (CLASS_ORDER.indexOf(resource.classification) > CLASS_ORDER.indexOf(agent.dataClassificationLimit)) {
+    const resourceClass = CLASS_ORDER.indexOf(resource.classification);
+    const agentLimit = CLASS_ORDER.indexOf(agent.dataClassificationLimit);
+    // An unknown classification on either side is a failure, never a pass: fail closed.
+    if (resourceClass < 0 || agentLimit < 0) {
+      failures.push({ code: "classification_exceeded", message: `Unknown data classification (resource ${resource.classification}, agent limit ${agent.dataClassificationLimit})` });
+    } else if (resourceClass > agentLimit) {
       failures.push({ code: "classification_exceeded", message: `Resource ${resource.key} is ${resource.classification}; agent is limited to ${agent.dataClassificationLimit}` });
     }
     const rules = (tool.destinationRules ?? {}) as { allowedResourceKeys?: string[] };

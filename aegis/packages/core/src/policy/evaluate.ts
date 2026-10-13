@@ -1,6 +1,6 @@
-import type { Comparison, Condition, PolicyDocument, Rule } from "./schema.js";
+import { type EFFECTS, type Comparison, type Condition, type MoreInformationSpec, type PolicyDocument, type QuarantineSpec, type RestrictSpec, type Rule } from "./schema.js";
 
-export type Effect = "allow" | "deny" | "require_approval";
+export type Effect = (typeof EFFECTS)[number];
 
 export interface ComparisonTrace {
   attr: string;
@@ -37,6 +37,12 @@ export interface EvaluationResult {
   trace: RuleTrace[];
   skippedPolicies: { policyKey: string; reason: string }[];
   approval: Rule["approval"] | null;
+  /** Narrowing from every matched restrict rule when the result is restrict; empty otherwise. */
+  restrict: RestrictSpec[];
+  /** What the agent must supply when the result is request_more_information. */
+  moreInformation: MoreInformationSpec | null;
+  /** How the request is held when the result is quarantine. */
+  quarantine: QuarantineSpec | null;
   riskIndicators: string[];
   reasons: string[];
   securityEventSeverity: "low" | "medium" | "high" | "critical" | null;
@@ -193,7 +199,9 @@ export function evaluateCondition(cond: Condition, input: unknown, out: Comparis
   return t.result;
 }
 
-const PRECEDENCE: Record<Effect, number> = { deny: 3, require_approval: 2, allow: 1 };
+/** Strictest outcome wins. A matching deny always decides; allow only decides when nothing stricter matched. */
+const PRECEDENCE: Record<Effect, number> = { deny: 6, quarantine: 5, require_approval: 4, request_more_information: 3, restrict: 2, allow: 1 };
+const DEFAULT_RESTRICT: RestrictSpec = { capNumeric: {}, setParams: {}, removeParams: [], note: "" };
 
 function policyApplies(doc: PolicyDocument, input: unknown): string | null {
   const tool = getAttr(input, "action.tool");
@@ -244,9 +252,11 @@ export function evaluatePolicies(policies: PolicyToEvaluate[], input: unknown): 
       def.riskIndicators.forEach((i) => indicators.add(i));
       if (def.reason) reasons.push(def.reason);
       if (def.effect === "deny" && def.securityEventSeverity) severity = maxSeverity(severity, def.securityEventSeverity);
+      if (def.effect === "quarantine") severity = maxSeverity(severity, def.quarantine?.severity ?? "high");
     }
   }
   if (!deciding) reasons.push("No policy rule allowed this action (default deny)");
+  const restrictSpecs = result === "restrict" ? matchedRules.map((m) => matchedRuleDefs.get(`${m.policyVersionId}:${m.ruleId}`)).filter((d): d is Rule => !!d && d.effect === "restrict").map((d) => d.restrict ?? DEFAULT_RESTRICT) : [];
   return {
     result,
     decidingRule: deciding,
@@ -254,6 +264,9 @@ export function evaluatePolicies(policies: PolicyToEvaluate[], input: unknown): 
     trace,
     skippedPolicies: skipped,
     approval: result === "require_approval" ? decidingRule?.approval ?? null : null,
+    restrict: restrictSpecs,
+    moreInformation: result === "request_more_information" ? decidingRule?.moreInformation ?? null : null,
+    quarantine: result === "quarantine" ? decidingRule?.quarantine ?? null : null,
     riskIndicators: [...indicators],
     reasons,
     securityEventSeverity: severity,

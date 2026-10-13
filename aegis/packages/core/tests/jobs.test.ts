@@ -3,6 +3,8 @@ import { rawPrisma, disconnectAll } from "@aegis/db";
 import { claimJobs, enqueueJob, recoverStaleJobs, registerJobHandler, runJob } from "../src/jobs/queue.js";
 
 const stamp = Date.now().toString(36);
+/** Test jobs sort before any due job a stopped local worker left behind, so the test never depends on an empty queue. */
+const EPOCH = new Date(0);
 afterAll(async () => {
   await rawPrisma().job.deleteMany({ where: { type: { startsWith: `test.${stamp}` } } });
   await disconnectAll();
@@ -21,7 +23,7 @@ describe("durable job queue", () => {
       runs += 1;
       if (runs === 1) throw new Error("transient");
     });
-    await enqueueJob({ type: `test.${stamp}.flaky`, payload: {}, idempotencyKey: `flaky-${stamp}`, maxAttempts: 3 });
+    await enqueueJob({ type: `test.${stamp}.flaky`, payload: {}, idempotencyKey: `flaky-${stamp}`, runAt: EPOCH, maxAttempts: 3 });
     const [claimed1, claimed2] = await Promise.all([claimJobs(50), claimJobs(50)]);
     const mine = [...claimed1, ...claimed2].filter((j) => j.type === `test.${stamp}.flaky`);
     expect(mine).toHaveLength(1);
@@ -41,7 +43,7 @@ describe("durable job queue", () => {
     registerJobHandler(`test.${stamp}.dead`, async () => {
       throw new Error("permanent");
     });
-    const j = await enqueueJob({ type: `test.${stamp}.dead`, payload: {}, idempotencyKey: `dead-${stamp}`, maxAttempts: 1 });
+    const j = await enqueueJob({ type: `test.${stamp}.dead`, payload: {}, idempotencyKey: `dead-${stamp}`, runAt: EPOCH, maxAttempts: 1 });
     const claimed = (await claimJobs(50)).find((x) => x.id === j.id)!;
     await runJob(claimed);
     const row = await rawPrisma().job.findUniqueOrThrow({ where: { id: j.id } });
@@ -56,7 +58,7 @@ describe("durable job queue", () => {
     expect((await rawPrisma().job.findUniqueOrThrow({ where: { id: j.id } })).status).toBe("pending");
   });
   it("unknown job types fail safely", async () => {
-    const j = await enqueueJob({ type: `test.${stamp}.unknown`, payload: {}, idempotencyKey: `unknown-${stamp}` });
+    const j = await enqueueJob({ type: `test.${stamp}.unknown`, payload: {}, idempotencyKey: `unknown-${stamp}`, runAt: EPOCH });
     const claimed = (await claimJobs(50)).find((x) => x.id === j.id)!;
     await runJob(claimed);
     expect((await rawPrisma().job.findUniqueOrThrow({ where: { id: j.id } })).status).toBe("failed");

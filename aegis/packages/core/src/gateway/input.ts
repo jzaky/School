@@ -45,6 +45,8 @@ export interface AuthorizationInput {
     injectionSignals: string[];
     blocked: boolean;
   };
+  /** Set when the request is made on behalf of another agent under an active delegation. */
+  delegation: { id: string; delegatorAgentId: string; delegatorSlug: string; toolKeys: string[]; constraints: Record<string, unknown> } | null;
 }
 
 const AMOUNT_KEYS = ["amount", "value", "total", "sum"];
@@ -106,6 +108,7 @@ export async function buildAuthorizationInput(
     ip?: string | null;
     supplied?: Record<string, unknown>;
     shield?: AuthorizationInput["shield"];
+    delegation?: AuthorizationInput["delegation"];
     now?: Date;
   },
 ): Promise<AuthorizationInput> {
@@ -159,5 +162,6 @@ export async function buildAuthorizationInput(
       supplied: args.supplied ?? {},
     },
     shield: args.shield ?? { dataClasses: [], highestSeverity: null, injectionSignals: [], blocked: false },
+    delegation: args.delegation ?? null,
   };
 }

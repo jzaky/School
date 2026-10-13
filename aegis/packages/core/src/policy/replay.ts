@@ -1,3 +1,4 @@
+import { EFFECTS } from "./schema.js";
 import type { TenantDb } from "@aegis/db";
 import { z } from "zod";
 import { buildAuthorizationInput } from "../gateway/input.js";
@@ -63,11 +64,11 @@ export interface ReplayResult {
   notes: string[];
 }
 
-const zero = (): Record<Effect, number> => ({ allow: 0, require_approval: 0, deny: 0 });
+const zero = (): Record<Effect, number> => ({ allow: 0, require_approval: 0, deny: 0, restrict: 0, quarantine: 0, request_more_information: 0 });
 const MAX_CHANGES = 50;
 
 function asEffect(result: string): Effect {
-  return result === "allow" || result === "require_approval" ? result : "deny";
+  return (EFFECTS as readonly string[]).includes(result) ? (result as Effect) : "deny";
 }
 
 export async function replayPolicy(db: TenantDb, ctx: OrgContext, input: { policyId?: string | null; document: unknown; options?: Partial<ReplayOptions> }): Promise<ReplayResult> {

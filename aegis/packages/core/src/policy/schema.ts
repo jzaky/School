@@ -4,8 +4,11 @@ import { z } from "zod";
  * AEGIS policy document, version 1.
  *
  * A policy is an ordered list of rules. Each rule has a condition tree over the authorization
- * input and an effect. Effects combine with deny-overrides: any matching deny wins; otherwise any
- * matching require_approval wins; otherwise a matching allow permits; otherwise the default is deny.
+ * input and an effect. Effects combine with deny-overrides, strictest first:
+ * deny > quarantine > require_approval > request_more_information > restrict > allow; with no
+ * matching rule the default is deny. A matching restrict narrows the parameters (caps, removed or
+ * forced fields) and then executes; quarantine holds the request for security review; request_more_information
+ * sends the request back to the agent naming the fields it must supply.
  *
  * Attribute paths address the input document (see gateway/input.ts), for example
  * "params.amount", "agent.riskTier", "resource.classification", "context.hour", "action.tool".
@@ -65,6 +68,40 @@ export const approvalRequirementSchema = z.object({
 });
 export type ApprovalRequirement = z.infer<typeof approvalRequirementSchema>;
 
+/** Narrowing applied when a rule with effect "restrict" decides. Paths are top-level or dotted parameter names. */
+export const restrictSpecSchema = z.object({
+  /** Numeric parameters capped at the given value, for example { "amount": 5000 }. */
+  capNumeric: z.record(z.number()).default({}),
+  /** Parameters forced to a value, for example { "channel": "sandbox" }. */
+  setParams: z.record(z.unknown()).default({}),
+  /** Parameters removed before execution. */
+  removeParams: z.array(z.string().min(1).max(80)).max(20).default([]),
+  /** Shown to the agent and recorded in evidence. */
+  note: z.string().max(300).default(""),
+});
+export type RestrictSpec = z.infer<typeof restrictSpecSchema>;
+
+/** What the agent must supply when a rule with effect "request_more_information" decides. */
+export const moreInformationSpecSchema = z.object({
+  fields: z.array(z.string().min(1).max(80)).min(1).max(20),
+  message: z.string().max(500).default(""),
+  /** How long the request waits for the resubmission before it expires. */
+  expiresInMinutes: z.number().int().min(5).max(7 * 24 * 60).default(24 * 60),
+});
+export type MoreInformationSpec = z.infer<typeof moreInformationSpecSchema>;
+
+/** How a quarantined request is held and who may release it. */
+export const quarantineSpecSchema = z.object({
+  severity: z.enum(["low", "medium", "high", "critical"]).default("high"),
+  /** Role keys that may release the request to the approval flow or refuse it. Empty means anyone with security:write. */
+  reviewRoles: z.array(z.string()).default([]),
+  expiresInMinutes: z.number().int().min(5).max(7 * 24 * 60).default(24 * 60),
+  note: z.string().max(300).default(""),
+});
+export type QuarantineSpec = z.infer<typeof quarantineSpecSchema>;
+
+export const EFFECTS = ["allow", "deny", "require_approval", "restrict", "quarantine", "request_more_information"] as const;
+
 export const ruleSchema = z.object({
   id: z
     .string()
@@ -72,9 +109,12 @@ export const ruleSchema = z.object({
     .max(64)
     .regex(/^[a-zA-Z0-9][a-zA-Z0-9_-]*$/),
   description: z.string().max(500).default(""),
-  effect: z.enum(["allow", "deny", "require_approval"]),
+  effect: z.enum(EFFECTS),
   when: conditionSchema,
   approval: approvalRequirementSchema.optional(),
+  restrict: restrictSpecSchema.optional(),
+  moreInformation: moreInformationSpecSchema.optional(),
+  quarantine: quarantineSpecSchema.optional(),
   /** Human readable reason returned to the agent and recorded in evidence. */
   reason: z.string().max(300).default(""),
   /** Labels copied onto the action request for approvers and monitoring. */
@@ -102,7 +142,7 @@ export const policyDocumentSchema = z
         z.object({
           name: z.string().max(120),
           input: z.record(z.unknown()),
-          expect: z.enum(["allow", "deny", "require_approval"]),
+          expect: z.enum(EFFECTS),
         }),
       )
       .default([]),

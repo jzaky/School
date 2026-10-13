@@ -1,5 +1,5 @@
 import { withTenant, disconnectAll } from "@aegis/db";
-import { assertApplicationProcess, claimJobs, env, expireApproval, expireOverdueApprovals, installConnectors, installShield, logger, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
+import { assertApplicationProcess, claimJobs, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
 import { rawPrisma } from "@aegis/db";
 import { registerModuleHandlers } from "./handlers.js";
 
@@ -17,7 +17,15 @@ registerJobHandler("approvals.sweep", async () => {
   for (const o of orgs) {
     const n = await withTenant(o.id, (db) => expireOverdueApprovals(db, systemContext(o.id)));
     if (n) log.info({ orgId: o.id, expired: n }, "expired overdue approvals");
+    const held = await withTenant(o.id, (db) => expireHeldRequests(db, systemContext(o.id)));
+    if (held) log.info({ orgId: o.id, expired: held }, "expired quarantined or waiting requests");
   }
+});
+
+/** A quarantined request or one waiting for more information whose window has passed. */
+registerJobHandler("request.expire", async (payload) => {
+  const { actionRequestId, orgId } = payload as { actionRequestId: string; orgId: string };
+  await withTenant(orgId, (db) => expireHeldRequest(db, systemContext(orgId), actionRequestId));
 });
 
 /** Resolves an ambiguous downstream outcome from the downstream system's own records. */

@@ -24,7 +24,7 @@ export interface AuthorizeInput {
 export interface Decision {
   requestId: string;
   status: string;
-  decision: "allow" | "deny" | "require_approval" | "error";
+  decision: "allow" | "deny" | "require_approval" | "restrict" | "quarantine" | "request_more_information" | "error";
   reasons: string[];
   riskIndicators: string[];
   policyVersionIds: string[];
@@ -32,6 +32,12 @@ export interface Decision {
   approval?: { approvalRequestId: string; expiresAt: string; requiredApprovals: number; requiredRoles: string[] };
   grant?: { token: string; expiresAt: string };
   receipt?: { status: string; downstreamSystem: string; reference: string | null; summary: Record<string, unknown> };
+  /** Present on a "restrict" decision: what was narrowed and the parameters that will execute. Use these, not your own. */
+  restrictions?: { applied: string[]; params: Record<string, unknown>; note: string };
+  /** Present on "request_more_information": resubmit with the same idempotency key and these fields filled in. */
+  moreInformation?: { fields: string[]; message: string; expiresAt: string };
+  /** Present on "quarantine": a security reviewer must release the request before anything can happen. */
+  quarantine?: { securityEventId: string | null; expiresAt: string };
   duplicate?: boolean;
   correlationId: string;
   /** Set by the SDK when the gateway could not be reached or returned an error. */
@@ -106,7 +112,7 @@ export class AegisClient {
     while (Date.now() < deadline) {
       const r = await this.getRequest(requestId);
       const status = (r?.status as string | undefined) ?? "unknown";
-      if (!["pending_approval", "approved", "evaluating", "executing"].includes(status)) {
+      if (!["pending_approval", "approved", "evaluating", "executing", "quarantined"].includes(status)) {
         const receipts = (r?.receipts as Record<string, unknown>[] | undefined) ?? [];
         return { status, receipt: receipts[0] ?? null };
       }

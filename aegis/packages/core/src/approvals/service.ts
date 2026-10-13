@@ -90,8 +90,10 @@ export async function decideApproval(db: TenantDb, ctx: OrgContext, approvalId: 
   if (!a) throw notFound("Approval request");
   const elig = await approverEligibility(db, ctx, a);
   if (!elig.canDecide) throw forbidden(elig.reasons.join("; "));
-  if (input.requestHash !== a.requestHash || a.requestHash !== a.request.paramsHash) {
-    await appendEvidence(db, ctx, { type: "approval.hash_mismatch", subjectType: "approval_request", subjectId: a.id, correlationId: a.request.correlationId, payload: { seen: input.requestHash, stored: a.requestHash, current: a.request.paramsHash } });
+  // Re-hash the stored parameters: the approval binds exactly what the approver saw and what will execute.
+  const currentHash = requestHashOf(a.request.toolKey, a.request.action, a.request.params as Record<string, unknown>);
+  if (input.requestHash !== a.requestHash || a.requestHash !== currentHash) {
+    await appendEvidence(db, ctx, { type: "approval.hash_mismatch", subjectType: "approval_request", subjectId: a.id, correlationId: a.request.correlationId, payload: { seen: input.requestHash, stored: a.requestHash, current: currentHash } });
     throw validation("The request changed since it was presented. Reload and review again.");
   }
   if ((input.decision === "reject" || input.decision === "request_info" || input.decision === "escalate") && input.comment.trim().length < 3) throw validation("A comment is required for this decision");
@@ -185,9 +187,14 @@ export async function decideApprovalAndExecute(run: TenantRunner, ctx: OrgContex
 
 /** The agent (or its owner) answers a request for information; the approval returns to pending. */
 export async function provideApprovalInfo(db: TenantDb, ctx: OrgContext, approvalId: string, info: string) {
-  const a = await db.approvalRequest.findUnique({ where: { id: approvalId }, include: { request: true } });
+  const a = await db.approvalRequest.findUnique({ where: { id: approvalId }, include: { request: { include: { agent: { select: { businessOwnerId: true, technicalOwnerId: true } } } } } });
   if (!a) throw notFound("Approval request");
   if (ctx.actor.type === "agent" && a.request.agentId !== ctx.actor.id) throw notFound("Approval request");
+  if (ctx.actor.type === "integration") throw forbidden("Integrations cannot answer approval questions");
+  if (ctx.actor.type === "user") {
+    const owns = ctx.actor.id !== null && (a.request.agent.businessOwnerId === ctx.actor.id || a.request.agent.technicalOwnerId === ctx.actor.id);
+    if (!owns && !hasPermission(ctx.actor.permissions, "approvals:decide")) throw forbidden("Only the requesting agent, its owners or an approver can answer");
+  }
   if (a.status !== "more_info") throw validation("This request is not waiting for information");
   if (info.trim().length < 3) throw validation("Provide the requested information");
   await db.approvalResponse.create({ data: { orgId: ctx.orgId, approvalRequestId: a.id, userId: ctx.actor.id ?? a.request.agentId, decision: "info_provided", comment: info.slice(0, 2000), requestHashSeen: a.requestHash } });

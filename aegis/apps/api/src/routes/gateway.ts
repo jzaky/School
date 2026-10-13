@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { withTenant } from "@aegis/db";
 import { z } from "zod";
-import { actionRequestInputSchema, appendEvidence, authorizeAndExecute, consumeGrant, forbidden, getActionRequest, hashObject, issueGrantForRequest, listActionRequests, recordAgentExecution, requestListFilter, provideApprovalInfo } from "@aegis/core";
+import { actionRequestInputSchema, appendEvidence, authorizeAndExecute, consumeGrant, forbidden, getActionRequest, hashObject, issueGrantForRequest, listActionRequests, recordAgentExecution, releaseQuarantine, releaseQuarantineSchema, requestListFilter, provideApprovalInfo } from "@aegis/core";
 
 /**
  * The Action Gateway. Agents call POST /v1/gateway/actions before doing anything protected.
@@ -14,7 +14,9 @@ export async function gatewayRoutes(app: FastifyInstance) {
     const headerKey = req.headers["idempotency-key"];
     const body = actionRequestInputSchema.parse({ ...(req.body as object), ...(typeof headerKey === "string" && !(req.body as { idempotencyKey?: string }).idempotencyKey ? { idempotencyKey: headerKey } : {}) });
     const result = await authorizeAndExecute(withTenant, ctx, body);
-    reply.status(result.decision === "allow" ? 200 : result.decision === "require_approval" ? 202 : 403);
+    // 200: proceeds now (allow, restrict). 202: held for a person or for more information. 403: refused.
+    const held = result.decision === "require_approval" || result.decision === "quarantine" || result.decision === "request_more_information";
+    reply.status(result.decision === "allow" || result.decision === "restrict" ? 200 : held ? 202 : 403);
     return result;
   });
 
@@ -56,12 +58,21 @@ export async function gatewayRoutes(app: FastifyInstance) {
     if (ctx.actor.type !== "integration") throw forbidden("Use an integration API key");
     const body = z.object({ grant: z.string().min(10), toolKey: z.string(), action: z.string().default("execute"), params: z.record(z.unknown()) }).parse(req.body);
     const result = await withTenant(ctx.orgId, async (db) => {
-      const r = await consumeGrant(db, body.grant, hashObject({ toolKey: body.toolKey, action: body.action, params: body.params }));
+      // The grant must have been issued for this integration: another downstream system's key cannot consume it.
+      const r = await consumeGrant(db, body.grant, hashObject({ toolKey: body.toolKey, action: body.action, params: body.params }), { integrationId: ctx.actor.id! });
       await appendEvidence(db, ctx, { type: r.ok ? "gateway.grant_verified_downstream" : "gateway.grant_rejected_downstream", subjectType: "action_request", subjectId: r.ok ? r.actionRequestId : "unknown", payload: { tool: body.toolKey, ok: r.ok, reason: r.ok ? null : r.reason } });
       return r;
     });
     if (!result.ok) reply.status(403);
     return result;
+  });
+
+  /** Security review of a quarantined request: refuse it or release it into the approval flow. */
+  app.post("/actions/:id/quarantine", async (req) => {
+    const ctx = await req.orgContext();
+    const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
+    const body = releaseQuarantineSchema.parse(req.body);
+    return withTenant(ctx.orgId, (db) => releaseQuarantine(db, ctx, id, body));
   });
 
   app.post("/approvals/:id/info", async (req) => {

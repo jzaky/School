@@ -1,4 +1,4 @@
-import type { ActionRequest, Prisma, TenantDb } from "@aegis/db";
+import type { ActionRequest, Agent, AgentDelegation, AgentTool, Permission, Prisma, Resource, TenantDb, Tool } from "@aegis/db";
 import { z } from "zod";
 import { appendEvidence } from "../evidence/ledger.js";
 import { makeContext, type OrgContext } from "../lib/context.js";
@@ -7,11 +7,15 @@ import { AegisError, conflict, forbidden, notFound } from "../lib/errors.js";
 import { logger } from "../lib/logger.js";
 import { enqueueJob } from "../jobs/queue.js";
 import { notifyUsers, userIdsWithPermission } from "../notify/notifications.js";
-import { evaluatePolicies, type EvaluationResult } from "../policy/evaluate.js";
+import { evaluatePolicies, type Effect, type EvaluationResult, type PolicyToEvaluate } from "../policy/evaluate.js";
+import type { MoreInformationSpec, QuarantineSpec } from "../policy/schema.js";
 import { resolvePoliciesForAgent } from "../policy/service.js";
-import { baselineChecks } from "./baseline.js";
-import { buildAuthorizationInput, extractDestinationDomain, type AuthorizationInput } from "./input.js";
-import { consumeGrant, EXECUTABLE_STATUSES, hashGrantToken, issueGrant, voidLiveGrants } from "./grants.js";
+import { hasPermission } from "../identity/permissions.js";
+import { createSecurityEvent } from "../shield/security-events.js";
+import { baselineChecks, type BaselineFailure } from "./baseline.js";
+import { buildAuthorizationInput, extractAmount, extractDestinationDomain, type AuthorizationInput } from "./input.js";
+import { consumeGrant, EXECUTABLE_STATUSES, hashGrantToken, issueGrant, parseGrantToken, voidLiveGrants } from "./grants.js";
+import { applyRestrictions } from "./restrictions.js";
 import { getShieldInspector } from "./shield-hook.js";
 import { getDownstreamSystem, readIntegrationCredential, type DownstreamContext } from "./simulators.js";
 
@@ -27,13 +31,15 @@ export const actionRequestInputSchema = z.object({
   context: z.record(z.unknown()).default({}),
   /** "gateway": AEGIS executes through the integration. "agent": AEGIS returns a grant for the agent to present downstream. */
   executionMode: z.enum(["gateway", "agent"]).default("gateway"),
+  /** Act on behalf of another agent under an active delegation. The delegate never gains more than its delegator holds. */
+  onBehalfOf: z.object({ agentId: z.string().uuid(), delegationId: z.string().uuid().optional() }).optional(),
 });
 export type ActionRequestInput = z.infer<typeof actionRequestInputSchema>;
 
 export interface GatewayResponse {
   requestId: string;
   status: ActionRequest["status"];
-  decision: "allow" | "deny" | "require_approval" | "error";
+  decision: Effect | "error";
   reasons: string[];
   riskIndicators: string[];
   policyVersionIds: string[];
@@ -41,8 +47,58 @@ export interface GatewayResponse {
   approval?: { approvalRequestId: string; expiresAt: string; requiredApprovals: number; requiredRoles: string[] };
   grant?: { token: string; expiresAt: string };
   receipt?: { status: string; downstreamSystem: string; reference: string | null; summary: Record<string, unknown> };
+  /** On a restrict decision: what policy narrowed and the parameters that will execute (the grant binds these). */
+  restrictions?: { applied: string[]; params: Record<string, unknown>; note: string };
+  /** On request_more_information: resubmit with the same idempotency key and these fields present. */
+  moreInformation?: { fields: string[]; message: string; expiresAt: string };
+  /** On quarantine: held until a security reviewer releases or refuses it. */
+  quarantine?: { securityEventId: string | null; expiresAt: string };
+  delegation?: { delegationId: string; onBehalfOf: string };
   duplicate?: boolean;
   correlationId: string;
+}
+
+const DEFAULT_MORE_INFORMATION: MoreInformationSpec = { fields: [], message: "", expiresInMinutes: 24 * 60 };
+const DEFAULT_QUARANTINE: QuarantineSpec = { severity: "high", reviewRoles: [], expiresInMinutes: 24 * 60, note: "" };
+type Severity = "low" | "medium" | "high" | "critical";
+
+interface DelegationContext {
+  row: AgentDelegation;
+  delegator: Agent & { tools: (AgentTool & { tool: Tool })[]; permissions: Permission[] };
+}
+
+/** Finds the active delegation the request claims. A missing, revoked, expired or inactive delegation is a structural failure (deny). */
+async function resolveDelegation(db: TenantDb, orgId: string, delegateAgentId: string, ref: { agentId: string; delegationId?: string }, now: Date): Promise<{ delegation: DelegationContext } | { failure: BaselineFailure }> {
+  const row = await db.agentDelegation.findFirst({ where: { orgId, delegateAgentId, delegatorAgentId: ref.agentId, ...(ref.delegationId ? { id: ref.delegationId } : {}), revokedAt: null, expiresAt: { gt: now } }, orderBy: { createdAt: "desc" } });
+  if (!row) return { failure: { code: "delegation_invalid", message: "No active delegation from that agent to this agent" } };
+  const delegator = await db.agent.findUnique({ where: { id: row.delegatorAgentId }, include: { tools: { include: { tool: true } }, permissions: true } });
+  if (!delegator) return { failure: { code: "delegation_invalid", message: "Delegating agent not found" } };
+  if (delegator.status !== "active") return { failure: { code: "delegation_invalid", message: `Delegating agent is ${delegator.status}` } };
+  return { delegation: { row, delegator } };
+}
+
+/** The delegate never gains more than the intersection of its own grants, the delegator's grants and the delegation's scope. */
+function delegationChecks(d: DelegationContext, tool: Tool | null, resource: Resource | null, action: string, params: Record<string, unknown>, now: Date): BaselineFailure[] {
+  const failures: BaselineFailure[] = [];
+  if (tool) {
+    if (d.row.toolKeys.length && !d.row.toolKeys.includes(tool.key)) failures.push({ code: "delegation_not_permitted", message: `Delegation does not cover tool ${tool.key}` });
+    const g = d.delegator.tools.find((t) => t.toolId === tool.id);
+    if (!g || !g.enabled || g.revokedAt) failures.push({ code: "delegation_not_permitted", message: `Delegating agent ${d.delegator.slug} has no active grant for tool ${tool.key}; a delegate never gains more than its delegator holds` });
+  }
+  if (resource) {
+    const p = d.delegator.permissions.find((x) => x.resourceId === resource.id && !x.revokedAt && (!x.expiresAt || x.expiresAt > now));
+    if (!p) failures.push({ code: "delegation_not_permitted", message: `Delegating agent ${d.delegator.slug} has no permission on resource ${resource.key}` });
+    else if (!p.actions.includes(action) && !p.actions.includes("*")) failures.push({ code: "delegation_not_permitted", message: `Delegating agent ${d.delegator.slug} may not ${action} on ${resource.key}` });
+  }
+  const constraints = (d.row.constraints ?? {}) as { maxAmount?: number };
+  const { amount } = extractAmount(params);
+  if (typeof constraints.maxAmount === "number" && amount !== null && amount > constraints.maxAmount) failures.push({ code: "delegation_limit_exceeded", message: `Amount ${amount} exceeds the delegation limit of ${constraints.maxAmount}` });
+  return failures;
+}
+
+function mergePolicies(a: PolicyToEvaluate[], b: PolicyToEvaluate[]): PolicyToEvaluate[] {
+  const seen = new Set(a.map((p) => p.policyVersionId));
+  return [...a, ...b.filter((p) => !seen.has(p.policyVersionId))].sort((x, y) => x.policyKey.localeCompare(y.policyKey));
 }
 
 export function requestHashOf(toolKey: string, action: string, params: Record<string, unknown>): string {
@@ -66,16 +122,22 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
   const agentId = ctx.actor.id;
   const correlationId = input.correlationId ?? ctx.requestId;
   const paramsHash = requestHashOf(input.tool, input.action, input.params);
+  const now = ctx.now ?? new Date();
 
-  // Idempotency: same key returns the recorded outcome; same key with different parameters is rejected.
+  // Idempotency: same key returns the recorded outcome; same key with different parameters is rejected,
+  // except that a request waiting for more information accepts the agent's resubmission under the same key.
   const existing = await db.actionRequest.findUnique({ where: { orgId_idempotencyKey: { orgId: ctx.orgId, idempotencyKey: input.idempotencyKey } }, include: { decisions: { orderBy: { createdAt: "desc" }, take: 1 }, approvals: { orderBy: { createdAt: "desc" }, take: 1 }, receipts: { orderBy: { createdAt: "desc" }, take: 1 } } });
+  let resubmission: NonNullable<typeof existing> | null = null;
   if (existing) {
-    if (existing.paramsHash !== paramsHash || existing.agentId !== agentId) {
+    if (existing.status === "awaiting_information" && existing.agentId === agentId) {
+      resubmission = existing;
+    } else if (existing.paramsHash !== paramsHash || existing.agentId !== agentId) {
       await appendEvidence(db, ctx, { type: "gateway.idempotency_conflict", subjectType: "action_request", subjectId: existing.id, correlationId, payload: { idempotencyKey: input.idempotencyKey, sameAgent: existing.agentId === agentId } });
       throw conflict("Idempotency key was already used with different parameters or by a different agent");
+    } else {
+      await appendEvidence(db, ctx, { type: "gateway.duplicate_request", subjectType: "action_request", subjectId: existing.id, correlationId, payload: { idempotencyKey: input.idempotencyKey, status: existing.status } });
+      return toResponse(existing, existing.decisions[0] ?? null, existing.approvals[0] ?? null, existing.receipts[0] ?? null, true);
     }
-    await appendEvidence(db, ctx, { type: "gateway.duplicate_request", subjectType: "action_request", subjectId: existing.id, correlationId, payload: { idempotencyKey: input.idempotencyKey, status: existing.status } });
-    return toResponse(existing, existing.decisions[0] ?? null, existing.approvals[0] ?? null, existing.receipts[0] ?? null, true);
   }
 
   const agent = await db.agent.findUnique({ where: { id: agentId }, include: { tools: { include: { tool: true } }, permissions: true } });
@@ -83,31 +145,36 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
   const tool = await db.tool.findUnique({ where: { orgId_key: { orgId: ctx.orgId, key: input.tool } }, include: { integration: true } });
   const resource = input.resource ? await db.resource.findUnique({ where: { orgId_key: { orgId: ctx.orgId, key: input.resource } } }) : null;
 
+  let delegation: DelegationContext | null = null;
+  let delegationFailure: BaselineFailure | null = null;
+  if (input.onBehalfOf) {
+    const resolved = await resolveDelegation(db, ctx.orgId, agentId, input.onBehalfOf, now);
+    if ("failure" in resolved) delegationFailure = resolved.failure;
+    else delegation = resolved.delegation;
+  }
+
   const started = Date.now();
-  const now = ctx.now ?? new Date();
-  const request = await db.actionRequest.create({
-    data: {
-      createdAt: now,
-      updatedAt: now,
-      orgId: ctx.orgId,
-      agentId,
-      toolId: tool?.id ?? null,
-      toolKey: input.tool,
-      action: input.action,
-      resourceKey: input.resource ?? null,
-      params: input.params as Prisma.InputJsonValue,
-      paramsHash,
-      idempotencyKey: input.idempotencyKey,
-      correlationId,
-      traceId: ctx.traceId ?? null,
-      principalUserId: input.principal.userId ?? null,
-      principalRef: input.principal.ref ?? null,
-      environment: agent.environment,
-      justification: input.justification,
-      context: { ...input.context, executionMode: input.executionMode, ip: ctx.ip ?? null } as Prisma.InputJsonValue,
-    },
-  });
-  await appendEvidence(db, ctx, { type: "gateway.request_received", subjectType: "action_request", subjectId: request.id, correlationId, payload: { tool: input.tool, action: input.action, resource: input.resource ?? null, paramsHash, agent: agent.slug } });
+  const requestData = {
+    toolId: tool?.id ?? null,
+    toolKey: input.tool,
+    action: input.action,
+    resourceKey: input.resource ?? null,
+    params: input.params as Prisma.InputJsonValue,
+    paramsHash,
+    correlationId,
+    traceId: ctx.traceId ?? null,
+    principalUserId: input.principal.userId ?? null,
+    principalRef: input.principal.ref ?? null,
+    environment: agent.environment,
+    justification: input.justification,
+    context: { ...input.context, executionMode: input.executionMode, ip: ctx.ip ?? null } as Prisma.InputJsonValue,
+    delegationId: delegation?.row.id ?? null,
+    onBehalfOfAgentId: input.onBehalfOf?.agentId ?? null,
+  };
+  const request = resubmission
+    ? await db.actionRequest.update({ where: { id: resubmission.id }, data: { ...requestData, status: "evaluating", expiresAt: null, completedAt: null, updatedAt: now } })
+    : await db.actionRequest.create({ data: { createdAt: now, updatedAt: now, orgId: ctx.orgId, agentId, idempotencyKey: input.idempotencyKey, ...requestData } });
+  await appendEvidence(db, ctx, { type: resubmission ? "gateway.information_provided" : "gateway.request_received", subjectType: "action_request", subjectId: request.id, correlationId, payload: { tool: input.tool, action: input.action, resource: input.resource ?? null, paramsHash, agent: agent.slug, onBehalfOf: delegation?.delegator.slug ?? input.onBehalfOf?.agentId ?? null, delegationId: delegation?.row.id ?? null } });
 
   let evaluation: EvaluationResult | null = null;
   let authzInput: AuthorizationInput | null = null;
@@ -119,30 +186,35 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
   let matchedRuleIds: string[] = [];
   let explanation: Record<string, unknown> = {};
   let approvalSpec: EvaluationResult["approval"] = null;
-  let securitySeverity: string | null = null;
+  let restrictApplied: string[] = [];
+  let securitySeverity: Severity | null = null;
   let securityType: string | null = null;
 
   try {
     const destinationDomain = extractDestinationDomain(input.params);
     const paused = await gatewayPausedState(db, ctx.orgId);
-    const baseline = baselineChecks({ agent, tool, action: input.action, resource, resourceKeyRequested: input.resource ?? null, params: input.params, destinationDomain, gatewayPaused: paused });
+    const baseline = baselineChecks({ agent, tool, action: input.action, resource, resourceKeyRequested: input.resource ?? null, params: input.params, destinationDomain, gatewayPaused: paused, now });
+    const failures: BaselineFailure[] = [...baseline.failures, ...(delegationFailure ? [delegationFailure] : []), ...(delegation ? delegationChecks(delegation, tool, resource, input.action, input.params, now) : [])];
 
     const shield = await getShieldInspector()(db, ctx.orgId, { params: input.params, toolKey: input.tool, destinationDomain, agentId });
     effectiveParams = shield.params;
 
-    if (baseline.failures.length > 0 || !tool) {
+    if (failures.length > 0 || !tool) {
       decisionResult = "deny";
-      reasons = baseline.failures.map((f) => f.message);
-      explanation = { stage: "baseline", failures: baseline.failures, shield: shield.findings };
-      if (baseline.failures.some((f) => f.code === "destination_not_allowed" || f.code === "classification_exceeded" || f.code === "tool_not_granted")) {
+      reasons = failures.map((f) => f.message);
+      explanation = { stage: "baseline", failures, shield: shield.findings };
+      if (failures.some((f) => f.code.startsWith("delegation_"))) {
         securitySeverity = "high";
-        securityType = baseline.failures.find((f) => f.code === "destination_not_allowed") ? "egress.blocked" : "authorization.boundary_violation";
+        securityType = "authorization.delegation_refused";
+      } else if (failures.some((f) => f.code === "destination_not_allowed" || f.code === "classification_exceeded" || f.code === "tool_not_granted")) {
+        securitySeverity = "high";
+        securityType = failures.find((f) => f.code === "destination_not_allowed") ? "egress.blocked" : "authorization.boundary_violation";
       }
     } else if (shield.blockReason) {
       decisionResult = "deny";
       reasons = [shield.blockReason];
       explanation = { stage: "shield", shield: shield.findings, injectionSignals: shield.shield.injectionSignals };
-      securitySeverity = shield.shield.highestSeverity ?? "high";
+      securitySeverity = (shield.shield.highestSeverity as Severity | null) ?? "high";
       securityType = "data_protection.blocked";
     } else {
       authzInput = await buildAuthorizationInput(db, {
@@ -155,17 +227,25 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
         ip: ctx.ip ?? null,
         supplied: input.context,
         shield: shield.shield,
+        delegation: delegation ? { id: delegation.row.id, delegatorAgentId: delegation.delegator.id, delegatorSlug: delegation.delegator.slug, toolKeys: delegation.row.toolKeys, constraints: (delegation.row.constraints ?? {}) as Record<string, unknown> } : null,
         now,
       });
-      const policies = await resolvePoliciesForAgent(db, ctx.orgId, agent);
+      // Under a delegation both agents' policies apply: the union with deny-overrides is never looser than either alone.
+      const own = await resolvePoliciesForAgent(db, ctx.orgId, agent);
+      const policies = delegation ? mergePolicies(own, await resolvePoliciesForAgent(db, ctx.orgId, delegation.delegator)) : own;
       evaluation = evaluatePolicies(policies, authzInput);
       decisionResult = evaluation.result;
-      if (shield.requireApproval && decisionResult === "allow") {
+      if (decisionResult === "restrict") {
+        const narrowed = applyRestrictions(effectiveParams, evaluation.restrict);
+        effectiveParams = narrowed.params;
+        restrictApplied = narrowed.applied;
+      }
+      if (shield.requireApproval && (decisionResult === "allow" || decisionResult === "restrict")) {
         decisionResult = "require_approval";
         evaluation = { ...evaluation, result: "require_approval", approval: { roles: [], minApprovers: 1, expiresInMinutes: 240, separationOfDuties: true, escalateToRoles: [], instructions: "Sensitive data detected in parameters" }, reasons: [...evaluation.reasons, "Sensitive data detected; approval required by data protection settings"] };
       }
       reasons = evaluation.reasons;
-      riskIndicators = [...evaluation.riskIndicators, ...shield.findings.map((f) => `data:${f.dataClass}`)];
+      riskIndicators = [...evaluation.riskIndicators, ...shield.findings.map((f) => `data:${f.dataClass}`), ...(restrictApplied.length ? ["restricted"] : []), ...(delegation ? ["delegated"] : [])];
       policyVersionIds = [...new Set(evaluation.trace.map((t) => t.policyVersionId))];
       matchedRuleIds = evaluation.matchedRules.map((m) => `${m.policyKey}/${m.ruleId}`);
       approvalSpec = evaluation.approval;
@@ -177,11 +257,20 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
         skipped: evaluation.skippedPolicies,
         trace: evaluation.trace,
         shield: shield.findings,
+        restrictions: restrictApplied,
+        restrictNote: evaluation.restrict.map((r) => r.note).filter(Boolean).join(" "),
+        moreInformation: evaluation.moreInformation,
+        quarantine: evaluation.quarantine,
+        delegation: delegation ? { id: delegation.row.id, onBehalfOf: delegation.delegator.slug, policiesFromDelegator: policies.length - own.length } : null,
         inputSummary: { amount: authzInput.context.amount, currency: authzInput.context.currency, destinationDomain: authzInput.context.destinationDomain, resource: authzInput.resource?.key ?? null, requestCount24h: authzInput.context.requestCount24h, deniedCount24h: authzInput.context.deniedCount24h, hour: authzInput.context.hour, priorRequestsSameReference: authzInput.context.priorRequestsSameReference, duplicateReferenceKey: authzInput.context.duplicateReferenceKey },
       };
       if (decisionResult === "deny" && evaluation.securityEventSeverity) {
         securitySeverity = evaluation.securityEventSeverity;
         securityType = "policy.violation";
+      }
+      if (decisionResult === "quarantine") {
+        securitySeverity = evaluation.quarantine?.severity ?? "high";
+        securityType = "policy.quarantine";
       }
     }
   } catch (err) {
@@ -197,41 +286,63 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
   const decision = await db.authorizationDecision.create({
     data: { createdAt: now, orgId: ctx.orgId, actionRequestId: request.id, result: decisionResult, policyVersionIds, matchedRuleIds, explanation: explanation as Prisma.InputJsonValue, inputHash: authzInput ? hashObject(authzInput) : paramsHash, latencyMs: Date.now() - started },
   });
-  await appendEvidence(db, ctx, { type: `gateway.decision.${decisionResult}`, subjectType: "action_request", subjectId: request.id, correlationId, payload: { decisionId: decision.id, result: decisionResult, reasons, policyVersionIds, matchedRuleIds, riskIndicators, latencyMs: decision.latencyMs } });
+  await appendEvidence(db, ctx, { type: `gateway.decision.${decisionResult}`, subjectType: "action_request", subjectId: request.id, correlationId, payload: { decisionId: decision.id, result: decisionResult, reasons, policyVersionIds, matchedRuleIds, riskIndicators, restrictions: restrictApplied, latencyMs: decision.latencyMs } });
 
+  let securityEventId: string | null = null;
   if (securityType) {
-    await db.securityEvent.create({ data: { createdAt: now, orgId: ctx.orgId, type: securityType, severity: securitySeverity ?? "medium", title: `${securityType.replace(/[._]/g, " ")}: ${agent.slug} ${input.tool}`, agentId, actionRequestId: request.id, policyVersionIds: undefined, detail: { reasons, tool: input.tool, action: input.action, resource: input.resource ?? null, destinationDomain: extractDestinationDomain(input.params) } as Prisma.InputJsonValue } as Prisma.SecurityEventUncheckedCreateInput });
+    // Through the Shield module so critical and repeated high events open or join an incident.
+    const created = await createSecurityEvent(db, ctx, { type: securityType, severity: securitySeverity ?? "medium", title: `${securityType.replace(/[._]/g, " ")}: ${agent.slug} ${input.tool}`, agentId, actionRequestId: request.id, detail: { reasons, tool: input.tool, action: input.action, resource: input.resource ?? null, destinationDomain: extractDestinationDomain(input.params), onBehalfOf: input.onBehalfOf?.agentId ?? null } });
+    securityEventId = created.event.id;
   }
 
   let status: ActionRequest["status"];
   let approvalRow = null as Awaited<ReturnType<typeof db.approvalRequest.create>> | null;
   let grant: { token: string; expiresAt: Date } | null = null;
-  if (decisionResult === "allow") {
+  let holdExpiresAt: Date | null = null;
+  const effectiveHash = requestHashOf(input.tool, input.action, effectiveParams);
+  if (decisionResult === "allow" || decisionResult === "restrict") {
     status = "allowed";
     // The request becomes executable before its single grant is issued; the grant binds the parameters that will
-    // execute (after Shield masking), so the downstream check matches.
+    // execute (after Shield masking and policy narrowing), so the downstream check matches.
     await db.actionRequest.update({ where: { id: request.id }, data: { status: "allowed", updatedAt: now } });
-    const g = await issueGrant(db, ctx.orgId, request.id, requestHashOf(input.tool, input.action, effectiveParams), { now });
+    const g = await issueGrant(db, ctx.orgId, request.id, effectiveHash, { now, integrationId: tool?.integrationId ?? null });
     grant = { token: g.token, expiresAt: g.grant.expiresAt };
   } else if (decisionResult === "require_approval") {
     status = "pending_approval";
     const spec = approvalSpec ?? { roles: [], minApprovers: 1, expiresInMinutes: 240, separationOfDuties: true, escalateToRoles: [], instructions: "" };
     const expiresAt = new Date(now.getTime() + spec.expiresInMinutes * 60_000);
+    // The approval binds the parameters the approver will see and that will execute.
     approvalRow = await db.approvalRequest.create({
-      data: { createdAt: now, updatedAt: now, orgId: ctx.orgId, actionRequestId: request.id, requiredApprovals: spec.minApprovers, requiredRoles: spec.roles, requestHash: paramsHash, triggeringRuleId: evaluation?.decidingRule ? `${evaluation.decidingRule.policyKey}/${evaluation.decidingRule.ruleId}` : null, policyVersionId: evaluation?.decidingRule?.policyVersionId ?? null, reason: spec.instructions || reasons.join("; "), expiresAt },
+      data: { createdAt: now, updatedAt: now, orgId: ctx.orgId, actionRequestId: request.id, requiredApprovals: spec.minApprovers, requiredRoles: spec.roles, requestHash: effectiveHash, triggeringRuleId: evaluation?.decidingRule ? `${evaluation.decidingRule.policyKey}/${evaluation.decidingRule.ruleId}` : null, policyVersionId: evaluation?.decidingRule?.policyVersionId ?? null, reason: spec.instructions || reasons.join("; "), expiresAt },
     });
     await enqueueJob({ type: "approval.expire", payload: { approvalRequestId: approvalRow.id, orgId: ctx.orgId }, idempotencyKey: `approval.expire:${approvalRow.id}`, orgId: ctx.orgId, runAt: expiresAt }, db);
     const approvers = await userIdsWithPermission(db, ctx, "approvals:decide");
     await notifyUsers(db, ctx, { userIds: approvers, type: "approval.requested", title: `Approval needed: ${agent.name} wants to ${input.tool}`, body: reasons.join("; "), link: `/approvals/${approvalRow.id}`, idempotencyKey: `approval.requested:${approvalRow.id}` });
     await appendEvidence(db, ctx, { type: "approval.requested", subjectType: "approval_request", subjectId: approvalRow.id, correlationId, payload: { actionRequestId: request.id, expiresAt, requiredApprovals: spec.minApprovers, requiredRoles: spec.roles } });
+  } else if (decisionResult === "quarantine") {
+    status = "quarantined";
+    const spec = evaluation?.quarantine ?? DEFAULT_QUARANTINE;
+    holdExpiresAt = new Date(now.getTime() + spec.expiresInMinutes * 60_000);
+    await enqueueJob({ type: "request.expire", payload: { actionRequestId: request.id, orgId: ctx.orgId }, idempotencyKey: `request.expire:${request.id}:${holdExpiresAt.getTime()}`, orgId: ctx.orgId, runAt: holdExpiresAt }, db);
+    const reviewers = await userIdsWithPermission(db, ctx, "security:write");
+    await notifyUsers(db, ctx, { userIds: reviewers, type: "gateway.quarantined", title: `Quarantined: ${agent.name} ${input.tool}`, body: reasons.join("; ") || spec.note, link: `/gateway/${request.id}`, idempotencyKey: `gateway.quarantined:${request.id}:${holdExpiresAt.getTime()}` });
+    await appendEvidence(db, ctx, { type: "gateway.quarantined", subjectType: "action_request", subjectId: request.id, correlationId, payload: { securityEventId, expiresAt: holdExpiresAt, reviewRoles: spec.reviewRoles, severity: spec.severity } });
+  } else if (decisionResult === "request_more_information") {
+    status = "awaiting_information";
+    const spec = evaluation?.moreInformation ?? DEFAULT_MORE_INFORMATION;
+    holdExpiresAt = new Date(now.getTime() + spec.expiresInMinutes * 60_000);
+    await enqueueJob({ type: "request.expire", payload: { actionRequestId: request.id, orgId: ctx.orgId }, idempotencyKey: `request.expire:${request.id}:${holdExpiresAt.getTime()}`, orgId: ctx.orgId, runAt: holdExpiresAt }, db);
+    await appendEvidence(db, ctx, { type: "gateway.information_requested", subjectType: "action_request", subjectId: request.id, correlationId, payload: { fields: spec.fields, expiresAt: holdExpiresAt } });
   } else {
     status = "denied";
   }
-  const updated = await db.actionRequest.update({ where: { id: request.id }, data: { status, riskIndicators, expiresAt: approvalRow?.expiresAt ?? null, completedAt: status === "denied" ? now : null, params: effectiveParams as Prisma.InputJsonValue, updatedAt: now } });
+  const updated = await db.actionRequest.update({ where: { id: request.id }, data: { status, riskIndicators, expiresAt: approvalRow?.expiresAt ?? holdExpiresAt, completedAt: status === "denied" ? now : null, params: effectiveParams as Prisma.InputJsonValue, updatedAt: now } });
   await db.agent.update({ where: { id: agentId }, data: { lastActivityAt: now } });
 
   const response = toResponse(updated, decision, approvalRow, null, false);
   response.reasons = reasons;
+  if (response.quarantine) response.quarantine.securityEventId = securityEventId;
+  if (delegation) response.delegation = { delegationId: delegation.row.id, onBehalfOf: delegation.delegator.slug };
   if (grant) response.grant = { token: grant.token, expiresAt: grant.expiresAt.toISOString() };
   // Store what the executor needs (post-commit) without leaking the grant into the response for gateway mode.
   if (status === "allowed") (response as GatewayResponse & { __pendingExecution?: { grantToken: string; params: Record<string, unknown> } }).__pendingExecution = { grantToken: grant!.token, params: effectiveParams };
@@ -240,18 +351,24 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
 }
 
 function toResponse(req: ActionRequest, decision: { result: string; policyVersionIds: string[]; matchedRuleIds: string[]; explanation: unknown } | null, approval: { id: string; expiresAt: Date; requiredApprovals: number; requiredRoles: string[] } | null, receipt: { status: string; downstreamSystem: string; downstreamReference: string | null; responseSummary: unknown } | null, duplicate: boolean): GatewayResponse {
-  const explanation = (decision?.explanation ?? {}) as { failures?: { message: string }[]; decidingRule?: { policy: string; rule: string } | null; defaultDeny?: boolean };
+  const explanation = (decision?.explanation ?? {}) as { failures?: { message: string }[]; decidingRule?: { policy: string; rule: string } | null; defaultDeny?: boolean; restrictions?: string[]; restrictNote?: string; moreInformation?: MoreInformationSpec | null; quarantine?: QuarantineSpec | null };
   const reasons = explanation.failures?.map((f) => f.message) ?? [];
+  const result = (decision?.result as GatewayResponse["decision"]) ?? "error";
+  const expiresAt = req.expiresAt?.toISOString() ?? new Date(0).toISOString();
   return {
     requestId: req.id,
     status: req.status,
-    decision: (decision?.result as GatewayResponse["decision"]) ?? "error",
+    decision: result,
     reasons,
     riskIndicators: (req.riskIndicators as string[]) ?? [],
     policyVersionIds: decision?.policyVersionIds ?? [],
     matchedRuleIds: decision?.matchedRuleIds ?? [],
     approval: approval ? { approvalRequestId: approval.id, expiresAt: approval.expiresAt.toISOString(), requiredApprovals: approval.requiredApprovals, requiredRoles: approval.requiredRoles } : undefined,
+    grant: undefined,
     receipt: receipt ? { status: receipt.status, downstreamSystem: receipt.downstreamSystem, reference: receipt.downstreamReference, summary: (receipt.responseSummary ?? {}) as Record<string, unknown> } : undefined,
+    restrictions: result === "restrict" ? { applied: explanation.restrictions ?? [], params: (req.params ?? {}) as Record<string, unknown>, note: explanation.restrictNote ?? "" } : undefined,
+    moreInformation: result === "request_more_information" ? { fields: explanation.moreInformation?.fields ?? [], message: explanation.moreInformation?.message ?? "", expiresAt } : undefined,
+    quarantine: result === "quarantine" ? { securityEventId: null, expiresAt } : undefined,
     duplicate: duplicate || undefined,
     correlationId: req.correlationId,
   };
@@ -434,7 +551,7 @@ export async function reconcileExecution(run: TenantRunner, ctx: OrgContext, act
 
 /**
  * A human settles an unresolved outcome after checking the downstream system directly. Requires
- * gateway:control. The resolution is a receipt plus evidence naming who decided and why.
+ * agents:control. The resolution is a receipt plus evidence naming who decided and why.
  */
 export async function resolveExecutionManually(db: TenantDb, ctx: OrgContext, actionRequestId: string, input: { outcome: "succeeded" | "failed"; reference: string | null; reason: string }): Promise<ExecutionOutcome> {
   if (!ctx.actor.permissions?.includes("*") && !ctx.actor.permissions?.includes("agents:control")) throw forbidden("Missing permission agents:control");
@@ -543,6 +660,7 @@ export async function recordAgentExecution(db: TenantDb, ctx: OrgContext, action
   if (!req || (ctx.actor.type === "agent" && req.agentId !== ctx.actor.id)) throw notFound("Action request");
   const latest = req.receipts[0];
   if (latest && FINAL_RECEIPTS.has(latest.status)) return receiptView(latest, req.status);
+  if (!parseGrantToken(input.grant)) throw forbidden("The grant token is not valid");
   const grant = await db.executionGrant.findUnique({ where: { tokenHash: hashGrantToken(input.grant) } });
   if (!grant || grant.actionRequestId !== req.id) throw forbidden("The grant does not belong to this request");
   if (!grant.consumedAt) {
@@ -563,6 +681,12 @@ export async function getActionRequest(db: TenantDb, ctx: OrgContext, id: string
   const req = await db.actionRequest.findUnique({ where: { id }, include: { agent: { select: { id: true, slug: true, name: true, status: true } }, decisions: { orderBy: { createdAt: "asc" } }, approvals: { include: { responses: { orderBy: { createdAt: "asc" } } }, orderBy: { createdAt: "asc" } }, receipts: { orderBy: { createdAt: "asc" } }, grants: { select: { id: true, expiresAt: true, consumedAt: true, voidedAt: true, voidReason: true, createdAt: true }, orderBy: { createdAt: "asc" } } } });
   if (!req) throw notFound("Action request");
   if (ctx.actor.type === "agent" && req.agentId !== ctx.actor.id) throw notFound("Action request");
+  if (ctx.actor.type === "user" && !hasPermission(ctx.actor.permissions, "gateway:read")) throw forbidden("Missing permission gateway:read");
+  if (ctx.actor.type === "integration") {
+    // A downstream system sees only the requests routed through its own tools.
+    const tool = req.toolId ? await db.tool.findUnique({ where: { id: req.toolId }, select: { integrationId: true } }) : null;
+    if (!tool || tool.integrationId !== ctx.actor.id) throw notFound("Action request");
+  }
   const evidence = await db.evidenceEvent.findMany({ where: { orgId: ctx.orgId, correlationId: req.correlationId }, orderBy: { seq: "asc" } });
   return { ...req, evidence };
 }
@@ -578,9 +702,12 @@ export const requestListFilter = z.object({
 });
 
 export async function listActionRequests(db: TenantDb, ctx: OrgContext, f: z.infer<typeof requestListFilter>) {
+  if (ctx.actor.type === "user" && !hasPermission(ctx.actor.permissions, "gateway:read")) throw forbidden("Missing permission gateway:read");
+  const integrationToolIds = ctx.actor.type === "integration" ? (await db.tool.findMany({ where: { orgId: ctx.orgId, integrationId: ctx.actor.id! }, select: { id: true } })).map((t) => t.id) : null;
   const where: Prisma.ActionRequestWhereInput = {
     orgId: ctx.orgId,
     ...(ctx.actor.type === "agent" ? { agentId: ctx.actor.id! } : {}),
+    ...(integrationToolIds ? { toolId: { in: integrationToolIds } } : {}),
     ...(f.status ? { status: f.status as ActionRequest["status"] } : {}),
     ...(f.agentId ? { agentId: f.agentId } : {}),
     ...(f.tool ? { toolKey: f.tool } : {}),
@@ -592,4 +719,60 @@ export async function listActionRequests(db: TenantDb, ctx: OrgContext, f: z.inf
     db.actionRequest.count({ where }),
   ]);
   return { items, total, page: f.page, pageSize: f.pageSize, pageCount: Math.max(1, Math.ceil(total / f.pageSize)) };
+}
+
+/** Expires one held request (quarantined or awaiting information) whose window has passed. Idempotent. */
+export async function expireHeldRequest(db: TenantDb, ctx: OrgContext, actionRequestId: string): Promise<boolean> {
+  const r = await db.actionRequest.findUnique({ where: { id: actionRequestId } });
+  if (!r || (r.status !== "quarantined" && r.status !== "awaiting_information")) return false;
+  const now = ctx.now ?? new Date();
+  if (r.expiresAt && r.expiresAt > now) return false;
+  await db.actionRequest.update({ where: { id: r.id }, data: { status: "expired", completedAt: now, updatedAt: now } });
+  await appendEvidence(db, ctx, { type: "gateway.hold_expired", subjectType: "action_request", subjectId: r.id, correlationId: r.correlationId, payload: { previousStatus: r.status } });
+  return true;
+}
+
+/** Sweep for held requests whose window passed while no job ran. */
+export async function expireHeldRequests(db: TenantDb, ctx: OrgContext): Promise<number> {
+  const now = ctx.now ?? new Date();
+  const due = await db.actionRequest.findMany({ where: { orgId: ctx.orgId, status: { in: ["quarantined", "awaiting_information"] }, expiresAt: { lte: now } }, select: { id: true }, take: 100 });
+  let n = 0;
+  for (const d of due) if (await expireHeldRequest(db, ctx, d.id)) n++;
+  return n;
+}
+
+export const releaseQuarantineSchema = z.object({ action: z.enum(["refuse", "to_approval"]), reason: z.string().min(5).max(2000) });
+
+/**
+ * A security reviewer settles a quarantined request: refuse it, or release it into the normal approval
+ * flow so a business approver decides. Requires security:write and, when the deciding rule names
+ * review roles, one of those roles. Nothing executes from quarantine without a later approval.
+ */
+export async function releaseQuarantine(db: TenantDb, ctx: OrgContext, actionRequestId: string, input: z.infer<typeof releaseQuarantineSchema>): Promise<{ status: "denied" | "pending_approval"; approvalRequestId: string | null }> {
+  if (ctx.actor.type !== "user" || !ctx.actor.id || !hasPermission(ctx.actor.permissions, "security:write")) throw forbidden("Missing permission security:write");
+  const req = await db.actionRequest.findUnique({ where: { id: actionRequestId }, include: { agent: true, decisions: { orderBy: { createdAt: "desc" }, take: 1 } } });
+  if (!req) throw notFound("Action request");
+  if (req.status !== "quarantined") throw conflict(`Request is ${req.status}; only quarantined requests are released`);
+  const spec = ((req.decisions[0]?.explanation as { quarantine?: QuarantineSpec | null } | null) ?? {}).quarantine ?? DEFAULT_QUARANTINE;
+  if (spec.reviewRoles.length) {
+    const m = await db.membership.findUnique({ where: { orgId_userId: { orgId: ctx.orgId, userId: ctx.actor.id } }, include: { role: true } });
+    if (!m || !spec.reviewRoles.includes(m.role.key)) throw forbidden(`Release requires role: ${spec.reviewRoles.join(" or ")}`);
+  }
+  const now = ctx.now ?? new Date();
+  if (input.action === "refuse") {
+    await db.actionRequest.update({ where: { id: req.id }, data: { status: "denied", completedAt: now, updatedAt: now } });
+    await appendEvidence(db, ctx, { type: "gateway.quarantine_refused", subjectType: "action_request", subjectId: req.id, correlationId: req.correlationId, payload: { reason: input.reason } });
+    return { status: "denied", approvalRequestId: null };
+  }
+  const expiresAt = new Date(now.getTime() + 240 * 60_000);
+  const approvalRow = await db.approvalRequest.create({
+    data: { createdAt: now, updatedAt: now, orgId: ctx.orgId, actionRequestId: req.id, requiredApprovals: 1, requiredRoles: [], requestHash: requestHashOf(req.toolKey, req.action, req.params as Record<string, unknown>), triggeringRuleId: null, policyVersionId: req.decisions[0]?.policyVersionIds[0] ?? null, reason: `Released from quarantine by security review: ${input.reason}`, expiresAt },
+  });
+  await db.actionRequest.update({ where: { id: req.id }, data: { status: "pending_approval", expiresAt, updatedAt: now } });
+  await enqueueJob({ type: "approval.expire", payload: { approvalRequestId: approvalRow.id, orgId: ctx.orgId }, idempotencyKey: `approval.expire:${approvalRow.id}`, orgId: ctx.orgId, runAt: expiresAt }, db);
+  const approvers = (await userIdsWithPermission(db, ctx, "approvals:decide")).filter((u) => u !== ctx.actor.id);
+  await notifyUsers(db, ctx, { userIds: approvers, type: "approval.requested", title: `Approval needed after security review: ${req.agent.name} ${req.toolKey}`, body: input.reason, link: `/approvals/${approvalRow.id}`, idempotencyKey: `approval.requested:${approvalRow.id}` });
+  await appendEvidence(db, ctx, { type: "gateway.quarantine_released", subjectType: "action_request", subjectId: req.id, correlationId: req.correlationId, payload: { reason: input.reason, approvalRequestId: approvalRow.id, releasedBy: ctx.actor.id } });
+  await appendEvidence(db, ctx, { type: "approval.requested", subjectType: "approval_request", subjectId: approvalRow.id, correlationId: req.correlationId, payload: { actionRequestId: req.id, expiresAt, requiredApprovals: 1, requiredRoles: [], source: "quarantine_release" } });
+  return { status: "pending_approval", approvalRequestId: approvalRow.id };
 }

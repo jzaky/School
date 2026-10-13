@@ -254,10 +254,39 @@ model Agent {
   tools       AgentTool[]
   permissions Permission[]
   requests    ActionRequest[]
+  delegationsGiven    AgentDelegation[] @relation("delegator")
+  delegationsReceived AgentDelegation[] @relation("delegate")
 
   @@unique([orgId, slug])
   @@index([orgId, status])
   @@map("agents")
+}
+
+/// One agent lets another act on its behalf, within a subset of its own tools. The delegate never
+/// gains more than the intersection of both agents' grants; both agents' policies apply.
+model AgentDelegation {
+  id               String    @id @default(uuid(7)) @db.Uuid
+  orgId            String    @map("org_id") @db.Uuid
+  delegatorAgentId String    @map("delegator_agent_id") @db.Uuid
+  delegateAgentId  String    @map("delegate_agent_id") @db.Uuid
+  /// Tool keys the delegate may use on the delegator's behalf. Empty means every tool both agents hold.
+  toolKeys         String[]  @default([]) @map("tool_keys")
+  /// Numeric caps and other limits applied to delegated requests, for example { "maxAmount": 5000 }.
+  constraints      Json      @default("{}")
+  reason           String    @default("")
+  grantedBy        String?   @map("granted_by") @db.Uuid
+  expiresAt        DateTime  @map("expires_at")
+  revokedAt        DateTime? @map("revoked_at")
+  revokedReason    String?   @map("revoked_reason")
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  delegator Agent           @relation("delegator", fields: [delegatorAgentId], references: [id])
+  delegate  Agent           @relation("delegate", fields: [delegateAgentId], references: [id])
+  requests  ActionRequest[]
+
+  @@index([orgId, delegateAgentId])
+  @@index([orgId, delegatorAgentId])
+  @@map("agent_delegations")
 }
 
 model AgentVersion {
@@ -297,6 +326,9 @@ model Integration {
   settings         Json              @default("{}")
   lastHealthAt     DateTime?         @map("last_health_at")
   lastHealthOk     Boolean?          @map("last_health_ok")
+  /// Last enforcement-path audit: downstream records compared with gateway receipts (see gateway/enforcement.ts).
+  lastEnforcementAuditAt DateTime?   @map("last_enforcement_audit_at")
+  enforcementSummary     Json        @default("{}") @map("enforcement_summary")
   createdAt        DateTime          @default(now()) @map("created_at")
   updatedAt        DateTime          @updatedAt @map("updated_at")
 
@@ -515,6 +547,8 @@ enum ActionRequestStatus {
   executed
   failed
   unknown
+  quarantined
+  awaiting_information
 }
 
 model ActionRequest {
@@ -544,10 +578,14 @@ model ActionRequest {
   executionAttempts  Int              @default(0) @map("execution_attempts")
   /// Stable key handed to the downstream system so repeats of one request are one operation there.
   downstreamIdempotencyKey String?    @map("downstream_idempotency_key")
+  /// Set when the request is made under an agent-to-agent delegation; the delegating agent's limits also apply.
+  delegationId      String?           @map("delegation_id") @db.Uuid
+  onBehalfOfAgentId String?           @map("on_behalf_of_agent_id") @db.Uuid
   createdAt       DateTime            @default(now()) @map("created_at")
   updatedAt       DateTime            @updatedAt @map("updated_at")
 
   agent     Agent                   @relation(fields: [agentId], references: [id])
+  delegation AgentDelegation?       @relation(fields: [delegationId], references: [id])
   decisions AuthorizationDecision[]
   approvals ApprovalRequest[]
   grants    ExecutionGrant[]
@@ -564,6 +602,12 @@ enum DecisionResult {
   allow
   deny
   require_approval
+  /// Allowed with parameters narrowed by policy (caps, removed fields, forced values). Executes the narrowed request.
+  restrict
+  /// Held for security review. Nothing executes until a reviewer releases it to approval or refuses it.
+  quarantine
+  /// The agent must resubmit with the named fields before a decision can be made.
+  request_more_information
   error
 }
 
@@ -655,6 +699,8 @@ model ExecutionGrant {
   actionRequestId String    @map("action_request_id") @db.Uuid
   tokenHash       String    @unique @map("token_hash")
   requestHash     String    @map("request_hash")
+  /// The integration whose downstream system may verify this grant. Another integration's key is refused.
+  integrationId   String?   @map("integration_id") @db.Uuid
   expiresAt       DateTime  @map("expires_at")
   consumedAt      DateTime? @map("consumed_at")
   /// Set when the grant is withdrawn (pause, suspension, revocation, expiry housekeeping). A voided grant never verifies.
