@@ -36,7 +36,8 @@ Each scenario is a fixed pattern. Passing the lab does not mean an agent is safe
 - monitoring alerts;
 - automatic incidents;
 - autonomy downgrades and denial-burst checks;
-- approval and quarantine notifications.
+- approval and quarantine notifications;
+- policy replay and the precedent heuristic, whose comparisons would otherwise be skewed by synthetic attacks.
 
 Their requests and security events (titled `[lab]`) stay on the evidence record. The target agent is never changed. Only one run per organization can be in progress at a time.
 

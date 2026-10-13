@@ -3,6 +3,7 @@ import { disconnectAll, withTenant } from "@aegis/db";
 import { makeGatewayFixture, type GatewayFixture } from "./gateway-fixture.js";
 import { getLabRun, LAB_SCENARIOS, listLabRuns, runAttackSimulation } from "../src/security/lab.js";
 import { listAgents } from "../src/agents/registry.js";
+import { replayPolicy } from "../src/policy/replay.js";
 import type { TenantRunner } from "../src/gateway/gateway.js";
 
 let f: GatewayFixture;
@@ -70,6 +71,13 @@ describe("Attack Simulation Lab", () => {
     expect(events.every((e) => e.title.startsWith("[lab]"))).toBe(true);
     const ledger = await runner((db) => db.evidenceEvent.findMany({ where: { subjectType: "attack_simulation_run", subjectId: out.runId } }));
     expect(ledger.map((e) => e.type).sort()).toEqual(["lab.run_completed", "lab.run_started"]);
+    // Replay of the refund policy sees none of the lab's synthetic requests, so it still matches the record.
+    const doc = await runner((db) => db.policyVersion.findFirstOrThrow({ where: { policyId: f.refundPolicyId, state: "active" } }));
+    const replay = await runner((db) => replayPolicy(db, f.ownerCtx, { policyId: f.refundPolicyId, document: doc.document }));
+    const labRequests = await runner((db) => db.actionRequest.count({ where: { agentId: lab.id, toolKey: "issue-refund" } }));
+    expect(labRequests).toBeGreaterThan(10);
+    expect(replay.replayed).toBe(1);
+    expect(replay.changed).toBe(0);
     // The target agent is untouched.
     const target = await runner((db) => db.agent.findUniqueOrThrow({ where: { id: f.agentId } }));
     expect(target.status).toBe("active");

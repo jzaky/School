@@ -85,7 +85,7 @@ export async function replayPolicy(db: TenantDb, ctx: OrgContext, input: { polic
   }
   const tools = draft.appliesTo.tools;
   const requests = await db.actionRequest.findMany({
-    where: { orgId: ctx.orgId, createdAt: { gte: from, lte: now }, ...(tools.length ? { toolKey: { in: tools } } : {}) },
+    where: { orgId: ctx.orgId, agent: { isLab: false }, createdAt: { gte: from, lte: now }, ...(tools.length ? { toolKey: { in: tools } } : {}) },
     orderBy: { createdAt: "desc" },
     take: opts.limit,
     // The latest decision belongs to the stored parameters and context: a request resubmitted after

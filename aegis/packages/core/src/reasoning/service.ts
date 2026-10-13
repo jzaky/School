@@ -22,7 +22,7 @@ export async function precedentIndicator(db: TenantDb, input: { requestId: strin
   if (input.amount === null || input.policyVersionIds.length === 0) return null;
   const since = new Date(input.now.getTime() - PRECEDENT_DAYS * 86_400_000);
   const rows = await db.authorizationDecision.findMany({
-    where: { createdAt: { gte: since, lt: input.now }, actionRequestId: { not: input.requestId }, request: { toolKey: input.toolKey } },
+    where: { createdAt: { gte: since, lt: input.now }, actionRequestId: { not: input.requestId }, request: { toolKey: input.toolKey, agent: { isLab: false } } },
     orderBy: { createdAt: "desc" },
     take: 300,
     select: { result: true, policyVersionIds: true, explanation: true },
