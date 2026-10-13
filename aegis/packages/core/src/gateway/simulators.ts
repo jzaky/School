@@ -1,6 +1,7 @@
 import type { TenantDb } from "@aegis/db";
 import { decryptSecret, hashObject } from "../lib/crypto.js";
 import { stripeTestConnector } from "./connectors/stripe.js";
+import { alpacaPaperConnector } from "./connectors/alpaca.js";
 
 /**
  * Downstream systems: the things the gateway executes against once a request is allowed or
@@ -180,9 +181,17 @@ export const warehouseSimulator = simulator("data-warehouse-sim", "Data warehous
   return { entry: { type: "query" }, reference: `QRY-${ref}`, summary: { rows: 42, syntheticResult: true } };
 });
 
+export const brokerageSimulator = simulator("brokerage-sim", "Brokerage (simulated)", (req, ref) => {
+  const p = req.params as { symbol: string; side: string; type: string; qty: number; notional: number; limitPrice?: number; reference?: string };
+  if (p.type === "limit" && (typeof p.limitPrice !== "number" || p.limitPrice <= 0)) return { reject: "limit orders need a limitPrice" };
+  if (p.type === "limit" && typeof p.limitPrice === "number" && Math.abs(p.qty * p.limitPrice - p.notional) > 0.005 * p.notional) return { reject: `declared notional ${p.notional} does not match qty times limit price` };
+  const fillPrice = p.type === "limit" ? p.limitPrice! : Math.round((p.notional / p.qty) * 100) / 100;
+  return { entry: { type: "order", symbol: p.symbol, side: p.side, orderType: p.type, qty: p.qty, notional: p.notional, clientReference: p.reference ?? null }, reference: `ORD-${ref}`, summary: { accepted: true, status: p.type === "market" ? "filled" : "accepted", symbol: p.symbol, side: p.side, qty: p.qty, notional: p.notional, fillPrice, paper: true, syntheticFill: true } };
+});
+
 // The sandbox connectors are part of the default registry so every module instance (the Next.js console bundles
 // core separately from instrumentation.ts) resolves them; installConnectors() re-registers them explicitly.
-const systems = new Map<string, DownstreamSystem>([coreBankingSimulator, supportPlatformSimulator, emailGatewaySimulator, crmSimulator, warehouseSimulator, stripeTestConnector].map((s) => [s.key, s]));
+const systems = new Map<string, DownstreamSystem>([coreBankingSimulator, supportPlatformSimulator, emailGatewaySimulator, crmSimulator, warehouseSimulator, brokerageSimulator, stripeTestConnector, alpacaPaperConnector].map((s) => [s.key, s]));
 
 export function registerDownstreamSystem(s: DownstreamSystem) {
   systems.set(s.key, s);

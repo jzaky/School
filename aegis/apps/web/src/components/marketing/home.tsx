@@ -38,6 +38,7 @@ const TODAY = [
   "Guided onboarding checklist and a sample refund workflow that runs without any external credentials",
   "Guided score-band template: route the score your own fraud or risk model produces into clear, review, hold and block bands, with approvals and holds generated for you",
   "Replay calibration: before activating a draft policy, see what it would have done to the last 30 days of real requests, which outcomes change and how many approvals per day it would create",
+  "AEGIS Trading: a guided trading mandate (instrument list, order value bands, unit cap, market hours, duplicate block, daily loss cap) for a trading agent you already run, with an Alpaca paper-trading connector that refuses live keys",
   "Autonomy posture per agent (suspended, restricted, supervised, autonomous) read from its state, tools and policies, and one sentence on every approval saying which limit the request was close to",
   "Optional continuous governance: automatic, evidence-recorded responses to monitoring alerts (suspend the agent, pause the gateway, disable the integration), chosen per rule and reversible by a person",
 ];
@@ -47,6 +48,7 @@ const INTEGRATIONS: { system: string; status: "Sandbox tested" | "Simulated" | "
   { system: "Support platform refunds", status: "Simulated", detail: "In-process stand-in used by the sample workflow. Verifies grants and honours idempotency like a real system; keeps a visible ledger." },
   { system: "Core banking transfers", status: "Simulated", detail: "In-process stand-in used by the banking scenario." },
   { system: "Email gateway, CRM, data warehouse", status: "Simulated", detail: "In-process stand-ins used by the data egress scenario." },
+  { system: "Alpaca paper trading (AEGIS Trading)", status: "Sandbox tested", detail: "Connector implemented against Alpaca's paper trading API with client_order_id idempotency, order lookup reconciliation and an account connection test. Verified locally against a fake Alpaca server; the paper-account run needs a customer paper key. Live keys and the live host are refused." },
   { system: "Helpdesk refunds (Zendesk, Intercom), PayPal, Adyen", status: "Planned", detail: "Same connector interface. Not started." },
   { system: "Approvals in Slack or Teams", status: "Planned", detail: "Approvals are decided in the console and over the API today." },
 ];

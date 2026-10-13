@@ -133,3 +133,21 @@ Stated approximations: agents are taken as they are today; counts over 24 hours 
 
 `packages/core/src/policy/boundary.ts`, `boundarySentence({ document, ruleId, params, context, trace, policyKey })`. One sentence on every approval saying which boundary the request was close to, in the policy's own units. Guided templates give exact wording: the refund template states how far the amount sits from the automatic limit and the ceiling (or which prohibited condition matched: duplicate, after hours, wrong currency, missing reason, too many refused attempts); the score-band template states the distance to the next band boundary. Any other policy falls back to the deciding rule's matched comparisons from the stored decision trace, in words ("Matched because amount (250,000) is between 50,000 and 1,000,000"). Context values the request no longer carries are rebuilt from the trace (`contextFromTrace`). Shown in the approval list ("Boundary") and on the approval page under "Why a person is needed".
 
+## Trading template (AEGIS Trading)
+
+`packages/core/src/policy/trading.ts`, template id `trading-v1`. Settings: tools (default
+`submit-order`, `place-order`), currency, instrument allowlist, allowed sides, allowed order types,
+`maxOrderQty`, `autoApproveNotionalBelow`, `approvalNotionalUpTo`, approver roles, minimum approvers,
+approval expiry (default 30 minutes), separation of duties, `blockDuplicates`, `requireReason`,
+`marketHoursOnly` (UTC window and whether outside means approval or refusal), `maxDailyLoss` (reads
+`context.supplied.dayPnl` as sent by the agent; 0 disables) and `maxDailyOrders` (reads
+`context.requestCount24h`; 0 disables).
+
+Generated rules, in order: `invalid-order`, `instrument-not-allowed`, `side-not-allowed`,
+`order-type-not-allowed`, `missing-reason`, `duplicate-order`, `daily-loss-cap`, `too-many-orders`,
+`oversize-order`, `autonomous-band`, `approval-band`, `outside-market-hours`, `above-ceiling`. The
+bands read `params.notional`; the per-order cap reads `params.qty`. Samples cover every band and
+guard and become the document's embedded tests. `extractTradingSettings` reopens the guided
+"Mandate" tab; `tradingDocumentMatchesSettings` detects hand edits. The boundary sentence and the
+autonomy posture use the template's wording. Product context and stated limits: `docs/TRADING.md`.
+

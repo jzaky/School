@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant } from "@aegis/db";
-import { activateVersion, assignPolicy, assignmentSchema, buildRefundPolicyDocument, createPolicy, createPolicyVersion, deactivatePolicy, explainRefundPolicy, forbidden, isAegisError, notFound, policyDocumentSchema, policyInputSchema, refundSampleRequests, refundTemplateSchema, rollbackToVersion, simulatePolicy, submitForReview, unassignPolicy, updateDraftVersion, updatePolicyMeta, validation, type EvaluationResult, type PolicyDocument, type RefundSampleId, buildScoreBandPolicyDocument, explainScoreBandPolicy, scoreBandSampleRequests, scoreBandTemplateSchema, type ScoreBandSampleId, replayPolicy, type ReplayResult } from "@aegis/core";
+import { activateVersion, assignPolicy, assignmentSchema, buildRefundPolicyDocument, createPolicy, createPolicyVersion, deactivatePolicy, explainRefundPolicy, forbidden, isAegisError, notFound, policyDocumentSchema, policyInputSchema, refundSampleRequests, refundTemplateSchema, rollbackToVersion, simulatePolicy, submitForReview, unassignPolicy, updateDraftVersion, updatePolicyMeta, validation, type EvaluationResult, type PolicyDocument, type RefundSampleId, buildScoreBandPolicyDocument, explainScoreBandPolicy, scoreBandSampleRequests, scoreBandTemplateSchema, type ScoreBandSampleId, replayPolicy, type ReplayResult, buildTradingPolicyDocument, explainTradingPolicy, tradingSampleRequests, tradingTemplateSchema, type TradingSampleId } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { act } from "./util";
 
@@ -181,7 +181,7 @@ interface SimAgentShape {
 }
 
 /** Builds the input document a dry run evaluates, shaped like the gateway's real input. */
-function buildSimulationInput(args: { tool: string; action: string; params: Record<string, unknown>; agent: SimAgentShape; riskLevel: string; integration: string | null; resource: Record<string, unknown> | null; hour?: number; deniedCount24h?: number; priorRequestsSameReference?: number; supplied?: Record<string, unknown>; now?: Date }): Record<string, unknown> {
+function buildSimulationInput(args: { tool: string; action: string; params: Record<string, unknown>; agent: SimAgentShape; riskLevel: string; integration: string | null; resource: Record<string, unknown> | null; hour?: number; deniedCount24h?: number; priorRequestsSameReference?: number; requestCount24h?: number; supplied?: Record<string, unknown>; now?: Date }): Record<string, unknown> {
   const now = args.now ?? new Date();
   const params = args.params;
   const amount = typeof params.amount === "number" ? params.amount : typeof params.amount === "string" && Number.isFinite(Number(params.amount)) ? Number(params.amount) : null;
@@ -198,7 +198,7 @@ function buildSimulationInput(args: { tool: string; action: string; params: Reco
       hour: args.hour ?? now.getUTCHours(),
       weekday: now.getUTCDay(),
       ip: null,
-      requestCount24h: 0,
+      requestCount24h: args.requestCount24h ?? 0,
       deniedCount24h: args.deniedCount24h ?? 0,
       approvalsPending: 0,
       destinationDomain: null,
@@ -366,6 +366,50 @@ export async function previewScoreBandTemplateAction(input: unknown) {
         name: sample.name,
         description: sample.description,
         score: sample.score,
+        expected: sample.expected,
+        result: r.result,
+        decidingRule: r.decidingRule ? { ruleId: r.decidingRule.ruleId, description: r.decidingRule.description, reason: r.decidingRule.reason } : null,
+        reasons: r.reasons,
+      };
+    });
+    return { document, explanation, samples };
+  });
+}
+
+export interface TradingSampleOutcome {
+  id: TradingSampleId;
+  name: string;
+  description: string;
+  expected: EvaluationResult["result"];
+  result: EvaluationResult["result"];
+  decidingRule: { ruleId: string; description: string; reason: string } | null;
+  reasons: string[];
+}
+
+export interface TradingTemplatePreview {
+  document: PolicyDocument;
+  explanation: string[];
+  samples: TradingSampleOutcome[];
+}
+
+/**
+ * Compiles guided trading-mandate settings into a document and dry-runs the template's sample orders
+ * against it. Pure computation: nothing is stored. Requires policies:read like the simulator.
+ */
+export async function previewTradingTemplateAction(input: unknown) {
+  return act(async (): Promise<TradingTemplatePreview> => {
+    const c = await getConsoleContext();
+    if (!c.can("policies:read")) throw forbidden("Missing permission policies:read");
+    const settings = tradingTemplateSchema.parse(input ?? {});
+    const document = buildTradingPolicyDocument(settings);
+    const explanation = explainTradingPolicy(settings);
+    const samples = tradingSampleRequests(settings).map((sample): TradingSampleOutcome => {
+      const simInput = buildSimulationInput({ tool: sample.tool, action: "execute", params: sample.params, agent: GENERIC_AGENT(sample.tool), riskLevel: "critical", integration: null, resource: null, supplied: sample.dayPnl === null ? {} : { dayPnl: sample.dayPnl }, hour: sample.hour, priorRequestsSameReference: sample.priorRequestsSameReference, requestCount24h: sample.requestCount24h });
+      const r = simulatePolicy(document, simInput);
+      return {
+        id: sample.id,
+        name: sample.name,
+        description: sample.description,
         expected: sample.expected,
         result: r.result,
         decidingRule: r.decidingRule ? { ruleId: r.decidingRule.ruleId, description: r.decidingRule.description, reason: r.decidingRule.reason } : null,

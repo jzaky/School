@@ -4,6 +4,7 @@ import { assertPermission } from "../orgs/orgs.js";
 import { resolvePoliciesForAgent } from "../policy/service.js";
 import { explainRefundPolicy, extractRefundSettings } from "../policy/templates.js";
 import { explainScoreBandPolicy, extractScoreBandSettings } from "../policy/score-band.js";
+import { explainTradingPolicy, extractTradingSettings } from "../policy/trading.js";
 import type { PolicyToEvaluate } from "../policy/evaluate.js";
 
 /**
@@ -53,6 +54,11 @@ function templateSentence(p: PolicyToEvaluate): string | null {
   if (score) {
     const lines = explainScoreBandPolicy(score);
     return lines.slice(2, 5).join(" ") || null;
+  }
+  const trading = extractTradingSettings(p.document);
+  if (trading) {
+    const lines = explainTradingPolicy(trading);
+    return lines.slice(4, 7).join(" ") || null;
   }
   return null;
 }

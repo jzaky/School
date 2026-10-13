@@ -195,3 +195,42 @@ bound to it and granted to `support-refund-agent`, and adds `refund-payment` to 
 `refund-authority` policy. The five simulated integrations carry `settings.kind: simulated`. An
 operator connects a test key on the integration page, runs "Test connection", then enables the
 integration.
+
+## Second connector: Alpaca paper trading (`alpaca-paper`)
+
+`packages/core/src/gateway/connectors/alpaca.ts`, tool `place-order`. Alpaca's paper trading API is a
+free, documented sandbox served from its own host (`paper-api.alpaca.markets`) with paper-only keys.
+The same `DownstreamSystem` interface applies; the product context is in `docs/TRADING.md`.
+
+Money safety, two independent gates plus a host check:
+
+1. At store time, `validateCredential` accepts only `KEYID:SECRET` where the key id starts with `PK`
+   (paper). Live key ids start with `AK` and are refused with: "Only Alpaca paper-trading keys can be
+   stored, as KEYID:SECRET where the key id starts with PK. Live keys (AK...) are refused so no real
+   money can trade."
+2. At execution and reconciliation time the credential is parsed again and refused on the same rule.
+3. The base URL (integration `settings.baseUrl`, else `ALPACA_API_BASE`, else the paper host) is
+   refused when its host is `api.alpaca.markets`, whatever the settings say.
+
+What is sent: `POST /v2/orders` with `client_order_id` set to the gateway's downstream idempotency
+key (`aegis:<request id>`). Alpaca enforces uniqueness of `client_order_id`, so a replay of the same
+request can never create a second order: a 422 "client_order_id must be unique" is answered by
+fetching the existing order (`GET /v2/orders:by_client_order_id`) and reporting it as succeeded with
+`idempotentReplay`. Market orders are submitted by `notional` (fractional shares) so the declared
+value is what fills; limit orders by `qty` and `limit_price`, and the connector refuses a limit order
+whose declared notional differs from `qty` times `limit_price` by more than 0.5 percent. The
+consumed grant is checked against the parameters before any byte leaves the gateway.
+
+Outcomes: `failed` for validation, a refused key or host, and definitive 4xx answers (nothing was
+placed); `unknown` for transport errors, 5xx and 429 (the order may exist); `succeeded` with the
+Alpaca order id. Reconciliation looks the order up by `client_order_id`: found means succeeded,
+a definitive 404 means failed with nothing placed. The connection test calls `GET /v2/account` and
+requires `status` ACTIVE with trading not blocked.
+
+Verified against a fake Alpaca server (`packages/core/tests/fixtures/fake-alpaca.ts`) in
+`packages/core/tests/trading.test.ts`: automatic market order, approval-band limit order released by
+an approver, refusals before any broker call, notional mismatch refused at the connector, lost
+response reconciled to the existing order, server error reconciled to failed, live key refused at
+store time, connection test. The real paper-account run (`scripts/alpaca-paper-check.mts`) needs a
+paper key from the owner and has not been made.
+

@@ -3,6 +3,7 @@ import type { OrgContext } from "../lib/context.js";
 import { activateVersion, assignPolicy, createPolicy, submitForReview } from "../policy/service.js";
 import { buildScoreBandPolicyDocument } from "../policy/score-band.js";
 import { buildRefundPolicyDocument } from "../policy/templates.js";
+import { buildTradingPolicyDocument } from "../policy/trading.js";
 
 /** Illustrative, customer-configurable thresholds. Not universal governance rules. */
 export const DEMO_POLICIES = [
@@ -97,6 +98,14 @@ export const DEMO_POLICIES = [
     category: "operational" as const,
     document: { version: 1, rules: [{ id: "not-active", effect: "deny", when: { attr: "agent.status", op: "neq", value: "active" }, reason: "Agent is not active" }] },
     assign: { targetType: "org" as const },
+  },
+  {
+    key: "trading-mandate",
+    name: "Trading mandate (paper)",
+    description: "AEGIS Trading: the portfolio agent may trade SPY, QQQ, AAPL, MSFT and NVDA. Orders below USD 5,000 run on their own, USD 5,000 to 50,000 need an Approver within 30 minutes, above is refused. Up to 500 units per order, market hours 14:00 to 20:00 UTC (outside needs a person), duplicates refused, a USD 2,500 daily loss cap. Generated from the guided trading template; illustrative limits.",
+    category: "authorization" as const,
+    document: buildTradingPolicyDocument({ tools: ["submit-order", "place-order"], currency: "USD", instruments: ["SPY", "QQQ", "AAPL", "MSFT", "NVDA"], allowedSides: ["buy", "sell"], allowedOrderTypes: ["market", "limit"], maxOrderQty: 500, autoApproveNotionalBelow: 5000, approvalNotionalUpTo: 50_000, approverRoles: ["approver", "governance_manager", "owner"], minApprovers: 1, approvalExpiresMinutes: 30, separationOfDuties: true, blockDuplicates: true, requireReason: true, marketHoursOnly: { enabled: true, startHourUtc: 14, endHourUtc: 20, handling: "require_approval" }, maxDailyLoss: 2500, maxDailyOrders: 0 }),
+    assign: { targetType: "agent" as const, agentSlug: "portfolio-trading-agent" },
   },
   {
     key: "refund-fraud-score",

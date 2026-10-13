@@ -11,6 +11,7 @@ const TIERS = [
 ];
 
 const OPTIONS = [
+  ["AEGIS Trading", "Any tier", "Governance of a trading agent you already run: a guided trading mandate (instruments, order value bands, unit cap, market hours, duplicates, daily loss cap), a simulated brokerage for rehearsal and an Alpaca paper-trading connector. Paper trading only; AEGIS holds no strategy and never reaches a live account."],
   ["Continuous governance", "Any tier", "AEGIS responds to monitoring alerts on its own, with a response you set per rule: suspend the agent, pause the gateway or disable the integration. Every automatic response is recorded in evidence, notifies your administrators and can be reversed by a person. Off by default; alerts then only notify people."],
 ];
 

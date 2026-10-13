@@ -13,7 +13,7 @@ import { Note } from "@/components/ui/note";
 import { cn } from "@/lib/utils";
 
 export interface Scenario {
-  id: "banking" | "refunds" | "sensitive-data";
+  id: "banking" | "refunds" | "sensitive-data" | "trading";
   title: string;
   agent: string;
   summary: string;
@@ -34,6 +34,13 @@ export const SCENARIOS: Scenario[] = [
     agent: "Customer Support Refund Agent",
     summary: "Six requests exercising the refund-authority policy and the gateway's integrity checks.",
     steps: ["AED 180 refund executes autonomously", "A duplicate idempotency key returns the original outcome without a second execution", "AED 1,450 refund requires a supervisor", "AED 6,200 refund is denied", "An approval left to expire cannot be used afterwards", "Replaying an approved request with a changed amount is rejected"],
+  },
+  {
+    id: "trading",
+    title: "AEGIS Trading: a portfolio agent under a mandate",
+    agent: "Portfolio Trading Agent",
+    summary: "Six orders against the trading-mandate policy and the simulated brokerage. No strategy runs here; the agent's orders are given and the mandate decides.",
+    steps: ["USD 2,600 SPY order runs on its own inside market hours (outside, a person decides)", "USD 13,800 AAPL order waits for an approver, who has 30 minutes", "USD 72,000 NVDA order is refused above the ceiling", "GME is refused: not on the instrument list", "A repeat of an order reference is refused", "After a USD 2,600 day loss, further orders are refused"],
   },
   {
     id: "sensitive-data",
@@ -78,7 +85,7 @@ export function DemoRunner({ canDecide, userName, enabled = true }: { canDecide:
           <span className="ms-auto text-xs text-fg-muted">{autoApprove ? "Approvals are decided in your name and executed immediately." : "Approval requests stay open for a human to decide."}</span>
         </div>
       </Panel>
-      <div className="grid gap-4 xl:grid-cols-3">
+      <div className="grid gap-4 xl:grid-cols-2">
         {SCENARIOS.map((s) => {
           const run0 = runs[s.id];
           return (

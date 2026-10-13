@@ -16,7 +16,7 @@ export interface DemoStep {
   ok: boolean;
 }
 export interface DemoRun {
-  scenario: "banking" | "refunds" | "sensitive-data";
+  scenario: "banking" | "refunds" | "sensitive-data" | "trading";
   correlationId: string;
   steps: DemoStep[];
   startedAt: string;
@@ -153,3 +153,39 @@ export async function runSensitiveDataDemo(a: Actors): Promise<DemoRun> {
 }
 
 export type { Actors as DemoActors };
+
+/** Demo 4: AEGIS Trading. A portfolio agent places orders under the trading mandate; the broker is simulated. */
+export async function runTradingDemo(a: Actors): Promise<DemoRun> {
+  const startedAt = new Date().toISOString();
+  const correlationId = `demo-trading-${Date.now().toString(36)}`;
+  const ctx = agentCtx(a, "portfolio-trading-agent", correlationId);
+  const steps: DemoStep[] = [];
+  const run = correlationId.slice(-6).toUpperCase();
+  const ref = (n: number) => `SIG-${n}-${run}`;
+  const base = { tool: "submit-order", action: "execute", resource: "trading-book", principal: { type: "system" as const }, executionMode: "gateway" as const };
+  const small = await authorizeAndExecute(withTenant, ctx, { ...base, params: { symbol: "SPY", side: "buy", type: "limit", qty: 5, limitPrice: 520, notional: 2600, reference: ref(1), reason: "Rebalance toward 60/40 target" }, idempotencyKey: `${correlationId}-small`, justification: "Daily rebalance signal", context: { dayPnl: 120 } });
+  const afterHours = small.status === "pending_approval";
+  steps.push({ title: afterHours ? "USD 2,600 SPY order waits: outside market hours" : "USD 2,600 SPY order placed automatically", detail: afterHours ? "Below the USD 5,000 automatic limit, but requested outside 14:00 to 20:00 UTC, so a person decides" : "Below the USD 5,000 automatic limit, an allowed instrument, with a reason", requestId: small.requestId, outcome: summarize(small), ok: small.status === "executed" || small.status === "pending_approval" });
+
+  const mid = await authorizeAndExecute(withTenant, ctx, { ...base, params: { symbol: "AAPL", side: "buy", type: "limit", qty: 60, limitPrice: 230, notional: 13_800, reference: ref(2), reason: "Momentum signal above threshold" }, idempotencyKey: `${correlationId}-mid`, justification: "Signal strength 0.82", context: { dayPnl: 120 } });
+  steps.push({ title: "USD 13,800 AAPL order needs an approver", detail: "Between USD 5,000 and 50,000: a person decides within 30 minutes; nothing reaches the broker until then", requestId: mid.requestId, outcome: summarize(mid), ok: mid.status === "pending_approval" || mid.status === "executed" });
+  if (mid.status === "pending_approval" && a.autoApprove) {
+    const d = await approve(a, mid.requestId, "Within mandate, exposure checked in the broker");
+    steps.push({ title: "Approver releases the AAPL order", detail: "Executed once through the simulated brokerage with the approved parameters", requestId: mid.requestId, outcome: d.executed ? "Approved and executed" : d.status, ok: d.executed });
+  }
+
+  const huge = await authorizeAndExecute(withTenant, ctx, { ...base, params: { symbol: "NVDA", side: "buy", type: "market", qty: 400, notional: 72_000, reference: ref(3), reason: "Breakout" }, idempotencyKey: `${correlationId}-huge`, justification: "Breakout signal", context: { dayPnl: 120 } });
+  steps.push({ title: "USD 72,000 NVDA order is refused", detail: "Above the USD 50,000 ceiling: denied before any broker call, security event recorded", requestId: huge.requestId, outcome: summarize(huge), ok: huge.status === "denied" });
+
+  const offList = await authorizeAndExecute(withTenant, ctx, { ...base, params: { symbol: "GME", side: "buy", type: "market", qty: 20, notional: 600, reference: ref(4), reason: "Social sentiment spike" }, idempotencyKey: `${correlationId}-offlist`, justification: "Sentiment signal", context: { dayPnl: 120 } });
+  steps.push({ title: "GME order is refused: not on the instrument list", detail: "The mandate names the instruments the agent may trade; everything else is refused however small", requestId: offList.requestId, outcome: summarize(offList), ok: offList.status === "denied" });
+
+  const dup = await authorizeAndExecute(withTenant, ctx, { ...base, params: { symbol: "SPY", side: "buy", type: "limit", qty: 5, limitPrice: 520, notional: 2600, reference: ref(1), reason: "Rebalance toward 60/40 target" }, idempotencyKey: `${correlationId}-dup`, justification: "Signal fired again", context: { dayPnl: 120 } });
+  steps.push({ title: "Second order with the same reference is refused", detail: "The duplicate-order rule blocks a repeat of a reference already placed, even inside the automatic band", requestId: dup.requestId, outcome: summarize(dup), ok: dup.status === "denied" });
+
+  const loss = await authorizeAndExecute(withTenant, ctx, { ...base, params: { symbol: "MSFT", side: "buy", type: "market", qty: 3, notional: 1200, reference: ref(5), reason: "Dip buy" }, idempotencyKey: `${correlationId}-loss`, justification: "Dip signal", context: { dayPnl: -2600 } });
+  steps.push({ title: "Order after a USD 2,600 day loss is refused", detail: "The daily loss cap of USD 2,500 stops further orders for the day; a person must lift it by changing the policy", requestId: loss.requestId, outcome: summarize(loss), ok: loss.status === "denied" });
+
+  return { scenario: "trading", correlationId, steps, startedAt, finishedAt: new Date().toISOString() };
+}
+

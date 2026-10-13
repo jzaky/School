@@ -1,5 +1,6 @@
 import { extractRefundSettings, formatRefundAmount, refundCurrencies } from "./templates.js";
 import { extractScoreBandSettings, formatScore, scoreBandAttr } from "./score-band.js";
+import { extractTradingSettings, formatNotional } from "./trading.js";
 
 /**
  * One sentence for approvers: which boundary the request was close to. Derived from the policy that
@@ -104,6 +105,56 @@ function scoreBoundary(doc: unknown, ruleId: string, params: Record<string, unkn
   }
 }
 
+function tradingBoundary(doc: unknown, ruleId: string, params: Record<string, unknown>, context: Record<string, unknown>): string | null {
+  const s = extractTradingSettings(doc);
+  if (!s) return null;
+  const notional = num(params.notional);
+  const qty = num(params.qty);
+  const f = (n: number) => formatNotional(n, s.currency);
+  const units = (n: number) => new Intl.NumberFormat("en-US").format(n);
+  switch (ruleId) {
+    case "approval-band":
+      if (notional === null) return null;
+      return `${f(notional)} is ${f(notional - s.autoApproveNotionalBelow)} above the automatic limit of ${f(s.autoApproveNotionalBelow)} and ${f(s.approvalNotionalUpTo - notional)} below the ceiling of ${f(s.approvalNotionalUpTo)}.`;
+    case "above-ceiling":
+      if (notional === null) return null;
+      return `${f(notional)} is ${f(notional - s.approvalNotionalUpTo)} above the ceiling of ${f(s.approvalNotionalUpTo)}; the agent has no authority for it.`;
+    case "autonomous-band":
+      if (notional === null) return null;
+      return `${f(notional)} is ${f(s.autoApproveNotionalBelow - notional)} below the automatic limit of ${f(s.autoApproveNotionalBelow)}.`;
+    case "oversize-order":
+      if (qty === null) return null;
+      return `${units(qty)} units is ${units(qty - s.maxOrderQty)} above the per-order cap of ${units(s.maxOrderQty)}.`;
+    case "instrument-not-allowed":
+      return `${String(params.symbol ?? "The symbol")} is not on the allowed list (${s.instruments.join(", ")}).`;
+    case "side-not-allowed":
+      return `${String(params.side ?? "This side")} is not an allowed side (${s.allowedSides.join(", ")}).`;
+    case "order-type-not-allowed":
+      return `${String(params.type ?? "This order type")} is not an allowed order type (${s.allowedOrderTypes.join(", ")}).`;
+    case "duplicate-order": {
+      const n = num(context.priorRequestsSameReference) ?? 1;
+      return `${n} earlier order${n === 1 ? "" : "s"} with the same reference in the last 30 days; the limit is none.`;
+    }
+    case "outside-market-hours": {
+      const hour = num(context.hour);
+      const w = `${pad(s.marketHoursOnly.startHourUtc)} to ${pad(s.marketHoursOnly.endHourUtc)} UTC`;
+      return hour === null ? `Requested outside market hours (${w}).` : `Requested at ${pad(hour)} UTC, outside market hours (${w}).`;
+    }
+    case "daily-loss-cap": {
+      const pnl = num((context.supplied as Record<string, unknown> | undefined)?.dayPnl);
+      return pnl === null ? `The day's reported loss reached the cap of ${f(s.maxDailyLoss)}.` : `The day's reported result is ${f(pnl)}; the loss cap is ${f(s.maxDailyLoss)}.`;
+    }
+    case "too-many-orders": {
+      const n = num(context.requestCount24h);
+      return n === null ? `The agent reached the limit of ${s.maxDailyOrders} requests in 24 hours.` : `The agent sent ${n} requests in 24 hours; the limit is ${s.maxDailyOrders}.`;
+    }
+    case "missing-reason":
+      return "No reason was given with the order.";
+    default:
+      return null;
+  }
+}
+
 function show(v: unknown): string {
   if (typeof v === "number") return v.toLocaleString("en-US");
   if (typeof v === "string") return v;
@@ -184,5 +235,5 @@ export function boundarySentence(args: { document: unknown; ruleId: string | nul
   if (!ruleId) return null;
   const fromTrace = contextFromTrace(args.trace);
   const context = { ...fromTrace, ...(args.context ?? {}), supplied: { ...((fromTrace.supplied as Record<string, unknown> | undefined) ?? {}), ...((args.context?.supplied as Record<string, unknown> | undefined) ?? {}) } };
-  return refundBoundary(args.document, ruleId, args.params, context) ?? scoreBoundary(args.document, ruleId, args.params, context) ?? boundaryFromTrace(args.trace, ruleId, args.policyKey);
+  return refundBoundary(args.document, ruleId, args.params, context) ?? scoreBoundary(args.document, ruleId, args.params, context) ?? tradingBoundary(args.document, ruleId, args.params, context) ?? boundaryFromTrace(args.trace, ruleId, args.policyKey);
 }

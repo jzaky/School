@@ -34,6 +34,12 @@ const SANDBOX_COPY: Record<string, { credentialName: string; connect: string; st
     storeHint: "Store the Stripe test-mode secret key (sk_test_ or rk_test_) under the name secret-key. Live keys are refused so no real money can move. The key is encrypted with the organization master key and never shown again.",
     records: "Stripe holds the record of every refund. Each gateway receipt carries the Stripe refund id (re_...) and the minor-unit amount, and reconciliation looks refunds up by the AEGIS request id stored in Stripe metadata. The connection test calls GET /v1/balance in test mode.",
   },
+  "alpaca-paper": {
+    credentialName: "api-key",
+    connect: "Connect an Alpaca paper-trading key to enable this integration. Only paper keys are accepted. Create one in the Alpaca dashboard under Paper Trading.",
+    storeHint: "Store the paper key as KEYID:SECRET (the key id starts with PK) under the name api-key. Live keys (AK...) and the live host are refused so no real money can trade. The key is encrypted with the organization master key and never shown again.",
+    records: "Alpaca holds the record of every order. Each gateway receipt carries the Alpaca order id, and reconciliation looks orders up by client_order_id, which is the AEGIS idempotency key, so a replay can never create a second order. The connection test calls GET /v2/account on the paper host.",
+  },
 };
 
 export default async function IntegrationDetailPage({ params }: { params: Promise<{ id: string }> }) {

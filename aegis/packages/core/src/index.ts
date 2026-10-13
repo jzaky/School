@@ -23,6 +23,7 @@ export * from "./policy/evaluate.js";
 export * from "./policy/service.js";
 export * from "./policy/templates.js";
 export * from "./policy/score-band.js";
+export * from "./policy/trading.js";
 export * from "./policy/replay.js";
 export * from "./policy/boundary.js";
 export * from "./policy/opa-adapter.js";

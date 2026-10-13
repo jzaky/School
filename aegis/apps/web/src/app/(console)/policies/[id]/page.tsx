@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { withTenant } from "@aegis/db";
-import { extractRefundSettings, extractScoreBandSettings, getPolicy, isAegisError, listPolicyHistory, policyDocumentSchema, refundDocumentMatchesSettings, scoreBandDocumentMatchesSettings, type PolicyDocument } from "@aegis/core";
+import { extractRefundSettings, extractScoreBandSettings, extractTradingSettings, getPolicy, isAegisError, listPolicyHistory, policyDocumentSchema, refundDocumentMatchesSettings, scoreBandDocumentMatchesSettings, tradingDocumentMatchesSettings, type PolicyDocument } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { userNames } from "@/server/queries/users";
 import { agentOptions, teamOptions, toolOptions } from "@/server/queries/control";
@@ -22,6 +22,7 @@ import { AssignPolicyDialog, AssignmentsTable } from "@/components/control/polic
 import { PolicyActions } from "@/components/control/policy-actions";
 import { RefundThresholdsPanel } from "@/components/control/policy-thresholds";
 import { ScoreBandThresholdsPanel } from "@/components/control/policy-score-band-thresholds";
+import { TradingMandatePanel } from "@/components/control/policy-trading-thresholds";
 import { PolicyReplayPanel } from "@/components/control/policy-replay";
 import { RefundTester } from "@/components/control/policy-refund-form";
 import { formatDateTime, timeAgo } from "@/lib/utils";
@@ -72,7 +73,7 @@ export default async function PolicyDetailPage({ params, searchParams }: { param
   const versionRows: PolicyVersionRow[] = policy.versions.map((x) => ({ id: x.id, version: x.version, state: x.state, changeNote: x.changeNote, createdByName: names.get(x.createdBy ?? "") ?? "system", approvedByName: x.approvedBy ? (names.get(x.approvedBy) ?? "user") : null, activatedAt: x.activatedAt?.toISOString() ?? null, retiredAt: x.retiredAt?.toISOString() ?? null, createdAt: x.createdAt.toISOString(), contentHash: x.contentHash }));
   const assignmentRows = policy.assignments.map((a) => ({ id: a.id, targetType: a.targetType, targetId: a.targetId, targetLabel: a.targetType === "org" ? c.org.name : a.targetType === "team" ? (teamById.get(a.targetId ?? "")?.name ?? "Unknown team") : (agentById.get(a.targetId ?? "")?.name ?? "Unknown agent"), priority: a.priority, createdAt: a.createdAt.toISOString() }));
   const defaultTool = doc?.appliesTo.tools[0] ?? tools[0]?.key ?? "issue-refund";
-  const defaultParams = defaultTool === "initiate-transfer" ? '{\n  "amount": 250000,\n  "currency": "AED",\n  "toAccount": "AE45 0030 0000 9876 5432 100"\n}' : defaultTool === "issue-refund" ? '{\n  "amount": 1200,\n  "currency": "AED",\n  "orderId": "ORD-1001"\n}' : "{\n  \n}";
+  const defaultParams = defaultTool === "initiate-transfer" ? '{\n  "amount": 250000,\n  "currency": "AED",\n  "toAccount": "AE45 0030 0000 9876 5432 100"\n}' : defaultTool === "issue-refund" ? '{\n  "amount": 1200,\n  "currency": "AED",\n  "orderId": "ORD-1001"\n}' : defaultTool === "submit-order" || defaultTool === "place-order" ? '{\n  "symbol": "AAPL",\n  "side": "buy",\n  "type": "limit",\n  "qty": 60,\n  "limitPrice": 230,\n  "notional": 13800,\n  "reference": "SIG-1",\n  "reason": "Momentum signal"\n}' : "{\n  \n}";
   const versionLabel = selected ? `v${selected.version} (${statusLabel(selected.state)})` : "no version";
   // Guided refund policies: the template settings travel with the document under meta.template.
   const refundSettings = doc ? extractRefundSettings(doc) : null;
@@ -80,6 +81,9 @@ export default async function PolicyDetailPage({ params, searchParams }: { param
   // Guided score-band policies: same mechanism, a different template id.
   const scoreSettings = doc && !refundSettings ? extractScoreBandSettings(doc) : null;
   const scoreDiverged = scoreSettings ? !scoreBandDocumentMatchesSettings(doc) : false;
+  // Guided trading mandates (AEGIS Trading).
+  const tradingSettings = doc && !refundSettings && !scoreSettings ? extractTradingSettings(doc) : null;
+  const tradingDiverged = tradingSettings ? !tradingDocumentMatchesSettings(doc) : false;
   const toolsLite = tools.map((t) => ({ key: t.key, name: t.name }));
 
   const rulesTab = !selected ? (
@@ -158,7 +162,9 @@ export default async function PolicyDetailPage({ params, searchParams }: { param
             ? [{ id: "thresholds", label: "Thresholds", content: <RefundThresholdsPanel policyId={policy.id} version={{ id: selected.id, version: selected.version, state: selected.state }} settings={refundSettings} diverged={refundDiverged} roles={roles} tools={toolsLite} canWrite={canWrite} /> }]
             : scoreSettings && selected
               ? [{ id: "thresholds", label: "Score bands", content: <ScoreBandThresholdsPanel policyId={policy.id} version={{ id: selected.id, version: selected.version, state: selected.state }} settings={scoreSettings} diverged={scoreDiverged} roles={roles} tools={toolsLite} canWrite={canWrite} /> }]
-              : []),
+              : tradingSettings && selected
+                ? [{ id: "thresholds", label: "Mandate", content: <TradingMandatePanel policyId={policy.id} version={{ id: selected.id, version: selected.version, state: selected.state }} settings={tradingSettings} diverged={tradingDiverged} roles={roles} tools={toolsLite} canWrite={canWrite} /> }]
+                : []),
           { id: "rules", label: "Rules", count: doc?.rules.length, content: rulesTab },
           { id: "replay", label: "Replay", content: selected ? <PolicyReplayPanel policyId={policy.id} versionId={selected.id} versionLabel={`v${selected.version}`} /> : <Note tone="warning">No version to replay.</Note> },
           { id: "editor", label: "Editor", content: selected ? <PolicyEditor policyId={policy.id} version={{ id: selected.id, version: selected.version, state: selected.state, document: selected.document }} canWrite={canWrite} /> : <Note tone="warning">No version to edit.</Note> },
