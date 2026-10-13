@@ -77,6 +77,11 @@ Two further defects surfaced during the work and were fixed: the Shield inspecto
 - Executed and verified: 4 core tests (active document changes nothing and skips pre-policy refusals, stricter draft moves requests between bands with the deciding rule, new policy replayed as an addition, permission and window validation); 1 Playwright test (active refund policy replays with no change, an unsaved AED 50 limit lists the refunds that would need approval).
 - Remaining: Shield findings and historical agent state are not replayed (stated in the result).
 
+### Autonomy posture and boundary sentence (packages/core/src/agents/posture.ts, packages/core/src/policy/boundary.ts, added 2026-10-13)
+- Implemented: a posture per agent (suspended, restricted, supervised, autonomous) derived from its state, tool grants and the active policies that reach it, with one explanatory sentence, shown on the Agents list and the agent page; a boundary sentence on every approval (list and detail) saying how far the request sat from the policy's limits, exact for the refund and score-band templates and derived from the decision trace for any other policy. Gateway decisions now also record the hour and duplicate-reference counts in their input summary. Documented in `docs/POLICY_LANGUAGE.md`.
+- Executed and verified: 6 core tests (supervised refund agent with the template sentence, suspended and restricted agents, autonomous and restricted from rule shape, refund wording for every rule, score wording from request context and from the trace, generic trace fallback); 2 Playwright tests (Agents list and agent page show Supervised for the refund agent, approval list and detail show the refund boundary sentence and the transfer fallback).
+- Remaining: postures are computed per page load (no stored history of posture changes).
+
 ### Public site (apps/web/src/components/marketing, app/(marketing))
 - Implemented: home page led by the product promise and the refund workflow, who it is for, how authorization and downstream enforcement work with real console screenshots, what is implemented today, integration status table (sandbox tested, simulated, planned), how to start a pilot, calls to action Explore the demo and Discuss a pilot; Explore the demo page with seven guided steps and persona sign-in shown only in demo mode; Discuss a pilot page with the request form; sitemap updated.
 - Executed and verified: 15 Playwright tests including the forbidden-claims sweep over every page.
@@ -96,6 +101,7 @@ Two further defects surfaced during the work and were fixed: the Shield inspecto
 | Seed | `pnpm db:seed` | 461 historical requests, 75 approvals, 18 denied; Stripe integration disabled with no credential; chain valid |
 | Console and site | `cd apps/web && npx playwright test` | see the line below, recorded from the full run |
 | Layout scan (2026-10-13) | `node tests/overlap-scan.mjs` | 0 findings over 30 pages at 390, 768, 1024, 1280 and 1440 px after the fixes in commit d9df1e6 |
+| Autonomy posture and boundary sentence (2026-10-13) | `npx vitest run tests/posture-boundary.test.ts`, `npx playwright test tests/e2e/posture.spec.ts` | 6 passed, 2 passed |
 | Replay calibration (2026-10-13) | `npx vitest run tests/policy-replay.test.ts`, `npx playwright test tests/e2e/replay.spec.ts` | 4 passed, 1 passed |
 | Score-band template (2026-10-13) | `npx vitest run tests/score-band.test.ts`, `npx playwright test tests/e2e/score-band.spec.ts` | 7 passed, 2 passed |
 | Continuous governance (2026-10-13) | `npx vitest run tests/continuous-governance.test.ts`, `npx playwright test tests/e2e/governance.spec.ts` | 4 passed, 2 passed; full core suite 170 passed |

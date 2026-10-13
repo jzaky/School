@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { withTenant } from "@aegis/db";
-import { getApproval, isAegisError } from "@aegis/core";
+import { boundarySentence, getApproval, isAegisError, type TraceEntry } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { userNames } from "@/server/queries/users";
 import { approverOptions } from "@/server/queries/control";
@@ -55,7 +55,8 @@ export default async function ApprovalDetailPage({ params }: { params: Promise<{
   const riskIndicators = Array.isArray(a.request.riskIndicators) ? (a.request.riskIndicators as string[]) : [];
   const canReassign = c.can("approvals:decide") && (c.can("users:write") || a.assignedUserId === c.session.user.id);
   const decision = a.request.decisions[0] ?? null;
-  const explanation = (decision?.explanation ?? {}) as { decidingRule?: { policy: string; rule: string; effect: string } | null };
+  const explanation = (decision?.explanation ?? {}) as { decidingRule?: { policy: string; rule: string; effect: string } | null; trace?: TraceEntry[]; inputSummary?: Record<string, unknown> };
+  const boundary = rule ? boundarySentence({ document: rule.document, ruleId: a.triggeringRuleId, params: a.request.params as Record<string, unknown>, context: { ...(explanation.inputSummary ?? {}), hour: (explanation.inputSummary?.hour as number | undefined) ?? a.request.createdAt.getUTCHours(), supplied: (a.request.context as Record<string, unknown> | null) ?? {} }, trace: explanation.trace, policyKey: explanation.decidingRule?.policy ?? rule.policyKey }) : null;
   const receipt = a.request.receipts[0] ?? null;
   const whoMayDecide = `${a.requiredApprovals} approval${a.requiredApprovals === 1 ? "" : "s"} ${a.requiredRoles.length ? `from ${a.requiredRoles.join(" or ")}` : "from anyone who may decide approvals"}. The agent's owners and the person who asked for this cannot approve it.`;
 
@@ -139,6 +140,12 @@ export default async function ApprovalDetailPage({ params }: { params: Promise<{
               ) : (
                 <p className="text-fg-muted">Required by data protection settings{explanation.decidingRule ? ` after rule ${explanation.decidingRule.policy}/${explanation.decidingRule.rule}` : ""}.</p>
               )}
+              {boundary ? (
+                <p className="text-sm text-fg" data-testid="approval-boundary">
+                  <span className="text-fg-dim">Which boundary was close: </span>
+                  {boundary}
+                </p>
+              ) : null}
               {rule?.instructions || a.reason ? <p className="rounded-md border border-approval/30 bg-approval/5 px-3 py-2 text-xs text-fg">What to check before approving: {rule?.instructions ?? a.reason}</p> : null}
               <p className="text-xs text-fg-muted">Needs {whoMayDecide}</p>
               {a.escalatedToUserId ? <Badge tone="critical">Escalated to {names.get(a.escalatedToUserId) ?? "approver"}</Badge> : a.assignedUserId ? <Badge tone="info">Assigned to {names.get(a.assignedUserId) ?? "approver"}</Badge> : null}

@@ -37,6 +37,7 @@ export interface ApprovalRow {
   triggeringRule: string | null;
   /** Why a person is needed, in words (the rule description). */
   whyApproval: string | null;
+  boundary: string | null;
   policyName: string | null;
   riskIndicators: string[];
   justification: string;
@@ -127,6 +128,12 @@ export function ApprovalsList({ rows, status, mine, counts, pagination, canDecid
                           {r.policyName ? <span className="text-fg-muted"> ({r.policyName})</span> : null}
                         </dd>
                       </div>
+                      {r.boundary ? (
+                        <div className="flex gap-2 sm:col-span-2">
+                          <dt className="shrink-0 text-fg-dim">Boundary</dt>
+                          <dd className="text-fg">{r.boundary}</dd>
+                        </div>
+                      ) : null}
                     </dl>
                     {r.riskIndicators.length ? (
                       <div className="mt-1.5 flex flex-wrap gap-1">

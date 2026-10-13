@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { withTenant } from "@aegis/db";
-import { approvalListFilter, listApprovals } from "@aegis/core";
+import { approvalListFilter, boundarySentence, listApprovals, type TraceEntry } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { userNames } from "@/server/queries/users";
 import { explanationKey, ruleExplanations } from "@/server/queries/approvals";
@@ -20,7 +20,7 @@ export default async function ApprovalsPage({ searchParams }: { searchParams: Pr
   const parsed = approvalListFilter.safeParse({ ...flat, mine: flat.mine === "1" || flat.mine === "true" });
   const filter = parsed.success ? parsed.data : approvalListFilter.parse({});
   const currency = typeof c.org.settings.currency === "string" ? c.org.settings.currency : "AED";
-  const { page, counts, toolSystems, rules } = await withTenant(
+  const { page, counts, toolSystems, rules, latestDecision } = await withTenant(
     c.ctx.orgId,
     async (db) => {
       const [page, grouped, tools] = await Promise.all([
@@ -28,10 +28,12 @@ export default async function ApprovalsPage({ searchParams }: { searchParams: Pr
         db.approvalRequest.groupBy({ by: ["status"], where: { orgId: c.ctx.orgId }, _count: { _all: true } }),
         db.tool.findMany({ where: { orgId: c.ctx.orgId }, select: { id: true, integration: { select: { name: true } } } }),
       ]);
-      const rules = await ruleExplanations(db, page.items);
+      const [rules, decisions] = await Promise.all([ruleExplanations(db, page.items), db.authorizationDecision.findMany({ where: { orgId: c.ctx.orgId, actionRequestId: { in: page.items.map((a) => a.actionRequestId) } }, orderBy: { createdAt: "desc" }, select: { actionRequestId: true, explanation: true } })]);
+      const latestDecision = new Map<string, { decidingRule?: { policy: string } | null; trace?: TraceEntry[]; inputSummary?: Record<string, unknown> }>();
+      for (const d of decisions) if (!latestDecision.has(d.actionRequestId)) latestDecision.set(d.actionRequestId, (d.explanation ?? {}) as { decidingRule?: { policy: string } | null; trace?: TraceEntry[]; inputSummary?: Record<string, unknown> });
       const by = Object.fromEntries(grouped.map((g) => [g.status, g._count._all])) as Record<string, number>;
       const counts = { pending: (by.pending ?? 0) + (by.more_info ?? 0) + (by.escalated ?? 0), approved: by.approved ?? 0, rejected: by.rejected ?? 0, expired: by.expired ?? 0, all: grouped.reduce((n, g) => n + g._count._all, 0) };
-      return { page, counts, toolSystems: new Map(tools.map((t) => [t.id, t.integration?.name ?? null])), rules };
+      return { page, counts, toolSystems: new Map(tools.map((t) => [t.id, t.integration?.name ?? null])), rules, latestDecision };
     },
     { readOnly: true },
   );
@@ -39,6 +41,8 @@ export default async function ApprovalsPage({ searchParams }: { searchParams: Pr
   const rows: ApprovalRow[] = page.items.map((a) => {
     const kp = keyParams(a.request.params);
     const rule = rules.get(explanationKey(a));
+    const explanation = latestDecision.get(a.actionRequestId);
+    const boundary = rule ? boundarySentence({ document: rule.document, ruleId: a.triggeringRuleId, params: a.request.params as Record<string, unknown>, context: { ...(explanation?.inputSummary ?? {}), hour: (explanation?.inputSummary?.hour as number | undefined) ?? a.request.createdAt.getUTCHours(), supplied: (a.request.context as Record<string, unknown> | null) ?? {} }, trace: explanation?.trace, policyKey: explanation?.decidingRule?.policy ?? rule.policyKey }) : null;
     return {
       id: a.id,
       status: a.status,
@@ -60,6 +64,7 @@ export default async function ApprovalsPage({ searchParams }: { searchParams: Pr
       toAccount: kp.toAccount,
       triggeringRule: a.triggeringRuleId,
       whyApproval: rule?.description ?? (a.reason || null),
+      boundary,
       policyName: rule?.policyName ?? null,
       riskIndicators: Array.isArray(a.request.riskIndicators) ? (a.request.riskIndicators as string[]) : [],
       justification: a.request.justification,

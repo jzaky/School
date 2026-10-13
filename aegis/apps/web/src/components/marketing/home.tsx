@@ -38,6 +38,7 @@ const TODAY = [
   "Guided onboarding checklist and a sample refund workflow that runs without any external credentials",
   "Guided score-band template: route the score your own fraud or risk model produces into clear, review, hold and block bands, with approvals and holds generated for you",
   "Replay calibration: before activating a draft policy, see what it would have done to the last 30 days of real requests, which outcomes change and how many approvals per day it would create",
+  "Autonomy posture per agent (suspended, restricted, supervised, autonomous) read from its state, tools and policies, and one sentence on every approval saying which limit the request was close to",
   "Optional continuous governance: automatic, evidence-recorded responses to monitoring alerts (suspend the agent, pause the gateway, disable the integration), chosen per rule and reversible by a person",
 ];
 

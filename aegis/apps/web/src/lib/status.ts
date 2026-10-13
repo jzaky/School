@@ -22,6 +22,9 @@ const TONES: Record<string, Tone> = {
   pending_approval: "approval",
   pending: "approval",
   suspended: "approval",
+  // autonomy posture
+  supervised: "info",
+  autonomous: "allow",
   expired: "neutral",
   evaluating: "info",
   executing: "info",
@@ -86,6 +89,8 @@ const LABELS: Record<string, string> = {
   internal: "Internal",
   confidential: "Confidential",
   restricted: "Restricted",
+  supervised: "Supervised",
+  autonomous: "Autonomous",
   enabled: "Enabled",
   disabled: "Disabled",
   done: "Done",

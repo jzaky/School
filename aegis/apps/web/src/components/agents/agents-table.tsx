@@ -19,6 +19,8 @@ export interface AgentRow {
   name: string;
   slug: string;
   status: string;
+  posture: string;
+  postureSentence: string;
   environment: string;
   riskTier: string;
   modelProvider: string;
@@ -45,6 +47,15 @@ const columns: ColumnDef<AgentRow, unknown>[] = [
     meta: { width: 260 },
   },
   { id: "status", header: "Status", cell: ({ row }) => <StatusCell status={row.original.status} /> },
+  {
+    id: "posture",
+    header: "Posture",
+    cell: ({ row }) => (
+      <span title={row.original.postureSentence} data-testid="agent-posture" data-posture={row.original.posture}>
+        <Badge tone={statusTone(row.original.posture)}>{statusLabel(row.original.posture)}</Badge>
+      </span>
+    ),
+  },
   { id: "environment", header: "Environment", cell: ({ row }) => statusLabel(row.original.environment) },
   { id: "riskTier", header: "Risk tier", cell: ({ row }) => <Badge tone={statusTone(row.original.riskTier)}>{statusLabel(row.original.riskTier)}</Badge> },
   {

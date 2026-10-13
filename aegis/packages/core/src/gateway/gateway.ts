@@ -177,7 +177,7 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
         skipped: evaluation.skippedPolicies,
         trace: evaluation.trace,
         shield: shield.findings,
-        inputSummary: { amount: authzInput.context.amount, currency: authzInput.context.currency, destinationDomain: authzInput.context.destinationDomain, resource: authzInput.resource?.key ?? null, requestCount24h: authzInput.context.requestCount24h, deniedCount24h: authzInput.context.deniedCount24h },
+        inputSummary: { amount: authzInput.context.amount, currency: authzInput.context.currency, destinationDomain: authzInput.context.destinationDomain, resource: authzInput.resource?.key ?? null, requestCount24h: authzInput.context.requestCount24h, deniedCount24h: authzInput.context.deniedCount24h, hour: authzInput.context.hour, priorRequestsSameReference: authzInput.context.priorRequestsSameReference, duplicateReferenceKey: authzInput.context.duplicateReferenceKey },
       };
       if (decisionResult === "deny" && evaluation.securityEventSeverity) {
         securitySeverity = evaluation.securityEventSeverity;

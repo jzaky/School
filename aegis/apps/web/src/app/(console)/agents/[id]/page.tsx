@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { withTenant } from "@aegis/db";
-import { AGENT_TRANSITIONS, getAgent, isAegisError, listResources, listTools } from "@aegis/core";
+import { AGENT_TRANSITIONS, agentPosture, getAgent, isAegisError, listResources, listTools } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { userNames } from "@/server/queries/users";
 import { PageHeader } from "@/components/ui/page-header";
@@ -42,20 +42,21 @@ export default async function AgentDetailPage({ params, searchParams }: { params
   const data = await withTenant(c.ctx.orgId, async (db) => {
     try {
       const agent = await getAgent(db, c.ctx, id);
-      const [tools, resources, team, evidence] = await Promise.all([
+      const [tools, resources, team, evidence, posture] = await Promise.all([
         listTools(db, c.ctx),
         listResources(db, c.ctx),
         agent.teamId ? db.team.findUnique({ where: { id: agent.teamId }, select: { id: true, name: true, key: true } }) : null,
         canEvidence ? db.evidenceEvent.findMany({ where: { orgId: c.ctx.orgId, subjectType: "agent", subjectId: id }, orderBy: { seq: "desc" }, take: 50 }) : [],
+        agentPosture(db, c.ctx, agent),
       ]);
-      return { agent, tools, resources, team, evidence };
+      return { agent, tools, resources, team, evidence, posture };
     } catch (e) {
       if (isAegisError(e) && e.code === "not_found") return null;
       throw e;
     }
   });
   if (!data) notFound();
-  const { agent, tools, resources, team, evidence } = data;
+  const { agent, tools, resources, team, evidence, posture } = data;
   const names = await userNames([agent.businessOwnerId, agent.technicalOwnerId, ...agent.versions.map((v) => v.createdBy), ...evidence.filter((e) => e.actorType === "user").map((e) => e.actorId)]);
   const caps: AgentCaps = { canWrite: c.can("agents:write"), canControl: c.can("agents:control"), editable: agent.status !== "revoked" && agent.status !== "archived", status: agent.status };
   const activeTools = agent.tools.filter((t) => !t.revokedAt).length;
@@ -85,6 +86,15 @@ export default async function AgentDetailPage({ params, searchParams }: { params
             { label: "Technical owner", value: names.get(agent.technicalOwnerId ?? "") ?? null },
             { label: "Team", value: team ? (c.can("users:read") ? <Link href="/org/teams" className="text-accent hover:underline">{team.name}</Link> : team.name) : null },
             { label: "Status", value: <StatusBadge status={agent.status} /> },
+            {
+              label: "Autonomy posture",
+              value: (
+                <span className="block text-end" data-testid="agent-posture" data-posture={posture.posture}>
+                  <Badge tone={statusTone(posture.posture)}>{posture.label}</Badge>
+                  <span className="mt-1 block text-xs text-fg-muted">{posture.sentence}</span>
+                </span>
+              ),
+            },
             { label: "Status reason", value: agent.statusReason || null },
             { label: "Status changed", value: agent.statusChangedAt ? formatDateTime(agent.statusChangedAt) : null },
             { label: "Last activity", value: agent.lastActivityAt ? formatDateTime(agent.lastActivityAt) : null },

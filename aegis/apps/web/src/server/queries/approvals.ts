@@ -16,12 +16,15 @@ export interface RuleExplanation {
   ruleId: string | null;
   description: string | null;
   instructions: string | null;
+  /** Policy key and the stored document of the deciding version, for the boundary sentence. */
+  policyKey: string | null;
+  document: unknown;
 }
 
 /** Looks up the plain-language description of the rule that stopped each request for a person. */
 export async function ruleExplanations(db: TenantDb, approvals: { policyVersionId: string | null; triggeringRuleId: string | null }[]): Promise<Map<string, RuleExplanation>> {
   const ids = [...new Set(approvals.map((a) => a.policyVersionId).filter((x): x is string => !!x))];
-  const versions = ids.length ? await db.policyVersion.findMany({ where: { id: { in: ids } }, select: { id: true, version: true, document: true, policyId: true, policy: { select: { name: true } } } }) : [];
+  const versions = ids.length ? await db.policyVersion.findMany({ where: { id: { in: ids } }, select: { id: true, version: true, document: true, policyId: true, policy: { select: { name: true, key: true } } } }) : [];
   const byId = new Map(versions.map((v) => [v.id, v]));
   const out = new Map<string, RuleExplanation>();
   for (const a of approvals) {
@@ -30,7 +33,7 @@ export async function ruleExplanations(db: TenantDb, approvals: { policyVersionI
     const v = a.policyVersionId ? byId.get(a.policyVersionId) : undefined;
     const ruleId = a.triggeringRuleId?.split("/").pop() ?? null;
     const rule = v ? ((v.document as { rules?: RuleDoc[] }).rules ?? []).find((r) => r.id === ruleId) : undefined;
-    out.set(key, { policyName: v?.policy.name ?? null, policyId: v?.policyId ?? null, policyVersionId: v?.id ?? null, version: v?.version ?? null, ruleId, description: rule?.description ?? rule?.reason ?? null, instructions: rule?.approval?.instructions ?? null });
+    out.set(key, { policyName: v?.policy.name ?? null, policyId: v?.policyId ?? null, policyVersionId: v?.id ?? null, version: v?.version ?? null, ruleId, description: rule?.description ?? rule?.reason ?? null, instructions: rule?.approval?.instructions ?? null, policyKey: v?.policy.key ?? null, document: v?.document ?? null });
   }
   return out;
 }

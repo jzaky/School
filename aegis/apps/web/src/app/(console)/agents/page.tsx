@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { withTenant } from "@aegis/db";
-import { agentListFilter, listAgents, listTeams } from "@aegis/core";
+import { agentListFilter, agentPostures, listAgents, listTeams } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { memberOptions, userNames } from "@/server/queries/users";
 import { PageHeader } from "@/components/ui/page-header";
@@ -19,10 +19,11 @@ export default async function AgentsPage({ searchParams }: { searchParams: Promi
   const parsed = agentListFilter.safeParse(flat);
   const filter = parsed.success ? parsed.data : agentListFilter.parse({});
   const canWrite = c.can("agents:write");
-  const { page, pickers } = await withTenant(c.ctx.orgId, async (db) => {
+  const { page, pickers, postures } = await withTenant(c.ctx.orgId, async (db) => {
     const page = await listAgents(db, c.ctx, filter);
+    const postures = await agentPostures(db, c.ctx, page.items);
     const pickers = canWrite ? { members: await memberOptions(db, c.ctx.orgId), teams: c.can("users:read") ? await listTeams(db, c.ctx) : [] } : { members: [], teams: [] };
-    return { page, pickers };
+    return { page, pickers, postures };
   });
   const names = await userNames(page.items.map((a) => a.businessOwnerId));
   const rows: AgentRow[] = page.items.map((a) => ({
@@ -30,6 +31,8 @@ export default async function AgentsPage({ searchParams }: { searchParams: Promi
     name: a.name,
     slug: a.slug,
     status: a.status,
+    posture: postures.get(a.id)?.posture ?? "restricted",
+    postureSentence: postures.get(a.id)?.sentence ?? "",
     environment: a.environment,
     riskTier: a.riskTier,
     modelProvider: a.modelProvider,
@@ -44,7 +47,7 @@ export default async function AgentsPage({ searchParams }: { searchParams: Promi
     <div>
       <PageHeader
         title="AI Agents"
-        description="Every agent that can reach the Action Gateway, with its lifecycle state, owners and tool access."
+        description="Every agent that can reach the Action Gateway, with its lifecycle state, autonomy posture, owners and tool access."
         badges={<DemoBadge show={c.org.demoMode} />}
         actions={
           <>
