@@ -85,6 +85,7 @@ const settingsSchema = z.object({
   currency: z.string().regex(/^[A-Z]{3}$/, "three-letter ISO code").optional(),
   timezone: z.string().min(2).max(64).optional(),
   approvalDefaultExpiryMinutes: z.coerce.number().int().min(5).max(10080).optional(),
+  requireMfa: z.boolean().optional(),
 });
 
 export async function updateOrganizationAction(input: unknown) {
@@ -95,6 +96,7 @@ export async function updateOrganizationAction(input: unknown) {
     if (data.currency !== undefined) settings.currency = data.currency;
     if (data.timezone !== undefined) settings.timezone = data.timezone;
     if (data.approvalDefaultExpiryMinutes !== undefined) settings.approvalDefaultExpiryMinutes = data.approvalDefaultExpiryMinutes;
+    if (data.requireMfa !== undefined) settings.requireMfa = data.requireMfa;
     await updateOrganization(c.ctx, { ...(data.name ? { name: data.name } : {}), settings });
     revalidatePath("/org/settings");
     revalidatePath("/", "layout");

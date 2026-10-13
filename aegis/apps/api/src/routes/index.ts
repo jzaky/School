@@ -7,6 +7,8 @@ import { assuranceRoutes } from "./assurance.js";
 import { ssoRoutes } from "./sso.js";
 import { shieldRoutes } from "./shield.js";
 import { auditRoutes } from "./audit.js";
+import { identityRoutes } from "./identity.js";
+import { scimRoutes } from "./scim.js";
 
 /** Module route registrations added phase by phase. */
 export async function registerModuleRoutes(app: FastifyInstance): Promise<void> {
@@ -18,4 +20,6 @@ export async function registerModuleRoutes(app: FastifyInstance): Promise<void> 
   await app.register(ssoRoutes, { prefix: "/v1/sso" });
   await app.register(shieldRoutes, { prefix: "/v1/shield" });
   await app.register(auditRoutes, { prefix: "/v1/audit" });
+  await app.register(identityRoutes, { prefix: "/v1/identity" });
+  await app.register(scimRoutes, { prefix: "/scim/v2" });
 }

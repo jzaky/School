@@ -29,6 +29,8 @@ export interface BaselineFailure {
     | "invalid_parameters"
     | "destination_not_allowed"
     | "gateway_paused"
+    | "agent_credential_expired"
+    | "grant_expired"
     | "delegation_invalid"
     | "delegation_not_permitted"
     | "delegation_limit_exceeded";
@@ -60,7 +62,7 @@ export function validateParams(schema: unknown, params: unknown): { ok: true } |
 const CLASS_ORDER = ["public", "internal", "confidential", "restricted"];
 
 export function baselineChecks(args: {
-  agent: Agent & { tools: { enabled: boolean; revokedAt: Date | null; toolId: string }[]; permissions: { resourceId: string; actions: string[]; expiresAt: Date | null; revokedAt: Date | null }[] };
+  agent: Agent & { tools: { enabled: boolean; revokedAt: Date | null; toolId: string; expiresAt?: Date | null }[]; permissions: { resourceId: string; actions: string[]; expiresAt: Date | null; revokedAt: Date | null }[] };
   tool: (Tool & { integration: Integration | null }) | null;
   action: string;
   resource: Resource | null;
@@ -76,6 +78,7 @@ export function baselineChecks(args: {
   const now = args.now ?? new Date();
   if (args.gatewayPaused.paused) failures.push({ code: "gateway_paused", message: `Gateway is paused: ${args.gatewayPaused.reason ?? "emergency control"}` });
   if (agent.status !== "active") failures.push({ code: "agent_not_active", message: `Agent is ${agent.status}` });
+  if (agent.credentialExpiresAt && agent.credentialExpiresAt <= now) failures.push({ code: "agent_credential_expired", message: `Agent authority lapsed on ${agent.credentialExpiresAt.toISOString().slice(0, 10)}; it must be re-certified` });
   if (!tool) {
     failures.push({ code: "tool_not_found", message: "Unknown tool" });
     return { failures, permittedActions: [] };
@@ -84,6 +87,7 @@ export function baselineChecks(args: {
   if (tool.integration && tool.integration.status !== "active") failures.push({ code: "integration_disabled", message: `Integration ${tool.integration.key} is disabled${tool.integration.statusReason ? `: ${tool.integration.statusReason}` : ""}` });
   const grant = agent.tools.find((t) => t.toolId === tool.id);
   if (!grant || !grant.enabled || grant.revokedAt) failures.push({ code: "tool_not_granted", message: `Agent has no active grant for tool ${tool.key}` });
+  else if (grant.expiresAt && grant.expiresAt <= now) failures.push({ code: "grant_expired", message: `Temporary access to ${tool.key} ended at ${grant.expiresAt.toISOString()}` });
 
   const paramCheck = validateParams(tool.parameterSchema, args.params);
   if (!paramCheck.ok) failures.push({ code: "invalid_parameters", message: "Parameters do not match the tool schema", details: paramCheck.errors });
@@ -115,6 +119,10 @@ export function baselineChecks(args: {
   if (rules.allowedDomains?.length && args.destinationDomain) {
     const ok = rules.allowedDomains.some((d) => domainMatches(args.destinationDomain!, d));
     if (!ok) failures.push({ code: "destination_not_allowed", message: `Destination ${args.destinationDomain} is outside the allowed destinations for ${tool.key}` });
+  }
+  // The agent's own destination list applies on top of each tool's: both must allow the destination.
+  if (agent.allowedDestinations?.length && args.destinationDomain && !agent.allowedDestinations.some((d) => domainMatches(args.destinationDomain!, d))) {
+    failures.push({ code: "destination_not_allowed", message: `Destination ${args.destinationDomain} is outside this agent's allowed destinations` });
   }
   return { failures, permittedActions };
 }

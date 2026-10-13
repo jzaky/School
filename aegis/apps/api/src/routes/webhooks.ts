@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { withTenant } from "@aegis/db";
 import { z } from "zod";
+import { requireScope } from "../plugins/auth.js";
 import { appendEvidence, forbidden, makeContext, recordIntegrationHealth, verifyWebhook } from "@aegis/core";
 
 /**
@@ -25,6 +26,7 @@ export async function webhookRoutes(app: FastifyInstance) {
   });
 
   app.post("/:integrationKey", async (req, reply) => {
+    requireScope(req, "webhooks:send");
     const ctx = await req.orgContext();
     if (ctx.actor.type !== "integration") throw forbidden("Use an integration API key");
     const { integrationKey } = z.object({ integrationKey: z.string() }).parse(req.params);

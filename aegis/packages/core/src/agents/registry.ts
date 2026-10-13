@@ -19,9 +19,12 @@ export const agentInputSchema = z.object({
   teamId: z.string().uuid().nullable().optional(),
   dataClassificationLimit: z.enum(["public", "internal", "confidential", "restricted"]).default("internal"),
   riskTier: z.enum(["low", "medium", "high", "critical"]).default("medium"),
+  purpose: z.string().max(1000).default(""),
+  allowedDestinations: z.array(z.string().min(3).max(253).regex(/^(\*\.)?[a-z0-9.-]+$/i, "Use a domain such as example.com or *.example.com")).max(50).default([]),
+  credentialExpiresAt: z.coerce.date().nullable().optional(),
   metadata: z.record(z.unknown()).default({}),
 });
-export type AgentInput = z.infer<typeof agentInputSchema>;
+export type AgentInput = z.input<typeof agentInputSchema>;
 
 /** Allowed lifecycle transitions. Anything not listed is rejected. */
 export const AGENT_TRANSITIONS: Record<AgentStatus, AgentStatus[]> = {
@@ -76,8 +79,9 @@ export async function getAgent(db: TenantDb, ctx: OrgContext, agentId: string) {
   return { ...agent, assignments, recentRequests, statusCounts: Object.fromEntries(decisionsAgg.map((d) => [d.status, d._count._all])), apiKeys };
 }
 
-export async function createAgent(db: TenantDb, ctx: OrgContext, input: AgentInput) {
+export async function createAgent(db: TenantDb, ctx: OrgContext, raw: AgentInput) {
   assertPermission(ctx, "agents:write");
+  const input = agentInputSchema.parse(raw);
   const dup = await db.agent.findUnique({ where: { orgId_slug: { orgId: ctx.orgId, slug: input.slug } } });
   if (dup) throw conflict("An agent with this slug already exists");
   const agent = await db.agent.create({ data: { orgId: ctx.orgId, ...input, metadata: input.metadata as Prisma.InputJsonValue } });
@@ -91,7 +95,8 @@ export async function updateAgent(db: TenantDb, ctx: OrgContext, agentId: string
   const current = await db.agent.findUnique({ where: { id: agentId } });
   if (!current) throw notFound("Agent");
   if (current.status === "revoked" || current.status === "archived") throw validation(`A ${current.status} agent cannot be edited`);
-  const { slug: _slug, metadata, ...rest } = patch;
+  const parsed = agentInputSchema.partial().parse(patch);
+  const { slug: _slug, metadata, ...rest } = parsed;
   const agent = await db.agent.update({ where: { id: agentId }, data: { ...rest, ...(metadata ? { metadata: metadata as Prisma.InputJsonValue } : {}) } });
   await appendEvidence(db, ctx, { type: "agent.updated", subjectType: "agent", subjectId: agentId, payload: { fields: Object.keys(patch) } });
   return agent;

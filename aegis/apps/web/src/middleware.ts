@@ -12,8 +12,14 @@ export function middleware(req: NextRequest) {
     url.searchParams.set("next", pathname);
     return NextResponse.redirect(url);
   }
-  const res = NextResponse.next();
-  res.headers.set("x-request-id", crypto.randomUUID());
+  // Request headers reach server components and actions: one request id end to end, and the path for
+  // checks that depend on where the user is (for example the organization's MFA requirement).
+  const requestId = req.headers.get("x-request-id") ?? crypto.randomUUID();
+  const headers = new Headers(req.headers);
+  headers.set("x-request-id", requestId);
+  headers.set("x-aegis-path", pathname);
+  const res = NextResponse.next({ request: { headers } });
+  res.headers.set("x-request-id", requestId);
   return res;
 }
 

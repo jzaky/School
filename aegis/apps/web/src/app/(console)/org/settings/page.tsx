@@ -57,7 +57,7 @@ export default async function SettingsPage() {
       </Panel>
       <div className="grid gap-4 lg:grid-cols-3">
         <Panel title="Organization" description="Only people with the org:admin permission can change these" className="lg:col-span-2">
-          <OrganizationSettingsForm canAdmin={canAdmin} initial={{ name: org.name, currency: typeof s.currency === "string" ? s.currency : "AED", timezone: typeof s.timezone === "string" ? s.timezone : "Asia/Dubai", approvalDefaultExpiryMinutes: typeof s.approvalDefaultExpiryMinutes === "number" ? s.approvalDefaultExpiryMinutes : 240 }} />
+          <OrganizationSettingsForm canAdmin={canAdmin} initial={{ name: org.name, currency: typeof s.currency === "string" ? s.currency : "AED", timezone: typeof s.timezone === "string" ? s.timezone : "Asia/Dubai", approvalDefaultExpiryMinutes: typeof s.approvalDefaultExpiryMinutes === "number" ? s.approvalDefaultExpiryMinutes : 240, requireMfa: s.requireMfa === true }} />
         </Panel>
         <div className="space-y-4">
           <Panel title="Identity">

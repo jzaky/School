@@ -6,15 +6,16 @@ import { updateOrganizationAction } from "@/server/actions/org";
 import { Button } from "@/components/ui/button";
 import { Field, FormError, Input } from "@/components/ui/input";
 
-export function OrganizationSettingsForm({ initial, canAdmin }: { initial: { name: string; currency: string; timezone: string; approvalDefaultExpiryMinutes: number }; canAdmin: boolean }) {
+export function OrganizationSettingsForm({ initial, canAdmin }: { initial: { name: string; currency: string; timezone: string; approvalDefaultExpiryMinutes: number; requireMfa: boolean }; canAdmin: boolean }) {
   const router = useRouter();
   const [name, setName] = React.useState(initial.name);
   const [currency, setCurrency] = React.useState(initial.currency);
   const [timezone, setTimezone] = React.useState(initial.timezone);
   const [expiry, setExpiry] = React.useState(String(initial.approvalDefaultExpiryMinutes));
+  const [requireMfa, setRequireMfa] = React.useState(initial.requireMfa);
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  const dirty = name !== initial.name || currency !== initial.currency || timezone !== initial.timezone || expiry !== String(initial.approvalDefaultExpiryMinutes);
+  const dirty = name !== initial.name || currency !== initial.currency || timezone !== initial.timezone || expiry !== String(initial.approvalDefaultExpiryMinutes) || requireMfa !== initial.requireMfa;
   return (
     <form
       className="space-y-4"
@@ -22,7 +23,7 @@ export function OrganizationSettingsForm({ initial, canAdmin }: { initial: { nam
         e.preventDefault();
         setPending(true);
         setError(null);
-        const r = await updateOrganizationAction({ name, currency: currency.toUpperCase(), timezone, approvalDefaultExpiryMinutes: expiry });
+        const r = await updateOrganizationAction({ name, currency: currency.toUpperCase(), timezone, approvalDefaultExpiryMinutes: expiry, requireMfa });
         setPending(false);
         if (!r.ok) return setError(r.error);
         toast.success("Organization settings saved");
@@ -42,6 +43,13 @@ export function OrganizationSettingsForm({ initial, canAdmin }: { initial: { nam
         <Field label="Default approval expiry" htmlFor="org-expiry" hint="in minutes, from 5 to 10080 (7 days); how long an approval request waits before it lapses">
           <Input id="org-expiry" type="number" min={5} max={10080} value={expiry} onChange={(e) => setExpiry(e.target.value)} disabled={!canAdmin} required />
         </Field>
+        <label className="flex items-start gap-2 text-sm md:col-span-2" htmlFor="org-require-mfa">
+          <input id="org-require-mfa" type="checkbox" className="mt-1" checked={requireMfa} onChange={(e) => setRequireMfa(e.target.checked)} disabled={!canAdmin} />
+          <span>
+            Require two-factor authentication for every member
+            <span className="block text-xs text-fg-muted">Members without it can open only their account page until they turn it on. API calls with their sessions are refused until then.</span>
+          </span>
+        </label>
       </div>
       <FormError error={error} />
       <div className="flex justify-end">

@@ -83,7 +83,7 @@ function delegationChecks(d: DelegationContext, tool: Tool | null, resource: Res
   if (tool) {
     if (d.row.toolKeys.length && !d.row.toolKeys.includes(tool.key)) failures.push({ code: "delegation_not_permitted", message: `Delegation does not cover tool ${tool.key}` });
     const g = d.delegator.tools.find((t) => t.toolId === tool.id);
-    if (!g || !g.enabled || g.revokedAt) failures.push({ code: "delegation_not_permitted", message: `Delegating agent ${d.delegator.slug} has no active grant for tool ${tool.key}; a delegate never gains more than its delegator holds` });
+    if (!g || !g.enabled || g.revokedAt || (g.expiresAt && g.expiresAt <= now)) failures.push({ code: "delegation_not_permitted", message: `Delegating agent ${d.delegator.slug} has no active grant for tool ${tool.key}; a delegate never gains more than its delegator holds` });
   }
   if (resource) {
     const p = d.delegator.permissions.find((x) => x.resourceId === resource.id && !x.revokedAt && (!x.expiresAt || x.expiresAt > now));

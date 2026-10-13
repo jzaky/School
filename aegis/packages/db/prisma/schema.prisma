@@ -248,6 +248,12 @@ model Agent {
   teamId                  String?            @map("team_id") @db.Uuid
   dataClassificationLimit DataClassification @default(internal) @map("data_classification_limit")
   riskTier                String             @default("medium") @map("risk_tier")
+  /// What the agent is for, in business terms. Shown to approvers and used for objective alignment.
+  purpose                 String             @default("")
+  /// Domains this agent may send data or requests to, across all its tools. Empty means only the tools' own rules apply.
+  allowedDestinations     String[]           @default([]) @map("allowed_destinations")
+  /// After this time the agent's authority lapses until someone re-certifies it. Null means no expiry.
+  credentialExpiresAt     DateTime?          @map("credential_expires_at")
   currentVersion          Int                @default(1) @map("current_version")
   metadata                Json               @default("{}")
   statusReason            String?            @map("status_reason")
@@ -397,6 +403,8 @@ model AgentTool {
   toolId         String    @map("tool_id") @db.Uuid
   enabled        Boolean   @default(true)
   revokedAt      DateTime? @map("revoked_at")
+  /// Time-limited grants end here; the gateway refuses the tool afterwards.
+  expiresAt     DateTime? @map("expires_at")
   revokedReason  String?   @map("revoked_reason")
   scope          Json      @default("{}")
   createdAt      DateTime  @default(now()) @map("created_at")
@@ -1252,4 +1260,65 @@ model DeploymentVersion {
   notes      String   @default("")
 
   @@map("deployment_versions")
+}
+
+enum AccessRequestStatus {
+  pending
+  approved
+  rejected
+  expired
+  revoked
+}
+
+/// A request for time-limited access: a tool or resource permission for one agent, for a stated reason
+/// and duration. Someone other than the requester approves it; access ends at expiresAt.
+model AccessRequest {
+  id            String              @id @default(uuid(7)) @db.Uuid
+  orgId         String              @map("org_id") @db.Uuid
+  agentId       String              @map("agent_id") @db.Uuid
+  toolId        String?             @map("tool_id") @db.Uuid
+  resourceId    String?             @map("resource_id") @db.Uuid
+  actions       String[]            @default([])
+  reason        String
+  durationHours Int                 @map("duration_hours")
+  status        AccessRequestStatus @default(pending)
+  requestedBy   String              @map("requested_by") @db.Uuid
+  decidedBy     String?             @map("decided_by") @db.Uuid
+  decidedAt     DateTime?           @map("decided_at")
+  decisionNote  String?             @map("decision_note")
+  expiresAt     DateTime?           @map("expires_at")
+  createdAt     DateTime            @default(now()) @map("created_at")
+
+  @@index([orgId, status])
+  @@index([orgId, agentId])
+  @@map("access_requests")
+}
+
+enum DiscoveredAgentStatus {
+  unregistered
+  linked
+  ignored
+}
+
+/// An AI agent seen somewhere (an integration, deployment metadata, telemetry, an enforcement audit)
+/// that may not be in the registry yet.
+model DiscoveredAgent {
+  id            String                @id @default(uuid(7)) @db.Uuid
+  orgId         String                @map("org_id") @db.Uuid
+  source        String
+  externalId    String                @map("external_id")
+  name          String
+  platform      String                @default("")
+  metadata      Json                  @default("{}")
+  observations  Int                   @default(1)
+  firstSeenAt   DateTime              @default(now()) @map("first_seen_at")
+  lastSeenAt    DateTime              @default(now()) @map("last_seen_at")
+  status        DiscoveredAgentStatus @default(unregistered)
+  linkedAgentId String?               @map("linked_agent_id") @db.Uuid
+  decidedBy     String?               @map("decided_by") @db.Uuid
+  note          String?
+
+  @@unique([orgId, source, externalId])
+  @@index([orgId, status])
+  @@map("discovered_agents")
 }

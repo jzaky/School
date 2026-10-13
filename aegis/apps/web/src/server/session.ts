@@ -29,12 +29,17 @@ export interface ConsoleContext {
 /** Resolves the signed-in user plus their active organization. Redirects when either is missing. */
 export const getConsoleContext = cache(async (): Promise<ConsoleContext> => {
   const session = await requireUser();
-  const memberships = await listUserMemberships(session.user.id);
+  const all = await listUserMemberships(session.user.id);
+  // A single sign-on session sees only the organization whose identity provider issued it.
+  const memberships = session.ssoOrgId ? all.filter((m) => m.orgId === session.ssoOrgId) : all;
   const active = memberships.filter((m) => m.status === "active");
   const membership = (session.activeOrgId ? active.find((m) => m.orgId === session.activeOrgId) : undefined) ?? active[0];
   if (!membership) redirect("/no-organization");
   const org = await rawPrisma().organization.findUniqueOrThrow({ where: { id: membership.orgId } });
   const h = await headers();
+  const settings = (org.settings as Record<string, unknown>) ?? {};
+  // The organization can require two-factor authentication: until it is on, only the account page opens.
+  if (settings.requireMfa === true && !session.user.mfaEnabled && !(h.get("x-aegis-path") ?? "").startsWith("/account")) redirect("/account/security?mfa=required");
   const ctx = makeContext(
     membership.orgId,
     { type: "user", id: session.user.id, label: session.user.name, permissions: membership.permissions, membershipId: membership.membershipId },

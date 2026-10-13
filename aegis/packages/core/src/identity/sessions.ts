@@ -15,6 +15,8 @@ export interface SessionInfo {
   id: string;
   user: Pick<User, "id" | "email" | "name" | "isPlatformAdmin" | "mfaEnabled" | "status">;
   activeOrgId: string | null;
+  /** Single sign-on sessions act only in this organization. */
+  ssoOrgId: string | null;
   mfaPassed: boolean;
   expiresAt: Date;
 }
@@ -52,7 +54,7 @@ export async function resolveSession(token: string | undefined | null): Promise<
   if (Date.now() - row.lastSeenAt.getTime() > 60_000) {
     await db.session.update({ where: { id: row.id }, data: { lastSeenAt: new Date() } });
   }
-  return { id: row.id, user: row.user, activeOrgId: row.activeOrgId, mfaPassed: row.mfaPassed, expiresAt: row.expiresAt };
+  return { id: row.id, user: row.user, activeOrgId: row.activeOrgId, ssoOrgId: row.ssoOrgId, mfaPassed: row.mfaPassed, expiresAt: row.expiresAt };
 }
 
 export async function requireSession(token: string | undefined | null): Promise<SessionInfo> {

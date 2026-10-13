@@ -1,5 +1,5 @@
 import { withTenant, disconnectAll } from "@aegis/db";
-import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
+import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
 import { rawPrisma } from "@aegis/db";
 import { registerModuleHandlers } from "./handlers.js";
 
@@ -19,6 +19,8 @@ registerJobHandler("approvals.sweep", async () => {
     if (n) log.info({ orgId: o.id, expired: n }, "expired overdue approvals");
     const held = await withTenant(o.id, (db) => expireHeldRequests(db, systemContext(o.id)));
     if (held) log.info({ orgId: o.id, expired: held }, "expired quarantined or waiting requests");
+    const access = await withTenant(o.id, (db) => expireTemporaryAccess(db, systemContext(o.id)));
+    if (access) log.info({ orgId: o.id, expired: access }, "temporary access ended");
   }
 });
 

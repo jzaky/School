@@ -3,17 +3,25 @@ import { listSessions } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { PageHeader } from "@/components/ui/page-header";
 import { Panel } from "@/components/ui/panel";
+import { Note } from "@/components/ui/note";
 import { ChangePasswordForm, MfaPanel, SessionsList } from "@/components/account/security";
 
 export const metadata: Metadata = { title: "Account and security" };
 export const dynamic = "force-dynamic";
 
-export default async function SecurityPage() {
+export default async function SecurityPage({ searchParams }: { searchParams: Promise<{ mfa?: string }> }) {
   const c = await getConsoleContext();
+  const { mfa } = await searchParams;
+  const mustEnrol = c.org.settings.requireMfa === true && !c.session.user.mfaEnabled;
   const sessions = await listSessions(c.session.user.id);
   return (
     <div>
       <PageHeader title="Account and security" description={`${c.session.user.name} · ${c.session.user.email}`} />
+      {mustEnrol ? (
+        <div className="mb-4" data-testid="mfa-required">
+          <Note tone="warning">{c.org.name} requires two-factor authentication. Turn it on below to use the rest of the console{mfa === "required" ? "; you were brought here because it is not on yet" : ""}.</Note>
+        </div>
+      ) : null}
       <div className="grid gap-4 lg:grid-cols-2">
         <Panel title="Password" description="Changing your password signs you out everywhere else">
           <ChangePasswordForm />

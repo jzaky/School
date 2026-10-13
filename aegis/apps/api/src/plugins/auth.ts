@@ -1,6 +1,6 @@
 import fp from "fastify-plugin";
 import type { FastifyReply, FastifyRequest } from "fastify";
-import { forbidden, getUserMembership, makeContext, resolveApiKey, resolveSession, SESSION_COOKIE, unauthorized, type OrgContext, type ResolvedApiKey, type SessionInfo } from "@aegis/core";
+import { effectiveScopes, forbidden, getOrganization, getUserMembership, makeContext, resolveApiKey, resolveSession, SESSION_COOKIE, unauthorized, type OrgContext, type ResolvedApiKey, type SessionInfo } from "@aegis/core";
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -26,9 +26,11 @@ export const authPlugin = fp(async (app) => {
     if (this.session) {
       const orgId = opts.orgId ?? this.session.activeOrgId;
       if (!orgId) throw forbidden("No organization selected");
+      if (this.session.ssoOrgId && orgId !== this.session.ssoOrgId) throw forbidden("This single sign-on session is limited to the organization that issued it");
       const m = await getUserMembership(this.session.user.id, orgId);
       if (!m) throw forbidden("Not a member of this organization");
       if (this.session.user.mfaEnabled && !this.session.mfaPassed) throw unauthorized("MFA verification required");
+      if (!this.session.user.mfaEnabled && (await orgRequiresMfa(orgId))) throw forbidden("This organization requires two-factor authentication; turn it on in the console first");
       return makeContext(orgId, { type: "user", id: this.session.user.id, label: this.session.user.name, permissions: m.permissions, membershipId: m.membershipId }, { requestId: this.id, ip: this.ip });
     }
     throw unauthorized();
@@ -45,6 +47,20 @@ export const authPlugin = fp(async (app) => {
     if (token) req.session = await resolveSession(token);
   });
 });
+
+/**
+ * Key-authenticated calls must carry the scope for the route. Session (console) users are governed by
+ * their role permissions instead, checked in the core services.
+ */
+export function requireScope(req: FastifyRequest, scope: string) {
+  if (!req.apiKey) return;
+  if (!effectiveScopes(req.apiKey).includes(scope)) throw forbidden(`This API key lacks the scope ${scope}`);
+}
+
+async function orgRequiresMfa(orgId: string): Promise<boolean> {
+  const org = await getOrganization(orgId);
+  return ((org.settings ?? {}) as { requireMfa?: boolean }).requireMfa === true;
+}
 
 export function requireUser(req: FastifyRequest): SessionInfo {
   if (!req.session) throw unauthorized();

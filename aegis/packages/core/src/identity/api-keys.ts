@@ -3,6 +3,30 @@ import { randomBytes } from "node:crypto";
 import { randomToken, sha256Hex } from "../lib/crypto.js";
 import type { OrgContext } from "../lib/context.js";
 import { appendEvidence } from "../evidence/ledger.js";
+import { validation } from "../lib/errors.js";
+
+/**
+ * What a key may do. A key with no scopes listed gets the defaults for its subject type, so keys
+ * issued before scopes were enforced keep working with exactly the routes they could use then.
+ */
+export const API_KEY_SCOPES = {
+  "gateway:submit": "Submit actions, fetch grants, report execution, answer approval questions (agents)",
+  "gateway:read": "Read its own action requests",
+  "grants:verify": "Verify and consume execution grants (downstream systems)",
+  "webhooks:send": "Send signed webhooks",
+  "discovery:report": "Report AI agents it has seen",
+  "scim:provision": "Provision users and groups over SCIM 2.0",
+} as const;
+export type ApiKeyScope = keyof typeof API_KEY_SCOPES;
+const DEFAULT_SCOPES: Record<string, ApiKeyScope[]> = {
+  agent: ["gateway:submit", "gateway:read"],
+  integration: ["grants:verify", "webhooks:send", "discovery:report", "gateway:read"],
+  user: [],
+};
+
+export function effectiveScopes(key: { subjectType: string; scopes: string[] }): string[] {
+  return key.scopes.length ? key.scopes : DEFAULT_SCOPES[key.subjectType] ?? [];
+}
 
 /** Keys look like aegis_ak_<prefix>_<secret>. The prefix is stored in clear for lookup, the rest hashed. */
 export function generateApiKey(): { key: string; prefix: string; keyHash: string } {
@@ -13,6 +37,9 @@ export function generateApiKey(): { key: string; prefix: string; keyHash: string
 }
 
 export async function issueApiKey(db: TenantDb, ctx: OrgContext, input: { name: string; subjectType: ApiKeySubject; subjectId: string; scopes?: string[]; expiresAt?: Date | null }) {
+  const unknown = (input.scopes ?? []).filter((x) => !(x in API_KEY_SCOPES));
+  if (unknown.length) throw validation(`Unknown scopes: ${unknown.join(", ")}`);
+  if (input.subjectType === "agent" && (input.scopes ?? []).some((x) => x === "scim:provision" || x === "grants:verify")) throw validation("An agent key cannot provision users or verify grants");
   const gen = generateApiKey();
   const row = await db.apiKey.create({
     data: {

@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { withTenant } from "@aegis/db";
 import { z } from "zod";
+import { requireScope } from "../plugins/auth.js";
 import { actionRequestInputSchema, appendEvidence, auditEnforcementPath, authorizeAndExecute, enforcementCoverage, consumeGrant, forbidden, getActionRequest, hashObject, issueGrantForRequest, listActionRequests, recordAgentExecution, releaseQuarantine, releaseQuarantineSchema, requestListFilter, provideApprovalInfo } from "@aegis/core";
 
 /**
@@ -9,6 +10,7 @@ import { actionRequestInputSchema, appendEvidence, auditEnforcementPath, authori
  */
 export async function gatewayRoutes(app: FastifyInstance) {
   app.post("/actions", { config: { rateLimit: { max: 300, timeWindow: "1 minute" } } }, async (req, reply) => {
+    requireScope(req, "gateway:submit");
     const ctx = await req.orgContext();
     if (ctx.actor.type !== "agent") throw forbidden("Use an agent API key");
     const headerKey = req.headers["idempotency-key"];
@@ -21,12 +23,14 @@ export async function gatewayRoutes(app: FastifyInstance) {
   });
 
   app.get("/actions", async (req) => {
+    requireScope(req, "gateway:read");
     const ctx = await req.orgContext();
     const f = requestListFilter.parse(req.query);
     return withTenant(ctx.orgId, (db) => listActionRequests(db, ctx, f));
   });
 
   app.get("/actions/:id", async (req) => {
+    requireScope(req, "gateway:read");
     const ctx = await req.orgContext();
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
     return withTenant(ctx.orgId, (db) => getActionRequest(db, ctx, id));
@@ -34,6 +38,7 @@ export async function gatewayRoutes(app: FastifyInstance) {
 
   /** Agent-mode: after allow or approval, the agent fetches its single execution grant to present downstream. */
   app.post("/actions/:id/grant", async (req) => {
+    requireScope(req, "gateway:submit");
     const ctx = await req.orgContext();
     if (ctx.actor.type !== "agent") throw forbidden("Use an agent API key");
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
@@ -42,6 +47,7 @@ export async function gatewayRoutes(app: FastifyInstance) {
 
   /** Agent-mode: the agent reports the outcome of executing through its own channel (writes the receipt). */
   app.post("/actions/:id/execute", async (req) => {
+    requireScope(req, "gateway:submit");
     const ctx = await req.orgContext();
     if (ctx.actor.type !== "agent") throw forbidden("Use an agent API key");
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
@@ -54,6 +60,7 @@ export async function gatewayRoutes(app: FastifyInstance) {
    * (sha256 of canonical {toolKey, action, params}) so parameter swaps are caught here.
    */
   app.post("/grants/verify", async (req, reply) => {
+    requireScope(req, "grants:verify");
     const ctx = await req.orgContext();
     if (ctx.actor.type !== "integration") throw forbidden("Use an integration API key");
     const body = z.object({ grant: z.string().min(10), toolKey: z.string(), action: z.string().default("execute"), params: z.record(z.unknown()) }).parse(req.body);
@@ -90,6 +97,7 @@ export async function gatewayRoutes(app: FastifyInstance) {
   });
 
   app.post("/approvals/:id/info", async (req) => {
+    requireScope(req, "gateway:submit");
     const ctx = await req.orgContext();
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
     const { info } = z.object({ info: z.string().min(3).max(2000) }).parse(req.body);
