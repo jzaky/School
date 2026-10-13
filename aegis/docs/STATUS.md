@@ -5,7 +5,8 @@ Updated at the end of each phase. `docs/IMPLEMENTATION_REPORT.md` has the curren
 ## Phase 9: layout clean-up and continuous governance (2026-10-13): complete
 - Layout scan tool and fixes for every text collision and sideways-scrolling page found at five widths (commit d9df1e6).
 - Continuous governance mode: per-rule automatic responses (suspend agent, pause gateway, disable integration) with evidence, notifications and reversal by a person. Core 4 tests, Playwright 2 tests. See docs/CONTINUOUS_GOVERNANCE.md.
-- Open: dnrs.ai comparison (host unreachable from the build environment), AEGIS Trading product scope, plain-language copy pass for non-technical users.
+- DNRS.ai public pages and demo sites read and compared: docs/COMPARISON_DNRS.md (ideas to take on our own terms, what not to take, suggested order).
+- Open: AEGIS Trading product scope (needs an Alpaca paper key), plain-language copy pass for non-technical users, score-band policy template and replay calibration.
 
 ## Phase 8: pilot-ready refund workflow (2026-10-11 to 2026-10-12): complete
 - Execution safety: one live grant per request (partial unique index), `executing` and `unknown` request states, three-phase execution with the downstream idempotency key `aegis:<requestId>`, reconciliation job and sweep, human settlement, monitoring rule RM-012. Pause voids grants and blocks approvals; suspension voids grants. 12 regression tests.
