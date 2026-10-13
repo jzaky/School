@@ -25,7 +25,7 @@ export default async function IntegrationsPage() {
   const soon = now + 14 * 86400_000;
   return (
     <div>
-      <PageHeader title="Integrations" description="Downstream systems the Action Gateway can reach: simulated systems for the demonstrations and sandbox connectors against real providers in test mode. Tools, encrypted credentials with rotation, webhook signing and connection tests." badges={<DemoBadge show={c.org.demoMode} />} actions={<CreateIntegrationDialog canWrite={c.can("integrations:write")} />} />
+      <PageHeader title="Integrations" description="The outside systems an agent can act on through the Action Gateway, the one door every agent action goes through. Some are simulated for the demonstrations; sandbox connectors reach real providers in their test mode. Each one holds its tools, its encrypted credentials and their renewal dates, its signed inbound notifications (webhooks) and a connection test." badges={<DemoBadge show={c.org.demoMode} />} actions={<CreateIntegrationDialog canWrite={c.can("integrations:write")} />} />
       <SimpleTable caption="Integrations">
         <thead>
           <tr>
@@ -43,7 +43,7 @@ export default async function IntegrationsPage() {
           {rows.length === 0 ? (
             <tr>
               <td colSpan={8}>
-                <EmptyState icon={Plug} title="No integrations" description="Register a downstream system to attach tools and credentials." />
+                <EmptyState icon={Plug} title="No integrations" description="Add an outside system here, then attach the tools and credentials agents will use with it." />
               </td>
             </tr>
           ) : (

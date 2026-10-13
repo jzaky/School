@@ -62,7 +62,7 @@ export function CreateIntegrationDialog({ canWrite }: { canWrite: boolean }) {
         </Button>
       }
       title={created ? "Integration registered" : "New integration"}
-      description={created ? "Copy the webhook secret now. It is shown once and stored encrypted; it can be revealed later only with integrations:write and an evidence entry." : "Registers a downstream system. Tools are attached to it and credentials are stored encrypted in the vault."}
+      description={created ? "Copy the webhook secret now. It is shown once and stored encrypted. It can be revealed later only by someone with integrations:write, and every reveal is kept in the evidence record." : "Registers a system your agents will act on, such as a payment or banking system. Tools are attached to it, and its credentials are stored encrypted in the vault."}
       size="md"
       footer={
         created ? (
@@ -79,7 +79,7 @@ export function CreateIntegrationDialog({ canWrite }: { canWrite: boolean }) {
             <Button variant="ghost" onClick={close} disabled={pending}>
               Cancel
             </Button>
-            <Button form="new-integration-form" type="submit" variant="primary" loading={pending} disabled={name.trim().length < 2 || key.length < 2} disabledReason="Name and key are required">
+            <Button form="new-integration-form" type="submit" variant="primary" loading={pending} disabled={name.trim().length < 2 || key.length < 2} disabledReason="Enter a name and a key first">
               Register
             </Button>
           </>
@@ -88,7 +88,7 @@ export function CreateIntegrationDialog({ canWrite }: { canWrite: boolean }) {
     >
       {created ? (
         <div className="space-y-3">
-          <Note tone="warning">Shown once. Store it in the downstream system&apos;s webhook configuration.</Note>
+          <Note tone="warning">Shown once. Store it in the connected system&apos;s webhook configuration.</Note>
           <CodeBlock label="Webhook secret" code={created.webhookSecret} wrap />
           <CodeBlock label="Webhook endpoint" code={`POST /v1/webhooks/${created.key}`} />
         </div>
@@ -97,7 +97,7 @@ export function CreateIntegrationDialog({ canWrite }: { canWrite: boolean }) {
           <Field label="Name" htmlFor="int-name">
             <Input id="int-name" value={name} onChange={(e) => setName(e.target.value)} required minLength={2} maxLength={120} autoFocus />
           </Field>
-          <Field label="Key" htmlFor="int-key" hint="lowercase, digits, hyphens">
+          <Field label="Key" htmlFor="int-key" hint="a short permanent code: lowercase letters, digits and hyphens">
             <Input
               id="int-key"
               value={key}
@@ -142,7 +142,7 @@ export function IntegrationStatusButton({ integrationId, status, canWrite, canCo
         open={open}
         onOpenChange={setOpen}
         title={disabling ? "Disable integration" : "Enable integration"}
-        description={disabling ? "Emergency control: every tool behind this integration denies at the gateway and nothing executes downstream until it is enabled again." : "Tools behind this integration can execute again, subject to policy."}
+        description={disabling ? "Emergency control: every tool that uses this integration is refused at the gateway, and nothing is sent to the connected system until it is enabled again." : "Tools that use this integration can run again, as long as your policies allow each action."}
         confirmLabel={disabling ? "Disable" : "Enable"}
         danger={disabling}
         reason={disabling ? { required: true } : { required: false, label: "Note" }}
@@ -193,14 +193,14 @@ export function StoreCredentialDialog({ integrationId, canWrite, existingNames, 
         </Button>
       }
       title="Store a credential"
-      description={sandboxHint ?? "The secret is encrypted with the organization master key and never shown again. Storing under an existing name rotates it."}
+      description={sandboxHint ?? "The secret is encrypted with your organization's master key and never shown again. Storing a secret under a name that already exists replaces the old one (rotates it)."}
       size="sm"
       footer={
         <>
           <Button variant="ghost" onClick={() => setOpen(false)} disabled={pending}>
             Cancel
           </Button>
-          <Button form="store-credential-form" type="submit" variant="primary" loading={pending} disabled={name.length < 2 || secret.length < 8} disabledReason="Name (2+) and secret (8+ characters) are required">
+          <Button form="store-credential-form" type="submit" variant="primary" loading={pending} disabled={name.length < 2 || secret.length < 8} disabledReason="Enter a name of at least 2 characters and a secret of at least 8">
             {replaces ? "Rotate" : "Store"}
           </Button>
         </>
@@ -210,7 +210,7 @@ export function StoreCredentialDialog({ integrationId, canWrite, existingNames, 
         <Field label="Name" htmlFor="cred-name" hint="e.g. api-token">
           <Input id="cred-name" value={name} onChange={(e) => setName(e.target.value)} className="font-mono" pattern="^[a-zA-Z0-9_.-]+$" required autoFocus />
         </Field>
-        {replaces ? <Badge tone="approval">Replaces the existing {name} (version increments)</Badge> : null}
+        {replaces ? <Badge tone="approval">Replaces the existing {name}; the version number goes up by one</Badge> : null}
         <Field label="Secret" htmlFor="cred-secret">
           <Input id="cred-secret" type="password" value={secret} onChange={(e) => setSecret(e.target.value)} autoComplete="off" required minLength={8} className="font-mono" />
         </Field>
@@ -229,7 +229,7 @@ export function CredentialActions({ integrationId, credential, canWrite, canCont
   const [revoke, setRevoke] = React.useState(false);
   return (
     <div className="flex justify-end gap-1">
-      <Button size="sm" variant="ghost" onClick={() => setRotate(true)} disabled={!canWrite || credential.revoked || sandbox} disabledReason={sandbox ? "Sandbox keys come from the provider: store the new key under the same name to rotate it" : credential.revoked ? "Revoked credentials are replaced by storing a new secret" : "Requires integrations:write"}>
+      <Button size="sm" variant="ghost" onClick={() => setRotate(true)} disabled={!canWrite || credential.revoked || sandbox} disabledReason={sandbox ? "Sandbox keys come from the provider: store the new key under the same name to rotate it" : credential.revoked ? "A revoked credential cannot be rotated. Store a new secret instead." : "Requires integrations:write"}>
         <RefreshCw className="h-3.5 w-3.5" aria-hidden />
         Rotate
       </Button>
@@ -241,7 +241,7 @@ export function CredentialActions({ integrationId, credential, canWrite, canCont
         open={rotate}
         onOpenChange={setRotate}
         title={`Rotate ${credential.name}`}
-        description="Generates a fresh secret for the simulated system and bumps the version. Real systems supply their own secret through Store credential."
+        description="Creates a fresh secret for the simulated system and raises the version number. For a real system, get the new secret from that system and use Store credential."
         confirmLabel="Rotate"
         onConfirm={async () => {
           const r = await rotateCredentialAction(integrationId, credential.id);
@@ -254,7 +254,7 @@ export function CredentialActions({ integrationId, credential, canWrite, canCont
         open={revoke}
         onOpenChange={setRevoke}
         title={`Revoke ${credential.name}`}
-        description="Emergency control: execution through this integration fails closed until a new secret is stored."
+        description="Emergency control: nothing can run through this integration until a new secret is stored. Every attempt is refused rather than risked (fail closed)."
         confirmLabel="Revoke"
         danger
         reason={{ required: true }}

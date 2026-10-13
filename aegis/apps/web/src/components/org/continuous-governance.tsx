@@ -71,7 +71,7 @@ export function ContinuousGovernancePanel({ initial, rules, defaults, canAdmin }
           </div>
           <p className="mt-1 text-xs text-fg-muted">
             {continuous
-              ? "When a monitoring rule raises an alert, AEGIS runs the response chosen for that rule right away, writes it to the evidence ledger and notifies the administrators. Responses only ever reduce what agents may do; a person can reverse each one."
+              ? "When a monitoring rule raises an alert, AEGIS runs the response chosen for that rule right away, keeps a record of it in the evidence ledger and notifies the administrators. Responses only ever reduce what agents may do; a person can reverse each one."
               : "Alerts notify people. Every containment step (suspending an agent, pausing the gateway, disabling an integration) is a human decision."}
           </p>
         </div>
@@ -119,7 +119,7 @@ export function ContinuousGovernancePanel({ initial, rules, defaults, canAdmin }
         <Button variant="primary" onClick={save} disabled={!canAdmin || !dirty || pending} disabledReason={!canAdmin ? "Needs org:admin" : !dirty ? "Nothing changed" : undefined} data-testid="cg-save">
           {pending ? "Saving" : continuous && initial.mode !== "continuous" ? "Turn on continuous governance" : "Save"}
         </Button>
-        <span className="text-xs text-fg-muted">Saved changes are recorded in evidence as governance.mode_changed.</span>
+        <span className="text-xs text-fg-muted">Every save is kept in the evidence record (event type governance.mode_changed).</span>
       </div>
     </div>
   );

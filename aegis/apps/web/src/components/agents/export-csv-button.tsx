@@ -22,7 +22,7 @@ export function ExportCsvButton({ filter, disabled }: { filter: Record<string, s
     toast.success(`Exported ${r.data.count} of ${r.data.total} agents`);
   }
   return (
-    <Button onClick={run} loading={pending} disabled={disabled} disabledReason="No agents to export">
+    <Button onClick={run} loading={pending} disabled={disabled} disabledReason="There are no agents in this list to export">
       <Download className="h-3.5 w-3.5" aria-hidden />
       Export CSV
     </Button>

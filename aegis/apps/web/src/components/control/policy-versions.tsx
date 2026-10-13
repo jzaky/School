@@ -92,7 +92,7 @@ export function PolicyVersionsTable({ policyId, versions, selectedId, activeId, 
         open={rollback !== null}
         onOpenChange={(o) => !o && setRollback(null)}
         title={rollback ? `Roll back to v${rollback.version}` : ""}
-        description="Creates a new active version with the same document. The current version is retired; nothing is overwritten."
+        description="The rules from this version are copied into a new version, which becomes active right away. The current version is retired. Nothing is overwritten."
         confirmLabel="Roll back"
         reason={{ required: true, placeholder: "Why this version is being restored" }}
         onConfirm={async ({ reason }) => {

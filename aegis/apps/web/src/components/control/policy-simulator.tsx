@@ -54,7 +54,7 @@ export function PolicySimulator({ versionId, versionLabel, tools, agents, defaul
 
   return (
     <div className="grid gap-4 xl:grid-cols-5">
-      <Panel title="Scenario" description={`Dry run against ${versionLabel}. Nothing is recorded.`} className="xl:col-span-2">
+      <Panel title="Scenario" description={`A practice run (dry run) against ${versionLabel}. Nothing is recorded.`} className="xl:col-span-2">
         <form onSubmit={run} className="space-y-3">
           <div className="grid gap-3 sm:grid-cols-2">
             <Field label="Tool" htmlFor="sim-tool">
@@ -70,24 +70,24 @@ export function PolicySimulator({ versionId, versionLabel, tools, agents, defaul
             <Field label="Action" htmlFor="sim-action">
               <Input id="sim-action" value={action} onChange={(e) => setAction(e.target.value)} className="font-mono" />
             </Field>
-            <Field label="Agent" htmlFor="sim-agent" hint="attributes come from the registry">
+            <Field label="Agent" htmlFor="sim-agent" hint="the agent's details (status, environment, risk tier) are taken from the register">
               <Combobox id="sim-agent" value={agentId} onChange={setAgentId} options={agents.map((a) => ({ value: a.id, label: a.name, description: a.slug }))} placeholder="Generic active agent" allowClear />
             </Field>
             <Field label="Resource key" htmlFor="sim-resource">
               <Input id="sim-resource" value={resource} onChange={(e) => setResource(e.target.value)} placeholder="payments-core" className="font-mono" />
             </Field>
-            <Field label="Hour (UTC)" htmlFor="sim-hour" hint="context.hour">
+            <Field label="Hour (UTC)" htmlFor="sim-hour" hint="the hour the request arrives (context.hour)">
               <Input id="sim-hour" type="number" min={0} max={23} value={hour} onChange={(e) => setHour(e.target.value)} placeholder="now" />
             </Field>
-            <Field label="Denied in 24h" htmlFor="sim-denied" hint="context.deniedCount24h">
+            <Field label="Denied in 24h" htmlFor="sim-denied" hint="how many of this agent's requests were denied in the last 24 hours (context.deniedCount24h)">
               <Input id="sim-denied" type="number" min={0} value={denied} onChange={(e) => setDenied(e.target.value)} />
             </Field>
           </div>
-          <Field label="Parameters (JSON)" htmlFor="sim-params" error={paramsValid ? null : "Invalid JSON"}>
+          <Field label="Parameters (JSON)" htmlFor="sim-params" error={paramsValid ? null : "This is not valid JSON. Check for missing quotes, commas or brackets."}>
             <Textarea id="sim-params" mono value={params} onChange={(e) => setParams(e.target.value)} className="min-h-[120px]" spellCheck={false} />
           </Field>
           <FormError error={error} />
-          <Button type="submit" variant="primary" loading={pending} disabled={!paramsValid || !tool.trim()} disabledReason="Tool and valid JSON parameters are required">
+          <Button type="submit" variant="primary" loading={pending} disabled={!paramsValid || !tool.trim()} disabledReason="Enter a tool and valid JSON parameters first">
             <Play className="h-3.5 w-3.5" aria-hidden />
             Simulate
           </Button>
@@ -96,7 +96,7 @@ export function PolicySimulator({ versionId, versionLabel, tools, agents, defaul
       <div className="space-y-4 xl:col-span-3">
         {!result ? (
           <Panel>
-            <p className="py-8 text-center text-xs text-fg-dim">Run a scenario to see the decision, the deciding rule and the full comparison trace.</p>
+            <p className="py-8 text-center text-xs text-fg-dim">Run a scenario to see the decision, the rule that decided it and every comparison the policy made.</p>
           </Panel>
         ) : (
           <>
@@ -129,9 +129,9 @@ export function PolicySimulator({ versionId, versionLabel, tools, agents, defaul
                   ))}
                 </div>
               ) : null}
-              {result.skipped.length ? <Note className="mt-3">Policy skipped: {result.skipped.map((s) => s.reason).join("; ")}. The scope in appliesTo did not match this input, so the result is the default deny.</Note> : null}
+              {result.skipped.length ? <Note className="mt-3">Policy skipped: {result.skipped.map((s) => s.reason).join("; ")}. This policy does not cover the request you described (its appliesTo scope did not match), so the result is the default deny.</Note> : null}
             </Panel>
-            <Panel title="Trace" description="Every rule and comparison is evaluated; nothing short-circuits." padded={false}>
+            <Panel title="Trace" description="Every rule and every comparison is checked, even after a match is found; nothing is skipped." padded={false}>
               <SimpleTable caption="Evaluation trace" className="rounded-none border-0">
                 <thead>
                   <tr>
@@ -183,7 +183,7 @@ export function PolicySimulator({ versionId, versionLabel, tools, agents, defaul
                 </tbody>
               </SimpleTable>
             </Panel>
-            <Panel title="Input document" description="What the evaluator saw">
+            <Panel title="Input document" description="Exactly what the policy engine was given to decide on">
               <CodeBlock code={JSON.stringify(result.input, null, 2)} className="max-h-72 overflow-auto" />
             </Panel>
           </>

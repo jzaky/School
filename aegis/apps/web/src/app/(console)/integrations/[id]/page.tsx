@@ -32,13 +32,13 @@ const SANDBOX_COPY: Record<string, { credentialName: string; connect: string; st
     credentialName: "secret-key",
     connect: "Connect your Stripe test-mode secret key to enable this integration. Only test keys are accepted. Get one from the Stripe dashboard in test mode.",
     storeHint: "Store the Stripe test-mode secret key (sk_test_ or rk_test_) under the name secret-key. Live keys are refused so no real money can move. The key is encrypted with the organization master key and never shown again.",
-    records: "Stripe holds the record of every refund. Each gateway receipt carries the Stripe refund id (re_...) and the minor-unit amount, and reconciliation looks refunds up by the AEGIS request id stored in Stripe metadata. The connection test calls GET /v1/balance in test mode.",
+    records: "Stripe keeps the record of every refund. Each receipt in AEGIS carries the Stripe refund id (re_...) and the amount in the smallest currency unit (minor units). When AEGIS checks with Stripe what actually happened (reconciliation), it looks refunds up by the AEGIS request id stored in the Stripe metadata. The connection test calls GET /v1/balance in test mode.",
   },
   "alpaca-paper": {
     credentialName: "api-key",
     connect: "Connect an Alpaca paper-trading key to enable this integration. Only paper keys are accepted. Create one in the Alpaca dashboard under Paper Trading.",
     storeHint: "Store the paper key as KEYID:SECRET (the key id starts with PK) under the name api-key. Live keys (AK...) and the live host are refused so no real money can trade. The key is encrypted with the organization master key and never shown again.",
-    records: "Alpaca holds the record of every order. Each gateway receipt carries the Alpaca order id, and reconciliation looks orders up by client_order_id, which is the AEGIS idempotency key, so a replay can never create a second order. The connection test calls GET /v2/account on the paper host.",
+    records: "Alpaca keeps the record of every order. Each receipt in AEGIS carries the Alpaca order id. When AEGIS checks with Alpaca what actually happened (reconciliation), it looks orders up by client_order_id, which is the AEGIS duplicate guard (idempotency key), so the same request can never create a second order. The connection test calls GET /v2/account on the paper host.",
   },
 };
 
@@ -60,7 +60,7 @@ export default async function IntegrationDetailPage({ params }: { params: Promis
   const now = Date.now();
   const kind = integrationKind(i);
   const sandbox = kind === "sandbox";
-  const copy = SANDBOX_COPY[i.key] ?? { credentialName: "api-key", connect: "Connect a sandbox credential to enable this integration. Only the provider's test-mode credentials are accepted.", storeHint: "Store the provider's test-mode credential. It is encrypted with the organization master key and never shown again.", records: "The provider holds the record of every action. Each gateway receipt carries the provider's reference." };
+  const copy = SANDBOX_COPY[i.key] ?? { credentialName: "api-key", connect: "Connect a sandbox credential to enable this integration. Only the provider's test-mode credentials are accepted.", storeHint: "Store the provider's test-mode credential. It is encrypted with the organization master key and never shown again.", records: "The provider keeps the record of every action. Each receipt in AEGIS carries the provider's reference." };
   const liveCredentials = i.credentials.filter((cr) => !cr.revokedAt);
   const needsCredential = sandbox && !liveCredentials.some((cr) => cr.name === copy.credentialName);
   const ledger = i.ledger.slice(0, 50);
@@ -93,7 +93,7 @@ export default async function IntegrationDetailPage({ params }: { params: Promis
       ) : null}
       {i.status === "disabled" ? (
         <Note tone="danger" className="mb-4">
-          <strong>Disabled.</strong> {i.statusReason ? `Reason: ${i.statusReason}. ` : ""}Every tool behind this integration is denied at the gateway.
+          <strong>Disabled.</strong> {i.statusReason ? `Reason: ${i.statusReason}. ` : ""}Every tool behind this integration is refused at the Action Gateway, so no agent can use it.
         </Note>
       ) : null}
       <div className="grid gap-4 xl:grid-cols-3">
@@ -109,9 +109,9 @@ export default async function IntegrationDetailPage({ params }: { params: Promis
             ]}
           />
         </Panel>
-        <Panel title="Tools" description="Actions the gateway can execute through this system" className="xl:col-span-2" padded={false}>
+        <Panel title="Tools" description="What agents can do in this system through the Action Gateway" className="xl:col-span-2" padded={false}>
           {i.tools.length === 0 ? (
-            <p className="px-4 py-6 text-center text-xs text-fg-dim">No tools attached. Tools are registered from the agents module.</p>
+            <p className="px-4 py-6 text-center text-xs text-fg-dim">No tools attached yet. Tools are added from the AI Agents pages.</p>
           ) : (
             <SimpleTable caption="Tools" className="rounded-none border-0">
               <thead>
@@ -145,9 +145,9 @@ export default async function IntegrationDetailPage({ params }: { params: Promis
             </SimpleTable>
           )}
         </Panel>
-        <Panel title="Credentials" description={sandbox ? "Encrypted at rest; the connector checks the key again before every call" : "Encrypted at rest; rotation due dates raise RM-011 alerts"} className="xl:col-span-2" actions={<StoreCredentialDialog integrationId={i.id} canWrite={canWrite} existingNames={i.credentials.map((cr) => cr.name)} defaultName={sandbox ? copy.credentialName : undefined} sandboxHint={sandbox ? copy.storeHint : undefined} />} padded={false}>
+        <Panel title="Credentials" description={sandbox ? "Stored encrypted. The connector re-checks that the key is a test key before every call" : "Stored encrypted. When a credential is due for renewal (rotation), rule RM-011 raises an alert"} className="xl:col-span-2" actions={<StoreCredentialDialog integrationId={i.id} canWrite={canWrite} existingNames={i.credentials.map((cr) => cr.name)} defaultName={sandbox ? copy.credentialName : undefined} sandboxHint={sandbox ? copy.storeHint : undefined} />} padded={false}>
           {i.credentials.length === 0 ? (
-            <p className="px-4 py-6 text-center text-xs text-fg-dim">{sandbox ? `No credential stored. ${copy.connect}` : "No credentials stored. Execution against a real system needs one."}</p>
+            <p className="px-4 py-6 text-center text-xs text-fg-dim">{sandbox ? `No credential stored. ${copy.connect}` : "No credentials stored. An agent cannot act on a real system until one is added."}</p>
           ) : (
             <SimpleTable caption="Credentials" className="rounded-none border-0">
               <thead>
@@ -155,7 +155,7 @@ export default async function IntegrationDetailPage({ params }: { params: Promis
                   <Th>Name</Th>
                   <Th align="end">Version</Th>
                   <Th>Rotated</Th>
-                  <Th>Rotation due</Th>
+                  <Th>Renewal due (rotation)</Th>
                   <Th>State</Th>
                   <Th align="end">Actions</Th>
                 </tr>
@@ -181,7 +181,7 @@ export default async function IntegrationDetailPage({ params }: { params: Promis
             </SimpleTable>
           )}
         </Panel>
-        <Panel title="Webhook setup" description="Inbound events from the downstream system">
+        <Panel title="Webhook setup" description="How this system sends notifications back to AEGIS (webhooks), signed so they cannot be forged">
           <ol className="list-inside list-decimal space-y-1 text-xs text-fg-muted">
             <li>
               Send events to <span className="font-mono text-fg">POST /v1/webhooks/{i.key}</span> with the integration API key as a bearer token.
@@ -199,11 +199,11 @@ export default async function IntegrationDetailPage({ params }: { params: Promis
           </div>
         </Panel>
         {sandbox ? (
-          <Panel title="Downstream records" description="Where the record of each action lives for a sandbox connector" className="xl:col-span-3">
+          <Panel title="Where the records live" description="For a sandbox connector the provider keeps the record of each action; this says where to find it and how AEGIS checks it" className="xl:col-span-3">
             <Note tone="info">{copy.records}</Note>
           </Panel>
         ) : (
-          <Panel title="Simulated system activity" description="Ledger written by the simulated downstream system when it verifies a grant and executes" className="xl:col-span-3" padded={false}>
+          <Panel title="Simulated system activity" description="Entries the simulated system writes when it checks the one-time permission slip (grant) and carries out the action" className="xl:col-span-3" padded={false}>
             <div className="px-4 pt-3">
               <Badge tone="approval">Simulated system activity</Badge>
             </div>

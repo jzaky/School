@@ -44,7 +44,7 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
   const openBySeverity = `${stats.bySeverity.critical ?? 0} critical, ${stats.bySeverity.high ?? 0} high, ${stats.bySeverity.medium ?? 0} medium, ${stats.bySeverity.low ?? 0} low (all statuses)`;
   return (
     <div>
-      <PageHeader title="Incident Center" description="Numbered cases that group security events, notes and status changes. Every change is written to the evidence ledger." badges={<DemoBadge show={c.org.demoMode} />} actions={<CreateIncidentDialog canWrite={canWrite} agents={agents.map((a) => ({ id: a.id, name: a.name, slug: a.slug }))} />} />
+      <PageHeader title="Incident Center" description="Numbered cases that bring together related security events, notes and status changes. Every change is written to the record (evidence ledger)." badges={<DemoBadge show={c.org.demoMode} />} actions={<CreateIncidentDialog canWrite={canWrite} agents={agents.map((a) => ({ id: a.id, name: a.name, slug: a.slug }))} />} />
       <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatPanel label="Open incidents" value={stats.openTotal} tone={stats.openTotal > 0 ? "approval" : "allow"} footer={openBySeverity} />
         <StatPanel label="Investigating" value={stats.byStatus.investigating ?? 0} tone="info" />

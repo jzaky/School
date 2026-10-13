@@ -36,10 +36,10 @@ export function GatewayPauseControl({ paused, reason, by, canAdmin }: { paused: 
     <div data-testid="gateway-pause">
       {paused ? (
         <Note tone="danger" className="mb-3">
-          <strong>Gateway paused.</strong> Every new agent request is denied and approved actions do not run.{reason ? ` Reason: ${reason}.` : ""} {by ? `Paused by ${by}.` : ""}
+          <strong>Gateway paused.</strong> Every new agent request is refused and actions that were already approved do not run.{reason ? ` Reason: ${reason}.` : ""} {by ? `Paused by ${by}.` : ""}
         </Note>
       ) : (
-        <p className="mb-3 text-xs text-fg-muted">The gateway is running. Pausing it denies every new request from every agent and voids live execution grants until you resume. Use it when something looks wrong and you need time to investigate.</p>
+        <p className="mb-3 text-xs text-fg-muted">The Action Gateway, the one door every agent action goes through, is running. Pausing it refuses every new request from every agent and cancels any one-time permission slips already issued (execution grants) until you resume. Use it when something looks wrong and you need time to investigate.</p>
       )}
       <div className="flex flex-wrap items-center gap-2">
         {paused ? (
@@ -61,21 +61,21 @@ export function GatewayPauseControl({ paused, reason, by, canAdmin }: { paused: 
         open={open}
         onOpenChange={(o) => !o && setOpen(false)}
         title={paused ? "Resume the Action Gateway" : "Pause the Action Gateway"}
-        description={paused ? "Agents can submit requests again and policies apply as before." : "Every new request from every agent is denied until the gateway resumes. Requests already approved do not execute. The pause is recorded in evidence with your reason."}
+        description={paused ? "Agents can send requests again and your policies decide them as before." : "Every new request from every agent is refused until the gateway resumes. Requests that were already approved do not run. The pause and your reason are kept in the evidence record."}
         size="sm"
         footer={
           <>
             <Button variant="ghost" onClick={() => setOpen(false)} disabled={pending}>
               Cancel
             </Button>
-            <Button form="gateway-pause-form" type="submit" variant={paused ? "primary" : "danger"} loading={pending} disabled={!ready} disabledReason="Give a reason of at least 3 characters">
+            <Button form="gateway-pause-form" type="submit" variant={paused ? "primary" : "danger"} loading={pending} disabled={!ready} disabledReason="Enter a reason of at least 3 characters first">
               {paused ? "Resume gateway" : "Pause gateway"}
             </Button>
           </>
         }
       >
         <form id="gateway-pause-form" onSubmit={submit} className="space-y-3">
-          <Field label={needsReason ? "Reason" : "Note"} htmlFor="gw-reason" hint={needsReason ? "required, recorded in evidence" : "optional, recorded in evidence"}>
+          <Field label={needsReason ? "Reason" : "Note"} htmlFor="gw-reason" hint={needsReason ? "required, kept in the evidence record" : "optional, kept in the evidence record"}>
             <Textarea id="gw-reason" value={text} onChange={(e) => setText(e.target.value)} autoFocus placeholder={needsReason ? "What happened and why the gateway must stop" : "What was checked before resuming"} />
           </Field>
           <FormError error={error} />

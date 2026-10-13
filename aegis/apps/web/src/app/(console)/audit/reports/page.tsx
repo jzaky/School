@@ -35,7 +35,7 @@ export default async function AuditReportsPage() {
   });
   return (
     <div>
-      <PageHeader title="Audit Reports" description="Generated reports for completed assessments, stored with their SHA-256 so a downloaded file can be verified against the ledger." badges={<DemoBadge show={c.org.demoMode} />} />
+      <PageHeader title="Audit Reports" description="Reports produced from completed assessments. Each is stored with a fingerprint (SHA-256) so you can prove a downloaded file is the one on record." badges={<DemoBadge show={c.org.demoMode} />} />
       <div className="mb-4 grid gap-4 lg:grid-cols-3">
         <Panel title="Generate a report" className="lg:col-span-1">
           {assessments.length === 0 ? <p className="text-xs text-fg-dim">Complete an assessment first; reports are generated from its findings.</p> : <GenerateReportForm assessments={assessments.map((a) => ({ id: a.id, name: a.name, frameworkName: a.frameworkName }))} canGenerate={canWrite} />}
@@ -44,7 +44,7 @@ export default async function AuditReportsPage() {
           <ReportKindList />
         </Panel>
       </div>
-      {!canReports ? <Note className="mb-4">Listing and downloading exports requires reports:read.</Note> : null}
+      {!canReports ? <Note className="mb-4">You need the reports:read permission to list and download reports; ask an administrator.</Note> : null}
       <ExportsTable rows={rows} canDownload={canReports} />
     </div>
   );

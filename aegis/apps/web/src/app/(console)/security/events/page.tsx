@@ -44,9 +44,9 @@ export default async function SecurityEventsPage({ searchParams }: { searchParam
   const sevLine = (s: typeof w["24h"]) => `${s.bySeverity.critical ?? 0} critical, ${s.bySeverity.high ?? 0} high, ${s.bySeverity.medium ?? 0} medium, ${s.bySeverity.low ?? 0} low`;
   return (
     <div>
-      <PageHeader title="Security Events" description="What the gateway, Shield, monitoring and integrations flagged for an analyst. Triage, dismiss or group events into incidents." badges={<DemoBadge show={c.org.demoMode} />} />
+      <PageHeader title="Security Events" description="Things the Action Gateway, the Shield data protection check, monitoring and integrations flagged for a security analyst to look at. Review each one, dismiss it, or group related events into an incident." badges={<DemoBadge show={c.org.demoMode} />} />
       <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4">
-        <StatPanel label="Open" value={stats.open} tone={stats.open > 0 ? "approval" : "neutral"} footer="Awaiting triage" />
+        <StatPanel label="Open" value={stats.open} tone={stats.open > 0 ? "approval" : "neutral"} footer="Waiting for an analyst to review (triage)" />
         <StatPanel label="Last 24 hours" value={w["24h"].total} footer={sevLine(w["24h"])} tone={(w["24h"].bySeverity.critical ?? 0) > 0 ? "critical" : undefined} />
         <StatPanel label="Last 7 days" value={w["7d"].total} footer={sevLine(w["7d"])} />
         <StatPanel label="Last 30 days" value={w["30d"].total} footer={sevLine(w["30d"])} />

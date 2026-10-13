@@ -162,7 +162,7 @@ export function EvidenceView({ rows, pagination, filters, types, subjectTypes, i
       </div>
       {lastExport ? (
         <Note>
-          Exported <span className="font-mono">{lastExport.filename}</span> with {lastExport.count} events. SHA-256 <span className="font-mono">{lastExport.sha256}</span>. Chain {lastExport.valid ? "valid" : "invalid"} at export time; the export itself is recorded in the ledger.
+          Exported <span className="font-mono">{lastExport.filename}</span> with {lastExport.count} events. File fingerprint (SHA-256) <span className="font-mono">{lastExport.sha256}</span>. The chain was {lastExport.valid ? "valid" : "invalid"} at export time, and the export itself is recorded in the ledger.
         </Note>
       ) : null}
       <DataTable
@@ -185,9 +185,9 @@ export function EvidenceView({ rows, pagination, filters, types, subjectTypes, i
           >
             <div className="relative">
               <Search className="pointer-events-none absolute start-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-fg-dim" aria-hidden />
-              <Input aria-label="Search evidence" placeholder="Type, subject, hash prefix" value={local.q} onChange={(e) => setLocal({ ...local, q: e.target.value })} className="w-56 ps-8" />
+              <Input aria-label="Search evidence" placeholder="Search by type, subject or the start of a hash" value={local.q} onChange={(e) => setLocal({ ...local, q: e.target.value })} className="w-56 ps-8" />
             </div>
-            <Input aria-label="Event type" list="evidence-types" placeholder="Type (prefix* allowed)" value={local.type} onChange={(e) => setLocal({ ...local, type: e.target.value })} className="w-52 font-mono text-xs" />
+            <Input aria-label="Event type" list="evidence-types" placeholder="Event type (prefix* allowed)" value={local.type} onChange={(e) => setLocal({ ...local, type: e.target.value })} className="w-52 font-mono text-xs" />
             <datalist id="evidence-types">
               {types.map((t) => (
                 <option key={t.type} value={t.type}>
@@ -228,7 +228,7 @@ export function EvidenceView({ rows, pagination, filters, types, subjectTypes, i
         ) : (
           <div className="space-y-4">
             <div className="flex flex-wrap items-center gap-2">
-              <Badge tone={detail.verified ? "allow" : "deny"}>{detail.verified ? "Hash recomputed and verified" : "Hash verification failed"}</Badge>
+              <Badge tone={detail.verified ? "allow" : "deny"}>{detail.verified ? "Hash recomputed and verified" : "Hash check failed: this record does not match its fingerprint"}</Badge>
               {detail.event.subjectHref ? (
                 <Link href={detail.event.subjectHref} className="inline-flex items-center gap-0.5 text-sm text-accent hover:underline">
                   Open {detail.event.subjectType.replace(/_/g, " ")} <ArrowUpRight className="h-3 w-3" aria-hidden />
@@ -247,9 +247,9 @@ export function EvidenceView({ rows, pagination, filters, types, subjectTypes, i
             />
             <CodeBlock label="Payload" code={detail.event.payload} wrap />
             <div>
-              <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-fg-muted">Related events (same correlation id)</h3>
+              <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-fg-muted">Related events (same request, by correlation id)</h3>
               {detail.related.length <= 1 ? (
-                <p className="text-xs text-fg-dim">No other events share this correlation id.</p>
+                <p className="text-xs text-fg-dim">No other events belong to the same request (correlation id).</p>
               ) : (
                 <ul className="divide-y divide-line rounded-md border border-line">
                   {detail.related.map((r) => (

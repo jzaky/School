@@ -103,11 +103,11 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
               { label: "Action", value: req.action, mono: true },
               { label: "Integration", value: tool?.integration ? <Link href={`/integrations/${tool.integration.id}`} className="text-accent hover:underline">{tool.integration.name}</Link> : null },
               { label: "Resource", value: req.resourceKey, mono: true },
-              { label: "Principal", value: req.principalUserId ? (names.get(req.principalUserId) ?? req.principalUserId) : req.principalRef || null },
+              { label: "On behalf of (principal)", value: req.principalUserId ? (names.get(req.principalUserId) ?? req.principalUserId) : req.principalRef || null },
               { label: "Environment", value: statusLabel(req.environment) },
-              { label: "Correlation id", value: req.correlationId, mono: true },
-              { label: "Idempotency key", value: req.idempotencyKey, mono: true },
-              { label: "Params hash", value: req.paramsHash, mono: true },
+              { label: "Trace reference (correlation id)", value: req.correlationId, mono: true },
+              { label: "Duplicate guard (idempotency key)", value: req.idempotencyKey, mono: true },
+              { label: "Parameter fingerprint (params hash)", value: req.paramsHash, mono: true },
               { label: "Execution mode", value: typeof ctx.executionMode === "string" ? ctx.executionMode : "gateway" },
               { label: "Completed", value: req.completedAt ? formatDateTime(req.completedAt) : null },
               { label: "Risk indicators", value: riskIndicators.length ? <span className="flex flex-wrap justify-end gap-1">{riskIndicators.map((r) => <Badge key={r} tone="approval" mono>{r}</Badge>)}</span> : null },
@@ -115,17 +115,17 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
           />
           {req.justification ? (
             <div className="mt-3 rounded-md border border-line bg-bg px-3 py-2 text-sm">
-              <div className="text-xs text-fg-dim">Business justification</div>
+              <div className="text-xs text-fg-dim">The agent&apos;s business reason</div>
               {req.justification}
             </div>
           ) : null}
         </Panel>
-        <Panel title="Parameters" description={shieldMasked ? "Shield inspected these parameters; sensitive values may be masked." : "As validated against the tool schema"}>
+        <Panel title="Parameters" description={shieldMasked ? "Shield, the data protection check, inspected these values; sensitive ones may be hidden." : "The exact values the agent sent, checked against the format the tool expects (its schema)"}>
           <CodeBlock code={JSON.stringify(req.params, null, 2)} />
           {Object.keys(ctx).filter((k) => k !== "executionMode" && k !== "ip").length ? <CodeBlock className="mt-3" label="Caller context" code={JSON.stringify(Object.fromEntries(Object.entries(ctx).filter(([k]) => k !== "executionMode" && k !== "ip")), null, 2)} /> : null}
         </Panel>
 
-        <Panel title="Decision" description="Deterministic evaluation; every rule and comparison is recorded" className="xl:col-span-3">
+        <Panel title="Decision" description="The same request always gets the same answer, and every rule and comparison that led to it is recorded" className="xl:col-span-3">
           {decision ? <DecisionPanel result={decision.result} explanation={explanation} reasons={reasons} policyVersionIds={decision.policyVersionIds} policyLinks={policyLinks} latencyMs={decision.latencyMs} /> : <Note tone="warning">No decision recorded for this request.</Note>}
         </Panel>
 
@@ -177,16 +177,16 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
           </Panel>
         ) : null}
 
-        <Panel title="Execution" description="Grants are bound to the request hash; receipts come from the downstream system" className={req.approvals.length ? "" : "xl:col-span-2"}>
+        <Panel title="Execution" description="A one-time permission slip (grant) is tied to this exact request before anything runs, and the receipt comes back from the other system" className={req.approvals.length ? "" : "xl:col-span-2"}>
           <div className="mb-3">
             <ExecutionControls requestId={req.id} status={req.status} canControl={c.can("agents:control")} canDecide={c.can("approvals:decide")} downstreamKind={req.receipts[0]?.downstreamSystem?.endsWith("-sim") ? "simulated" : req.receipts[0] ? "sandbox" : null} />
           </div>
           {req.grants.length === 0 && req.receipts.length === 0 ? (
-            <p className="text-xs text-fg-dim">Nothing executed. {req.status === "denied" ? "Denied requests never reach a downstream system." : req.status === "pending_approval" ? "Waiting for approval." : req.status === "approved" ? "Approved; execution has not started." : ""}</p>
+            <p className="text-xs text-fg-dim">Nothing has run. {req.status === "denied" ? "A refused request never reaches the other system." : req.status === "pending_approval" ? "Waiting for a person to approve it." : req.status === "approved" ? "Approved; it has not started running yet." : ""}</p>
           ) : (
             <div className="space-y-3">
               {req.grants.length ? (
-                <SimpleTable caption="Execution grants">
+                <SimpleTable caption="One-time permission slips (execution grants)">
                   <thead>
                     <tr>
                       <Th>Grant</Th>
@@ -201,7 +201,7 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
                         <Td mono>{g.id.slice(0, 8)}</Td>
                         <Td>{formatDateTime(g.createdAt)}</Td>
                         <Td>{formatDateTime(g.expiresAt)}</Td>
-                        <Td>{g.consumedAt ? <Badge tone="allow">consumed {timeAgo(g.consumedAt)}</Badge> : g.voidedAt ? <Badge tone="deny">voided: {g.voidReason ?? "withdrawn"}</Badge> : g.expiresAt < new Date() ? <Badge>expired unused</Badge> : <Badge tone="info">live</Badge>}</Td>
+                        <Td>{g.consumedAt ? <Badge tone="allow">used {timeAgo(g.consumedAt)}</Badge> : g.voidedAt ? <Badge tone="deny">cancelled: {g.voidReason ?? "withdrawn"}</Badge> : g.expiresAt < new Date() ? <Badge>expired unused</Badge> : <Badge tone="info">ready to use</Badge>}</Td>
                       </Tr>
                     ))}
                   </tbody>
@@ -231,9 +231,9 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
           )}
         </Panel>
 
-        <Panel title="Evidence" description={`Ledger entries sharing correlation id ${req.correlationId}`} className="xl:col-span-3">
+        <Panel title="Evidence" description={`Entries in the record (ledger) that share trace reference ${req.correlationId}`} className="xl:col-span-3">
           <Timeline
-            emptyText="No evidence for this correlation id"
+            emptyText="No record entries for this trace reference"
             items={req.evidence.map((e) => ({
               id: e.id,
               tone: evidenceTone(e.type),

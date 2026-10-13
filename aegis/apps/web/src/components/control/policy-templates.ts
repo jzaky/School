@@ -14,7 +14,7 @@ export const POLICY_TEMPLATES: PolicyTemplate[] = [
   {
     id: "empty",
     name: "Empty skeleton",
-    description: "One default-deny rule and no tests. Build from scratch.",
+    description: "Starts with a single rule that denies everything and no test cases. Build the rest yourself.",
     category: "authorization",
     document: {
       version: 1,
@@ -46,7 +46,7 @@ export const POLICY_TEMPLATES: PolicyTemplate[] = [
   {
     id: "transfer-limits",
     name: "Transfer limits",
-    description: "Business-hours autonomy, approval band, hard ceiling.",
+    description: "Runs on its own during business hours, needs approval in a middle band, and refuses anything above a hard ceiling.",
     category: "authorization",
     document: {
       version: 1,
@@ -68,7 +68,7 @@ export const POLICY_TEMPLATES: PolicyTemplate[] = [
   {
     id: "egress-allowlist",
     name: "Egress allowlist",
-    description: "Destinations must be on the list; sensitive data classes are blocked.",
+    description: "Data may only go to destinations on the approved list; anything carrying sensitive data types is blocked.",
     category: "data_protection",
     document: {
       version: 1,
@@ -88,7 +88,7 @@ export const POLICY_TEMPLATES: PolicyTemplate[] = [
   {
     id: "read-only-defaults",
     name: "Read-only defaults",
-    description: "Low-risk read tools are allowed; mutating SQL is denied.",
+    description: "Low-risk read-only tools are allowed; database queries that change data (mutating SQL) are denied.",
     category: "operational",
     document: {
       version: 1,

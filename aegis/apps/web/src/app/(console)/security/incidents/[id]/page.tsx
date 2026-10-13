@@ -144,7 +144,7 @@ export default async function IncidentPage({ params }: { params: Promise<{ id: s
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
           <Panel title="Summary">{incident.summary ? <p className="whitespace-pre-wrap text-sm text-fg">{incident.summary}</p> : <p className="text-xs text-fg-dim">No summary yet. A summary of at least 10 characters is required to resolve the incident.</p>}</Panel>
-          <Panel title="Timeline" description="Incident events, linked security events and ledger entries for the related requests, oldest first">
+          <Panel title="Timeline" description="What happened on this incident, the security events linked to it and the record entries for the related agent actions, oldest first">
             <Timeline items={timeline} emptyText="Nothing recorded yet." />
           </Panel>
         </div>
@@ -160,7 +160,7 @@ export default async function IncidentPage({ params }: { params: Promise<{ id: s
                 { label: "Opened", value: formatDateTime(incident.createdAt) },
                 { label: "Updated", value: formatDateTime(incident.updatedAt) },
                 { label: "Resolved", value: incident.resolvedAt ? formatDateTime(incident.resolvedAt) : null },
-                { label: "Ledger entries", value: incident.incidentEvidence.length },
+                { label: "Record entries (ledger)", value: incident.incidentEvidence.length },
               ]}
             />
           </Panel>
@@ -182,7 +182,7 @@ export default async function IncidentPage({ params }: { params: Promise<{ id: s
           </Panel>
           <Panel title="Related requests">
             {incident.requests.length === 0 ? (
-              <p className="text-xs text-fg-dim">Linked events do not reference gateway requests.</p>
+              <p className="text-xs text-fg-dim">None of the linked events point at an agent action.</p>
             ) : (
               <ul className="divide-y divide-line">
                 {incident.requests.map((r) => (

@@ -170,7 +170,7 @@ export function RefundSettingsForm({ values, onChange, errors, roles, tools, dis
         </div>
         <div>
           <span className="mb-1 block text-xs font-medium text-fg-muted">
-            Also accept <span className="font-normal text-fg-dim">same thresholds, no conversion</span>
+            Also accept <span className="font-normal text-fg-dim">the same limits apply to these currencies; amounts are not converted</span>
           </span>
           <div className="flex flex-wrap gap-1.5" role="group" aria-label="Additional accepted currencies">
             {CURRENCY_OPTIONS.filter((c) => c !== values.currency).map((c) => {
@@ -194,10 +194,10 @@ export function RefundSettingsForm({ values, onChange, errors, roles, tools, dis
         <h3 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Approval</h3>
         <div>
           <span className="mb-1 block text-xs font-medium text-fg-muted">
-            Who can approve <span className="font-normal text-fg-dim">roles holding approvals:decide; none selected means any of them</span>
+            Who can approve <span className="font-normal text-fg-dim">roles that can decide approvals (approvals:decide); if none is ticked, any of them may approve</span>
           </span>
           {roles.length === 0 ? (
-            <Note tone="warning">No role in this organization holds approvals:decide. Approvals would wait until one is created.</Note>
+            <Note tone="warning">No role in this organization can decide approvals (approvals:decide). Requests needing approval would wait until such a role exists.</Note>
           ) : (
             <div className="grid gap-1 sm:grid-cols-2" role="group" aria-label="Approver roles">
               {roles.map((r) => (
@@ -215,13 +215,13 @@ export function RefundSettingsForm({ values, onChange, errors, roles, tools, dis
             <Input id={id("exp")} type="number" min={5} max={10080} value={values.approvalExpiresMinutes} onChange={(e) => set("approvalExpiresMinutes", e.target.value)} disabled={dis} aria-invalid={!!field("approvalExpiresMinutes")} />
           </Field>
           <div className="flex items-end pb-1">
-            <Checkbox id={id("sod")} checked={values.separationOfDuties} onCheckedChange={(v) => set("separationOfDuties", v)} disabled={dis} label="Separation of duties" description="Agent owners cannot approve" />
+            <Checkbox id={id("sod")} checked={values.separationOfDuties} onCheckedChange={(v) => set("separationOfDuties", v)} disabled={dis} label="Separation of duties" description="Owners of the requesting agent cannot approve its refunds" />
           </div>
         </div>
       </section>
 
       <section className="space-y-2">
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Guards</h3>
+        <h3 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Safeguards</h3>
         <ToggleRow id={id("dup")} label="Block duplicate refunds" description="Same order or payment already refunded, or awaiting a decision, in the last 30 days" checked={values.blockDuplicates} onCheckedChange={(v) => set("blockDuplicates", v)} disabled={dis} disabledReason={disabledReason}>
           <Field label="When a duplicate is detected" htmlFor={id("duph")}>
             <Select id={id("duph")} value={values.duplicateHandling} onValueChange={(v) => set("duplicateHandling", v as RefundFormValues["duplicateHandling"])} options={[{ value: "deny", label: "Refuse it" }, { value: "require_approval", label: "Ask a human, whatever the amount" }]} disabled={dis} />
@@ -233,7 +233,7 @@ export function RefundSettingsForm({ values, onChange, errors, roles, tools, dis
             <Field label="From" htmlFor={id("start")} hint="UTC" error={field("startHourUtc")}>
               <Select id={id("start")} value={values.startHourUtc} onValueChange={(v) => set("startHourUtc", v)} options={HOURS} disabled={dis} />
             </Field>
-            <Field label="Until" htmlFor={id("end")} hint="UTC, exclusive" error={field("endHourUtc")}>
+            <Field label="Until" htmlFor={id("end")} hint="UTC; the window ends at the start of this hour" error={field("endHourUtc")}>
               <Select id={id("end")} value={values.endHourUtc} onValueChange={(v) => set("endHourUtc", v)} options={HOURS} disabled={dis} />
             </Field>
           </div>
@@ -257,7 +257,7 @@ export function RefundSettingsForm({ values, onChange, errors, roles, tools, dis
           <Button
             size="md"
             disabled={dis || !/^[a-z0-9][a-z0-9-]*$/.test(customTool.trim())}
-            disabledReason={dis ? disabledReason : "Tool keys are lowercase with hyphens"}
+            disabledReason={dis ? disabledReason : "Enter a tool key in lowercase letters, digits and hyphens"}
             onClick={() => {
               set("tools", toggle(values.tools, customTool.trim(), true));
               setCustomTool("");
@@ -431,10 +431,10 @@ export function RefundTester({ settings, document, versionId, idPrefix = "rt", t
             <Field label="Currency" htmlFor={id("currency")}>
               <Select id={id("currency")} value={currency} onValueChange={setCurrency} options={currencyOptions} />
             </Field>
-            <Field label="Order id" htmlFor={id("order")} hint="business reference">
+            <Field label="Order id" htmlFor={id("order")} hint="the business reference for the order">
               <Input id={id("order")} value={orderId} onChange={(e) => setOrderId(e.target.value)} className="font-mono" />
             </Field>
-            <Field label="Reason" htmlFor={id("reason")} hint="clear it to test the reason guard">
+            <Field label="Reason" htmlFor={id("reason")} hint="clear it to see what happens when no reason is given">
               <Input id={id("reason")} value={reason} onChange={(e) => setReason(e.target.value)} />
             </Field>
             {settings.tools.length > 1 ? (
@@ -486,7 +486,7 @@ export function RefundTester({ settings, document, versionId, idPrefix = "rt", t
                   {result.decidingRule.reason ? <p className="mt-1 text-xs text-fg-muted">Reason returned to the agent: {result.decidingRule.reason}</p> : null}
                 </div>
               ) : (
-                <p className="text-sm text-fg-muted">No rule matched, so the request falls to the default deny.</p>
+                <p className="text-sm text-fg-muted">No rule matched, so the request is denied by default.</p>
               )}
               {result.skipped.length ? <Note>The policy did not apply: {result.skipped.map((s) => s.reason).join("; ")}.</Note> : null}
               {result.riskIndicators.length ? (

@@ -50,14 +50,14 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
   const totalBytes = all.reduce((a, r) => a + (r._sum.size ?? 0), 0);
   return (
     <div>
-      <PageHeader title="Documents" description="Policies and procedures the assessment engine searches for evidence. Files are stored under opaque names in this deployment and chunked for lexical retrieval." badges={<DemoBadge show={c.org.demoMode} />} actions={<UploadDocumentDialog canWrite={canWrite} />} />
+      <PageHeader title="Documents" description="Your policies and procedures, which assessments search for evidence. Files stay in this deployment under anonymous file names and are split into short passages (chunks) so the engine can search them by words and phrases." badges={<DemoBadge show={c.org.demoMode} />} actions={<UploadDocumentDialog canWrite={canWrite} />} />
       <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatPanel label="Documents" value={totalDocs} footer={`${(totalBytes / (1024 * 1024)).toFixed(1)} MB stored`} />
-        <StatPanel label="Parsed" value={count("parsed")} tone="allow" footer={`${totalChunks} chunks indexed`} />
+        <StatPanel label="Parsed" value={count("parsed")} tone="allow" footer={`${totalChunks} passages (chunks) indexed`} />
         <StatPanel label="Failed" value={count("failed")} tone={count("failed") > 0 ? "deny" : "neutral"} />
-        <StatPanel label="Awaiting parse" value={count("uploaded") + count("parsing")} />
+        <StatPanel label="Not yet processed" value={count("uploaded") + count("parsing")} />
       </div>
-      <Note className="mb-4">Documents never leave this deployment. Parsing runs in this process, content is never logged, and the evidence ledger records only size, type and hash.</Note>
+      <Note className="mb-4">Documents never leave this deployment. Reading them happens inside this process, their content is never written to logs, and the record (evidence ledger) stores only the size, type and fingerprint (hash) of each file.</Note>
       <DocumentsTable rows={rows} pagination={{ page: page.page, pageSize: page.pageSize, total: page.total }} canWrite={canWrite} />
     </div>
   );

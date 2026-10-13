@@ -67,16 +67,16 @@ export function TradingMandatePanel({ policyId, version, settings, diverged, rol
     <div className="space-y-4" data-testid="trading-mandate">
       {!isDraft ? (
         <Note>
-          Version v{version.version} is {version.state} and frozen. Changing the mandate creates a new draft version that still goes through review and a second person&apos;s activation.
+          Version v{version.version} is {version.state} and can no longer be changed. Changing the mandate creates a new draft version, which still goes through review and must be switched on by a second person.
         </Note>
       ) : !canWrite ? (
-        <Note>You can explore the mandate, but saving requires policies:write.</Note>
+        <Note>You can explore the mandate, but saving needs the policies:write permission.</Note>
       ) : null}
-      {diverged ? <Note tone="warning">The JSON of this version was edited by hand after it was generated. Saving from this form regenerates every rule from the settings below and drops those manual edits. Use the Editor tab to keep them.</Note> : null}
+      {diverged ? <Note tone="warning">Someone edited this version&apos;s rules by hand (in the JSON) after the form generated them. Saving from this form rebuilds every rule from the settings below and discards those manual edits. To keep them, use the Editor tab instead.</Note> : null}
       <div className="grid gap-4 xl:grid-cols-2">
         <Panel
           title="Trading mandate"
-          description="What the agent may trade, how much runs on its own, and what waits for a person. The JSON stays editable in the Editor tab."
+          description="What the agent may trade, how much runs on its own, and what waits for a person. The underlying rules (JSON) stay editable in the Editor tab."
           actions={
             isDraft ? (
               <Button size="sm" variant="primary" onClick={saveDraft} loading={saving} disabled={!!saveDisabledReason} disabledReason={saveDisabledReason}>
@@ -94,10 +94,10 @@ export function TradingMandatePanel({ policyId, version, settings, diverged, rol
           <TradingSettingsForm values={values} onChange={setValues} errors={parsed.errors} roles={roles} tools={tools} idPrefix="trm" />
         </Panel>
         <div className="space-y-4">
-          <Panel title="What this mandate does" description="Generated from the settings. Changes appear immediately.">
+          <Panel title="What this mandate does" description="Written from the settings on the left. Changes appear immediately.">
             {explanation.length ? <RefundExplanation lines={explanation} /> : <p className="text-xs text-deny">Fix the highlighted fields to see the explanation.</p>}
           </Panel>
-          <Panel title="Sample orders" description="Dry runs of one order per band and guard against the settings as they stand now.">
+          <Panel title="Sample orders" description="One sample order for each band and each safeguard, tried against the settings as they stand now (a dry run).">
             <TradingSamplePreview settings={parsed.settings} />
           </Panel>
           <Note>AEGIS does not trade and holds no strategy. The agent decides what to order; this mandate decides what may reach the broker, what waits for a person and what is refused. Paper trading only: the Alpaca connector refuses live keys.</Note>
@@ -113,7 +113,7 @@ export function TradingMandatePanel({ policyId, version, settings, diverged, rol
           if (!o) setNvError(null);
         }}
         title="New draft version from this mandate"
-        description={`Creates v${version.version + 1} as a draft. v${version.version} stays unchanged until the draft is reviewed and activated by someone else.`}
+        description={`Creates v${version.version + 1} as a draft. v${version.version} stays in force, unchanged, until the draft is reviewed and switched on by someone else.`}
         size="sm"
         footer={
           <>
@@ -127,7 +127,7 @@ export function TradingMandatePanel({ policyId, version, settings, diverged, rol
         }
       >
         <form id="trading-new-version" onSubmit={createVersion} className="space-y-3">
-          <Field label="Change note" htmlFor="trm-nv-note" hint="shown in history">
+          <Field label="Change note" htmlFor="trm-nv-note" hint="a short note on what changed, shown in the version history">
             <Textarea id="trm-nv-note" value={note} onChange={(e) => setNote(e.target.value)} maxLength={500} autoFocus placeholder={defaultNote} />
           </Field>
           <FormError error={nvError} />

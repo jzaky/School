@@ -50,7 +50,7 @@ export function EnterprisePricingForm({ defaultName, defaultEmail }: { defaultNa
           <Input id="bill-seats" type="number" min={1} value={seats} onChange={(e) => setSeats(e.target.value)} />
         </Field>
         <Field label="Notes" htmlFor="bill-notes" className="md:col-span-2" hint="optional">
-          <Textarea id="bill-notes" value={message} onChange={(e) => setMessage(e.target.value)} maxLength={2000} rows={3} placeholder="Deployment model, regions, procurement timeline" />
+          <Textarea id="bill-notes" value={message} onChange={(e) => setMessage(e.target.value)} maxLength={2000} rows={3} placeholder="For example: how you want it deployed, which regions, and when procurement needs to finish" />
         </Field>
       </div>
       <FormError error={error} />

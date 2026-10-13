@@ -73,7 +73,7 @@ export function PoliciesTable({ rows, filters }: { rows: PolicyRow[]; filters: {
       rowHref={(r) => `/policies/${r.id}`}
       storageKey="policies"
       caption="Policies"
-      emptyState={<EmptyState icon={Scale} title={hasFilters ? "No policies match these filters" : "No policies yet"} description={hasFilters ? "Try clearing the filters." : "Create the first policy to govern what agents may do."} action={hasFilters ? <Button size="sm" onClick={() => router.push(pathname)}>Clear filters</Button> : undefined} />}
+      emptyState={<EmptyState icon={Scale} title={hasFilters ? "No policies match these filters" : "No policies yet"} description={hasFilters ? "Try clearing the filters." : "A policy sets what agents may do on their own, what needs a person to approve, and what is refused. Create the first one here."} action={hasFilters ? <Button size="sm" onClick={() => router.push(pathname)}>Clear filters</Button> : undefined} />}
       toolbar={
         <>
           <Select aria-label="Category" value={filters.category || ALL} onValueChange={(v) => apply({ category: v })} className="w-44" options={[{ value: ALL, label: "All categories" }, ...POLICY_CATEGORIES]} />

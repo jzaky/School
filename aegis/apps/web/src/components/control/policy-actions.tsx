@@ -94,7 +94,7 @@ export function PolicyActions({ policyId, policyName, version, activeVersionId, 
         open={activate}
         onOpenChange={setActivate}
         title={`Activate v${version.version} of ${policyName}`}
-        description="The version becomes the one evaluated on every matching request. Any previously active version is retired, not changed. Your activation is recorded as the second pair of eyes."
+        description="From now on, every matching request is decided by this version. Any previously active version is retired, not changed. Your activation is recorded as the second person's sign-off (four-eyes)."
         confirmLabel="Activate"
         onConfirm={async () => {
           const r = await activateVersionAction(policyId, version.id);
@@ -107,7 +107,7 @@ export function PolicyActions({ policyId, policyName, version, activeVersionId, 
         open={deactivate}
         onOpenChange={setDeactivate}
         title={`Deactivate ${policyName}`}
-        description="Retires the active version. Requests that relied on this policy for an allow will fall to default deny until another version is activated."
+        description="Retires the active version. Requests that this policy used to allow will be denied by default until another version is activated."
         confirmLabel="Deactivate"
         danger
         reason={{ required: true, placeholder: "Why this policy is being switched off" }}
@@ -125,14 +125,14 @@ export function PolicyActions({ policyId, policyName, version, activeVersionId, 
           if (!o) setNvError(null);
         }}
         title="New draft version"
-        description={`Copies the document of v${version.version} into a new draft you can edit. Nothing changes until that draft is reviewed and activated.`}
+        description={`Copies the rules of v${version.version} into a new draft you can edit. Nothing changes for agents until that draft is reviewed and activated.`}
         size="sm"
         footer={
           <>
             <Button variant="ghost" onClick={() => setNewVersion(false)} disabled={busy === "new"}>
               Cancel
             </Button>
-            <Button form="pa-new-version" type="submit" variant="primary" loading={busy === "new"} disabled={note.trim().length < 2} disabledReason="A change note is required">
+            <Button form="pa-new-version" type="submit" variant="primary" loading={busy === "new"} disabled={note.trim().length < 2} disabledReason="Enter a change note first">
               Create draft
             </Button>
           </>
@@ -148,8 +148,8 @@ export function PolicyActions({ policyId, policyName, version, activeVersionId, 
       <Dialog
         open={tests !== null}
         onOpenChange={(o) => !o && setTests(null)}
-        title={tests?.error ? "Submission blocked by embedded tests" : "Embedded tests passed"}
-        description={tests?.error ?? "Every embedded test case produced the expected effect. The version is now in review and can be activated by someone other than its author."}
+        title={tests?.error ? "Submission blocked: a built-in test failed" : "Built-in tests passed"}
+        description={tests?.error ?? "Every built-in test case gave the expected result. The version is now in review and can be switched on by someone other than its author."}
         size="lg"
         footer={
           <Button variant="primary" onClick={() => setTests(null)}>
@@ -158,7 +158,7 @@ export function PolicyActions({ policyId, policyName, version, activeVersionId, 
         }
       >
         {tests && tests.results.length ? (
-          <SimpleTable caption="Embedded test results">
+          <SimpleTable caption="Built-in test results">
             <thead>
               <tr>
                 <Th>Test</Th>
@@ -196,7 +196,7 @@ export function PolicyActions({ policyId, policyName, version, activeVersionId, 
           </SimpleTable>
         ) : (
           <p className="text-xs text-fg-muted">
-            This document has no embedded tests. Add cases under <span className="font-mono">tests</span> so reviewers can see the expected behaviour. <Link href={`/policies/${policyId}?tab=editor`} className="text-accent hover:underline">Open the editor</Link>
+            This policy has no built-in test cases. Add cases under <span className="font-mono">tests</span> so reviewers can see what the policy is expected to decide. <Link href={`/policies/${policyId}?tab=editor`} className="text-accent hover:underline">Open the editor</Link>
           </p>
         )}
       </Dialog>

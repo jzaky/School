@@ -76,7 +76,7 @@ export function RegisterAgentDialog({ canWrite, members, teams }: { canWrite: bo
         </Button>
       }
       title="Register an agent"
-      description="The agent starts as a draft. Register and activate it from its page once tools and permissions are in place."
+      description="The agent starts as a draft. Once its tools and permissions are in place, register and activate it from its page."
       size="lg"
       footer={
         <>
@@ -93,7 +93,7 @@ export function RegisterAgentDialog({ canWrite, members, teams }: { canWrite: bo
         <Field label="Name" htmlFor="agent-name">
           <Input id="agent-name" value={name} onChange={(e) => setName(e.target.value)} required minLength={2} maxLength={120} autoFocus />
         </Field>
-        <Field label="Slug" htmlFor="agent-slug" hint="lowercase, digits, hyphens">
+        <Field label="Slug" htmlFor="agent-slug" hint="a short web-friendly name: lowercase letters, digits and hyphens">
           <Input
             id="agent-slug"
             value={slug}
@@ -121,7 +121,7 @@ export function RegisterAgentDialog({ canWrite, members, teams }: { canWrite: bo
         <Field label="Model id" htmlFor="agent-model">
           <Input id="agent-model" name="modelId" placeholder="claude-sonnet-5-5" maxLength={120} className="font-mono" />
         </Field>
-        <Field label="Data classification limit" htmlFor="agent-class" hint="highest class the agent may touch">
+        <Field label="Data classification limit" htmlFor="agent-class" hint="the most sensitive class of data this agent may handle">
           <Select id="agent-class" value={classification} onValueChange={setClassification} options={["public", "internal", "confidential", "restricted"].map((s) => ({ value: s, label: statusLabel(s) }))} />
         </Field>
         <Field label="Team" htmlFor="agent-team">

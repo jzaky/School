@@ -138,10 +138,10 @@ export function ScoreBandSettingsForm({ values, onChange, errors, roles, tools, 
         <h3 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Approval</h3>
         <div>
           <span className="mb-1 block text-xs font-medium text-fg-muted">
-            Who can approve <span className="font-normal text-fg-dim">roles holding approvals:decide; none selected means any of them</span>
+            Who can approve <span className="font-normal text-fg-dim">roles that can decide approvals (approvals:decide); if none is ticked, any of them may approve</span>
           </span>
           {roles.length === 0 ? (
-            <Note tone="warning">No role in this organization holds approvals:decide. Approvals would wait until one is created.</Note>
+            <Note tone="warning">No role in this organization can decide approvals (approvals:decide). Requests needing approval would wait until such a role exists.</Note>
           ) : (
             <div className="grid gap-1 sm:grid-cols-2" role="group" aria-label="Approver roles">
               {roles.map((r) => (

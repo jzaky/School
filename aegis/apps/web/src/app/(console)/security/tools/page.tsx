@@ -31,10 +31,10 @@ export default async function ToolSecurityPage({ searchParams }: { searchParams:
   const initialTool = typeof sp.tool === "string" ? sp.tool : undefined;
   return (
     <div>
-      <PageHeader title="Tool Security" description="Every registered tool with its grants, destination and resource restrictions and recent denials. Evaluate a hypothetical call against the same checks the gateway runs." badges={<DemoBadge show={c.org.demoMode} />} />
+      <PageHeader title="Tool Security" description="Every tool agents can use, with which agents may use it, where it may send data, which resources it may touch and how often it was refused recently. You can also test a hypothetical call against the same checks the Action Gateway runs." badges={<DemoBadge show={c.org.demoMode} />} />
       <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatPanel label="Tools" value={rows.length} footer={`${rows.filter((t) => t.enabled).length} enabled`} />
-        <StatPanel label="Without restrictions" value={unrestricted} tone={unrestricted > 0 ? "approval" : "allow"} footer="No domain or resource allowlist" />
+        <StatPanel label="Without restrictions" value={unrestricted} tone={unrestricted > 0 ? "approval" : "allow"} footer="No list of allowed destinations or resources" />
         <StatPanel label="Requests, 7 days" value={requests} />
         <StatPanel label="Denied, 7 days" value={denied} tone={denied > 0 ? "deny" : "neutral"} footer={requests ? `${Math.round((denied / requests) * 100)}% of requests` : undefined} />
       </div>

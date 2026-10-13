@@ -48,7 +48,7 @@ function NeedsAttention({ o, canApprove }: { o: OverviewData; canApprove: boolea
   return (
     <Panel title="Needs your attention" description={total === 0 ? "Nothing is waiting on you right now." : `${total} item${total === 1 ? "" : "s"} waiting on a person.`} padded={false} data-testid="needs-attention" actions={a.openApprovalsTotal > a.approvals.length ? <Link href="/approvals" className="text-xs text-accent hover:underline">{a.openApprovalsTotal} pending in total</Link> : undefined}>
       {total === 0 ? (
-        <EmptyState icon={ShieldCheck} title="All clear" description={canApprove ? "Approvals you can decide, stalled executions, high alerts and suspended agents appear here." : "Stalled executions, high alerts and suspended agents appear here."} />
+        <EmptyState icon={ShieldCheck} title="All clear" description={canApprove ? "Approvals you can decide, actions that started but were never confirmed, high alerts and suspended agents appear here." : "Actions that started but were never confirmed, high alerts and suspended agents appear here."} />
       ) : (
         <ul className="divide-y divide-line">
           {a.approvals.map((p) => (
@@ -77,7 +77,7 @@ function NeedsAttention({ o, canApprove }: { o: OverviewData; canApprove: boolea
             />
           ))}
           {a.unresolved.map((r) => (
-            <AttentionRow key={r.id} href={`/gateway/${r.id}`} icon={<AlertTriangle className="h-4 w-4 text-critical" aria-hidden />} title={<span className="flex flex-wrap items-center gap-2"><span className="font-medium">{describeRequest(r.toolKey, r.action, r.params)}</span><StatusBadge status={r.status} /></span>} detail={r.status === "unknown" ? `${r.agentName}: the downstream system did not confirm the outcome. A person must check it and settle the result.` : `${r.agentName}: execution started and has not been confirmed for more than five minutes.`} trailing={<TimeAgo value={r.updatedAt} />} />
+            <AttentionRow key={r.id} href={`/gateway/${r.id}`} icon={<AlertTriangle className="h-4 w-4 text-critical" aria-hidden />} title={<span className="flex flex-wrap items-center gap-2"><span className="font-medium">{describeRequest(r.toolKey, r.action, r.params)}</span><StatusBadge status={r.status} /></span>} detail={r.status === "unknown" ? `${r.agentName}: the other system did not confirm whether this went through. A person must check it there and record the result.` : `${r.agentName}: this action started more than five minutes ago and the other system has not confirmed it yet.`} trailing={<TimeAgo value={r.updatedAt} />} />
           ))}
           {a.alerts.map((al) => (
             <AttentionRow key={al.id} href={`/alerts?focus=${al.id}`} icon={<AlertTriangle className={`h-4 w-4 ${al.severity === "critical" ? "text-critical" : "text-approval"}`} aria-hidden />} title={<span className="flex flex-wrap items-center gap-2"><span className="font-medium">{al.title}</span><Badge tone={statusTone(al.severity)}>{al.severity} alert</Badge></span>} detail="Open alert from risk monitoring" trailing={<TimeAgo value={al.createdAt} />} />
@@ -101,7 +101,7 @@ function Health({ o }: { o: OverviewData }) {
           <OctagonPause className="h-4 w-4 text-deny" aria-hidden />
           <span className="font-semibold text-deny">Gateway paused.</span>
           <span className="text-fg-muted">
-            Every new request is denied and approved actions do not run.{o.gateway.reason ? ` Reason: ${o.gateway.reason}.` : ""}
+            Every new agent request is refused and approved actions do not run until someone resumes it.{o.gateway.reason ? ` Reason: ${o.gateway.reason}.` : ""}
           </span>
           <Link href="/org/settings" className="ms-auto text-accent hover:underline">
             Resume in Settings
@@ -137,7 +137,7 @@ function Health({ o }: { o: OverviewData }) {
           ) : null}
         </div>
         {!o.integrations.canView ? (
-          <p className="text-xs text-fg-dim">Requires integrations:read.</p>
+          <p className="text-xs text-fg-dim">You need the integrations:read permission to see integrations; ask an administrator.</p>
         ) : ints.length === 0 ? (
           <p className="text-xs text-fg-dim">
             No integrations yet.{" "}
@@ -156,13 +156,13 @@ function Health({ o }: { o: OverviewData }) {
                 </Link>
                 <Badge tone={i.kind === "sandbox" ? "info" : i.kind === "live" ? "allow" : "neutral"}>{i.kind}</Badge>
                 <StatusBadge status={i.status} />
-                {i.lastHealthOk === null ? <span className="text-fg-dim">health unchecked</span> : <span className={i.lastHealthOk ? "text-allow" : "text-deny"}>{i.lastHealthOk ? "healthy" : "unhealthy"}</span>}
+                {i.lastHealthOk === null ? <span className="text-fg-dim">health not checked yet</span> :<span className={i.lastHealthOk ? "text-allow" : "text-deny"}>{i.lastHealthOk ? "healthy" : "unhealthy"}</span>}
                 {i.lastHealthAt ? (
                   <span className="text-fg-dim">
                     checked <TimeAgo value={i.lastHealthAt} />
                   </span>
                 ) : null}
-                {i.liveCredentials === 0 ? <span className="text-deny">no live credential</span> : null}
+                {i.liveCredentials === 0 ? <span className="text-deny">no active credential</span> : null}
               </li>
             ))}
           </ul>
@@ -179,7 +179,7 @@ function RecentActions({ o }: { o: OverviewData }) {
   return (
     <Panel title="Recent actions" description="The last 20 requests agents made, grouped by what happened." padded={false} data-testid="recent-actions" actions={o.recent.canView ? <Link href="/activity" className="text-xs text-accent hover:underline">All activity</Link> : undefined}>
       {!o.recent.canView ? (
-        <EmptyState title="Requires gateway:read" description="Ask an administrator for access to action requests." />
+        <EmptyState title="You need the gateway:read permission" description="Ask an administrator for access to agent actions." />
       ) : items.length === 0 ? (
         <EmptyState title="No actions yet" description="Run the sample refund workflow to see how allowed, approved and blocked actions look." action={<LinkButton href="/gateway/demos" size="sm">Explore a sample workflow</LinkButton>} />
       ) : (
@@ -232,7 +232,7 @@ export default async function OverviewPage() {
         badges={<DemoBadge show={c.org.demoMode} />}
         actions={
           chain ? (
-            <Link href="/evidence" className="inline-flex items-center gap-1.5 rounded-md border border-line bg-bg-elev px-2.5 py-1 text-xs text-fg-muted hover:border-line-strong" title={`Hash chain recomputed over ${chain.checked} events; ${chain.checkpoints} signed checkpoints`} data-testid="chain-indicator">
+            <Link href="/evidence" className="inline-flex items-center gap-1.5 rounded-md border border-line bg-bg-elev px-2.5 py-1 text-xs text-fg-muted hover:border-line-strong" title={`The record was re-checked across ${chain.checked} events and ${chain.checkpoints} signed checkpoints (hash chain)`} data-testid="chain-indicator">
               <span className={`h-2 w-2 rounded-full ${chain.valid ? "bg-allow" : "bg-deny"}`} aria-hidden />
               {chain.valid ? "Evidence chain valid" : chain.firstBadSeq ? `Evidence chain broken at seq ${chain.firstBadSeq}` : "Evidence checkpoint mismatch"}
               <span className="text-fg-dim">{o.evidence.count} events</span>

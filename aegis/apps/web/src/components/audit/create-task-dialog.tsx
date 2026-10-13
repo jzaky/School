@@ -85,14 +85,14 @@ export function CreateTaskDialog({ canWrite, owners, findings, prefill, trigger,
         )
       }
       title="Create remediation task"
-      description="A work item that closes a finding. The owner is notified; every change is kept in the task history and the evidence ledger."
+      description="A piece of work that fixes a gap found in an assessment. The owner is notified, and every change is kept in the task history and in the evidence record (the ledger)."
       size="lg"
       footer={
         <>
           <Button variant="ghost" onClick={() => setOpen(false)} disabled={pending}>
             Cancel
           </Button>
-          <Button form="create-task-form" type="submit" variant="primary" loading={pending} disabled={title.trim().length < 3} disabledReason="Title needs at least 3 characters">
+          <Button form="create-task-form" type="submit" variant="primary" loading={pending} disabled={title.trim().length < 3} disabledReason="Enter a title of at least 3 characters">
             Create task
           </Button>
         </>
@@ -105,7 +105,7 @@ export function CreateTaskDialog({ canWrite, owners, findings, prefill, trigger,
         <Field label="Description" htmlFor="task-desc" className="md:col-span-2">
           <Textarea id="task-desc" value={description} onChange={(e) => setDescription(e.target.value)} maxLength={5000} rows={4} />
         </Field>
-        <Field label="Owner" htmlFor="task-owner" hint="members with audit:write">
+        <Field label="Owner" htmlFor="task-owner" hint="people who can edit audit work (audit:write)">
           <Combobox id="task-owner" value={ownerId} onChange={setOwnerId} options={owners.map((o) => ({ value: o.userId, label: o.name, description: o.roleName }))} placeholder="Unassigned" allowClear searchPlaceholder="Search members" />
         </Field>
         <Field label="Due date" htmlFor="task-due" hint="optional">

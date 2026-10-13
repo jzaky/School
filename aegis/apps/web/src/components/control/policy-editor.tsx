@@ -142,13 +142,13 @@ export function PolicyEditor({ policyId, version, canWrite }: { policyId: string
     <div className="space-y-4">
       {!isDraft ? (
         <Note>
-          Version v{version.version} is {version.state} and frozen. Edits here are not saved over it: use <strong>New version from this document</strong> to create a draft carrying your changes.
+          Version v{version.version} is {version.state} and can no longer be changed. Edits here are not saved over it: use <strong>New version from this document</strong> to create a draft carrying your changes.
         </Note>
       ) : !canWrite ? (
-        <Note>You can inspect and modify the document locally, but saving requires policies:write.</Note>
+        <Note>You can look at the document and try changes in your browser, but saving needs the policies:write permission.</Note>
       ) : null}
       <div className="grid gap-4 xl:grid-cols-2">
-        <Panel title="Rule graph" description="Nodes in evaluation order, grouped by effect. Combining: deny beats require approval beats allow; nothing matching is a deny." padded={false}>
+        <Panel title="Rule graph" description="Each box is a rule, in the order they are checked, grouped by what they do. A deny rule beats an approval rule, which beats an allow rule; if nothing matches, the request is denied." padded={false}>
           <div className="p-2">
             <PolicyFlow doc={doc ?? lastValid.current} />
             {!doc ? <p className="mt-1 px-1 text-[11px] text-approval">Showing the last valid document while the JSON has errors.</p> : null}
@@ -164,12 +164,12 @@ export function PolicyEditor({ policyId, version, canWrite }: { policyId: string
                 Format
               </Button>
               {isDraft ? (
-                <Button size="sm" variant="primary" onClick={save} loading={saving} disabled={!editable || !doc || !dirty} disabledReason={!canWrite ? "Requires policies:write" : !doc ? "Resolve the validation issues first" : !dirty ? "No changes to save" : undefined}>
+                <Button size="sm" variant="primary" onClick={save} loading={saving} disabled={!editable || !doc || !dirty} disabledReason={!canWrite ? "Requires policies:write" : !doc ? "Fix the issues listed under the document first" : !dirty ? "No changes to save" : undefined}>
                   <Save className="h-3.5 w-3.5" aria-hidden />
                   Save draft
                 </Button>
               ) : (
-                <Button size="sm" variant="primary" onClick={() => setNewVersionOpen(true)} disabled={!canWrite || !doc} disabledReason={!canWrite ? "Requires policies:write" : "Resolve the validation issues first"}>
+                <Button size="sm" variant="primary" onClick={() => setNewVersionOpen(true)} disabled={!canWrite || !doc} disabledReason={!canWrite ? "Requires policies:write" : "Fix the issues listed under the document first"}>
                   <Plus className="h-3.5 w-3.5" aria-hidden />
                   New version from this document
                 </Button>
@@ -201,7 +201,7 @@ export function PolicyEditor({ policyId, version, canWrite }: { policyId: string
         </Panel>
       </div>
 
-      <Panel title="Rule builder" description="Form-based edits write into the same document above. Thresholds and attribute paths are yours to set.">
+      <Panel title="Rule builder" description="A simpler way to edit: what you add here is written into the same document above. Thresholds and attribute paths are yours to set.">
         <div className="grid gap-4 lg:grid-cols-2">
           <div className="space-y-3">
             <h3 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Add a rule</h3>
@@ -219,7 +219,7 @@ export function PolicyEditor({ policyId, version, canWrite }: { policyId: string
                 <Input id="nr-reason" value={newRule.reason} onChange={(e) => setNewRule({ ...newRule, reason: e.target.value })} disabled={builderDisabled} />
               </Field>
             </div>
-            <Button size="sm" onClick={addRule} disabled={builderDisabled || !/^[a-zA-Z0-9][a-zA-Z0-9_-]*$/.test(newRule.id) || ruleList.some((r) => r.id === newRule.id)} disabledReason={builderDisabled ? (editable ? "Fix the JSON syntax first" : "Only drafts are editable") : "Rule id must be unique: letters, digits, hyphen, underscore"}>
+            <Button size="sm" onClick={addRule} disabled={builderDisabled || !/^[a-zA-Z0-9][a-zA-Z0-9_-]*$/.test(newRule.id) || ruleList.some((r) => r.id === newRule.id)} disabledReason={builderDisabled ? (editable ? "Fix the JSON syntax first" : "Only a draft version can be edited") : "Enter a rule id that is not already used: letters, digits, hyphen, underscore"}>
               <Plus className="h-3.5 w-3.5" aria-hidden />
               Add rule (starts as always true)
             </Button>
@@ -255,7 +255,7 @@ export function PolicyEditor({ policyId, version, canWrite }: { policyId: string
               </Field>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Button size="sm" onClick={addComparison} disabled={builderDisabled || !selected || !cmp.attr.trim() || (cmp.kind !== "none" && cmp.value.trim() === "")} disabledReason={!selected ? "Choose a rule first" : "Attribute and value are required"}>
+              <Button size="sm" onClick={addComparison} disabled={builderDisabled || !selected || !cmp.attr.trim() || (cmp.kind !== "none" && cmp.value.trim() === "")} disabledReason={!selected ? "Choose a rule first" : "Enter an attribute and a value first"}>
                 <Plus className="h-3.5 w-3.5" aria-hidden />
                 Add comparison
               </Button>
@@ -291,14 +291,14 @@ export function PolicyEditor({ policyId, version, canWrite }: { policyId: string
             <Button variant="ghost" onClick={() => setNewVersionOpen(false)} disabled={saving}>
               Cancel
             </Button>
-            <Button form="new-version-form" type="submit" variant="primary" loading={saving} disabled={changeNote.trim().length < 2} disabledReason="A change note is required">
+            <Button form="new-version-form" type="submit" variant="primary" loading={saving} disabled={changeNote.trim().length < 2} disabledReason="Enter a change note first">
               Create draft
             </Button>
           </>
         }
       >
         <form id="new-version-form" onSubmit={createVersion} className="space-y-3">
-          <Field label="Change note" htmlFor="nv-note" hint="required, shown in history">
+          <Field label="Change note" htmlFor="nv-note" hint="required; a short note on what changed, shown in the version history">
             <Textarea id="nv-note" value={changeNote} onChange={(e) => setChangeNote(e.target.value)} maxLength={500} autoFocus />
           </Field>
           <FormError error={newVersionError} />

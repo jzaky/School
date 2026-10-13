@@ -21,7 +21,7 @@ export function AgentLifecycleActions({ agentId, agentName, status, allowedNext,
     router.refresh();
   }
 
-  if (actions.length === 0) return <span className="text-xs text-fg-dim">No further transitions: this agent is archived.</span>;
+  if (actions.length === 0) return <span className="text-xs text-fg-dim">This agent is archived. No further status changes are possible.</span>;
 
   return (
     <>
@@ -40,7 +40,7 @@ export function AgentLifecycleActions({ agentId, agentName, status, allowedNext,
             loading={busy === a.to}
             title={a.description}
             onClick={async () => {
-              if (needsDialog) return setPendingAction(isResume ? { ...a, label: "Resume", reason: true, description: "Lifts the suspension. A reason is recorded in evidence." } : a);
+              if (needsDialog) return setPendingAction(isResume ? { ...a, label: "Resume", reason: true, description: "The agent can act again. Your reason is kept in the evidence record." } : a);
               setBusy(a.to);
               const err = await run(a, `${label.toLowerCase()} from console`);
               setBusy(null);

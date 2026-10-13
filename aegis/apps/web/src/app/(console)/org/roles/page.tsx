@@ -19,7 +19,7 @@ export default async function RolesPage() {
   const canWrite = c.can("users:write");
   return (
     <div>
-      <PageHeader title="Roles" description="System roles ship with AEGIS and cannot change. Custom roles compose permissions from the catalog." badges={<DemoBadge show={c.org.demoMode} />} actions={<CreateRoleDialog catalog={catalog} canWrite={canWrite} />} />
+      <PageHeader title="Roles" description="A role decides what a person can see and do. The system roles come with AEGIS and cannot be changed; custom roles pick their permissions from the catalog." badges={<DemoBadge show={c.org.demoMode} />} actions={<CreateRoleDialog catalog={catalog} canWrite={canWrite} />} />
       <RolesTable roles={rows} catalog={catalog} canWrite={canWrite} />
     </div>
   );

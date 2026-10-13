@@ -60,7 +60,7 @@ export default async function RemediationPage({ searchParams }: { searchParams: 
   const initialTaskId = flat.task && isUuid(flat.task) ? flat.task : undefined;
   return (
     <div>
-      <PageHeader title="Remediation" description="Work items that close assessment findings. Tasks move open, in progress, review, resolved; reopening and sending back require a note." badges={<DemoBadge show={c.org.demoMode} />} actions={<CreateTaskDialog canWrite={canWrite} owners={owners.map((o) => ({ userId: o.userId, name: o.name, roleName: o.roleName }))} findings={findings.map((f) => ({ id: f.id, code: f.code, title: f.title, assessmentName: f.assessmentName }))} />} />
+      <PageHeader title="Remediation" description="Tasks that fix what an assessment found. Each task moves from open to in progress, then review, then resolved. Reopening a task or sending it back needs a note." badges={<DemoBadge show={c.org.demoMode} />} actions={<CreateTaskDialog canWrite={canWrite} owners={owners.map((o) => ({ userId: o.userId, name: o.name, roleName: o.roleName }))} findings={findings.map((f) => ({ id: f.id, code: f.code, title: f.title, assessmentName: f.assessmentName }))} />} />
       <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatPanel label="Open" value={stats.open} tone={stats.open > 0 ? "approval" : "allow"} footer="Not yet resolved" />
         <StatPanel label="Overdue" value={stats.overdue} tone={stats.overdue > 0 ? "deny" : "neutral"} />

@@ -63,7 +63,7 @@ export function AssignPolicyDialog({ policyId, agents, teams, canActivate, hasAc
         </Button>
       }
       title="Assign policy"
-      description={hasActive ? "The active version applies to the target on its next request." : "This policy has no active version yet; the assignment takes effect once a version is activated."}
+      description={hasActive ? "From its next request onward, the target is checked against this policy's active version." : "This policy has no active version yet; the assignment takes effect once a version is activated."}
       size="sm"
       footer={
         <>
@@ -97,7 +97,7 @@ export function AssignPolicyDialog({ policyId, agents, teams, canActivate, hasAc
             <Combobox id="as-team" value={targetId} onChange={setTargetId} options={teams} placeholder="Select a team" />
           </Field>
         ) : null}
-        <Field label="Priority" htmlFor="as-priority" hint="lower runs first when the same policy is assigned twice">
+        <Field label="Priority" htmlFor="as-priority" hint="when the same policy is assigned more than once, the lower number is applied first">
           <Input id="as-priority" type="number" min={1} max={1000} value={priority} onChange={(e) => setPriority(e.target.value)} />
         </Field>
         <FormError error={error} />
@@ -109,7 +109,7 @@ export function AssignPolicyDialog({ policyId, agents, teams, canActivate, hasAc
 export function AssignmentsTable({ policyId, rows, canActivate }: { policyId: string; rows: AssignmentRow[]; canActivate: boolean }) {
   const router = useRouter();
   const [removing, setRemoving] = React.useState<AssignmentRow | null>(null);
-  if (rows.length === 0) return <EmptyState title="Not assigned" description="Assign this policy to the organization, a team or an agent for it to be evaluated." />;
+  if (rows.length === 0) return <EmptyState title="Not assigned" description="This policy is not checked against anything yet. Assign it to the whole organization, a team or an agent to put it to work." />;
   return (
     <>
       <SimpleTable caption="Policy assignments">
@@ -145,7 +145,7 @@ export function AssignmentsTable({ policyId, rows, canActivate }: { policyId: st
         open={removing !== null}
         onOpenChange={(o) => !o && setRemoving(null)}
         title="Unassign policy"
-        description={removing ? `The policy stops applying to ${removing.targetLabel} on the next request. The removal is recorded in evidence.` : undefined}
+        description={removing ? `From the next request onward, this policy no longer applies to ${removing.targetLabel}. The removal is kept in the evidence record.` : undefined}
         confirmLabel="Unassign"
         danger
         onConfirm={async () => {

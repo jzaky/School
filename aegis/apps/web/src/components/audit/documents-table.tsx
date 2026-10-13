@@ -131,7 +131,7 @@ export function DocumentsTable({ rows, pagination, canWrite }: { rows: DocumentR
                 { label: "Uploaded", value: `${formatDateTime(selected.createdAt)}${selected.uploadedBy ? ` by ${selected.uploadedBy}` : ""}` },
               ]}
             />
-            {selected.error ? <p className="rounded-md border border-deny/30 bg-deny/10 px-3 py-2 text-xs text-deny">Parse error: {selected.error}</p> : null}
+            {selected.error ? <p className="rounded-md border border-deny/30 bg-deny/10 px-3 py-2 text-xs text-deny">The document could not be read (parse error): {selected.error}</p> : null}
             <section>
               <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-fg-muted">Assessments citing this document</h3>
               {preview === null && !previewError ? (
@@ -161,7 +161,7 @@ export function DocumentsTable({ rows, pagination, canWrite }: { rows: DocumentR
                   <Skeleton className="h-16 w-full" />
                 </div>
               ) : preview.chunks.length === 0 ? (
-                <p className="text-xs text-fg-dim">No chunks: the document has not been parsed.</p>
+                <p className="text-xs text-fg-dim">No passages yet: the document has not been read (parsed).</p>
               ) : (
                 <ol className="space-y-2">
                   {preview.chunks.map((ch) => (
@@ -186,7 +186,7 @@ export function DocumentsTable({ rows, pagination, canWrite }: { rows: DocumentR
         open={confirmDelete}
         onOpenChange={setConfirmDelete}
         title={selected ? `Delete ${selected.title}` : ""}
-        description="Removes the stored file and its chunks. The ledger keeps the hash and the deletion record."
+        description="Removes the stored file and its passages (chunks). The evidence ledger keeps the file's fingerprint (hash) and a record of the deletion."
         confirmLabel="Delete document"
         danger
         warning={

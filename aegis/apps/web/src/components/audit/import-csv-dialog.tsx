@@ -22,7 +22,7 @@ export function ImportCsvDialog({ frameworkId, custom, canWrite }: { frameworkId
   const [preview, setPreview] = React.useState<ControlInput[] | null>(null);
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  const reason = !custom ? "Shared catalog frameworks are read-only" : !canWrite ? "Requires audit:write" : undefined;
+  const reason = !custom ? "Frameworks from the shared catalog cannot be changed. Create a custom framework to import your own controls." : !canWrite ? "Requires audit:write" : undefined;
 
   async function runPreview() {
     setPending(true);
@@ -63,7 +63,7 @@ export function ImportCsvDialog({ frameworkId, custom, canWrite }: { frameworkId
         </Button>
       }
       title="Import controls from CSV"
-      description="Header: code,title,summary,category,keywords,automated_evidence_type. Keywords separated by ; or |. Existing codes are updated, new codes are created."
+      description="Paste a CSV with this header row: code,title,summary,category,keywords,automated_evidence_type. Separate keywords with ; or |. Controls whose code already exists are updated; new codes are added."
       size="lg"
       footer={
         <>
@@ -73,7 +73,7 @@ export function ImportCsvDialog({ frameworkId, custom, canWrite }: { frameworkId
           <Button onClick={runPreview} loading={pending && !preview} disabled={csv.trim().length === 0 || pending} disabledReason="Paste CSV first">
             Preview
           </Button>
-          <Button variant="primary" onClick={runImport} loading={pending && !!preview} disabled={!preview || preview.length === 0 || pending} disabledReason={!preview ? "Preview the CSV first" : "Nothing to import"}>
+          <Button variant="primary" onClick={runImport} loading={pending && !!preview} disabled={!preview || preview.length === 0 || pending} disabledReason={!preview ? "Preview the CSV first" : "The preview found no controls to import"}>
             Import {preview?.length ? `${preview.length} controls` : ""}
           </Button>
         </>
@@ -96,7 +96,7 @@ export function ImportCsvDialog({ frameworkId, custom, canWrite }: { frameworkId
         <FormError error={error} />
         {preview ? (
           <div>
-            <p className="mb-2 text-xs text-fg-muted">{preview.length} controls parsed. Review, then import.</p>
+            <p className="mb-2 text-xs text-fg-muted">{preview.length} controls read from the CSV. Check them below, then import.</p>
             <SimpleTable caption="CSV preview">
               <thead>
                 <tr>

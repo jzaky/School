@@ -52,10 +52,10 @@ export default async function AssessmentsPage({ searchParams }: { searchParams: 
   const avgCoverage = dashboard.frameworks.length ? Math.round(dashboard.frameworks.reduce((acc, f) => acc + f.coveragePercent, 0) / dashboard.frameworks.length) : null;
   return (
     <div>
-      <PageHeader title="Assessments" description="Lexical assessments of your documents against a framework, with findings per control that a person validates." badges={<DemoBadge show={c.org.demoMode} />} actions={<NewAssessmentDialog canWrite={canWrite} frameworks={frameworks.map((f) => ({ id: f.id, name: f.name, version: f.version, controlCount: f.controlCount }))} documents={documents.map((d) => ({ id: d.id, title: d.title, chunkCount: d.chunkCount }))} />} />
+      <PageHeader title="Assessments" description="Checks of your policy documents against a standard, with one finding per control. The engine matches words and phrases (a lexical search), so every finding needs a person to confirm it." badges={<DemoBadge show={c.org.demoMode} />} actions={<NewAssessmentDialog canWrite={canWrite} frameworks={frameworks.map((f) => ({ id: f.id, name: f.name, version: f.version, controlCount: f.controlCount }))} documents={documents.map((d) => ({ id: d.id, title: d.title, chunkCount: d.chunkCount }))} />} />
       <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatPanel label="Frameworks assessed" value={dashboard.frameworks.length} footer={dashboard.frameworks.map((f) => f.framework.key).join(", ") || "No completed assessments"} />
-        <StatPanel label="Average coverage" value={avgCoverage === null ? "n/a" : `${avgCoverage}%`} tone={avgCoverage === null ? "neutral" : avgCoverage >= 70 ? "allow" : avgCoverage >= 40 ? "approval" : "deny"} footer="Latest run per framework, covered controls only" />
+        <StatPanel label="Average coverage" value={avgCoverage === null ? "n/a" : `${avgCoverage}%`} tone={avgCoverage === null ? "neutral" : avgCoverage >= 70 ? "allow" : avgCoverage >= 40 ? "approval" : "deny"} footer="Latest run per framework, counting covered controls only" />
         <StatPanel label="Open remediation" value={dashboard.remediation.open} tone={dashboard.remediation.overdue > 0 ? "deny" : "neutral"} footer={`${dashboard.remediation.overdue} overdue`} />
         <StatPanel label="Awaiting validation" value={dashboard.review.pending} tone={dashboard.review.pending > 0 ? "approval" : "allow"} footer={`${dashboard.review.validated} findings human validated`} />
       </div>

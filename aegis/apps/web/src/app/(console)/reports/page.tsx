@@ -80,7 +80,7 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
         <Panel title="Alerts by severity" description={`Raised in the period. ${observed}.`}>
           <AlertsBySeverityChart data={alertRows} />
         </Panel>
-        <Panel title="Approval turnaround" description="Decided requests in the period" padded={false}>
+        <Panel title="Approval turnaround" description="How long approvals took to decide in the period" padded={false}>
           {report.approvals.length === 0 ? (
             <p className="px-4 py-6 text-center text-xs text-fg-dim">No decided approvals in the period.</p>
           ) : (
@@ -183,7 +183,7 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
             }))}
           />
         </Panel>
-        <Panel title="Evidence chain" description="Status at generation time">
+        <Panel title="Evidence chain" description="State of the record when this report was generated">
           <dl className="space-y-2 text-sm">
             <div className="flex justify-between">
               <dt className="text-fg-muted">Chain</dt>
@@ -202,14 +202,14 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
               <dd className="break-all font-mono text-[11px]">{report.evidenceChain.lastHash ?? "none"}</dd>
             </div>
           </dl>
-          <p className="mt-3 text-xs text-fg-dim">Tamper-evident, not immutable. Compliance evidence sources: {report.complianceEvidence.length ? report.complianceEvidence.map((s) => `${statusLabel(s.source)} ${s.controls}`).join(", ") : "none mapped yet"}.</p>
+          <p className="mt-3 text-xs text-fg-dim">Any edit to the record would show, but the record is not impossible to change (tamper-evident, not immutable). Compliance evidence sources:{report.complianceEvidence.length ? report.complianceEvidence.map((s) => `${statusLabel(s.source)} ${s.controls}`).join(", ") : "none mapped yet"}.</p>
         </Panel>
       </div>
 
       <h2 className="mb-1 mt-8 text-lg font-semibold tracking-tight">Compliance evidence</h2>
       <p className="mb-4 max-w-3xl text-sm text-fg-muted">What AEGIS can observe about its own technical controls, labelled by status, next to the framework mapping maintained in the Audit module. Observations are inputs to an assessment, not a statement of compliance.</p>
       <div className="grid gap-4 xl:grid-cols-3">
-        <Panel title="Observed technical controls" description={`${observed}. Status reflects measurements in this tenant.`} className="xl:col-span-2" padded={false}>
+        <Panel title="Observed technical controls" description={`${observed}. Status reflects what AEGIS measured in this organization.`} className="xl:col-span-2" padded={false}>
           <SimpleTable caption="Observed technical controls" className="rounded-none border-0">
             <thead>
               <tr>
@@ -244,7 +244,7 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
             </tbody>
           </SimpleTable>
         </Panel>
-        <Panel title="Framework mapping" description="Controls per framework by evidence source" padded={false}>
+        <Panel title="Framework mapping" description="For each framework, how many controls have evidence and where that evidence comes from" padded={false}>
           {frameworks.length === 0 ? (
             <p className="px-4 py-6 text-center text-xs text-fg-dim">No frameworks loaded.</p>
           ) : (

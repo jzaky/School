@@ -77,21 +77,21 @@ export function NewAssessmentDialog({ canWrite, frameworks, documents }: { canWr
         </Button>
       }
       title="New assessment"
-      description="Lexical assessment of the selected documents against every control of the framework. Runs in this deployment; no external AI provider is called."
+      description="Checks the wording of the selected documents against every control in the framework (a lexical, text-matching assessment). It runs inside this deployment; no external AI provider is called."
       size="lg"
       footer={
         <>
           <Button variant="ghost" onClick={() => setOpen(false)} disabled={phase !== "form"}>
             Cancel
           </Button>
-          <Button form="new-assessment-form" type="submit" variant="primary" loading={phase !== "form"} disabled={!canSubmit} disabledReason={!frameworkId ? "Choose a framework" : "Name needs at least 2 characters"}>
+          <Button form="new-assessment-form" type="submit" variant="primary" loading={phase !== "form"} disabled={!canSubmit} disabledReason={!frameworkId ? "Choose a framework" : "Enter a name of at least 2 characters"}>
             {phase === "creating" ? "Creating" : phase === "running" ? `Running ${framework?.controlCount ?? ""} controls` : "Create and run"}
           </Button>
         </>
       }
     >
       <form id="new-assessment-form" onSubmit={submit} className="space-y-3">
-        {phase === "running" ? <Note>Running the engine over {docIds.length} document{docIds.length === 1 ? "" : "s"} and {framework?.controlCount ?? 0} controls. This usually takes a few seconds and at most three minutes.</Note> : null}
+        {phase === "running" ? <Note>Checking {docIds.length} document{docIds.length === 1 ? "" : "s"} against {framework?.controlCount ?? 0} controls. This usually takes a few seconds and at most three minutes.</Note> : null}
         <div className="grid gap-3 md:grid-cols-2">
           <Field label="Framework" htmlFor="as-framework">
             <Select id="as-framework" value={frameworkId} onValueChange={setFrameworkId} disabled={phase !== "form"} options={frameworks.map((f) => ({ value: f.id, label: `${f.name}${f.version ? ` ${f.version}` : ""} (${f.controlCount} controls)` }))} placeholder="Select a framework" />
@@ -108,11 +108,11 @@ export function NewAssessmentDialog({ canWrite, frameworks, documents }: { canWr
             Documents <span className="font-normal text-fg-dim">({docIds.length} of {documents.length} parsed documents selected)</span>
           </legend>
           {noDocs ? (
-            <Note tone="warning">No parsed documents yet. The assessment will rely on automated AEGIS evidence only; upload documents first for document coverage.</Note>
+            <Note tone="warning">No documents have been uploaded and read yet. This assessment will rely only on the evidence AEGIS records automatically. Upload documents first if you want them covered.</Note>
           ) : (
             <div className="grid max-h-56 gap-0.5 overflow-y-auto rounded-md border border-line p-1">
               {documents.map((d) => (
-                <Checkbox key={d.id} checked={docIds.includes(d.id)} disabled={phase !== "form"} onCheckedChange={(v) => setDocIds((prev) => (v ? [...prev, d.id] : prev.filter((x) => x !== d.id)))} label={d.title} description={`${d.chunkCount} chunks`} />
+                <Checkbox key={d.id} checked={docIds.includes(d.id)} disabled={phase !== "form"} onCheckedChange={(v) => setDocIds((prev) => (v ? [...prev, d.id] : prev.filter((x) => x !== d.id)))} label={d.title} description={`${d.chunkCount} passages (chunks)`} />
               ))}
             </div>
           )}

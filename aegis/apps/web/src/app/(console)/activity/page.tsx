@@ -55,7 +55,7 @@ export default async function ActivityPage({ searchParams }: { searchParams: Pro
       <details className="mt-6 rounded-panel border border-line bg-bg-elev" data-testid="ledger-feed">
         <summary className="cursor-pointer select-none px-4 py-3 text-sm font-semibold text-fg">
           Live evidence feed
-          <span className="ms-2 text-xs font-normal text-fg-muted">every ledger event as it lands: gateway, approvals, policy, agents, monitoring and security</span>
+          <span className="ms-2 text-xs font-normal text-fg-muted">every entry written to the record as it happens: agent actions, approvals, policies, agents, monitoring and security</span>
         </summary>
         <div className="border-t border-line p-4">
           <LiveActivity initial={ledger} />

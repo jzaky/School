@@ -51,7 +51,7 @@ export function CreateTeamDialog({ canWrite }: { canWrite: boolean }) {
         </Button>
       }
       title="Create a team"
-      description="Teams own agents and resources and can be targeted by policies."
+      description="A team can own agents and resources, and a policy can be assigned to a whole team at once."
       size="sm"
       footer={
         <>
@@ -85,7 +85,7 @@ export function CreateTeamDialog({ canWrite }: { canWrite: boolean }) {
         <Field label="Name" htmlFor="team-name">
           <Input id="team-name" value={name} onChange={(e) => setName(e.target.value)} required autoFocus maxLength={80} />
         </Field>
-        <Field label="Key" htmlFor="team-key" hint="lowercase, digits, hyphens">
+        <Field label="Key" htmlFor="team-key" hint="a short permanent code: lowercase letters, digits and hyphens">
           <Input id="team-key" value={key} onChange={(e) => { setTouched(true); setKey(e.target.value); }} className="font-mono" pattern="^[a-z0-9][a-z0-9-]*[a-z0-9]$" required />
         </Field>
         <Field label="Description" htmlFor="team-desc">
@@ -182,7 +182,7 @@ export function TeamCard({ team, members, canWrite }: { team: TeamView; members:
                           description={`${m.email} · ${m.roleName}`}
                         />
                       </div>
-                      <Button size="sm" variant={lead === m.membershipId ? "secondary" : "ghost"} disabled={!checked} disabledReason="Select the member first" aria-pressed={lead === m.membershipId} onClick={() => setLead(lead === m.membershipId ? null : m.membershipId)}>
+                      <Button size="sm" variant={lead === m.membershipId ? "secondary" : "ghost"} disabled={!checked} disabledReason="Tick this member first to make them lead" aria-pressed={lead === m.membershipId} onClick={() => setLead(lead === m.membershipId ? null : m.membershipId)}>
                         <Star className={`h-3.5 w-3.5 ${lead === m.membershipId ? "text-approval" : ""}`} aria-hidden />
                         {lead === m.membershipId ? "Lead" : "Make lead"}
                       </Button>

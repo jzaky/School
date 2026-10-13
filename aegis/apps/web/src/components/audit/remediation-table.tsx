@@ -175,7 +175,7 @@ export function RemediationTable({ rows, pagination, filters, owners, documents,
         pagination={pagination}
         storageKey="remediation"
         caption="Remediation tasks"
-        emptyState={<EmptyState icon={ListChecks} title={hasFilters ? "No tasks match these filters" : "No remediation tasks"} description={hasFilters ? "Try clearing the filters." : "Create tasks from assessment findings or directly."} action={hasFilters ? <Button size="sm" onClick={() => router.push(pathname)}>Clear filters</Button> : undefined} />}
+        emptyState={<EmptyState icon={ListChecks} title={hasFilters ? "No tasks match these filters" : "No remediation tasks"} description={hasFilters ? "Try clearing the filters." : "A remediation task tracks the work to fix a gap. Create one from an assessment finding, or directly with New task."} action={hasFilters ? <Button size="sm" onClick={() => router.push(pathname)}>Clear filters</Button> : undefined} />}
         toolbar={
           <>
             <Select aria-label="Status" value={filters.status || "active"} onValueChange={(v) => apply({ status: v })} className="w-40" options={[{ value: "active", label: "Active (not resolved)" }, { value: "all", label: "All statuses" }, ...STATUSES.map((s) => ({ value: s, label: remediationLabel(s) }))]} />
@@ -214,14 +214,14 @@ export function RemediationTable({ rows, pagination, filters, owners, documents,
             />
 
             <section className="space-y-2">
-              <h3 className="text-xs font-medium uppercase tracking-wide text-fg-muted">Transitions</h3>
+              <h3 className="text-xs font-medium uppercase tracking-wide text-fg-muted">Change status</h3>
               <div className="flex flex-wrap gap-2">
                 {(TRANSITIONS[selected.status] ?? []).map((to) => (
                   <Button key={to} size="sm" variant={transitionTo === to ? "primary" : "secondary"} disabled={!canWrite} disabledReason={reason} onClick={() => setTransitionTo(transitionTo === to ? null : to)}>
                     {TRANSITION_LABELS[to] ?? remediationLabel(to)}
                   </Button>
                 ))}
-                {(TRANSITIONS[selected.status] ?? []).length === 0 ? <span className="text-xs text-fg-dim">No transitions available.</span> : null}
+                {(TRANSITIONS[selected.status] ?? []).length === 0 ? <span className="text-xs text-fg-dim">No further status changes are available.</span> : null}
               </div>
               {transitionTo ? (
                 <div className="space-y-2 rounded-md border border-line bg-bg p-3">
@@ -229,7 +229,7 @@ export function RemediationTable({ rows, pagination, filters, owners, documents,
                     <Textarea id="task-transition-note" value={note} onChange={(e) => setNote(e.target.value)} maxLength={2000} rows={2} autoFocus />
                   </Field>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="primary" loading={pending} disabled={needsNote && note.trim().length < 3} disabledReason="A note of at least 3 characters is required" onClick={doTransition}>
+                    <Button size="sm" variant="primary" loading={pending} disabled={needsNote && note.trim().length < 3} disabledReason="Enter a note of at least 3 characters" onClick={doTransition}>
                       Confirm: {TRANSITION_LABELS[transitionTo] ?? remediationLabel(transitionTo)}
                     </Button>
                     <Button size="sm" variant="ghost" onClick={() => setTransitionTo(null)} disabled={pending}>

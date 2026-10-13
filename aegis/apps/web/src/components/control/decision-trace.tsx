@@ -58,7 +58,7 @@ export function DecisionPanel({ result, explanation, reasons, policyVersionIds, 
       ) : null}
       {explanation.failures?.length ? (
         <Note tone="danger">
-          <strong>Baseline checks failed before policy evaluation:</strong>
+          <strong>Basic safety checks failed before any policy was consulted:</strong>
           <ul className="mt-1 list-inside list-disc">
             {explanation.failures.map((f, i) => (
               <li key={i}>
@@ -68,7 +68,7 @@ export function DecisionPanel({ result, explanation, reasons, policyVersionIds, 
           </ul>
         </Note>
       ) : null}
-      {explanation.error ? <Note tone="danger">Policy evaluation failed and the request was denied (fail closed): {explanation.error}</Note> : null}
+      {explanation.error ? <Note tone="danger">The policy check itself hit an error, so the request was denied to be safe (fail closed): {explanation.error}</Note> : null}
       {policyVersionIds.length ? (
         <div className="flex flex-wrap items-center gap-1 text-xs text-fg-muted">
           <span>Policy versions:</span>
@@ -88,7 +88,7 @@ export function DecisionPanel({ result, explanation, reasons, policyVersionIds, 
           })}
         </div>
       ) : null}
-      {explanation.skipped?.length ? <p className="text-xs text-fg-dim">Skipped (scope did not match): {explanation.skipped.map((s) => `${s.policyKey} (${s.reason})`).join("; ")}</p> : null}
+      {explanation.skipped?.length ? <p className="text-xs text-fg-dim">Not applied because this request is outside their scope: {explanation.skipped.map((s) => `${s.policyKey} (${s.reason})`).join("; ")}</p> : null}
       {trace.length ? (
         <SimpleTable caption="Decision trace">
           <thead>
@@ -141,7 +141,7 @@ export function DecisionPanel({ result, explanation, reasons, policyVersionIds, 
           </tbody>
         </SimpleTable>
       ) : explanation.stage === "policy" ? (
-        <p className="text-xs text-fg-dim">No policy applied to this request; the result is the default deny.</p>
+        <p className="text-xs text-fg-dim">No policy covers this request, so it was denied by default.</p>
       ) : null}
     </div>
   );

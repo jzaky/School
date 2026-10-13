@@ -50,13 +50,13 @@ export function CreateFrameworkDialog({ canWrite }: { canWrite: boolean }) {
         </Button>
       }
       title="Create a custom framework"
-      description="Your own control set, for internal standards or regulator checklists. Controls are added one by one or imported from CSV."
+      description="Build your own list of controls, for an internal standard or a regulator's checklist. Add controls one by one or import them from a CSV file."
       footer={
         <>
           <Button variant="ghost" onClick={() => setOpen(false)} disabled={pending}>
             Cancel
           </Button>
-          <Button form="create-framework-form" type="submit" variant="primary" loading={pending} disabled={!keyOk || name.trim().length < 2} disabledReason={!keyOk ? "Key: lowercase letters, digits, dots and hyphens" : "Name needs at least 2 characters"}>
+          <Button form="create-framework-form" type="submit" variant="primary" loading={pending} disabled={!keyOk || name.trim().length < 2} disabledReason={!keyOk ? "The key may only use lowercase letters, digits, dots and hyphens" : "Enter a name of at least 2 characters"}>
             Create framework
           </Button>
         </>
@@ -66,7 +66,7 @@ export function CreateFrameworkDialog({ canWrite }: { canWrite: boolean }) {
         <Field label="Name" htmlFor="fw-name">
           <Input id="fw-name" value={name} onChange={(e) => setName(e.target.value)} maxLength={120} autoFocus />
         </Field>
-        <Field label="Key" htmlFor="fw-key" hint="stable identifier">
+        <Field label="Key" htmlFor="fw-key" hint="a short code that stays the same even if you rename the framework">
           <Input
             id="fw-key"
             value={key}

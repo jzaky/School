@@ -31,12 +31,12 @@ export default async function DataProtectionPage() {
   const enabled = rows.filter((r) => r.enabled).length;
   return (
     <div>
-      <PageHeader title="Data Protection" description="What Shield looks for in tool parameters before policy evaluation, and what it does when it finds it. Changes apply to the next request." badges={<DemoBadge show={c.org.demoMode} />} actions={<CreateDataClassDialog canWrite={canWrite} />} />
+      <PageHeader title="Data Protection" description="Shield is the data protection check that reads what an agent sends before the rules are applied. This page lists the kinds of sensitive data it looks for and what it does when it finds them. Changes apply from the next request." badges={<DemoBadge show={c.org.demoMode} />} actions={<CreateDataClassDialog canWrite={canWrite} />} />
       <div className="space-y-4">
-        <Panel title="Data classes" description={`${enabled} of ${rows.length} classes enabled. System classes can be tuned but not removed. Addressing fields (to, destination, url) are classified but never rewritten; destination allowlists govern them.`} padded={false}>
+        <Panel title="Data classes" description={`${enabled} of ${rows.length} data classes switched on. The built-in classes can be adjusted but not removed. Fields that say where something goes (to, destination, url) are recognised but never altered; the list of allowed destinations controls those.`} padded={false}>
           <DataClassesTable rows={rows} canWrite={canWrite} />
         </Panel>
-        {!canWrite ? <Note>You can view the configuration. Changing actions, severities or classes requires security:write.</Note> : null}
+        {!canWrite ? <Note>You can view these settings. To change an action, a severity or a class you need the security:write permission; ask an administrator.</Note> : null}
         <div className="grid gap-4 xl:grid-cols-2">
           <SampleTestPanel tools={tools.map((t) => ({ key: t.key, name: t.name }))} />
           <InjectionPanel />

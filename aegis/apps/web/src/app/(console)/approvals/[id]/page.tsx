@@ -107,7 +107,7 @@ export default async function ApprovalDetailPage({ params }: { params: Promise<{
               ].filter((i) => i.value !== null && i.value !== undefined && i.value !== "")}
             />
             <div className="mt-3 rounded-md border border-line bg-bg px-3 py-2 text-sm">
-              <div className="text-xs text-fg-dim">Justification from the agent</div>
+              <div className="text-xs text-fg-dim">The agent&apos;s reason for asking</div>
               {a.request.justification || <span className="text-fg-dim">none given</span>}
             </div>
             {riskIndicators.length ? (
@@ -152,9 +152,9 @@ export default async function ApprovalDetailPage({ params }: { params: Promise<{
             </div>
           </Panel>
           {receipt ? (
-            <Panel title="What happened downstream">
+            <Panel title="What happened in the other system">
               <p className="text-sm text-fg">
-                {receipt.status === "succeeded" ? `Executed through ${receipt.downstreamSystem}.` : receipt.status === "failed" ? `The call to ${receipt.downstreamSystem} failed; nothing was changed there.` : receipt.status === "unknown" ? `${receipt.downstreamSystem} did not confirm the outcome. A person must check the system and settle the result from the action request.` : `Skipped: the call to ${receipt.downstreamSystem} was not made.`}
+                {receipt.status === "succeeded" ? `Carried out in ${receipt.downstreamSystem}.` : receipt.status === "failed" ? `The call to ${receipt.downstreamSystem} failed; nothing was changed there.` : receipt.status === "unknown" ? `${receipt.downstreamSystem} did not confirm whether this went through. A person must check that system and record the result from the action request page.` : `Skipped: the call to ${receipt.downstreamSystem} was not made.`}
                 {receipt.downstreamReference ? (
                   <>
                     {" "}
@@ -185,7 +185,7 @@ export default async function ApprovalDetailPage({ params }: { params: Promise<{
           <details className="group rounded-panel border border-line bg-bg-elev" data-testid="technical-details">
             <summary className="cursor-pointer select-none px-4 py-3 text-sm font-semibold text-fg marker:text-fg-dim">
               Technical details
-              <span className="ms-2 text-xs font-normal text-fg-muted">parameters, request hash, decision trace and evidence</span>
+              <span className="ms-2 text-xs font-normal text-fg-muted">the exact values that will run, the request fingerprint (hash), the step-by-step decision and the record entries</span>
             </summary>
             <div className="space-y-4 border-t border-line p-4">
               <div>
@@ -197,7 +197,7 @@ export default async function ApprovalDetailPage({ params }: { params: Promise<{
                     { label: "Tool", value: a.tool ? `${a.tool.name} (${a.tool.key})` : a.request.toolKey, mono: true },
                     { label: "Action", value: a.request.action, mono: true },
                     { label: "Resource", value: a.request.resourceKey, mono: true },
-                    { label: "Correlation id", value: a.request.correlationId, mono: true },
+                    { label: "Trace reference (correlation id)", value: a.request.correlationId, mono: true },
                     { label: "Agent risk tier", value: <Badge tone={statusTone(a.request.agent.riskTier)}>{statusLabel(a.request.agent.riskTier)}</Badge> },
                     { label: "Business owner", value: names.get(a.request.agent.businessOwnerId ?? "") ?? null },
                     { label: "Technical owner", value: names.get(a.request.agent.technicalOwnerId ?? "") ?? null },
@@ -207,28 +207,28 @@ export default async function ApprovalDetailPage({ params }: { params: Promise<{
               </div>
               <div>
                 <h3 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Parameters</h3>
-                <p className="mb-1 text-xs text-fg-muted">Exactly what will execute. The hash is bound to the decision.</p>
+                <p className="mb-1 text-xs text-fg-muted">Exactly what will run if approved. These values are fingerprinted (hashed) and the decision is tied to that fingerprint, so a changed value would no longer match the decision.</p>
                 <CodeBlock code={JSON.stringify(a.request.params, null, 2)} />
                 <p className="mt-2 break-all font-mono text-[11px] text-fg-dim">request hash {a.requestHash}</p>
               </div>
               {decision ? (
                 <div>
-                  <h3 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Decision trace</h3>
+                  <h3 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">How the decision was reached (decision trace)</h3>
                   <p className="mb-1 text-xs text-fg-muted">
-                    Result <span className="font-mono">{decision.result}</span>, evaluator <span className="font-mono">{decision.evaluator}</span>, matched rules {decision.matchedRuleIds.length ? decision.matchedRuleIds.join(", ") : "none"}, {decision.latencyMs} ms.
+                    Result <span className="font-mono">{decision.result}</span>, decided by <span className="font-mono">{decision.evaluator}</span>, matched rules {decision.matchedRuleIds.length ? decision.matchedRuleIds.join(", ") : "none"}, took {decision.latencyMs} ms.
                   </p>
                   <CodeBlock code={JSON.stringify(decision.explanation, null, 2)} copy={false} />
                 </div>
               ) : null}
               {receipt ? (
                 <div>
-                  <h3 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Execution receipt</h3>
+                  <h3 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Receipt from the other system (execution receipt)</h3>
                   <CodeBlock className="mt-1" code={JSON.stringify(receipt.responseSummary, null, 2)} copy={false} />
                 </div>
               ) : null}
               <div>
                 <h3 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Evidence</h3>
-                <p className="mb-1 text-xs text-fg-muted">Ledger entries for correlation {a.request.correlationId}</p>
+                <p className="mb-1 text-xs text-fg-muted">Entries in the record (ledger) that share trace reference {a.request.correlationId}</p>
                 <Timeline
                   emptyText="No evidence recorded"
                   items={a.evidence.map((e) => ({
@@ -251,7 +251,7 @@ export default async function ApprovalDetailPage({ params }: { params: Promise<{
         </div>
         <div className="space-y-4">
           <ApprovalDecisionForm approvalId={a.id} requestId={a.actionRequestId} requestHash={a.requestHash} canDecide={a.eligibility.canDecide} eligibilityReasons={a.eligibility.reasons} canReassign={canReassign && isOpen} approvers={approvers.filter((p) => p.userId !== c.session.user.id)} status={a.status} isOpen={isOpen} summary={summary} />
-          <Panel title="Approval history for this agent" description="Last 10 other requests" padded={false}>
+          <Panel title="Approval history for this agent" description="The last 10 other requests this agent sent for approval" padded={false}>
             {a.history.length === 0 ? (
               <p className="px-4 py-6 text-center text-xs text-fg-dim">No other approval requests for this agent.</p>
             ) : (

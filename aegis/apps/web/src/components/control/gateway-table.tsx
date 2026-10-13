@@ -107,7 +107,7 @@ export function GatewayTable({ rows, pagination, filters, agents, tools }: { row
       pagination={pagination}
       storageKey="gateway"
       caption="Action requests"
-      emptyState={<EmptyState icon={GitBranch} title={hasFilters ? "No requests match these filters" : "No action requests yet"} description={hasFilters ? "Try clearing the filters." : "Requests appear here as agents call the gateway."} action={hasFilters ? <Button size="sm" onClick={() => router.push(pathname)}>Clear filters</Button> : undefined} />}
+      emptyState={<EmptyState icon={GitBranch} title={hasFilters ? "No requests match these filters" : "No action requests yet"} description={hasFilters ? "Try clearing the filters." : "Every request an agent sends through the Action Gateway appears here as it happens."} action={hasFilters ? <Button size="sm" onClick={() => router.push(pathname)}>Clear filters</Button> : undefined} />}
       toolbar={
         <>
           <form

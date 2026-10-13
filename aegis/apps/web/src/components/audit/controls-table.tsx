@@ -64,14 +64,14 @@ function ControlDialog({ open, onOpenChange, frameworkId, control, evidenceTypes
       open={open}
       onOpenChange={onOpenChange}
       title={control ? `Edit control ${control.code}` : "Add control"}
-      description="Keywords drive lexical retrieval; the automated evidence type lets the engine corroborate the control with AEGIS records."
+      description="Keywords are what the assessment searches for in your documents (lexical retrieval). The automated evidence type lets AEGIS back up the control with its own records as well."
       size="lg"
       footer={
         <>
           <Button variant="ghost" onClick={() => onOpenChange(false)} disabled={pending}>
             Cancel
           </Button>
-          <Button form="control-form" type="submit" variant="primary" loading={pending} disabled={!code.trim() || !title.trim()} disabledReason="Code and title are required">
+          <Button form="control-form" type="submit" variant="primary" loading={pending} disabled={!code.trim() || !title.trim()} disabledReason="Enter a code and a title first">
             {control ? "Save changes" : "Add control"}
           </Button>
         </>
@@ -110,7 +110,7 @@ export function ControlsTable({ frameworkId, controls, categories, custom, canWr
   const [adding, setAdding] = React.useState(false);
   const [deleting, setDeleting] = React.useState<ControlRow | null>(null);
   const editable = custom && canWrite;
-  const reason = !custom ? "Shared catalog frameworks are read-only" : !canWrite ? "Requires audit:write" : undefined;
+  const reason = !custom ? "Frameworks from the shared catalog cannot be changed. Create a custom framework to add your own controls." : !canWrite ? "Requires audit:write" : undefined;
   const groups = categories.length ? categories : ["General"];
 
   return (
@@ -191,7 +191,7 @@ export function ControlsTable({ frameworkId, controls, categories, custom, canWr
         open={deleting !== null}
         onOpenChange={(o) => !o && setDeleting(null)}
         title={deleting ? `Delete control ${deleting.code}` : ""}
-        description="Controls that have findings in existing assessments cannot be deleted."
+        description="The control is removed from this framework. A control that already has findings in an assessment cannot be deleted."
         confirmLabel="Delete control"
         danger
         onConfirm={async () => {

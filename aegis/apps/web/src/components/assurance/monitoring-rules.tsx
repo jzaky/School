@@ -41,16 +41,16 @@ interface ParamField {
 
 /** Parameters per rule type, mirroring ruleDefinitionSchema in the core monitoring module. */
 export const RULE_TYPES: Record<string, { label: string; summary: string; params: ParamField[] }> = {
-  repeated_denials: { label: "Repeated denials", summary: "An agent was denied at least N times in the window", params: [{ key: "threshold", label: "Threshold (denials)", kind: "int", default: 5 }, { key: "windowMinutes", label: "Window (minutes)", kind: "int", default: 1440 }] },
-  permission_escalation: { label: "Permission escalation", summary: "An agent tried tools, resources or classifications outside its grants", params: [{ key: "threshold", label: "Threshold (attempts)", kind: "int", default: 3 }, { key: "windowMinutes", label: "Window (minutes)", kind: "int", default: 1440 }] },
-  unusual_tool_usage: { label: "Unusual tool usage", summary: "First use of a tool in the baseline period", params: [{ key: "baselineDays", label: "Baseline (days)", kind: "int", default: 30 }] },
-  transaction_volume: { label: "Transaction volume", summary: "Executed amounts for one tool exceed a total in the window", params: [{ key: "toolKey", label: "Tool key", kind: "string", default: "initiate-transfer" }, { key: "amountThreshold", label: "Amount threshold", kind: "number", default: 1000000 }, { key: "windowMinutes", label: "Window (minutes)", kind: "int", default: 1440 }] },
-  integration_failures: { label: "Integration failures", summary: "Failed executions against one integration", params: [{ key: "threshold", label: "Threshold (failures)", kind: "int", default: 3 }, { key: "windowMinutes", label: "Window (minutes)", kind: "int", default: 60 }] },
-  policy_evaluation_failures: { label: "Policy evaluation failures", summary: "Decisions that ended in an evaluation error", params: [{ key: "threshold", label: "Threshold (errors)", kind: "int", default: 1 }, { key: "windowMinutes", label: "Window (minutes)", kind: "int", default: 60 }] },
-  missing_evidence: { label: "Missing evidence or receipts", summary: "Allowed requests without a receipt, or requests without evidence", params: [{ key: "olderThanMinutes", label: "Older than (minutes)", kind: "int", default: 10 }] },
-  abnormal_activity: { label: "Abnormal activity", summary: "Requests in the last hour exceed a multiple of the hourly baseline", params: [{ key: "multiplier", label: "Multiplier", kind: "number", default: 3 }, { key: "baselineDays", label: "Baseline (days)", kind: "int", default: 7 }, { key: "minimumRequests", label: "Minimum requests", kind: "int", default: 20 }] },
+  repeated_denials: { label: "Repeated denials", summary: "An agent was refused at least N times within the time window", params: [{ key: "threshold", label: "Threshold (denials)", kind: "int", default: 5 }, { key: "windowMinutes", label: "Window (minutes)", kind: "int", default: 1440 }] },
+  permission_escalation: { label: "Permission escalation", summary: "An agent tried to use tools, resources or data classes it was never given", params: [{ key: "threshold", label: "Threshold (attempts)", kind: "int", default: 3 }, { key: "windowMinutes", label: "Window (minutes)", kind: "int", default: 1440 }] },
+  unusual_tool_usage: { label: "Unusual tool usage", summary: "An agent used a tool for the first time in the baseline period", params: [{ key: "baselineDays", label: "Baseline (days)", kind: "int", default: 30 }] },
+  transaction_volume: { label: "Transaction volume", summary: "The amounts carried out through one tool add up to more than a total within the time window", params: [{ key: "toolKey", label: "Tool key", kind: "string", default: "initiate-transfer" }, { key: "amountThreshold", label: "Amount threshold", kind: "number", default: 1000000 }, { key: "windowMinutes", label: "Window (minutes)", kind: "int", default: 1440 }] },
+  integration_failures: { label: "Integration failures", summary: "Actions through one connected system failed", params: [{ key: "threshold", label: "Threshold (failures)", kind: "int", default: 3 }, { key: "windowMinutes", label: "Window (minutes)", kind: "int", default: 60 }] },
+  policy_evaluation_failures: { label: "Policy evaluation failures", summary: "Policy checks that ended in an error instead of a decision", params: [{ key: "threshold", label: "Threshold (errors)", kind: "int", default: 1 }, { key: "windowMinutes", label: "Window (minutes)", kind: "int", default: 60 }] },
+  missing_evidence: { label: "Missing evidence or receipts", summary: "Allowed requests with no receipt from the other system, or requests with no evidence record", params: [{ key: "olderThanMinutes", label: "Older than (minutes)", kind: "int", default: 10 }] },
+  abnormal_activity: { label: "Abnormal activity", summary: "Requests in the last hour are several times the normal hourly rate", params: [{ key: "multiplier", label: "Multiplier", kind: "number", default: 3 }, { key: "baselineDays", label: "Baseline (days)", kind: "int", default: 7 }, { key: "minimumRequests", label: "Minimum requests", kind: "int", default: 20 }] },
   approval_backlog: { label: "Approvals about to expire", summary: "Pending approvals expiring soon", params: [{ key: "expiringWithinMinutes", label: "Expiring within (minutes)", kind: "int", default: 60 }] },
-  chain_integrity: { label: "Evidence chain integrity", summary: "Hash chain or checkpoint verification failed", params: [] },
+  chain_integrity: { label: "Evidence chain integrity", summary: "The evidence record failed its tamper check (hash chain or checkpoint)", params: [] },
   credential_rotation_due: { label: "Credential rotation due", summary: "Credentials due or overdue for rotation", params: [{ key: "withinDays", label: "Within (days)", kind: "int", default: 7 }] },
 };
 
@@ -64,7 +64,7 @@ export function summarizeDefinition(def: Record<string, unknown>): string {
 function ParamsForm({ type, values, onChange, idPrefix }: { type: string; values: Record<string, string>; onChange: (v: Record<string, string>) => void; idPrefix: string }) {
   const meta = RULE_TYPES[type];
   if (!meta) return null;
-  if (meta.params.length === 0) return <p className="text-xs text-fg-dim">This rule type has no parameters.</p>;
+  if (meta.params.length === 0) return <p className="text-xs text-fg-dim">This rule type has no thresholds to set.</p>;
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       {meta.params.map((p) => (
@@ -197,7 +197,7 @@ export function MonitoringRulesTable({ rules, canWrite }: { rules: RuleRow[]; ca
             <Button variant="ghost" onClick={() => setEditing(null)} disabled={saving}>
               Cancel
             </Button>
-            <Button form="edit-rule-form" type="submit" variant="primary" loading={saving} disabled={form.name.trim().length < 3} disabledReason="A name of at least 3 characters is required">
+            <Button form="edit-rule-form" type="submit" variant="primary" loading={saving} disabled={form.name.trim().length < 3} disabledReason="Enter a name of at least 3 characters">
               Save
             </Button>
           </>
@@ -226,7 +226,7 @@ export function MonitoringRulesTable({ rules, canWrite }: { rules: RuleRow[]; ca
         open={deleting !== null}
         onOpenChange={(o) => !o && setDeleting(null)}
         title={deleting ? `Delete ${deleting.key}` : ""}
-        description="Existing alerts keep their detail but lose the link to this rule. The deletion is recorded in evidence."
+        description="Existing alerts keep their detail but lose the link to this rule. The deletion is kept in the evidence record."
         confirmLabel="Delete"
         danger
         typed={deleting?.key}
@@ -290,14 +290,14 @@ export function CreateRuleDialog({ canWrite, existingKeys }: { canWrite: boolean
         </Button>
       }
       title="New custom rule"
-      description="Custom rules use the same deterministic checks as the built-ins with your own thresholds."
+      description="A custom rule uses the same checks as the built-in rules, with your own thresholds. The same data always gives the same result."
       size="lg"
       footer={
         <>
           <Button variant="ghost" onClick={() => setOpen(false)} disabled={pending}>
             Cancel
           </Button>
-          <Button form="create-rule-form" type="submit" variant="primary" loading={pending} disabled={!keyOk || name.trim().length < 3} disabledReason={!keyOk ? "Key must look like RM-012 and be unused" : "A name of at least 3 characters is required"}>
+          <Button form="create-rule-form" type="submit" variant="primary" loading={pending} disabled={!keyOk || name.trim().length < 3} disabledReason={!keyOk ? "Enter a key like RM-012 that is not already used" : "Enter a name of at least 3 characters"}>
             Create rule
           </Button>
         </>
@@ -335,7 +335,7 @@ export function CreateRuleDialog({ canWrite, existingKeys }: { canWrite: boolean
 export function MonitoringNote() {
   return (
     <Note>
-      Rules are deterministic checks over this organization&apos;s records: counts, sums and lists with explicit thresholds and windows. Every alert shows the definition that produced it, so anyone can reproduce the result. Nothing here predicts or scores.
+      Every rule is a plain check over this organization&apos;s records: counts, sums and lists with set thresholds and time windows (deterministic rules). Every alert shows the definition that produced it, so anyone can reproduce the result. Nothing here predicts or scores.
     </Note>
   );
 }

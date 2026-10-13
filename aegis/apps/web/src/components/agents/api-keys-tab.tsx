@@ -62,7 +62,7 @@ export function ApiKeysTab({ agentId, keys, caps }: { agentId: string; keys: Age
           if (!o) setIssued(null);
         }}
         title={issued ? "Copy your new API key" : "Issue an API key"}
-        description={issued ? "This is the only time the full key is shown. AEGIS stores a hash." : "The key authenticates this agent at the Action Gateway. It is scoped to the agent and can be revoked at any time."}
+        description={issued ? "This is the only time the full key is shown. AEGIS keeps only a scrambled fingerprint of it (a hash), so it cannot show the key again." : "The agent presents this key to prove who it is at the Action Gateway, the one door every agent action goes through. The key works only for this agent and can be revoked at any time."}
         footer={
           issued ? (
             <Button variant="primary" onClick={() => setOpen(false)}>
@@ -113,12 +113,12 @@ export function ApiKeysTab({ agentId, keys, caps }: { agentId: string; keys: Age
           </form>
         )}
       </Dialog>
-      <DataTable columns={columns} data={keys} getRowId={(k) => k.id} columnVisibilityMenu={false} caption="API keys" emptyState={<EmptyState icon={KeyRound} title="No API keys" description="Issue a key so the agent can authenticate at the gateway." />} />
+      <DataTable columns={columns} data={keys} getRowId={(k) => k.id} columnVisibilityMenu={false} caption="API keys" emptyState={<EmptyState icon={KeyRound} title="No API keys" description="Issue a key so the agent can prove who it is when it calls the Action Gateway." />} />
       <ConfirmDialog
         open={revoking !== null}
         onOpenChange={(o) => !o && setRevoking(null)}
         title={revoking ? `Revoke key ${revoking.name}` : ""}
-        description="Requests signed with this key are rejected immediately."
+        description="Any request the agent makes with this key is refused immediately."
         confirmLabel="Revoke key"
         danger
         reason={{ required: true }}

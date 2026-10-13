@@ -58,7 +58,7 @@ export function NotificationsMenu({ initialUnread, disabled }: { initialUnread: 
       }}
     >
       <DropdownMenuTrigger asChild>
-        <button type="button" disabled={disabled} aria-label={unread > 0 ? `Notifications, ${unread} unread` : "Notifications"} title={disabled ? "Notifications need an organization" : undefined} className="relative inline-flex h-8 w-8 items-center justify-center rounded-md text-fg-muted transition-colors duration-150 hover:bg-bg-elev-2 hover:text-fg disabled:cursor-not-allowed disabled:opacity-50">
+        <button type="button" disabled={disabled} aria-label={unread > 0 ? `Notifications, ${unread} unread` : "Notifications"} title={disabled ? "Notifications are available once you belong to an organization" : undefined} className="relative inline-flex h-8 w-8 items-center justify-center rounded-md text-fg-muted transition-colors duration-150 hover:bg-bg-elev-2 hover:text-fg disabled:cursor-not-allowed disabled:opacity-50">
           <Bell className="h-4 w-4" aria-hidden />
           {unread > 0 ? <span className="absolute end-1 top-1 min-w-[16px] rounded-full bg-accent px-1 text-center text-[10px] font-semibold leading-4 tabular text-white">{unread > 99 ? "99+" : unread}</span> : null}
         </button>

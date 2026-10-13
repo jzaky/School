@@ -18,7 +18,7 @@ export default async function StandardsPage() {
   const frameworks = await withTenant(c.ctx.orgId, (db) => listFrameworks(db, c.ctx), { readOnly: true });
   return (
     <div>
-      <PageHeader title="Standards" description="Frameworks the assessment engine can evaluate documents against. The shared catalog is read-only; custom frameworks belong to this organization." badges={<DemoBadge show={c.org.demoMode} />} actions={<CreateFrameworkDialog canWrite={c.can("audit:write")} />} />
+      <PageHeader title="Standards" description="The standards and frameworks your documents can be assessed against. The shared catalog cannot be edited; custom frameworks belong to this organization and can be." badges={<DemoBadge show={c.org.demoMode} />} actions={<CreateFrameworkDialog canWrite={c.can("audit:write")} />} />
       <Note className="mb-4">ISO standards are copyrighted. The catalog reproduces control identifiers with original one-sentence summaries only; the standard text itself is not included. Obtain the standards from ISO or a national member body.</Note>
       <SimpleTable caption="Frameworks">
         <thead>

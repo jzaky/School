@@ -7,7 +7,7 @@ import { EFFECT_LABEL } from "./policy-templates";
 
 const EFFECT_COLOR: Record<string, string> = { deny: "#e5484d", require_approval: "#f5a524", allow: "#2fbf71", default: "#5f6d87" };
 const COLUMNS: { effect: string; title: string; x: number }[] = [
-  { effect: "deny", title: "1. Deny rules (win first)", x: 0 },
+  { effect: "deny", title: "1. Deny rules (these always win)", x: 0 },
   { effect: "require_approval", title: "2. Approval rules", x: 280 },
   { effect: "allow", title: "3. Allow rules", x: 560 },
 ];
@@ -89,7 +89,7 @@ export function PolicyFlow({ doc }: { doc: PolicyDocument | null }) {
         <Background gap={16} color="#182236" />
         <Controls showInteractive={false} />
       </ReactFlow>
-      <p className="sr-only">Combining order: deny beats require approval, which beats allow. When nothing matches the result is deny.</p>
+      <p className="sr-only">How rules combine: a deny rule beats an approval rule, and an approval rule beats an allow rule. When no rule matches, the request is denied.</p>
     </div>
   );
 }

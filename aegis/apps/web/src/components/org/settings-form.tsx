@@ -33,13 +33,13 @@ export function OrganizationSettingsForm({ initial, canAdmin }: { initial: { nam
         <Field label="Organization name" htmlFor="org-name" className="md:col-span-2">
           <Input id="org-name" value={name} onChange={(e) => setName(e.target.value)} disabled={!canAdmin} minLength={2} maxLength={120} required />
         </Field>
-        <Field label="Currency" htmlFor="org-currency" hint="ISO 4217, used for amount thresholds">
+        <Field label="Currency" htmlFor="org-currency" hint="three-letter currency code (ISO 4217); amount limits in policies use this currency">
           <Input id="org-currency" value={currency} onChange={(e) => setCurrency(e.target.value.toUpperCase())} disabled={!canAdmin} maxLength={3} pattern="[A-Za-z]{3}" className="font-mono uppercase" required />
         </Field>
-        <Field label="Timezone" htmlFor="org-tz" hint="IANA name">
+        <Field label="Timezone" htmlFor="org-tz" hint="time zone name, for example Asia/Dubai (IANA format)">
           <Input id="org-tz" value={timezone} onChange={(e) => setTimezone(e.target.value)} disabled={!canAdmin} maxLength={64} required />
         </Field>
-        <Field label="Default approval expiry" htmlFor="org-expiry" hint="minutes, 5 to 10080">
+        <Field label="Default approval expiry" htmlFor="org-expiry" hint="in minutes, from 5 to 10080 (7 days); how long an approval request waits before it lapses">
           <Input id="org-expiry" type="number" min={5} max={10080} value={expiry} onChange={(e) => setExpiry(e.target.value)} disabled={!canAdmin} required />
         </Field>
       </div>

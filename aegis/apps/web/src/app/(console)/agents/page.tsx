@@ -47,7 +47,7 @@ export default async function AgentsPage({ searchParams }: { searchParams: Promi
     <div>
       <PageHeader
         title="AI Agents"
-        description="Every agent that can reach the Action Gateway, with its lifecycle state, autonomy posture, owners and tool access."
+        description="Every AI agent that can act through the Action Gateway, the one door every agent action goes through. For each one: whether it is active, how much it may do on its own (its posture), who owns it and which tools it can use."
         badges={<DemoBadge show={c.org.demoMode} />}
         actions={
           <>

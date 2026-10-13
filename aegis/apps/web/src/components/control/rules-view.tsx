@@ -88,7 +88,7 @@ export function RuleCard({ rule, index, decidingId }: { rule: Rule; index: numbe
             {rule.approval.expiresInMinutes} minutes
           </div>
           <div>
-            <span className="text-fg-dim">Separation of duties: </span>
+            <span className="text-fg-dim">Owners cannot approve their own agent (separation of duties): </span>
             {rule.approval.separationOfDuties ? "on" : "off"}
           </div>
           {rule.approval.escalateToRoles.length ? (
@@ -132,14 +132,14 @@ export function RulesView({ doc }: { doc: PolicyDocument }) {
         ) : (
           <span>every tool, action and environment</span>
         )}
-        <span className="ms-auto">Combining: deny, then require approval, then allow, otherwise default deny. Every rule is evaluated.</span>
+        <span className="ms-auto">How rules combine: every rule is checked; a deny wins over require approval, which wins over allow. If nothing matches, the request is denied.</span>
       </div>
       {doc.rules.map((r, i) => (
         <RuleCard key={r.id} rule={r} index={i} />
       ))}
       <div className="rounded-md border border-dashed border-line px-3 py-2 text-xs text-fg-muted">
         <Badge tone="deny">Deny</Badge> <span className="ms-2">Default when no rule matches.</span>
-        {doc.tests.length ? <span className="ms-3 text-fg-dim">{doc.tests.length} embedded test case{doc.tests.length === 1 ? "" : "s"} run on submit for review.</span> : <span className="ms-3 text-fg-dim">No embedded tests.</span>}
+        {doc.tests.length ? <span className="ms-3 text-fg-dim">{doc.tests.length} built-in test case{doc.tests.length === 1 ? "" : "s"} run when the version is submitted for review.</span> : <span className="ms-3 text-fg-dim">No built-in test cases.</span>}
       </div>
     </div>
   );

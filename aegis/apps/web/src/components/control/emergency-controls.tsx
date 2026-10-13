@@ -29,12 +29,12 @@ export interface ControlIntegration {
 type Kind = "pause" | "resume" | "suspend" | "revoke-tool" | "disable-integration" | "revoke-credential";
 
 const TITLES: Record<Kind, { title: string; description: string; confirm: string; danger: boolean }> = {
-  pause: { title: "Pause the Action Gateway", description: "Every new request from every agent is denied at the baseline stage until the gateway resumes. Requests already approved do not execute. The pause is recorded in evidence with your reason.", confirm: "Pause gateway", danger: true },
-  resume: { title: "Resume the Action Gateway", description: "Agents can submit requests again and policies apply as before.", confirm: "Resume gateway", danger: false },
-  suspend: { title: "Suspend an agent", description: "The agent is rejected at authentication before any policy runs. Pending approvals for it cannot execute. Resume from the agent page.", confirm: "Suspend agent", danger: true },
-  "revoke-tool": { title: "Revoke a tool from an agent", description: "Takes effect on the agent's next request. The grant can be re-issued from the agent page.", confirm: "Revoke tool", danger: true },
-  "disable-integration": { title: "Disable an integration", description: "Every tool behind the integration denies at the gateway and nothing executes against the downstream system.", confirm: "Disable integration", danger: true },
-  "revoke-credential": { title: "Revoke a credential", description: "Execution through the integration fails closed until a new secret is stored.", confirm: "Revoke credential", danger: true },
+  pause: { title: "Pause the Action Gateway", description: "Every new request from every agent is refused at the door, before any policy is checked, until the gateway resumes. Requests that were already approved do not run. The pause and your reason are kept in the evidence record.", confirm: "Pause gateway", danger: true },
+  resume: { title: "Resume the Action Gateway", description: "Agents can send requests again and your policies decide them as before.", confirm: "Resume gateway", danger: false },
+  suspend: { title: "Suspend an agent", description: "The agent is turned away the moment it identifies itself, before any policy runs. Approvals already pending for it cannot be carried out. You can resume it from the agent's page.", confirm: "Suspend agent", danger: true },
+  "revoke-tool": { title: "Revoke a tool from an agent", description: "The agent loses the tool from its next request onward. You can grant the tool again from the agent's page.", confirm: "Revoke tool", danger: true },
+  "disable-integration": { title: "Disable an integration", description: "Every tool that uses this integration is refused at the gateway, and nothing is sent to the connected system.", confirm: "Disable integration", danger: true },
+  "revoke-credential": { title: "Revoke a credential", description: "Nothing can run through this integration until a new secret is stored: every attempt is refused rather than risked (fail closed).", confirm: "Revoke credential", danger: true },
 };
 
 export function EmergencyControls({ paused, pausedReason, pausedBy, canAdmin, canControl, agents, integrations }: { paused: boolean; pausedReason: string | null; pausedBy: string | null; canAdmin: boolean; canControl: boolean; agents: ControlAgent[]; integrations: ControlIntegration[] }) {
@@ -109,10 +109,10 @@ export function EmergencyControls({ paused, pausedReason, pausedBy, canAdmin, ca
   const credentialOptions = integrations.flatMap((i) => i.credentials.filter((cr) => !cr.revoked).map((cr) => ({ value: cr.id, label: `${i.name} / ${cr.name}`, description: i.key })));
 
   return (
-    <Panel title="Emergency controls" description="Each control calls the live service and is recorded in evidence with a reason." className={paused ? "border-deny" : undefined}>
+    <Panel title="Emergency controls" description="Each control acts on the live system immediately and is kept in the evidence record with your reason." className={paused ? "border-deny" : undefined}>
       {paused ? (
         <Note tone="danger" className="mb-3">
-          <strong>Gateway paused.</strong> {pausedReason ? `Reason: ${pausedReason}.` : ""} {pausedBy ? `By ${pausedBy}.` : ""} All new requests are denied.
+          <strong>Gateway paused.</strong> {pausedReason ? `Reason: ${pausedReason}.` : ""} {pausedBy ? `By ${pausedBy}.` : ""} Every new request is refused.
         </Note>
       ) : null}
       <div className="flex flex-wrap gap-2">
@@ -127,7 +127,7 @@ export function EmergencyControls({ paused, pausedReason, pausedBy, canAdmin, ca
             Pause gateway
           </Button>
         )}
-        <Button onClick={() => open("suspend")} disabled={!canControl || activeAgents.length === 0} disabledReason={!canControl ? controlReason : "No active agents"}>
+        <Button onClick={() => open("suspend")} disabled={!canControl || activeAgents.length === 0} disabledReason={!canControl ? controlReason : "There are no active agents to suspend"}>
           <Ban className="h-3.5 w-3.5" aria-hidden />
           Suspend agent
         </Button>
@@ -135,11 +135,11 @@ export function EmergencyControls({ paused, pausedReason, pausedBy, canAdmin, ca
           <Wrench className="h-3.5 w-3.5" aria-hidden />
           Revoke tool from agent
         </Button>
-        <Button onClick={() => open("disable-integration")} disabled={!canControl || integrations.every((i) => i.status !== "active")} disabledReason={!canControl ? controlReason : "No active integrations"}>
+        <Button onClick={() => open("disable-integration")} disabled={!canControl || integrations.every((i) => i.status !== "active")} disabledReason={!canControl ? controlReason : "There are no active integrations to disable"}>
           <Plug className="h-3.5 w-3.5" aria-hidden />
           Disable integration
         </Button>
-        <Button onClick={() => open("revoke-credential")} disabled={!canControl || credentialOptions.length === 0} disabledReason={!canControl ? controlReason : "No live credentials"}>
+        <Button onClick={() => open("revoke-credential")} disabled={!canControl || credentialOptions.length === 0} disabledReason={!canControl ? controlReason : "There are no live credentials to revoke"}>
           <KeyRound className="h-3.5 w-3.5" aria-hidden />
           Revoke credential
         </Button>
@@ -191,7 +191,7 @@ export function EmergencyControls({ paused, pausedReason, pausedBy, canAdmin, ca
               <Combobox id="em-credential" value={credentialId} onChange={setCredentialId} options={credentialOptions} placeholder="Select a credential" />
             </Field>
           ) : null}
-          <Field label={needsReason ? "Reason" : "Note"} htmlFor="em-reason" hint={needsReason ? "required, recorded in evidence" : "optional"}>
+          <Field label={needsReason ? "Reason" : "Note"} htmlFor="em-reason" hint={needsReason ? "required, kept in the evidence record" : "optional"}>
             <Textarea id="em-reason" value={reason} onChange={(e) => setReason(e.target.value)} autoFocus={kind === "pause" || kind === "resume"} placeholder="What happened and why this control is needed" />
           </Field>
           <FormError error={error} />

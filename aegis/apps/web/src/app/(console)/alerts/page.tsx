@@ -57,7 +57,7 @@ export default async function AlertsPage({ searchParams }: { searchParams: Promi
   });
   return (
     <div>
-      <PageHeader title="Alerts" description="Raised by deterministic monitoring rules over this organization's records. Each alert carries the definition and counts that produced it." badges={<DemoBadge show={c.org.demoMode} />} actions={<LinkButton href="/monitoring">Manage rules</LinkButton>} />
+      <PageHeader title="Alerts" description="Warnings raised when a monitoring rule finds something in this organization's records. The same records always produce the same alerts, and each alert shows the rule and the counts behind it." badges={<DemoBadge show={c.org.demoMode} />} actions={<LinkButton href="/monitoring">Manage rules</LinkButton>} />
       <AlertsView rows={rows} status={filter.status} severity={filter.severity ?? ""} counts={counts} pagination={{ page: page.page, pageSize: page.pageSize, total: page.total }} canWrite={c.can("monitoring:write")} focus={focus} />
     </div>
   );

@@ -119,7 +119,7 @@ export default async function AssessmentPage({ params }: { params: Promise<{ id:
         {(["covered", "partial", "ambiguous", "missing"] as const).map((s) => (
           <StatPanel key={s} label={findingLabel(s)} value={counts[s] ?? 0} tone={findingTone(s)} />
         ))}
-        <StatPanel label="Human validated" value={`${a.review.validated}/${a.findings.length}`} tone={a.review.pending === 0 && a.findings.length > 0 ? "allow" : "approval"} footer={`${a.review.pending} automated conclusions awaiting review`} />
+        <StatPanel label="Human validated" value={`${a.review.validated}/${a.findings.length}`} tone={a.review.pending === 0 && a.findings.length > 0 ? "allow" : "approval"} footer={`${a.review.pending} automated findings still waiting for a person to confirm`} />
       </div>
       <div className="mb-4 grid gap-4 lg:grid-cols-3">
         <Panel title="Scope and inputs" className="lg:col-span-2">
@@ -128,14 +128,14 @@ export default async function AssessmentPage({ params }: { params: Promise<{ id:
             items={[
               { label: "Scope", value: a.scope || null },
               { label: "Engine", value: summary.engine ?? "aegis-lexical-v1", mono: true },
-              { label: "Documents", value: a.documents.length ? a.documents.map((d) => `${d.title} (${d.chunkCount} chunks)`).join("; ") : "none: automated AEGIS evidence only" },
-              { label: "Chunks searched", value: summary.chunkCount ?? null },
-              { label: "Automated artifacts", value: summary.automatedArtifacts ?? null },
+              { label: "Documents", value: a.documents.length ? a.documents.map((d) => `${d.title} (${d.chunkCount} chunks)`).join("; ") : "none: only AEGIS's own records were used" },
+              { label: "Passages searched (chunks)", value: summary.chunkCount ?? null },
+              { label: "Automated evidence items (artifacts)", value: summary.automatedArtifacts ?? null },
               { label: "Run duration", value: summary.durationMs !== undefined ? `${summary.durationMs} ms` : null },
             ]}
           />
         </Panel>
-        <Panel title="Reports" description="Every finding carries an Automated or Human validated label; every PDF page carries the disclaimer.">
+        <Panel title="Reports" description="Every finding in a report is labelled Automated or Human validated, and every PDF page carries the disclaimer.">
           {a.status === "completed" ? <GenerateReportForm assessments={[{ id: a.id, name: a.name, frameworkName: a.framework.name }]} fixedAssessmentId={a.id} canGenerate={canWrite} compact /> : <p className="text-xs text-fg-dim">Reports can be generated once the assessment has completed.</p>}
           <div className="mt-3">
             <ExportsTable rows={exportRows} showAssessment={false} canDownload={canReports} />

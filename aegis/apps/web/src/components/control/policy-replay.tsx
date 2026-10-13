@@ -47,7 +47,7 @@ export function PolicyReplayPanel({ policyId, versionId, versionLabel, document,
     <div className="space-y-4" data-testid="policy-replay">
       <Panel
         title={title}
-        description={description ?? `Re-evaluates every recorded request for this policy's tools with ${versionLabel ?? "this document"} in place of the active policy. Nothing is recorded.`}
+        description={description ?? `Takes every request already recorded for this policy's tools and asks what ${versionLabel ?? "this document"} would have decided instead of the active policy. Nothing is recorded.`}
         actions={
           <div className="flex items-center gap-2">
             <Select value={days} onValueChange={setDays} options={PERIODS} size="sm" aria-label="Replay period" />
@@ -64,7 +64,7 @@ export function PolicyReplayPanel({ policyId, versionId, versionLabel, document,
         ) : (
           <div className="space-y-4" aria-live="polite">
             <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-              <StatPanel label="Requests replayed" value={result.replayed} footer={`${result.considered} in the window${result.skipped.beforePolicy ? `, ${result.skipped.beforePolicy} refused before policy` : ""}`} />
+              <StatPanel label="Requests replayed" value={result.replayed} footer={`${result.considered} in the window${result.skipped.beforePolicy ? `, ${result.skipped.beforePolicy} refused before any policy was checked` : ""}`} />
               <StatPanel label="Outcomes that change" value={result.changed} tone={result.changed > 0 ? "approval" : "allow"} footer={result.changed === 0 ? "Same decisions as recorded" : `${Math.round((result.changed / Math.max(1, result.replayed)) * 100)}% of replayed requests`} />
               <StatPanel label="Approvals per day" value={result.approvalsPerDayAfter} footer={`was ${result.approvalsPerDayBefore}`} tone={result.approvalsPerDayAfter > result.approvalsPerDayBefore ? "approval" : undefined} />
               <StatPanel label="Refused" value={result.after.deny} footer={`was ${result.before.deny}`} tone={result.after.deny > result.before.deny ? "deny" : undefined} />
@@ -130,7 +130,7 @@ export function PolicyReplayPanel({ policyId, versionId, versionLabel, document,
                 {result.changed > result.changes.length ? <p className="mt-1 text-xs text-fg-muted">Showing the {result.changes.length} most recent of {result.changed} changes.</p> : null}
               </div>
             ) : (
-              <p className="text-sm text-fg-muted">{result.replayed === 0 ? "No request for these tools reached policy evaluation in the window." : `All ${result.replayed} replayed requests would receive the same outcome as recorded: ${outcome("allow").toLowerCase()} ${result.after.allow}, ${outcome("require_approval").toLowerCase()} ${result.after.require_approval}, ${outcome("deny").toLowerCase()} ${result.after.deny}.`}</p>
+              <p className="text-sm text-fg-muted">{result.replayed === 0 ? "No request for these tools was decided by a policy in this period." : `All ${result.replayed} replayed requests would receive the same outcome as recorded: ${outcome("allow").toLowerCase()} ${result.after.allow}, ${outcome("require_approval").toLowerCase()} ${result.after.require_approval}, ${outcome("deny").toLowerCase()} ${result.after.deny}.`}</p>
             )}
             <Note>
               <ul className="list-disc space-y-0.5 ps-4">

@@ -12,7 +12,7 @@ export function RunAssessmentButton({ assessmentId, status, canWrite, controlCou
   const [running, setRunning] = React.useState(false);
   const [confirm, setConfirm] = React.useState(false);
   const rerun = status === "completed" || status === "failed";
-  const reason = !canWrite ? "Requires audit:write" : status === "running" ? "The assessment is already running" : undefined;
+  const reason = !canWrite ? "Requires audit:write" : status === "running" ? "This assessment is already running. Wait for it to finish before starting another." : undefined;
 
   async function run() {
     setRunning(true);
@@ -40,7 +40,7 @@ export function RunAssessmentButton({ assessmentId, status, canWrite, controlCou
         {rerun ? <RefreshCw className="h-3.5 w-3.5" aria-hidden /> : <Play className="h-3.5 w-3.5" aria-hidden />}
         {running ? `Running ${controlCount} controls` : rerun ? "Re-run" : "Run assessment"}
       </Button>
-      <ConfirmDialog open={confirm} onOpenChange={setConfirm} title="Re-run this assessment" description="Findings and cited artifacts are replaced by a fresh run over the current documents. Human validations on the previous run are not carried over." confirmLabel="Re-run" onConfirm={run} />
+      <ConfirmDialog open={confirm} onOpenChange={setConfirm} title="Re-run this assessment" description="The current findings and the evidence they cite are replaced by a fresh run over the documents as they are now. Findings that a person validated on the previous run are not carried over." confirmLabel="Re-run" onConfirm={run} />
     </>
   );
 }

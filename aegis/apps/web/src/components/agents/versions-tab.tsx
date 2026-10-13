@@ -25,9 +25,9 @@ export function VersionsTab({ agentId, versions, caps }: { agentId: string; vers
   const jsonError = React.useMemo(() => {
     try {
       const v = JSON.parse(manifest);
-      return v && typeof v === "object" && !Array.isArray(v) ? null : "Manifest must be a JSON object";
+      return v && typeof v === "object" && !Array.isArray(v) ? null : "The manifest must be a JSON object: start with { and end with }";
     } catch (e) {
-      return e instanceof Error ? `Invalid JSON: ${e.message}` : "Invalid JSON";
+      return e instanceof Error ? `This is not valid JSON, fix it before saving: ${e.message}` : "Invalid JSON";
     }
   }, [manifest]);
   const blockedReason = !caps.canWrite ? "Requires agents:write" : !caps.editable ? `A ${caps.status} agent cannot be edited` : undefined;
@@ -45,7 +45,7 @@ export function VersionsTab({ agentId, versions, caps }: { agentId: string; vers
             </Button>
           }
           title="Add a version"
-          description="Versions are immutable snapshots of the agent manifest. Deploying makes it the current version."
+          description="Each version is a frozen copy of the agent's configuration (its manifest) that cannot be changed later. Deploying a version makes it the one the agent runs with."
           size="lg"
           footer={
             <>
@@ -74,7 +74,7 @@ export function VersionsTab({ agentId, versions, caps }: { agentId: string; vers
               router.refresh();
             }}
           >
-            <Field label="Manifest" htmlFor="version-manifest" hint="JSON" error={jsonError}>
+            <Field label="Manifest" htmlFor="version-manifest" hint="the agent's configuration, as JSON" error={jsonError}>
               <Textarea id="version-manifest" mono value={manifest} onChange={(e) => setManifest(e.target.value)} rows={12} spellCheck={false} />
             </Field>
             <Field label="Notes" htmlFor="version-notes">

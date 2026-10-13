@@ -75,7 +75,7 @@ export default async function FrameworkPage({ params }: { params: Promise<{ id: 
           />
         </Panel>
         <Panel title="How controls are assessed" className="lg:col-span-2">
-          <p className="text-sm text-fg-muted">For each control the engine searches the selected documents with BM25 using the title, summary and keywords, measures keyword overlap and normative language in the best passage, and, when an automated evidence type is set, checks this organization&apos;s own AEGIS records. The result is covered, partial, ambiguous or missing with a confidence score. Similarity is not proof of compliance; every finding is labelled Automated until a person validates it.</p>
+          <p className="text-sm text-fg-muted">For each control, the engine looks through your selected documents for the passage that best matches the control&apos;s title, summary and keywords (a BM25 word-match search). It then measures how many keywords that passage shares and whether it uses binding, rule-like wording (normative language), and, when an automated evidence type is set, checks this organization&apos;s own AEGIS records. The result is covered, partial, ambiguous or missing with a confidence score. Similarity is not proof of compliance; every finding is labelled Automated until a person validates it.</p>
         </Panel>
       </div>
       <ControlsTable frameworkId={framework.id} controls={framework.controls.map((ctl) => ({ id: ctl.id, code: ctl.code, title: ctl.title, summary: ctl.summary, category: ctl.category, keywords: ctl.keywords, automatedEvidenceType: ctl.automatedEvidenceType }))} categories={framework.categories} custom={custom} canWrite={canWrite} evidenceTypes={AUTOMATED_EVIDENCE_TYPES} />

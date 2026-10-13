@@ -128,13 +128,13 @@ export function AlertsView({ rows, status, severity, counts, pagination, canWrit
       </div>
       {lastRun ? (
         <Note tone={lastRun.errors.length ? "warning" : "info"}>
-          Monitoring ran: {lastRun.evaluated} rules evaluated, {lastRun.newAlerts} new alert{lastRun.newAlerts === 1 ? "" : "s"}. {lastRun.newAlerts === 0 ? "Existing situations dedupe to their open alert." : ""}
+          Monitoring ran: {lastRun.evaluated} rules evaluated, {lastRun.newAlerts} new alert{lastRun.newAlerts === 1 ? "" : "s"}. {lastRun.newAlerts === 0 ? "A situation that already has an open alert is not raised again." : ""}
           {lastRun.errors.length ? ` Errors: ${lastRun.errors.join("; ")}` : ""}
         </Note>
       ) : null}
       {rows.length === 0 ? (
         <div className="rounded-panel border border-line bg-bg-elev">
-          <EmptyState icon={AlertTriangle} title={status === "open" ? "No open alerts" : "No alerts in this state"} description="Deterministic rules run on a schedule and whenever you run monitoring." />
+          <EmptyState icon={AlertTriangle} title={status === "open" ? "No open alerts" : "No alerts in this state"} description="The monitoring rules run on a schedule and whenever you press Run monitoring now. The same data always gives the same alerts." />
         </div>
       ) : (
         <SimpleTable caption="Alerts">
@@ -253,11 +253,11 @@ export function AlertsView({ rows, status, severity, counts, pagination, canWrit
             ) : null}
             {open.autoResponse ? (
               <Note tone={open.autoResponse.outcome === "applied" ? "warning" : "info"}>
-                <strong>Automatic response {open.autoResponse.outcome}.</strong> {open.autoResponse.note} Recorded in evidence as governance.auto_response.
+                <strong>Automatic response {open.autoResponse.outcome}.</strong> {open.autoResponse.note} Kept in the evidence record (event type governance.auto_response).
               </Note>
             ) : null}
-            <CodeBlock label="Detail (definition that produced it, counts and references)" code={open.detail} wrap />
-            <Note>Rules are deterministic: the definition above with the stored counts reproduces this alert. No scoring or prediction is involved.</Note>
+            <CodeBlock label="Detail: the rule definition that produced this alert, the counts and the references" code={open.detail} wrap />
+            <Note>Anyone can reproduce this alert: the definition above with the stored counts always gives the same result (the rules are deterministic). No scoring or prediction is involved.</Note>
           </div>
         ) : null}
       </Sheet>

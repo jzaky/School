@@ -117,10 +117,10 @@ export function LiveActivity({ initial }: { initial: ActivityEvent[] }) {
           </Button>
         </div>
       </div>
-      {error ? <p className="text-xs text-deny">Feed error: {error}</p> : null}
+      {error ? <p className="text-xs text-deny">The feed could not refresh: {error}. Press Refresh to try again.</p> : null}
       <div className="overflow-hidden rounded-panel border border-line bg-bg-elev">
         {visible.length === 0 ? (
-          <EmptyState title="No events for the selected families" description="Events appear here within five seconds of being written to the evidence ledger." />
+          <EmptyState title="No events for the selected families" description="Events appear here within five seconds of being added to the evidence ledger, the record that cannot be edited without it showing." />
         ) : (
           <ul className="divide-y divide-line" aria-live="off">
             {visible.map((e) => (

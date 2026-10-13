@@ -105,7 +105,7 @@ export function CreateRoleDialog({ catalog, canWrite }: { catalog: PermissionInf
         </Button>
       }
       title="Create a custom role"
-      description="Pick the permissions this role grants. System roles cannot be changed."
+      description="Tick what people with this role are allowed to do. The built-in system roles cannot be changed, so create a custom role when you need something different."
       size="lg"
       footer={
         <>
@@ -141,7 +141,7 @@ export function CreateRoleDialog({ catalog, canWrite }: { catalog: PermissionInf
           <Field label="Name" htmlFor="role-name">
             <Input id="role-name" value={name} onChange={(e) => setName(e.target.value)} required autoFocus maxLength={80} />
           </Field>
-          <Field label="Key" htmlFor="role-key" hint="lowercase, digits, hyphens">
+          <Field label="Key" htmlFor="role-key" hint="a short permanent code: lowercase letters, digits and hyphens">
             <Input id="role-key" value={key} onChange={(e) => { setTouched(true); setKey(e.target.value); }} className="font-mono" pattern="^[a-z0-9][a-z0-9-]*[a-z0-9]$" required />
           </Field>
           <Field label="Description" htmlFor="role-desc" className="md:col-span-2">
@@ -221,7 +221,7 @@ export function RolesTable({ roles, catalog, canWrite }: { roles: RoleRow[]; cat
               </>
             ) : (
               <>
-                <Button variant="ghost" className="text-deny" disabled={!canWrite || active.isSystem || active.memberCount > 0} disabledReason={!canWrite ? "Requires users:write" : active.isSystem ? "System roles cannot be deleted" : "Reassign its members first"} onClick={() => setDeleting(active)}>
+                <Button variant="ghost" className="text-deny" disabled={!canWrite || active.isSystem || active.memberCount > 0} disabledReason={!canWrite ? "Requires users:write" : active.isSystem ? "System roles cannot be deleted" : "Move its members to another role first"} onClick={() => setDeleting(active)}>
                   Delete role
                 </Button>
                 <Button variant="primary" disabled={!canWrite || active.isSystem} disabledReason={!canWrite ? "Requires users:write" : "System roles are read-only. Create a custom role instead."} onClick={() => setEditing(true)}>
@@ -246,7 +246,7 @@ export function RolesTable({ roles, catalog, canWrite }: { roles: RoleRow[]; cat
             ) : (
               <p className="text-sm text-fg-muted">{active.description || "No description."}</p>
             )}
-            {wildcard ? <div className="rounded-md border border-info/30 bg-info/10 px-3 py-2 text-xs text-fg">This role holds the wildcard permission: every current and future permission is granted.</div> : null}
+            {wildcard ? <div className="rounded-md border border-info/30 bg-info/10 px-3 py-2 text-xs text-fg">This role can do everything: it holds the wildcard permission, which grants every current and future permission.</div> : null}
             <PermissionPicker catalog={catalog} selected={selected} onChange={setSelected} readOnly={!editing} />
             <FormError error={error} />
           </div>
@@ -256,7 +256,7 @@ export function RolesTable({ roles, catalog, canWrite }: { roles: RoleRow[]; cat
         open={deleting !== null}
         onOpenChange={(o) => !o && setDeleting(null)}
         title={deleting ? `Delete role ${deleting.name}` : ""}
-        description="The role is removed permanently. Members must be reassigned first."
+        description="The role is removed permanently. Move its members to another role first."
         confirmLabel="Delete role"
         danger
         onConfirm={async () => {

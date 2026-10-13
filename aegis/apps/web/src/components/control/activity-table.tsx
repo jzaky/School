@@ -126,7 +126,7 @@ export function ActivityTable({ rows, total, agents, outcome, agentId, currency 
         )}
       </div>
       <p className="text-[11px] text-fg-dim">
-        Showing {rows.length} of {total} matching actions. Every row links to the full decision trace and evidence.
+        Showing {rows.length} of {total} matching actions. Every row opens the full record of why it was decided that way (the decision trace) and its evidence.
       </p>
     </div>
   );

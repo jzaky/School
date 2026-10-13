@@ -172,16 +172,16 @@ export function TradingSettingsForm({ values, onChange, errors, roles, tools, di
             <Input id={id("ceiling")} type="number" min={0} step="0.01" inputMode="decimal" value={values.approvalNotionalUpTo} onChange={(e) => set("approvalNotionalUpTo", e.target.value)} disabled={dis} aria-invalid={!!field("approvalNotionalUpTo")} />
           </Field>
         </div>
-        <p className="text-xs text-fg-muted">The order value is the notional the agent declares with each order. The Alpaca paper connector refuses a limit order whose notional is not quantity times the limit price, and submits market orders by notional, so the declared value is what the broker fills.</p>
+        <p className="text-xs text-fg-muted">The order value (notional) is the amount the agent declares with each order. The Alpaca paper connector refuses a limit order whose declared value is not quantity times the limit price, and submits market orders by value, so the declared value is what the broker fills.</p>
       </section>
 
       <section className="space-y-3">
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Guards</h3>
+        <h3 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Safeguards</h3>
         <div className="grid gap-3 sm:grid-cols-3">
-          <Field label="Daily loss cap" htmlFor={id("loss")} hint="0 disables; uses context.dayPnl sent by the agent" error={field("maxDailyLoss")}>
+          <Field label="Daily loss cap" htmlFor={id("loss")} hint="0 switches it off; uses the day's profit or loss the agent sends (context.dayPnl)" error={field("maxDailyLoss")}>
             <Input id={id("loss")} type="number" min={0} step="0.01" inputMode="decimal" value={values.maxDailyLoss} onChange={(e) => set("maxDailyLoss", e.target.value)} disabled={dis} aria-invalid={!!field("maxDailyLoss")} />
           </Field>
-          <Field label="Max requests in 24 hours" htmlFor={id("rate")} hint="0 disables" error={field("maxDailyOrders")}>
+          <Field label="Max requests in 24 hours" htmlFor={id("rate")} hint="0 switches it off" error={field("maxDailyOrders")}>
             <Input id={id("rate")} type="number" min={0} step="1" inputMode="numeric" value={values.maxDailyOrders} onChange={(e) => set("maxDailyOrders", e.target.value)} disabled={dis} aria-invalid={!!field("maxDailyOrders")} />
           </Field>
         </div>
@@ -196,7 +196,7 @@ export function TradingSettingsForm({ values, onChange, errors, roles, tools, di
           <label className="flex items-center justify-between gap-3 rounded-md border border-line bg-bg px-3 py-2 text-sm">
             <span>
               <span className="block text-fg">Require a reason</span>
-              <span className="block text-xs text-fg-muted">Orders without params.reason are refused.</span>
+              <span className="block text-xs text-fg-muted">Orders that do not carry a reason (params.reason) are refused.</span>
             </span>
             <Switch id={id("reason")} checked={values.requireReason} onCheckedChange={(v) => set("requireReason", v)} disabled={dis} aria-label="Require a reason" />
           </label>
@@ -227,10 +227,10 @@ export function TradingSettingsForm({ values, onChange, errors, roles, tools, di
         <h3 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Approval</h3>
         <div>
           <span className="mb-1 block text-xs font-medium text-fg-muted">
-            Who can approve <span className="font-normal text-fg-dim">roles holding approvals:decide; none selected means any of them</span>
+            Who can approve <span className="font-normal text-fg-dim">roles that can decide approvals (approvals:decide); if none is ticked, any of them may approve</span>
           </span>
           {roles.length === 0 ? (
-            <Note tone="warning">No role in this organization holds approvals:decide. Approvals would wait until one is created.</Note>
+            <Note tone="warning">No role in this organization can decide approvals (approvals:decide). Requests needing approval would wait until such a role exists.</Note>
           ) : (
             <div className="grid gap-1 sm:grid-cols-2" role="group" aria-label="Approver roles">
               {roles.map((r) => (

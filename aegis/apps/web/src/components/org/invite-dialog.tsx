@@ -36,7 +36,7 @@ export function InviteDialog({ roles, canWrite }: { roles: { id: string; name: s
         </Button>
       }
       title={result ? "Invitation link" : "Invite a member"}
-      description={result ? "Send this link to the invitee. It is shown once and expires in 7 days." : "The invitee signs in with the same email address to accept."}
+      description={result ? "Send this link to the invitee. It is shown once and expires in 7 days." : "The person you invite accepts by signing in with this same email address."}
       footer={
         result ? (
           <Button variant="primary" onClick={() => setOpen(false)}>
@@ -57,7 +57,7 @@ export function InviteDialog({ roles, canWrite }: { roles: { id: string; name: s
       {result ? (
         <div className="space-y-2">
           <CodeBlock code={result.link} wrap label="Invitation link" />
-          <p className="text-xs text-fg-muted">Expires {formatDateTime(result.expiresAt)}. No email is sent by this deployment.</p>
+          <p className="text-xs text-fg-muted">Expires {formatDateTime(result.expiresAt)}. This deployment does not send the email for you, so copy the link and send it yourself.</p>
         </div>
       ) : (
         <form

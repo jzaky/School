@@ -42,7 +42,7 @@ export function GenerateReportForm({ assessments, fixedAssessmentId, canGenerate
   const [format, setFormat] = React.useState("pdf");
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  const reason = !canGenerate ? "Requires audit:write" : !assessmentId ? "No completed assessment to report on" : undefined;
+  const reason = !canGenerate ? "Requires audit:write" : !assessmentId ? "Complete an assessment first; reports are generated from a completed assessment" : undefined;
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();

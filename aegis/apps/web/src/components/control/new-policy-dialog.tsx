@@ -53,7 +53,7 @@ export function NewPolicyDialog({ canWrite, roles = [], tools = [] }: { canWrite
   }, [template]);
 
   const templateOptions = [{ value: GUIDED_REFUND, label: "Refund policy (guided)" }, { value: GUIDED_SCORE, label: "Score-band policy (guided): route your model's score" }, { value: GUIDED_TRADING, label: "Trading mandate (guided): govern a trading agent" }, ...POLICY_TEMPLATES.map((t) => ({ value: t.id, label: t.name }))];
-  const submitBlocked = name.trim().length < 2 || key.length < 2 ? "Name and key are required" : (guided && !parsedRefund.settings) || (guidedScore && !parsedScore.settings) || (guidedTrading && !parsedTrading.settings) ? "Fix the highlighted threshold fields" : undefined;
+  const submitBlocked = name.trim().length < 2 || key.length < 2 ? "Enter a name and a key first" : (guided && !parsedRefund.settings) || (guidedScore && !parsedScore.settings) || (guidedTrading && !parsedTrading.settings) ? "Fix the highlighted threshold fields" : undefined;
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -98,7 +98,7 @@ export function NewPolicyDialog({ canWrite, roles = [], tools = [] }: { canWrite
         </Button>
       }
       title="New policy"
-      description="Creates the policy with a draft version 1. Nothing is enforced until a version is reviewed and activated by a second person."
+      description="Creates the policy as draft version 1. Nothing is enforced until a version has been reviewed and switched on by a second person."
       size="lg"
       className={guided || guidedScore || guidedTrading ? "max-w-5xl" : undefined}
       footer={
@@ -116,7 +116,7 @@ export function NewPolicyDialog({ canWrite, roles = [], tools = [] }: { canWrite
         <Field label="Name" htmlFor="policy-name">
           <Input id="policy-name" value={name} onChange={(e) => setName(e.target.value)} required minLength={2} maxLength={120} autoFocus />
         </Field>
-        <Field label="Key" htmlFor="policy-key" hint="lowercase, digits, hyphens">
+        <Field label="Key" htmlFor="policy-key" hint="a short permanent code: lowercase letters, digits and hyphens">
           <Input
             id="policy-key"
             value={key}
@@ -140,14 +140,14 @@ export function NewPolicyDialog({ canWrite, roles = [], tools = [] }: { canWrite
         </Field>
         {guided ? (
           <>
-            <p className="text-xs text-fg-muted md:col-span-2">Answer a few business questions and the policy rules, reasons, approver instructions and embedded tests are generated for you. The result is ordinary policy JSON you can still edit.</p>
+            <p className="text-xs text-fg-muted md:col-span-2">Answer a few business questions and the policy rules, reasons, approver instructions and built-in test cases are written for you. The result is an ordinary policy document (JSON) you can still edit.</p>
             <div className="grid gap-4 md:col-span-2 xl:grid-cols-2">
               <Panel title="Settings" padded>
                 <RefundSettingsForm values={refund} onChange={setRefund} errors={parsedRefund.errors} roles={roles} tools={tools} idPrefix="np" />
               </Panel>
               <div className="space-y-4">
                 <Panel title="What this policy will do">{explanation.length ? <RefundExplanation lines={explanation} /> : <p className="text-xs text-deny">Fix the highlighted fields to see the explanation.</p>}</Panel>
-                <Panel title="Sample requests" description="Dry runs against the generated document.">
+                <Panel title="Sample requests" description="Sample requests tried against the rules as generated (a dry run).">
                   <RefundSamplePreview settings={parsedRefund.settings} />
                 </Panel>
               </div>
@@ -155,14 +155,14 @@ export function NewPolicyDialog({ canWrite, roles = [], tools = [] }: { canWrite
           </>
         ) : guidedScore ? (
           <>
-            <p className="text-xs text-fg-muted md:col-span-2">Route the score your own fraud or risk model already produces. Choose where the agent sends it and the boundaries of the clear, review, hold and block bands; the rules, approver instructions and embedded tests are generated for you.</p>
+            <p className="text-xs text-fg-muted md:col-span-2">Route the score your own fraud or risk model already produces. Choose where the agent sends it and the boundaries of the clear, review, hold and block bands; the rules, approver instructions and built-in test cases are written for you.</p>
             <div className="grid gap-4 md:col-span-2 xl:grid-cols-2">
               <Panel title="Settings" padded>
                 <ScoreBandSettingsForm values={score} onChange={setScore} errors={parsedScore.errors} roles={roles} tools={tools} idPrefix="nps" />
               </Panel>
               <div className="space-y-4">
                 <Panel title="What this policy will do">{explanation.length ? <RefundExplanation lines={explanation} /> : <p className="text-xs text-deny">Fix the highlighted fields to see the explanation.</p>}</Panel>
-                <Panel title="Sample requests" description="Dry runs against the generated document.">
+                <Panel title="Sample requests" description="Sample requests tried against the rules as generated (a dry run).">
                   <ScoreBandSamplePreview settings={parsedScore.settings} />
                 </Panel>
               </div>
@@ -170,14 +170,14 @@ export function NewPolicyDialog({ canWrite, roles = [], tools = [] }: { canWrite
           </>
         ) : guidedTrading ? (
           <>
-            <p className="text-xs text-fg-muted md:col-span-2">Govern a trading agent you already run. Name the instruments it may trade, the order value that runs on its own, the value that needs a person and the caps that refuse an order outright; the rules, approver instructions and embedded tests are generated for you. Paper trading only.</p>
+            <p className="text-xs text-fg-muted md:col-span-2">Govern a trading agent you already run. Name the instruments it may trade, the order value that runs on its own, the value that needs a person and the caps that refuse an order outright; the rules, approver instructions and built-in test cases are written for you. Paper trading only.</p>
             <div className="grid gap-4 md:col-span-2 xl:grid-cols-2">
               <Panel title="Settings" padded>
                 <TradingSettingsForm values={trading} onChange={setTrading} errors={parsedTrading.errors} roles={roles} tools={tools} idPrefix="npt" />
               </Panel>
               <div className="space-y-4">
                 <Panel title="What this policy will do">{explanation.length ? <RefundExplanation lines={explanation} /> : <p className="text-xs text-deny">Fix the highlighted fields to see the explanation.</p>}</Panel>
-                <Panel title="Sample orders" description="Dry runs against the generated document.">
+                <Panel title="Sample orders" description="Sample orders tried against the rules as generated (a dry run).">
                   <TradingSamplePreview settings={parsedTrading.settings} />
                 </Panel>
               </div>

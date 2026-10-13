@@ -85,11 +85,11 @@ export const REPORT_KIND_LABELS: Record<string, string> = {
 };
 
 export const REPORT_KIND_DESCRIPTIONS: Record<string, string> = {
-  executive_summary: "Coverage headline, counts by status and category, and the review state. One page for leadership.",
-  detailed: "Every control with its finding, confidence, rationale, recommendation and cited evidence.",
-  evidence_inventory: "All cited artifacts: document excerpts with page and chunk, automated AEGIS references and human validations.",
-  gap_report: "Only partial, ambiguous and missing controls, with recommendations and linked remediation tasks.",
-  remediation_plan: "Open remediation tasks grouped by owner and due date, with the controls they close.",
+  executive_summary: "One page for leadership: the overall coverage figure, how many controls are covered, partial, ambiguous or missing by category, and whether the findings have been reviewed.",
+  detailed: "Every control, with what was found, how confident the check was, the reasoning, a recommendation and the evidence it cites.",
+  evidence_inventory: "Every piece of evidence cited: document excerpts with their page and passage (chunk), automated AEGIS references and the validations people made.",
+  gap_report: "Only the controls that are partial, ambiguous or missing, with recommendations and the remediation tasks linked to them.",
+  remediation_plan: "Open remediation tasks grouped by owner and due date, showing which controls each one closes.",
 };
 
 export function toDateInput(d: string | Date | null | undefined): string {

@@ -33,7 +33,7 @@ export default async function PoliciesPage({ searchParams }: { searchParams: Pro
     .map((p) => ({ id: p.id, name: p.name, key: p.key, description: p.description, category: p.category, activeVersion: p.activeVersion?.version ?? null, latestVersion: p.latestVersion?.version ?? null, latestState: p.latestVersion?.state ?? null, assignments: p.assignments.length, decisions: decisionCounts.get(p.id) ?? 0, versions: p._count.versions, updatedAt: p.updatedAt.toISOString() }));
   return (
     <div>
-      <PageHeader title="Policies" description="Versioned authorization rules evaluated on every action request. Drafts are edited, reviewed with embedded tests, then activated by a second person." badges={<DemoBadge show={c.org.demoMode} />} actions={<NewPolicyDialog canWrite={c.can("policies:write")} roles={roles} tools={tools.map((t) => ({ key: t.key, name: t.name }))} />} />
+      <PageHeader title="Policies" description="The rules that decide what an agent may do, checked on every request. Each change is a new version: a draft is edited, reviewed with its built-in tests, then switched on by a second person." badges={<DemoBadge show={c.org.demoMode} />} actions={<NewPolicyDialog canWrite={c.can("policies:write")} roles={roles} tools={tools.map((t) => ({ key: t.key, name: t.name }))} />} />
       <PoliciesTable rows={rows} filters={{ category, state }} />
     </div>
   );

@@ -229,7 +229,7 @@ export function FindingsList({ assessmentId, findings, categories, canWrite, own
                           </div>
                           <div className="space-y-3">
                             <h4 className="text-xs font-medium uppercase tracking-wide text-fg-muted">Cited evidence ({f.artifacts.length})</h4>
-                            {f.artifacts.length === 0 ? <p className="text-xs text-fg-dim">No passage scored high enough to cite.</p> : null}
+                            {f.artifacts.length === 0 ? <p className="text-xs text-fg-dim">No passage in the documents matched closely enough to cite.</p> : null}
                             <ol className="space-y-2">
                               {f.artifacts.map((a) => (
                                 <li key={a.id} className="rounded-md border border-line bg-bg p-3" data-artifact={a.kind}>
@@ -257,7 +257,7 @@ export function FindingsList({ assessmentId, findings, categories, canWrite, own
                                       )}
                                     </span>
                                     {a.kind === "document" ? (
-                                      <span className="tabular text-fg-muted" title="BM25 normalised score">
+                                      <span className="tabular text-fg-muted" title="How closely the wording matches, from 0 to 1 (BM25 normalised score)">
                                         lexical similarity {a.score.toFixed(2)}
                                       </span>
                                     ) : null}

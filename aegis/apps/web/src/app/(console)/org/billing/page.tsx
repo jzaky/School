@@ -18,13 +18,13 @@ export default async function BillingPage() {
   const [members, agents] = await withTenant(c.ctx.orgId, (db) => Promise.all([db.membership.count({ where: { orgId: c.ctx.orgId, status: "active" } }), db.agent.count({ where: { orgId: c.ctx.orgId, status: { not: "archived" } } })]));
   return (
     <div>
-      <PageHeader title="Billing" description="Plan, usage and commercial contact." badges={<DemoBadge show={c.org.demoMode} />} actions={<Button disabled disabledReason="No billing provider is connected in this deployment">Manage billing portal</Button>} />
+      <PageHeader title="Billing" description="Plan, usage and commercial contact." badges={<DemoBadge show={c.org.demoMode} />} actions={<Button disabled disabledReason="There is no billing provider connected in this deployment, so there is no portal to open">Manage billing portal</Button>} />
       <div className="grid gap-3 md:grid-cols-3">
         <StatPanel label="Plan" value={<Badge tone="info" className="text-sm">{org.plan.replace(/_/g, " ")}</Badge>} footer="Usage based pricing is not enforced in this deployment" />
         <StatPanel label="Active members" value={members} />
         <StatPanel label="Registered agents" value={agents} footer="Excludes archived" />
       </div>
-      <Panel title="Request enterprise pricing" description="Recorded as a platform event; only the details you type are stored." className="mt-4">
+      <Panel title="Request enterprise pricing" description="Your request is recorded as a platform event. Only the details you type are stored." className="mt-4">
         <EnterprisePricingForm defaultName={c.session.user.name} defaultEmail={c.session.user.email} />
       </Panel>
     </div>

@@ -11,9 +11,9 @@ const ANSWERS: { value: CheckerAnswer; label: string }[] = [
 ];
 
 const LEVEL_COPY: Record<string, { title: string; body: string }> = {
-  starting: { title: "Starting", body: "Most of the basic controls are missing or unknown. The first three gaps below are the ones that stop an agent doing damage; start there." },
-  developing: { title: "Developing", body: "The foundations exist but there are gaps a regulator or auditor would ask about. Close the weakest answers first; most of them are a policy and a control point, not a project." },
-  established: { title: "Established", body: "The controls an auditor expects are in place. The remaining work is keeping evidence current and reviewing limits when agents change." },
+  starting: { title: "Starting", body: "Most of the basic controls are missing, or you are not sure they exist. Start with the first three gaps below: they are the ones that stop an agent doing damage." },
+  developing: { title: "Developing", body: "The foundations are in place, but there are gaps a regulator or an auditor would ask about. Close the weakest answers first. Most of them need a written rule and one place to enforce it, not a project." },
+  established: { title: "Established", body: "The controls an auditor expects are in place. What remains is keeping your evidence current and reviewing the limits whenever an agent changes." },
 };
 
 /**
@@ -74,7 +74,7 @@ export function GovernanceChecker() {
 
       <div ref={resultsRef} className="mt-8 rounded-xl border border-(--mk-line) bg-(--mk-bg-2) p-5 md:p-6" aria-live="polite" data-testid="checker-results">
         {!started ? (
-          <p className="text-sm text-(--mk-muted)">Answer the questions above. The score and the framework coverage appear here as you go. Nothing you enter leaves your browser.</p>
+          <p className="text-sm text-(--mk-muted)">Answer the questions above. Your score and your coverage of each framework appear here as you go. Nothing you enter leaves your browser.</p>
         ) : (
           <>
             <div className="flex flex-wrap items-end justify-between gap-4">
@@ -109,7 +109,7 @@ export function GovernanceChecker() {
             <p className="mt-3 text-sm text-(--mk-fg)">{LEVEL_COPY[result.level]!.body}</p>
 
             <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-(--mk-muted)">Coverage by framework</h3>
-            <p className="mt-1 text-xs text-(--mk-muted)">The share of this checker&apos;s questions for each framework that you answered yes. Open control references are the ones a reviewer would ask about first.</p>
+            <p className="mt-1 text-xs text-(--mk-muted)">For each framework, the share of its questions that you answered yes. The open references are the controls a reviewer would ask about first.</p>
             <div className="mt-3 overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
@@ -146,7 +146,7 @@ export function GovernanceChecker() {
               </>
             ) : null}
             <p className="mt-6 text-xs text-(--mk-muted)">
-              This is a self-assessment against AEGIS&apos;s own summaries of public frameworks. It is not a compliance opinion, a certification or legal advice. To see the controls behind each reference, <Link href="/site/demo" className="underline underline-offset-2">open the demo</Link> and visit Standards.
+              This is a self-check scored against AEGIS&apos;s own summaries of public frameworks. It is not a compliance opinion, a certification or legal advice. To see the controls behind each reference, <Link href="/site/demo" className="underline underline-offset-2">open the demo</Link> and visit Standards.
             </p>
           </>
         )}

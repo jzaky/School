@@ -86,7 +86,7 @@ export function UsersTable({ rows, roles, canWrite, selfUserId, q }: { rows: Mem
         open={confirm !== null}
         onOpenChange={(o) => !o && setConfirm(null)}
         title={confirm ? `${confirm.status === "suspended" ? "Suspend" : "Reactivate"} ${confirm.row.name}` : ""}
-        description={confirm?.status === "suspended" ? "The member loses access to this organization immediately. Their sessions remain valid for other organizations." : "The member regains access with their previous role."}
+        description={confirm?.status === "suspended" ? "This person loses access to this organization immediately. If they belong to other organizations, they stay signed in to those." : "This person gets access back with the same role they had before."}
         confirmLabel={confirm?.status === "suspended" ? "Suspend member" : "Reactivate"}
         danger={confirm?.status === "suspended"}
         onConfirm={async () => {

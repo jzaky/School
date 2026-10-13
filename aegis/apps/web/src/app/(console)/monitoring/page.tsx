@@ -31,7 +31,7 @@ export default async function MonitoringPage() {
     <div>
       <PageHeader
         title="Risk Monitoring"
-        description={`${rows.filter((r) => r.builtIn).length} built-in rules and ${rows.filter((r) => !r.builtIn).length} custom rules evaluated by the worker and on demand.`}
+        description={`${rows.filter((r) => r.builtIn).length} built-in rules and ${rows.filter((r) => !r.builtIn).length} custom rules watch this organization's records for warning signs. They run automatically in the background (the worker) and whenever you ask.`}
         badges={<DemoBadge show={c.org.demoMode} />}
         actions={
           <>
@@ -72,9 +72,9 @@ export default async function MonitoringPage() {
               ))}
             </ul>
           </Panel>
-          <Panel title="Most denied agents" description="Denied requests in the last 30 days">
+          <Panel title="Most denied agents" description="Agents whose requests were refused most often in the last 30 days">
             {topDenied.length === 0 ? (
-              <p className="text-xs text-fg-dim">{c.can("gateway:read") ? "No denied requests in the period." : "Requires gateway:read."}</p>
+              <p className="text-xs text-fg-dim">{c.can("gateway:read") ? "No denied requests in the period." : "You need the gateway:read permission to see this; ask an administrator."}</p>
             ) : (
               <ol className="space-y-1.5">
                 {topDenied.map((t, i) => (

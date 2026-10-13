@@ -74,7 +74,7 @@ export default async function AgentDetailPage({ params, searchParams }: { params
             { label: "Environment", value: statusLabel(agent.environment) },
             { label: "Model", value: agent.modelProvider || agent.modelId ? `${agent.modelProvider}${agent.modelProvider && agent.modelId ? " / " : ""}${agent.modelId}` : null, mono: true },
             { label: "Risk tier", value: <Badge tone={statusTone(agent.riskTier)}>{statusLabel(agent.riskTier)}</Badge> },
-            { label: "Classification limit", value: <Badge tone={statusTone(agent.dataClassificationLimit)}>{statusLabel(agent.dataClassificationLimit)}</Badge> },
+            { label: "Most sensitive data it may handle (classification limit)", value: <Badge tone={statusTone(agent.dataClassificationLimit)}>{statusLabel(agent.dataClassificationLimit)}</Badge> },
             { label: "Current version", value: `v${agent.currentVersion}`, mono: true },
           ]}
         />
@@ -102,7 +102,7 @@ export default async function AgentDetailPage({ params, searchParams }: { params
           ]}
         />
       </Panel>
-      <Panel title="Request outcomes" description="Action requests by status" className="lg:col-span-2">
+      <Panel title="Request outcomes" description="Everything this agent has asked to do, counted by what happened to it" className="lg:col-span-2">
         {Object.keys(agent.statusCounts).length === 0 ? (
           <p className="text-xs text-fg-dim">No action requests yet.</p>
         ) : (
@@ -116,16 +116,16 @@ export default async function AgentDetailPage({ params, searchParams }: { params
         )}
       </Panel>
       <Panel title="Metadata" className="lg:col-span-2">
-        {metadata ? <CodeBlock code={metadata} /> : <p className="text-xs text-fg-dim">No metadata recorded.</p>}
+        {metadata ? <CodeBlock code={metadata} /> : <p className="text-xs text-fg-dim">No additional details (metadata) recorded.</p>}
       </Panel>
     </div>
   );
 
   const policies = (
     <div className="space-y-3">
-      <div className="rounded-md border border-info/30 bg-info/10 px-3 py-2 text-xs text-fg">Policy management arrives in the Control release. Assignments shown here are read-only.</div>
+      <div className="rounded-md border border-info/30 bg-info/10 px-3 py-2 text-xs text-fg">Policy management arrives in the Control release. The assignments listed here cannot be changed from this page.</div>
       {agent.assignments.length === 0 ? (
-        <EmptyState title="No policies assigned" description="Organization-wide, team and agent-level assignments will appear here." />
+        <EmptyState title="No policies assigned" description="Rules that apply to this agent will appear here, whether they are set for the whole organization, for its team or for this agent alone." />
       ) : (
         <div className="overflow-hidden rounded-panel border border-line bg-bg-elev">
           <table className="w-full text-[13px]">
@@ -156,7 +156,7 @@ export default async function AgentDetailPage({ params, searchParams }: { params
   );
 
   const activity = agent.recentRequests.length === 0 ? (
-    <EmptyState title="No action requests yet" description="Requests the agent submits to the Action Gateway will be listed here with their decisions." />
+    <EmptyState title="No action requests yet" description="Everything the agent asks to do goes through the Action Gateway, the one door for every agent action. Each request and its decision will be listed here." />
   ) : (
     <div className="overflow-auto rounded-panel border border-line bg-bg-elev">
       <table className="w-full text-[13px]">
@@ -189,7 +189,7 @@ export default async function AgentDetailPage({ params, searchParams }: { params
   );
 
   const evidenceTab = !canEvidence ? (
-    <EmptyState title="Evidence requires evidence:read" description="Ask an administrator for the Auditor or Governance Manager role to view the ledger." />
+    <EmptyState title="You need the evidence:read permission to see this" description="Ask an administrator for the Auditor or Governance Manager role to view the record of this agent's events." />
   ) : (
     <Panel>
       <Timeline

@@ -30,15 +30,15 @@ export default async function EvidencePage({ searchParams }: { searchParams: Pro
   const ev = metrics.evidence;
   return (
     <div>
-      <PageHeader title="Evidence Ledger" description="Every governance event, hash-chained per organization and signed in checkpoints. Verification recomputes the chain and is itself recorded." badges={<DemoBadge show={c.org.demoMode} />} />
+      <PageHeader title="Evidence Ledger" description="Every governance event, kept in a record that cannot be edited without it showing. Each entry is linked to the one before it (a hash chain) and batches are signed in checkpoints. Checking the record recomputes every link, and the check itself is recorded." badges={<DemoBadge show={c.org.demoMode} />} />
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatPanel label="Events" value={ev.events} footer={ev.lastAt ? `Last at ${formatDateTime(ev.lastAt)}` : "none yet"} />
-        <StatPanel label="Last seq" value={<span className="font-mono">{ev.lastSeq}</span>} />
-        <StatPanel label="Last checkpoint" value={ev.lastCheckpointSeq ? <span className="font-mono">#{ev.lastCheckpointSeq}</span> : "none"} footer={ev.lastCheckpointAt ? `Signed ${formatDateTime(ev.lastCheckpointAt)}` : "Written by the worker"} />
+        <StatPanel label="Latest entry number (seq)" value={<span className="font-mono">{ev.lastSeq}</span>} />
+        <StatPanel label="Last checkpoint" value={ev.lastCheckpointSeq ? <span className="font-mono">#{ev.lastCheckpointSeq}</span> : "none"} footer={ev.lastCheckpointAt ? `Signed ${formatDateTime(ev.lastCheckpointAt)}` : "Written by the background worker"} />
         <StatPanel label="Chain status" value={chain.valid ? "Valid" : "Invalid"} tone={chain.valid ? "allow" : "deny"} footer={`${chain.checked} events recomputed, ${chain.checkpoints.length} checkpoints`} />
       </div>
       <Note className="my-4">
-        <strong>Tamper-evident, not immutable.</strong> Each event stores the previous hash, so any edit or gap breaks verification from that point on. Someone holding the database owner role and the signing key could still rewrite history, which is why the key lives outside the database and exports carry the public key for offline re-verification.
+        <strong>Tamper-evident, not immutable.</strong> Any edit would show, but the record is not impossible to change. Each entry stores the fingerprint (hash) of the one before it, so any edit or missing entry shows up as a broken link from that point on. Someone who held both the database owner role and the signing key could still rewrite history. That is why the key is kept outside the database and why exports include the public key, so the record can be re-checked on another machine.
       </Note>
       <EvidenceView rows={rows} pagination={{ page: page.page, pageSize: page.pageSize, total: page.total }} filters={filters} types={types} subjectTypes={subjectTypes} initialChain={{ valid: chain.valid, checked: chain.checked, firstBadSeq: chain.firstBadSeq, reason: chain.reason, checkpoints: chain.checkpoints.length }} />
     </div>

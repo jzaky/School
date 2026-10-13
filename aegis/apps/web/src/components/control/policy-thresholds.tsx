@@ -71,16 +71,16 @@ export function RefundThresholdsPanel({ policyId, version, settings, diverged, r
     <div className="space-y-4">
       {!isDraft ? (
         <Note>
-          Version v{version.version} is {version.state} and frozen. Changing the thresholds creates a new draft version that still goes through review and a second person&apos;s activation.
+          Version v{version.version} is {version.state} and can no longer be changed. Changing the thresholds creates a new draft version, which still goes through review and must be switched on by a second person.
         </Note>
       ) : !canWrite ? (
-        <Note>You can explore the thresholds and try requests, but saving requires policies:write.</Note>
+        <Note>You can explore the thresholds and try requests, but saving needs the policies:write permission.</Note>
       ) : null}
-      {diverged ? <Note tone="warning">The JSON of this version was edited by hand after it was generated. Saving from this form regenerates every rule from the settings below and drops those manual edits. Use the Editor tab to keep them.</Note> : null}
+      {diverged ? <Note tone="warning">Someone edited this version&apos;s rules by hand (in the JSON) after the form generated them. Saving from this form rebuilds every rule from the settings below and discards those manual edits. To keep them, use the Editor tab instead.</Note> : null}
       <div className="grid gap-4 xl:grid-cols-2">
         <Panel
           title="Thresholds"
-          description="Business settings compiled into the policy rules. The JSON stays editable in the Editor tab."
+          description="Plain business settings that AEGIS turns into the policy rules. The underlying rules (JSON) stay editable in the Editor tab."
           actions={
             isDraft ? (
               <Button size="sm" variant="primary" onClick={saveDraft} loading={saving} disabled={!!saveDisabledReason} disabledReason={saveDisabledReason}>
@@ -98,10 +98,10 @@ export function RefundThresholdsPanel({ policyId, version, settings, diverged, r
           <RefundSettingsForm values={values} onChange={setValues} errors={parsed.errors} roles={roles} tools={tools} idPrefix="th" />
         </Panel>
         <div className="space-y-4">
-          <Panel title="What this policy does" description="Generated from the settings. Changes appear immediately.">
+          <Panel title="What this policy does" description="Written from the settings on the left. Changes appear immediately.">
             {explanation.length ? <RefundExplanation lines={explanation} /> : <p className="text-xs text-deny">Fix the highlighted fields to see the explanation.</p>}
           </Panel>
-          <Panel title="Sample requests" description="Dry runs of representative refunds against the settings as they stand now.">
+          <Panel title="Sample requests" description="Typical refunds tried against the settings as they stand now (a dry run).">
             <RefundSamplePreview settings={parsed.settings} />
           </Panel>
         </div>
@@ -116,7 +116,7 @@ export function RefundThresholdsPanel({ policyId, version, settings, diverged, r
           if (!o) setNvError(null);
         }}
         title="New draft version from these thresholds"
-        description={`Creates v${version.version + 1} as a draft. v${version.version} stays unchanged until the draft is reviewed and activated by someone else.`}
+        description={`Creates v${version.version + 1} as a draft. v${version.version} stays in force, unchanged, until the draft is reviewed and switched on by someone else.`}
         size="sm"
         footer={
           <>
@@ -130,7 +130,7 @@ export function RefundThresholdsPanel({ policyId, version, settings, diverged, r
         }
       >
         <form id="thresholds-new-version" onSubmit={createVersion} className="space-y-3">
-          <Field label="Change note" htmlFor="th-nv-note" hint="shown in history">
+          <Field label="Change note" htmlFor="th-nv-note" hint="a short note on what changed, shown in the version history">
             <Textarea id="th-nv-note" value={note} onChange={(e) => setNote(e.target.value)} maxLength={500} autoFocus placeholder={defaultNote} />
           </Field>
           <FormError error={nvError} />

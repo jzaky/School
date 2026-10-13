@@ -98,7 +98,7 @@ export default async function PolicyDetailPage({ params, searchParams }: { param
       <RulesView doc={doc} />
     </div>
   ) : (
-    <Note tone="danger">The stored document of {versionLabel} does not validate against the current schema: {parsed && !parsed.success ? parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).slice(0, 3).join("; ") : ""}</Note>
+    <Note tone="danger">The stored rules of {versionLabel} do not match the format AEGIS currently expects (the policy schema), so they cannot be shown. Details:{parsed && !parsed.success ? parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).slice(0, 3).join("; ") : ""}</Note>
   );
 
   const historyTab = (

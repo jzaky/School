@@ -37,13 +37,13 @@ export function ToolsTab({ agentId, tools, catalog, caps }: { agentId: string; t
     { id: "state", header: "State", cell: ({ row }) => {
       const t = row.original;
       if (t.revokedAt) return <Tooltip content={<span>Revoked <DateTime value={t.revokedAt} />{t.revokedReason ? `: ${t.revokedReason}` : ""}</span>}><span><Badge tone="deny">Revoked</Badge></span></Tooltip>;
-      if (!t.toolEnabled) return <Tooltip content="Disabled for the whole organization in Tool Security"><span><Badge tone="approval">Tool disabled</Badge></span></Tooltip>;
+      if (!t.toolEnabled) return <Tooltip content="Switched off for the whole organization in Tool Security. Enable it there first."><span><Badge tone="approval">Tool disabled</Badge></span></Tooltip>;
       return <Badge tone={t.enabled ? "allow" : "neutral"}>{t.enabled ? "Enabled" : "Disabled"}</Badge>;
     } },
     { id: "enabled", header: "Enabled", meta: { width: 80 }, cell: ({ row }) => {
       const t = row.original;
       const blocked = !!t.revokedAt || !caps.canWrite || !caps.editable;
-      const reason = t.revokedAt ? "Revoked grants cannot be re-enabled. Grant the tool again." : !caps.canWrite ? "Requires agents:write" : !caps.editable ? `A ${caps.status} agent cannot be edited` : undefined;
+      const reason = t.revokedAt ? "A revoked tool cannot be switched back on. Grant the tool again from the catalog instead." : !caps.canWrite ? "Requires agents:write" : !caps.editable ? `A ${caps.status} agent cannot be edited` : undefined;
       const sw = (
         <span data-no-row-click>
           <Switch aria-label={`${t.name} enabled`} checked={t.enabled && !t.revokedAt} disabled={blocked} onCheckedChange={async (v) => {
@@ -91,12 +91,12 @@ export function ToolsTab({ agentId, tools, catalog, caps }: { agentId: string; t
           Grant
         </Button>
       </div>
-      <DataTable columns={columns} data={tools} getRowId={(t) => t.toolId} columnVisibilityMenu={false} caption="Agent tools" emptyState={<EmptyState icon={Wrench} title="No tools granted" description="This agent cannot call any tool through the gateway until one is granted." />} />
+      <DataTable columns={columns} data={tools} getRowId={(t) => t.toolId} columnVisibilityMenu={false} caption="Agent tools" emptyState={<EmptyState icon={Wrench} title="No tools granted" description="This agent cannot use any tool until one is granted here. Every tool call passes through the Action Gateway, the one door every agent action goes through." />} />
       <ConfirmDialog
         open={revoking !== null}
         onOpenChange={(o) => !o && setRevoking(null)}
         title={revoking ? `Revoke ${revoking.name}` : ""}
-        description="Emergency control. Takes effect on the agent's next gateway call and is recorded in evidence."
+        description="This is an emergency control. The agent loses the tool the next time it tries to use it, and the change is kept in the evidence record."
         confirmLabel="Revoke tool"
         danger
         reason={{ required: true }}

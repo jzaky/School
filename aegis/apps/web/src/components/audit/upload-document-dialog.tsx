@@ -70,7 +70,7 @@ export function UploadDocumentDialog({ canWrite }: { canWrite: boolean }) {
         </Button>
       }
       title="Upload a document"
-      description="PDF, DOCX, TXT or Markdown up to 25 MB. The file is parsed and chunked in this deployment; its content never leaves it."
+      description="PDF, DOCX, TXT or Markdown up to 25 MB. The file is read and split into passages (chunks) inside this deployment; its content never leaves it."
       footer={
         result ? (
           <Button variant="primary" onClick={() => setOpen(false)}>
@@ -81,7 +81,7 @@ export function UploadDocumentDialog({ canWrite }: { canWrite: boolean }) {
             <Button variant="ghost" onClick={() => setOpen(false)} disabled={pending}>
               Cancel
             </Button>
-            <Button form="upload-document-form" type="submit" variant="primary" loading={pending} disabled={!canSubmit} disabledReason={!file ? "Choose a file" : tooLarge ? "File exceeds the 25 MB limit" : title.trim().length === 0 ? "Title is required" : undefined}>
+            <Button form="upload-document-form" type="submit" variant="primary" loading={pending} disabled={!canSubmit} disabledReason={!file ? "Choose a file first" : tooLarge ? "The file is over the 25 MB limit. Choose a smaller file." : title.trim().length === 0 ? "Enter a title first" : undefined}>
               {pending ? "Uploading and parsing" : "Upload and parse"}
             </Button>
           </>
@@ -123,7 +123,7 @@ export function UploadDocumentDialog({ canWrite }: { canWrite: boolean }) {
               required
             />
           </Field>
-          <Field label="Retention" htmlFor="doc-retention" hint="days, optional; the file is deleted when it expires">
+          <Field label="Retention" htmlFor="doc-retention" hint="in days, optional; the file is deleted when this period ends">
             <Input id="doc-retention" name="retentionDays" type="number" min={1} max={3650} value={retention} onChange={(e) => setRetention(e.target.value)} placeholder="keep indefinitely" className="w-48" />
           </Field>
           <FormError error={error} />

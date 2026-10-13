@@ -59,5 +59,5 @@ const columns: ColumnDef<AssessmentRow, unknown>[] = [
 ];
 
 export function AssessmentsTable({ rows, pagination }: { rows: AssessmentRow[]; pagination: { page: number; pageSize: number; total: number } }) {
-  return <DataTable columns={columns} data={rows} getRowId={(r) => r.id} rowHref={(r) => `/audit/assessments/${r.id}`} pagination={pagination} storageKey="assessments" caption="Assessments" emptyState={<EmptyState icon={ClipboardList} title="No assessments" description="Create an assessment to evaluate parsed documents against a framework." />} />;
+  return <DataTable columns={columns} data={rows} getRowId={(r) => r.id} rowHref={(r) => `/audit/assessments/${r.id}`} pagination={pagination} storageKey="assessments" caption="Assessments" emptyState={<EmptyState icon={ClipboardList} title="No assessments" description="An assessment reads your uploaded documents and checks them against a framework, control by control. Create one to start." />} />;
 }

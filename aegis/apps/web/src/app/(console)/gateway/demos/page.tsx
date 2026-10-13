@@ -16,7 +16,7 @@ export default async function DemosPage() {
       <PageHeader
         breadcrumbs={[{ label: "Action Gateway", href: "/gateway" }, { label: "Demo scenarios" }]}
         title="Demo scenarios"
-        description="Every step runs through the real Action Gateway: baseline checks, policy evaluation, Shield, approvals, execution grants and the simulated downstream systems. Nothing is mocked in the console."
+        description="Every step goes through the real Action Gateway, the one door every agent action takes: the basic checks, the policy decision, the Shield data protection check, approvals, one-time permission slips (execution grants) and the simulated outside systems. Nothing in the console is faked."
         badges={<DemoBadge show={c.org.demoMode} />}
         actions={
           <>
@@ -25,7 +25,7 @@ export default async function DemosPage() {
           </>
         }
       />
-      {!c.org.demoMode ? <Note tone="warning" className="mb-4">This organization is not in demo mode. Scenarios are disabled so synthetic records cannot mix with real ones.</Note> : null}
+      {!c.org.demoMode ? <Note tone="warning" className="mb-4">This organization is not in demo mode. The scenarios are switched off so that made-up records cannot mix with real ones.</Note> : null}
       <DemoRunner canDecide={c.can("approvals:decide") && c.org.demoMode} userName={c.session.user.name} enabled={c.org.demoMode} />
     </div>
   );

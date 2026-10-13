@@ -26,11 +26,11 @@ export function outcomeSentence(o: DecisionOutcome, summary?: string): string {
   if (o.status === "approved" && o.receipt) {
     const ref = o.receipt.reference ? ` ${o.receipt.downstreamSystem} reference ${o.receipt.reference}.` : "";
     if (o.receipt.status === "succeeded") return `Approved and executed.${ref}`;
-    if (o.receipt.status === "failed") return `Approved, but the call to ${o.receipt.downstreamSystem} failed. Nothing changed downstream; open the action request to retry or settle it.`;
+    if (o.receipt.status === "failed") return `Approved, but the call to ${o.receipt.downstreamSystem} failed. Nothing changed in that system; open the action request to retry or settle it.`;
     if (o.receipt.status === "unknown") return `Approved, but ${o.receipt.downstreamSystem} did not confirm the outcome. Check the system, then settle the result from the action request.`;
     return `Approved, but the call to ${o.receipt.downstreamSystem} was skipped.${ref}`;
   }
-  if (o.status === "approved" && o.grantIssued) return "Approved. The agent may now collect its single execution grant and run the action itself.";
+  if (o.status === "approved" && o.grantIssued) return "Approved. The agent may now collect its one-time permission slip (execution grant) and carry out the action itself.";
   if (o.status === "approved") return "Approved. Executing...";
   return `Recorded: ${o.status}.`;
 }
@@ -118,9 +118,9 @@ export function ApprovalDecisionForm({ approvalId, requestId, requestHash, canDe
         </p>
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <StatusBadge status={outcome.status} />
-          {outcome.executed ? <Badge tone="allow">executed downstream</Badge> : null}
+          {outcome.executed ? <Badge tone="allow">carried out in the connected system</Badge> : null}
           {outcome.approvalsSoFar ? <Badge tone="approval">{outcome.approvalsSoFar} approval(s) so far</Badge> : null}
-          {outcome.grantIssued ? <Badge tone="info">grant issued for the agent</Badge> : null}
+          {outcome.grantIssued ? <Badge tone="info">one-time permission slip issued to the agent (grant)</Badge> : null}
           {outcome.receipt?.reference ? (
             <span className="text-xs text-fg-muted">
               {outcome.receipt.downstreamSystem} reference{" "}
@@ -153,7 +153,7 @@ export function ApprovalDecisionForm({ approvalId, requestId, requestHash, canDe
   }
 
   return (
-    <Panel title="Your decision" description="Approving runs exactly what is described above, once, right away. The request hash is checked again before anything runs." data-testid="decision-panel">
+    <Panel title="Your decision" description="Approving runs exactly what is described above, once, right away. Before anything runs, AEGIS checks the request's fingerprint (hash) again to be sure nothing changed since you saw it." data-testid="decision-panel">
       {!canDecide ? (
         <Note tone="warning" className="mb-3">
           <strong>You cannot decide this request.</strong>
@@ -198,20 +198,20 @@ export function ApprovalDecisionForm({ approvalId, requestId, requestHash, canDe
           })}
         </div>
         {needsTarget ? (
-          <Field label={decision === "escalate" ? "Escalate to" : "Reassign to"} htmlFor="decision-target" hint="members with approvals:decide">
+          <Field label={decision === "escalate" ? "Escalate to" : "Reassign to"} htmlFor="decision-target" hint="people who can decide approvals (approvals:decide)">
             <Combobox id="decision-target" value={target} onChange={setTarget} options={approvers.map((a) => ({ value: a.userId, label: a.name, description: a.roleName }))} placeholder="Choose a person" />
           </Field>
         ) : null}
-        <Field label="Comment" htmlFor="decision-comment" hint={needsComment ? "required, recorded in evidence" : "optional, recorded in evidence"}>
+        <Field label="Comment" htmlFor="decision-comment" hint={needsComment ? "required, kept in the evidence record" : "optional, kept in the evidence record"}>
           <Textarea id="decision-comment" value={comment} onChange={(e) => setComment(e.target.value)} maxLength={2000} placeholder={decision === "approve" ? "What you verified before approving" : decision === "reject" ? "Why this action must not run" : "What you need to know"} />
         </Field>
         <input type="hidden" name="requestHash" value={requestHash} />
         <FormError error={error} />
         <div className="flex items-center justify-between gap-2">
-          <span className="font-mono text-[11px] text-fg-dim" title="Request hash bound to this decision">
+          <span className="font-mono text-[11px] text-fg-dim" title="The request's fingerprint (hash). Your decision is tied to exactly this version of the request.">
             hash {requestHash.slice(0, 16)}
           </span>
-          <Button type="submit" variant={decision === "reject" ? "danger" : "primary"} loading={pending} disabled={!ready} disabledReason={!allowedHere ? eligibilityReasons[0] ?? "Not permitted" : needsTarget && !target ? "Choose a person" : "A comment of at least 3 characters is required"}>
+          <Button type="submit" variant={decision === "reject" ? "danger" : "primary"} loading={pending} disabled={!ready} disabledReason={!allowedHere ? eligibilityReasons[0] ?? "Not permitted" : needsTarget && !target ? "Choose a person" : "Enter a comment of at least 3 characters"}>
             {decision === "approve" ? "Approve and execute" : decision === "reject" ? "Reject" : decision === "request_info" ? "Request information" : decision === "escalate" ? "Escalate" : "Reassign"}
           </Button>
         </div>

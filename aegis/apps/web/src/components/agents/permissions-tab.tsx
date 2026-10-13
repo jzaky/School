@@ -61,10 +61,10 @@ export function PermissionsTab({ agentId, permissions, resources, classification
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-end gap-2">
-        <Field label="Resource" htmlFor="grant-resource" className="w-80" hint={`limit: ${statusLabel(classificationLimit)}`}>
+        <Field label="Resource" htmlFor="grant-resource" className="w-80" hint={`this agent may use data classified up to: ${statusLabel(classificationLimit)}`}>
           <Combobox id="grant-resource" value={resourceId} onChange={setResourceId} options={options} placeholder={resources.length ? "Choose a resource" : "No resources in the catalog"} disabled={!!blockedReason || resources.length === 0} />
         </Field>
-        <Field label="Actions" htmlFor="grant-actions" className="w-56" hint="comma separated">
+        <Field label="Actions" htmlFor="grant-actions" className="w-56" hint="separate several actions with commas, for example read, write">
           <Input id="grant-actions" value={actions} onChange={(e) => setActions(e.target.value)} placeholder="read, write" disabled={!!blockedReason} className="font-mono" />
         </Field>
         <Button variant="primary" disabled={!!blockedReason || !resourceId || parsedActions.length === 0} disabledReason={blockedReason ?? "Choose a resource and at least one action"} loading={granting} onClick={async () => {
@@ -81,12 +81,12 @@ export function PermissionsTab({ agentId, permissions, resources, classification
           Grant
         </Button>
       </div>
-      <DataTable columns={columns} data={permissions} getRowId={(p) => p.id} columnVisibilityMenu={false} caption="Resource permissions" emptyState={<EmptyState icon={KeyRound} title="No resource permissions" description="Grant access to a resource to let policies evaluate actions against it." />} />
+      <DataTable columns={columns} data={permissions} getRowId={(p) => p.id} columnVisibilityMenu={false} caption="Resource permissions" emptyState={<EmptyState icon={KeyRound} title="No resource permissions" description="Until a resource is granted here, the agent cannot act on it. Grant one and your policies will decide each action the agent tries on it." />} />
       <ConfirmDialog
         open={revoking !== null}
         onOpenChange={(o) => !o && setRevoking(null)}
         title={revoking ? `Revoke access to ${revoking.resourceName}` : ""}
-        description="The permission is marked revoked and recorded in evidence."
+        description="The agent loses this access. The permission is marked revoked and the change is kept in the evidence record."
         confirmLabel="Revoke permission"
         danger
         reason={{ required: true }}

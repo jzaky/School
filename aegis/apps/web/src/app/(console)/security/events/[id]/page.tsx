@@ -111,7 +111,7 @@ export default async function SecurityEventPage({ params }: { params: Promise<{ 
           />
         </Panel>
 
-        <Panel title="Related request" description="The gateway request this event was raised for">
+        <Panel title="Related request" description="The agent action this event was raised about">
           {ev.request ? (
             <KeyValue
               items={[
@@ -129,17 +129,17 @@ export default async function SecurityEventPage({ params }: { params: Promise<{ 
                 { label: "Request status", value: <StatusBadge status={ev.request.status} /> },
                 { label: "Decision", value: ev.decision ? <StatusBadge status={ev.decision.result} /> : null },
                 { label: "Matched rules", value: ev.decision?.matchedRuleIds.length ? <span className="font-mono text-xs">{ev.decision.matchedRuleIds.join(", ")}</span> : null },
-                { label: "Evaluation latency", value: ev.decision?.latencyMs !== null && ev.decision?.latencyMs !== undefined ? `${ev.decision.latencyMs} ms` : null },
+                { label: "Time to decide", value: ev.decision?.latencyMs !== null && ev.decision?.latencyMs !== undefined ? `${ev.decision.latencyMs} ms` : null },
                 { label: "Receipt", value: ev.request.receipt ? <StatusBadge status={ev.request.receipt.status} /> : null },
                 { label: "Submitted", value: formatDateTime(ev.request.createdAt) },
               ]}
             />
           ) : (
-            <p className="text-xs text-fg-dim">This event is not tied to a gateway request.</p>
+            <p className="text-xs text-fg-dim">This event is not linked to an agent action.</p>
           )}
         </Panel>
 
-        <Panel title="Decision explanation" description="Why the gateway decided as it did">
+        <Panel title="Decision explanation" description="Why the Action Gateway decided as it did">
           {explanationText ? <CodeBlock code={explanationText} wrap /> : <p className="text-xs text-fg-dim">No decision is attached to this event.</p>}
         </Panel>
 
@@ -170,11 +170,11 @@ export default async function SecurityEventPage({ params }: { params: Promise<{ 
           )}
         </Panel>
 
-        <Panel title="Detail" description="Structured data recorded with the event. Values are class keys and tool keys, never the data itself." className="lg:col-span-2">
+        <Panel title="Detail" description="What was recorded with the event. Only the names of data classes and tools appear here, never the sensitive data itself." className="lg:col-span-2">
           <CodeBlock code={pretty(detailRest) || "{}"} />
         </Panel>
 
-        <Panel title="Evidence for the request" description="Ledger entries about the related request" className="lg:col-span-2">
+        <Panel title="Evidence for the request" description="Entries in the record (ledger) about the related agent action" className="lg:col-span-2">
           <Timeline
             items={ev.evidence.map((e) => ({
               id: e.id,

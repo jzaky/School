@@ -45,7 +45,7 @@ export default async function GatewayPage({ searchParams }: { searchParams: Prom
     <div>
       <PageHeader
         title="Action Gateway"
-        description="Every action an agent attempts, the decision it received and what executed. Figures below cover the last 24 hours."
+        description="The Action Gateway is the one door every agent action goes through. This page shows every action an agent tried, the decision it got and what was actually carried out. The figures below cover the last 24 hours."
         badges={<DemoBadge show={c.org.demoMode} />}
         actions={
           c.org.demoMode ? (
@@ -57,10 +57,10 @@ export default async function GatewayPage({ searchParams }: { searchParams: Prom
         }
       />
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
-        <StatPanel label="Evaluated" value={a.evaluated} footer="Decisions in 24h" />
+        <StatPanel label="Evaluated" value={a.evaluated} footer="Decisions in the last 24 hours" />
         <StatPanel label="Allowed" value={a.allowed} tone="allow" />
         <StatPanel label="Denied" value={a.denied} tone={a.denied > 0 ? "deny" : undefined} />
-        <StatPanel label="Approval required" value={a.approvalRequired} tone={a.approvalRequired > 0 ? "approval" : undefined} footer={`${a.awaitingApproval} awaiting now`} />
+        <StatPanel label="Approval required" value={a.approvalRequired} tone={a.approvalRequired > 0 ? "approval" : undefined} footer={`${a.awaitingApproval} waiting for a person now`} />
         <StatPanel label="Executed" value={a.executed} tone="allow" />
         <StatPanel label="Failed" value={a.failed} tone={a.failed > 0 ? "deny" : undefined} />
       </div>
