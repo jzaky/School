@@ -4,7 +4,7 @@
 Fail closed, least privilege, every action attributable, tamper-evident evidence, tenant isolation enforced in the database.
 
 ## Identity
-- Console users: argon2id password hashes, lockout after 8 failures, server-side sessions (12 hour absolute, 2 hour idle) in HttpOnly Secure SameSite=Lax cookies, TOTP MFA (RFC 6238), per-organization OpenID Connect with PKCE and JIT provisioning limited to allowed email domains. SAML is not implemented.
+- Console users: argon2id password hashes, lockout after 8 failures, server-side sessions (12 hour absolute, 2 hour idle) in HttpOnly Secure SameSite=Lax cookies, TOTP MFA (RFC 6238), per-organization OpenID Connect with PKCE and JIT provisioning limited to allowed email domains. SAML 2.0 (node-saml, signed assertions, audience and validity checks, one-time assertion ids per process).
 - Agents and integrations: API keys `aegis_ak_<prefix>_<secret>`, SHA-256 hashed at rest, shown once, scoped to one subject, revocable, revoked automatically when an agent is revoked.
 - Roles: 8 system roles over 22 explicit permissions; custom roles cannot hold the wildcard. Four-eyes rule on policy activation. Separation of duties on approvals (owners of an agent cannot approve its requests).
 
@@ -30,4 +30,4 @@ The api, web and worker processes run as the non-owner database role and refuse 
 Rate limits per key and per IP, body limits, Helmet headers, CORS allowlist, HMAC-signed webhooks with a replay window, non-root containers, Kubernetes network policy template for egress.
 
 ## Known gaps (also in THREAT_MODEL.md)
-No SAML; keys in environment variables rather than a KMS; master key rotation is manual; network egress enforcement for real downstream systems depends on the customer's platform; prompt-injection detection is heuristic; no independent penetration test has been performed.
+SAML replay cache per process; no console CSP; keys in environment variables rather than a KMS; master key rotation is manual; network egress enforcement for real downstream systems depends on the customer's platform; prompt-injection detection is heuristic; no independent penetration test has been performed.

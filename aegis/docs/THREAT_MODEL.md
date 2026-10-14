@@ -44,7 +44,8 @@ Policy documents and versions; approval decisions; evidence chain; downstream cr
 | T25 | A live payment credential is connected by mistake | Connector validates keys at storage and at use; only test-mode keys are accepted | Built for the Stripe connector |
 
 ## Known gaps
-- No SAML.
+- SAML exists (node-saml); its assertion replay cache is per process.
+- No Content-Security-Policy on the console yet.
 - No hardware-backed key storage for the evidence signing key or the credential vault key (environment variable; KMS integration is a documented next step).
 - Network-level egress enforcement for real downstream systems depends on the customer's deployment.
 - Injection detection is heuristic; false negatives expected; it is a signal, not a guarantee.

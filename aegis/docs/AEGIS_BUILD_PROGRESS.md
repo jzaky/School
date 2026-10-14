@@ -573,3 +573,23 @@ The missed throughput target is explained in docs/PERFORMANCE.md, with the next 
 | Browser | 3 |
 
 **Status:** implemented and tested with synthetic reports and a stand-in for OSV.dev. No real scanner output or osv.dev query has been used. See docs/SOFTWARE_SECURITY.md for the gaps: signatures, behavioural analysis and running scanners inside AEGIS.
+
+## Validation V1 to V7 (14 October 2026)
+
+**Built or written:**
+- **Staging deployment plan:** `docs/STAGING_DEPLOYMENT_PLAN.md`. Waiting for approval; nothing is deployed.
+- **Integration validation:** a harness and matrix (`docs/INTEGRATION_VALIDATION.md`).
+  - OSV.dev is externally verified.
+  - Stripe, Alpaca, the AI provider and Entra ID are ready to run and need test credentials.
+- **Gateway throughput:** 7.0 to about 21 decisions per second for one organization, with authorization, evidence and isolation unchanged (`docs/PERFORMANCE.md`).
+- **Microsoft Entra ID connector:** tested against a stand-in, not externally verified. The Okta connector is specified only.
+- **Penetration test readiness pack:** `docs/PENTEST_READINESS.md`. The console now sends HSTS. A console CSP is still open (K10).
+- **Pilot demo:** `scripts/pilot-demo.mts` and `docs/PILOT_DEMO.md`. The recorded run passed, and every step is labelled real or simulated.
+- **Deliverables report:** `docs/VALIDATION_DELIVERABLES.md`, including the remaining production blockers.
+
+**Fixed:** the browser test locator for the Entra panel matched three buttons, which made CI red. It now matches exactly, and the spec passes locally 3 of 3.
+
+**Next:**
+- Secure S5, secure execution workspaces.
+- A console Content-Security-Policy.
+- The live provider checks, once credentials are available.
