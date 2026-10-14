@@ -1,5 +1,5 @@
 import { withTenant, disconnectAll } from "@aegis/db";
-import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, purgeRateLimitBuckets, recomputeCalibration, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
+import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, dispatchEvents, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, purgeRateLimitBuckets, recomputeCalibration, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
 import { rawPrisma } from "@aegis/db";
 import { registerModuleHandlers } from "./handlers.js";
 
@@ -55,6 +55,15 @@ registerJobHandler("executions.sweep", async () => {
   }
 });
 
+/** Sends new governance events to each organization's event destinations (docs/INTEGRATIONS.md). */
+registerJobHandler("events.dispatch", async () => {
+  const orgs = await rawPrisma().organization.findMany({ select: { id: true } });
+  for (const o of orgs) {
+    const out = await dispatchEvents((fn) => withTenant(o.id, fn), o.id);
+    if (out.delivered || out.failed) log.info({ orgId: o.id, delivered: out.delivered, failed: out.failed }, "events dispatched");
+  }
+});
+
 registerJobHandler("evidence.checkpoint", async () => {
   const orgs = await rawPrisma().organization.findMany({ select: { id: true } });
   for (const o of orgs) await withTenant(o.id, (db) => writeCheckpoint(db, o.id));
@@ -97,6 +106,7 @@ async function scheduleRecurring() {
   const minute = Math.floor(Date.now() / 60_000);
   await enqueueJob({ type: "approvals.sweep", payload: {}, idempotencyKey: `approvals.sweep:${minute}`, runAt: new Date() });
   await enqueueJob({ type: "executions.sweep", payload: {}, idempotencyKey: `executions.sweep:${minute}`, runAt: new Date() });
+  await enqueueJob({ type: "events.dispatch", payload: {}, idempotencyKey: `events.dispatch:${minute}`, runAt: new Date() });
   await enqueueJob({ type: "evidence.checkpoint", payload: {}, idempotencyKey: `evidence.checkpoint:${Math.floor(minute / 5)}`, runAt: new Date() });
   await enqueueJob({ type: "monitoring.run", payload: {}, idempotencyKey: `monitoring.run:${minute}`, runAt: new Date() });
   await enqueueJob({ type: "audit.retention", payload: {}, idempotencyKey: `audit.retention:${Math.floor(minute / 1440)}`, runAt: new Date() });

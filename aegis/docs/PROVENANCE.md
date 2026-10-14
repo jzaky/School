@@ -79,4 +79,10 @@ Every item below was implemented from AEGIS's own engine and code. None was buil
 - **Erasure.** The right to erasure as described in GDPR Article 17 and the UAE Personal Data Protection Law, for the deletion request workflow. AEGIS records decisions; it does not determine legal obligations.
 - **Regulatory facts.** The EU AI Act general-purpose AI obligations date (2 August 2025) is from Regulation (EU) 2024/1689. Every other regulatory entry in the demo is marked illustrative.
 
+### Phase 8: integrations and event destinations
+- **Vendor protocols.** Built from each provider's public API documentation: Slack incoming webhooks and Block Kit, Microsoft Teams workflow webhooks with Adaptive Cards 1.4, Splunk HTTP Event Collector, Datadog Logs intake API v2, and the ServiceNow Table API. No vendor SDK or source code is used.
+- **Webhook signing.** HMAC-SHA-256 over a timestamp and the raw body (RFC 2104), the same scheme AEGIS already used for inbound webhooks.
+- **Network safety.** Address ranges from RFC 1918, RFC 6598, RFC 3927, RFC 4193 and RFC 4291, and the OWASP guidance on server-side request forgery.
+- **Delivery.** The transactional outbox pattern (a cursor over an append-only log, a unique delivery per destination and event, retries with backoff), which is standard practice with no single source.
+
 Later phases add their foundations here.

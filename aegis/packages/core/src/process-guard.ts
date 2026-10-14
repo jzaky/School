@@ -13,11 +13,12 @@ export function assertApplicationProcess(processName: "api" | "web" | "worker"):
   const problems: string[] = [];
   if (e.MIGRATION_DATABASE_URL) problems.push("MIGRATION_DATABASE_URL (table-owner credentials) is set");
   if (e.AEGIS_APP_PASSWORD) problems.push("AEGIS_APP_PASSWORD (role bootstrap secret) is set");
+  if (e.AEGIS_ALLOW_PRIVATE_DESTINATIONS) problems.push("AEGIS_ALLOW_PRIVATE_DESTINATIONS lets event destinations reach private networks");
   if (problems.length === 0) {
     assertEvidenceSigning(processName);
     return;
   }
-  const message = `${processName} received privileged database settings it must not hold: ${problems.join("; ")}. Give them only to the migrate job.`;
+  const message = `${processName} received settings it must not hold in production: ${problems.join("; ")}. Database owner settings belong only to the migrate job; private destinations are for local tests.`;
   if (isProduction()) throw new Error(message);
   logger.warn({ process: processName }, message);
   assertEvidenceSigning(processName);

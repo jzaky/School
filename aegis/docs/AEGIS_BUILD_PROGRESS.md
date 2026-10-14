@@ -306,3 +306,39 @@ Full description: `docs/MODEL_DATA_GOVERNANCE.md`.
 - No imports from model hubs or data catalogs.
 - Impact suggestions are lexical.
 - No scheduled reminders.
+
+## Phase 8: integration marketplace and event destinations (15 October 2026)
+
+**Built:**
+- **Event destinations.** Signed webhooks, Slack, Microsoft Teams, Splunk HEC, Datadog Logs and ServiceNow incidents.
+  - Fed from the evidence ledger through a per-destination cursor, with one delivery per event and destination.
+  - Retries with backoff; permanent failures can be retried by hand.
+  - Category and severity filters.
+  - Lab traffic excluded.
+  - A test event marks a destination verified against the customer's real endpoint.
+  - The worker job `events.dispatch` runs every minute.
+- **Network safety.** HTTPS only, no credentials in URLs, public addresses only (checked on save and before every delivery), no redirects. The local-test override is refused in production.
+- **Secrets.** Encrypted per organization and kind, never returned, rotatable.
+- **Marketplace.** Every integration with an honest status (stand-in tested, tested in the repository, or simulator), what the customer must supply, and "verified in your organization" when the customer's own test succeeded.
+- **Console:** Marketplace, Event Destinations, and the destination detail page with the delivery log, test, pause and credential rotation. Nested nav items now highlight correctly.
+
+Full description: `docs/INTEGRATIONS.md`.
+
+**Database migration:** `20261015090000_event_destinations`.
+
+**API:** `/v1/integrations/catalog`, `/destinations`, `/destinations/:id` (GET, PATCH), `/destinations/:id/secret`, `/destinations/:id/test` and `/deliveries/:id/retry`. All need a person.
+
+**Tests added:**
+
+| Suite | Tests |
+|---|---|
+| Core | 8 |
+| API | 1 |
+| Browser | 3 |
+
+**Status:** implemented and tested against local stand-ins. **Not verified against any real vendor service;** each needs the customer's own credential and a test event.
+
+**Known limitations:**
+- No DNS pinning.
+- No interactive Slack or Teams approvals.
+- No cloud, CRM or ticketing connectors beyond ServiceNow incidents.

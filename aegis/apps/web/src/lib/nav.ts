@@ -25,9 +25,11 @@ import {
   Rocket,
   Scale,
   ScrollText,
+  Send,
   Server,
   Settings,
   ShieldAlert,
+  Store,
   ShieldCheck,
   Siren,
   Stethoscope,
@@ -81,6 +83,8 @@ export const SECONDARY_NAV: NavGroup[] = [
       { label: "Policies", href: "/policies", icon: Scale, ready: true, permission: "policies:read" },
       { label: "Action Gateway", href: "/gateway", icon: GitBranch, ready: true, permission: "gateway:read" },
       { label: "Integrations", href: "/integrations", icon: Plug, ready: true, permission: "integrations:read" },
+      { label: "Marketplace", href: "/integrations/marketplace", icon: Store, ready: true, permission: "integrations:read" },
+      { label: "Event Destinations", href: "/integrations/destinations", icon: Send, ready: true, permission: "integrations:read" },
       { label: "Autonomy", href: "/agents/autonomy", icon: Gauge, ready: true, permission: "agents:read" },
       { label: "Agent Discovery", href: "/agents/discovery", icon: Radar, ready: true, permission: "agents:read" },
       { label: "Models", href: "/governance/models", icon: Cpu, ready: true, permission: "agents:read" },
@@ -146,9 +150,15 @@ export const NAV: NavGroup[] = [{ label: "Primary", items: [GETTING_STARTED, ...
 
 export const ALL_NAV_ITEMS: NavItem[] = NAV.flatMap((g) => g.items);
 
-export function isActivePath(pathname: string, href: string): boolean {
+function matches(pathname: string, href: string): boolean {
   if (href === "/overview") return pathname === "/overview";
   return pathname === href || pathname.startsWith(href + "/");
+}
+
+/** Active when the path is under this item and no more specific item (for example /integrations/marketplace under /integrations) matches it. */
+export function isActivePath(pathname: string, href: string): boolean {
+  if (!matches(pathname, href)) return false;
+  return !ALL_NAV_ITEMS.some((i) => i.href.length > href.length && i.href.startsWith(href + "/") && matches(pathname, i.href));
 }
 
 /** True when the current path belongs to one of the secondary groups (so "More" opens on its own). */

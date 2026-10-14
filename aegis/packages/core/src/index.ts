@@ -73,3 +73,5 @@ export * from "./security/lab.js";
 export * from "./governance/models.js";
 export * from "./governance/data.js";
 export * from "./governance/regulatory.js";
+export * from "./integrations/destinations.js";
+export * from "./integrations/catalog.js";

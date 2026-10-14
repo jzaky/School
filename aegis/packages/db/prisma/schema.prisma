@@ -1684,3 +1684,60 @@ model RegulatoryChange {
   @@index([orgId, effectiveAt])
   @@map("regulatory_changes")
 }
+
+/// Where AEGIS sends governance events (docs/INTEGRATIONS.md). The secret (a webhook URL with a token,
+/// an API key or a password) is encrypted with the master key; non-secret settings live in config.
+model EventDestination {
+  id                  String    @id @default(uuid(7)) @db.Uuid
+  orgId               String    @map("org_id") @db.Uuid
+  /// webhook, slack, teams, splunk_hec, datadog_logs or servicenow.
+  kind                String
+  name                String
+  /// Event categories this destination receives (security, approvals, decisions, agents, monitoring, governance, lab, audit).
+  categories          String[]  @default([])
+  /// Only for security events: the lowest severity sent. Null sends every severity.
+  minSeverity         String?   @map("min_severity")
+  enabled             Boolean   @default(true)
+  config              Json      @default("{}")
+  secretEnvelope      String    @map("secret_envelope")
+  /// The highest evidence sequence number already considered for this destination.
+  cursorSeq           BigInt    @default(0) @map("cursor_seq")
+  /// Set while a dispatcher holds this destination, so two workers never deliver for it at once.
+  dispatchLockedUntil DateTime? @map("dispatch_locked_until")
+  lastDeliveredAt     DateTime? @map("last_delivered_at")
+  lastError           String?   @map("last_error")
+  /// The last successful test delivery: proof the real endpoint accepted an AEGIS event.
+  verifiedAt          DateTime? @map("verified_at")
+  createdBy           String?   @map("created_by") @db.Uuid
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  deliveries EventDelivery[]
+
+  @@index([orgId, enabled])
+  @@map("event_destinations")
+}
+
+/// One evidence event to one destination. Unique per pair, so a delivery is attempted once and retried, never duplicated.
+model EventDelivery {
+  id              String           @id @default(uuid(7)) @db.Uuid
+  orgId           String           @map("org_id") @db.Uuid
+  destinationId   String           @map("destination_id") @db.Uuid
+  /// The evidence event delivered, or null for a test delivery.
+  evidenceEventId String?          @map("evidence_event_id") @db.Uuid
+  eventType       String           @map("event_type")
+  /// pending, delivered or failed.
+  status          String           @default("pending")
+  attempts        Int              @default(0)
+  nextAttemptAt   DateTime         @default(now()) @map("next_attempt_at")
+  responseStatus  Int?             @map("response_status")
+  lastError       String?          @map("last_error")
+  deliveredAt     DateTime?        @map("delivered_at")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  destination     EventDestination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@unique([destinationId, evidenceEventId])
+  @@index([orgId, status, nextAttemptAt])
+  @@index([destinationId, createdAt])
+  @@map("event_deliveries")
+}

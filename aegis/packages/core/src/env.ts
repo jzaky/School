@@ -37,6 +37,11 @@ const schema = z.object({
   EMAIL_FROM: z.string().default("aegis@example.com"),
   LOG_LEVEL: z.string().default("info"),
   AEGIS_STORAGE_DIR: z.string().default(".uploads"),
+  /** Lets event destinations point at private or loopback addresses (local fakes in tests). Refused in production. */
+  AEGIS_ALLOW_PRIVATE_DESTINATIONS: z
+    .string()
+    .default("false")
+    .transform((v) => v === "true" || v === "1"),
   AEGIS_APP_PASSWORD: z.string().optional().transform((v) => (v && v.trim() !== "" ? v : undefined)),
 });
 
