@@ -24,6 +24,8 @@ const schema = z.object({
   /** Retired evidence public keys (SPKI PEM, base64, comma separated) kept so old checkpoints still verify after a rotation. */
   EVIDENCE_VERIFY_KEYS: z.string().optional(),
   API_PORT: z.coerce.number().default(4000),
+  /** Port for the AI gateway when it runs as its own process (pnpm --filter @aegis/api start:ai-gateway). */
+  AI_GATEWAY_PORT: z.coerce.number().default(4100),
   API_PUBLIC_URL: z.string().default("http://localhost:4000"),
   WEB_PUBLIC_URL: z.string().default("http://localhost:3000"),
   API_CORS_ORIGINS: z.string().default("http://localhost:3000"),

@@ -9,13 +9,13 @@
 
 export const FIGURES = {
   /** `it(` cases under packages/core/tests. */
-  coreTests: 380,
+  coreTests: 397,
   /** `it(` cases under packages/db/tests (tenant isolation). */
   dbTests: 22,
   /** Playwright spec files under apps/web/tests/e2e. */
-  e2eFiles: 27,
+  e2eFiles: 28,
   /** `test(` cases across those spec files. */
-  e2eTests: 118,
+  e2eTests: 120,
   /** Shared framework catalogs seeded for every tenant. */
   catalogs: 20,
   /** Controls across those catalogs. */
@@ -67,5 +67,6 @@ export const NOT_YET: NotYetRow[] = [
   { check: "Independent penetration test", status: "Not commissioned. The threat model and the known gaps are published on the Security page." },
   { check: "Load testing at scale", status: "Measured only in a single development container, one organization at a time. Throughput across organizations, several API replicas and a separate database host have not been measured. See docs/PERFORMANCE.md." },
   { check: "Production deployment of the current build", status: "Not made. Every feature is verified by tests in the repository, none in a deployed environment. Deployment needs the owner's approval." },
-  { check: "Employee AI gateway, Shadow AI discovery, software supply-chain scanning, isolated execution", status: "Planned in docs/AEGIS_MASTER_ROADMAP.md (Secure track); not built. Listed as planned on the Billing page, never as included." },
+  { check: "Employee AI gateway against a real model provider", status: "The gateway is built and verified against a stand-in provider that records what it receives (docs/AI_GATEWAY_DLP.md). No request has been sent to a real provider; that needs a customer's provider key." },
+  { check: "Shadow AI discovery, software supply-chain scanning, isolated execution", status: "Planned in docs/AEGIS_MASTER_ROADMAP.md (Secure track); not built. Listed as planned on the Billing page, never as included." },
 ];

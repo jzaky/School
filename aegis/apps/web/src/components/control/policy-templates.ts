@@ -6,7 +6,7 @@ export interface PolicyTemplate {
   id: string;
   name: string;
   description: string;
-  category: "authorization" | "data_protection" | "tool_security" | "operational";
+  category: "authorization" | "data_protection" | "tool_security" | "operational" | "ai_usage";
   document: Record<string, unknown>;
 }
 
@@ -103,6 +103,27 @@ export const POLICY_TEMPLATES: PolicyTemplate[] = [
       ],
     },
   },
+  {
+    id: "employee-ai-use",
+    name: "Employee AI use",
+    description: "For the AI gateway. Approved models are allowed; prompts with personal or confidential data are sent only with every detected value removed; very long prompts and application requests that name no person are refused. Assign it to the whole organization.",
+    category: "ai_usage",
+    document: {
+      version: 1,
+      appliesTo: { tools: ["ai.chat"], actions: [], environments: [] },
+      rules: [
+        { id: "allow-approved", description: "Approved providers and models", effect: "allow", when: { attr: "provider.approved", op: "eq", value: true }, reason: "Approved model" },
+        { id: "strip-sensitive", description: "Remove every detected value", effect: "restrict", when: { attr: "data.total", op: "gt", value: 0 }, reason: "Personal or confidential data is removed before the prompt leaves the organization" },
+        { id: "no-bulk-paste", description: "Refuse very long prompts", effect: "deny", when: { attr: "prompt.chars", op: "gt", value: 100000 }, reason: "Prompts over 100,000 characters look like a bulk export; ask for an exception" },
+        { id: "apps-name-a-person", description: "Applications must say who the request is for", effect: "deny", when: { all: [{ attr: "principal.type", op: "eq", value: "integration" }, { attr: "principal.claimedUser", op: "missing" }] }, reason: "An application request must name the person it is for" },
+      ],
+      tests: [
+        { name: "clean prompt allowed", input: { action: { tool: "ai.chat" }, provider: { approved: true }, data: { total: 0 }, prompt: { chars: 40 }, principal: { type: "user", claimedUser: null } }, expect: "allow" },
+        { name: "email removed", input: { action: { tool: "ai.chat" }, provider: { approved: true }, data: { total: 1 }, prompt: { chars: 40 }, principal: { type: "user", claimedUser: null } }, expect: "restrict" },
+        { name: "bulk paste refused", input: { action: { tool: "ai.chat" }, provider: { approved: true }, data: { total: 0 }, prompt: { chars: 200000 }, principal: { type: "user", claimedUser: null } }, expect: "deny" },
+      ],
+    },
+  },
 ];
 
 /** Input paths from docs/POLICY_LANGUAGE.md, offered as suggestions in the rule builder. */
@@ -147,6 +168,15 @@ export const INPUT_ATTRIBUTES: string[] = [
   "shield.highestSeverity",
   "shield.injectionSignals",
   "shield.blocked",
+  "provider.key",
+  "provider.approved",
+  "model",
+  "data.classes",
+  "data.total",
+  "data.maxSeverity",
+  "prompt.chars",
+  "prompt.messages",
+  "principal.claimedUser",
 ];
 
 export const POLICY_CATEGORIES = [
@@ -154,6 +184,7 @@ export const POLICY_CATEGORIES = [
   { value: "data_protection", label: "Data protection" },
   { value: "tool_security", label: "Tool security" },
   { value: "operational", label: "Operational" },
+  { value: "ai_usage", label: "AI usage (AI gateway)" },
 ];
 
 export const EFFECT_LABEL: Record<string, string> = { allow: "Allow", deny: "Deny", require_approval: "Require approval" };

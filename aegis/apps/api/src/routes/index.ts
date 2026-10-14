@@ -16,6 +16,7 @@ import { labRoutes } from "./lab.js";
 import { governanceRegistryRoutes } from "./governance-registry.js";
 import { destinationRoutes } from "./destinations.js";
 import { policyInsightRoutes } from "./policy-insights.js";
+import { aiGatewayRoutes } from "./ai-gateway.js";
 
 /** Module route registrations added phase by phase. */
 export async function registerModuleRoutes(app: FastifyInstance): Promise<void> {
@@ -36,4 +37,5 @@ export async function registerModuleRoutes(app: FastifyInstance): Promise<void> 
   await app.register(governanceRegistryRoutes, { prefix: "/v1/governance" });
   await app.register(destinationRoutes, { prefix: "/v1/integrations" });
   await app.register(policyInsightRoutes, { prefix: "/v1/policies/insights" });
+  await app.register(aiGatewayRoutes, { prefix: "/v1/ai" });
 }

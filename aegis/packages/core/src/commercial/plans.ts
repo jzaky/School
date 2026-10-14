@@ -58,7 +58,7 @@ export const FEATURES: Feature[] = [
   { key: "integrations", name: "Integration marketplace and event destinations", plans: ALL, status: "available" },
   { key: "shield", name: "Data protection, tool security and injection defence", plans: SECURE_UP, status: "available" },
   { key: "lab", name: "Attack Simulation Lab", plans: SECURE_UP, status: "available" },
-  { key: "ai_gateway_dlp", name: "AI model gateway with data loss prevention for people's prompts", plans: SECURE_UP, status: "planned" },
+  { key: "ai_gateway_dlp", name: "AI model gateway with data loss prevention for people's prompts", plans: SECURE_UP, status: "available" },
   { key: "shadow_ai", name: "Shadow AI and shadow IT discovery", plans: SECURE_UP, status: "planned" },
   { key: "sso", name: "Single sign-on (OIDC, SAML) and SCIM", plans: ENTERPRISE, status: "available" },
   { key: "deployment_choice", name: "Single-tenant, private-cloud or on-premises deployment", plans: ENTERPRISE, status: "available" },
@@ -72,6 +72,12 @@ export function normalizePlan(raw: string | null | undefined): PlanKey {
 
 export function featuresFor(plan: PlanKey) {
   return FEATURES.map((f) => ({ ...f, included: f.plans.includes(plan) }));
+}
+
+/** True when the plan includes a built feature. A planned feature is never included. */
+export function planIncludes(plan: PlanKey, featureKey: string): boolean {
+  const f = FEATURES.find((x) => x.key === featureKey);
+  return !!f && f.status === "available" && f.plans.includes(plan);
 }
 
 export type TrialState = { state: "not_trial" } | { state: "active"; daysLeft: number; endsAt: Date } | { state: "ending_soon"; daysLeft: number; endsAt: Date } | { state: "ended"; endedAt: Date } | { state: "no_end_date" };

@@ -103,7 +103,7 @@ Phases keep their numbers; S-phases depend on finished original phases, as the g
                          +------------------- one policy engine, one evidence ledger -------------------+
  Agents, SDKs, MCP  ---> | Agent gateway (apps/api)      built                                          |
  MCP clients       ----> | MCP proxy (packages/mcp-gateway) built                                       |
- People's AI apps  ----> | Employee AI gateway + DLP     S2, not implemented                            |
+ People's AI apps  ----> | Employee AI gateway + DLP     S2, built (local)                              |
  IdP, browser, endpoint  | Discovery ingestion           S3, not implemented (agent discovery partial)  |
  SBOMs, registries ----> | Software inventory and scans  S4, not implemented                            |
  Code to run      -----> | Isolated execution runner     S5, not implemented (separate host)            |
@@ -162,7 +162,7 @@ Phase 3 evidence + audit --> Cap 10 continuous assurance (partial) --> S7 --> S8
 |---|---|---|---|---|
 | S0 Architecture and threat model | Implemented | This roadmap; `docs/THREAT_MODEL.md` (agent side) | Threat model sections for prompt inspection and execution, written with S2 and S5 | None |
 | S1 Foundations | Partial | Tenancy, policy, evidence, jobs, integrations, metrics are shared and reusable | An ingestion API for discovery and telemetry signals | None |
-| S2 AI gateway and DLP | Not implemented | Shield detectors and data classes, used today on agent parameters | OpenAI-compatible proxy, prompt and response inspection, redaction, routing to approved models, enforcement evidence | S1 |
+| S2 AI gateway and DLP | Implemented, tested locally | `secure/ai-gateway.ts`, `/v1/ai/chat/completions`, standalone process, console page; see docs/AI_GATEWAY_DLP.md | Streaming, tokenization, exact data matching, approval holds, cost budgets; a run against a real provider | S1 |
 | S3 Shadow AI discovery | Partial (agents only) | `agents/discovery.ts` records unregistered agents seen by integrations | Identity-provider, browser, network and endpoint adapters; observed versus inferred | S1; customer authorization for each source |
 | S4 Open-source security | Not implemented | CI scans AEGIS's own dependencies | Inventory, SBOM ingestion, vulnerability matching, provenance, approvals | S1 |
 | S5 Secure execution | Not implemented | None | Isolated runner (gVisor or microVM), egress control, secrets isolation | Separate host; S1 |

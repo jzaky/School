@@ -67,16 +67,16 @@ model Session {
 // ---------- Organizations ----------
 
 model Organization {
-  id        String   @id @default(uuid(7)) @db.Uuid
-  slug      String   @unique
-  name      String
-  plan      String   @default("enterprise_trial")
+  id          String    @id @default(uuid(7)) @db.Uuid
+  slug        String    @unique
+  name        String
+  plan        String    @default("enterprise_trial")
   /// End of a trial plan. Null for paid plans and for trials without an end date.
   trialEndsAt DateTime? @map("trial_ends_at")
-  demoMode  Boolean  @default(false) @map("demo_mode")
-  settings  Json     @default("{}")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  demoMode    Boolean   @default(false) @map("demo_mode")
+  settings    Json      @default("{}")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
 
   @@map("organizations")
 }
@@ -1791,30 +1791,30 @@ enum BillingPeriod {
 /// The commercial terms agreed with a customer. Amounts are entered by the provider from the signed
 /// contract; AEGIS has no price list. One active contract per organization; replaced ones stay for history.
 model CommercialContract {
-  id                    String        @id @default(uuid(7)) @db.Uuid
-  orgId                 String        @map("org_id") @db.Uuid
-  plan                  String
-  active                Boolean       @default(true)
-  termStart             DateTime      @map("term_start")
-  termEnd               DateTime      @map("term_end")
-  billingPeriod         BillingPeriod @default(monthly) @map("billing_period")
-  currency              String        @default("AED")
+  id                String        @id @default(uuid(7)) @db.Uuid
+  orgId             String        @map("org_id") @db.Uuid
+  plan              String
+  active            Boolean       @default(true)
+  termStart         DateTime      @map("term_start")
+  termEnd           DateTime      @map("term_end")
+  billingPeriod     BillingPeriod @default(monthly) @map("billing_period")
+  currency          String        @default("AED")
   /// Fee per billing period, in minor units (fils for AED).
-  periodFeeMinor        BigInt        @map("period_fee_minor")
+  periodFeeMinor    BigInt        @map("period_fee_minor")
   /// Gateway decisions included per billing period; null means unlimited.
-  includedDecisions     Int?          @map("included_decisions")
+  includedDecisions Int?          @map("included_decisions")
   /// Price per decision above the included amount, in ten-thousandths of the major unit.
-  overageUnitPrice4     BigInt?       @map("overage_unit_price_4")
+  overageUnitPrice4 BigInt?       @map("overage_unit_price_4")
   /// Tax rate in basis points (500 = 5%). Zero unless the provider is registered and the contract says so.
-  taxRateBp             Int           @default(0) @map("tax_rate_bp")
-  paymentTermsDays      Int           @default(30) @map("payment_terms_days")
-  purchaseOrder         String?       @map("purchase_order")
+  taxRateBp         Int           @default(0) @map("tax_rate_bp")
+  paymentTermsDays  Int           @default(30) @map("payment_terms_days")
+  purchaseOrder     String?       @map("purchase_order")
   /// Overrides for plan limits: { agents?, members?, monthlyDecisions? }.
-  limits                Json          @default("{}")
-  notes                 String        @default("")
-  createdBy             String        @map("created_by") @db.Uuid
-  createdAt             DateTime      @default(now()) @map("created_at")
-  updatedAt             DateTime      @updatedAt @map("updated_at")
+  limits            Json          @default("{}")
+  notes             String        @default("")
+  createdBy         String        @map("created_by") @db.Uuid
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
 
   invoices Invoice[]
 
@@ -1902,4 +1902,48 @@ model SupportRequest {
 
   @@index([orgId, status])
   @@map("support_requests")
+}
+
+/// One request through the employee AI gateway (docs/AI_GATEWAY_DLP.md). Never holds prompt or response
+/// text: only a keyed hash, sizes, the data classes found and what AEGIS did about them.
+model AiGatewayEvent {
+  id               String    @id @default(uuid(7)) @db.Uuid
+  orgId            String    @map("org_id") @db.Uuid
+  /// "user" for a personal key, "integration" for an application key (the person it names is a claim).
+  principalType    String    @map("principal_type")
+  principalId      String    @map("principal_id") @db.Uuid
+  apiKeyId         String?   @map("api_key_id") @db.Uuid
+  /// Person named by an application key in the request body. Unverified by AEGIS.
+  claimedUser      String?   @map("claimed_user")
+  providerId       String?   @map("provider_id") @db.Uuid
+  providerKey      String?   @map("provider_key")
+  model            String
+  /// allow, redact or block: what the policy decided.
+  decision         String
+  /// enforce or monitor. In monitor mode a block decision is recorded but the request is still sent.
+  mode             String    @default("enforce")
+  /// data_classes_only when no AI usage policy is active, otherwise policy.
+  basis            String
+  reasons          Json      @default("[]")
+  policyVersionIds String[]  @default([]) @map("policy_version_ids")
+  /// [{ dataClass, count, action, severity }] for the prompt.
+  promptClasses    Json      @default("[]") @map("prompt_classes")
+  /// Same shape, for the provider's answer.
+  responseClasses  Json      @default("[]") @map("response_classes")
+  promptHash       String    @map("prompt_hash")
+  promptChars      Int       @map("prompt_chars")
+  messageCount     Int       @map("message_count")
+  /// True only once the upstream provider answered. A block is recorded as forwarded = false.
+  forwarded        Boolean   @default(false)
+  /// pending, forwarded, upstream_error, not_forwarded.
+  status           String
+  upstreamStatus   Int?      @map("upstream_status")
+  responseWithheld Boolean   @default(false) @map("response_withheld")
+  latencyMs        Int?      @map("latency_ms")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  completedAt      DateTime? @map("completed_at")
+
+  @@index([orgId, createdAt])
+  @@index([orgId, decision])
+  @@map("ai_gateway_events")
 }

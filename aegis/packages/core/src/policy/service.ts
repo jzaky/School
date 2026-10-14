@@ -13,7 +13,7 @@ export const policyInputSchema = z.object({
   key: slugSchema,
   name: z.string().min(2).max(120),
   description: z.string().max(2000).default(""),
-  category: z.enum(["authorization", "data_protection", "tool_security", "operational"]).default("authorization"),
+  category: z.enum(["authorization", "data_protection", "tool_security", "operational", "ai_usage"]).default("authorization"),
   document: z.unknown(),
   changeNote: z.string().max(500).default("Initial version"),
 });

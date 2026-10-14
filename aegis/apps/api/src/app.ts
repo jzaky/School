@@ -10,8 +10,13 @@ import { healthRoutes } from "./routes/health.js";
 import { authRoutes } from "./routes/auth.js";
 import { agentRoutes } from "./routes/agents.js";
 import { registerModuleRoutes } from "./routes/index.js";
+import { aiGatewayRoutes } from "./routes/ai-gateway.js";
 
-export async function buildApp(): Promise<FastifyInstance> {
+/**
+ * "all" is the full API. "ai-gateway" serves only health and the AI gateway, so the part that forwards
+ * employee prompts to model providers can run as its own process (src/ai-gateway-server.ts).
+ */
+export async function buildApp(opts: { modules?: "all" | "ai-gateway" } = {}): Promise<FastifyInstance> {
   const app: FastifyInstance = Fastify({
     loggerInstance: logger.child({ component: "api" }) as unknown as FastifyBaseLogger,
     requestIdHeader: "x-request-id",
@@ -66,6 +71,10 @@ export async function buildApp(): Promise<FastifyInstance> {
   app.setNotFoundHandler((req, reply) => reply.status(404).send({ error: { code: "not_found", message: "Route not found" }, requestId: req.id }));
 
   await app.register(healthRoutes);
+  if (opts.modules === "ai-gateway") {
+    await app.register(aiGatewayRoutes, { prefix: "/v1/ai" });
+    return app;
+  }
   await app.register(authRoutes, { prefix: "/v1/auth" });
   await app.register(agentRoutes, { prefix: "/v1/agents" });
   await registerModuleRoutes(app);

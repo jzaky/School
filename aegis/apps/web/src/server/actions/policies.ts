@@ -36,7 +36,7 @@ export async function createPolicyAction(input: unknown) {
   });
 }
 
-const metaSchema = z.object({ name: z.string().min(2).max(120).optional(), description: z.string().max(2000).optional(), category: z.enum(["authorization", "data_protection", "tool_security", "operational"]).optional() });
+const metaSchema = z.object({ name: z.string().min(2).max(120).optional(), description: z.string().max(2000).optional(), category: z.enum(["authorization", "data_protection", "tool_security", "operational", "ai_usage"]).optional() });
 
 export async function updatePolicyMetaAction(policyId: string, input: unknown) {
   return act(async () => {

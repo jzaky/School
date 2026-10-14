@@ -17,6 +17,7 @@ export const API_KEY_SCOPES = {
   "discovery:report": "Report AI agents it has seen",
   "scim:provision": "Provision users and groups over SCIM 2.0",
   "outcomes:report": "Report whether an action turned out right, for calibration (customer systems; never an agent)",
+  "ai:chat": "Send chat requests through the AEGIS AI gateway (people and internal applications; never an agent)",
 } as const;
 export type ApiKeyScope = keyof typeof API_KEY_SCOPES;
 const DEFAULT_SCOPES: Record<string, ApiKeyScope[]> = {
@@ -43,6 +44,8 @@ export async function issueApiKey(db: TenantDb, ctx: OrgContext, input: { name: 
   if (input.subjectType === "agent" && (input.scopes ?? []).some((x) => x === "scim:provision" || x === "grants:verify")) throw validation("An agent key cannot provision users or verify grants");
   // An agent must never grade its own actions: outcome labels calibrate its confidence.
   if (input.subjectType === "agent" && (input.scopes ?? []).includes("outcomes:report")) throw validation("An agent key cannot report outcomes");
+  // Agents act through the action gateway, where their tools are governed; the AI gateway is for people.
+  if (input.subjectType === "agent" && (input.scopes ?? []).includes("ai:chat")) throw validation("An agent key cannot use the AI gateway; agents act through the action gateway");
   const gen = generateApiKey();
   const row = await db.apiKey.create({
     data: {

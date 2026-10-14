@@ -501,3 +501,27 @@ The missed throughput target is explained in docs/PERFORMANCE.md, with the next 
 **Verified:** the full browser suite, 118 tests, passed against a production build with a fresh seed.
 
 **Status:** documentation only, apart from the language switch fix. Nothing was deployed.
+
+## Secure S1 and S2: employee AI gateway with data loss prevention (14 October 2026)
+
+**Built:**
+- **An OpenAI-compatible endpoint, `POST /v1/ai/chat/completions`,** for people's own keys and application keys. Agent keys are refused.
+- **Local detection** with the existing data classes. No content is sent to a model to classify it.
+- **Decisions by the existing policy engine,** with a new `ai_usage` category and an Employee AI use template. Outcomes are allow, redact or block. Policies can use role and team.
+- **Forwarding** to approved providers only, with vaulted keys and pinned DNS. The answer is inspected; an answer containing a secret is withheld.
+- **Monitor mode,** recorded as "not blocked".
+- **Plan entitlement:** Secure, Enterprise and trial plans only.
+- **Records without prompt or answer text:** a keyed fingerprint only. A security event is raised for blocked sensitive data.
+- **A standalone process option** that serves only the AI gateway.
+- **A console page:** stats, mode, providers, dry run, personal keys and the log.
+- **Demo history** produced through the real code path with an in-process simulated provider.
+
+**Tests added:**
+
+| Suite | Tests |
+|---|---|
+| Core, against a recording stand-in provider | 17 |
+| API | 4 |
+| Browser | 2 |
+
+**Status:** implemented and tested locally. No real provider has been called and nothing is deployed. The gaps are listed in docs/AI_GATEWAY_DLP.md: streaming, tokenization, exact data matching, approval holds and cost budgets.
