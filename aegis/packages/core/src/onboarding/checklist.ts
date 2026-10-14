@@ -113,3 +113,37 @@ export function summarizeOnboarding(steps: OnboardingStep[], settings: Record<st
   const dismissedAt = typeof settings?.onboardingDismissedAt === "string" ? (settings.onboardingDismissedAt as string) : null;
   return { done, total: steps.length, complete: done === steps.length, dismissedAt, next: steps.find((s) => !s.done) ?? null };
 }
+
+/**
+ * Enterprise rollout (docs/COMMERCIAL.md): the path from a new customer organization to its first audit
+ * report. Like the pilot checklist, every step is derived from records, never from stored flags.
+ */
+export interface RolloutStep {
+  key: "organization" | "administrator" | "sso" | "agent" | "integration" | "policy" | "protected_action" | "audit_report";
+  title: string;
+  done: boolean;
+  href: string;
+}
+
+export async function enterpriseRollout(db: TenantDb, ctx: OrgContext): Promise<RolloutStep[]> {
+  const orgId = ctx.orgId;
+  const [owners, sso, agents, integrations, policies, decisions, reports] = await Promise.all([
+    db.membership.count({ where: { orgId, status: "active", role: { key: "owner" } } }),
+    db.ssoConnection.count({ where: { orgId, enabled: true } }),
+    db.agent.count({ where: { orgId, isLab: false, status: "active" } }),
+    db.integration.count({ where: { orgId, status: "active" } }),
+    db.policy.count({ where: { orgId, currentVersionId: { not: null } } }),
+    db.authorizationDecision.count({ where: { orgId, request: { agent: { isLab: false } } }, take: 1 }),
+    db.evidenceEvent.count({ where: { orgId, type: "report.generated" }, take: 1 }),
+  ]);
+  return [
+    { key: "organization", title: "Organization created", done: true, href: "/org/settings" },
+    { key: "administrator", title: "First administrator signed in", done: owners > 0, href: "/org/users" },
+    { key: "sso", title: "Single sign-on configured", done: sso > 0, href: "/org/settings" },
+    { key: "agent", title: "First agent registered and active", done: agents > 0, href: "/agents" },
+    { key: "integration", title: "First integration connected", done: integrations > 0, href: "/integrations" },
+    { key: "policy", title: "First policy active", done: policies > 0, href: "/policies" },
+    { key: "protected_action", title: "First action decided by the gateway", done: decisions > 0, href: "/activity" },
+    { key: "audit_report", title: "First audit or governance report", done: reports > 0, href: "/reports" },
+  ];
+}

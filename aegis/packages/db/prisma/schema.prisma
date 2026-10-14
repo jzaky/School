@@ -71,6 +71,8 @@ model Organization {
   slug      String   @unique
   name      String
   plan      String   @default("enterprise_trial")
+  /// End of a trial plan. Null for paid plans and for trials without an end date.
+  trialEndsAt DateTime? @map("trial_ends_at")
   demoMode  Boolean  @default(false) @map("demo_mode")
   settings  Json     @default("{}")
   createdAt DateTime @default(now()) @map("created_at")
@@ -1776,4 +1778,128 @@ model PolicyException {
   @@index([orgId, agentId, status])
   @@index([orgId, policyId])
   @@map("policy_exceptions")
+}
+
+// ---------- Commercial (Phase 12) ----------
+
+enum BillingPeriod {
+  monthly
+  quarterly
+  annual
+}
+
+/// The commercial terms agreed with a customer. Amounts are entered by the provider from the signed
+/// contract; AEGIS has no price list. One active contract per organization; replaced ones stay for history.
+model CommercialContract {
+  id                    String        @id @default(uuid(7)) @db.Uuid
+  orgId                 String        @map("org_id") @db.Uuid
+  plan                  String
+  active                Boolean       @default(true)
+  termStart             DateTime      @map("term_start")
+  termEnd               DateTime      @map("term_end")
+  billingPeriod         BillingPeriod @default(monthly) @map("billing_period")
+  currency              String        @default("AED")
+  /// Fee per billing period, in minor units (fils for AED).
+  periodFeeMinor        BigInt        @map("period_fee_minor")
+  /// Gateway decisions included per billing period; null means unlimited.
+  includedDecisions     Int?          @map("included_decisions")
+  /// Price per decision above the included amount, in ten-thousandths of the major unit.
+  overageUnitPrice4     BigInt?       @map("overage_unit_price_4")
+  /// Tax rate in basis points (500 = 5%). Zero unless the provider is registered and the contract says so.
+  taxRateBp             Int           @default(0) @map("tax_rate_bp")
+  paymentTermsDays      Int           @default(30) @map("payment_terms_days")
+  purchaseOrder         String?       @map("purchase_order")
+  /// Overrides for plan limits: { agents?, members?, monthlyDecisions? }.
+  limits                Json          @default("{}")
+  notes                 String        @default("")
+  createdBy             String        @map("created_by") @db.Uuid
+  createdAt             DateTime      @default(now()) @map("created_at")
+  updatedAt             DateTime      @updatedAt @map("updated_at")
+
+  invoices Invoice[]
+
+  @@index([orgId, active])
+  @@map("commercial_contracts")
+}
+
+/// Usage measured from the organization's own records for one calendar month. Written idempotently.
+model UsageRecord {
+  id         String   @id @default(uuid(7)) @db.Uuid
+  orgId      String   @map("org_id") @db.Uuid
+  /// Calendar month, YYYY-MM (UTC).
+  period     String
+  metric     String
+  value      BigInt
+  computedAt DateTime @default(now()) @map("computed_at")
+
+  @@unique([orgId, period, metric])
+  @@map("usage_records")
+}
+
+enum InvoiceStatus {
+  draft
+  issued
+  paid
+  void
+}
+
+/// An invoice document. AEGIS does not collect payment: a provider records payment it received elsewhere.
+model Invoice {
+  id               String        @id @default(uuid(7)) @db.Uuid
+  orgId            String        @map("org_id") @db.Uuid
+  contractId       String        @map("contract_id") @db.Uuid
+  number           String
+  status           InvoiceStatus @default(draft)
+  periodStart      DateTime      @map("period_start")
+  periodEnd        DateTime      @map("period_end")
+  currency         String
+  lines            Json
+  subtotalMinor    BigInt        @map("subtotal_minor")
+  taxMinor         BigInt        @map("tax_minor")
+  totalMinor       BigInt        @map("total_minor")
+  issuedAt         DateTime?     @map("issued_at")
+  dueAt            DateTime?     @map("due_at")
+  paidAt           DateTime?     @map("paid_at")
+  paymentReference String?       @map("payment_reference")
+  voidReason       String?       @map("void_reason")
+  createdBy        String        @map("created_by") @db.Uuid
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+
+  contract CommercialContract @relation(fields: [contractId], references: [id])
+
+  @@unique([orgId, number])
+  @@index([orgId, status])
+  @@map("invoices")
+}
+
+enum SupportSeverity {
+  low
+  normal
+  high
+  urgent
+}
+
+enum SupportStatus {
+  open
+  in_progress
+  resolved
+}
+
+/// A customer's request to the provider's support team.
+model SupportRequest {
+  id         String          @id @default(uuid(7)) @db.Uuid
+  orgId      String          @map("org_id") @db.Uuid
+  createdBy  String          @map("created_by") @db.Uuid
+  subject    String
+  body       String
+  severity   SupportSeverity @default(normal)
+  status     SupportStatus   @default(open)
+  resolution String          @default("")
+  resolvedAt DateTime?       @map("resolved_at")
+  createdAt  DateTime        @default(now()) @map("created_at")
+  updatedAt  DateTime        @updatedAt @map("updated_at")
+
+  @@index([orgId, status])
+  @@map("support_requests")
 }

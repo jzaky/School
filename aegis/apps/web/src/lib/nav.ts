@@ -17,6 +17,9 @@ import {
   Gavel,
   GitBranch,
   HeartPulse,
+  LifeBuoy,
+  Briefcase,
+  Presentation,
   History,
   Landmark,
   LayoutDashboard,
@@ -83,6 +86,7 @@ export const SECONDARY_NAV: NavGroup[] = [
     items: [
       { label: "Control Center", href: "/control-center", icon: Radar, ready: true, permission: "org:read" },
       { label: "System Health", href: "/org/health", icon: HeartPulse, ready: true, permission: "org:read" },
+      { label: "Sales Demo", href: "/sales-demo", icon: Presentation, ready: true, permission: "gateway:read" },
     ],
   },
   {
@@ -139,6 +143,7 @@ export const SECONDARY_NAV: NavGroup[] = [
       { label: "Roles", href: "/org/roles", icon: ShieldCheck, ready: true, permission: "users:read" },
       { label: "Billing", href: "/org/billing", icon: BadgeDollarSign, ready: true, permission: "org:read" },
       { label: "Deployment", href: "/org/deployment", icon: Server, ready: true, permission: "org:read" },
+      { label: "Support", href: "/org/support", icon: LifeBuoy, ready: true, permission: "org:read" },
     ],
   },
   {
@@ -146,6 +151,7 @@ export const SECONDARY_NAV: NavGroup[] = [
     platformAdmin: true,
     items: [
       { label: "Tenants", href: "/platform/tenants", icon: Building2, ready: true, platformAdmin: true, needsOrg: false },
+      { label: "Customers", href: "/platform/customers", icon: Briefcase, ready: true, platformAdmin: true, needsOrg: false },
       { label: "Infrastructure Health", href: "/platform/health", icon: Stethoscope, ready: true, platformAdmin: true, needsOrg: false },
       { label: "System Events", href: "/platform/events", icon: Server, ready: true, platformAdmin: true, needsOrg: false },
       { label: "Deployment Versions", href: "/platform/versions", icon: Cpu, ready: true, platformAdmin: true, needsOrg: false },

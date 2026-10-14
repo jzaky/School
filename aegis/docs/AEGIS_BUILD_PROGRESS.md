@@ -405,3 +405,31 @@ Full description: `docs/INTEGRATIONS.md`.
 **Status:** implemented and tested locally. No deployment was made.
 
 **Known limitations:** Arabic covers the shell and three pages; the rest of the console is English inside the Arabic layout, and the Arabic text has not had a professional review. Declared facts cannot be verified from inside AEGIS.
+
+## Phase 12: commercial platform (15 October 2026)
+
+**Built:**
+- **Plans and entitlements:** Trial, Core, Secure and Enterprise. Prices are left to the contract (no pricing analysis has been done). Planned features are labelled "planned, not built". Limits are reported, not enforced.
+- **Usage metering** from each organization's records, with an idempotent six-hourly snapshot job.
+- **Contracts and invoices:** recorded by platform administrators. Integer arithmetic, a draft, issued, paid or void lifecycle, and evidence events. AEGIS never collects payment.
+- **Customer onboarding:** a platform administrator creates an organization with a one-time owner invitation for its first administrator. A new enterprise rollout checklist runs from organization creation to the first audit report.
+- **Customer success:** a platform Customers page with health measures per organization.
+- **Support requests:** customers open them, the provider answers them.
+- **Sales demonstration environment:** a separate synthetic organization with six scenarios (finance, healthcare, enterprise IT, uncertainty, managed autonomy, reasoning governance) run through the real engines and labelled simulated.
+- **Per-agent autonomy automation,** including suspension at the lowest burst level.
+
+**Database migration:** `20261015150000_commercial`.
+
+**Tests added:**
+
+| Suite | Tests |
+|---|---|
+| Core | 17 |
+| Browser | 5 |
+
+**Status:** implemented and tested locally. No billing provider is connected, and no live transactions are possible.
+
+**Known limitations:**
+- Limits are not enforced.
+- Invoices are not emailed or rendered as PDF.
+- The sales demonstration cannot be deleted from the console, because audit records are append-only. Each run of the autonomy scenario adds a new agent.

@@ -1,5 +1,5 @@
 import { withTenant, disconnectAll } from "@aegis/db";
-import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, dispatchEvents, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, purgeRateLimitBuckets, recomputeCalibration, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
+import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, dispatchEvents, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, periodOf, purgeRateLimitBuckets, recomputeCalibration, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, snapshotUsage, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
 import { rawPrisma } from "@aegis/db";
 import { registerModuleHandlers } from "./handlers.js";
 
@@ -64,6 +64,15 @@ registerJobHandler("events.dispatch", async () => {
   }
 });
 
+/** Records each organization's usage for the current month, and the previous month in the first days of a month (docs/COMMERCIAL.md). */
+registerJobHandler("usage.snapshot", async () => {
+  const now = new Date();
+  const periods = [periodOf(now)];
+  if (now.getUTCDate() <= 3) periods.push(periodOf(new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 15))));
+  const orgs = await rawPrisma().organization.findMany({ select: { id: true } });
+  for (const o of orgs) for (const p of periods) await withTenant(o.id, (db) => snapshotUsage(db, o.id, p, now));
+});
+
 registerJobHandler("evidence.checkpoint", async () => {
   const orgs = await rawPrisma().organization.findMany({ select: { id: true } });
   for (const o of orgs) await withTenant(o.id, (db) => writeCheckpoint(db, o.id));
@@ -112,6 +121,7 @@ async function scheduleRecurring() {
   await enqueueJob({ type: "audit.retention", payload: {}, idempotencyKey: `audit.retention:${Math.floor(minute / 1440)}`, runAt: new Date() });
   await enqueueJob({ type: "enforcement.audit", payload: {}, idempotencyKey: `enforcement.audit:${Math.floor(minute / 60)}`, runAt: new Date() });
   await enqueueJob({ type: "rate-limits.purge", payload: {}, idempotencyKey: `rate-limits.purge:${Math.floor(minute / 60)}`, runAt: new Date() });
+  await enqueueJob({ type: "usage.snapshot", payload: {}, idempotencyKey: `usage.snapshot:${Math.floor(minute / 360)}`, runAt: new Date() });
   await enqueueJob({ type: "uncertainty.calibrate", payload: {}, idempotencyKey: `uncertainty.calibrate:${Math.floor(minute / 60)}`, runAt: new Date() });
 }
 

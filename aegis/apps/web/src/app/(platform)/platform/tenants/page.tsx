@@ -5,6 +5,8 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import { formatDateTime } from "@/lib/utils";
+import { Panel } from "@/components/ui/panel";
+import { CreateCustomerForm } from "@/components/commercial/platform-forms";
 
 export const metadata: Metadata = { title: "Tenants" };
 export const dynamic = "force-dynamic";
@@ -15,6 +17,9 @@ export default async function TenantsPage() {
   return (
     <div>
       <PageHeader title="Tenants" description="Every organization on this deployment. Listing is recorded as a platform event." badges={<Badge tone="info">Platform admin</Badge>} />
+      <Panel title="Create an organization" description="For a new customer: the organization starts with no members, and its first administrator joins as owner through a one-time invitation link" className="mb-4">
+        <CreateCustomerForm />
+      </Panel>
       <div className="overflow-auto rounded-panel border border-line bg-bg-elev">
         <table className="w-full text-[13px]">
           <caption className="sr-only">Organizations</caption>

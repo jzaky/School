@@ -173,6 +173,27 @@ export function readAutonomySettings(orgSettings: unknown): AutonomySettings {
   return parsed.success ? parsed.data : DEFAULT_AUTONOMY_SETTINGS;
 }
 
+/**
+ * Per-agent opt-in, kept in agent.metadata.autonomyAutomation: turns the automatic rules on for one agent
+ * when they are off for the organization (useful for a pilot), and can add one more step for that agent:
+ * suspend it when it is refused again in a burst while already at level 1, the lowest level a burst reaches.
+ */
+export interface AgentAutomation {
+  automaticDowngrades: boolean;
+  suspendAtFloor: boolean;
+}
+
+export function readAgentAutomation(metadata: unknown): AgentAutomation {
+  const raw = (metadata as { autonomyAutomation?: Record<string, unknown> } | null)?.autonomyAutomation;
+  return { automaticDowngrades: raw?.automaticDowngrades === true, suspendAtFloor: raw?.suspendAtFloor === true };
+}
+
+function settingsFor(orgSettings: unknown, agentMetadata: unknown): AutonomySettings & { suspendAtFloor: boolean } {
+  const org = readAutonomySettings(orgSettings);
+  const agent = readAgentAutomation(agentMetadata);
+  return { ...org, automaticDowngrades: org.automaticDowngrades || agent.automaticDowngrades, suspendAtFloor: agent.suspendAtFloor };
+}
+
 export async function updateAutonomySettings(db: TenantDb, ctx: OrgContext, input: z.input<typeof autonomySettingsSchema>) {
   assertPermission(ctx, "org:admin");
   const data = autonomySettingsSchema.parse(input);
@@ -209,13 +230,13 @@ export function downgradeTarget(current: AutonomyLevel, trigger: DowngradeTrigge
  */
 export async function applyAutomaticDowngrade(db: TenantDb, ctx: OrgContext, agentId: string, trigger: DowngradeTrigger): Promise<{ fromLevel: number; toLevel: number } | null> {
   const org = await db.organization.findUnique({ where: { id: ctx.orgId }, select: { settings: true } });
-  const settings = readAutonomySettings(org?.settings);
+  const agent = await db.agent.findUnique({ where: { id: agentId } });
+  if (!agent || !isAutonomyLevel(agent.autonomyLevel)) return null;
+  const settings = settingsFor(org?.settings, agent.metadata);
   if (!settings.automaticDowngrades) return null;
   if (trigger.rule === "security_event" && !settings.onSecurityEvents) return null;
   if (trigger.rule === "unknown_outcome" && !settings.onUnknownOutcome) return null;
   if (trigger.rule === "denial_burst" && !settings.denialBurst) return null;
-  const agent = await db.agent.findUnique({ where: { id: agentId } });
-  if (!agent || !isAutonomyLevel(agent.autonomyLevel)) return null;
   const target = downgradeTarget(agent.autonomyLevel, trigger);
   if (target === null) return null;
   const reasons: Record<DowngradeTrigger["rule"], string> = {
@@ -234,7 +255,9 @@ export async function applyAutomaticDowngrade(db: TenantDb, ctx: OrgContext, age
 /** Counts refusals in the window and applies the burst rule at most once per window. */
 export async function checkDenialBurst(db: TenantDb, ctx: OrgContext, agentId: string, actionRequestId: string | null) {
   const org = await db.organization.findUnique({ where: { id: ctx.orgId }, select: { settings: true } });
-  const settings = readAutonomySettings(org?.settings);
+  const agent = await db.agent.findUnique({ where: { id: agentId }, select: { metadata: true, autonomyLevel: true, status: true } });
+  if (!agent) return null;
+  const settings = settingsFor(org?.settings, agent.metadata);
   if (!settings.automaticDowngrades || !settings.denialBurst) return null;
   const now = ctx.now ?? new Date();
   const since = new Date(now.getTime() - settings.denialBurst.windowMinutes * 60_000);
@@ -242,7 +265,14 @@ export async function checkDenialBurst(db: TenantDb, ctx: OrgContext, agentId: s
   if (denials < settings.denialBurst.count) return null;
   const recent = await db.autonomyTransition.findFirst({ where: { agentId, kind: "automatic_downgrade", createdAt: { gte: since }, trigger: { path: ["rule"], equals: "denial_burst" } } });
   if (recent) return null;
-  return applyAutomaticDowngrade(db, ctx, agentId, { rule: "denial_burst", denials, windowMinutes: settings.denialBurst.windowMinutes, actionRequestId });
+  const trigger = { rule: "denial_burst" as const, denials, windowMinutes: settings.denialBurst.windowMinutes, actionRequestId };
+  if (settings.suspendAtFloor && agent.status === "active" && isAutonomyLevel(agent.autonomyLevel) && downgradeTarget(agent.autonomyLevel, trigger) === null) {
+    // Already at the lowest level a burst can reach and refused again: the opted-in agent is suspended.
+    const { emergencyRevokeAgent } = await import("../agents/revocation.js");
+    await emergencyRevokeAgent(db, ctx, agentId, { mode: "suspend", reason: `Automatic: ${denials} refused requests within ${settings.denialBurst.windowMinutes} minutes while already at autonomy level ${agent.autonomyLevel}` });
+    return null;
+  }
+  return applyAutomaticDowngrade(db, ctx, agentId, trigger);
 }
 
 // ---------- reading, simulation and measurement ----------

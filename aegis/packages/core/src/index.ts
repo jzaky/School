@@ -83,3 +83,6 @@ export * from "./assurance/control-center.js";
 export * from "./deployment/manifest.js";
 export * from "./deployment/residency.js";
 export * from "./deployment/readiness.js";
+export * from "./commercial/plans.js";
+export * from "./commercial/billing.js";
+export * from "./demos/sales.js";

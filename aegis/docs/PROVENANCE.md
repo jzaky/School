@@ -99,4 +99,9 @@ Every item below was implemented from AEGIS's own engine and code. None was buil
 - **Readiness checks.** PostgreSQL's own catalogs (`pg_stat_ssl`, `pg_roles`, `pg_class.relrowsecurity`, `pg_trigger`), as documented in the PostgreSQL 16 manual.
 - **Localization.** Unicode Bidirectional Algorithm (UAX #9) isolation with `dir="auto"` and `<bdi>`; W3C "Structural markup and right-to-left text in HTML". Number formats from the ECMAScript Internationalization API (ECMA-402) with the `nu-latn` extension.
 
+### Phase 12: commercial platform
+- **Money arithmetic.** Integer minor units and basis points, half-up rounding: the approach recommended for monetary values in financial software (for example Martin Fowler, Patterns of Enterprise Application Architecture, 2002, the Money pattern). No library code used.
+- **Usage metering.** Idempotent upsert per period and metric, the pattern used by metered billing systems so retries never double count.
+- **Customer health measures.** Common customer success practice (adoption, activity and support signals); the measures here are computed from records, not scored by a model.
+
 Later phases add their foundations here.
