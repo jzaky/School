@@ -116,3 +116,42 @@ Every item below was implemented from AEGIS's own engine and code. None was buil
 - **Dead-letter queue and backpressure.** Common messaging practice (Enterprise Integration Patterns, Hohpe and Woolf, 2003: Dead Letter Channel).
 
 Later phases add their foundations here.
+
+### Secure and validation work (2026-10-14)
+
+- **AI Gateway and data protection.**
+  - OpenAI chat completions request and response format (public API reference).
+  - Luhn checksum.
+  - IBAN mod-97 (ISO 7064).
+  - Detectors written by AEGIS.
+- **Shadow AI discovery and the Entra ID connector.** Microsoft Graph public documentation:
+  - `auditLogs/signIns` and `auditLogs/directoryAudits`;
+  - OAuth 2.0 client credentials (RFC 6749);
+  - the `Retry-After` header (RFC 9110).
+
+  The Okta specification follows Okta's public System Log API documentation.
+- **Software approvals.**
+  - CycloneDX and SPDX specifications.
+  - The OSV.dev public API schema.
+  - OpenSSF Scorecard output format.
+  - Grype, Trivy and Gitleaks report formats, read as data only. No scanner code is included.
+- **Gateway throughput.** PostgreSQL advisory locks and transaction semantics (PostgreSQL documentation).
+- **Staging, penetration-test readiness and pilot demo.** STRIDE threat modelling and OWASP testing guidance (public).
+- **Brochure and technical capabilities document.** Screenshots of the AEGIS console with the synthetic demo tenant. Figures come from AEGIS's own recorded runs.
+
+### Quant OS integration research and design (2026-10-14)
+
+Recorded in `docs/QUANTOS_INTEGRATION.md`. Design only; nothing implemented, no trades placed, no dependencies installed.
+
+**Sources used:**
+- Quant OS's own repository (`jzaky/quantos`, commit `8c27f61`), owned by the same founder.
+- AEGIS's existing agent-mode gateway, grant and evidence design.
+- Public licence and manifest files of the 22 open-source projects reviewed. They were read to classify licences; no code was copied from any of them.
+- Alpaca's public paper-trading API documentation: the `client_order_id` and order lookup endpoints.
+- EU AI Act Article 17(1): public law text.
+- Public reporting on EN 18286:2026, used only for its status and scope.
+
+**Rules carried forward:**
+- **EN 18286.** AEGIS will store EN 18286 clause numbers and its own descriptive wording only. They are entered from a licensed copy, and the standard's text, structure and tables are never reproduced.
+- **Quant parameters.** No external scoring weights, gate structures or tier thresholds were reproduced or are to be reproduced. The Quant OS risk-governor limits referenced in the design are the values already in Quant OS's own code. Any new risk limits will be designed from public finance methods and cited: for example the Kelly criterion (Kelly, 1956), volatility targeting, and drawdown and exposure limits as described in public practitioner literature.
+- **No confidential material.** No third-party confidential material was available or used.
