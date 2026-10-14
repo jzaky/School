@@ -456,3 +456,35 @@ Full description: `docs/INTEGRATIONS.md`.
 **Known limitations:**
 - No independent penetration test.
 - No production point-in-time recovery drill.
+
+## Phase 14: performance and reliability (15 October 2026)
+
+**Built:**
+- **Metrics** for every listed measure, recorded to OpenTelemetry and served in Prometheus format (API `/metrics`, worker on localhost).
+- **Spans** for decisions, executions and jobs.
+- **Backpressure** on the gateway.
+- **Circuit breakers** for downstream executions and event destinations.
+- **A dead-letter queue** with requeue, and poison-job protection.
+- **Operational alerts** with an optional webhook.
+- **Benchmarks** with targets.
+- **Four query optimizations** on the decision path, cutting queries per decision from 62 to 47.
+
+**Measured:**
+
+| Measure | Result | Target |
+|---|---|---|
+| Policy evaluation p95, 50 rules | 156 microseconds | met |
+| Evidence ingestion | 144 events per second | met |
+| Single-decision p95 | 220 to 234 ms | met |
+| Throughput for one organization | 5 to 6.5 per second | target 20, missed |
+
+The missed throughput target is explained in docs/PERFORMANCE.md, with the next steps.
+
+**Tests added:**
+
+| Suite | Tests |
+|---|---|
+| Core reliability | 7 |
+| API | 2 |
+
+**Status:** implemented and tested locally. No production measurement has been made.

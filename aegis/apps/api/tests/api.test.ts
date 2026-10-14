@@ -49,6 +49,31 @@ async function loginCookie(): Promise<string> {
 }
 
 describe("api", () => {
+  it("serves Prometheus metrics to the same host only, and counts requests by route group without ids", async () => {
+    await app.inject({ method: "GET", url: "/health" });
+    const local = await app.inject({ method: "GET", url: "/metrics", remoteAddress: "127.0.0.1" });
+    expect(local.statusCode).toBe(200);
+    expect(local.headers["content-type"]).toContain("text/plain");
+    expect(local.body).toContain("# TYPE aegis_http_requests_total counter");
+    expect(local.body).toMatch(/aegis_http_requests_total\{route="\/health",status="2xx"\} \d+/);
+    expect(local.body).not.toMatch(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}/);
+    expect((await app.inject({ method: "GET", url: "/metrics", remoteAddress: "203.0.113.9" })).statusCode).toBe(404);
+  });
+  it("refuses gateway requests with 503 when the process is at capacity, and nothing is decided", async () => {
+    const { m, env } = await import("@aegis/core");
+    const before = m.gatewayDecisions.total();
+    m.gatewayInFlight.add(env().AEGIS_GATEWAY_MAX_IN_FLIGHT);
+    try {
+      const res = await app.inject({ method: "POST", url: "/v1/gateway/actions", headers: { authorization: `Bearer ${agentKey}` }, payload: { tool: "none", params: {}, idempotencyKey: `bp-${Date.now()}` } });
+      expect(res.statusCode).toBe(503);
+      expect(res.headers["retry-after"]).toBe("1");
+      expect(res.json().error.code).toBe("overloaded");
+    } finally {
+      m.gatewayInFlight.add(-env().AEGIS_GATEWAY_MAX_IN_FLIGHT);
+    }
+    expect(m.gatewayDecisions.total()).toBe(before);
+    expect(m.gatewayOverloaded.total()).toBeGreaterThanOrEqual(1);
+  });
   it("serves health and readiness", async () => {
     expect((await app.inject({ method: "GET", url: "/health" })).statusCode).toBe(200);
     const ready = await app.inject({ method: "GET", url: "/ready" });

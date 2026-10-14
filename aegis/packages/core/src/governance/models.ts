@@ -1,3 +1,4 @@
+import { orgSettings } from "../lib/tx-cache.js";
 import type { AiModel, ModelStage, Prisma, TenantDb } from "@aegis/db";
 import { z } from "zod";
 import { appendEvidence } from "../evidence/ledger.js";
@@ -193,7 +194,7 @@ export function readModelGovernance(settings: unknown): ModelGovernanceSetting {
 }
 
 export async function getModelGovernance(db: TenantDb, orgId: string): Promise<ModelGovernanceSetting> {
-  const org = await db.organization.findUnique({ where: { id: orgId }, select: { settings: true } });
+  const org = { settings: await orgSettings(db, orgId) };
   return readModelGovernance(org?.settings);
 }
 

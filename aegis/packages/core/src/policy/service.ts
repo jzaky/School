@@ -190,10 +190,13 @@ export async function resolvePoliciesForAgent(db: TenantDb, orgId: string, agent
   });
   const seen = new Set<string>();
   const out: PolicyToEvaluate[] = [];
+  // One query for every current version instead of one per assignment.
+  const versionIds = [...new Set(assignments.filter((a) => !a.policy.archived && a.policy.currentVersionId).map((a) => a.policy.currentVersionId!))];
+  const versions = new Map((versionIds.length ? await db.policyVersion.findMany({ where: { id: { in: versionIds } } }) : []).map((v) => [v.id, v]));
   for (const a of assignments) {
     if (a.policy.archived || !a.policy.currentVersionId || seen.has(a.policyId)) continue;
     seen.add(a.policyId);
-    const v = await db.policyVersion.findUnique({ where: { id: a.policy.currentVersionId } });
+    const v = versions.get(a.policy.currentVersionId);
     if (!v || v.state !== "active") continue;
     out.push({ policyKey: a.policy.key, policyVersionId: v.id, policyVersion: v.version, document: v.document as unknown as PolicyDocument, contentHash: v.contentHash });
   }

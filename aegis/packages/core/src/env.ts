@@ -42,6 +42,14 @@ const schema = z.object({
     .string()
     .default("false")
     .transform((v) => v === "true" || v === "1"),
+  /** Bearer token for the Prometheus /metrics endpoint. Unset: only same-host requests are answered. */
+  AEGIS_METRICS_TOKEN: z.string().min(16).optional(),
+  /** Gateway decisions one API process makes at once before refusing with 503 (backpressure). */
+  AEGIS_GATEWAY_MAX_IN_FLIGHT: z.coerce.number().int().min(1).max(10_000).default(64),
+  /** When set, the worker serves its Prometheus metrics on 127.0.0.1 at this port. */
+  AEGIS_WORKER_METRICS_PORT: z.coerce.number().int().min(1024).max(65535).optional(),
+  /** HTTPS endpoint (for example a chat or paging webhook) that receives operational alerts. Optional. */
+  AEGIS_OPS_ALERT_WEBHOOK: z.string().url().optional(),
   /** Deployment manifest: inline JSON or a path (deploy/profiles). Unset means nothing is declared. */
   AEGIS_DEPLOYMENT_MANIFEST: z.string().optional(),
   AEGIS_APP_PASSWORD: z.string().optional().transform((v) => (v && v.trim() !== "" ? v : undefined)),

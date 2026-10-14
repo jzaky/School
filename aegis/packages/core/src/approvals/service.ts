@@ -1,3 +1,4 @@
+import { m } from "../lib/metrics.js";
 import type { ApprovalDecision, Prisma, TenantDb } from "@aegis/db";
 import { labelFromApprovalDecision } from "../uncertainty/service.js";
 import { z } from "zod";
@@ -114,6 +115,7 @@ export async function decideApproval(db: TenantDb, ctx: OrgContext, approvalId: 
   switch (input.decision) {
     case "reject": {
       await db.approvalRequest.update({ where: { id: a.id }, data: { status: "rejected", decidedAt: now, updatedAt: now } });
+      m.approvalDelaySeconds.observe(Math.max(0, now.getTime() - a.createdAt.getTime()) / 1000, { decision: "rejected" });
       await db.actionRequest.update({ where: { id: a.actionRequestId }, data: { status: "rejected", completedAt: now, updatedAt: now } });
       // An approver's rejection is an outcome label for calibrating the agent's confidence (when it gave one).
       await labelFromApprovalDecision(db, ctx, a.actionRequestId, false);
@@ -154,6 +156,7 @@ export async function decideApproval(db: TenantDb, ctx: OrgContext, approvalId: 
         throw validation(`Gateway is paused (${paused.reason ?? "emergency control"}). The approval was recorded but nothing can execute until the gateway resumes; decide again after resumption.`);
       }
       await db.approvalRequest.update({ where: { id: a.id }, data: { status: "approved", decidedAt: now, updatedAt: now } });
+      m.approvalDelaySeconds.observe(Math.max(0, now.getTime() - a.createdAt.getTime()) / 1000, { decision: "approved" });
       await db.actionRequest.update({ where: { id: a.actionRequestId }, data: { status: "approved", updatedAt: now } });
       await labelFromApprovalDecision(db, ctx, a.actionRequestId, true);
       await appendEvidence(db, ctx, { type: "approval.granted", subjectType: "approval_request", subjectId: a.id, correlationId: a.request.correlationId, payload: { actionRequestId: a.actionRequestId, approvals, approverIds: [...a.responses.filter((r) => r.decision === "approve").map((r) => r.userId), ctx.actor.id] } });

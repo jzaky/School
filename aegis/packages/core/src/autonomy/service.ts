@@ -1,3 +1,4 @@
+import { orgSettings } from "../lib/tx-cache.js";
 import type { Prisma, TenantDb } from "@aegis/db";
 import { z } from "zod";
 import { appendEvidence } from "../evidence/ledger.js";
@@ -229,7 +230,7 @@ export function downgradeTarget(current: AutonomyLevel, trigger: DowngradeTrigge
  * transaction (the gateway's or the execution's), so the downgrade and its cause commit together.
  */
 export async function applyAutomaticDowngrade(db: TenantDb, ctx: OrgContext, agentId: string, trigger: DowngradeTrigger): Promise<{ fromLevel: number; toLevel: number } | null> {
-  const org = await db.organization.findUnique({ where: { id: ctx.orgId }, select: { settings: true } });
+  const org = { settings: await orgSettings(db, ctx.orgId) };
   const agent = await db.agent.findUnique({ where: { id: agentId } });
   if (!agent || !isAutonomyLevel(agent.autonomyLevel)) return null;
   const settings = settingsFor(org?.settings, agent.metadata);
@@ -254,7 +255,7 @@ export async function applyAutomaticDowngrade(db: TenantDb, ctx: OrgContext, age
 
 /** Counts refusals in the window and applies the burst rule at most once per window. */
 export async function checkDenialBurst(db: TenantDb, ctx: OrgContext, agentId: string, actionRequestId: string | null) {
-  const org = await db.organization.findUnique({ where: { id: ctx.orgId }, select: { settings: true } });
+  const org = { settings: await orgSettings(db, ctx.orgId) };
   const agent = await db.agent.findUnique({ where: { id: agentId }, select: { metadata: true, autonomyLevel: true, status: true } });
   if (!agent) return null;
   const settings = settingsFor(org?.settings, agent.metadata);
@@ -353,7 +354,7 @@ export async function simulateAutonomy(db: TenantDb, ctx: OrgContext, agentId: s
   const now = ctx.now ?? new Date();
   const agent = await db.agent.findUnique({ where: { id: agentId }, select: { id: true, autonomyLevel: true, autonomyCeilingAmount: true } });
   if (!agent) throw notFound("Agent");
-  const org = await db.organization.findUnique({ where: { id: ctx.orgId }, select: { settings: true } });
+  const org = { settings: await orgSettings(db, ctx.orgId) };
   const orgCurrency = ((org?.settings as { currency?: string } | null)?.currency ?? "AED").toUpperCase();
   const ceiling = input.ceilingAmount === undefined ? toNum(agent.autonomyCeilingAmount) : input.ceilingAmount;
   const requests = await db.actionRequest.findMany({

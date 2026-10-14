@@ -86,3 +86,6 @@ export * from "./deployment/readiness.js";
 export * from "./commercial/plans.js";
 export * from "./commercial/billing.js";
 export * from "./demos/sales.js";
+export * from "./lib/metrics.js";
+export * from "./assurance/ops-alerts.js";
+export * from "./lib/circuit.js";

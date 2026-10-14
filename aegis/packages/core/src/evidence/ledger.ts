@@ -1,3 +1,4 @@
+import { m } from "../lib/metrics.js";
 import { createPrivateKey, createPublicKey, sign, verify, type KeyObject } from "node:crypto";
 import type { Prisma, TenantDb } from "@aegis/db";
 import { env } from "../env.js";
@@ -63,10 +64,20 @@ export function computeEvidenceHash(e: Omit<EvidenceRecord, "id" | "hash">): str
  * rolls the domain change back (fail closed). Appends for one org are serialised with
  * a transaction-scoped advisory lock.
  */
+const chainHeads = new WeakMap<object, Map<string, { seq: bigint; hash: string }>>();
+
 export async function appendEvidence(db: TenantDb, ctx: OrgContext, input: EvidenceInput): Promise<EvidenceRecord> {
-  // Re-entrant for the transaction that already holds it (withTenant takes it first); harmless otherwise.
-  await db.$executeRawUnsafe(`SELECT pg_advisory_xact_lock(hashtext('evidence:' || $1))`, ctx.orgId);
-  const last = await db.evidenceEvent.findFirst({ where: { orgId: ctx.orgId }, orderBy: { seq: "desc" }, select: { seq: true, hash: true } });
+  m.evidenceAppended.inc();
+  // After the first append in a transaction this transaction holds the organization's ledger lock until it
+  // commits, so the head it wrote is still the head: later appends in the same transaction skip the lock
+  // and the read. The cache is keyed by the transaction client and dies with it.
+  let heads = chainHeads.get(db);
+  let last = heads?.get(ctx.orgId) ?? null;
+  if (!last) {
+    // Re-entrant for the transaction that already holds it (withTenant takes it first); harmless otherwise.
+    await db.$executeRawUnsafe(`SELECT pg_advisory_xact_lock(hashtext('evidence:' || $1))`, ctx.orgId);
+    last = await db.evidenceEvent.findFirst({ where: { orgId: ctx.orgId }, orderBy: { seq: "desc" }, select: { seq: true, hash: true } });
+  }
   const seq = (last?.seq ?? 0n) + 1n;
   const prevHash = last?.hash ?? GENESIS_HASH;
   const actor = input.actor ?? { type: ctx.actor.type, id: ctx.actor.id };
@@ -87,6 +98,11 @@ export async function appendEvidence(db: TenantDb, ctx: OrgContext, input: Evide
   };
   const hash = computeEvidenceHash(base);
   const row = await db.evidenceEvent.create({ data: { ...base, payload: base.payload as Prisma.InputJsonValue, hash } });
+  if (!heads) {
+    heads = new Map();
+    chainHeads.set(db, heads);
+  }
+  heads.set(ctx.orgId, { seq, hash });
   return row as EvidenceRecord;
 }
 

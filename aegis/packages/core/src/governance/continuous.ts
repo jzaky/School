@@ -1,3 +1,4 @@
+import { orgSettings } from "../lib/tx-cache.js";
 /**
  * Continuous governance: the organization lets AEGIS act on monitoring alerts on its own, inside limits it
  * chose in advance, instead of only notifying a person.
@@ -109,7 +110,7 @@ export interface AppliedResponse {
  */
 export async function applyAutoResponses(db: TenantDb, ctx: OrgContext, alerts: NewAlert[], now = new Date()): Promise<AppliedResponse[]> {
   if (alerts.length === 0) return [];
-  const org = await db.organization.findUnique({ where: { id: ctx.orgId }, select: { settings: true } });
+  const org = { settings: await orgSettings(db, ctx.orgId) };
   const cfg = readContinuousGovernance(org?.settings);
   if (cfg.mode !== "continuous") return [];
   // The system actor carries every permission here: the organization delegated these specific responses in advance.

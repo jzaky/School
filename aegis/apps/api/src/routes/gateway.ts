@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { withTenant } from "@aegis/db";
 import { z } from "zod";
 import { requireScope } from "../plugins/auth.js";
-import { actionRequestInputSchema, appendEvidence, auditEnforcementPath, authorizeAndExecute, enforcementCoverage, consumeGrant, forbidden, getActionRequest, hashObject, issueGrantForRequest, listActionRequests, recordAgentExecution, releaseQuarantine, releaseQuarantineSchema, requestListFilter, provideApprovalInfo } from "@aegis/core";
+import { actionRequestInputSchema, appendEvidence, env, m, auditEnforcementPath, authorizeAndExecute, enforcementCoverage, consumeGrant, forbidden, getActionRequest, hashObject, issueGrantForRequest, listActionRequests, recordAgentExecution, releaseQuarantine, releaseQuarantineSchema, requestListFilter, provideApprovalInfo } from "@aegis/core";
 
 /**
  * The Action Gateway. Agents call POST /v1/gateway/actions before doing anything protected.
@@ -11,6 +11,14 @@ import { actionRequestInputSchema, appendEvidence, auditEnforcementPath, authori
 export async function gatewayRoutes(app: FastifyInstance) {
   app.post("/actions", { config: { rateLimit: { max: 300, timeWindow: "1 minute" } } }, async (req, reply) => {
     requireScope(req, "gateway:submit");
+    // Backpressure: past the process's limit of decisions in progress, refuse at once with 503 and a retry
+    // hint instead of queueing until the database pool and the transaction timeout give out. The SDK
+    // treats a 503 like any other failure: the action does not run.
+    if (m.gatewayInFlight.get() >= env().AEGIS_GATEWAY_MAX_IN_FLIGHT) {
+      m.gatewayOverloaded.inc();
+      reply.status(503).header("retry-after", "1");
+      return { error: { code: "overloaded", message: "The gateway is at capacity; retry shortly. Nothing was decided and nothing ran." }, requestId: req.id };
+    }
     const ctx = await req.orgContext();
     if (ctx.actor.type !== "agent") throw forbidden("Use an agent API key");
     const headerKey = req.headers["idempotency-key"];

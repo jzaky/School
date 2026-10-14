@@ -3,7 +3,7 @@ import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import cookie from "@fastify/cookie";
 import rateLimit, { type FastifyRateLimitStoreCtor } from "@fastify/rate-limit";
-import { env, isAegisError, logger, secretBucketKey, SharedRateLimitStore } from "@aegis/core";
+import { env, isAegisError, logger, m, secretBucketKey, SharedRateLimitStore } from "@aegis/core";
 import { ZodError } from "zod";
 import { authPlugin } from "./plugins/auth.js";
 import { healthRoutes } from "./routes/health.js";
@@ -40,6 +40,13 @@ export async function buildApp(): Promise<FastifyInstance> {
     keyGenerator: (req) => (req.headers.authorization ? secretBucketKey("key", req.headers.authorization) : `ip:${req.ip}`),
   });
   await app.register(authPlugin);
+
+  // Request metrics by route group (the first two path segments) and status class; never by id.
+  app.addHook("onResponse", async (req, reply) => {
+    const group = (req.routeOptions.url ?? req.url).split("?")[0]!.split("/").slice(0, 3).join("/") || "/";
+    m.httpRequests.inc({ route: group, status: `${Math.floor(reply.statusCode / 100)}xx` });
+    m.httpRequestSeconds.observe(reply.elapsedTime / 1000, { route: group });
+  });
 
   app.setErrorHandler((err: unknown, req, reply) => {
     if (isAegisError(err)) {

@@ -1,3 +1,4 @@
+import { orgSettings } from "../lib/tx-cache.js";
 import type { Prisma, TenantDb } from "@aegis/db";
 import { z } from "zod";
 import { appendEvidence } from "../evidence/ledger.js";
@@ -33,7 +34,7 @@ export function readInjectionResponse(settings: unknown): InjectionResponseSetti
 }
 
 export async function getInjectionResponse(db: TenantDb, orgId: string): Promise<InjectionResponseSetting> {
-  const org = await db.organization.findUnique({ where: { id: orgId }, select: { settings: true } });
+  const org = { settings: await orgSettings(db, orgId) };
   return readInjectionResponse(org?.settings);
 }
 

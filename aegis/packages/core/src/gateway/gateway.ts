@@ -1,3 +1,7 @@
+import { orgSettings, primeOrgSettingsCache } from "../lib/tx-cache.js";
+import { breakers } from "../lib/circuit.js";
+import { m, secondsSince } from "../lib/metrics.js";
+import { withSpan } from "../lib/otel.js";
 import type { ActionRequest, Agent, AgentDelegation, AgentTool, Permission, Prisma, Resource, TenantDb, Tool } from "@aegis/db";
 import { z } from "zod";
 import { appendEvidence } from "../evidence/ledger.js";
@@ -116,7 +120,7 @@ export function requestHashOf(toolKey: string, action: string, params: Record<st
 
 /** Reads through the transaction client: never touch the shared pool from inside a tenant transaction (pool exhaustion under load). */
 export async function gatewayPausedState(db: TenantDb, orgId: string): Promise<{ paused: boolean; reason?: string }> {
-  const org = await db.organization.findUnique({ where: { id: orgId }, select: { settings: true } });
+  const org = { settings: await orgSettings(db, orgId) };
   const s = (org?.settings ?? {}) as { gatewayPaused?: boolean; gatewayPausedReason?: string };
   return { paused: !!s.gatewayPaused, reason: s.gatewayPausedReason };
 }
@@ -126,8 +130,26 @@ export async function gatewayPausedState(db: TenantDb, orgId: string): Promise<{
  * so a failure anywhere (including evidence) leaves no partial state. Execution happens after the
  * decision commits so a crash cannot execute without a recorded decision.
  */
+/** Decides one action request (docs/UNIVERSAL_GATEWAY.md), measured and traced. */
 export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: ActionRequestInput): Promise<GatewayResponse> {
+  const start = process.hrtime.bigint();
+  m.gatewayInFlight.add(1);
+  try {
+    const r = await withSpan("gateway.decide", { "aegis.tool": input.tool }, () => decideActionRequest(db, ctx, input));
+    m.gatewayDecisions.inc({ result: r.duplicate ? "duplicate" : r.decision });
+    m.gatewayDecisionSeconds.observe(secondsSince(start), { result: r.duplicate ? "duplicate" : r.decision });
+    return r;
+  } catch (e) {
+    m.gatewayDecisions.inc({ result: "failed" });
+    throw e;
+  } finally {
+    m.gatewayInFlight.add(-1);
+  }
+}
+
+async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionRequestInput): Promise<GatewayResponse> {
   if (ctx.actor.type !== "agent" || !ctx.actor.id) throw forbidden("Only agents submit action requests");
+  primeOrgSettingsCache(db);
   const agentId = ctx.actor.id;
   const correlationId = input.correlationId ?? ctx.requestId;
   const paramsHash = requestHashOf(input.tool, input.action, input.params);
@@ -215,7 +237,9 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
     const baseline = baselineChecks({ agent, tool, action: input.action, resource, resourceKeyRequested: input.resource ?? null, params: input.params, destinationDomain, gatewayPaused: paused, now });
     const failures: BaselineFailure[] = [...baseline.failures, ...(delegationFailure ? [delegationFailure] : []), ...(delegation ? delegationChecks(delegation, tool, resource, input.action, input.params, now) : [])];
     // Policy tampering: a stored policy that no longer matches its recorded hash is never evaluated.
-    const tampered = policyIntegrityFailures([...(await resolvePoliciesForAgent(db, ctx.orgId, agent)), ...(delegation ? await resolvePoliciesForAgent(db, ctx.orgId, delegation.delegator) : [])]);
+    const ownPolicies = await resolvePoliciesForAgent(db, ctx.orgId, agent);
+    const delegatorPolicies = delegation ? await resolvePoliciesForAgent(db, ctx.orgId, delegation.delegator) : [];
+    const tampered = policyIntegrityFailures([...ownPolicies, ...delegatorPolicies]);
     if (tampered.length) failures.push({ code: "policy_integrity", message: `Policy ${tampered.map((t) => t.policyKey).join(", ")} does not match its recorded hash: it was changed outside AEGIS, so the request is refused`, details: tampered });
     // Concurrent action limit (agent.metadata.maxConcurrentActions): actions in flight are live, unconsumed
     // grants plus executions under way. A per-agent advisory lock, held until this transaction commits,
@@ -272,12 +296,13 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
         now,
       });
       // Under a delegation both agents' policies apply: the union with deny-overrides is never looser than either alone.
-      const ownPolicies = await resolvePoliciesForAgent(db, ctx.orgId, agent);
-      const policies = delegation ? mergePolicies(ownPolicies, await resolvePoliciesForAgent(db, ctx.orgId, delegation.delegator)) : ownPolicies;
+      const policies = delegation ? mergePolicies(ownPolicies, delegatorPolicies) : ownPolicies;
       // Approved, unexpired exceptions skip their rule for this agent; never under a delegation.
       const exceptions = delegation ? { keys: new Set<string>(), ids: [] as string[] } : await activeExceptionRules(db, agent.id, input.tool, now);
       exceptionIds = exceptions.ids;
+      const evalStart = process.hrtime.bigint();
       evaluation = evaluatePolicies(policies, authzInput, { skipRules: exceptions.keys });
+      m.policyEvaluationSeconds.observe(secondsSince(evalStart));
       decisionResult = evaluation.result;
       policyOnlyResult = evaluation.result;
       if (decisionResult === "restrict") {
@@ -658,12 +683,23 @@ export async function executeRequest(run: TenantRunner, ctx: OrgContext, actionR
   const { systemKey, system, integrationId, req, downstream } = prepared.call;
   const started = Date.now();
   let result: { outcome: "succeeded" | "failed" | "unknown"; reference: string | null; summary: Record<string, unknown>; error?: string };
-  try {
-    result = await system.execute(downstreamContext(run, ctx.orgId, integrationId), downstream);
-  } catch (e) {
-    // A thrown error after the call started is ambiguous by definition: record unknown, reconcile later.
-    result = { outcome: "unknown", reference: null, summary: {}, error: e instanceof Error ? e.message : "execution failed" };
+  const circuitKey = `${ctx.orgId}:${systemKey}`;
+  if (!breakers.execution.allow(circuitKey)) {
+    // The system failed repeatedly just now: refuse at once. Nothing is sent, so the failure is definitive.
+    result = { outcome: "failed", reference: null, summary: {}, error: `${systemKey} is failing repeatedly; AEGIS paused calls to it for a short time and sent nothing` };
+  } else {
+    try {
+      result = await withSpan("gateway.execute", { "aegis.system": systemKey }, () => system.execute(downstreamContext(run, ctx.orgId, integrationId), downstream));
+    } catch (e) {
+      // A thrown error after the call started is ambiguous by definition: record unknown, reconcile later.
+      result = { outcome: "unknown", reference: null, summary: {}, error: e instanceof Error ? e.message : "execution failed" };
+    }
+    // Only ambiguous outcomes (timeouts, lost connections) count against the circuit; a definitive refusal is an answer.
+    if (result.outcome === "unknown") breakers.execution.failure(circuitKey);
+    else breakers.execution.success(circuitKey);
   }
+  m.executions.inc({ system: systemKey, outcome: result.outcome });
+  m.executionSeconds.observe((Date.now() - started) / 1000, { system: systemKey });
   return run((db) => recordOutcome(db, ctx, req, systemKey, result, Date.now() - started));
 }
 
@@ -958,7 +994,7 @@ function autonomyLevelOf(v: number): AutonomyLevel {
 }
 
 async function organizationCurrency(db: TenantDb, orgId: string): Promise<string> {
-  const org = await db.organization.findUnique({ where: { id: orgId }, select: { settings: true } });
+  const org = { settings: await orgSettings(db, orgId) };
   const c = (org?.settings as { currency?: unknown } | null)?.currency;
   return typeof c === "string" && c ? c.toUpperCase() : "AED";
 }

@@ -110,4 +110,9 @@ Every item below was implemented from AEGIS's own engine and code. None was buil
 - **Advisory locks.** PostgreSQL `pg_advisory_xact_lock`, transaction-scoped.
 - **Fail closed.** NIST SP 800-53 Rev. 5 SC-24 (fail in known state) and SC-7(18) (fail secure).
 
+### Phase 14: performance and reliability
+- **Metrics format.** Prometheus text exposition format 0.0.4 and the OpenTelemetry metrics API (both Apache 2.0 specifications); AEGIS writes the text format itself.
+- **Circuit breaker.** The pattern described by Michael Nygard, Release It! (2007), as summarised in Martin Fowler's "CircuitBreaker" (2014).
+- **Dead-letter queue and backpressure.** Common messaging practice (Enterprise Integration Patterns, Hohpe and Woolf, 2003: Dead Letter Channel).
+
 Later phases add their foundations here.

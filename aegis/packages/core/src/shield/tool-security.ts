@@ -1,3 +1,4 @@
+import { orgSettings } from "../lib/tx-cache.js";
 import type { TenantDb } from "@aegis/db";
 import { baselineChecks, validateParams, type BaselineFailure } from "../gateway/baseline.js";
 import { extractDestinationDomain } from "../gateway/input.js";
@@ -29,7 +30,7 @@ export interface ToolSecurityReport {
 
 async function gatewayPaused(db: TenantDb, orgId: string): Promise<{ paused: boolean; reason?: string }> {
   // organizations is a global table (no org_id); reading it is how the gateway does it too.
-  const org = await db.organization.findUnique({ where: { id: orgId }, select: { settings: true } });
+  const org = { settings: await orgSettings(db, orgId) };
   const s = (org?.settings ?? {}) as { gatewayPaused?: boolean; gatewayPausedReason?: string };
   return { paused: !!s.gatewayPaused, reason: s.gatewayPausedReason };
 }

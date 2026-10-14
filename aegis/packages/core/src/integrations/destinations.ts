@@ -1,4 +1,6 @@
 import { lookup } from "node:dns/promises";
+import { breakers } from "../lib/circuit.js";
+import { m } from "../lib/metrics.js";
 import { request as httpRequest } from "node:http";
 import { request as httpsRequest } from "node:https";
 import type { LookupFunction } from "node:net";
@@ -385,7 +387,7 @@ export function pinnedLookup(allowPrivate: boolean, resolve: (host: string) => P
   };
 }
 
-const defaultSender: Sender = (req) =>
+export const defaultSender: Sender = (req) =>
   new Promise((resolvePromise, reject) => {
     const url = new URL(req.url);
     const client = url.protocol === "https:" ? httpsRequest : httpRequest;
@@ -422,7 +424,17 @@ async function attempt(d: EventDestination, envelope: EventEnvelope, deliveryId:
     const secret = decryptSecret(d.secretEnvelope, aad(d.orgId, d.kind));
     const req = buildRequest(d, secret, envelope, deliveryId, now);
     await assertSafeDestinationUrl(req.url);
-    const res = await sender(req);
+    if (!breakers.destination.allow(d.id)) {
+      m.deliveries.inc({ kind: d.kind, outcome: "circuit_open" });
+      return { ok: false, status: null, error: "The destination failed repeatedly just now; AEGIS paused deliveries to it for a minute and will retry", permanent: false };
+    }
+    const res = await sender(req).catch((e: Error) => {
+      breakers.destination.failure(d.id);
+      throw e;
+    });
+    if (res.status >= 500 || res.status === 429) breakers.destination.failure(d.id);
+    else breakers.destination.success(d.id);
+    m.deliveries.inc({ kind: d.kind, outcome: res.status >= 200 && res.status < 300 ? "delivered" : `http_${Math.floor(res.status / 100)}xx` });
     if (res.status >= 200 && res.status < 300) return { ok: true, status: res.status, error: null, permanent: false };
     if (res.status >= 300 && res.status < 400) return { ok: false, status: res.status, error: "The destination answered with a redirect, which AEGIS does not follow", permanent: true };
     return { ok: false, status: res.status, error: `HTTP ${res.status}${res.body ? `: ${res.body.slice(0, 200)}` : ""}`, permanent: permanentStatus(res.status) };

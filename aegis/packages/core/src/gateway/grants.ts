@@ -1,3 +1,4 @@
+import { orgSettings } from "../lib/tx-cache.js";
 import { createHmac, randomUUID } from "node:crypto";
 import type { TenantDb } from "@aegis/db";
 import { appendEvidence } from "../evidence/ledger.js";
@@ -89,7 +90,7 @@ export function hashGrantToken(token: string): string {
 export const EXECUTABLE_STATUSES = ["allowed", "approved"] as const;
 
 async function gatewayPaused(db: TenantDb, orgId: string): Promise<{ paused: boolean; reason?: string }> {
-  const org = await db.organization.findUnique({ where: { id: orgId }, select: { settings: true } });
+  const org = { settings: await orgSettings(db, orgId) };
   const s = (org?.settings ?? {}) as { gatewayPaused?: boolean; gatewayPausedReason?: string };
   return { paused: !!s.gatewayPaused, reason: s.gatewayPausedReason };
 }

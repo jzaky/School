@@ -1,5 +1,6 @@
+import { createServer } from "node:http";
 import { withTenant, disconnectAll } from "@aegis/db";
-import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, dispatchEvents, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, periodOf, purgeRateLimitBuckets, recomputeCalibration, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, snapshotUsage, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
+import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, dispatchEvents, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, periodOf, prometheusText, purgeRateLimitBuckets, recomputeCalibration, recordOperationalAlerts, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, snapshotUsage, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
 import { rawPrisma } from "@aegis/db";
 import { registerModuleHandlers } from "./handlers.js";
 
@@ -73,6 +74,12 @@ registerJobHandler("usage.snapshot", async () => {
   for (const o of orgs) for (const p of periods) await withTenant(o.id, (db) => snapshotUsage(db, o.id, p, now));
 });
 
+/** Platform operational alerts (docs/PERFORMANCE.md): recorded once per hour each, optionally posted to a webhook. */
+registerJobHandler("ops.alerts", async () => {
+  const out = await recordOperationalAlerts();
+  if (out.recorded) log.warn({ firing: out.firing, recorded: out.recorded }, "operational alerts recorded");
+});
+
 registerJobHandler("evidence.checkpoint", async () => {
   const orgs = await rawPrisma().organization.findMany({ select: { id: true } });
   for (const o of orgs) await withTenant(o.id, (db) => writeCheckpoint(db, o.id));
@@ -121,8 +128,22 @@ async function scheduleRecurring() {
   await enqueueJob({ type: "audit.retention", payload: {}, idempotencyKey: `audit.retention:${Math.floor(minute / 1440)}`, runAt: new Date() });
   await enqueueJob({ type: "enforcement.audit", payload: {}, idempotencyKey: `enforcement.audit:${Math.floor(minute / 60)}`, runAt: new Date() });
   await enqueueJob({ type: "rate-limits.purge", payload: {}, idempotencyKey: `rate-limits.purge:${Math.floor(minute / 60)}`, runAt: new Date() });
+  await enqueueJob({ type: "ops.alerts", payload: {}, idempotencyKey: `ops.alerts:${Math.floor(minute / 5)}`, runAt: new Date() });
   await enqueueJob({ type: "usage.snapshot", payload: {}, idempotencyKey: `usage.snapshot:${Math.floor(minute / 360)}`, runAt: new Date() });
   await enqueueJob({ type: "uncertainty.calibrate", payload: {}, idempotencyKey: `uncertainty.calibrate:${Math.floor(minute / 60)}`, runAt: new Date() });
+}
+
+// Optional Prometheus endpoint for the worker's own metrics (jobs, deliveries, executions, circuits).
+// Bound to 127.0.0.1 only; scrape it from a sidecar or the same host.
+const metricsPort = env().AEGIS_WORKER_METRICS_PORT;
+if (metricsPort) {
+  createServer((req, res) => {
+    if (req.url !== "/metrics") {
+      res.writeHead(404).end();
+      return;
+    }
+    res.writeHead(200, { "content-type": "text/plain; version=0.0.4; charset=utf-8" }).end(prometheusText());
+  }).listen(metricsPort, "127.0.0.1", () => log.info({ port: metricsPort }, "worker metrics listening on 127.0.0.1"));
 }
 
 let stopping = false;

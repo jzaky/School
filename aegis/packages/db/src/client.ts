@@ -9,6 +9,12 @@ declare global {
 
 const logLevels: ("warn" | "error")[] = ["warn", "error"];
 
+/** Optional observer of query durations (milliseconds), set by the metrics module; never sees query text or values. */
+let queryObserver: ((durationMs: number) => void) | null = null;
+export function observeQueryDurations(fn: ((durationMs: number) => void) | null) {
+  queryObserver = fn;
+}
+
 /**
  * Application connection (aegis_app). Never use this directly for tenant data:
  * go through tenantDb(orgId) so RLS has a tenant context. Direct use is only
@@ -16,7 +22,9 @@ const logLevels: ("warn" | "error")[] = ["warn", "error"];
  */
 export function rawPrisma(): PrismaClient {
   if (!globalThis.__aegisPrisma) {
-    globalThis.__aegisPrisma = new PrismaClient({ log: logLevels });
+    const client = new PrismaClient({ log: [...logLevels.map((level) => ({ emit: "stdout" as const, level })), { emit: "event" as const, level: "query" as const }] });
+    client.$on("query", (e) => queryObserver?.(e.duration));
+    globalThis.__aegisPrisma = client as unknown as PrismaClient;
   }
   return globalThis.__aegisPrisma;
 }
