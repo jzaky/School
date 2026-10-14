@@ -197,6 +197,7 @@ const NAV_AR: Record<string, string> = {
   "Data Protection": "حماية البيانات",
   "AI Gateway": "بوابة الذكاء الاصطناعي",
   "Shadow AI": "الذكاء الاصطناعي غير المعتمد",
+  "Software Security": "أمن البرمجيات",
   "Tool Security": "أمن الأدوات",
   Incidents: "الحوادث",
   "Attack Simulation Lab": "مختبر محاكاة الهجمات",

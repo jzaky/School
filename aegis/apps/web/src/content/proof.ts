@@ -9,13 +9,13 @@
 
 export const FIGURES = {
   /** `it(` cases under packages/core/tests. */
-  coreTests: 409,
+  coreTests: 422,
   /** `it(` cases under packages/db/tests (tenant isolation). */
   dbTests: 22,
   /** Playwright spec files under apps/web/tests/e2e. */
-  e2eFiles: 29,
+  e2eFiles: 30,
   /** `test(` cases across those spec files. */
-  e2eTests: 123,
+  e2eTests: 126,
   /** Shared framework catalogs seeded for every tenant. */
   catalogs: 20,
   /** Controls across those catalogs. */
@@ -69,5 +69,6 @@ export const NOT_YET: NotYetRow[] = [
   { check: "Production deployment of the current build", status: "Not made. Every feature is verified by tests in the repository, none in a deployed environment. Deployment needs the owner's approval." },
   { check: "Employee AI gateway against a real model provider", status: "The gateway is built and verified against a stand-in provider that records what it receives (docs/AI_GATEWAY_DLP.md). No request has been sent to a real provider; that needs a customer's provider key." },
   { check: "Shadow AI discovery against a customer's real logs", status: "Built and verified with synthetic exports in the Entra, Okta, DNS, browser, proxy, endpoint and inventory formats (docs/SHADOW_AI.md). No customer log has been imported." },
-  { check: "Software supply-chain scanning, isolated execution", status: "Planned in docs/AEGIS_MASTER_ROADMAP.md (Secure track); not built. Listed as planned on the Billing page, never as included." },
+  { check: "Software security against real scanner output and OSV.dev", status: "Built and verified with synthetic SBOMs and reports in the CycloneDX, SPDX, npm lockfile, Grype, Trivy, Gitleaks and Scorecard formats, and a stand-in for OSV.dev (docs/SOFTWARE_SECURITY.md). Not yet run on real tool output or against osv.dev itself." },
+  { check: "Isolated execution", status: "Planned in docs/AEGIS_MASTER_ROADMAP.md (Secure track); not built. Needs a separate host. Listed as planned on the Billing page, never as included." },
 ];

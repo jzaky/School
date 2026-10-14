@@ -241,6 +241,7 @@ BEGIN
     'ai_gateway_events.provider_id>integrations', 'ai_gateway_events.api_key_id>api_keys',
     'datasets.resource_id>resources',
     'discovery_signals.import_id>discovery_imports',
+    'software_evidence.item_id>software_items',
     'discovered_agents.linked_agent_id>agents',
     'execution_grants.integration_id>integrations',
     'incident_events.security_event_id>security_events',

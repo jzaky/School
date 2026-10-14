@@ -1,6 +1,6 @@
 import { createServer } from "node:http";
 import { withTenant, disconnectAll } from "@aegis/db";
-import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, dispatchEvents, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, periodOf, prometheusText, purgeRateLimitBuckets, recomputeCalibration, recordOperationalAlerts, reconcileExecution, recoverStaleJobs, registerJobHandler, runJob, snapshotUsage, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
+import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, dispatchEvents, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, periodOf, prometheusText, purgeRateLimitBuckets, recomputeCalibration, recordOperationalAlerts, reconcileExecution, recoverStaleJobs, refreshSoftwareAdvisories, registerJobHandler, runJob, snapshotUsage, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
 import { rawPrisma } from "@aegis/db";
 import { registerModuleHandlers } from "./handlers.js";
 
@@ -114,6 +114,19 @@ registerJobHandler("rate-limits.purge", async () => {
   if (n) log.info({ deleted: n }, "expired rate-limit windows deleted");
 });
 
+/** Re-queries OSV.dev for approved and restricted software where the organization turned the lookup on, and reassesses. */
+registerJobHandler("software.advisories", async () => {
+  const orgs = await rawPrisma().organization.findMany({ select: { id: true } });
+  for (const o of orgs) {
+    try {
+      const r = await withTenant(o.id, (db) => refreshSoftwareAdvisories(db, systemContext(o.id)), { lock: "lazy", timeout: 120_000 });
+      if (r.newFindings) log.warn({ orgId: o.id, newFindings: r.newFindings }, "new advisories for approved software");
+    } catch (e) {
+      log.error({ orgId: o.id, err: e instanceof Error ? e.message : String(e) }, "software advisory refresh failed");
+    }
+  }
+});
+
 registerModuleHandlers();
 
 /** Recurring jobs are re-scheduled by key so there is always exactly one pending instance. */
@@ -131,6 +144,7 @@ async function scheduleRecurring() {
   await enqueueJob({ type: "ops.alerts", payload: {}, idempotencyKey: `ops.alerts:${Math.floor(minute / 5)}`, runAt: new Date() });
   await enqueueJob({ type: "usage.snapshot", payload: {}, idempotencyKey: `usage.snapshot:${Math.floor(minute / 360)}`, runAt: new Date() });
   await enqueueJob({ type: "uncertainty.calibrate", payload: {}, idempotencyKey: `uncertainty.calibrate:${Math.floor(minute / 60)}`, runAt: new Date() });
+  await enqueueJob({ type: "software.advisories", payload: {}, idempotencyKey: `software.advisories:${Math.floor(minute / 1440)}`, runAt: new Date() });
 }
 
 // Optional Prometheus endpoint for the worker's own metrics (jobs, deliveries, executions, circuits).

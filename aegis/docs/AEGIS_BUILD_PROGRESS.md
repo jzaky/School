@@ -551,3 +551,25 @@ The missed throughput target is explained in docs/PERFORMANCE.md, with the next 
 | Browser | 3 |
 
 **Status:** implemented and tested with synthetic exports. There are no live connectors and no customer logs.
+
+## Secure S4: open-source software security (14 October 2026)
+
+**Built:**
+- **Software requests** from anyone in the organization.
+- **SBOM ingestion:** CycloneDX, SPDX and npm lockfiles.
+- **Scanner reports:** Grype, Trivy, Gitleaks (secret values are never stored) and OpenSSF Scorecard.
+- **An optional OSV.dev lookup.** Internal names are never sent.
+- **Local checks:** typosquatting, dependency confusion, install scripts, integrity and licenses.
+- **An explained risk score,** a built-in floor, and software policies in the one engine that can only make the recommendation stricter.
+- **Four-eyes decisions,** with a written reason when deciding below the recommendation. Findings can be accepted as risks.
+- **Reassessment** with a security event, and a daily advisory refresh job.
+- **API, console list and detail pages,** and demo requests run through the real code.
+
+**Tests added:**
+
+| Suite | Tests |
+|---|---|
+| Core | 13 |
+| Browser | 3 |
+
+**Status:** implemented and tested with synthetic reports and a stand-in for OSV.dev. No real scanner output or osv.dev query has been used. See docs/SOFTWARE_SECURITY.md for the gaps: signatures, behavioural analysis and running scanners inside AEGIS.

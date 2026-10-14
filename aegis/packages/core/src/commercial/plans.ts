@@ -60,7 +60,7 @@ export const FEATURES: Feature[] = [
   { key: "lab", name: "Attack Simulation Lab", plans: SECURE_UP, status: "available" },
   { key: "ai_gateway_dlp", name: "AI model gateway with data loss prevention for people's prompts", plans: SECURE_UP, status: "available" },
   { key: "shadow_ai", name: "Shadow AI discovery from sign-in, DNS, browser, endpoint and inventory logs", plans: SECURE_UP, status: "available" },
-  { key: "software_security", name: "Open-source and AI supply-chain security (SBOM, vulnerabilities, approvals)", plans: SECURE_UP, status: "planned" },
+  { key: "software_security", name: "Open-source and AI supply-chain security (SBOM, vulnerabilities, approvals)", plans: SECURE_UP, status: "available" },
   { key: "secure_execution", name: "Isolated execution workspaces for untrusted code and agents", plans: ENTERPRISE, status: "planned" },
   { key: "sso", name: "Single sign-on (OIDC, SAML) and SCIM", plans: ENTERPRISE, status: "available" },
   { key: "deployment_choice", name: "Single-tenant, private-cloud or on-premises deployment", plans: ENTERPRISE, status: "available" },

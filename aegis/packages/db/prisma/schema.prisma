@@ -2026,3 +2026,102 @@ model DiscoveryImport {
   @@index([orgId, createdAt])
   @@map("discovery_imports")
 }
+
+/// A piece of third-party or open-source software someone asked to use (docs/SOFTWARE_SECURITY.md).
+model SoftwareItem {
+  id                 String    @id @default(uuid(7)) @db.Uuid
+  orgId              String    @map("org_id") @db.Uuid
+  name               String
+  /// npm, pypi, maven, go, nuget, cargo, container, application, browser_extension, other
+  ecosystem          String
+  version            String
+  purpose            String    @default("")
+  requestedBy        String?   @map("requested_by") @db.Uuid
+  /// under_review, approved, restricted, quarantined or prohibited. Set by a person, or automatically only when policy allows it.
+  status             String    @default("under_review")
+  /// What the assessment recommends; the status is the decision.
+  recommended        String    @default("under_review")
+  riskScore          Int       @default(0) @map("risk_score")
+  /// [{ factor, points, detail }]: every point in the score is explained.
+  riskFactors        Json      @default("[]") @map("risk_factors")
+  policyVersionIds   String[]  @default([]) @map("policy_version_ids")
+  decidedBy          String?   @map("decided_by") @db.Uuid
+  decidedAt          DateTime? @map("decided_at")
+  decisionNote       String    @default("") @map("decision_note")
+  /// Set when new information made the recommendation worse than the decision.
+  reassessmentNeeded Boolean   @default(false) @map("reassessment_needed")
+  lastAssessedAt     DateTime? @map("last_assessed_at")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  components SoftwareComponent[]
+  findings   SoftwareFinding[]
+
+  @@unique([orgId, ecosystem, name, version])
+  @@index([orgId, status])
+  @@map("software_items")
+}
+
+model SoftwareComponent {
+  id               String   @id @default(uuid(7)) @db.Uuid
+  orgId            String   @map("org_id") @db.Uuid
+  itemId           String   @map("item_id") @db.Uuid
+  name             String
+  version          String   @default("")
+  ecosystem        String   @default("")
+  purl             String?
+  licenses         String[] @default([])
+  /// Host the package was resolved from (npm lockfiles), for provenance and dependency confusion checks.
+  resolvedHost     String?  @map("resolved_host")
+  hasIntegrity     Boolean? @map("has_integrity")
+  hasInstallScript Boolean? @map("has_install_script")
+  direct           Boolean  @default(false)
+
+  item SoftwareItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@unique([itemId, name, version])
+  @@index([orgId])
+  @@map("software_components")
+}
+
+model SoftwareFinding {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  orgId     String   @map("org_id") @db.Uuid
+  itemId    String   @map("item_id") @db.Uuid
+  /// vulnerability, license, typosquat, dependency_confusion, install_script, secret, provenance, maintenance
+  kind      String
+  severity  String
+  /// Advisory id (CVE, GHSA, OSV), license id, rule id or check name.
+  ref       String
+  component String   @default("")
+  title     String
+  /// osv, grype, trivy, gitleaks, scorecard or aegis (local checks)
+  source    String
+  fixedIn   String?  @map("fixed_in")
+  /// open or accepted (a person accepted the risk with a note)
+  status    String   @default("open")
+  note      String   @default("")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  item SoftwareItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@unique([itemId, kind, ref, component])
+  @@index([orgId, kind, severity])
+  @@map("software_findings")
+}
+
+/// One SBOM or scanner report attached to a software item. Reports are reduced to components and findings; the file is not kept.
+model SoftwareEvidence {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  orgId     String   @map("org_id") @db.Uuid
+  itemId    String   @map("item_id") @db.Uuid
+  /// cyclonedx, spdx, npm_lock, grype, trivy, gitleaks, scorecard, osv
+  format    String
+  tool      String   @default("")
+  summary   Json     @default("{}")
+  createdBy String?  @map("created_by") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([orgId, itemId])
+  @@map("software_evidence")
+}

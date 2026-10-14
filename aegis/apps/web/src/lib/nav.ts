@@ -45,6 +45,7 @@ import {
   CircleHelp,
   MessagesSquare,
   ScanEye,
+  PackageCheck,
 } from "lucide-react";
 
 export interface NavItem {
@@ -122,6 +123,7 @@ export const SECONDARY_NAV: NavGroup[] = [
       { label: "Data Protection", href: "/security/data-protection", icon: Lock, ready: true, permission: "security:read" },
       { label: "AI Gateway", href: "/security/ai-gateway", icon: MessagesSquare, ready: true, permission: "security:read" },
       { label: "Shadow AI", href: "/security/shadow-ai", icon: ScanEye, ready: true, permission: "security:read" },
+      { label: "Software Security", href: "/security/software", icon: PackageCheck, ready: true, permission: "org:read" },
       { label: "Tool Security", href: "/security/tools", icon: Wrench, ready: true, permission: "security:read" },
       { label: "Incidents", href: "/security/incidents", icon: Siren, ready: true, permission: "security:read" },
       { label: "Attack Simulation Lab", href: "/security/lab", icon: FlaskConical, ready: true, permission: "security:read" },

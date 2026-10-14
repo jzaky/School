@@ -6,7 +6,7 @@ export interface PolicyTemplate {
   id: string;
   name: string;
   description: string;
-  category: "authorization" | "data_protection" | "tool_security" | "operational" | "ai_usage";
+  category: "authorization" | "data_protection" | "tool_security" | "operational" | "ai_usage" | "software";
   document: Record<string, unknown>;
 }
 
@@ -185,6 +185,7 @@ export const POLICY_CATEGORIES = [
   { value: "tool_security", label: "Tool security" },
   { value: "operational", label: "Operational" },
   { value: "ai_usage", label: "AI usage (AI gateway)" },
+  { value: "software", label: "Software use (software security)" },
 ];
 
 export const EFFECT_LABEL: Record<string, string> = { allow: "Allow", deny: "Deny", require_approval: "Require approval" };
