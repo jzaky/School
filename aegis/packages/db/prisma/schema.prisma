@@ -248,6 +248,8 @@ model Agent {
   environment             Environment        @default(development)
   modelProvider           String             @default("") @map("model_provider")
   modelId                 String             @default("") @map("model_id")
+  /// The registered model this agent runs on (docs/MODEL_DATA_GOVERNANCE.md). Null: not linked to the model registry.
+  modelRecordId           String?            @map("model_record_id") @db.Uuid
   businessOwnerId         String?            @map("business_owner_id") @db.Uuid
   technicalOwnerId        String?            @map("technical_owner_id") @db.Uuid
   teamId                  String?            @map("team_id") @db.Uuid
@@ -1494,4 +1496,191 @@ model AttackSimulationResult {
 
   @@index([orgId, runId])
   @@map("attack_simulation_results")
+}
+
+/// Lifecycle of a registered AI model. Only "approved" models pass the model-governance gateway check
+/// when it is switched on; "deprecated" is allowed with a risk indicator.
+enum ModelStage {
+  proposed
+  evaluating
+  approved
+  deprecated
+  retired
+}
+
+/// An AI model the organization uses or plans to use (docs/MODEL_DATA_GOVERNANCE.md).
+model AiModel {
+  id                  String     @id @default(uuid(7)) @db.Uuid
+  orgId               String     @map("org_id") @db.Uuid
+  key                 String
+  name                String
+  provider            String
+  /// The provider's model identifier, as agents report it (agents.model_id).
+  providerModelId     String     @map("provider_model_id")
+  version             String     @default("")
+  stage               ModelStage @default(proposed)
+  riskTier            String     @default("medium") @map("risk_tier")
+  intendedUse         String     @default("") @map("intended_use")
+  limitations         String     @default("")
+  /// Data categories the model may receive (personal, financial, health and so on).
+  dataCategories      String[]   @default([]) @map("data_categories")
+  /// Where the organization states the model is hosted. Declared, not verified by AEGIS.
+  hostingRegion       String     @default("") @map("hosting_region")
+  ownerId             String?    @map("owner_id") @db.Uuid
+  /// Who asked for approval; a different person must approve.
+  approvalRequestedBy String?    @map("approval_requested_by") @db.Uuid
+  approvedBy          String?    @map("approved_by") @db.Uuid
+  approvedAt          DateTime?  @map("approved_at")
+  /// Approval lapses into "review overdue" after this time. Null: no periodic review.
+  reviewDueAt         DateTime?  @map("review_due_at")
+  createdBy           String?    @map("created_by") @db.Uuid
+  createdAt           DateTime   @default(now()) @map("created_at")
+  updatedAt           DateTime   @updatedAt @map("updated_at")
+
+  evaluations  ModelEvaluation[]
+  stageChanges ModelStageChange[]
+
+  @@unique([orgId, key])
+  @@index([orgId, stage])
+  @@map("ai_models")
+}
+
+/// An evaluation of a model recorded by a person. Append-only.
+model ModelEvaluation {
+  id         String   @id @default(uuid(7)) @db.Uuid
+  orgId      String   @map("org_id") @db.Uuid
+  modelId    String   @map("model_id") @db.Uuid
+  /// accuracy, safety, bias, security, privacy or other.
+  kind       String
+  /// pass, conditional or fail.
+  result     String
+  summary    String
+  metrics    Json     @default("{}")
+  documentId String?  @map("document_id") @db.Uuid
+  recordedBy String?  @map("recorded_by") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at")
+  model      AiModel  @relation(fields: [modelId], references: [id], onDelete: Restrict)
+
+  @@index([orgId, modelId])
+  @@map("model_evaluations")
+}
+
+/// Every stage change of a model. Append-only.
+model ModelStageChange {
+  id        String     @id @default(uuid(7)) @db.Uuid
+  orgId     String     @map("org_id") @db.Uuid
+  modelId   String     @map("model_id") @db.Uuid
+  fromStage ModelStage @map("from_stage")
+  toStage   ModelStage @map("to_stage")
+  reason    String
+  actorId   String?    @map("actor_id") @db.Uuid
+  createdAt DateTime   @default(now()) @map("created_at")
+  model     AiModel    @relation(fields: [modelId], references: [id], onDelete: Restrict)
+
+  @@index([orgId, modelId, createdAt])
+  @@map("model_stage_changes")
+}
+
+/// A dataset agents can reach, with its governance facts (docs/MODEL_DATA_GOVERNANCE.md).
+model Dataset {
+  id              String             @id @default(uuid(7)) @db.Uuid
+  orgId           String             @map("org_id") @db.Uuid
+  key             String
+  name            String
+  description     String             @default("")
+  ownerId         String?            @map("owner_id") @db.Uuid
+  classification  DataClassification @default(internal)
+  /// personal, financial, health, biometric, children, credentials, location and so on.
+  categories      String[]           @default([])
+  /// The gateway resource that fronts this dataset; access auditing uses its permissions and requests.
+  resourceId      String?            @map("resource_id") @db.Uuid
+  /// Where the organization states the data is stored. Declared, not verified by AEGIS.
+  storageLocation String             @default("") @map("storage_location")
+  region          String             @default("")
+  /// Null: no retention period recorded, which the inventory flags.
+  retentionDays   Int?               @map("retention_days")
+  lawfulBasis     String             @default("") @map("lawful_basis")
+  createdBy       String?            @map("created_by") @db.Uuid
+  createdAt       DateTime           @default(now()) @map("created_at")
+  updatedAt       DateTime           @updatedAt @map("updated_at")
+
+  deletionRequests DataDeletionRequest[]
+
+  @@unique([orgId, key])
+  @@map("datasets")
+}
+
+enum DeletionRequestStatus {
+  requested
+  approved
+  rejected
+  completed
+}
+
+/// A request to delete one data subject's records from a dataset. AEGIS records the decision and the
+/// completion attestation; the deletion itself happens in the customer's system. The subject reference
+/// is stored only as a keyed hash.
+model DataDeletionRequest {
+  id                  String                @id @default(uuid(7)) @db.Uuid
+  orgId               String                @map("org_id") @db.Uuid
+  datasetId           String                @map("dataset_id") @db.Uuid
+  /// HMAC-SHA-256 of the subject reference; the reference itself is never stored.
+  subjectRefHash      String                @map("subject_ref_hash")
+  /// The last 4 characters of the reference, so people can tell requests apart.
+  subjectHint         String                @default("") @map("subject_hint")
+  reason              String
+  status              DeletionRequestStatus @default(requested)
+  dueAt               DateTime              @map("due_at")
+  requestedBy         String?               @map("requested_by") @db.Uuid
+  decidedBy           String?               @map("decided_by") @db.Uuid
+  decidedAt           DateTime?             @map("decided_at")
+  decisionNote        String?               @map("decision_note")
+  completedBy         String?               @map("completed_by") @db.Uuid
+  completedAt         DateTime?             @map("completed_at")
+  /// The customer system's reference for the deletion (a ticket or job id).
+  completionReference String?               @map("completion_reference")
+  createdAt           DateTime              @default(now()) @map("created_at")
+  updatedAt           DateTime              @updatedAt @map("updated_at")
+  dataset             Dataset               @relation(fields: [datasetId], references: [id], onDelete: Restrict)
+
+  @@index([orgId, status])
+  @@map("data_deletion_requests")
+}
+
+enum RegulatoryChangeStatus {
+  new
+  assessing
+  action_required
+  implemented
+  not_applicable
+}
+
+/// A regulatory or standards change entered by a person, with its impact assessment and actions.
+/// AEGIS does not monitor regulators; entries are recorded by the organization.
+model RegulatoryChange {
+  id                 String                 @id @default(uuid(7)) @db.Uuid
+  orgId              String                 @map("org_id") @db.Uuid
+  title              String
+  source             String
+  reference          String                 @default("")
+  jurisdiction       String                 @default("")
+  frameworkId        String?                @map("framework_id") @db.Uuid
+  publishedAt        DateTime?              @map("published_at")
+  effectiveAt        DateTime?              @map("effective_at")
+  summary            String                 @default("")
+  status             RegulatoryChangeStatus @default(new)
+  /// { controls, policies, agents, models, datasets: string[] (ids), notes: string }
+  impact             Json                   @default("{}")
+  assessedBy         String?                @map("assessed_by") @db.Uuid
+  assessedAt         DateTime?              @map("assessed_at")
+  decisionNote       String?                @map("decision_note")
+  remediationTaskIds String[]               @default([]) @map("remediation_task_ids") @db.Uuid
+  ownerId            String?                @map("owner_id") @db.Uuid
+  createdBy          String?                @map("created_by") @db.Uuid
+  createdAt          DateTime               @default(now()) @map("created_at")
+  updatedAt          DateTime               @updatedAt @map("updated_at")
+
+  @@index([orgId, status])
+  @@index([orgId, effectiveAt])
+  @@map("regulatory_changes")
 }

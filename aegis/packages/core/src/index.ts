@@ -70,3 +70,6 @@ export * from "./uncertainty/service.js";
 export * from "./reasoning/assess.js";
 export * from "./reasoning/service.js";
 export * from "./security/lab.js";
+export * from "./governance/models.js";
+export * from "./governance/data.js";
+export * from "./governance/regulatory.js";

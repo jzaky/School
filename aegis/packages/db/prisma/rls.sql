@@ -116,7 +116,7 @@ END $$ LANGUAGE plpgsql;
 DO $$
 DECLARE t text;
 BEGIN
-  FOREACH t IN ARRAY ARRAY['evidence_events','evidence_checkpoints','authorization_decisions','approval_responses','execution_receipts','policy_events','autonomy_transitions','attack_simulation_results']
+  FOREACH t IN ARRAY ARRAY['evidence_events','evidence_checkpoints','authorization_decisions','approval_responses','execution_receipts','policy_events','autonomy_transitions','attack_simulation_results','model_evaluations','model_stage_changes']
   LOOP
     EXECUTE format('DROP TRIGGER IF EXISTS forbid_mutation ON public.%I', t);
     EXECUTE format('CREATE TRIGGER forbid_mutation BEFORE UPDATE OR DELETE ON public.%I FOR EACH ROW EXECUTE FUNCTION aegis_forbid_mutation()', t);

@@ -24,6 +24,7 @@ import { assessReasoning, escalateForReasoning, readReasoningPolicy, type Reason
 import { precedentIndicator } from "../reasoning/service.js";
 import { getShieldInspector } from "./shield-hook.js";
 import { escalateForInjection, getInjectionResponse } from "../shield/injection-response.js";
+import { escalateForModel, getModelGovernance, modelGateCheck } from "../governance/models.js";
 import { getDownstreamSystem, readIntegrationCredential, type DownstreamContext } from "./simulators.js";
 
 export const actionRequestInputSchema = z.object({
@@ -202,6 +203,7 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
   let reasoning: ReasoningAssessment | null = null;
   let reasoningEscalated = false;
   let injectionEscalated: { response: string; signals: string[] } | null = null;
+  let modelRecordState: { status: string; enforcement: string; escalated: boolean; model: string | null } | null = null;
   /** What the policies alone decided, before data protection, uncertainty and autonomy (used by replay). */
   let policyOnlyResult: string | null = null;
 
@@ -330,6 +332,23 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
           evaluation = { ...evaluation, result: "deny", reasons: [...evaluation.reasons, why] };
         }
       }
+      // Model governance (Phase 7): when the organization enforces it, an agent whose model is unregistered,
+      // not approved or retired goes to a person or is refused. Monotonic; off by default.
+      const modelSetting = await getModelGovernance(db, ctx.orgId);
+      const modelRecord = agent.modelRecordId ? await db.aiModel.findUnique({ where: { id: agent.modelRecordId }, select: { key: true, stage: true, reviewDueAt: true } }) : null;
+      const modelCheck = modelGateCheck(modelRecord, now);
+      const modelEscalation = escalateForModel(decisionResult, modelCheck, modelSetting);
+      modelRecordState = { status: modelCheck.status, enforcement: modelSetting.enforcement, escalated: modelEscalation.escalated, model: modelRecord?.key ?? null };
+      if (modelEscalation.escalated) {
+        const why = `Model governance: ${modelCheck.reason}`;
+        if (modelEscalation.outcome === "require_approval") {
+          decisionResult = "require_approval";
+          evaluation = { ...evaluation, result: "require_approval", approval: { roles: [], minApprovers: 1, expiresInMinutes: 240, separationOfDuties: true, escalateToRoles: [], instructions: why }, reasons: [...evaluation.reasons, why] };
+        } else {
+          decisionResult = "deny";
+          evaluation = { ...evaluation, result: "deny", reasons: [...evaluation.reasons, why] };
+        }
+      }
       // Managed autonomy (Phase 3): the agent's level is applied after policy and data protection and can only
       // make the outcome stricter. Under a delegation the stricter of the two agents' settings applies.
       const policyOutcome = decisionResult;
@@ -353,7 +372,7 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
       }
       autonomyRecord = { level: autonomySetting.level, ceiling: autonomySetting.ceiling, policyOutcome, effect: autonomy.effect, code: autonomy.code };
       reasons = evaluation.reasons;
-      riskIndicators = [...evaluation.riskIndicators, ...(autonomy.effect !== "unchanged" ? [`autonomy:level-${autonomySetting.level}`] : []), ...shield.findings.map((f) => `data:${f.dataClass}`), ...(restrictApplied.length ? ["restricted"] : []), ...(delegation ? ["delegated"] : [])];
+      riskIndicators = [...evaluation.riskIndicators, ...(modelRecordState && modelRecordState.status !== "ok" && modelRecordState.status !== "unregistered" ? [`model:${modelRecordState.status}`] : []), ...(autonomy.effect !== "unchanged" ? [`autonomy:level-${autonomySetting.level}`] : []), ...shield.findings.map((f) => `data:${f.dataClass}`), ...(restrictApplied.length ? ["restricted"] : []), ...(delegation ? ["delegated"] : [])];
       policyVersionIds = [...new Set(evaluation.trace.map((t) => t.policyVersionId))];
       matchedRuleIds = evaluation.matchedRules.map((m) => `${m.policyKey}/${m.ruleId}`);
       approvalSpec = evaluation.approval;
@@ -375,6 +394,7 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
         uncertainty: { ...uncertainty, escalated: uncertaintyEscalated },
         reasoning: reasoning ? { ...reasoning, escalated: reasoningEscalated } : null,
         injection: { signals: shield.shield.injectionSignals, escalated: injectionEscalated },
+        model: modelRecordState,
         inputSummary: { amount: authzInput.context.amount, currency: authzInput.context.currency, destinationDomain: authzInput.context.destinationDomain, resource: authzInput.resource?.key ?? null, requestCount24h: authzInput.context.requestCount24h, deniedCount24h: authzInput.context.deniedCount24h, hour: authzInput.context.hour, priorRequestsSameReference: authzInput.context.priorRequestsSameReference, duplicateReferenceKey: authzInput.context.duplicateReferenceKey },
       };
       if (decisionResult === "deny" && evaluation.securityEventSeverity) {

@@ -328,6 +328,7 @@ async function prepare(db: TenantDb, ctx: OrgContext, input: z.infer<typeof star
       environment: target.environment,
       modelProvider: target.modelProvider,
       modelId: target.modelId,
+      modelRecordId: target.modelRecordId,
       teamId: target.teamId,
       dataClassificationLimit: target.dataClassificationLimit,
       riskTier: target.riskTier,
