@@ -33,7 +33,7 @@ export default async function GettingStartedPage() {
       <Panel title="Enterprise rollout" description={`From a new organization to its first audit report: ${rollout.filter((r) => r.done).length} of ${rollout.length} done. Checked against your records.`} className="mt-4" padded={false}>
         <ol className="divide-y divide-line" data-testid="enterprise-rollout">
           {rollout.map((r) => (
-            <li key={r.key} className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm" data-step={r.key} data-done={r.done ? "yes" : "no"}>
+            <li key={r.key} className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm" data-rollout-step={r.key} data-done={r.done ? "yes" : "no"}>
               <span className="flex items-center gap-2">
                 {r.done ? <CheckCircle2 className="h-4 w-4 text-allow" aria-label="Done" /> : <Circle className="h-4 w-4 text-fg-dim" aria-label="Not done" />}
                 <span className={r.done ? "text-fg" : "text-fg-muted"}>{r.title}</span>

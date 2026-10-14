@@ -45,9 +45,9 @@ test.describe("commercial platform", () => {
   test("getting started shows the enterprise rollout from organization to first audit report", async ({ page }) => {
     await login(page, NADIA);
     await page.goto("/getting-started");
-    const steps = page.getByTestId("enterprise-rollout").locator("[data-step]");
+    const steps = page.getByTestId("enterprise-rollout").locator("[data-rollout-step]");
     await expect(steps).toHaveCount(8);
-    await expect(page.locator('[data-step="protected_action"]')).toHaveAttribute("data-done", "yes");
+    await expect(page.locator('[data-rollout-step="protected_action"]')).toHaveAttribute("data-done", "yes");
   });
 
   test("a platform administrator creates a customer with a first-administrator invitation, records a contract and issues an invoice", async ({ page }) => {
