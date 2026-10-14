@@ -14,6 +14,7 @@ import { seedDemoAutonomy } from "./demo-autonomy.js";
 import { seedDemoUncertainty } from "./demo-uncertainty.js";
 import { withTenant } from "@aegis/db";
 import { runAttackSimulation } from "../security/lab.js";
+import { seedDemoGovernance } from "./demo-governance.js";
 import type { TenantRunner } from "../gateway/gateway.js";
 import { updateInjectionResponse } from "../shield/injection-response.js";
 
@@ -45,6 +46,8 @@ export async function runSeed() {
   await seedSharedFrameworks();
   const audit = await withTenant(t.orgId, (db) => seedDemoAudit(db, t.users.owner!.ctx, { ownerUserId: t.users.owner!.id, auditorUserId: t.users.auditor!.id }), { timeout: 180_000, lock: "lazy" });
   console.log(`Audit: ${audit.documents.length} documents, ${audit.assessments.length} assessments, ${audit.tasks.length} tasks`);
+  const governance = await seedDemoGovernance(t);
+  console.log(`Model and data governance: ${governance.models} models, ${governance.datasets} datasets, ${governance.changes} regulatory changes`);
   // Monitoring over the seeded history: run at several points in the past so alerts carry realistic timestamps,
   // then once now. A few alerts are already handled.
   const mon = await withTenant(t.orgId, async (db) => {

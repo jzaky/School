@@ -65,11 +65,16 @@ describe("an agent key cannot change its own governance", () => {
     ["relax a tool's uncertainty requirements", "/v1/uncertainty/tools/:random/policy", () => ({ enabled: false })],
     ["relax a tool's rationale requirements", "/v1/decisions/tools/:random/reasoning-policy", () => ({ enabled: false })],
     ["start an attack simulation", "/v1/lab/runs", () => ({ targetAgentId: agentId })],
+    ["register a model", "/v1/governance/models", () => ({ key: "agent-model", name: "Agent model", provider: "x", providerModelId: "y" })],
+    ["approve a model", "/v1/governance/models/:random/decide", () => ({ approve: true, note: "self approved" })],
+    ["switch off model enforcement", "/v1/governance/models/enforcement", () => ({ enforcement: "off" })],
+    ["decide a data deletion", "/v1/governance/deletion-requests/:random/decide", () => ({ approve: false, note: "agent refuses" })],
+    ["close a regulatory change", "/v1/governance/regulatory-changes/:random/implemented", () => ({ note: "agent says done" })],
   ];
   for (const [what, path, body] of attempts) {
     it(`cannot ${what}`, async () => {
       const url = path.replace(":agent", agentId).replace(":random", randomUUID());
-      const method = path === "/v1/autonomy/settings" || path.endsWith("/policy") || path.endsWith("-policy") ? "PUT" : "POST";
+      const method = path === "/v1/autonomy/settings" || path.endsWith("/enforcement") || path.endsWith("/policy") || path.endsWith("-policy") ? "PUT" : "POST";
       const res = await app.inject({ method, url, headers: { authorization: `Bearer ${agentKey}` }, payload: body() });
       expect([401, 403]).toContain(res.statusCode);
     });

@@ -11,6 +11,13 @@ export function formatDateTime(d: Date | string | null | undefined): string {
   return date.toLocaleString("en-GB", { year: "numeric", month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false });
 }
 
+/** A calendar date in UTC, for dates without a meaningful time of day (effective dates, due dates). */
+export function formatDate(d: Date | string | null | undefined): string {
+  if (!d) return "";
+  const date = typeof d === "string" ? new Date(d) : d;
+  return date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+}
+
 export function timeAgo(d: Date | string | null | undefined): string {
   if (!d) return "never";
   const t = typeof d === "string" ? new Date(d).getTime() : d.getTime();

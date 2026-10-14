@@ -269,3 +269,40 @@ Full description: `docs/ATTACK_SIMULATION_LAB.md`.
 **Known limitations:**
 - Scenarios are fixed and runs are manual.
 - Injection detection is heuristic and has not been evaluated against an independent adversarial corpus.
+
+## Phase 7: model governance, data governance and regulatory change (14 October 2026)
+
+**Built:**
+- **Model registry and lifecycle.**
+  - Stages: proposed, evaluating, approved, deprecated, retired.
+  - Evaluations are append-only.
+  - Approval needs evaluations with no failing latest result and a second person with `policies:activate`.
+  - Periodic review dates; agents linked to their model.
+- **Model enforcement in the gateway.** An off-by-default organization setting holds or refuses agents whose model is unregistered, unapproved or retired. It is monotonic (property-tested) and recorded on every decision.
+- **Data inventory.**
+  - Owner, classification, categories, declared region, retention and lawful basis, with findings for the gaps.
+  - Access audit from real agent permissions and gateway requests.
+- **Deletion requests.** Keyed hash of the subject only, a two-person decision, and the completion reference from the customer's system.
+- **Regulatory change register.** People record a change, assess it (with a labelled lexical suggestion) and turn it into remediation tasks. It can close only when every task is resolved.
+- **Console:** Models (Control), Data Inventory (Security) and Regulatory Changes (Audit), each with a detail page.
+
+Full description: `docs/MODEL_DATA_GOVERNANCE.md`.
+
+**Database migration:** `20261014180000_model_data_governance`. It adds six tables, two of them append-only, and `agents.model_record_id`.
+
+**API:** `/v1/governance/*`. Writes need a person.
+
+**Tests added:**
+
+| Suite | Tests |
+|---|---|
+| Core | 9 |
+| API | 5 |
+| Browser | 4 |
+
+**Status:** implemented and tested locally. Records are entered by people. Regions are declared, not verified. AEGIS records deletions; it does not perform them.
+
+**Known limitations:**
+- No imports from model hubs or data catalogs.
+- Impact suggestions are lexical.
+- No scheduled reminders.

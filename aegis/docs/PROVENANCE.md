@@ -73,4 +73,10 @@ Every item below was implemented from AEGIS's own engine and code. None was buil
 - **Test data.** The card number is the widely published test number 4111 1111 1111 1111, and the IBAN is a checksum-valid example. Neither belongs to anyone.
 - **Method.** Regression testing of the organization's own configuration through the production code path (decision-only), which is standard software testing practice, with no external source.
 
+### Phase 7: model governance, data governance and regulatory change
+- **AI management systems.** ISO/IEC 42001:2023 (AI system life cycle, impact assessment, data for AI systems) and the NIST AI Risk Management Framework 1.0 (Map, Measure, Manage), for the stages, evaluations and periodic review. Both are already in the AEGIS framework catalog.
+- **Model and dataset documentation.** Mitchell et al. (2019), "Model Cards for Model Reporting" (FAT* 2019), and Gebru et al. (2021), "Datasheets for Datasets" (Communications of the ACM), for the kinds of facts recorded per model and per dataset.
+- **Erasure.** The right to erasure as described in GDPR Article 17 and the UAE Personal Data Protection Law, for the deletion request workflow. AEGIS records decisions; it does not determine legal obligations.
+- **Regulatory facts.** The EU AI Act general-purpose AI obligations date (2 August 2025) is from Regulation (EU) 2024/1689. Every other regulatory entry in the demo is marked illustrative.
+
 Later phases add their foundations here.
