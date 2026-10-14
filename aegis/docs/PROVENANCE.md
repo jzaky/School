@@ -155,3 +155,8 @@ Recorded in `docs/QUANTOS_INTEGRATION.md`. Design only; nothing implemented, no 
 - **EN 18286.** AEGIS will store EN 18286 clause numbers and its own descriptive wording only. They are entered from a licensed copy, and the standard's text, structure and tables are never reproduced.
 - **Quant parameters.** No external scoring weights, gate structures or tier thresholds were reproduced or are to be reproduced. The Quant OS risk-governor limits referenced in the design are the values already in Quant OS's own code. Any new risk limits will be designed from public finance methods and cited: for example the Kelly criterion (Kelly, 1956), volatility targeting, and drawdown and exposure limits as described in public practitioner literature.
 - **No confidential material.** No third-party confidential material was available or used.
+
+## Quant OS safety and AEGIS authorization implementation (2026-10-14)
+
+- AEGIS side: `packages/core/scripts/quantos-tenant-setup.ts`, written for this project using AEGIS's own service functions. Quant OS side: written for Quant OS, standard library only.
+- No DNRS material and no AGPL or GPL source was used. No dependency was added.

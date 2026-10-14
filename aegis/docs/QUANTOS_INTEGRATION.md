@@ -12,6 +12,23 @@ The only network calls were reads of public repository and standards pages, made
 
 **Goal:** use Quant OS as a real-world demonstration of AEGIS authorizing an AI agent's financial action, with Alpaca paper trading only.
 
+## 0. Implementation status (2026-10-14)
+
+Implemented in `jzaky/quantos` on branch `claude/quantos-safety-aegis`. See `docs/SAFETY_ARCHITECTURE.md` and `docs/safety/REPORT.md` in that repository.
+
+- **Quant OS safety fixes Q1 to Q7: tested.** Failing-first regression tests are in place.
+- **Agent-mode authorization: tested.**
+  - Tested against a local stand-in and against this AEGIS gateway running locally, using `packages/core/scripts/quantos-tenant-setup.ts`.
+  - The tenant uses an integration with no credentials, whose key has only `grants:verify`.
+  - The tool is `place-order`, governed by the trading policy template.
+- **Changes from the design above:**
+  - **Broker reference.** The broker `client_order_id` is `qos-` plus a hash of the workspace and the idempotency key, not `aegis-<requestId>`. It is sent to AEGIS as the bound `reference` parameter, so it is covered by the grant hash.
+  - **Restrict decision.** Refused by Quant OS.
+  - **Stop orders.** Refused while AEGIS is enabled.
+- **No AEGIS product code changed.**
+- **T4 (tamper detection): tested from the Quant OS live suite.** A database owner rewrites the evidence of a Quant OS order, and verification reports the exact sequence.
+- **No Alpaca order, paper or live, has been sent.**
+
 ## 1. Audit: what already exists
 
 ### 1.1 AEGIS (relevant parts)
