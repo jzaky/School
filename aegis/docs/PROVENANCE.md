@@ -104,4 +104,10 @@ Every item below was implemented from AEGIS's own engine and code. None was buil
 - **Usage metering.** Idempotent upsert per period and metric, the pattern used by metered billing systems so retries never double count.
 - **Customer health measures.** Common customer success practice (adoption, activity and support signals); the measures here are computed from records, not scored by a model.
 
+### Phase 13: security hardening
+- **Foreign keys and row-level security.** The PostgreSQL 16 manual (section 5.8, row security policies) notes that referential integrity checks bypass row security; the guard triggers close that gap.
+- **DNS rebinding.** OWASP Server-Side Request Forgery Prevention Cheat Sheet: validate the resolved address used for the connection, not a separate lookup.
+- **Advisory locks.** PostgreSQL `pg_advisory_xact_lock`, transaction-scoped.
+- **Fail closed.** NIST SP 800-53 Rev. 5 SC-24 (fail in known state) and SC-7(18) (fail secure).
+
 Later phases add their foundations here.

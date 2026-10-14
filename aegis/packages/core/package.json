@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "keygen": "tsx scripts/keygen.ts",
+    "drill:restore": "tsx scripts/backup-restore-drill.ts",
     "lint": "eslint src tests",
     "seed": "tsx src/seed/index.ts"
   },

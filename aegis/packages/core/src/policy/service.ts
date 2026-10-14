@@ -195,9 +195,19 @@ export async function resolvePoliciesForAgent(db: TenantDb, orgId: string, agent
     seen.add(a.policyId);
     const v = await db.policyVersion.findUnique({ where: { id: a.policy.currentVersionId } });
     if (!v || v.state !== "active") continue;
-    out.push({ policyKey: a.policy.key, policyVersionId: v.id, policyVersion: v.version, document: v.document as unknown as PolicyDocument });
+    out.push({ policyKey: a.policy.key, policyVersionId: v.id, policyVersion: v.version, document: v.document as unknown as PolicyDocument, contentHash: v.contentHash });
   }
   return out.sort((x, y) => x.policyKey.localeCompare(y.policyKey));
+}
+
+/**
+ * Policy tampering check (docs/SECURITY_VALIDATION.md). A version's hash is recorded when it is written and its
+ * document is frozen by a database trigger once it leaves draft. If the stored document no longer hashes to
+ * the recorded value, someone changed it outside AEGIS (for example with the owner role and the trigger
+ * disabled). The gateway then refuses the request rather than evaluate a policy it cannot trust.
+ */
+export function policyIntegrityFailures(policies: PolicyToEvaluate[]): { policyKey: string; policyVersionId: string }[] {
+  return policies.filter((p) => p.contentHash !== undefined && hashObject(p.document) !== p.contentHash).map((p) => ({ policyKey: p.policyKey, policyVersionId: p.policyVersionId }));
 }
 
 /** Policy history across the organization for the Policy History screen. */

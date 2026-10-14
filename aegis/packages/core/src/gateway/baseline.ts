@@ -33,7 +33,9 @@ export interface BaselineFailure {
     | "grant_expired"
     | "delegation_invalid"
     | "delegation_not_permitted"
-    | "delegation_limit_exceeded";
+    | "delegation_limit_exceeded"
+    | "policy_integrity"
+    | "concurrency_limit";
   message: string;
   details?: unknown;
 }

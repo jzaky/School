@@ -433,3 +433,26 @@ Full description: `docs/INTEGRATIONS.md`.
 - Limits are not enforced.
 - Invoices are not emailed or rendered as PDF.
 - The sales demonstration cannot be deleted from the console, because audit records are append-only. Each run of the autonomy scenario adds a new agent.
+
+## Phase 13: security hardening and validation (15 October 2026)
+
+**Built:**
+- **Cross-tenant reference guard.** 67 triggers refuse a row that points at another organization's row, covering foreign keys (which PostgreSQL checks without row-level security) and 31 plain reference columns.
+- **Policy tampering detection.** Before every decision the active versions are re-hashed. A mismatch refuses the request and raises a critical security event.
+- **Concurrent action limits per agent,** serialized with an advisory lock so simultaneous requests cannot exceed the limit.
+- **DNS pinning for event destinations.** The checked address is the connected address, which closes DNS rebinding.
+- **A repeatable backup restore drill.** Run and recorded: 53,177 evidence events across 1,202 chains, every chain giving the source's result.
+- **docs/SECURITY_VALIDATION.md:** a requirement matrix with proofs, the fail-closed design and its operational consequences.
+
+**Tests added:**
+
+| Suite | Tests |
+|---|---|
+| Core security regression | 8 |
+| SDK | 1 |
+
+**Status:** implemented and tested locally. The restore drill was run on the development database.
+
+**Known limitations:**
+- No independent penetration test.
+- No production point-in-time recovery drill.

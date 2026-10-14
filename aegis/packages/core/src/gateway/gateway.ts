@@ -9,7 +9,7 @@ import { enqueueJob } from "../jobs/queue.js";
 import { notifyUsers, userIdsWithPermission } from "../notify/notifications.js";
 import { evaluatePolicies, type Effect, type EvaluationResult, type PolicyToEvaluate } from "../policy/evaluate.js";
 import type { MoreInformationSpec, QuarantineSpec } from "../policy/schema.js";
-import { resolvePoliciesForAgent } from "../policy/service.js";
+import { policyIntegrityFailures, resolvePoliciesForAgent } from "../policy/service.js";
 import { hasPermission } from "../identity/permissions.js";
 import { createSecurityEvent } from "../shield/security-events.js";
 import { baselineChecks, type BaselineFailure } from "./baseline.js";
@@ -214,6 +214,21 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
     const paused = await gatewayPausedState(db, ctx.orgId);
     const baseline = baselineChecks({ agent, tool, action: input.action, resource, resourceKeyRequested: input.resource ?? null, params: input.params, destinationDomain, gatewayPaused: paused, now });
     const failures: BaselineFailure[] = [...baseline.failures, ...(delegationFailure ? [delegationFailure] : []), ...(delegation ? delegationChecks(delegation, tool, resource, input.action, input.params, now) : [])];
+    // Policy tampering: a stored policy that no longer matches its recorded hash is never evaluated.
+    const tampered = policyIntegrityFailures([...(await resolvePoliciesForAgent(db, ctx.orgId, agent)), ...(delegation ? await resolvePoliciesForAgent(db, ctx.orgId, delegation.delegator) : [])]);
+    if (tampered.length) failures.push({ code: "policy_integrity", message: `Policy ${tampered.map((t) => t.policyKey).join(", ")} does not match its recorded hash: it was changed outside AEGIS, so the request is refused`, details: tampered });
+    // Concurrent action limit (agent.metadata.maxConcurrentActions): actions in flight are live, unconsumed
+    // grants plus executions under way. A per-agent advisory lock, held until this transaction commits,
+    // makes simultaneous requests count one after another, so they cannot all slip under the limit.
+    const maxConcurrent = readConcurrencyLimit(agent.metadata);
+    if (maxConcurrent !== null) {
+      await db.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${agentId}, 7301))`;
+      const [liveGrants, executing] = await Promise.all([
+        db.executionGrant.count({ where: { orgId: ctx.orgId, consumedAt: null, voidedAt: null, expiresAt: { gt: now }, request: { agentId } } }),
+        db.actionRequest.count({ where: { orgId: ctx.orgId, agentId, status: "executing" } }),
+      ]);
+      if (liveGrants + executing >= maxConcurrent) failures.push({ code: "concurrency_limit", message: `The agent already has ${liveGrants + executing} action(s) in flight, its limit is ${maxConcurrent}; wait for one to finish`, details: { inFlight: liveGrants + executing, limit: maxConcurrent } });
+    }
 
     const shield = await getShieldInspector()(db, ctx.orgId, { params: input.params, toolKey: input.tool, destinationDomain, agentId });
     effectiveParams = shield.params;
@@ -222,7 +237,10 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
       decisionResult = "deny";
       reasons = failures.map((f) => f.message);
       explanation = { stage: "baseline", failures, shield: shield.findings };
-      if (failures.some((f) => f.code.startsWith("delegation_"))) {
+      if (failures.some((f) => f.code === "policy_integrity")) {
+        securitySeverity = "critical";
+        securityType = "policy.integrity_failure";
+      } else if (failures.some((f) => f.code.startsWith("delegation_"))) {
         securitySeverity = "high";
         securityType = "authorization.delegation_refused";
       } else if (failures.some((f) => f.code === "destination_not_allowed" || f.code === "classification_exceeded" || f.code === "tool_not_granted")) {
@@ -439,7 +457,8 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
     // Through the Shield module so critical and repeated high events open or join an incident.
     const created = await createSecurityEvent(db, ctx, { type: securityType, severity: securitySeverity ?? "medium", title: `${isLab ? "[lab] " : ""}${securityType.replace(/[._]/g, " ")}: ${agent.slug} ${input.tool}`, agentId, actionRequestId: request.id, escalate: isLab ? false : undefined, detail: { reasons, tool: input.tool, action: input.action, resource: input.resource ?? null, destinationDomain: extractDestinationDomain(input.params), onBehalfOf: input.onBehalfOf?.agentId ?? null, ...(isLab ? { lab: true } : {}) } });
     securityEventId = created.event.id;
-    if (!isLab) await applyAutomaticDowngrade(db, { ...systemContextFor(ctx.orgId), now }, agentId, { rule: "security_event", severity: securitySeverity ?? "medium", securityEventType: securityType, actionRequestId: request.id });
+    // A tampered policy is not the agent's doing, so it does not lower the agent's autonomy.
+    if (!isLab && securityType !== "policy.integrity_failure") await applyAutomaticDowngrade(db, { ...systemContextFor(ctx.orgId), now }, agentId, { rule: "security_event", severity: securitySeverity ?? "medium", securityEventType: securityType, actionRequestId: request.id });
   }
 
   let status: ActionRequest["status"];
@@ -821,6 +840,12 @@ export async function recordAgentExecution(db: TenantDb, ctx: OrgContext, action
   const fresh = await db.actionRequest.findUniqueOrThrow({ where: { id: req.id }, select: { executionAttempts: true } });
   const tool = req.toolId ? await db.tool.findUnique({ where: { id: req.toolId }, include: { integration: { select: { key: true } } } }) : null;
   return recordOutcome(db, ctx, { id: req.id, correlationId: req.correlationId, executionAttempts: fresh.executionAttempts }, tool?.integration?.key ?? "agent-channel", { outcome: input.outcome, reference: input.reference ?? null, summary: { reportedByAgent: true, ...(input.summary ?? {}) } }, 0);
+}
+
+/** A positive whole number in agent.metadata.maxConcurrentActions, or null when the agent has no limit. */
+export function readConcurrencyLimit(metadata: unknown): number | null {
+  const v = (metadata as { maxConcurrentActions?: unknown } | null)?.maxConcurrentActions;
+  return typeof v === "number" && Number.isInteger(v) && v > 0 && v <= 10_000 ? v : null;
 }
 
 export function systemContextFor(orgId: string): OrgContext {

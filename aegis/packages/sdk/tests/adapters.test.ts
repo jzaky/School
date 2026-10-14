@@ -84,6 +84,22 @@ describe("guardedCall", () => {
       expect(ran).toBe(0);
     }
   });
+  it("fails closed when the gateway hangs past the timeout or answers with something that is not a decision", async () => {
+    const hanging = (async (_url: string, init?: RequestInit) =>
+      new Promise<Response>((_resolve, reject) => {
+        init?.signal?.addEventListener("abort", () => reject(new Error("aborted")));
+      })) as unknown as typeof fetch;
+    const garbled = (async () => new Response("<html>bad gateway</html>", { status: 502 })) as unknown as typeof fetch;
+    const notADecision = (async () => new Response(JSON.stringify({ ok: true }), { status: 200 })) as unknown as typeof fetch;
+    for (const fetchImpl of [hanging, garbled, notADecision]) {
+      const client = new AegisClient({ baseUrl: "http://gateway.test", apiKey: "k", fetchImpl, timeoutMs: 50 });
+      let ran = 0;
+      const err = await guardedCall(client, "t", { amount: 1 }, () => ++ran).catch((e: unknown) => e);
+      expect(err).toBeInstanceOf(AegisRefusal);
+      expect((err as AegisRefusal).decision.decision).toBe("deny");
+      expect(ran).toBe(0);
+    }
+  });
   it("waits for a human when asked, then runs with the issued grant", async () => {
     const g = fakeGateway();
     let ran = 0;

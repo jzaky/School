@@ -1,4 +1,7 @@
 import { lookup } from "node:dns/promises";
+import { request as httpRequest } from "node:http";
+import { request as httpsRequest } from "node:https";
+import type { LookupFunction } from "node:net";
 import { isIP } from "node:net";
 import type { EventDestination, EvidenceEvent, Prisma, TenantDb } from "@aegis/db";
 import { z } from "zod";
@@ -364,19 +367,43 @@ export async function getDestination(db: TenantDb, ctx: OrgContext, id: string) 
 
 export type Sender = (req: DestinationRequest) => Promise<{ status: number; body: string }>;
 
-const defaultSender: Sender = async (req) => {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 10_000);
-  try {
-    const res = await fetch(req.url, { method: "POST", headers: req.headers, body: req.body, redirect: "manual", signal: controller.signal });
-    return { status: res.status, body: (await res.text()).slice(0, 500) };
-  } finally {
-    clearTimeout(timer);
-  }
-};
+/**
+ * DNS pinning (docs/SECURITY_VALIDATION.md). The address checked is the address connected to: the request
+ * resolves the name itself through this lookup, which refuses private, loopback and metadata addresses, so a
+ * name that changes its answer between the check and the connection (DNS rebinding) cannot reach them.
+ */
+export function pinnedLookup(allowPrivate: boolean, resolve: (host: string) => Promise<{ address: string; family: number }[]> = (h) => lookup(h, { all: true })): LookupFunction {
+  return (hostname, options, callback) => {
+    resolve(hostname)
+      .then((all) => {
+        if (all.length === 0) return callback(new Error(`Could not resolve ${hostname}`), "", 0);
+        if (!allowPrivate && all.some((a) => isPrivateAddress(a.address))) return callback(new Error("Destinations must not resolve to private, loopback or metadata addresses"), "", 0);
+        if ((options as { all?: boolean }).all) return (callback as unknown as (e: null, a: { address: string; family: number }[]) => void)(null, all);
+        callback(null, all[0]!.address, all[0]!.family);
+      })
+      .catch((e: Error) => callback(e, "", 0));
+  };
+}
+
+const defaultSender: Sender = (req) =>
+  new Promise((resolvePromise, reject) => {
+    const url = new URL(req.url);
+    const client = url.protocol === "https:" ? httpsRequest : httpRequest;
+    const r = client(url, { method: "POST", headers: req.headers, lookup: pinnedLookup(env().AEGIS_ALLOW_PRIVATE_DESTINATIONS), timeout: 10_000 }, (res) => {
+      let body = "";
+      res.setEncoding("utf8");
+      res.on("data", (chunk: string) => {
+        if (body.length < 500) body += chunk;
+      });
+      res.on("end", () => resolvePromise({ status: res.statusCode ?? 0, body: body.slice(0, 500) }));
+    });
+    r.on("timeout", () => r.destroy(new Error("The destination did not answer within 10 seconds")));
+    r.on("error", reject);
+    r.end(req.body);
+  });
 
 let sender: Sender = defaultSender;
-/** Tests replace the HTTP sender; production uses fetch. */
+/** Tests replace the HTTP sender; production uses the pinned-DNS sender above. */
 export function setDestinationSender(s: Sender | null) {
   sender = s ?? defaultSender;
 }

@@ -29,6 +29,8 @@ export interface PolicyToEvaluate {
   policyVersionId: string;
   policyVersion: number;
   document: PolicyDocument;
+  /** Hash recorded when the version was written; set when the version was read from the database. */
+  contentHash?: string;
 }
 
 export interface EvaluationResult {

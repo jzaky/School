@@ -180,3 +180,83 @@ BEGIN
   EXECUTE format('GRANT EXECUTE ON FUNCTION aegis_user_memberships(uuid) TO %I', app_role);
   EXECUTE format('GRANT EXECUTE ON FUNCTION aegis_invitation_by_hash(text) TO %I', app_role);
 END $$;
+
+-- Cross-tenant reference guard (docs/SECURITY_VALIDATION.md). PostgreSQL checks foreign keys without
+-- row-level security, so a tenant that learned another tenant's row id could point its own rows at it.
+-- For every single-column foreign key between two tables that both carry org_id, a trigger refuses a
+-- reference to a row of another organization. The lookup runs as the table owner (SECURITY DEFINER) so
+-- it can see the parent whatever the caller's tenant; it compares organization ids and nothing else.
+CREATE OR REPLACE FUNCTION aegis_same_org_reference() RETURNS trigger
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+DECLARE parent_org uuid;
+BEGIN
+  EXECUTE format('SELECT org_id FROM public.%I WHERE %I = ($1).%I', TG_ARGV[0], TG_ARGV[2], TG_ARGV[1]) INTO parent_org USING NEW;
+  IF parent_org IS NOT NULL AND parent_org <> NEW.org_id THEN
+    RAISE EXCEPTION 'AEGIS: %.% refers to a % row of another organization', TG_TABLE_NAME, TG_ARGV[1], TG_ARGV[0]
+      USING ERRCODE = 'integrity_constraint_violation';
+  END IF;
+  RETURN NEW;
+END $$;
+REVOKE ALL ON FUNCTION aegis_same_org_reference() FROM PUBLIC;
+
+DO $$
+DECLARE r record; trg text;
+BEGIN
+  -- Drop guards from earlier runs so renamed or removed keys leave nothing behind.
+  FOR r IN SELECT tgname, tgrelid::regclass::text AS tbl FROM pg_trigger WHERE tgname LIKE 'org_ref_%' AND NOT tgisinternal LOOP
+    EXECUTE format('DROP TRIGGER %I ON %s', r.tgname, r.tbl);
+  END LOOP;
+  FOR r IN
+    SELECT c.conname, child.relname AS child_table, parent.relname AS parent_table, ca.attname AS child_col, pa.attname AS parent_col
+    FROM pg_constraint c
+    JOIN pg_class child ON child.oid = c.conrelid
+    JOIN pg_class parent ON parent.oid = c.confrelid
+    JOIN pg_namespace n ON n.oid = child.relnamespace AND n.nspname = 'public'
+    JOIN pg_attribute ca ON ca.attrelid = c.conrelid AND ca.attnum = c.conkey[1]
+    JOIN pg_attribute pa ON pa.attrelid = c.confrelid AND pa.attnum = c.confkey[1]
+    WHERE c.contype = 'f' AND array_length(c.conkey, 1) = 1 AND ca.attname <> 'org_id'
+      AND EXISTS (SELECT 1 FROM pg_attribute x WHERE x.attrelid = c.conrelid AND x.attname = 'org_id' AND NOT x.attisdropped)
+      AND EXISTS (SELECT 1 FROM pg_attribute x WHERE x.attrelid = c.confrelid AND x.attname = 'org_id' AND NOT x.attisdropped)
+  LOOP
+    trg := 'org_ref_' || substr(md5(r.conname), 1, 20);
+    EXECUTE format('CREATE TRIGGER %I BEFORE INSERT OR UPDATE OF %I ON public.%I FOR EACH ROW EXECUTE FUNCTION aegis_same_org_reference(%L, %L, %L)', trg, r.child_col, r.child_table, r.parent_table, r.child_col, r.parent_col);
+  END LOOP;
+END $$;
+
+-- The same guard for references that are not foreign keys (kept loose for history, soft deletes or
+-- optional links). Each entry is child_table.child_column -> parent_table; entries whose table or column
+-- does not exist are skipped, so the list can run before or after a migration that adds one.
+DO $$
+DECLARE pair text; c_table text; c_col text; p_table text; trg text;
+BEGIN
+  FOREACH pair IN ARRAY ARRAY[
+    'access_requests.agent_id>agents', 'access_requests.resource_id>resources', 'access_requests.tool_id>tools',
+    'action_requests.on_behalf_of_agent_id>agents', 'action_requests.tool_id>tools',
+    'agents.model_record_id>ai_models', 'agents.team_id>teams',
+    'alerts.agent_id>agents',
+    'approval_requests.policy_version_id>policy_versions',
+    'attack_simulation_runs.lab_agent_id>agents', 'attack_simulation_runs.target_agent_id>agents',
+    'autonomy_change_requests.agent_id>agents', 'autonomy_transitions.agent_id>agents', 'autonomy_transitions.change_request_id>autonomy_change_requests',
+    'calibration_profiles.agent_id>agents',
+    'datasets.resource_id>resources',
+    'discovered_agents.linked_agent_id>agents',
+    'execution_grants.integration_id>integrations',
+    'incident_events.security_event_id>security_events',
+    'invitations.role_id>roles',
+    'outcome_labels.action_request_id>action_requests', 'outcome_labels.agent_id>agents',
+    'policies.current_version_id>policy_versions',
+    'policy_events.version_id>policy_versions',
+    'policy_exceptions.agent_id>agents', 'policy_exceptions.policy_id>policies',
+    'resources.owner_team_id>teams',
+    'security_events.action_request_id>action_requests', 'security_events.agent_id>agents', 'security_events.policy_version_id>policy_versions',
+    'team_members.membership_id>memberships'
+  ] LOOP
+    c_table := split_part(split_part(pair, '>', 1), '.', 1);
+    c_col := split_part(split_part(pair, '>', 1), '.', 2);
+    p_table := split_part(pair, '>', 2);
+    CONTINUE WHEN NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = c_table AND column_name = c_col);
+    CONTINUE WHEN NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = p_table AND column_name = 'org_id');
+    trg := 'org_ref_' || substr(md5(pair), 1, 20);
+    EXECUTE format('CREATE TRIGGER %I BEFORE INSERT OR UPDATE OF %I ON public.%I FOR EACH ROW EXECUTE FUNCTION aegis_same_org_reference(%L, %L, %L)', trg, c_col, c_table, p_table, c_col, 'id');
+  END LOOP;
+END $$;
