@@ -28,8 +28,8 @@ test.describe("commercial platform", () => {
     await expect(page.getByTestId("billing-plan")).toHaveAttribute("data-plan", "trial");
     await expect(page.getByText("It never charges a card or collects payment")).toBeVisible();
     await expect(page.getByTestId("usage-lines").locator("[data-metric]")).toHaveCount(3);
-    await expect(page.locator('[data-feature="shadow_ai"]')).toHaveAttribute("data-included", "no");
-    await expect(page.locator('[data-feature="shadow_ai"]')).toContainText("planned, not built");
+    await expect(page.locator('[data-feature="secure_execution"]')).toHaveAttribute("data-included", "no");
+    await expect(page.locator('[data-feature="secure_execution"]')).toContainText("planned, not built");
   });
 
   test("a viewer opens a support request and sees it listed", async ({ page }) => {

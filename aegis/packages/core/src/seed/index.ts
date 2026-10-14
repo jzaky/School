@@ -18,6 +18,7 @@ import { seedDemoGovernance } from "./demo-governance.js";
 import { seedDemoDestinations } from "./demo-destinations.js";
 import { seedDemoPolicyExtras } from "./demo-policy-extras.js";
 import { seedDemoAiGateway } from "./demo-ai-gateway.js";
+import { seedDemoShadowAi } from "./demo-shadow-ai.js";
 import type { TenantRunner } from "../gateway/gateway.js";
 import { updateInjectionResponse } from "../shield/injection-response.js";
 
@@ -54,6 +55,8 @@ export async function runSeed() {
   console.log(`Event destinations: ${await seedDemoDestinations(t)} (paused)`);
   console.log(`Policy exceptions: ${await seedDemoPolicyExtras(t)}`);
   console.log(`AI gateway: ${(await seedDemoAiGateway(t)).requests} requests through a simulated provider`);
+  const shadow = await seedDemoShadowAi(t);
+  console.log(`Shadow AI: ${shadow.signals} signals from ${shadow.imports} synthetic log exports`);
   // Monitoring over the seeded history: run at several points in the past so alerts carry realistic timestamps,
   // then once now. A few alerts are already handled.
   const mon = await withTenant(t.orgId, async (db) => {

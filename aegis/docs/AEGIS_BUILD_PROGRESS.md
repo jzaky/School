@@ -525,3 +525,29 @@ The missed throughput target is explained in docs/PERFORMANCE.md, with the next 
 | Browser | 2 |
 
 **Status:** implemented and tested locally. No real provider has been called and nothing is deployed. The gaps are listed in docs/AI_GATEWAY_DLP.md: streaming, tokenization, exact data matching, approval holds and cost budgets.
+
+## Secure S3: Shadow AI discovery (14 October 2026)
+
+**Built:**
+- **A catalog of 18 AI applications,** with hostnames, identity-provider names and process names. Organizations can add their own.
+- **Parsers for seven export formats:** Entra sign-ins, Okta System Log, DNS (including Zeek), managed browser, proxy, endpoint and SaaS inventory.
+- **Signals labelled** confirmed, observed or inferred.
+- **Only AI matches are stored.** Other log lines are discarded on read. Non-member identities and devices are kept as keyed fingerprints. Re-imports are idempotent.
+- **An app register** with decisions and stated controls. Use of an unapproved app raises a security event that says how sure it is and that nothing was blocked.
+- **A coverage view** that lists what each source misses.
+- **An ingestion API** for log forwarders (`discovery:report`).
+- **A console page and demo data** imported through the real parsers.
+
+**Billing:** Shadow AI moves from planned to available. Software security and secure execution are listed as planned.
+
+**Tests changed:** the two tests that used Shadow AI as their example of a planned feature now use secure execution, which is still planned.
+
+**Tests added:**
+
+| Suite | Tests |
+|---|---|
+| Core | 12 |
+| API | 3 |
+| Browser | 3 |
+
+**Status:** implemented and tested with synthetic exports. There are no live connectors and no customer logs.

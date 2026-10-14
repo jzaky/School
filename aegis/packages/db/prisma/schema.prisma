@@ -1947,3 +1947,82 @@ model AiGatewayEvent {
   @@index([orgId, decision])
   @@map("ai_gateway_events")
 }
+
+/// An AI application in the organization's register (docs/SHADOW_AI.md): a catalog entry the organization has
+/// reviewed, or one it added itself. Status is the organization's decision; controls are its own statements.
+model ShadowAiApp {
+  id         String    @id @default(uuid(7)) @db.Uuid
+  orgId      String    @map("org_id") @db.Uuid
+  key        String
+  name       String
+  vendor     String    @default("")
+  category   String    @default("chat")
+  domains    String[]  @default([])
+  /// Process or package names an endpoint sensor reports for local AI tools.
+  processes  String[]  @default([])
+  custom     Boolean   @default(false)
+  /// unreviewed, approved, tolerated or unapproved.
+  status     String    @default("unreviewed")
+  note       String    @default("")
+  /// { sso?, dataRetentionAgreed?, dpaSigned?, adminConsole? } as stated by the organization.
+  controls   Json      @default("{}")
+  reviewedBy String?   @map("reviewed_by") @db.Uuid
+  reviewedAt DateTime? @map("reviewed_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  @@unique([orgId, key])
+  @@index([orgId, status])
+  @@map("shadow_ai_apps")
+}
+
+/// One normalized observation of AI use from a customer-authorized source. Holds no content: the app,
+/// the domain, who (a member id when the identity matches a member, otherwise a keyed hash) and when.
+model DiscoverySignal {
+  id           String   @id @default(uuid(7)) @db.Uuid
+  orgId        String   @map("org_id") @db.Uuid
+  importId     String?  @map("import_id") @db.Uuid
+  /// entra, okta, dns, managed_browser, endpoint, saas_inventory, casb, swg, ai_gateway, generic
+  source       String
+  /// identity, browser, endpoint, network, inventory, gateway
+  sourceType   String   @map("source_type")
+  /// confirmed (an authenticated sign-in or an AEGIS record), observed (a managed browser or endpoint saw
+  /// the app in use) or inferred (network metadata or inventory suggests use).
+  confidence   String
+  appKey       String?  @map("app_key")
+  domain       String?
+  process      String?
+  userId       String?  @map("user_id") @db.Uuid
+  identityHash String?  @map("identity_hash")
+  deviceHash   String?  @map("device_hash")
+  occurredAt   DateTime @map("occurred_at")
+  dedupeKey    String   @map("dedupe_key")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@unique([orgId, dedupeKey])
+  @@index([orgId, appKey, occurredAt])
+  @@index([orgId, sourceType, occurredAt])
+  @@map("discovery_signals")
+}
+
+/// One file or API batch of signals. The file itself is not kept.
+model DiscoveryImport {
+  id           String   @id @default(uuid(7)) @db.Uuid
+  orgId        String   @map("org_id") @db.Uuid
+  source       String
+  format       String
+  label        String   @default("")
+  received     Int      @default(0)
+  accepted     Int      @default(0)
+  matched      Int      @default(0)
+  duplicates   Int      @default(0)
+  unmatched    Int      @default(0)
+  rejected     Int      @default(0)
+  /// Up to 20 unmatched domains or app names with counts, for adding custom apps.
+  unmatchedTop Json     @default("[]") @map("unmatched_top")
+  createdBy    String?  @map("created_by") @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([orgId, createdAt])
+  @@map("discovery_imports")
+}

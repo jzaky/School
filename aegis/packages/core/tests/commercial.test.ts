@@ -31,7 +31,7 @@ describe("plans and invoices (pure)", () => {
     expect(normalizePlan("nonsense")).toBe("trial");
     const core = featuresFor("core");
     expect(core.find((f) => f.key === "shield")!.included).toBe(false);
-    expect(featuresFor("secure").find((f) => f.key === "shadow_ai")!.status).toBe("planned");
+    expect(featuresFor("enterprise").find((f) => f.key === "secure_execution")!.status).toBe("planned");
   });
 
   it("reports trial state and usage against limits without blocking anything", () => {

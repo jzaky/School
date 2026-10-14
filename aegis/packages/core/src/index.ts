@@ -90,3 +90,4 @@ export * from "./lib/metrics.js";
 export * from "./assurance/ops-alerts.js";
 export * from "./lib/circuit.js";
 export * from "./secure/ai-gateway.js";
+export * from "./secure/shadow-ai.js";

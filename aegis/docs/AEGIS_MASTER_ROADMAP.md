@@ -161,9 +161,9 @@ Phase 3 evidence + audit --> Cap 10 continuous assurance (partial) --> S7 --> S8
 | Phase | Status | What exists | What is missing | Dependency |
 |---|---|---|---|---|
 | S0 Architecture and threat model | Implemented | This roadmap; `docs/THREAT_MODEL.md` (agent side) | Threat model sections for prompt inspection and execution, written with S2 and S5 | None |
-| S1 Foundations | Partial | Tenancy, policy, evidence, jobs, integrations, metrics are shared and reusable | An ingestion API for discovery and telemetry signals | None |
+| S1 Foundations | Implemented | Tenancy, policy, evidence, jobs, integrations, metrics are shared; ingestion API for discovery signals (`/v1/shadow-ai/imports`); `ai:chat` key scope; plan entitlements | Live connectors pulling from customer systems | None |
 | S2 AI gateway and DLP | Implemented, tested locally | `secure/ai-gateway.ts`, `/v1/ai/chat/completions`, standalone process, console page; see docs/AI_GATEWAY_DLP.md | Streaming, tokenization, exact data matching, approval holds, cost budgets; a run against a real provider | S1 |
-| S3 Shadow AI discovery | Partial (agents only) | `agents/discovery.ts` records unregistered agents seen by integrations | Identity-provider, browser, network and endpoint adapters; observed versus inferred | S1; customer authorization for each source |
+| S3 Shadow AI discovery | Implemented, tested with synthetic exports | `secure/shadow-ai.ts`: parsers for Entra, Okta, DNS (including Zeek), managed browser, proxy, endpoint and inventory exports; confirmed, observed and inferred; coverage; app register; see docs/SHADOW_AI.md | Live API connectors, browser extension, DHCP-based linking of DNS to people | S1; customer authorization for each source |
 | S4 Open-source security | Not implemented | CI scans AEGIS's own dependencies | Inventory, SBOM ingestion, vulnerability matching, provenance, approvals | S1 |
 | S5 Secure execution | Not implemented | None | Isolated runner (gVisor or microVM), egress control, secrets isolation | Separate host; S1 |
 | S6 Investigations | Partial | Security events, incidents with timelines, Decision Inspector | Correlation across signals, investigation workspace, summaries as drafts | S1, S2, S3 |
