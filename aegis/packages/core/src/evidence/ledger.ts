@@ -1,6 +1,6 @@
 import { m } from "../lib/metrics.js";
 import { createPrivateKey, createPublicKey, sign, verify, type KeyObject } from "node:crypto";
-import type { Prisma, TenantDb } from "@aegis/db";
+import { isDeferredTransaction, onBeforeCommit, type Prisma, type TenantDb } from "@aegis/db";
 import { env } from "../env.js";
 import { canonicalJson, canonicalValue, sha256Hex } from "../lib/crypto.js";
 import type { OrgContext } from "../lib/context.js";
@@ -66,8 +66,58 @@ export function computeEvidenceHash(e: Omit<EvidenceRecord, "id" | "hash">): str
  */
 const chainHeads = new WeakMap<object, Map<string, { seq: bigint; hash: string }>>();
 
+type Pending = Omit<EvidenceRecord, "id" | "hash" | "seq" | "prevHash">;
+const pendingByTx = new WeakMap<object, Pending[]>();
+
+/**
+ * Deferred mode (withTenant lock "deferred"): events are kept in order and written just before commit,
+ * under the organization lock, with their chain links computed then. The rows, hashes and ordering are
+ * exactly what immediate appends would produce; only the time the lock is held changes.
+ */
+async function flushPending(db: TenantDb, orgId: string) {
+  const list = pendingByTx.get(db);
+  if (!list?.length) return;
+  pendingByTx.set(db, []);
+  await db.$executeRawUnsafe(`SELECT pg_advisory_xact_lock(hashtext('evidence:' || $1))`, orgId);
+  const last = await db.evidenceEvent.findFirst({ where: { orgId }, orderBy: { seq: "desc" }, select: { seq: true, hash: true } });
+  let seq = last?.seq ?? 0n;
+  let prevHash = last?.hash ?? GENESIS_HASH;
+  const rows = list.map((p) => {
+    seq += 1n;
+    const base = { ...p, seq, prevHash };
+    const hash = computeEvidenceHash(base);
+    prevHash = hash;
+    return { ...base, payload: base.payload as Prisma.InputJsonValue, hash };
+  });
+  await db.evidenceEvent.createMany({ data: rows });
+}
+
 export async function appendEvidence(db: TenantDb, ctx: OrgContext, input: EvidenceInput): Promise<EvidenceRecord> {
   m.evidenceAppended.inc();
+  if (isDeferredTransaction(db)) {
+    const actor = input.actor ?? { type: ctx.actor.type, id: ctx.actor.id };
+    const p: Pending = {
+      orgId: ctx.orgId,
+      type: input.type,
+      actorType: actor.type,
+      actorId: actor.id,
+      subjectType: input.subjectType,
+      subjectId: input.subjectId ?? null,
+      correlationId: input.correlationId ?? ctx.requestId,
+      traceId: input.traceId ?? ctx.traceId ?? null,
+      payload: canonicalValue(input.payload ?? {}),
+      occurredAt: input.occurredAt ?? ctx.now ?? new Date(),
+    };
+    let list = pendingByTx.get(db);
+    if (!list) {
+      list = [];
+      pendingByTx.set(db, list);
+      onBeforeCommit(db, () => flushPending(db, ctx.orgId));
+    }
+    list.push(p);
+    // Written at commit; the id, sequence and hash are assigned then. No caller reads them back.
+    return { ...p, id: "", seq: 0n, prevHash: "", hash: "" } as EvidenceRecord;
+  }
   // After the first append in a transaction this transaction holds the organization's ledger lock until it
   // commits, so the head it wrote is still the head: later appends in the same transaction skip the lock
   // and the read. The cache is keyed by the transaction client and dies with it.

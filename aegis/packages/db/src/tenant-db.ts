@@ -24,12 +24,32 @@ export interface TenantTxOptions {
    * "lazy": do not take the lock up front; appendEvidence takes it when it writes. Right for long
    * jobs (monitoring runs, assessments, seeding) that would otherwise block the request path for
    * their whole duration. Deadlocks that this can cause are resolved by the retry below.
+   * "deferred": evidence appended during the transaction is buffered and written, under the organization
+   * lock, just before the transaction commits (docs/PERFORMANCE.md). The lock then covers only the ledger
+   * writes and the commit, not the work before them. Code using this mode must protect any other
+   * invariant it relied on the organization lock for with a narrower lock (the gateway takes per-agent,
+   * per-idempotency-key and per-reference locks).
    */
-  lock?: "upfront" | "lazy";
+  lock?: "upfront" | "lazy" | "deferred";
   /** Attempts on deadlock or serialization failure. Default 3. */
   retries?: number;
   /** Milliseconds to wait for a connection and the lock before starting. Default 10s. */
   maxWait?: number;
+}
+
+const beforeCommit = new WeakMap<object, (() => Promise<void>)[]>();
+const deferredTx = new WeakSet<object>();
+
+/** True when evidence in this transaction is buffered until just before commit ("deferred" lock mode). */
+export function isDeferredTransaction(tx: TenantDb): boolean {
+  return deferredTx.has(tx);
+}
+
+/** Registers work to run inside the transaction after its body, just before commit, in registration order. */
+export function onBeforeCommit(tx: TenantDb, fn: () => Promise<void>) {
+  const list = beforeCommit.get(tx);
+  if (!list) throw new Error("onBeforeCommit needs a transaction opened by withTenant");
+  list.push(fn);
 }
 
 /**
@@ -53,7 +73,13 @@ export async function withTenant<T>(orgId: string, fn: (db: TenantDb) => Promise
         async (tx) => {
           await tx.$executeRawUnsafe(`SELECT set_config('app.current_org', '${orgId}', true)`);
           if (!opts.readOnly && (opts.lock ?? "upfront") === "upfront") await tx.$executeRawUnsafe(`SELECT pg_advisory_xact_lock(hashtext('evidence:' || '${orgId}'))`);
-          return fn(tx);
+          beforeCommit.set(tx, []);
+          if (opts.lock === "deferred" && !opts.readOnly) deferredTx.add(tx);
+          const out = await fn(tx);
+          // Runs whatever was registered, including callbacks registered by earlier callbacks.
+          const list = beforeCommit.get(tx)!;
+          for (let i = 0; i < list.length; i++) await list[i]!();
+          return out;
         },
         { timeout: opts.timeout ?? 15_000, maxWait: opts.maxWait ?? 10_000 },
       );

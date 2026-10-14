@@ -1,6 +1,102 @@
 # Performance and reliability
 
-## Targets and measured results (15 October 2026)
+## Gateway throughput for one organization: the bottleneck and the fix (14 October 2026)
+
+### Workload (reproducible)
+
+```
+pnpm --filter @aegis/core bench:gateway:setup 2 10          # 2 organizations, 10 agents each, fresh every run
+AEGIS_URL=http://127.0.0.1:4000 pnpm --filter @aegis/core bench:gateway 600 20 1   # requests, concurrency, organizations
+```
+
+**Each request:**
+- is an `issue-refund` sent over HTTP to `POST /v1/gateway/actions` with an agent's own API key;
+- is spread round-robin over the organization's agents;
+- has a unique order and a unique idempotency key;
+- has an amount that rotates through the refund policy's tiers:
+
+  | Amount | Policy outcome |
+  |---|---|
+  | Below AED 200 | Allowed and executed against the simulated support system |
+  | AED 1,000 to 2,500 | Waits for approval |
+  | Above AED 2,500 | Denied |
+
+  The policy's velocity rule also denies an agent's tenth refund in 24 hours.
+
+**How it is measured:**
+- 30 warm-up requests per organization are excluded.
+- Results are throughput, p50, p95, p99 and maximum latency, the error rate (HTTP 5xx, 429 or network error) and the outcome counts.
+- The JSON records are in `docs/validation/performance/`.
+
+**Environment:**
+- The build container: 4 vCPU, shared by PostgreSQL 16, the API in production mode and the load generator.
+- `DATABASE_URL` with `connection_limit=25`.
+- This is not a production environment, and the CPU ceiling below belongs to this machine.
+
+### Results
+
+| Run | Throughput | p50 | p95 | p99 | Max | Errors |
+|---|---|---|---|---|---|---|
+| Before: 1 organization, concurrency 20 | **7.0/s** | 2,118 ms | 5,812 ms | 6,481 ms | 6,892 ms | 0 |
+| After: 1 organization, concurrency 10 | 19.5/s | 473 ms | 829 ms | 1,052 ms | 1,359 ms | 0 |
+| After: 1 organization, concurrency 20 | **20.7 to 21.1/s** | 960 to 981 ms | 1,452 to 1,522 ms | 1,626 to 1,655 ms | 1,692 to 1,702 ms | 0 |
+| After: 1 organization, concurrency 40 | 19.8/s | 1,914 ms | 3,245 ms | 3,456 ms | 3,646 ms | 0 |
+| After: 2 organizations, concurrency 40 | 22.6/s in total (11.3/s each) | 1,605 ms | 3,235 ms | 3,465 ms | 3,621 ms | 0 |
+
+**Same decisions before and after.** The outcome counts at concurrency 20 were identical: 178 executed, 108 waiting for approval and 114 denied of 400. The change removed waiting; it did not change any decision.
+
+**Verdict on the 20/s target.** It is met at concurrency 20 and narrowly missed at 10 and 40 (19.5 and 19.8). After the fix the limit is this machine's CPU, not the organization:
+- Two organizations together get about the same total as one.
+- The CPU is about 90% busy, mostly Prisma's query engine.
+
+On a host where the database, the API and the load generator do not share four cores, the figure should be higher. That has not been measured.
+
+### What limited it, and what changed
+
+1. **The organization lock covered whole transactions (cause of the 7/s).**
+   - **Before:** every gateway transaction took the organization's ledger lock before its first statement and held it to commit, so an organization's decisions ran one at a time, each taking about 77 queries. The lock exists to keep the evidence chain strictly ordered.
+   - **Now:** the API's gateway route runs with a new `deferred` lock mode (`withTenant(..., { lock: "deferred" })`). Evidence appended during the transaction is buffered and written, under the lock, just before commit. The lock now covers only the ledger writes and the commit.
+   - **Unchanged:** the rows, hashes and chain order are produced exactly as before. Evidence still commits or rolls back with the decision.
+   - **Narrower locks** keep exact what the big lock used to guarantee, always taken in this order:
+     1. per idempotency key;
+     2. per agent (the agent's 24-hour counters, approvals pending and its concurrency limit);
+     3. per business reference (the duplicate-refund check).
+   - **A latent race, found and fixed.** The duplicate check only counted requests created before the deciding request's start time. A competing request that committed while this one waited could therefore be missed; the organization lock had hidden this. Live decisions now count every committed request and exclude only themselves; replays keep the time bound.
+2. **Connection pool.** Prisma's default pool is two connections per CPU plus one (9 here), below the gateway's concurrency. The deployment guidance is now `connection_limit` at least the expected concurrency (25 in these runs) and below PostgreSQL's `max_connections`.
+3. **Per-query events.** The database client asked Prisma for an event on every query, for one duration metric. That cost the query engine noticeable CPU on every statement, so it is now opt-in: `AEGIS_DB_QUERY_METRICS=1`.
+4. **The integration's settings JSON is no longer loaded with the tool on the decision path.** In the demo tenant this blob holds the simulated systems' ledgers, about 60 KB each, and was read three times per decision.
+
+The effect of each step, at concurrency 20 with one organization:
+
+| After step | Throughput |
+|---|---|
+| Before | 7.0/s |
+| 1 (lock) | 18.1/s |
+| 2 (pool) | 19.2/s |
+| 3 and 4 | 21.1/s |
+
+### What proves nothing was weakened
+
+`packages/core/tests/deferred-evidence.test.ts` runs real concurrency against the database. It shows that:
+- 30 simultaneous decisions from three agents leave one unbroken, gap-free evidence chain that verifies;
+- the same idempotency key sent five times at once creates one request and one execution;
+- two agents refunding the same order at the same moment, in five races per run, allow exactly one;
+- evidence written at commit has the same shape and verifies;
+- a failed transaction leaves no evidence.
+
+It passed 25 consecutive runs after the fix. Before the fix, the race test caught the double refund about once in fifteen runs.
+
+The full core, API and database suites pass. Tenant isolation is unchanged: row-level security and the cross-tenant reference triggers are untouched. Authorization is unchanged: every check, the policy evaluation and fail-closed handling run as before.
+
+### Next steps (not done)
+
+- Fewer queries per decision. An allowed request makes about 77 across five transactions; two of those transactions belong to the simulated downstream system.
+- Prisma's TypeScript query compiler, which removes the native engine's CPU cost. It needs its own evaluation.
+- A measurement with PostgreSQL, the API and the load generator on separate hosts, and with two API replicas.
+
+## Earlier measurements (before the fix above)
+
+### Targets and measured results
 
 Measured in the development container: 4 vCPU, PostgreSQL 16 on the same host, the demo database after
 many test runs (53,000 evidence events, 7,500 action requests). Every figure below was produced by a
@@ -12,7 +108,7 @@ command in this repository; nothing is estimated. These are not production numbe
 | Policy evaluation, 200-rule policy, p95 | none set | 489 microseconds | measured | same |
 | Evidence ingestion, one organization | 50 events per second or more | 144 per second (500 sequential appends, one transaction each) | met | same |
 | Gateway decision, one request at a time, p95 | 300 ms or less | 220 to 234 ms (p50 184 to 189 ms) | met | `scripts/perf-gateway.mts 100 1` |
-| Gateway throughput, one organization | 20 per second | 5.1 to 6.5 per second at concurrency 10 | missed | `scripts/perf-gateway.mts 200 10` |
+| Gateway throughput, one organization | 20 per second | 5.1 to 6.5 per second at concurrency 10 (superseded: see the section above) | missed then; 19.5 to 21.1 per second after the fix | `scripts/perf-gateway.mts 200 10` |
 | Gateway latency at concurrency 10, one organization, p95 | none set | 1.95 s (refusals), 2.08 s (allowed transfers including execution) | measured | same |
 
 ### Why per-organization throughput is about 5 per second
@@ -54,7 +150,7 @@ model governance, exception and integrity stages, each of which adds reads to a 
 |---|---|
 | Gateway authorization latency | `aegis_gateway_decision_seconds{result}`, `aegis_gateway_decisions_total{result}` |
 | Policy evaluation latency | `aegis_policy_evaluation_seconds` |
-| Database performance | `aegis_db_query_seconds` (from the database client's own timing) |
+| Database performance | `aegis_db_query_seconds` (from the database client's own timing; opt-in with `AEGIS_DB_QUERY_METRICS=1` because it costs CPU on every query) |
 | Queue processing time | `aegis_job_seconds{type}`, `aegis_job_wait_seconds{type}`, `aegis_jobs_total{type,outcome}` |
 | Integration reliability | `aegis_executions_total{system,outcome}`, `aegis_execution_seconds{system}`, `aegis_destination_deliveries_total{kind,outcome}` |
 | Error rates | `aegis_http_requests_total{route,status}`, `aegis_http_request_seconds{route}` |

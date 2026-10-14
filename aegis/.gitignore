@@ -13,3 +13,4 @@ test-results
 .turbo
 .demo-keys.json
 deploy/seed-output/
+.bench-keys.json

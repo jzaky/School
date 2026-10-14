@@ -155,6 +155,13 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
   const paramsHash = requestHashOf(input.tool, input.action, input.params);
   const now = ctx.now ?? new Date();
 
+  // Narrow locks (docs/PERFORMANCE.md), always taken in this order: idempotency key, agent, then (in
+  // buildAuthorizationInput) the business reference. With the default lock mode the organization lock
+  // already serializes these decisions; in "deferred" mode these locks are what keep the idempotency check,
+  // the agent's counters and concurrency limit, and the duplicate-reference check exact.
+  await db.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${ctx.orgId}:idem:${input.idempotencyKey}`}, 7302))`;
+  await db.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${agentId}, 7301))`;
+
   // Idempotency: same key returns the recorded outcome; same key with different parameters is rejected,
   // except that a request waiting for more information accepts the agent's resubmission under the same key.
   const existing = await db.actionRequest.findUnique({ where: { orgId_idempotencyKey: { orgId: ctx.orgId, idempotencyKey: input.idempotencyKey } }, include: { decisions: { orderBy: { createdAt: "desc" }, take: 1 }, approvals: { orderBy: { createdAt: "desc" }, take: 1 }, receipts: { orderBy: { createdAt: "desc" }, take: 1 } } });
@@ -173,7 +180,7 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
 
   const agent = await db.agent.findUnique({ where: { id: agentId }, include: { tools: { include: { tool: true } }, permissions: true } });
   if (!agent) throw notFound("Agent");
-  const tool = await db.tool.findUnique({ where: { orgId_key: { orgId: ctx.orgId, key: input.tool } }, include: { integration: true } });
+  const tool = await db.tool.findUnique({ where: { orgId_key: { orgId: ctx.orgId, key: input.tool } }, include: { integration: { omit: { settings: true, enforcementSummary: true } } } });
   const resource = input.resource ? await db.resource.findUnique({ where: { orgId_key: { orgId: ctx.orgId, key: input.resource } } }) : null;
 
   let delegation: DelegationContext | null = null;
@@ -246,7 +253,7 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
     // makes simultaneous requests count one after another, so they cannot all slip under the limit.
     const maxConcurrent = readConcurrencyLimit(agent.metadata);
     if (maxConcurrent !== null) {
-      await db.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${agentId}, 7301))`;
+      // The per-agent lock taken at the start of the decision is held until commit.
       const [liveGrants, executing] = await Promise.all([
         db.executionGrant.count({ where: { orgId: ctx.orgId, consumedAt: null, voidedAt: null, expiresAt: { gt: now }, request: { agentId } } }),
         db.actionRequest.count({ where: { orgId: ctx.orgId, agentId, status: "executing" } }),
@@ -282,6 +289,7 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
       uncertainty = await assessForRequest(db, { agent, tool, params: input.params, supplied: (input.context ?? {}) as Record<string, unknown>, now });
       const uncertaintyPolicy = readUncertaintyPolicy(tool.uncertaintyPolicy);
       authzInput = await buildAuthorizationInput(db, {
+        currentRequestId: request.id,
         agent,
         tool,
         action: input.action,
@@ -647,7 +655,7 @@ export async function executeRequest(run: TenantRunner, ctx: OrgContext, actionR
       await appendEvidence(db, ctx, { type: "gateway.execution_skipped", subjectType: "action_request", subjectId: req.id, correlationId: req.correlationId, payload: { reason: `agent ${req.agent.status}` } });
       return { done: receiptView(receipt, "failed") };
     }
-    const tool = req.toolId ? await db.tool.findUnique({ where: { id: req.toolId }, include: { integration: true } }) : null;
+    const tool = req.toolId ? await db.tool.findUnique({ where: { id: req.toolId }, include: { integration: { omit: { settings: true, enforcementSummary: true } } } }) : null;
     const systemKey = tool?.integration?.key ?? "none";
     const system = getDownstreamSystem(systemKey);
     const definitiveFailure = !system || !tool?.integration ? `no downstream system registered for ${systemKey}` : tool.integration.status !== "active" ? `integration ${systemKey} is disabled` : null;
@@ -716,7 +724,7 @@ export async function reconcileExecution(run: TenantRunner, ctx: OrgContext, act
     const latest = req.receipts[0];
     if (latest && FINAL_RECEIPTS.has(latest.status)) return { done: receiptView(latest, req.status) };
     if (req.status !== "executing" && req.status !== "unknown") throw conflict(`Request is ${req.status}; only executing or unknown requests reconcile`);
-    const tool = req.toolId ? await db.tool.findUnique({ where: { id: req.toolId }, include: { integration: true } }) : null;
+    const tool = req.toolId ? await db.tool.findUnique({ where: { id: req.toolId }, include: { integration: { omit: { settings: true, enforcementSummary: true } } } }) : null;
     const systemKey = tool?.integration?.key ?? "none";
     const system = getDownstreamSystem(systemKey);
     const grant = req.grants[0];

@@ -23,7 +23,9 @@ export async function gatewayRoutes(app: FastifyInstance) {
     if (ctx.actor.type !== "agent") throw forbidden("Use an agent API key");
     const headerKey = req.headers["idempotency-key"];
     const body = actionRequestInputSchema.parse({ ...(req.body as object), ...(typeof headerKey === "string" && !(req.body as { idempotencyKey?: string }).idempotencyKey ? { idempotencyKey: headerKey } : {}) });
-    const result = await authorizeAndExecute(withTenant, ctx, body);
+    // Deferred evidence (docs/PERFORMANCE.md): the organization lock covers only the ledger writes and the
+    // commit; the decision takes narrower locks for idempotency, the agent and the business reference.
+    const result = await authorizeAndExecute((orgId, fn) => withTenant(orgId, fn, { lock: "deferred" }), ctx, body);
     // 200: proceeds now (allow, restrict). 202: held for a person or for more information. 403: refused.
     const held = result.decision === "require_approval" || result.decision === "quarantine" || result.decision === "request_more_information";
     reply.status(result.decision === "allow" || result.decision === "restrict" ? 200 : held ? 202 : 403);

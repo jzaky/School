@@ -22,8 +22,11 @@ export function observeQueryDurations(fn: ((durationMs: number) => void) | null)
  */
 export function rawPrisma(): PrismaClient {
   if (!globalThis.__aegisPrisma) {
-    const client = new PrismaClient({ log: [...logLevels.map((level) => ({ emit: "stdout" as const, level })), { emit: "event" as const, level: "query" as const }] });
-    client.$on("query", (e) => queryObserver?.(e.duration));
+    // Per-query events cost the query engine noticeable CPU on every statement (docs/PERFORMANCE.md), so the
+    // database query duration metric is opt-in: AEGIS_DB_QUERY_METRICS=1.
+    const queryEvents = process.env.AEGIS_DB_QUERY_METRICS === "1";
+    const client = new PrismaClient({ log: [...logLevels.map((level) => ({ emit: "stdout" as const, level })), ...(queryEvents ? [{ emit: "event" as const, level: "query" as const }] : [])] });
+    if (queryEvents) (client as unknown as { $on: (e: "query", cb: (ev: { duration: number }) => void) => void }).$on("query", (e) => queryObserver?.(e.duration));
     globalThis.__aegisPrisma = client as unknown as PrismaClient;
   }
   return globalThis.__aegisPrisma;

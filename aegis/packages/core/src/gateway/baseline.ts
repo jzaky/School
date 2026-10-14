@@ -65,7 +65,7 @@ const CLASS_ORDER = ["public", "internal", "confidential", "restricted"];
 
 export function baselineChecks(args: {
   agent: Agent & { tools: { enabled: boolean; revokedAt: Date | null; toolId: string; expiresAt?: Date | null }[]; permissions: { resourceId: string; actions: string[]; expiresAt: Date | null; revokedAt: Date | null }[] };
-  tool: (Tool & { integration: Integration | null }) | null;
+  tool: (Tool & { integration: Omit<Integration, "settings" | "enforcementSummary"> | null }) | null;
   action: string;
   resource: Resource | null;
   resourceKeyRequested: string | null;

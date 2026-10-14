@@ -20,11 +20,18 @@ export type ShieldInspector = (db: TenantDb, orgId: string, args: { params: Reco
 
 let inspector: ShieldInspector | null = null;
 
+let loading: Promise<ShieldInspector> | null = null;
+
 const lazyDefault: ShieldInspector = async (db, orgId, args) => {
   // Dynamic import avoids a static cycle (shield/inspector imports registerShieldInspector from here).
-  const mod = await import("../shield/inspector.js");
-  if (inspector === null) inspector = mod.shieldInspector;
-  return mod.shieldInspector(db, orgId, args);
+  // One shared promise: concurrent first calls must not each start the import, or a caller can observe the
+  // module while it is still evaluating and find the inspector undefined.
+  loading ??= import("../shield/inspector.js").then((mod) => {
+    if (inspector === null) inspector = mod.shieldInspector;
+    return mod.shieldInspector;
+  });
+  const fn = await loading;
+  return fn(db, orgId, args);
 };
 
 export function registerShieldInspector(fn: ShieldInspector) {

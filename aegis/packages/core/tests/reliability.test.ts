@@ -1,3 +1,5 @@
+// The per-query database metric is opt-in (docs/PERFORMANCE.md); this file checks it when it is on.
+process.env.AEGIS_DB_QUERY_METRICS = "1";
 /**
  * Reliability (docs/PERFORMANCE.md): metrics, circuit breakers, dead-letter handling and operational alerts.
  */
@@ -75,6 +77,7 @@ describe("with the database", () => {
     expect(m.gatewayDecisionSeconds.summary({ result: "allow" })!.count).toBeGreaterThan(0);
     expect(m.policyEvaluationSeconds.summary()!.count).toBe(evalBefore + 1);
     expect(m.executions.get({ system: "support-platform-sim", outcome: "succeeded" })).toBeGreaterThan(0);
+    // AEGIS_DB_QUERY_METRICS=1 is set at the top of this file; without it the query metric is off by design.
     expect(m.dbQuerySeconds.summary()!.count).toBeGreaterThan(0);
     expect(m.gatewayInFlight.get()).toBe(0);
   });

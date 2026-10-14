@@ -9,7 +9,7 @@
 
 export const FIGURES = {
   /** `it(` cases under packages/core/tests. */
-  coreTests: 422,
+  coreTests: 427,
   /** `it(` cases under packages/db/tests (tenant isolation). */
   dbTests: 22,
   /** Playwright spec files under apps/web/tests/e2e. */
@@ -41,7 +41,7 @@ export const VERIFIED: ProofRow[] = [
   { what: "Demo seed", shows: "461 historical requests, 75 approvals and 18 denials, all generated through the real gateway with a backdated clock; the evidence chain was verified after seeding", repeat: "pnpm db:seed" },
   { what: "Framework catalogs", shows: `${FIGURES.catalogs} shared catalogs holding ${FIGURES.controls} controls, each an original one-sentence summary with a license note; every reference the public checker makes points to a seeded control`, repeat: "npx vitest run tests/frameworks-checker.test.ts" },
   { what: "Backup and restore drill", shows: "Run on 15 October 2026 against the development database: dumped, restored into a scratch database, row counts matched for 11 core tables, and all 1,202 evidence chains (53,177 events) gave the same verification result on the copy as on the source. One host; not a production recovery drill.", repeat: "MIGRATION_DATABASE_URL=... pnpm --filter @aegis/core drill:restore" },
-  { what: "Benchmarks with targets", shows: "Measured on 15 October 2026 in a 4-vCPU development container. Policy evaluation for a 50-rule policy: p95 156 microseconds (target 1 ms, met). Evidence ingestion for one organization: 144 events per second (target 50, met). One gateway decision at a time: p95 220 to 234 ms (target 300 ms, met). Throughput for one organization: 5 to 6.5 decisions per second (target 20, missed; the reason is in docs/PERFORMANCE.md).", repeat: "pnpm --filter @aegis/core bench; AEGIS_URL=http://localhost:4000 npx tsx scripts/perf-gateway.mts 200 10" },
+  { what: "Benchmarks with targets", shows: "Measured on 15 October 2026 in a 4-vCPU development container. Policy evaluation for a 50-rule policy: p95 156 microseconds (target 1 ms, met). Evidence ingestion for one organization: 144 events per second (target 50, met). One gateway decision at a time: p95 220 to 234 ms (target 300 ms, met). Throughput for one organization, after the 14 October lock change: 19.5 to 21.1 decisions per second over HTTP with 10 agents (target 20: met at concurrency 20, just under at 10 and 40), p99 1.0 to 3.5 s, no errors; before the change it was 7 per second. The ceiling is now the container's CPU, not the organization (docs/PERFORMANCE.md).", repeat: "pnpm --filter @aegis/core bench; pnpm --filter @aegis/core bench:gateway:setup 2 10; AEGIS_URL=http://127.0.0.1:4000 pnpm --filter @aegis/core bench:gateway 600 20 1" },
   { what: "Proof page figures", shows: "The counts on this page are compared with the repository on every CI run, and the build fails when they no longer match", repeat: "node scripts/proof-check.mjs" },
 ];
 
@@ -65,7 +65,7 @@ export const NOT_YET: NotYetRow[] = [
   { check: "Stripe test-mode run against Stripe's own API", status: "The connector is verified against a stand-in Stripe server. The real test-mode run (scripts/stripe-sandbox-check.mts) needs a customer's test key and has not been made." },
   { check: "Alpaca paper-account run", status: "Verified against a stand-in Alpaca server. The real paper-account run (scripts/alpaca-paper-check.mts) needs a paper key and has not been made." },
   { check: "Independent penetration test", status: "Not commissioned. The threat model and the known gaps are published on the Security page." },
-  { check: "Load testing at scale", status: "Measured only in a single development container, one organization at a time. Throughput across organizations, several API replicas and a separate database host have not been measured. See docs/PERFORMANCE.md." },
+  { check: "Load testing at scale", status: "Measured only in a single 4-vCPU container shared by the database, the API and the load generator, with one and two organizations. Several API replicas, a separate database host and sustained runs longer than a minute have not been measured. See docs/PERFORMANCE.md." },
   { check: "Production deployment of the current build", status: "Not made. Every feature is verified by tests in the repository, none in a deployed environment. Deployment needs the owner's approval." },
   { check: "Employee AI gateway against a real model provider", status: "The gateway is built and verified against a stand-in provider that records what it receives (docs/AI_GATEWAY_DLP.md). No request has been sent to a real provider; that needs a customer's provider key." },
   { check: "Shadow AI discovery against a customer's real logs", status: "Built and verified with synthetic exports in the Entra, Okta, DNS, browser, proxy, endpoint and inventory formats (docs/SHADOW_AI.md). No customer log has been imported." },

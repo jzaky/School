@@ -117,19 +117,31 @@ export async function buildAuthorizationInput(
     delegation?: AuthorizationInput["delegation"];
     uncertainty?: AuthorizationInput["uncertainty"];
     now?: Date;
+    /**
+     * The request being decided, for a live decision. Counts then include every committed request, with no
+     * upper time bound, and exclude only this one: a request that committed while this one waited for a
+     * lock may carry a later timestamp than this request's start, and must still be counted. Replays and
+     * explanations omit it and count up to `now`, as of that moment.
+     */
+    currentRequestId?: string;
   },
 ): Promise<AuthorizationInput> {
   const now = args.now ?? new Date();
   const since = new Date(now.getTime() - 24 * 3600_000);
   const reference = extractReference(args.params);
   const since30d = new Date(now.getTime() - 30 * 24 * 3600_000);
+  // Two requests for the same business reference (for example the same order) are counted one after the
+  // other, so both cannot see "no earlier request" at once, whatever the transaction's lock mode.
+  if (reference) await db.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${args.agent.orgId}:ref:${args.tool.key}:${reference.key}:${String(reference.value)}`}, 7303))`;
+  const live = args.currentRequestId;
+  // Bounded above for a replay, so a replay as of an earlier time does not count requests that came later.
+  const window24h = live ? { gte: since } : { gte: since, lte: now };
   const [requestCount24h, deniedCount24h, approvalsPending, priorRequestsSameReference] = await Promise.all([
-    // Bounded above so a replay as of an earlier time does not count requests that came later.
-    db.actionRequest.count({ where: { agentId: args.agent.id, createdAt: { gte: since, lte: now } } }),
-    db.actionRequest.count({ where: { agentId: args.agent.id, createdAt: { gte: since, lte: now }, status: "denied" } }),
+    db.actionRequest.count({ where: { agentId: args.agent.id, createdAt: window24h } }),
+    db.actionRequest.count({ where: { agentId: args.agent.id, createdAt: window24h, status: "denied" } }),
     db.actionRequest.count({ where: { agentId: args.agent.id, status: "pending_approval" } }),
     reference
-      ? db.actionRequest.count({ where: { orgId: args.agent.orgId, toolKey: args.tool.key, createdAt: { gte: since30d, lt: now }, status: { in: ["allowed", "pending_approval", "approved", "executing", "executed", "unknown"] }, params: { path: [reference.key], equals: reference.value } } })
+      ? db.actionRequest.count({ where: { orgId: args.agent.orgId, toolKey: args.tool.key, createdAt: live ? { gte: since30d } : { gte: since30d, lt: now }, ...(live ? { id: { not: live } } : {}), status: { in: ["allowed", "pending_approval", "approved", "executing", "executed", "unknown"] }, params: { path: [reference.key], equals: reference.value } } })
       : Promise.resolve(0),
   ]);
   const { amount, currency } = extractAmount(args.params);

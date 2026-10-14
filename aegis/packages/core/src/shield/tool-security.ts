@@ -40,7 +40,7 @@ export async function evaluateToolSecurity(db: TenantDb, orgId: string, input: {
   const action = input.action ?? "execute";
   const agent = await db.agent.findUnique({ where: { id: input.agentId }, include: { tools: { include: { tool: true } }, permissions: true } });
   if (!agent || agent.orgId !== orgId) throw notFound("Agent");
-  const tool = await db.tool.findUnique({ where: { orgId_key: { orgId, key: input.toolKey } }, include: { integration: true } });
+  const tool = await db.tool.findUnique({ where: { orgId_key: { orgId, key: input.toolKey } }, include: { integration: { omit: { settings: true, enforcementSummary: true } } } });
   const resource = input.resourceKey ? await db.resource.findUnique({ where: { orgId_key: { orgId, key: input.resourceKey } } }) : null;
   const destinationDomain = input.destinationDomain === undefined ? extractDestinationDomain(params) : input.destinationDomain;
 

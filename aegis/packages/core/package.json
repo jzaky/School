@@ -16,7 +16,9 @@
     "drill:restore": "tsx scripts/backup-restore-drill.ts",
     "bench": "tsx scripts/bench.ts",
     "lint": "eslint src tests",
-    "seed": "tsx src/seed/index.ts"
+    "seed": "tsx src/seed/index.ts",
+    "bench:gateway:setup": "tsx scripts/bench-gateway-setup.ts",
+    "bench:gateway": "tsx scripts/bench-gateway.ts"
   },
   "dependencies": {
     "@aegis/db": "workspace:*",
