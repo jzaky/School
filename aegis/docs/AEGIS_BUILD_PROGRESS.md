@@ -369,3 +369,19 @@ Full description: `docs/INTEGRATIONS.md`.
 **Status:** implemented and tested locally.
 
 **Known limitations:** conflict analysis cannot decide regular expressions or negated text tests; it counts those pairs instead of passing them.
+
+## Phase 10: enterprise control center (15 October 2026)
+
+**Built:**
+- **Control Center** (`/control-center`). One tile per module: decisions, approvals, autonomy, policy coverage, exceptions, security events, incidents, Attack Simulation Lab, models, data, regulatory changes, evidence and event destinations. Every tile names the records it is computed from and links to them. Tiles the viewer cannot read are left out rather than shown as zero.
+- **System Health** (`/org/health`). Database, background worker (evidence not covered by a signed checkpoint), organization jobs, integrations, event delivery and the Action Gateway, each judged from records the organization owns.
+- **Light, dark and system themes.** Set before first paint so the page does not flash; charts and the policy flow diagram read the active theme.
+- **Keyboard shortcuts.** `?` lists them; `g` then a letter moves between the main areas.
+- **Navigation.** A new "Command" group, and the most specific matching item is highlighted.
+
+**Tests added:** Browser, 5.
+
+**Status:** implemented and tested locally.
+
+**Known limitations:** System Health covers what one organization can see. Host and cross-tenant queue health stays on the platform administration view. Locally the worker check reads "failing" when the worker is not running, which is the intended behaviour.
+

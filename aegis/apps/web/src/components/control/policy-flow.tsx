@@ -4,8 +4,10 @@ import { ReactFlow, Background, Controls, type Node, type Edge, Position, Handle
 import "@xyflow/react/dist/style.css";
 import type { PolicyDocument } from "@aegis/core/policy/schema";
 import { EFFECT_LABEL } from "./policy-templates";
+import { useThemeTokens } from "@/lib/theme";
 
-const EFFECT_COLOR: Record<string, string> = { deny: "#e5484d", require_approval: "#f5a524", allow: "#2fbf71", default: "#5f6d87" };
+// Fixed effect colours readable on both themes; the canvas, edges and labels follow the theme.
+const EFFECT_COLOR: Record<string, string> = { deny: "#d9363e", require_approval: "#d48806", allow: "#22a35a", default: "#64748b" };
 const COLUMNS: { effect: string; title: string; x: number }[] = [
   { effect: "deny", title: "1. Deny rules (these always win)", x: 0 },
   { effect: "require_approval", title: "2. Approval rules", x: 280 },
@@ -62,6 +64,8 @@ const nodeTypes = { rule: RuleNode, header: HeaderNode };
 
 /** Rules as nodes grouped by effect, in evaluation order, with the combining order annotated. Read-only. */
 export function PolicyFlow({ doc }: { doc: PolicyDocument | null }) {
+  const t = useThemeTokens();
+  const dark = t.bg.toLowerCase() === "#0b0f17";
   const { nodes, edges } = React.useMemo(() => {
     const nodes: Node[] = [];
     const edges: Edge[] = [];
@@ -74,19 +78,19 @@ export function PolicyFlow({ doc }: { doc: PolicyDocument | null }) {
       const id = `r-${r.id}`;
       nodes.push({ id, type: "rule", position: { x: col.x, y: rowY[r.effect] ?? 50 }, data: { label: r.id, effect: r.effect, description: r.description, order: i + 1, conditions: countComparisons(r.when) } satisfies RuleNodeData });
       rowY[r.effect] = (rowY[r.effect] ?? 50) + 120;
-      if (prevId) edges.push({ id: `e-${prevId}-${id}`, source: prevId, target: id, animated: false, style: { stroke: "#2f4166" }, label: i === 1 ? "evaluation order" : undefined, labelStyle: { fill: "#93a1ba", fontSize: 10 }, labelBgStyle: { fill: "#0b0f17" } });
+      if (prevId) edges.push({ id: `e-${prevId}-${id}`, source: prevId, target: id, animated: false, style: { stroke: t["line-strong"] }, label: i === 1 ? "evaluation order" : undefined, labelStyle: { fill: t["fg-muted"], fontSize: 10 }, labelBgStyle: { fill: t.bg } });
       prevId = id;
     });
     const maxY = Math.max(rowY.deny ?? 50, rowY.require_approval ?? 50, rowY.allow ?? 50);
     nodes.push({ id: "default-deny", type: "rule", position: { x: 280, y: maxY + 20 }, data: { label: "default", effect: "default", description: "No matching rule: the request is denied.", order: rules.length + 1, conditions: 0 } satisfies RuleNodeData, draggable: false });
-    if (prevId) edges.push({ id: `e-${prevId}-default`, source: prevId, target: "default-deny", style: { stroke: "#2f4166", strokeDasharray: "4 4" }, label: "otherwise", labelStyle: { fill: "#93a1ba", fontSize: 10 }, labelBgStyle: { fill: "#0b0f17" } });
+    if (prevId) edges.push({ id: `e-${prevId}-default`, source: prevId, target: "default-deny", style: { stroke: t["line-strong"], strokeDasharray: "4 4" }, label: "otherwise", labelStyle: { fill: t["fg-muted"], fontSize: 10 }, labelBgStyle: { fill: t.bg } });
     return { nodes, edges };
-  }, [doc]);
+  }, [doc, t]);
 
   return (
     <div className="h-[520px] w-full overflow-hidden rounded-md border border-line bg-bg" role="img" aria-label={`Policy rule graph with ${doc?.rules.length ?? 0} rules grouped by effect`}>
-      <ReactFlow key={nodes.length} nodes={nodes} edges={edges} nodeTypes={nodeTypes} colorMode="dark" fitView fitViewOptions={{ padding: 0.2 }} nodesConnectable={false} proOptions={{ hideAttribution: true }} minZoom={0.3} maxZoom={1.5}>
-        <Background gap={16} color="#182236" />
+      <ReactFlow key={nodes.length} nodes={nodes} edges={edges} nodeTypes={nodeTypes} colorMode={dark ? "dark" : "light"} fitView fitViewOptions={{ padding: 0.2 }} nodesConnectable={false} proOptions={{ hideAttribution: true }} minZoom={0.3} maxZoom={1.5}>
+        <Background gap={16} color={t["bg-elev-2"]} />
         <Controls showInteractive={false} />
       </ReactFlow>
       <p className="sr-only">How rules combine: a deny rule beats an approval rule, and an approval rule beats an allow rule. When no rule matches, the request is denied.</p>

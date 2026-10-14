@@ -90,4 +90,8 @@ Every item below was implemented from AEGIS's own engine and code. None was buil
 - **Normal forms.** Disjunctive normal form and De Morgan's laws, standard logic.
 - **Exceptions.** Time-limited, two-person approved exceptions follow common change-management practice (ISO/IEC 27001:2022 Annex A 8.32 change management; the separation of duties control 5.3).
 
+### Phase 10: enterprise control center
+- **Theme without flash.** An inline script sets the theme attribute before the stylesheet applies, a widely used pattern (for example the MIT-licensed next-themes project). AEGIS implements its own short version; no code was copied.
+- **Health from evidence.** Judging a service by the records it should leave (heartbeats, checkpoints) follows common observability practice (Google SRE book, "Monitoring Distributed Systems", 2016).
+
 Later phases add their foundations here.

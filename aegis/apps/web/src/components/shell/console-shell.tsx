@@ -14,6 +14,8 @@ import { SidebarNav } from "./sidebar-nav";
 import { OrgSwitcher } from "./org-switcher";
 import { UserMenu } from "./user-menu";
 import { NotificationsMenu } from "./notifications-menu";
+import { ThemeToggle } from "./theme-toggle";
+import { KeyboardShortcuts } from "./keyboard-shortcuts";
 import { GlobalSearch } from "./global-search";
 import type { ShellData } from "./types";
 
@@ -108,6 +110,8 @@ export function ConsoleShell({ data, children }: { data: ShellData; children: Re
             </div>
             <div className="ms-auto flex items-center gap-1.5">
               <GlobalSearch data={data} />
+              <ThemeToggle />
+              <KeyboardShortcuts />
               <NotificationsMenu initialUnread={data.unread} disabled={!data.org} />
               <UserMenu data={data} />
             </div>

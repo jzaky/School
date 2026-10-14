@@ -25,6 +25,26 @@
   color-scheme: dark;
 }
 
+/* Light theme for the console. Same tokens, checked for WCAG AA contrast against their backgrounds. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-bg: #f5f7fb;
+  --color-bg-elev: #ffffff;
+  --color-bg-elev-2: #edf1f7;
+  --color-line: #dbe2ec;
+  --color-line-strong: #c2ccda;
+  --color-fg: #0f172a;
+  --color-fg-muted: #475569;
+  --color-fg-dim: #5d6b80;
+  --color-accent: #2563d9;
+  --color-accent-strong: #1d4fb8;
+  --color-allow: #15803d;
+  --color-deny: #c62828;
+  --color-approval: #b45309;
+  --color-info: #2563d9;
+  --color-critical: #a1185c;
+}
+
 html,
 body {
   background: var(--color-bg);

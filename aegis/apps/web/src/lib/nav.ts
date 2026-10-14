@@ -16,6 +16,7 @@ import {
   FlaskConical,
   Gavel,
   GitBranch,
+  HeartPulse,
   History,
   Landmark,
   LayoutDashboard,
@@ -77,6 +78,13 @@ export const PRIMARY_NAV: NavItem[] = [
 
 /** Specialist sections, collapsed under "More" by default. */
 export const SECONDARY_NAV: NavGroup[] = [
+  {
+    label: "Command",
+    items: [
+      { label: "Control Center", href: "/control-center", icon: Radar, ready: true, permission: "org:read" },
+      { label: "System Health", href: "/org/health", icon: HeartPulse, ready: true, permission: "org:read" },
+    ],
+  },
   {
     label: "Control",
     items: [
