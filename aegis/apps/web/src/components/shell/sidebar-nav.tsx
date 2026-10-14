@@ -8,6 +8,7 @@ import { GETTING_STARTED, isActivePath, isSecondaryPath, NOT_READY_REASON, PRIMA
 import { canDo } from "@/lib/status";
 import { Tooltip } from "@/components/ui/tooltip";
 import type { ShellData } from "./types";
+import { useT } from "@/components/region-provider";
 
 const MORE_KEY = "aegis.sidebar.more";
 
@@ -27,6 +28,8 @@ export function showGettingStarted(data: ShellData): boolean {
 
 function NavEntry({ item, data, collapsed, onNavigate, progress }: { item: NavItem; data: ShellData; collapsed: boolean; onNavigate?: () => void; progress?: string }) {
   const pathname = usePathname();
+  const { nav } = useT();
+  const label = nav(item.label);
   const state = navItemState(item, data);
   const active = isActivePath(pathname, item.href);
   const Icon = item.icon;
@@ -34,7 +37,7 @@ function NavEntry({ item, data, collapsed, onNavigate, progress }: { item: NavIt
   const inner = (
     <>
       <Icon className="h-4 w-4 shrink-0" aria-hidden />
-      {!collapsed ? <span className="truncate">{item.label}</span> : null}
+      {!collapsed ? <span className="truncate">{label}</span> : null}
       {!collapsed && state.disabled ? <Lock className="ms-auto h-3 w-3 shrink-0 text-fg-dim" aria-hidden /> : null}
       {!collapsed && !state.disabled && badge > 0 ? (
         <span className="ms-auto rounded-full bg-approval/20 px-1.5 text-[10px] font-semibold tabular text-approval" aria-label={`${badge} pending`} data-nav-badge={item.href}>
@@ -54,7 +57,7 @@ function NavEntry({ item, data, collapsed, onNavigate, progress }: { item: NavIt
       {inner}
     </Link>
   );
-  const tip = state.disabled ? (collapsed ? `${item.label}: ${state.reason}` : state.reason) : collapsed ? item.label : null;
+  const tip = state.disabled ? (collapsed ? `${label}: ${state.reason}` : state.reason) : collapsed ? label : null;
   return (
     <li>
       {tip ? (
@@ -70,6 +73,7 @@ function NavEntry({ item, data, collapsed, onNavigate, progress }: { item: NavIt
 
 export function SidebarNav({ data, collapsed, onNavigate }: { data: ShellData; collapsed: boolean; onNavigate?: () => void }) {
   const pathname = usePathname();
+  const { t, nav } = useT();
   const onSecondary = isSecondaryPath(pathname);
   // Collapsed by default; the preference persists per browser. Opens on its own while a secondary page is active.
   const [moreOpen, setMoreOpen] = React.useState(false);
@@ -113,14 +117,14 @@ export function SidebarNav({ data, collapsed, onNavigate }: { data: ShellData; c
           title={collapsed ? (expanded ? "Hide specialist sections" : "Show specialist sections") : undefined}
           className={cn("flex h-7 w-full items-center gap-2.5 rounded-md px-2 text-[13px] text-fg-muted transition-colors duration-150 hover:bg-bg-elev-2 hover:text-fg", collapsed && "justify-center px-0")}
         >
-          <ChevronDown className={cn("h-4 w-4 shrink-0 transition-transform duration-150", expanded ? "rotate-0" : "-rotate-90")} aria-hidden />
-          {!collapsed ? <span className="truncate">More</span> : <span className="sr-only">More</span>}
+          <ChevronDown className={cn("h-4 w-4 shrink-0 transition-transform duration-150", expanded ? "rotate-0" : "-rotate-90 rtl:rotate-90")} aria-hidden />
+          {!collapsed ? <span className="truncate">{t("shell.more")}</span> : <span className="sr-only">{t("shell.more")}</span>}
         </button>
         {expanded ? (
           <div id="sidebar-more" className="mt-2 flex flex-col gap-3">
             {groups.map((group) => (
               <div key={group.label}>
-                {!collapsed ? <div className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-fg-dim">{group.label}</div> : <div className="mx-2 mb-2 h-px bg-line" aria-hidden />}
+                {!collapsed ? <div className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-fg-dim">{nav(group.label)}</div> : <div className="mx-2 mb-2 h-px bg-line" aria-hidden />}
                 <ul className="space-y-0.5">
                   {group.items.map((item) => (
                     <NavEntry key={item.href} item={item} data={data} collapsed={collapsed} onNavigate={onNavigate} />

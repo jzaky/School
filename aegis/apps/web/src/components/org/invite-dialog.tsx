@@ -1,4 +1,5 @@
 "use client";
+import { useRegion } from "@/components/region-provider";
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { UserPlus } from "lucide-react";
@@ -11,6 +12,7 @@ import { CodeBlock } from "@/components/ui/code-block";
 import { formatDateTime } from "@/lib/utils";
 
 export function InviteDialog({ roles, canWrite }: { roles: { id: string; name: string; key: string }[]; canWrite: boolean }) {
+  const region = useRegion();
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [email, setEmail] = React.useState("");
@@ -57,7 +59,7 @@ export function InviteDialog({ roles, canWrite }: { roles: { id: string; name: s
       {result ? (
         <div className="space-y-2">
           <CodeBlock code={result.link} wrap label="Invitation link" />
-          <p className="text-xs text-fg-muted">Expires {formatDateTime(result.expiresAt)}. This deployment does not send the email for you, so copy the link and send it yourself.</p>
+          <p className="text-xs text-fg-muted">Expires {formatDateTime(result.expiresAt, region)}. This deployment does not send the email for you, so copy the link and send it yourself.</p>
         </div>
       ) : (
         <form

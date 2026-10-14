@@ -1,3 +1,4 @@
+import { currentRegion, intlLocale, type Region } from "./region";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -5,17 +6,18 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatDateTime(d: Date | string | null | undefined): string {
+/** Date and time in the organization's time zone and the viewer's console language. */
+export function formatDateTime(d: Date | string | null | undefined, region: Region = currentRegion()): string {
   if (!d) return "";
   const date = typeof d === "string" ? new Date(d) : d;
-  return date.toLocaleString("en-GB", { year: "numeric", month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false });
+  return date.toLocaleString(intlLocale(region.locale), { year: "numeric", month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false, timeZone: region.timeZone });
 }
 
 /** A calendar date in UTC, for dates without a meaningful time of day (effective dates, due dates). */
-export function formatDate(d: Date | string | null | undefined): string {
+export function formatDate(d: Date | string | null | undefined, region: Region = currentRegion()): string {
   if (!d) return "";
   const date = typeof d === "string" ? new Date(d) : d;
-  return date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+  return date.toLocaleDateString(intlLocale(region.locale), { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
 }
 
 export function timeAgo(d: Date | string | null | undefined): string {

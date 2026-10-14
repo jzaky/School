@@ -8,6 +8,7 @@ import { Panel } from "@/components/ui/panel";
 import { DemoBadge } from "@/components/ui/demo-badge";
 import { DecisionsChart } from "@/components/assurance/report-charts";
 import { cn, formatDateTime } from "@/lib/utils";
+import { t, tLabel } from "@/i18n/server";
 
 export const metadata: Metadata = { title: "Control Center" };
 export const dynamic = "force-dynamic";
@@ -20,9 +21,9 @@ export default async function ControlCenterPage() {
   const data = await withTenant(c.ctx.orgId, (db) => controlCenter(db, c.ctx), { readOnly: true, timeout: 30_000 });
   return (
     <div>
-      <PageHeader title="Control Center" description="Every AEGIS module in one view. Each figure is computed from your records when the page loads, names its source, and opens the page with the rows behind it. Areas you cannot read are left out." badges={<DemoBadge show={c.org.demoMode} />} />
+      <PageHeader title={t("cc.title")} description={t("cc.description")} badges={<DemoBadge show={c.org.demoMode} />} />
       {data.decisionsByDay.length ? (
-        <Panel title="Gateway decisions, last 14 days" description="Allowed (including narrowed), sent to a person (approval, more information, quarantine), and refused, per day" className="mb-4">
+        <Panel title={t("cc.chartTitle")} description={t("cc.chartDescription")} className="mb-4">
           <DecisionsChart data={data.decisionsByDay} />
         </Panel>
       ) : null}
@@ -33,16 +34,16 @@ export default async function ControlCenterPage() {
           return (
             <section key={g} aria-labelledby={`cc-${g}`}>
               <h2 id={`cc-${g}`} className="mb-2 text-xs font-medium uppercase tracking-wide text-fg-dim">
-                {g}
+                {t(`cc.group.${g}`)}
               </h2>
               <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                {tiles.map((t) => (
-                  <li key={t.key} data-testid="cc-tile" data-tile={t.key}>
-                    <Link href={t.href} className="block h-full rounded-panel border border-line bg-bg-elev p-4 transition-colors hover:border-line-strong focus-visible:border-accent">
-                      <span className="block text-xs text-fg-muted">{t.label}</span>
-                      <span className={cn("mt-1 block text-2xl font-semibold tabular", TONE_TEXT[t.tone])}>{t.value}</span>
-                      <span className="mt-1 block text-xs text-fg-muted">{t.detail}</span>
-                      <span className="mt-2 block text-[11px] text-fg-dim">Source: {t.source}</span>
+                {tiles.map((tile) => (
+                  <li key={tile.key} data-testid="cc-tile" data-tile={tile.key}>
+                    <Link href={tile.href} className="block h-full rounded-panel border border-line bg-bg-elev p-4 transition-colors hover:border-line-strong focus-visible:border-accent">
+                      <span className="block text-xs text-fg-muted">{tLabel(`tile.${tile.key}`, tile.label)}</span>
+                      <span className={cn("mt-1 block text-2xl font-semibold tabular", TONE_TEXT[tile.tone])} dir="auto">{tile.value}</span>
+                      <span className="mt-1 block text-xs text-fg-muted" dir="auto">{tile.detail}</span>
+                      <span className="mt-2 block text-[11px] text-fg-dim">{t("common.source")}: <bdi>{tile.source}</bdi></span>
                     </Link>
                   </li>
                 ))}
@@ -51,7 +52,7 @@ export default async function ControlCenterPage() {
           );
         })}
       </div>
-      <p className="mt-4 text-xs text-fg-dim">Computed {formatDateTime(data.generatedAt)}. Reload the page for current figures.</p>
+      <p className="mt-4 text-xs text-fg-dim">{t("cc.computed", { at: formatDateTime(data.generatedAt) })}</p>
     </div>
   );
 }

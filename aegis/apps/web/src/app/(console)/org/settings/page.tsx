@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { withTenant } from "@aegis/db";
 import { rawPrisma } from "@aegis/db";
-import { DEFAULT_AUTO_RESPONSES, computeOnboarding, env, listMonitoringRules, readContinuousGovernance, responseOptionsForRule, samlAcsUrl, samlEntityId, summarizeOnboarding } from "@aegis/core";
+import { DEFAULT_AUDIT_RETENTION_DAYS, DEFAULT_AUTO_RESPONSES, computeOnboarding, env, listMonitoringRules, readContinuousGovernance, responseOptionsForRule, samlAcsUrl, samlEntityId, summarizeOnboarding } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { PageHeader } from "@/components/ui/page-header";
 import { DemoBadge } from "@/components/ui/demo-badge";
@@ -57,7 +57,7 @@ export default async function SettingsPage() {
       </Panel>
       <div className="grid gap-4 lg:grid-cols-3">
         <Panel title="Organization" description="Only people with the org:admin permission can change these" className="lg:col-span-2">
-          <OrganizationSettingsForm canAdmin={canAdmin} initial={{ name: org.name, currency: typeof s.currency === "string" ? s.currency : "AED", timezone: typeof s.timezone === "string" ? s.timezone : "Asia/Dubai", approvalDefaultExpiryMinutes: typeof s.approvalDefaultExpiryMinutes === "number" ? s.approvalDefaultExpiryMinutes : 240, requireMfa: s.requireMfa === true }} />
+          <OrganizationSettingsForm canAdmin={canAdmin} initial={{ name: org.name, currency: typeof s.currency === "string" ? s.currency : "AED", timezone: typeof s.timezone === "string" ? s.timezone : "Asia/Dubai", approvalDefaultExpiryMinutes: typeof s.approvalDefaultExpiryMinutes === "number" ? s.approvalDefaultExpiryMinutes : 240, requireMfa: s.requireMfa === true, locale: s.locale === "ar" ? "ar" : "en", dataResidencyCountry: typeof s.dataResidencyCountry === "string" ? s.dataResidencyCountry : "AE", auditRetentionDays: typeof s.auditRetentionDays === "number" ? s.auditRetentionDays : DEFAULT_AUDIT_RETENTION_DAYS }} />
         </Panel>
         <div className="space-y-4">
           <Panel title="Identity">

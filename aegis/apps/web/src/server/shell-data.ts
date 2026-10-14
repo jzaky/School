@@ -33,6 +33,7 @@ export async function shellDataFromContext(c: ConsoleContext): Promise<ShellData
     unread,
     pendingApprovals,
     onboarding,
+    region: c.region,
   };
 }
 

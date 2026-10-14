@@ -2,6 +2,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Dialog } from "@/components/ui/dialog";
+import { useT } from "@/components/region-provider";
 
 /** Two-key shortcuts ("g" then a letter) and "?" for help. Ignored while typing in a field. */
 export const SHORTCUTS: { keys: string; label: string; href: string }[] = [
@@ -22,6 +23,7 @@ function typing(t: EventTarget | null) {
 
 export function KeyboardShortcuts() {
   const router = useRouter();
+  const { t, nav } = useT();
   const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
     let pendingG = 0;
@@ -47,16 +49,16 @@ export function KeyboardShortcuts() {
     return () => window.removeEventListener("keydown", onKey);
   }, [router]);
   return (
-    <Dialog open={open} onOpenChange={setOpen} title="Keyboard shortcuts" description="Press g, then a letter. Press Ctrl K (Cmd K on a Mac) to search.">
+    <Dialog open={open} onOpenChange={setOpen} title={t("shell.shortcuts")} description={t("shell.shortcutsHelp")}>
       <ul className="grid gap-2 text-sm sm:grid-cols-2" data-testid="shortcut-list">
         {SHORTCUTS.map((s) => (
           <li key={s.keys} className="flex items-center justify-between gap-3">
-            <span className="text-fg">{s.label}</span>
+            <span className="text-fg">{nav(s.label)}</span>
             <kbd className="rounded border border-line bg-bg-elev-2 px-1.5 py-0.5 font-mono text-xs text-fg-muted">{s.keys}</kbd>
           </li>
         ))}
         <li className="flex items-center justify-between gap-3">
-          <span className="text-fg">This list</span>
+          <span className="text-fg">{t("shell.thisList")}</span>
           <kbd className="rounded border border-line bg-bg-elev-2 px-1.5 py-0.5 font-mono text-xs text-fg-muted">?</kbd>
         </li>
       </ul>

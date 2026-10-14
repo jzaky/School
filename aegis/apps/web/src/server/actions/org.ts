@@ -83,7 +83,22 @@ export async function deleteRoleAction(roleId: string) {
 const settingsSchema = z.object({
   name: z.string().min(2).max(120).optional(),
   currency: z.string().regex(/^[A-Z]{3}$/, "three-letter ISO code").optional(),
-  timezone: z.string().min(2).max(64).optional(),
+  timezone: z
+    .string()
+    .min(2)
+    .max(64)
+    .refine((tz) => {
+      try {
+        new Intl.DateTimeFormat("en", { timeZone: tz });
+        return true;
+      } catch {
+        return false;
+      }
+    }, "not a recognised time zone name")
+    .optional(),
+  locale: z.enum(["en", "ar"]).optional(),
+  dataResidencyCountry: z.string().regex(/^[A-Z]{2}$/, "two-letter ISO country code").optional(),
+  auditRetentionDays: z.coerce.number().int().min(365, "at least 365 days").max(36500).optional(),
   approvalDefaultExpiryMinutes: z.coerce.number().int().min(5).max(10080).optional(),
   requireMfa: z.boolean().optional(),
 });
@@ -95,10 +110,14 @@ export async function updateOrganizationAction(input: unknown) {
     const settings = { ...c.org.settings };
     if (data.currency !== undefined) settings.currency = data.currency;
     if (data.timezone !== undefined) settings.timezone = data.timezone;
+    if (data.locale !== undefined) settings.locale = data.locale;
+    if (data.dataResidencyCountry !== undefined) settings.dataResidencyCountry = data.dataResidencyCountry;
+    if (data.auditRetentionDays !== undefined) settings.auditRetentionDays = data.auditRetentionDays;
     if (data.approvalDefaultExpiryMinutes !== undefined) settings.approvalDefaultExpiryMinutes = data.approvalDefaultExpiryMinutes;
     if (data.requireMfa !== undefined) settings.requireMfa = data.requireMfa;
     await updateOrganization(c.ctx, { ...(data.name ? { name: data.name } : {}), settings });
     revalidatePath("/org/settings");
+    revalidatePath("/org/deployment");
     revalidatePath("/", "layout");
   });
 }

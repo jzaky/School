@@ -94,4 +94,9 @@ Every item below was implemented from AEGIS's own engine and code. None was buil
 - **Theme without flash.** An inline script sets the theme attribute before the stylesheet applies, a widely used pattern (for example the MIT-licensed next-themes project). AEGIS implements its own short version; no code was copied.
 - **Health from evidence.** Judging a service by the records it should leave (heartbeats, checkpoints) follows common observability practice (Google SRE book, "Monitoring Distributed Systems", 2016).
 
+### Phase 11: deployment options and localization
+- **Residency.** The approach (inventory every component and subprocessor, record location and attestation) follows the records-of-processing and transfer duties in the UAE Personal Data Protection Law (Federal Decree-Law No. 45 of 2021, articles on cross-border transfer) and GDPR Article 30. AEGIS checks the operator's records for completeness; it does not interpret the law.
+- **Readiness checks.** PostgreSQL's own catalogs (`pg_stat_ssl`, `pg_roles`, `pg_class.relrowsecurity`, `pg_trigger`), as documented in the PostgreSQL 16 manual.
+- **Localization.** Unicode Bidirectional Algorithm (UAX #9) isolation with `dir="auto"` and `<bdi>`; W3C "Structural markup and right-to-left text in HTML". Number formats from the ECMAScript Internationalization API (ECMA-402) with the `nu-latn` extension.
+
 Later phases add their foundations here.

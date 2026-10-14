@@ -18,6 +18,8 @@ import { ThemeToggle } from "./theme-toggle";
 import { KeyboardShortcuts } from "./keyboard-shortcuts";
 import { GlobalSearch } from "./global-search";
 import type { ShellData } from "./types";
+import { RegionProvider } from "@/components/region-provider";
+import { DEFAULT_REGION } from "@/lib/region";
 
 const STORAGE_KEY = "aegis.sidebar.collapsed";
 
@@ -56,9 +58,22 @@ export function ConsoleShell({ data, children }: { data: ShellData; children: Re
       ) : null}
     </Link>
   );
+  const region = data.region ?? DEFAULT_REGION;
+  const dir = region.locale === "ar" ? "rtl" : "ltr";
+  React.useEffect(() => {
+    // Dialogs and menus render outside the shell, so the document carries the direction too.
+    const html = document.documentElement;
+    html.dir = dir;
+    html.lang = region.locale;
+    return () => {
+      html.dir = "ltr";
+      html.lang = "en";
+    };
+  }, [dir, region.locale]);
   return (
-    <TooltipProvider>
-      <div className="flex min-h-screen bg-bg text-fg">
+    <RegionProvider region={region}>
+      <TooltipProvider>
+        <div className="flex min-h-screen bg-bg text-fg" dir={dir} lang={region.locale} data-locale={region.locale}>
         <aside className={cn("sticky top-0 hidden h-screen shrink-0 flex-col border-e border-line bg-bg-elev transition-[width] duration-150 ease-out lg:flex", collapsed ? "w-14" : "w-[248px]")} aria-label="Sidebar">
           {brand}
           <div className="min-h-0 flex-1 overflow-y-auto">
@@ -120,6 +135,7 @@ export function ConsoleShell({ data, children }: { data: ShellData; children: Re
         </div>
       </div>
       <Toaster />
-    </TooltipProvider>
+      </TooltipProvider>
+    </RegionProvider>
   );
 }

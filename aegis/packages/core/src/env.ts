@@ -42,6 +42,8 @@ const schema = z.object({
     .string()
     .default("false")
     .transform((v) => v === "true" || v === "1"),
+  /** Deployment manifest: inline JSON or a path (deploy/profiles). Unset means nothing is declared. */
+  AEGIS_DEPLOYMENT_MANIFEST: z.string().optional(),
   AEGIS_APP_PASSWORD: z.string().optional().transform((v) => (v && v.trim() !== "" ? v : undefined)),
 });
 

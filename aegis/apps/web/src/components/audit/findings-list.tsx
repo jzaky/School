@@ -1,4 +1,5 @@
 "use client";
+import { useRegion } from "@/components/region-provider";
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -69,6 +70,7 @@ function ConfidenceBar({ value }: { value: number }) {
 }
 
 function ValidationForm({ assessmentId, finding, canWrite }: { assessmentId: string; finding: FindingView; canWrite: boolean }) {
+  const region = useRegion();
   const router = useRouter();
   const [status, setStatus] = React.useState(finding.humanStatus ?? finding.status);
   const [note, setNote] = React.useState("");
@@ -91,7 +93,7 @@ function ValidationForm({ assessmentId, finding, canWrite }: { assessmentId: str
         <h4 className="text-xs font-medium uppercase tracking-wide text-fg-muted">Human validation</h4>
         {finding.validatedAt ? (
           <span className="text-xs text-fg-muted">
-            Validated by {finding.validatedBy ?? "a member"} on {formatDateTime(finding.validatedAt)}
+            Validated by {finding.validatedBy ?? "a member"} on {formatDateTime(finding.validatedAt, region)}
           </span>
         ) : (
           <span className="text-xs text-fg-dim">Not yet validated</span>
@@ -116,6 +118,7 @@ function ValidationForm({ assessmentId, finding, canWrite }: { assessmentId: str
 }
 
 export function FindingsList({ assessmentId, findings, categories, canWrite, owners }: { assessmentId: string; findings: FindingView[]; categories: CategoryView[]; canWrite: boolean; owners: OwnerOption[] }) {
+  const region = useRegion();
   const [status, setStatus] = React.useState(ALL);
   const [conclusion, setConclusion] = React.useState(ALL);
   const [expanded, setExpanded] = React.useState<Set<string>>(new Set());
@@ -214,7 +217,7 @@ export function FindingsList({ assessmentId, findings, categories, canWrite, own
                               {f.resolvedAt ? (
                                 <>
                                   <dt className="text-fg-muted">Resolved</dt>
-                                  <dd>{formatDateTime(f.resolvedAt)}</dd>
+                                  <dd>{formatDateTime(f.resolvedAt, region)}</dd>
                                 </>
                               ) : null}
                             </dl>

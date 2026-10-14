@@ -1,4 +1,5 @@
 "use client";
+import { useRegion } from "@/components/region-provider";
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -69,6 +70,7 @@ const columns: ColumnDef<DocumentRow, unknown>[] = [
 ];
 
 export function DocumentsTable({ rows, pagination, canWrite }: { rows: DocumentRow[]; pagination: { page: number; pageSize: number; total: number }; canWrite: boolean }) {
+  const region = useRegion();
   const router = useRouter();
   const [selected, setSelected] = React.useState<DocumentRow | null>(null);
   const [preview, setPreview] = React.useState<DocumentPreview | null>(null);
@@ -127,8 +129,8 @@ export function DocumentsTable({ rows, pagination, canWrite }: { rows: DocumentR
                 { label: "Pages", value: selected.pageCount ?? "n/a" },
                 { label: "Chunks", value: selected.chunkCount },
                 { label: "SHA-256", value: selected.sha256.slice(0, 24), mono: true },
-                { label: "Retention", value: selected.retentionUntil ? `until ${formatDateTime(selected.retentionUntil)}` : "indefinite" },
-                { label: "Uploaded", value: `${formatDateTime(selected.createdAt)}${selected.uploadedBy ? ` by ${selected.uploadedBy}` : ""}` },
+                { label: "Retention", value: selected.retentionUntil ? `until ${formatDateTime(selected.retentionUntil, region)}` : "indefinite" },
+                { label: "Uploaded", value: `${formatDateTime(selected.createdAt, region)}${selected.uploadedBy ? ` by ${selected.uploadedBy}` : ""}` },
               ]}
             />
             {selected.error ? <p className="rounded-md border border-deny/30 bg-deny/10 px-3 py-2 text-xs text-deny">The document could not be read (parse error): {selected.error}</p> : null}

@@ -138,6 +138,7 @@ export const SECONDARY_NAV: NavGroup[] = [
       { label: "Teams", href: "/org/teams", icon: UsersRound, ready: true, permission: "users:read" },
       { label: "Roles", href: "/org/roles", icon: ShieldCheck, ready: true, permission: "users:read" },
       { label: "Billing", href: "/org/billing", icon: BadgeDollarSign, ready: true, permission: "org:read" },
+      { label: "Deployment", href: "/org/deployment", icon: Server, ready: true, permission: "org:read" },
     ],
   },
   {

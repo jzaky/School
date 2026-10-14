@@ -7,6 +7,8 @@ export interface ShellMembership {
 }
 
 export interface ShellData {
+  /** Language, time zone and currency for this viewer and organization. */
+  region?: { locale: "en" | "ar"; timeZone: string; currency: string };
   user: { id: string; name: string; email: string; isPlatformAdmin: boolean };
   org: { id: string; slug: string; name: string; demoMode: boolean } | null;
   roleName: string | null;

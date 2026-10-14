@@ -385,3 +385,23 @@ Full description: `docs/INTEGRATIONS.md`.
 
 **Known limitations:** System Health covers what one organization can see. Host and cross-tenant queue health stays on the platform administration view. Locally the worker check reads "failing" when the worker is not running, which is the intended behaviour.
 
+## Phase 11: UAE enterprise deployment options (15 October 2026)
+
+**Built:**
+- **Four deployment models** (multi-tenant SaaS, single-tenant managed, customer-controlled private cloud, on-premises), described on a new Deployment page with the installation files each uses.
+- **Deployment manifest** (`AEGIS_DEPLOYMENT_MANIFEST`) with four example profiles in `deploy/profiles`. Every fact from it is labelled "declared".
+- **Data residency assessment.** A claim is allowed only when every component and subprocessor holding customer data, and the backups, are declared in the country and attested by a named person within a year. Otherwise the page says AEGIS makes no claim and lists why.
+- **Readiness checks** for encryption in transit and at rest, secrets, tenant isolation, audit retention, backup and recovery, monitoring and administrator access. Live checks read the database itself: TLS on the connection, the application role, row-level security on every organization table, append-only triggers and sealed secrets.
+- **Regional settings.** Time zone (validated), currency, default language, residency country and audit retention in Settings. Dates across the console now use the organization's time zone.
+- **Arabic and English.** Typed message catalogue, per-person language switch, right-to-left layout including menus and dialogs. Translated: shell, navigation, Control Center, System Health and Deployment.
+
+**Tests added:**
+
+| Suite | Tests |
+|---|---|
+| Core | 11 (one runs against the live database) |
+| Browser | 2 |
+
+**Status:** implemented and tested locally. No deployment was made.
+
+**Known limitations:** Arabic covers the shell and three pages; the rest of the console is English inside the Arabic layout, and the Arabic text has not had a professional review. Declared facts cannot be verified from inside AEGIS.

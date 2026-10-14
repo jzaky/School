@@ -3,6 +3,7 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 import { rawPrisma } from "@aegis/db";
+import { LOCALE_COOKIE, regionFromSettings, setRegion, type Region } from "@/lib/region";
 import { getUserMembership, hasPermission, listUserMemberships, makeContext, resolveSession, SESSION_COOKIE, type OrgContext, type Permission, type SessionInfo, type UserMembership } from "@aegis/core";
 
 export const getSession = cache(async (): Promise<SessionInfo | null> => {
@@ -23,6 +24,7 @@ export interface ConsoleContext {
   memberships: UserMembership[];
   org: { id: string; slug: string; name: string; demoMode: boolean; settings: Record<string, unknown> };
   ctx: OrgContext;
+  region: Region;
   can: (p: Permission) => boolean;
 }
 
@@ -45,12 +47,15 @@ export const getConsoleContext = cache(async (): Promise<ConsoleContext> => {
     { type: "user", id: session.user.id, label: session.user.name, permissions: membership.permissions, membershipId: membership.membershipId },
     { requestId: h.get("x-request-id") ?? undefined },
   );
+  const region = regionFromSettings(settings, (await cookies()).get(LOCALE_COOKIE)?.value);
+  setRegion(region);
   return {
     session,
     membership,
     memberships,
     org: { id: org.id, slug: org.slug, name: org.name, demoMode: org.demoMode, settings: (org.settings as Record<string, unknown>) ?? {} },
     ctx,
+    region,
     can: (p) => hasPermission(membership.permissions, p),
   };
 });

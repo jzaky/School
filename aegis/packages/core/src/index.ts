@@ -80,3 +80,6 @@ export * from "./policy/exceptions.js";
 export * from "./policy/insights.js";
 export * from "./policy/sector-templates.js";
 export * from "./assurance/control-center.js";
+export * from "./deployment/manifest.js";
+export * from "./deployment/residency.js";
+export * from "./deployment/readiness.js";

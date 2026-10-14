@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { useRegion } from "@/components/region-provider";
 import { formatDateTime, timeAgo } from "@/lib/utils";
 
 /**
@@ -7,6 +8,7 @@ import { formatDateTime, timeAgo } from "@/lib/utils";
  * The text can differ by a few seconds between the two, so hydration warnings are suppressed for it.
  */
 export function TimeAgo({ value, className }: { value: string | Date | null | undefined; className?: string }) {
+  const region = useRegion();
   const [text, setText] = React.useState(() => timeAgo(value));
   React.useEffect(() => {
     setText(timeAgo(value));
@@ -16,16 +18,17 @@ export function TimeAgo({ value, className }: { value: string | Date | null | un
   if (!value) return <span className="text-fg-dim">never</span>;
   const iso = typeof value === "string" ? value : value.toISOString();
   return (
-    <time dateTime={iso} title={formatDateTime(value)} className={className} suppressHydrationWarning>
+    <time dateTime={iso} title={formatDateTime(value, region)} className={className} suppressHydrationWarning>
       {text}
     </time>
   );
 }
 
-/** Absolute timestamp formatted in the viewer's timezone after hydration. */
+/** Absolute timestamp in the organization's time zone and the viewer's console language. */
 export function DateTime({ value, className }: { value: string | Date | null | undefined; className?: string }) {
-  const [text, setText] = React.useState(() => formatDateTime(value));
-  React.useEffect(() => setText(formatDateTime(value)), [value]);
+  const region = useRegion();
+  const [text, setText] = React.useState(() => formatDateTime(value, region));
+  React.useEffect(() => setText(formatDateTime(value, region)), [value, region]);
   if (!value) return <span className="text-fg-dim">never</span>;
   const iso = typeof value === "string" ? value : value.toISOString();
   return (

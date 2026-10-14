@@ -1,4 +1,5 @@
 "use client";
+import { useRegion } from "@/components/region-provider";
 import * as React from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -91,6 +92,7 @@ const columns: ColumnDef<TaskRow, unknown>[] = [
 ];
 
 export function RemediationTable({ rows, pagination, filters, owners, documents, canWrite, initialTaskId }: { rows: TaskRow[]; pagination: { page: number; pageSize: number; total: number }; filters: TaskFilters; owners: { userId: string; name: string; roleName: string }[]; documents: { id: string; title: string; status: string }[]; canWrite: boolean; initialTaskId?: string }) {
+  const region = useRegion();
   const router = useRouter();
   const pathname = usePathname();
   const sp = useSearchParams();
@@ -207,9 +209,9 @@ export function RemediationTable({ rows, pagination, filters, owners, documents,
               columns={2}
               items={[
                 { label: "Owner", value: selected.ownerName ?? null },
-                { label: "Due", value: selected.dueAt ? formatDateTime(selected.dueAt) : null },
-                { label: "Created", value: formatDateTime(selected.createdAt) },
-                { label: "Updated", value: formatDateTime(selected.updatedAt) },
+                { label: "Due", value: selected.dueAt ? formatDateTime(selected.dueAt, region) : null },
+                { label: "Created", value: formatDateTime(selected.createdAt, region) },
+                { label: "Updated", value: formatDateTime(selected.updatedAt, region) },
               ]}
             />
 
@@ -289,7 +291,7 @@ export function RemediationTable({ rows, pagination, filters, owners, documents,
                   id: `${h.at}-${i}`,
                   title: h.from && h.from !== h.to ? `${remediationLabel(h.from)} to ${remediationLabel(h.to)}` : h.note || remediationLabel(h.to),
                   meta: `${h.byName ?? "System"}${h.from && h.from !== h.to && h.note ? `: ${h.note}` : ""}`,
-                  time: formatDateTime(h.at),
+                  time: formatDateTime(h.at, region),
                   tone: remediationTone(h.to),
                 }))}
               />

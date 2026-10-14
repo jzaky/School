@@ -1,0 +1,15 @@
+{
+  "model": "multi_tenant_saas",
+  "name": "AEGIS SaaS (example)",
+  "operator": "AEGIS provider",
+  "components": [
+    { "key": "hosting", "kind": "hosting", "provider": "Application hosting provider", "region": "", "country": "unknown" },
+    { "key": "database", "kind": "database", "provider": "Managed PostgreSQL 16", "region": "", "country": "unknown", "encryptionAtRest": "provider_managed" },
+    { "key": "cache", "kind": "cache", "provider": "Managed Redis 7", "region": "", "country": "unknown", "holdsCustomerData": false },
+    { "key": "storage", "kind": "object_storage", "provider": "Document storage volume", "region": "", "country": "unknown", "encryptionAtRest": "provider_managed" },
+    { "key": "email", "kind": "email", "provider": "Transactional email service", "country": "unknown", "subprocessor": true }
+  ],
+  "backups": { "schedule": "Daily snapshots plus point-in-time recovery", "retentionDays": 30, "country": "unknown", "encrypted": true },
+  "disasterRecovery": { "rpoMinutes": 15, "rtoMinutes": 240, "runbook": "docs/BACKUP_RECOVERY.md" },
+  "secrets": { "source": "environment", "rotationDays": 365 }
+}

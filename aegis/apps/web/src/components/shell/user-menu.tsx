@@ -1,12 +1,17 @@
 "use client";
 import * as React from "react";
 import Link from "next/link";
-import { LogOut, ShieldCheck, User } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Languages, LogOut, ShieldCheck, User } from "lucide-react";
+import { useT } from "@/components/region-provider";
+import { setLocaleAction } from "@/server/actions/locale";
 import { logoutAction } from "@/server/actions/auth";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import type { ShellData } from "./types";
 
 export function UserMenu({ data }: { data: ShellData }) {
+  const { t, locale } = useT();
+  const router = useRouter();
   const initials = data.user.name
     .split(" ")
     .map((p) => p[0])
@@ -32,13 +37,24 @@ export function UserMenu({ data }: { data: ShellData }) {
         <DropdownMenuItem asChild>
           <Link href="/account/security">
             <ShieldCheck className="h-4 w-4 text-fg-muted" aria-hidden />
-            Account and security
+            {t("shell.account")}
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem
+          data-testid="language-switch"
+          onSelect={async () => {
+            await setLocaleAction(locale === "ar" ? "en" : "ar");
+            router.refresh();
+          }}
+        >
+          <Languages className="h-4 w-4 text-fg-muted" aria-hidden />
+          <span lang={locale === "ar" ? "en" : "ar"}>{locale === "ar" ? t("shell.switchToEnglish") : t("shell.switchToArabic")}</span>
+        </DropdownMenuItem>
+        {locale === "ar" ? <p className="px-2 pb-1 text-[11px] leading-snug text-fg-dim">{t("shell.partialArabic")}</p> : null}
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={() => logoutAction()}>
           <LogOut className="h-4 w-4 text-fg-muted" aria-hidden />
-          Sign out
+          {t("shell.signOut")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
