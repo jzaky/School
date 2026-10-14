@@ -3,7 +3,8 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Plus, Upload } from "lucide-react";
-import { addCustomShadowAiAppAction, importDiscoveryFileAction, reviewShadowAiAppAction } from "@/server/actions/shadow-ai";
+import { addCustomShadowAiAppAction, connectEntraAction, disconnectEntraAction, importDiscoveryFileAction, reviewShadowAiAppAction, syncEntraAction, testEntraAction } from "@/server/actions/shadow-ai";
+import { Note } from "@/components/ui/note";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import { Field, FormError, Input, Textarea } from "@/components/ui/input";
@@ -216,5 +217,89 @@ export function AddCustomAppButton({ canWrite }: { canWrite: boolean }) {
         </div>
       </form>
     </Dialog>
+  );
+}
+
+// ---------- Microsoft Entra ID ----------
+
+type EntraStatusView = { active: boolean; tenantId: string; clientId: string; lastRunAt: string | null; lastSuccessAt: string | null; lastError: string | null; lastResult: { signIns: number; consents: number; matched: number; caughtUp: boolean } | null; secret: string; cursorSignIns: string | null } | null;
+
+export function EntraPanel({ status, canWrite }: { status: EntraStatusView; canWrite: boolean }) {
+  const router = useRouter();
+  const [form, setForm] = React.useState({ tenantId: status?.tenantId ?? "", clientId: status?.clientId ?? "", clientSecret: "" });
+  const [pending, setPending] = React.useState<string | null>(null);
+  const [error, setError] = React.useState<string | null>(null);
+  const [note, setNote] = React.useState<string | null>(null);
+  const runAction = async (label: string, fn: () => Promise<{ ok: true; data: unknown } | { ok: false; error: string }>, describe: (d: never) => string) => {
+    setPending(label);
+    setError(null);
+    setNote(null);
+    const r = await fn();
+    setPending(null);
+    if (!r.ok) return setError(r.error);
+    setNote(describe(r.data as never));
+    router.refresh();
+  };
+  return (
+    <div className="space-y-3" data-testid="entra-panel" data-connected={status?.active ? "yes" : "no"}>
+      {status?.active ? (
+        <dl className="grid gap-x-4 gap-y-1 text-sm sm:grid-cols-2">
+          <dt className="text-fg-muted">Tenant</dt>
+          <dd className="font-mono text-xs">{status.tenantId}</dd>
+          <dt className="text-fg-muted">Client secret</dt>
+          <dd>{status.secret === "stored" ? "In the vault" : status.secret}</dd>
+          <dt className="text-fg-muted">Last successful sync</dt>
+          <dd>{status.lastSuccessAt ? new Date(status.lastSuccessAt).toLocaleString() : "Never"}</dd>
+          <dt className="text-fg-muted">Read up to</dt>
+          <dd>{status.cursorSignIns ? new Date(status.cursorSignIns).toLocaleString() : "Not yet"}</dd>
+          {status.lastResult ? (
+            <>
+              <dt className="text-fg-muted">Last run</dt>
+              <dd>
+                {status.lastResult.signIns} sign-ins, {status.lastResult.consents} consents read, {status.lastResult.matched} AI matches kept{status.lastResult.caughtUp ? "" : ", more to read next run"}
+              </dd>
+            </>
+          ) : null}
+        </dl>
+      ) : null}
+      {status?.lastError ? <Note tone="warning">{status.lastError}</Note> : null}
+      <form
+        className="grid gap-3 sm:grid-cols-3"
+        onSubmit={(e) => {
+          e.preventDefault();
+          void runAction("connect", () => connectEntraAction({ ...form, backfillDays: 7 }) as never, () => "Connected. Test the connection, then sync.");
+        }}
+      >
+        <Field label="Directory (tenant) ID" htmlFor="en-tenant">
+          <Input id="en-tenant" value={form.tenantId} onChange={(e) => setForm({ ...form, tenantId: e.target.value })} required disabled={!canWrite} />
+        </Field>
+        <Field label="Application (client) ID" htmlFor="en-client">
+          <Input id="en-client" value={form.clientId} onChange={(e) => setForm({ ...form, clientId: e.target.value })} required disabled={!canWrite} />
+        </Field>
+        <Field label="Client secret" htmlFor="en-secret" hint="stored in the vault, never shown again">
+          <Input id="en-secret" type="password" autoComplete="off" value={form.clientSecret} onChange={(e) => setForm({ ...form, clientSecret: e.target.value })} required disabled={!canWrite} />
+        </Field>
+        <div className="flex flex-wrap gap-2 sm:col-span-3">
+          <Button type="submit" variant="primary" loading={pending === "connect"} disabled={!canWrite} disabledReason="Needs the integrations:write permission">
+            {status?.active ? "Update connection" : "Connect"}
+          </Button>
+          <Button type="button" variant="secondary" loading={pending === "test"} disabled={!status?.active} disabledReason="Connect first" onClick={() => runAction("test", () => testEntraAction() as never, (d: { detail: string }) => d.detail)}>
+            Test connection
+          </Button>
+          <Button type="button" variant="secondary" loading={pending === "sync"} disabled={!status?.active || !canWrite} disabledReason={!status?.active ? "Connect first" : "Needs the integrations:write permission"} onClick={() => runAction("sync", () => syncEntraAction() as never, (d: { signIns: number; consents: number; matched: number }) => `Read ${d.signIns} sign-ins and ${d.consents} consents; kept ${d.matched} AI matches.`)}>
+            Sync now
+          </Button>
+          <Button type="button" variant="ghost" loading={pending === "disconnect"} disabled={!status?.active || !canWrite} disabledReason={!status?.active ? "Not connected" : "Needs the integrations:write permission"} onClick={() => runAction("disconnect", () => disconnectEntraAction({ reason: "Disconnected from the console" }) as never, () => "Disconnected; the secret is revoked.")}>
+            Disconnect
+          </Button>
+        </div>
+      </form>
+      <FormError error={error} />
+      {note ? (
+        <p className="text-sm text-fg-muted" aria-live="polite" data-testid="entra-note">
+          {note}
+        </p>
+      ) : null}
+    </div>
   );
 }

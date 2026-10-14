@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { withTenant } from "@aegis/db";
-import { listDiscoveryImports, listShadowAiApps, shadowAiCoverage } from "@aegis/core";
+import { entraStatus, listDiscoveryImports, listShadowAiApps, shadowAiCoverage } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { PageHeader } from "@/components/ui/page-header";
 import { DemoBadge } from "@/components/ui/demo-badge";
@@ -11,7 +11,7 @@ import { StatPanel } from "@/components/ui/stat-panel";
 import { EmptyState } from "@/components/ui/empty-state";
 import { TimeAgo } from "@/components/ui/time";
 import { SimpleTable, Td, Th, Tr } from "@/components/ui/simple-table";
-import { AddCustomAppButton, ImportLogForm, ReviewAppButton } from "@/components/secure/shadow-ai";
+import { AddCustomAppButton, EntraPanel, ImportLogForm, ReviewAppButton } from "@/components/secure/shadow-ai";
 
 export const metadata: Metadata = { title: "Shadow AI" };
 export const dynamic = "force-dynamic";
@@ -31,11 +31,11 @@ const STATUS: Record<string, { label: string; tone: "allow" | "approval" | "deny
 export default async function ShadowAiPage() {
   const c = await requirePermission("security:read");
   const canWrite = c.can("security:write");
-  const { apps, coverage, imports } = await withTenant(
+  const { apps, coverage, imports, entra } = await withTenant(
     c.ctx.orgId,
     async (db) => {
-      const [apps, coverage, imports] = await Promise.all([listShadowAiApps(db, c.ctx), shadowAiCoverage(db, c.ctx), listDiscoveryImports(db, c.ctx)]);
-      return { apps, coverage, imports };
+      const [apps, coverage, imports, entra] = await Promise.all([listShadowAiApps(db, c.ctx), shadowAiCoverage(db, c.ctx), listDiscoveryImports(db, c.ctx), c.can("integrations:read") ? entraStatus(db, c.ctx) : Promise.resolve(null)]);
+      return { apps, coverage, imports, entra };
     },
     { readOnly: true },
   );
@@ -139,6 +139,10 @@ export default async function ShadowAiPage() {
               ))}
             </tbody>
           </SimpleTable>
+        </Panel>
+
+        <Panel title="Microsoft Entra ID (live connector)" description="Reads sign-ins and app consents through Microsoft Graph every 15 minutes with an app registration you create: application permissions AuditLog.Read.All and Directory.Read.All, admin consent, nothing written to your tenant. Only AI matches are kept. See docs/ENTRA_CONNECTOR.md for the setup steps.">
+          <EntraPanel status={entra ? { ...entra, lastRunAt: entra.lastRunAt, lastSuccessAt: entra.lastSuccessAt } : null} canWrite={c.can("integrations:write")} />
         </Panel>
 
         <div className="grid gap-4 xl:grid-cols-2">

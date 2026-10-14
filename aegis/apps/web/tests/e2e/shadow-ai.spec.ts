@@ -44,5 +44,8 @@ test.describe("Shadow AI discovery", () => {
     await page.goto("/security/shadow-ai");
     await expect(page.getByTestId("shadow-import-form").getByRole("button", { name: "Import" })).toBeDisabled();
     await expect(page.getByTestId("review-deepseek")).toBeDisabled();
+    // The live Entra connector panel is there, but a viewer cannot connect it.
+    await expect(page.getByTestId("entra-panel")).toHaveAttribute("data-connected", "no");
+    await expect(page.getByTestId("entra-panel").getByRole("button", { name: "Connect" })).toBeDisabled();
   });
 });

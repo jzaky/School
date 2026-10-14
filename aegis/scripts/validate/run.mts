@@ -3,6 +3,7 @@
  *
  *   npx tsx scripts/validate/run.mts stripe     # needs STRIPE_TEST_SECRET_KEY (sk_test_...)
  *   npx tsx scripts/validate/run.mts alpaca     # needs ALPACA_PAPER_KEY (keyId:secret of a paper account)
+ *   npx tsx scripts/validate/run.mts entra      # needs AEGIS_VALIDATE_ENTRA_TENANT_ID, _CLIENT_ID, _CLIENT_SECRET (an app registration)
  *   npx tsx scripts/validate/run.mts ai         # needs AEGIS_VALIDATE_AI_BASE_URL, AEGIS_VALIDATE_AI_KEY, AEGIS_VALIDATE_AI_MODEL
  *
  * Credentials are read from the environment of the shell that runs this; they are never printed or recorded.
@@ -18,6 +19,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const plans: Record<string, { script: string; needs: string[]; hosts: () => string[] }> = {
   stripe: { script: join(here, "..", "stripe-sandbox-check.mts"), needs: ["STRIPE_TEST_SECRET_KEY"], hosts: () => ["api.stripe.com"] },
   alpaca: { script: join(here, "..", "alpaca-paper-check.mts"), needs: ["ALPACA_PAPER_KEY"], hosts: () => [new URL(process.env.ALPACA_API_BASE ?? "https://paper-api.alpaca.markets").host] },
+  entra: { script: join(here, "entra.mts"), needs: ["AEGIS_VALIDATE_ENTRA_TENANT_ID", "AEGIS_VALIDATE_ENTRA_CLIENT_ID", "AEGIS_VALIDATE_ENTRA_CLIENT_SECRET"], hosts: () => ["login.microsoftonline.com", "graph.microsoft.com"] },
   ai: { script: join(here, "ai-provider.mts"), needs: ["AEGIS_VALIDATE_AI_BASE_URL", "AEGIS_VALIDATE_AI_KEY", "AEGIS_VALIDATE_AI_MODEL"], hosts: () => (process.env.AEGIS_VALIDATE_AI_BASE_URL ? [new URL(process.env.AEGIS_VALIDATE_AI_BASE_URL).host] : []) },
 };
 const plan = plans[which ?? ""];

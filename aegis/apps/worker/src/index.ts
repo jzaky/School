@@ -1,6 +1,6 @@
 import { createServer } from "node:http";
 import { withTenant, disconnectAll } from "@aegis/db";
-import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, dispatchEvents, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, periodOf, prometheusText, purgeRateLimitBuckets, recomputeCalibration, recordOperationalAlerts, reconcileExecution, recoverStaleJobs, refreshSoftwareAdvisories, registerJobHandler, runJob, snapshotUsage, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
+import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, dispatchEvents, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, periodOf, prometheusText, purgeRateLimitBuckets, recomputeCalibration, recordOperationalAlerts, reconcileExecution, recoverStaleJobs, refreshSoftwareAdvisories, syncEntra, ENTRA_KEY, registerJobHandler, runJob, snapshotUsage, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
 import { rawPrisma } from "@aegis/db";
 import { registerModuleHandlers } from "./handlers.js";
 
@@ -127,6 +127,21 @@ registerJobHandler("software.advisories", async () => {
   }
 });
 
+/** Microsoft Entra ID sign-ins and app consents into Shadow AI discovery, for organizations that connected it. */
+registerJobHandler("entra.sync", async () => {
+  const orgs = await rawPrisma().organization.findMany({ select: { id: true } });
+  for (const o of orgs) {
+    const connected = await withTenant(o.id, (db) => db.integration.findFirst({ where: { orgId: o.id, key: ENTRA_KEY, status: "active" }, select: { id: true } }), { readOnly: true });
+    if (!connected) continue;
+    try {
+      const r = await syncEntra((fn) => withTenant(o.id, fn, { lock: "lazy", timeout: 120_000 }), systemContext(o.id));
+      log.info({ orgId: o.id, signIns: r.signIns, consents: r.consents, matched: r.matched, caughtUp: r.caughtUp, errors: r.errors.length }, "entra sync");
+    } catch (e) {
+      log.error({ orgId: o.id, err: e instanceof Error ? e.message : String(e) }, "entra sync failed");
+    }
+  }
+});
+
 registerModuleHandlers();
 
 /** Recurring jobs are re-scheduled by key so there is always exactly one pending instance. */
@@ -144,6 +159,7 @@ async function scheduleRecurring() {
   await enqueueJob({ type: "ops.alerts", payload: {}, idempotencyKey: `ops.alerts:${Math.floor(minute / 5)}`, runAt: new Date() });
   await enqueueJob({ type: "usage.snapshot", payload: {}, idempotencyKey: `usage.snapshot:${Math.floor(minute / 360)}`, runAt: new Date() });
   await enqueueJob({ type: "uncertainty.calibrate", payload: {}, idempotencyKey: `uncertainty.calibrate:${Math.floor(minute / 60)}`, runAt: new Date() });
+  await enqueueJob({ type: "entra.sync", payload: {}, idempotencyKey: `entra.sync:${Math.floor(minute / 15)}`, runAt: new Date() });
   await enqueueJob({ type: "software.advisories", payload: {}, idempotencyKey: `software.advisories:${Math.floor(minute / 1440)}`, runAt: new Date() });
 }
 

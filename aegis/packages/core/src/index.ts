@@ -92,3 +92,4 @@ export * from "./lib/circuit.js";
 export * from "./secure/ai-gateway.js";
 export * from "./secure/shadow-ai.js";
 export * from "./secure/software.js";
+export * from "./secure/entra.js";

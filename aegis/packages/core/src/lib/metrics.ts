@@ -168,6 +168,9 @@ export const m = {
   dbQuerySeconds: new Histogram("aegis_db_query_seconds", "Database query duration as reported by the database client"),
   httpRequests: new Counter("aegis_http_requests_total", "API requests by route group and status class"),
   httpRequestSeconds: new Histogram("aegis_http_request_seconds", "API request duration by route group"),
+  connectorSyncs: new Counter("aegis_connector_syncs_total", "Enterprise connector sync runs by connector and outcome"),
+  connectorRecords: new Counter("aegis_connector_records_total", "Records read from an enterprise connector by connector and kind"),
+  connectorRetries: new Counter("aegis_connector_retries_total", "Retried connector requests by connector and reason"),
 };
 
 observeQueryDurations((ms) => m.dbQuerySeconds.observe(ms / 1000));

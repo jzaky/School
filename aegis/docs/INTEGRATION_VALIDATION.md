@@ -14,7 +14,7 @@ This document separates three kinds of evidence:
 | Stripe (refunds, test mode) | Yes, a test-mode secret key | Not run | Yes (`stripe-connector.test.ts`, fake Stripe server) | none yet |
 | Alpaca (paper trading) | Yes, a paper-account key pair | Not run | Yes (`trading.test.ts`, fake Alpaca server) | none yet |
 | AI provider through the AI gateway | Yes, a provider API key | Not run | Yes (`ai-gateway.test.ts`, a recording stand-in) | none yet |
-| Microsoft Entra ID (sign-in and audit logs) | Yes, an app registration in a test tenant | Not run | See docs/ENTRA_CONNECTOR.md | none yet |
+| Microsoft Entra ID (sign-ins and app consents) | Yes, an app registration in a test tenant, admin consent | Not run | Yes (`entra-connector.test.ts`, stand-in Microsoft identity platform and Graph) | none yet; run `npx tsx scripts/validate/run.mts entra` (docs/ENTRA_CONNECTOR.md) |
 
 All four providers answered from the build environment: OSV.dev with 200, and Stripe, Alpaca and OpenAI with 401 because no key was sent. So the remaining runs are blocked only by credentials, not by network access.
 
@@ -117,7 +117,12 @@ No credential. Run `npx tsx scripts/validate/osv.mts`.
 
 ### Microsoft Entra ID
 
-See `docs/ENTRA_CONNECTOR.md`. It needs a test tenant you administer (a free Microsoft 365 developer tenant is enough, where available) and an app registration with read-only audit log permissions. Only a tenant administrator can grant those.
+The steps are in `docs/ENTRA_CONNECTOR.md` under "Setting it up". You need:
+- a test tenant you administer;
+- an app registration with the application permissions AuditLog.Read.All and Directory.Read.All, and admin consent;
+- a client secret.
+
+Then run `npx tsx scripts/validate/run.mts entra` with `AEGIS_VALIDATE_ENTRA_TENANT_ID`, `AEGIS_VALIDATE_ENTRA_CLIENT_ID` and, typed with `read -rs`, `AEGIS_VALIDATE_ENTRA_CLIENT_SECRET`. Sign-in logs are personal data about employees: use a test tenant, or get the tenant owner's written agreement first.
 
 ## What a pass does and does not show
 

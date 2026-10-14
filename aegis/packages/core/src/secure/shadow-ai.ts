@@ -67,6 +67,7 @@ export const AI_APP_CATALOG: CatalogApp[] = [
 
 export const SOURCES: Record<string, { label: string; type: SourceType; confidence: Confidence; sees: string; misses: string }> = {
   entra: { label: "Microsoft Entra ID sign-in logs", type: "identity", confidence: "confirmed", sees: "Sign-ins with work accounts to apps connected to single sign-on", misses: "Personal accounts, apps not connected to single sign-on, anything typed" },
+  entra_consent: { label: "Microsoft Entra ID app consents", type: "identity", confidence: "confirmed", sees: "A person or administrator granting an app access to organizational data", misses: "Apps used without consent to organizational data, personal accounts" },
   okta: { label: "Okta System Log", type: "identity", confidence: "confirmed", sees: "Single sign-on to apps assigned in Okta", misses: "Personal accounts, apps outside Okta, anything typed" },
   managed_browser: { label: "Managed browser telemetry", type: "browser", confidence: "observed", sees: "AI sites visited in the managed browser, with the signed-in work identity", misses: "Other browsers, personal devices, page contents unless the browser policy captures them" },
   endpoint: { label: "Endpoint security", type: "endpoint", confidence: "observed", sees: "AI desktop apps and local model runtimes running on managed devices", misses: "Unmanaged devices, browser use, what the app was asked" },
