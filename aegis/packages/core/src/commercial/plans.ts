@@ -1,5 +1,5 @@
 /**
- * Plans and entitlements (docs/COMMERCIAL.md). Three paid plans follow the product structure: Core
+ * Plans and entitlements (docs/COMMERCIAL_READINESS.md). Three paid plans follow the product structure: Core
  * (govern and control agent actions), Secure (adds AI security controls) and Enterprise (adds deployment
  * choice and enterprise contract terms), plus a time-limited trial.
  *

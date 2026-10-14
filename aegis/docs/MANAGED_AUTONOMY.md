@@ -48,6 +48,16 @@ Off by default, like continuous governance. An administrator turns them on under
 
 A downgrade commits in the same transaction as its cause, notifies everyone with `agents:control`, and records the rule and the facts that triggered it.
 
+### Per-agent automation (Phase 12)
+
+`agent.metadata.autonomyAutomation = { automaticDowngrades: true, suspendAtFloor: true }` turns the
+automatic rules on for one agent even when they are off for the organization, which is useful for a
+pilot. With `suspendAtFloor`, an agent that is refused in another burst while already at level 1 (the
+lowest level a burst reaches) is suspended through emergency revocation. The managed autonomy scenario of
+the sales demonstration shows the whole path: 3 to 2 to 1, then suspended
+(`sales-demo.test.ts`). A tampered policy (Phase 13) raises a critical security event but never
+lowers the agent's level, because it is not the agent's doing.
+
 ## Measuring autonomy
 
 **Readiness for a raise.** Five measures over the last 30 days:

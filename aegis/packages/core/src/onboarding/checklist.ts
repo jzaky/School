@@ -115,7 +115,7 @@ export function summarizeOnboarding(steps: OnboardingStep[], settings: Record<st
 }
 
 /**
- * Enterprise rollout (docs/COMMERCIAL.md): the path from a new customer organization to its first audit
+ * Enterprise rollout (docs/COMMERCIAL_READINESS.md): the path from a new customer organization to its first audit
  * report. Like the pilot checklist, every step is derived from records, never from stored flags.
  */
 export interface RolloutStep {

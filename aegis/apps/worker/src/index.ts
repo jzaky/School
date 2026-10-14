@@ -56,7 +56,7 @@ registerJobHandler("executions.sweep", async () => {
   }
 });
 
-/** Sends new governance events to each organization's event destinations (docs/INTEGRATIONS.md). */
+/** Sends new governance events to each organization's event destinations (docs/ENTERPRISE_INTEGRATIONS.md). */
 registerJobHandler("events.dispatch", async () => {
   const orgs = await rawPrisma().organization.findMany({ select: { id: true } });
   for (const o of orgs) {
@@ -65,7 +65,7 @@ registerJobHandler("events.dispatch", async () => {
   }
 });
 
-/** Records each organization's usage for the current month, and the previous month in the first days of a month (docs/COMMERCIAL.md). */
+/** Records each organization's usage for the current month, and the previous month in the first days of a month (docs/COMMERCIAL_READINESS.md). */
 registerJobHandler("usage.snapshot", async () => {
   const now = new Date();
   const periods = [periodOf(now)];

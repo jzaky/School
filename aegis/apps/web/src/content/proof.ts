@@ -40,6 +40,8 @@ export const VERIFIED: ProofRow[] = [
   { what: "Layout scan", shows: "0 cases of overlapping or cut-off text across 30 pages at five screen widths: 390, 768, 1024, 1280 and 1440 px", repeat: "node tests/overlap-scan.mjs" },
   { what: "Demo seed", shows: "461 historical requests, 75 approvals and 18 denials, all generated through the real gateway with a backdated clock; the evidence chain was verified after seeding", repeat: "pnpm db:seed" },
   { what: "Framework catalogs", shows: `${FIGURES.catalogs} shared catalogs holding ${FIGURES.controls} controls, each an original one-sentence summary with a license note; every reference the public checker makes points to a seeded control`, repeat: "npx vitest run tests/frameworks-checker.test.ts" },
+  { what: "Backup and restore drill", shows: "Run on 15 October 2026 against the development database: dumped, restored into a scratch database, row counts matched for 11 core tables, and all 1,202 evidence chains (53,177 events) gave the same verification result on the copy as on the source. One host; not a production recovery drill.", repeat: "MIGRATION_DATABASE_URL=... pnpm --filter @aegis/core drill:restore" },
+  { what: "Benchmarks with targets", shows: "Measured on 15 October 2026 in a 4-vCPU development container. Policy evaluation for a 50-rule policy: p95 156 microseconds (target 1 ms, met). Evidence ingestion for one organization: 144 events per second (target 50, met). One gateway decision at a time: p95 220 to 234 ms (target 300 ms, met). Throughput for one organization: 5 to 6.5 decisions per second (target 20, missed; the reason is in docs/PERFORMANCE.md).", repeat: "pnpm --filter @aegis/core bench; AEGIS_URL=http://localhost:4000 npx tsx scripts/perf-gateway.mts 200 10" },
   { what: "Proof page figures", shows: "The counts on this page are compared with the repository on every CI run, and the build fails when they no longer match", repeat: "node scripts/proof-check.mjs" },
 ];
 
@@ -63,5 +65,7 @@ export const NOT_YET: NotYetRow[] = [
   { check: "Stripe test-mode run against Stripe's own API", status: "The connector is verified against a stand-in Stripe server. The real test-mode run (scripts/stripe-sandbox-check.mts) needs a customer's test key and has not been made." },
   { check: "Alpaca paper-account run", status: "Verified against a stand-in Alpaca server. The real paper-account run (scripts/alpaca-paper-check.mts) needs a paper key and has not been made." },
   { check: "Independent penetration test", status: "Not commissioned. The threat model and the known gaps are published on the Security page." },
-  { check: "Load testing at scale", status: "Measured only on a single developer machine. See docs/PERFORMANCE.md for the numbers and what they do and do not show." },
+  { check: "Load testing at scale", status: "Measured only in a single development container, one organization at a time. Throughput across organizations, several API replicas and a separate database host have not been measured. See docs/PERFORMANCE.md." },
+  { check: "Production deployment of the current build", status: "Not made. Every feature is verified by tests in the repository, none in a deployed environment. Deployment needs the owner's approval." },
+  { check: "Employee AI gateway, Shadow AI discovery, software supply-chain scanning, isolated execution", status: "Planned in docs/AEGIS_MASTER_ROADMAP.md (Secure track); not built. Listed as planned on the Billing page, never as included." },
 ];

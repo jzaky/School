@@ -1,7 +1,6 @@
 "use client";
 import * as React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Languages, LogOut, ShieldCheck, User } from "lucide-react";
 import { useT } from "@/components/region-provider";
 import { setLocaleAction } from "@/server/actions/locale";
@@ -11,7 +10,6 @@ import type { ShellData } from "./types";
 
 export function UserMenu({ data }: { data: ShellData }) {
   const { t, locale } = useT();
-  const router = useRouter();
   const initials = data.user.name
     .split(" ")
     .map((p) => p[0])
@@ -43,8 +41,10 @@ export function UserMenu({ data }: { data: ShellData }) {
         <DropdownMenuItem
           data-testid="language-switch"
           onSelect={async () => {
-            await setLocaleAction(locale === "ar" ? "en" : "ar");
-            router.refresh();
+            const r = await setLocaleAction(locale === "ar" ? "en" : "ar");
+            // A full reload: the direction and every server-rendered text change at once, and no cached
+            // router state can keep the old language.
+            if (r.ok) window.location.reload();
           }}
         >
           <Languages className="h-4 w-4 text-fg-muted" aria-hidden />

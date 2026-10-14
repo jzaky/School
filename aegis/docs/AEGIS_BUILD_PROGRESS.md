@@ -186,7 +186,7 @@ Full description: `docs/MANAGED_AUTONOMY.md`.
 - **Replay fix.** Policy replay now compares a draft with what the policies alone decided, not with the final outcome after data protection, uncertainty and autonomy.
 - **SDK.** The TypeScript SDK types the uncertainty fields.
 
-Full description: `docs/UNCERTAINTY_GOVERNANCE.md`.
+Full description: `docs/UNCERTAINTY_ENGINE.md`.
 
 **Database migration:** `20261014120000_uncertainty`.
 
@@ -322,7 +322,7 @@ Full description: `docs/MODEL_DATA_GOVERNANCE.md`.
 - **Marketplace.** Every integration with an honest status (stand-in tested, tested in the repository, or simulator), what the customer must supply, and "verified in your organization" when the customer's own test succeeded.
 - **Console:** Marketplace, Event Destinations, and the destination detail page with the delivery log, test, pause and credential rotation. Nested nav items now highlight correctly.
 
-Full description: `docs/INTEGRATIONS.md`.
+Full description: `docs/ENTERPRISE_INTEGRATIONS.md`.
 
 **Database migration:** `20261015090000_event_destinations`.
 
@@ -488,3 +488,16 @@ The missed throughput target is explained in docs/PERFORMANCE.md, with the next 
 | API | 2 |
 
 **Status:** implemented and tested locally. No production measurement has been made.
+
+## Phase 15: documentation and release (14 October 2026)
+
+**Built:**
+- **Documentation set renamed and rewritten** to match the platform as built: AEGIS_ARCHITECTURE, UNCERTAINTY_ENGINE, ENTERPRISE_INTEGRATIONS and COMMERCIAL_READINESS, with every reference updated.
+- **docs/AEGIS_MASTER_ROADMAP.md:** answers to the ten audit questions, the architecture, a dependency graph, the master feature matrix (phases 0 to 15, Secure S0 to S8 and the ten platform capabilities), prioritization and the completeness criteria.
+- **Open-source research re-verified** for the Secure track: licenses, latest releases and maintenance for 33 projects, with the copyleft and source-available parts flagged.
+- **Proof page:** verified rows for the backup restore drill and the benchmarks; the rows for production deployment and the Secure features say they are not yet done.
+- **Language switch fix:** switching between English and Arabic now reloads the page, so the direction and every server-rendered string change together (a production build showed a stale direction intermittently).
+
+**Verified:** the full browser suite, 118 tests, passed against a production build with a fresh seed.
+
+**Status:** documentation only, apart from the language switch fix. Nothing was deployed.

@@ -9,7 +9,7 @@ import { SYSTEM_ROLES } from "../identity/permissions.js";
 import { effectiveLimits, normalizePlan, PLAN_KEYS, PLANS, trialState, usageAgainstLimits, type PlanKey, type PlanLimits } from "./plans.js";
 
 /**
- * Commercial records (docs/COMMERCIAL.md): contracts, usage metering, invoices and support requests.
+ * Commercial records (docs/COMMERCIAL_READINESS.md): contracts, usage metering, invoices and support requests.
  * AEGIS keeps these records; it is not connected to a payment provider, never charges a card and never
  * collects money. A provider records payment it received elsewhere. Writes that set commercial terms
  * are for platform administrators only.

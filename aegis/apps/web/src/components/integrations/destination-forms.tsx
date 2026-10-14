@@ -80,7 +80,7 @@ export function AddDestinationDialog({ canWrite, categories, initialKind }: { ca
         <div className="space-y-3" data-testid="destination-signing-secret">
           <Note tone="warning">Store this signing secret in the receiving system now. AEGIS will not show it again.</Note>
           <CodeBlock code={created.signingSecret ?? ""} />
-          <p className="text-xs text-fg-muted">Verify each request: HMAC-SHA-256 of the timestamp header, a dot and the raw body, compared with X-AEGIS-Signature. See docs/INTEGRATIONS.md.</p>
+          <p className="text-xs text-fg-muted">Verify each request: HMAC-SHA-256 of the timestamp header, a dot and the raw body, compared with X-AEGIS-Signature. See docs/ENTERPRISE_INTEGRATIONS.md.</p>
         </div>
       ) : (
         <form id="add-destination-form" onSubmit={submit} className="grid gap-3 md:grid-cols-2">

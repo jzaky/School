@@ -30,7 +30,7 @@ Nothing here invents a document that does not exist.
 
 | Item | Status | Location or action |
 |---|---|---|
-| Architecture | Available | `docs/ARCHITECTURE.md`, `docs/adr/` |
+| Architecture | Available | `docs/AEGIS_ARCHITECTURE.md`, `docs/adr/` |
 | Current capabilities, implemented versus simulated | Available | `docs/IMPLEMENTATION_REPORT.md`, `docs/AEGIS_FULL_PLATFORM_AUDIT.md`, `AEGIS_MASTER_BUSINESS_PLAN.md` section 3 |
 | Roadmap | Available | `docs/AEGIS_BUILD_PROGRESS.md`, `docs/PLAN.md` |
 | Testing evidence | Available | CI workflow `.github/workflows/aegis-ci.yml`, Proof page `apps/web/src/content/proof.ts` |

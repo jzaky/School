@@ -20,7 +20,7 @@ export interface AuthorizeInput {
   /**
    * Free-form context. Uncertainty governance reads three optional fields: `evidence` (the facts the agent relied on),
    * `confidence` (its own figure between 0 and 1, never treated as calibrated without labelled outcomes) and `missing`
-   * (what it could not determine). See docs/UNCERTAINTY_GOVERNANCE.md.
+   * (what it could not determine). See docs/UNCERTAINTY_ENGINE.md.
    */
   context?: Record<string, unknown> & UncertaintyContext;
   executionMode?: "gateway" | "agent";

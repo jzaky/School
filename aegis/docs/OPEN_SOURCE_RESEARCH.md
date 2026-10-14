@@ -152,3 +152,73 @@ Guiding constraints:
 | Agent workflow | Customer side; SDK provided | SDK built |
 
 See `THIRD_PARTY.md` for every installed package and its license.
+
+## Re-verification for the Secure track (2026-10-14)
+
+This section was added for the AEGIS Secure and platform expansion work. It covers the employee AI gateway, shadow AI discovery, supply chain, sandboxing and red-team candidates. AEGIS copies no source from any project below; the copyleft ones (TruffleHog, Velociraptor, Wazuh) may only ever run as separate processes, and none is a dependency today.
+
+
+**How I checked:** `gh` and plain `curl` to api.github.com are blocked in this session. I used two other routes instead:
+- **License and activity:** GitHub repository search (MCP). It returns each repo's `license.spdx_id` and `pushed_at`. "Active" below means the last push was within 3 months (on or after 2026-07-14). That counts pushes, not individual commits.
+- **Releases and license files:** WebFetch of `github.com/<repo>/releases/latest` and the LICENSE files. GitHub leaves the year off dates in the current year, so release dates with no year shown are 2026. Where a page confirmed the year (tag name or changelog), the table says so.
+
+| Project | Repository | License (verified) | Mixed-license parts | Latest release (date) | Active? | Use in AEGIS | Integration shape |
+|---|---|---|---|---|---|---|---|
+| OPA | open-policy-agent/opa | Apache-2.0 | None in top-level LICENSE | v1.21.2 (2026-10-12, atom feed) | Yes (push 2026-10-14) | Central policy decisions (Rego) for AI tool, data and model access | Go; sidecar or separate service, or Wasm/Go library |
+| Cedar | cedar-policy/cedar | Apache-2.0 | None seen | cedar-policy-cli-v4.13.0 (15 Sep) | Yes (10-13) | Fast, analyzable authorization policies for agent actions | Rust library (Wasm/bindings) embedded in-process |
+| Keycloak | keycloak/keycloak | Apache-2.0 | None seen | 26.8.1 (13 Oct) | Yes (10-14) | SSO, OIDC/SAML identity broker for users and services | Java; separate service |
+| OpenTelemetry JS | open-telemetry/opentelemetry-js | Apache-2.0 | None seen | v2.12.0 (6 Oct) | Yes (10-13) | Tracing and metrics for AI calls and the policy path | TypeScript/Node library |
+| Langfuse | langfuse/langfuse | MIT core ("MIT Expat") | **ee/, web/src/ee/, worker/src/ee/ under the proprietary Langfuse Enterprise License** | v4.59.0 (14 Oct) | Yes (10-14) | LLM trace, prompt and eval observability | TypeScript; separate service (needs Postgres/ClickHouse) |
+| LangGraph | langchain-ai/langgraph | MIT | None in top-level license (sub-packages not checked) | cli==0.4.34 (13 Oct); this is the CLI tag, the core package tag was not checked | Yes (10-14) | Stateful agent orchestration with human approval steps | Python (JS port separate); library |
+| MCP TypeScript SDK | modelcontextprotocol/typescript-sdk | Mixed: Apache-2.0 for new code, MIT for older contributions not yet relicensed, CC-BY-4.0 docs (GitHub shows NOASSERTION) | Moving from MIT to Apache-2.0 | v2.3.1 (5 Oct) | Yes (10-14) | Build or inspect MCP clients and servers, and an MCP gateway for policy enforcement | TypeScript library |
+| MCP servers | modelcontextprotocol/servers | Same mixed Apache-2.0 / MIT / CC-BY-4.0 | Same transition | v1.0.0 (11 Oct) | Yes (10-13) | Reference MCP servers for testing gateway controls | Node/Python; separate processes |
+| promptfoo | promptfoo/promptfoo | MIT (root LICENSE, "Copyright Promptfoo 2025") | None stated in root LICENSE; subdirectories not checked | 0.124.1 (2026-10-08, changelog) | Yes (10-14) | LLM red-teaming and eval in CI | TypeScript/Node CLI or library |
+| garak | NVIDIA/garak (leondz/garak gave no search result; NVIDIA/garak is current) | Apache-2.0 | None seen | v0.17.0 (9 Sep) | Yes (10-10) | LLM vulnerability scanning (jailbreak, leakage probes) | Python CLI; batch job |
+| NeMo Guardrails | **NVIDIA-NeMo/Guardrails** (current location; NVIDIA/NeMo-Guardrails gave no search result) | Apache-2.0 (LICENSE.md SPDX line; GitHub shows NOASSERTION) | None seen | v0.24.1 (16 Sep) | Yes (10-14) | Runtime input and output rails for LLM apps | Python library or guardrails server |
+| Guardrails AI | guardrails-ai/guardrails | Apache-2.0 | None seen (validators in the Hub are separate repos) | v0.11.0 (14 Aug) | Yes (10-09) | Output validation and structured-output checks | Python library or server |
+| Presidio | **data-privacy-stack/presidio** (moved from microsoft/presidio) | MIT ("Copyright (c) Presidio Contributors") | None seen | 2.2.364 (22 Jul) | Yes (10-09) | PII detection and redaction before prompts leave AEGIS | Python; library or analyzer/anonymizer REST services |
+| OpenFGA | openfga/openfga | Apache-2.0 | None seen | v1.22.0 (6 Oct) | Yes (10-13) | Relationship-based authorization (Zanzibar-style) for tenants, agents and resources | Go; separate service |
+| SPIFFE | spiffe/spiffe | Apache-2.0 | None seen | No releases | Yes (09-26) | Workload identity standard and spec | Spec only, no runtime |
+| SPIRE | spiffe/spire | Apache-2.0 | None seen | v1.15.3 (21 Aug) | Yes (10-11) | Issues SPIFFE IDs (SVIDs) to agents and services for mTLS | Go; server plus per-node agent |
+| Temporal | temporalio/temporal | MIT (Temporal and Uber copyrights, no carve-outs) | None | v1.32.1 (8 Oct) | Yes (10-14) | Durable workflows for approvals and remediation | Go server; separate service plus SDK workers |
+| SOPS | getsops/sops | **MPL-2.0** | - | v3.13.3 (23 Jul) | Yes (10-13) | Encrypted secrets in Git (KMS/age) | Go CLI or library |
+| Trivy | aquasecurity/trivy | Apache-2.0 | None seen | v0.75.0 (2026-10-01) | Yes (10-14) | Container, IaC, secret and SBOM scanning | Go CLI or server; CI job |
+| LiteLLM | BerriAI/litellm | MIT outside enterprise/ (GitHub shows NOASSERTION) | **enterprise/ under the proprietary BerriAI Enterprise License; production use needs a paid subscription** | v1.105.1 (14 Oct) | Yes (10-14) | AI gateway: one API across many LLMs, with cost tracking and a guardrail hook | Python SDK or proxy service |
+| Syft | anchore/syft | Apache-2.0 | None seen | v1.54.1 (6 Oct) | Yes (10-12) | SBOM generation for models and containers | Go CLI or library |
+| Grype | anchore/grype | Apache-2.0 | None seen | v0.120.1 (6 Oct) | Yes (10-13) | Vulnerability matching against SBOMs | Go CLI or library |
+| OpenSSF Scorecard | ossf/scorecard | Apache-2.0 | None seen | v5.6.0 (12 Oct) | Yes (10-12) | Supply-chain risk scoring of dependencies | Go CLI or GitHub Action |
+| Package Analysis | ossf/package-analysis | Apache-2.0 | None seen | rel-38 (20 May) | Yes (09-25) | Dynamic analysis of packages for malicious behavior | Go; sandboxed batch service |
+| Cosign | sigstore/cosign | Apache-2.0 | None seen | v3.1.3 (6 Aug) | Yes (10-14) | Signing and verifying images, models and attestations | Go CLI or library |
+| Gitleaks | gitleaks/gitleaks | MIT | None seen | v8.30.1 (21 Mar) | Yes (09-30); no release since March | Secret scanning in repos and CI | Go CLI or library |
+| TruffleHog | trufflesecurity/trufflehog | **AGPL-3.0** | - | v3.99.2 (8 Oct) | Yes (10-14) | Secret detection with live credential checks | Go CLI; run as a separate binary only |
+| gVisor | google/gvisor | Apache-2.0 | None seen | release-20261005.0 (8 Oct) | Yes (10-14) | Sandboxes agent code and tool execution | Go; OCI runtime (runsc) |
+| Firecracker | firecracker-microvm/firecracker | Apache-2.0 | None seen | v1.17.0 (10 Sep) | Yes (10-14) | MicroVM isolation for untrusted agent workloads | Rust VMM; host-level service (KVM) |
+| Wazuh | wazuh/wazuh | **GPL-2.0** (OpenSSL linking exception on some files; GitHub shows NOASSERTION) | License says it also covers decoders, rules and data files | v4.14.8 (25 Sep) | Yes (10-14) | SIEM/XDR: endpoint telemetry and alerting | C/C++; separate manager plus agents |
+| Velociraptor | Velocidex/velociraptor | **AGPL-3.0** (GitHub shows NOASSERTION) | - | v0.77.3 (5 Oct) | Yes (10-13) | Digital forensics and incident response (DFIR) on endpoints | Go; separate server plus clients |
+| Zeek | zeek/zeek | BSD-3-Clause (COPYING text; GitHub shows NOASSERTION) | Not checked | v9.0.0 (21 Aug) | Yes (10-13) | Network traffic analysis and logs of AI egress | C++; separate sensor service |
+
+### Copyleft or source-available licenses to review
+
+**Do not copy source from these; run them only as separate processes:**
+- **TruffleHog: AGPL-3.0.** The network-use clause applies if it is modified and offered as a service. Gitleaks (MIT) is the permissive alternative.
+- **Velociraptor: AGPL-3.0.**
+- **Wazuh: GPL-2.0.** This also covers its rules and decoders.
+
+**Weak copyleft:**
+- **SOPS: MPL-2.0.** Copyleft applies per file. Using it as a CLI or library is fine; if you modify SOPS files, those files must stay MPL.
+
+**Source-available or commercial parts inside otherwise permissive repos:**
+- **Langfuse:** the `ee/`, `web/src/ee/` and `worker/src/ee/` directories are under a proprietary Enterprise License. Free for development and testing; production needs a subscription; redistribution is forbidden.
+- **LiteLLM:** the `enterprise/` directory is under the proprietary BerriAI Enterprise License. Production use needs a seat-based subscription. Avoid copying from or enabling these features without a contract.
+
+**License in transition, not copyleft:**
+- **MCP typescript-sdk and servers** are moving from MIT to Apache-2.0, with CC-BY-4.0 docs. Keep both MIT and Apache notices when reusing code.
+
+None of the 33 repos showed SSPL, BUSL or Elastic licensing in the files I checked.
+
+### Not verified
+- **Release years:** most release pages showed only day and month. They are taken as 2026 because GitHub omits the current year. Years were confirmed for OPA (atom feed), promptfoo and Trivy (changelog), and gVisor (tag name).
+- **Repo moves:** the moves of Presidio (to data-privacy-stack, with the same 2018 repo creation date) and NeMo Guardrails (to NVIDIA-NeMo) are inferred from search results. I did not see a redirect notice. The garak case is likewise inferred: leondz/garak gave no search result and NVIDIA/garak is the active repo.
+- **Subdirectory licenses:** these were not checked beyond the top-level LICENSE for promptfoo, LangGraph (its sub-packages and the separately distributed LangGraph Platform/API), Keycloak, Zeek and the other Apache/MIT repos.
+- **LangGraph core package:** its latest release tag was not checked; the table shows the CLI tag only.
+- **Commit-level activity:** "Active" is based on the repo's last push time, not a count of commits in the last 3 months.

@@ -45,7 +45,7 @@ Build
 
 Test
 - Restore drill from a real backup into a fresh database, then migrate, then `POST /v1/assurance/evidence/verify` for every tenant (docs/BACKUP_RECOVERY.md). Record the RTO achieved.
-- Failure tests from docs/ARCHITECTURE.md: stop PostgreSQL and confirm the gateway returns 503 and the SDK reports deny; kill the worker mid-run and confirm `recoverStaleJobs` resumes; expire an approval and confirm the late approval is refused; revoke an agent and confirm its key stops working within one request.
+- Failure tests from docs/AEGIS_ARCHITECTURE.md: stop PostgreSQL and confirm the gateway returns 503 and the SDK reports deny; kill the worker mid-run and confirm `recoverStaleJobs` resumes; expire an approval and confirm the late approval is refused; revoke an agent and confirm its key stops working within one request.
 - Multi-replica: run the load script against the load balancer; confirm idempotency holds across replicas (same key, two replicas, one execution).
 - Security: dependency scan (`pnpm audit`), container image scan, and the first external penetration test scoped to the API and console.
 

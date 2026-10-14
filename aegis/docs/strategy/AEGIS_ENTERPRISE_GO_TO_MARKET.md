@@ -181,7 +181,7 @@ Prepare before the first proposal:
 - Bank letter.
 - Insurance certificates.
 - Security questionnaire answers (section 7).
-- Architecture and data-flow document (`docs/ARCHITECTURE.md`, adapted).
+- Architecture and data-flow document (`docs/AEGIS_ARCHITECTURE.md`, adapted).
 - Data processing terms.
 - Master subscription agreement and order form.
 - Service level terms for hosted pilots.

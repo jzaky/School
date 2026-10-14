@@ -26,7 +26,7 @@ In the request `context`, optional:
 }
 ```
 
-A citation names an evidence item by its `ref` or `field`, from `context.evidence` (see `docs/UNCERTAINTY_GOVERNANCE.md`).
+A citation names an evidence item by its `ref` or `field`, from `context.evidence` (see `docs/UNCERTAINTY_ENGINE.md`).
 
 ## Checks
 

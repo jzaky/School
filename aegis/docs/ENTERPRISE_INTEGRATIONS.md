@@ -88,6 +88,12 @@ A destination can also set a lowest severity for security events.
 
 **Residual risk:** DNS can change between the check and the connection (DNS rebinding). The pre-delivery check narrows the window but does not pin the resolved address. Pinning is listed for Phase 13.
 
+## Delivery hardening (Phases 13 and 14)
+
+- **DNS pinning.** A delivery resolves the destination's name through a lookup that refuses private, loopback and metadata addresses, and connects to the address it checked. A name that changes its answer between check and connection (DNS rebinding) cannot reach an internal address.
+- **Circuit breaker.** After five server errors in a row, deliveries to a destination pause for 60 seconds and retry afterwards.
+- **Metrics:** `aegis_destination_deliveries_total{kind,outcome}`.
+
 ## Demo data
 
 Two destinations, both paused, never tested, and so never marked verified:

@@ -100,4 +100,4 @@ Said plainly because buyers and auditors will ask.
 - To take it to buyers: `docs/DEMO_TO_PRODUCTION.md` (hosted demo, staging, pilot, production gates).
 - To prove it in real life: `docs/REAL_WORLD_VALIDATION.md` (live sandbox connectors, the one-week autonomy experiment, adversarial tests).
 - For the honest per-module ledger of implemented, tested, simulated and missing: `docs/IMPLEMENTATION_REPORT.md`.
-- For the technical design: `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/THREAT_MODEL.md`, `docs/POLICY_LANGUAGE.md`, `docs/API.md`, `docs/SECURITY.md`.
+- For the technical design: `docs/AEGIS_ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/THREAT_MODEL.md`, `docs/POLICY_LANGUAGE.md`, `docs/API.md`, `docs/SECURITY.md`.

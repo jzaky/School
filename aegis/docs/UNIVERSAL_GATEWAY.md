@@ -63,7 +63,7 @@ Grants are single-use, five-minute, signed tokens (`aegis_gr2.<claims>.<signatur
 - pause, agent suspension and revocation void live grants.
 
 A grant is not exactly-once execution. A lost downstream response is handled by the downstream
-idempotency key (`aegis:<requestId>`) and reconciliation, documented in `docs/ARCHITECTURE.md`.
+idempotency key (`aegis:<requestId>`) and reconciliation, documented in `docs/AEGIS_ARCHITECTURE.md`.
 
 ## Agent-to-agent delegation
 
@@ -107,6 +107,22 @@ from the list and refuses calls to them. Resources, prompts and server-initiated
 elicitation) are refused so nothing reaches the server around the gateway. The client must be
 configured to launch the gateway instead of the server; a client that can still start the server
 directly is outside AEGIS.
+
+## Hardening and reliability (Phases 13 and 14)
+
+- **Policy integrity.** Before every decision the active policy versions are re-hashed; a version changed outside AEGIS refuses the request with a critical security event (`policy.integrity_failure`).
+- **Concurrent action limits per agent:** see docs/AGENT_IDENTITY.md.
+- **Backpressure.** Each API process decides at most `AEGIS_GATEWAY_MAX_IN_FLIGHT` requests at once (default 64). Beyond that it answers 503 with `Retry-After: 1`, deciding nothing; the SDK treats this as a refusal.
+- **Circuit breaker on execution.** After five ambiguous outcomes in a row from one downstream system, calls to it are refused for 30 seconds. Each such refusal is a definitive failure with nothing sent.
+- **Metrics:**
+  - decisions by result;
+  - decision time;
+  - policy evaluation time;
+  - executions by system and outcome;
+  - decisions in flight.
+
+  They are served at `/metrics`; see docs/PERFORMANCE.md.
+- **Fail closed** throughout; the full table is in docs/SECURITY_VALIDATION.md.
 
 ## Who can read what
 

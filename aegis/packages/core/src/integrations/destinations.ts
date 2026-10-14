@@ -17,7 +17,7 @@ import { assertPermission } from "../orgs/orgs.js";
 import { signWebhook } from "./service.js";
 
 /**
- * Event destinations (docs/INTEGRATIONS.md): AEGIS sends governance events to the systems an
+ * Event destinations (docs/ENTERPRISE_INTEGRATIONS.md): AEGIS sends governance events to the systems an
  * organization already watches.
  *
  * Source: the evidence ledger. A dispatcher walks each destination's cursor over new evidence

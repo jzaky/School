@@ -96,6 +96,21 @@ API keys belong to an agent or an integration and carry scopes:
 A key with no scopes listed has its type's defaults, so keys issued before scopes were enforced keep
 exactly the routes they had.
 
+## Concurrent action limits
+
+An agent can be limited to a number of actions in flight at once: set `maxConcurrentActions` in the
+agent's metadata. Actions in flight are live, unused execution grants plus executions under way. A
+per-agent lock held until the decision commits makes simultaneous requests count one after another, so
+they cannot all slip under the limit. Past the limit the request is refused, saying how many are in
+flight. Test: `security-regression.test.ts` (five simultaneous requests with a limit of two give exactly two
+permissions).
+
+## Credential rotation
+
+Agent API keys are revoked and reissued; a revoked key stops working on the next request. Integration
+credentials rotate to a new version and ciphertext, sealed to their record. Test:
+`security-regression.test.ts` "credential rotation".
+
 ## Limits
 
 - The SAML replay check is kept in each API or web process; several replicas each keep their own.

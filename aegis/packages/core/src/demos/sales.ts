@@ -1,5 +1,5 @@
 /**
- * Sales demonstration environment (docs/COMMERCIAL.md). A separate synthetic organization with six
+ * Sales demonstration environment (docs/COMMERCIAL_READINESS.md). A separate synthetic organization with six
  * scenarios, each driven through the real gateway, policy engine, uncertainty, reasoning and autonomy
  * engines. No downstream system is called: every scenario runs in "agent" execution mode, so an allowed
  * action returns a one-time permission slip and nothing else happens. All people, members, claims and
