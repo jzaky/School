@@ -15,6 +15,7 @@ import { POLICY_CATEGORIES } from "./policy-templates";
 
 export interface PolicyRow {
   id: string;
+  enforcement: { state: string; text: string; agents: number; exceptions: number };
   name: string;
   key: string;
   description: string;
@@ -42,6 +43,16 @@ const columns: ColumnDef<PolicyRow, unknown>[] = [
       </span>
     ),
     meta: { width: 280 },
+  },
+  {
+    id: "enforcement",
+    header: "Enforcement",
+    cell: ({ row }) => (
+      <span title={row.original.enforcement.text} data-enforcement={row.original.enforcement.state} className="inline-flex flex-wrap items-center gap-1">
+        {row.original.enforcement.state === "enforced" ? <Badge tone="allow">enforced, {row.original.enforcement.agents} agent{row.original.enforcement.agents === 1 ? "" : "s"}</Badge> : <Badge tone="approval">not enforced</Badge>}
+        {row.original.enforcement.exceptions ? <Badge tone="info">{row.original.enforcement.exceptions} exception{row.original.enforcement.exceptions === 1 ? "" : "s"}</Badge> : null}
+      </span>
+    ),
   },
   { id: "category", header: "Category", cell: ({ row }) => statusLabel(row.original.category) },
   { id: "active", header: "Active version", cell: ({ row }) => (row.original.activeVersion ? <Badge tone="allow">v{row.original.activeVersion}</Badge> : <Badge>None</Badge>) },

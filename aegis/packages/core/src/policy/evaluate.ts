@@ -20,6 +20,8 @@ export interface RuleTrace {
   description: string;
   reason: string;
   comparisons: ComparisonTrace[];
+  /** Skipped by an approved, unexpired policy exception for this agent. */
+  excepted?: boolean;
 }
 
 export interface PolicyToEvaluate {
@@ -218,7 +220,7 @@ function policyApplies(doc: PolicyDocument, input: unknown): string | null {
  * Deterministic evaluation of every assigned policy. Pure function: same input and policies
  * always give the same result. Throws only on programmer error; comparisons never throw.
  */
-export function evaluatePolicies(policies: PolicyToEvaluate[], input: unknown): EvaluationResult {
+export function evaluatePolicies(policies: PolicyToEvaluate[], input: unknown, opts: { skipRules?: ReadonlySet<string> } = {}): EvaluationResult {
   const trace: RuleTrace[] = [];
   const skipped: { policyKey: string; reason: string }[] = [];
   for (const p of policies) {
@@ -228,6 +230,10 @@ export function evaluatePolicies(policies: PolicyToEvaluate[], input: unknown): 
       continue;
     }
     for (const rule of p.document.rules) {
+      if (opts.skipRules?.has(`${p.policyKey}/${rule.id}`)) {
+        trace.push({ policyKey: p.policyKey, policyVersionId: p.policyVersionId, policyVersion: p.policyVersion, ruleId: rule.id, effect: rule.effect, matched: false, description: rule.description, reason: rule.reason, comparisons: [], excepted: true });
+        continue;
+      }
       const comparisons: ComparisonTrace[] = [];
       const matched = evaluateCondition(rule.when, input, comparisons);
       trace.push({ policyKey: p.policyKey, policyVersionId: p.policyVersionId, policyVersion: p.policyVersion, ruleId: rule.id, effect: rule.effect, matched, description: rule.description, reason: rule.reason, comparisons });

@@ -342,3 +342,30 @@ Full description: `docs/INTEGRATIONS.md`.
 - No DNS pinning.
 - No interactive Slack or Teams approvals.
 - No cloud, CRM or ticketing connectors beyond ServiceNow incidents.
+
+## Phase 9: advanced policy management (15 October 2026)
+
+**Built:**
+- **Enforcement status for every policy.** Enforced, or not enforced and why.
+- **Conflict detection.** Witness-confirmed overlaps with the winning rule, rules that can never match, and an honest count of pairs not analyzed. It runs across the policy sets that apply to each active agent.
+- **Expiring exceptions for one rule, one agent and optionally one tool.**
+  - Two-person approval, at most 90 days, never under a delegation.
+  - Recorded on every decision they touch.
+  - Honoured by replay and recheck.
+- **Recommendations from 30 days of decisions:** dead rules, habitual approvals, default denials, unenforced policies, conflicts, lab gaps.
+- **Five sector templates** with built-in tests, previewed before a draft is created.
+- **Console:** the Policies page has tabs for Policies (with an enforcement column), Conflicts, Exceptions, Recommendations and Sector templates. The policy detail page shows its enforcement status.
+
+**Database migration:** `20261015120000_policy_exceptions`.
+
+**Tests added:**
+
+| Suite | Tests |
+|---|---|
+| Core | 8 |
+| API | 2 |
+| Browser | 3 |
+
+**Status:** implemented and tested locally.
+
+**Known limitations:** conflict analysis cannot decide regular expressions or negated text tests; it counts those pairs instead of passing them.

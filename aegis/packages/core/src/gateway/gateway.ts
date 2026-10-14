@@ -25,6 +25,7 @@ import { precedentIndicator } from "../reasoning/service.js";
 import { getShieldInspector } from "./shield-hook.js";
 import { escalateForInjection, getInjectionResponse } from "../shield/injection-response.js";
 import { escalateForModel, getModelGovernance, modelGateCheck } from "../governance/models.js";
+import { activeExceptionRules } from "../policy/exceptions.js";
 import { getDownstreamSystem, readIntegrationCredential, type DownstreamContext } from "./simulators.js";
 
 export const actionRequestInputSchema = z.object({
@@ -203,6 +204,7 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
   let reasoning: ReasoningAssessment | null = null;
   let reasoningEscalated = false;
   let injectionEscalated: { response: string; signals: string[] } | null = null;
+  let exceptionIds: string[] = [];
   let modelRecordState: { status: string; enforcement: string; escalated: boolean; model: string | null } | null = null;
   /** What the policies alone decided, before data protection, uncertainty and autonomy (used by replay). */
   let policyOnlyResult: string | null = null;
@@ -254,7 +256,10 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
       // Under a delegation both agents' policies apply: the union with deny-overrides is never looser than either alone.
       const ownPolicies = await resolvePoliciesForAgent(db, ctx.orgId, agent);
       const policies = delegation ? mergePolicies(ownPolicies, await resolvePoliciesForAgent(db, ctx.orgId, delegation.delegator)) : ownPolicies;
-      evaluation = evaluatePolicies(policies, authzInput);
+      // Approved, unexpired exceptions skip their rule for this agent; never under a delegation.
+      const exceptions = delegation ? { keys: new Set<string>(), ids: [] as string[] } : await activeExceptionRules(db, agent.id, input.tool, now);
+      exceptionIds = exceptions.ids;
+      evaluation = evaluatePolicies(policies, authzInput, { skipRules: exceptions.keys });
       decisionResult = evaluation.result;
       policyOnlyResult = evaluation.result;
       if (decisionResult === "restrict") {
@@ -395,6 +400,8 @@ export async function submitActionRequest(db: TenantDb, ctx: OrgContext, input: 
         reasoning: reasoning ? { ...reasoning, escalated: reasoningEscalated } : null,
         injection: { signals: shield.shield.injectionSignals, escalated: injectionEscalated },
         model: modelRecordState,
+        exceptions: exceptionIds,
+        exceptedRules: evaluation.trace.filter((t) => t.excepted).map((t) => `${t.policyKey}/${t.ruleId}`),
         inputSummary: { amount: authzInput.context.amount, currency: authzInput.context.currency, destinationDomain: authzInput.context.destinationDomain, resource: authzInput.resource?.key ?? null, requestCount24h: authzInput.context.requestCount24h, deniedCount24h: authzInput.context.deniedCount24h, hour: authzInput.context.hour, priorRequestsSameReference: authzInput.context.priorRequestsSameReference, duplicateReferenceKey: authzInput.context.duplicateReferenceKey },
       };
       if (decisionResult === "deny" && evaluation.securityEventSeverity) {

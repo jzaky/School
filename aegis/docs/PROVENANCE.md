@@ -85,4 +85,9 @@ Every item below was implemented from AEGIS's own engine and code. None was buil
 - **Network safety.** Address ranges from RFC 1918, RFC 6598, RFC 3927, RFC 4193 and RFC 4291, and the OWASP guidance on server-side request forgery.
 - **Delivery.** The transactional outbox pattern (a cursor over an append-only log, a unique delivery per destination and event, retries with backoff), which is standard practice with no single source.
 
+### Phase 9: advanced policy management
+- **Combining and conflicts.** Deny-overrides combination as in XACML 3.0 (OASIS, 2013); conflict detection by satisfiability of rule conditions, as in the policy analysis literature (for example Fisler et al., "Verification and change-impact analysis of access-control policies", ICSE 2005). AEGIS confirms each overlap with a concrete witness evaluated by its own engine.
+- **Normal forms.** Disjunctive normal form and De Morgan's laws, standard logic.
+- **Exceptions.** Time-limited, two-person approved exceptions follow common change-management practice (ISO/IEC 27001:2022 Annex A 8.32 change management; the separation of duties control 5.3).
+
 Later phases add their foundations here.

@@ -75,3 +75,7 @@ export * from "./governance/data.js";
 export * from "./governance/regulatory.js";
 export * from "./integrations/destinations.js";
 export * from "./integrations/catalog.js";
+export * from "./policy/analysis.js";
+export * from "./policy/exceptions.js";
+export * from "./policy/insights.js";
+export * from "./policy/sector-templates.js";

@@ -132,7 +132,7 @@ export async function replayPolicy(db: TenantDb, ctx: OrgContext, input: { polic
     const stored = (r.context ?? {}) as Record<string, unknown>;
     const { executionMode: _mode, ip, ...supplied } = stored;
     const params = (r.params ?? {}) as Record<string, unknown>;
-    const exp = decision.explanation as { policyResult?: string; uncertainty?: { level?: string; missing?: string[]; contradictions?: string[]; confidence?: { value?: number; calibratedAccuracy?: number | null; basis?: string } | null } };
+    const exp = decision.explanation as { policyResult?: string; exceptedRules?: unknown; uncertainty?: { level?: string; missing?: string[]; contradictions?: string[]; confidence?: { value?: number; calibratedAccuracy?: number | null; basis?: string } | null } };
     const u = exp.uncertainty;
     const authzInput = await buildAuthorizationInput(db, {
       agent,
@@ -151,7 +151,8 @@ export async function replayPolicy(db: TenantDb, ctx: OrgContext, input: { polic
     const active = policySets.get(r.agentId)!;
     const draftEntry: PolicyToEvaluate = { policyKey: policyKey ?? "draft", policyVersionId: "draft", policyVersion: 0, document: draft };
     const set = policyKey && active.some((p) => p.policyKey === policyKey) ? active.map((p) => (p.policyKey === policyKey ? draftEntry : p)) : [...active, draftEntry];
-    const evaluation = evaluatePolicies(set, authzInput);
+    // Rules an exception skipped at the time are skipped again, so an exception is not mistaken for a policy change.
+    const evaluation = evaluatePolicies(set, authzInput, { skipRules: new Set(Array.isArray(exp.exceptedRules) ? (exp.exceptedRules as string[]) : []) });
     // Compare with what the policies alone decided then: data protection, uncertainty and autonomy act after policy
     // and are not what a draft policy changes. Decisions recorded before this field existed carry only their result.
     const was = asEffect(exp.policyResult ?? decision.result);

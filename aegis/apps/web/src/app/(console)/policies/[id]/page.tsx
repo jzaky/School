@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { withTenant } from "@aegis/db";
-import { extractRefundSettings, extractScoreBandSettings, extractTradingSettings, getPolicy, isAegisError, listPolicyHistory, policyDocumentSchema, refundDocumentMatchesSettings, scoreBandDocumentMatchesSettings, tradingDocumentMatchesSettings, type PolicyDocument } from "@aegis/core";
+import { extractRefundSettings, extractScoreBandSettings, extractTradingSettings, getPolicy, isAegisError, listPolicyHistory, policyDocumentSchema, policyEnforcement, refundDocumentMatchesSettings, scoreBandDocumentMatchesSettings, tradingDocumentMatchesSettings, type PolicyDocument } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { userNames } from "@/server/queries/users";
 import { agentOptions, teamOptions, toolOptions } from "@/server/queries/control";
@@ -52,15 +52,15 @@ export default async function PolicyDetailPage({ params, searchParams }: { param
   const data = await withTenant(c.ctx.orgId, async (db) => {
     try {
       const policy = await getPolicy(db, c.ctx, id);
-      const [agents, teams, tools, history, roles] = await Promise.all([agentOptions(db, c.ctx.orgId), teamOptions(db, c.ctx.orgId), toolOptions(db, c.ctx.orgId), listPolicyHistory(db, c.ctx, { policyId: id, limit: 100 }), approverRoleOptions(db, c.ctx.orgId)]);
-      return { policy, agents, teams, tools, history, roles };
+      const [agents, teams, tools, history, roles, enforcementMap] = await Promise.all([agentOptions(db, c.ctx.orgId), teamOptions(db, c.ctx.orgId), toolOptions(db, c.ctx.orgId), listPolicyHistory(db, c.ctx, { policyId: id, limit: 100 }), approverRoleOptions(db, c.ctx.orgId), policyEnforcement(db, c.ctx)]);
+      return { policy, agents, teams, tools, history, roles, enforcement: enforcementMap.get(id) ?? null };
     } catch (e) {
       if (isAegisError(e) && e.code === "not_found") return null;
       throw e;
     }
   });
   if (!data) notFound();
-  const { policy, agents, teams, tools, history, roles } = data;
+  const { policy, agents, teams, tools, history, roles, enforcement } = data;
   const names = await userNames([policy.createdBy, ...policy.versions.flatMap((x) => [x.createdBy, x.approvedBy]), ...history.map((h) => h.actorId)]);
   const selected = (v && policy.versions.find((x) => x.id === v)) || (policy.currentVersionId ? policy.versions.find((x) => x.id === policy.currentVersionId) : undefined) || policy.versions[0] || null;
   const parsed = selected ? policyDocumentSchema.safeParse(selected.document) : null;
@@ -154,6 +154,15 @@ export default async function PolicyDetailPage({ params, searchParams }: { param
           </>
         }
       />
+      {enforcement ? (
+        <div data-testid="policy-enforcement" data-state={enforcement.state}>
+          <Note tone={enforcement.state === "enforced" ? "info" : "warning"} className="mb-4">
+            {enforcement.text}
+            {enforcement.state === "enforced" ? `. Agents: ${enforcement.agents.join(", ")}. Tools: ${enforcement.tools.join(", ")}.` : "."}
+            {enforcement.activeExceptions ? ` ${enforcement.activeExceptions} active exception${enforcement.activeExceptions === 1 ? "" : "s"} skip rules of this policy for specific agents.` : ""}
+          </Note>
+        </div>
+      ) : null}
       <UrlTabs
         label="Policy sections"
         initial={tab}

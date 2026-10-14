@@ -176,3 +176,89 @@ guard and become the document's embedded tests. `extractTradingSettings` reopens
 "Mandate" tab; `tradingDocumentMatchesSettings` detects hand edits. The boundary sentence and the
 autonomy posture use the template's wording. Product context and stated limits: `docs/TRADING.md`.
 
+
+## Advanced policy management (Phase 9)
+
+Status: implemented and tested in this repository; not independently reviewed.
+
+### Enforcement status
+
+Every policy shows whether the gateway actually evaluates it. The status is computed from the active version, the assignments, the agents they cover and the tools those agents hold.
+
+| State | Meaning |
+|---|---|
+| Enforced | Evaluated for every request from the covered agents. The console lists those agents and tools. |
+| Not enforced: no active version | Nothing has been switched on |
+| Not enforced: not assigned | Active, but not assigned to the organization, a team or an agent |
+| Not enforced: no active agents | Its assignments cover no active agent |
+| Not enforced: no matching tools | No covered agent holds a tool in its scope |
+
+A policy is never shown as protection when it is not reached.
+
+### Conflicts
+
+**How rules combine.** The strictest matching effect decides. A conflict is two rules with different effects that can match the same request; the less strict rule has no effect there.
+
+**How it is checked:**
+- Each condition is put into a bounded disjunctive normal form.
+- For each rule pair, the analysis builds a concrete witness request from both rules' conditions.
+- It reports the conflict only if the real evaluator agrees that both rules match. Every reported conflict comes with that example request and the rule that wins.
+
+**What runs it:**
+- The Conflicts tab runs the analysis across the policy sets that apply together to each active agent. It lists the agents each conflict affects.
+- Overlaps across different policies are rated by the effects involved (allow against deny or quarantine is high). Overlaps inside one policy are marked low, since they are usually intended precedence (for example, "refuse duplicates" overriding "allow small refunds").
+
+**Also reported:**
+- **Rules that can never match:** their conditions contradict each other.
+- **Pairs not analyzed:** regular expressions, negated text tests and very large conditions are counted as not analyzed, never as safe.
+
+### Exceptions
+
+An exception skips one rule of one policy for one agent, optionally for one tool, for at most 90 days.
+
+| Step | Who |
+|---|---|
+| Request, with a business need of at least 10 characters | A person with `policies:write` |
+| Approve or reject | A different person with `policies:activate` |
+| Revoke at any time | `policies:activate` |
+
+**What an exception affects:**
+- **Policy stage only.** Data protection, uncertainty, stated reasons, injection response, model governance and autonomy still apply. It never applies under a delegation.
+- **Recorded on decisions.** Each decision it touches records `exceptions` (the ids) and `exceptedRules`. The trace marks the skipped rule as `excepted`.
+- **Replay and recheck.** Replay skips the rules that were excepted at the time, so an exception is not mistaken for a policy change. Recheck applies the exceptions active today.
+
+An exception skips a rule; it does not add an allow. A request that no remaining rule allows is still refused by default.
+
+### Recommendations
+
+Drawn from the last 30 days; nothing is applied automatically.
+- Rules evaluated at least 20 times that never matched.
+- Approval rules approved at least 95% of the time over at least 10 decisions (the threshold may be too low; replay first).
+- Agent and tool pairs refused at least 5 times by default deny.
+- Policies that are not enforced.
+- High cross-policy conflicts.
+- Attack Simulation Lab gaps from the last runs.
+
+### Sector templates
+
+Each template builds an ordinary policy document with its own tests. A preview runs those tests before anything is saved, and the result is a draft that goes through review and activation like any other policy. The templates are illustrative starting points, not legal or regulatory advice.
+
+| Template | What it does |
+|---|---|
+| Secrets publishing guard | Refuses credentials (API keys, tokens, private keys, passwords) in parameters, with a high security event |
+| Personal data egress | Refuses personal data classes to destinations outside an approved list |
+| Health records, minimum necessary | More than N records needs approval; unapproved destinations are refused; a missing record count is refused |
+| Employee data access | Every access needs approval; refused outside business hours |
+| Public information only | Public resources allowed; anything else needs a person |
+
+**Inheritance** is unchanged: organization, team and agent assignments combine as a union with deny-overrides.
+
+**API:** `/v1/policies/insights/enforcement`, `/conflicts`, `/recommendations`, `/exceptions` (GET and POST), `/exceptions/:id/decide`, `/exceptions/:id/revoke`, `/templates` and `/templates/:id/preview`. Writes need a person; preview writes nothing.
+
+**Tests:**
+
+| Suite | Tests |
+|---|---|
+| Core | `policy-advanced.test.ts` (8) |
+| API | Person-only writes in `self-governance.test.ts` |
+| Browser | `policy-advanced.spec.ts` (3) |

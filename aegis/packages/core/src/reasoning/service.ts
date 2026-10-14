@@ -7,6 +7,7 @@ import { notFound } from "../lib/errors.js";
 import { assertPermission } from "../orgs/orgs.js";
 import { buildAuthorizationInput } from "../gateway/input.js";
 import { evaluatePolicies } from "../policy/evaluate.js";
+import { activeExceptionRules } from "../policy/exceptions.js";
 import { resolvePoliciesForAgent } from "../policy/service.js";
 import type { Indicator } from "../uncertainty/assess.js";
 import { reasoningPolicySchema } from "./assess.js";
@@ -166,7 +167,9 @@ export async function recheckWithCurrentPolicies(db: TenantDb, ctx: OrgContext, 
     now: req.createdAt,
   });
   const policies = await resolvePoliciesForAgent(db, ctx.orgId, agent);
-  const evaluation = evaluatePolicies(policies, input);
+  // Today's policies with today's approved exceptions for this agent and tool.
+  const exceptions = await activeExceptionRules(db, agent.id, req.toolKey, ctx.now ?? new Date());
+  const evaluation = evaluatePolicies(policies, input, { skipRules: exceptions.keys });
   const then = exp.policyResult ?? decision.result;
   return {
     comparable: true as const,

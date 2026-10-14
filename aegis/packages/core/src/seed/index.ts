@@ -16,6 +16,7 @@ import { withTenant } from "@aegis/db";
 import { runAttackSimulation } from "../security/lab.js";
 import { seedDemoGovernance } from "./demo-governance.js";
 import { seedDemoDestinations } from "./demo-destinations.js";
+import { seedDemoPolicyExtras } from "./demo-policy-extras.js";
 import type { TenantRunner } from "../gateway/gateway.js";
 import { updateInjectionResponse } from "../shield/injection-response.js";
 
@@ -50,6 +51,7 @@ export async function runSeed() {
   const governance = await seedDemoGovernance(t);
   console.log(`Model and data governance: ${governance.models} models, ${governance.datasets} datasets, ${governance.changes} regulatory changes`);
   console.log(`Event destinations: ${await seedDemoDestinations(t)} (paused)`);
+  console.log(`Policy exceptions: ${await seedDemoPolicyExtras(t)}`);
   // Monitoring over the seeded history: run at several points in the past so alerts carry realistic timestamps,
   // then once now. A few alerts are already handled.
   const mon = await withTenant(t.orgId, async (db) => {

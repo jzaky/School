@@ -9,13 +9,13 @@
 
 export const FIGURES = {
   /** `it(` cases under packages/core/tests. */
-  coreTests: 334,
+  coreTests: 342,
   /** `it(` cases under packages/db/tests (tenant isolation). */
   dbTests: 22,
   /** Playwright spec files under apps/web/tests/e2e. */
-  e2eFiles: 23,
+  e2eFiles: 24,
   /** `test(` cases across those spec files. */
-  e2eTests: 103,
+  e2eTests: 106,
   /** Shared framework catalogs seeded for every tenant. */
   catalogs: 20,
   /** Controls across those catalogs. */
@@ -31,8 +31,8 @@ export interface ProofRow {
 
 /** Tests and recorded runs. Keep each row to what a reader could repeat. */
 export const VERIFIED: ProofRow[] = [
-  { what: "Core test suite", shows: `${FIGURES.coreTests} automated tests of the product's inner workings (unit and integration tests), covering policy evaluation, the gateway, approvals, execution safety, evidence, Shield, monitoring, audit, SSO (OIDC and SAML), SCIM, agent identity, managed autonomy, uncertainty and calibration, stated-reasons checks, the Attack Simulation Lab and injection response, the model registry, data inventory and regulatory change register, event destinations and their network safety checks, evidence signing and key rotation, shared rate limits, background jobs, connectors, templates and the public checker`, repeat: "pnpm --filter @aegis/core test" },
-  { what: "Browser suite", shows: `${FIGURES.e2eTests} tests that drive a real browser through the console and the public site (Playwright, ${FIGURES.e2eFiles} spec files), run against a production build in CI: control, approvals, policies, assurance, audit, Shield, integrations, onboarding, governance, score bands, replay, posture, trading, the gateway outcomes between allow and deny, agent identity and access, managed autonomy, uncertainty, the Decision Inspector, the Attack Simulation Lab, model and data governance, the integration marketplace and event destinations, the public checker and the site`, repeat: "cd apps/web && npx playwright test" },
+  { what: "Core test suite", shows: `${FIGURES.coreTests} automated tests of the product's inner workings (unit and integration tests), covering policy evaluation, the gateway, approvals, execution safety, evidence, Shield, monitoring, audit, SSO (OIDC and SAML), SCIM, agent identity, managed autonomy, uncertainty and calibration, stated-reasons checks, the Attack Simulation Lab and injection response, the model registry, data inventory and regulatory change register, event destinations and their network safety checks, policy conflict analysis and exceptions, evidence signing and key rotation, shared rate limits, background jobs, connectors, templates and the public checker`, repeat: "pnpm --filter @aegis/core test" },
+  { what: "Browser suite", shows: `${FIGURES.e2eTests} tests that drive a real browser through the console and the public site (Playwright, ${FIGURES.e2eFiles} spec files), run against a production build in CI: control, approvals, policies, assurance, audit, Shield, integrations, onboarding, governance, score bands, replay, posture, trading, the gateway outcomes between allow and deny, agent identity and access, managed autonomy, uncertainty, the Decision Inspector, the Attack Simulation Lab, model and data governance, the integration marketplace and event destinations, policy conflicts and exceptions, the public checker and the site`, repeat: "cd apps/web && npx playwright test" },
   { what: "Tenant isolation", shows: `${FIGURES.dbTests} tests that each customer's data is kept apart inside the database (row-level security): one tenant cannot read, write or even count another tenant's rows, and the application's own database role cannot bypass the rules`, repeat: "pnpm --filter @aegis/db test" },
   { what: "Refund journey over HTTP", shows: "12 of 12 checks passed in one run from start to finish: register an agent, give it a tool, submit a refund below and above the limit, approve it, have the downstream system verify its one-time permission slip (execution grant), then read the receipt and the evidence", repeat: "npx tsx scripts/smoke-refund-journey.mts" },
   { what: "Stripe test-mode connector", shows: "Run through the real gateway against a stand-in Stripe server: the same refund is never carried out twice (idempotent), a lost response is settled by checking Stripe's own records (reconciliation), and live keys are refused", repeat: "npx vitest run tests/stripe-connector.test.ts" },
