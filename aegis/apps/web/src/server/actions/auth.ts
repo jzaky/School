@@ -8,7 +8,8 @@ export interface ActionState {
   error?: string;
 }
 
-const cookieOpts = { httpOnly: true, secure: isProduction(), sameSite: "lax" as const, path: "/" };
+/** Built per call: reading the environment at import time would break image builds that have no secrets. */
+const cookieOpts = () => ({ httpOnly: true, secure: isProduction(), sameSite: "lax" as const, path: "/" });
 
 export async function loginAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const parsed = loginSchema.safeParse({ email: formData.get("email"), password: formData.get("password") });
@@ -16,7 +17,7 @@ export async function loginAction(_prev: ActionState, formData: FormData): Promi
   const h = await headers();
   try {
     const r = await loginWithPassword(parsed.data, { ip: h.get("x-forwarded-for") ?? undefined, userAgent: h.get("user-agent") ?? undefined });
-    (await cookies()).set(SESSION_COOKIE, r.token, cookieOpts);
+    (await cookies()).set(SESSION_COOKIE, r.token, cookieOpts());
     const next = safeNext(formData.get("next"));
     redirect(r.mfaRequired ? `/mfa${next !== "/overview" ? `?next=${encodeURIComponent(next)}` : ""}` : next);
   } catch (e) {

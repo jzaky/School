@@ -1,6 +1,15 @@
 # Deploy AEGIS, step by step
 
-Two routes. Route A (one Linux VM, no Docker) is the one that has actually been run end to end on this code, in the same way the build environment runs it. Route B (Docker Compose) uses the same images the Kubernetes manifests use; the images compile from the same source but have not been built by us yet, so expect to report the first build's output.
+Two routes. Route A (one Linux VM, no Docker) runs the code the way the build environment does. Route B (Docker Compose) uses the same images the Kubernetes manifests use.
+
+What has been verified, and how (14 October 2026):
+- All four images (migrate, api, worker, web) built from a clean checkout of this branch. The first build found three deployment bugs, all fixed:
+  - the web image needed runtime secrets just to compile;
+  - the containers' non-root user could not start pnpm;
+  - the Compose seed wrote the demo keys inside a container that is then deleted.
+- The images ran in production mode: migrate, seed, then API, worker and console. The HTTP smoke test (`scripts/smoke-refund-journey.mts`) passed 12 of 12 against the containerized API. The console answered 200 on /login.
+- The build environment's registry quota ran out for the stock `postgres:16` image, so that run used the host's PostgreSQL 16 and Redis 7 with host networking instead of the Compose containers for them. The `postgres` and `redis` services in `deploy/docker-compose.yml` are the stock official images and were not exercised in that run.
+- Nothing has been deployed to a public host.
 
 Everything below uses the synthetic demo tenant. No real money can move: the only real connector is Stripe in test mode and it refuses live keys.
 
@@ -146,15 +155,21 @@ What you need: a machine with Docker 24 or newer and the Compose plugin.
 cd aegis
 ./scripts/setup-env.sh                        # then edit .env as in Route A step 4 (keep 127.0.0.1 URLs; Compose overrides them)
 docker compose -f deploy/docker-compose.yml up --build -d
-docker compose -f deploy/docker-compose.yml run --rm seed
+docker compose -f deploy/docker-compose.yml --profile seed run --rm seed
 docker compose -f deploy/docker-compose.yml ps
+curl -s http://127.0.0.1:4000/health                     # {"ok":true,...}
+curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:3000/login   # 200
 ```
 
-The stack is Postgres, Redis, a one-shot migrate job, the API on port 4000, the console on port 3000 and the worker. The seed prints the demo users and the agent API keys to your terminal. Put Caddy or any other TLS proxy in front exactly as in Route A step 8, pointing at ports 3000 and 4000.
+The stack is Postgres, Redis, a one-shot migrate job, the API on port 4000, the console on port 3000 and the worker. The seed prints the demo users. It writes the demo agent API keys and the platform admin password to `deploy/seed-output/.demo-keys.json` on the host (mode 600, ignored by git). Keep that file private.
+
+To run the smoke test from the host, copy that file to `aegis/.demo-keys.json`, then run `AEGIS_API_URL=http://127.0.0.1:4000 npx tsx scripts/smoke-refund-journey.mts`. Expect 12/12.
+
+Put Caddy or any other TLS proxy in front exactly as in Route A step 8, pointing at ports 3000 and 4000. Sign-in needs HTTPS in production because the cookies are Secure.
 
 Database passwords for Compose come from `POSTGRES_OWNER_PASSWORD` and `POSTGRES_APP_PASSWORD` in your shell environment (defaults are development values; set real ones for anything reachable from the internet).
 
-If the first `docker compose up --build` fails, copy the error into the conversation: the images compile the same source that passes CI, but this is the first build of the images themselves.
+The images are large (about 3.9 GB for api and worker) because they carry the full workspace and its development dependencies. Slimming them is a follow-up, not a blocker.
 
 ## Route C: Kubernetes
 

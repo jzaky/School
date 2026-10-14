@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { LoginForm } from "./login-form";
 import { env } from "@aegis/core";
 
+/** Rendered per request: whether demo sign-in is offered comes from the running environment, not the build. */
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = { title: "Sign in" };
 
 /** Known sign-in problems, in plain words. Anything else shows a generic line: the URL is never echoed. */

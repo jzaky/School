@@ -49,8 +49,9 @@ services:
     depends_on:
       postgres: { condition: service_healthy }
     restart: "no"
-  # One-off: seeds the synthetic demo tenant. Run after migrate:  docker compose -f deploy/docker-compose.yml run --rm seed
-  # The agent API keys are printed to the console at the end of the run (they are not written to a file you can reach).
+  # One-off: seeds the synthetic demo tenant. Run after migrate:  docker compose -f deploy/docker-compose.yml --profile seed run --rm seed
+  # The demo agent API keys and the platform admin password are written to deploy/seed-output/.demo-keys.json
+  # on the host (mode 600). Keep that file private; delete it once you have what you need.
   seed:
     build: { context: .., dockerfile: deploy/Dockerfile, target: migrate }
     env_file: ../.env
@@ -58,6 +59,9 @@ services:
       MIGRATION_DATABASE_URL: postgresql://aegis_owner:${POSTGRES_OWNER_PASSWORD:-aegis_owner_dev}@postgres:5432/aegis
       DATABASE_URL: postgresql://aegis_app:${POSTGRES_APP_PASSWORD:-aegis_app_dev}@postgres:5432/aegis
       AEGIS_PROCESS: script
+      AEGIS_DEMO_KEYS_FILE: /out/.demo-keys.json
+    volumes:
+      - ./seed-output:/out
     command: ["pnpm", "--filter", "@aegis/core", "seed"]
     profiles: ["seed"]
     depends_on:

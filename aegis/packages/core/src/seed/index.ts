@@ -74,7 +74,8 @@ export async function runSeed() {
   console.log(`Monitoring: ${mon.evaluated} rules, ${mon.newAlerts} alerts${mon.errors.length ? ", errors: " + mon.errors.join("; ") : ""}`);
   // Demo agent API keys are needed by the SDK examples and the live demo runner. Written to a
   // gitignored file in the monorepo root; never printed to logs.
-  const keysPath = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "..", ".demo-keys.json");
+  // AEGIS_DEMO_KEYS_FILE lets a container write the file to a mounted folder (deploy/docker-compose.yml).
+  const keysPath = process.env.AEGIS_DEMO_KEYS_FILE || join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "..", ".demo-keys.json");
   writeFileSync(keysPath, JSON.stringify({ orgId: t.orgId, generatedAt: new Date().toISOString(), agents: t.apiKeys, platformAdmin: { email: PLATFORM_ADMIN.email, password: t.platformAdminPassword } }, null, 2), { mode: 0o600 });
   console.log(`Demo agent API keys written to ${keysPath}`);
   console.log(`Seeded demo tenant ${t.orgId} in ${Date.now() - started}ms`);

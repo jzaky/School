@@ -4,8 +4,10 @@
 #   docker build -f deploy/Dockerfile --target web    -t aegis-web .
 # Runs as a non-root user. No secrets are baked in; everything comes from the environment.
 FROM node:22-bookworm-slim AS base
-ENV PNPM_HOME=/pnpm PATH=/pnpm:$PATH NEXT_TELEMETRY_DISABLED=1
-RUN corepack enable && corepack prepare pnpm@10.28.0 --activate && apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates && rm -rf /var/lib/apt/lists/*
+# pnpm is installed into a shared, read-only location at build time. The runtime user has no writable cache,
+# so without this corepack tries to download pnpm on every start and fails.
+ENV PNPM_HOME=/pnpm PATH=/pnpm:$PATH NEXT_TELEMETRY_DISABLED=1 COREPACK_HOME=/opt/corepack COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+RUN corepack enable && corepack prepare pnpm@10.28.0 --activate && chmod -R a+rX /opt/corepack && apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 FROM base AS deps
@@ -16,6 +18,7 @@ COPY apps/worker/package.json apps/worker/
 COPY packages/db/package.json packages/db/
 COPY packages/core/package.json packages/core/
 COPY packages/sdk/package.json packages/sdk/
+COPY packages/mcp-gateway/package.json packages/mcp-gateway/
 RUN pnpm install --frozen-lockfile
 
 FROM deps AS source
@@ -24,7 +27,7 @@ RUN pnpm --filter @aegis/db generate
 
 # ---- API (Action Gateway) ----
 FROM source AS api
-RUN addgroup --system aegis && adduser --system --ingroup aegis aegis && chown -R aegis:aegis /app && mkdir -p /data/uploads && chown aegis:aegis /data/uploads
+RUN addgroup --system aegis && adduser --system --ingroup aegis --home /home/aegis aegis && chown -R aegis:aegis /app && mkdir -p /data/uploads && chown aegis:aegis /data/uploads
 USER aegis
 ENV NODE_ENV=production API_PORT=4000 AEGIS_STORAGE_DIR=/data/uploads AEGIS_PROCESS=api
 EXPOSE 4000
@@ -33,7 +36,7 @@ CMD ["pnpm", "--filter", "@aegis/api", "start"]
 
 # ---- Worker ----
 FROM source AS worker
-RUN addgroup --system aegis && adduser --system --ingroup aegis aegis && chown -R aegis:aegis /app && mkdir -p /data/uploads && chown aegis:aegis /data/uploads
+RUN addgroup --system aegis && adduser --system --ingroup aegis --home /home/aegis aegis && chown -R aegis:aegis /app && mkdir -p /data/uploads && chown aegis:aegis /data/uploads
 USER aegis
 ENV NODE_ENV=production AEGIS_STORAGE_DIR=/data/uploads AEGIS_PROCESS=worker
 CMD ["pnpm", "--filter", "@aegis/worker", "start"]
@@ -49,7 +52,7 @@ ENV NODE_ENV=production
 RUN pnpm --filter @aegis/web build
 
 FROM web-build AS web
-RUN addgroup --system aegis && adduser --system --ingroup aegis aegis && chown -R aegis:aegis /app && mkdir -p /data/uploads && chown aegis:aegis /data/uploads
+RUN addgroup --system aegis && adduser --system --ingroup aegis --home /home/aegis aegis && chown -R aegis:aegis /app && mkdir -p /data/uploads && chown aegis:aegis /data/uploads
 USER aegis
 ENV AEGIS_STORAGE_DIR=/data/uploads AEGIS_PROCESS=web
 EXPOSE 3000

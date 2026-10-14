@@ -12,3 +12,4 @@ test-results
 .uploads
 .turbo
 .demo-keys.json
+deploy/seed-output/
