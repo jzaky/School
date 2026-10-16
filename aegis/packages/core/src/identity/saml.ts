@@ -11,7 +11,7 @@ import { finishSsoLogin, readSsoState, signSsoState } from "./oidc.js";
  * - the assertion is signed with the identity provider's configured certificate;
  * - it is addressed to this service provider (audience) and inside its validity window;
  * - the RelayState is AEGIS's own signed, ten-minute state naming the organization;
- * - an assertion id is accepted once (per process; a shared store is listed as a limitation).
+ * - an assertion id is accepted once, across every process (shared `saml_assertions` table).
  * The account rules after that are the same as OIDC: see finishSsoLogin.
  */
 export function samlEntityId(orgSlug: string): string {
@@ -57,13 +57,17 @@ export async function beginSamlLogin(orgSlug: string): Promise<{ url: string }> 
   return { url };
 }
 
-const seenAssertions = new Map<string, number>();
-function acceptOnce(id: string, ttlMs: number): boolean {
-  const now = Date.now();
-  for (const [k, exp] of seenAssertions) if (exp < now) seenAssertions.delete(k);
-  if (seenAssertions.has(id)) return false;
-  seenAssertions.set(id, now + ttlMs);
-  return true;
+/**
+ * Records an assertion id in the shared `saml_assertions` table and returns false if it was already
+ * there, so a captured response is refused on every process and replica, not only the one that saw it.
+ * Expired ids for the organization are removed first; the primary key makes the insert the check.
+ */
+export async function acceptAssertionOnce(orgId: string, assertionId: string, ttlMs: number): Promise<boolean> {
+  return withTenant(orgId, async (db) => {
+    await db.samlAssertion.deleteMany({ where: { orgId, expiresAt: { lt: new Date() } } });
+    const inserted = await db.samlAssertion.createMany({ data: [{ orgId, assertionId, expiresAt: new Date(Date.now() + ttlMs) }], skipDuplicates: true });
+    return inserted.count === 1;
+  });
 }
 
 export async function completeSamlLogin(params: { samlResponse: string; relayState: string; ip?: string; userAgent?: string }) {
@@ -78,7 +82,7 @@ export async function completeSamlLogin(params: { samlResponse: string; relaySta
   }
   if (!profile) throw unauthorized("SAML response carried no assertion");
   const assertionId = (profile as { ID?: string }).ID ?? (profile.getAssertionXml?.().match(/\bID="([^"]+)"/)?.[1] ?? null);
-  if (!assertionId || !acceptOnce(assertionId, 10 * 60_000)) throw unauthorized("This SAML assertion was already used");
+  if (!assertionId || !(await acceptAssertionOnce(st.orgId, assertionId, 10 * 60_000))) throw unauthorized("This SAML assertion was already used");
   const p = profile as Record<string, unknown>;
   const email = String(p.email ?? p.mail ?? p["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"] ?? profile.nameID ?? "").toLowerCase();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw unauthorized("The identity provider did not send an email address");

@@ -1,7 +1,9 @@
-import { assertApplicationProcess, env, installConnectors, installShield, logger, startTelemetry } from "@aegis/core";
+import { assertApplicationProcess, env, initKeyring, installConnectors, installShield, logger, startTelemetry } from "@aegis/core";
 import { buildApp } from "./app.js";
 
 assertApplicationProcess("api");
+// Loads the data keys; with a vault provider this unwraps them once, before any request is served.
+await initKeyring();
 
 const telemetry = await startTelemetry("api");
 installShield();

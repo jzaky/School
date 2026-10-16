@@ -190,6 +190,18 @@ model SsoConnection {
   @@map("sso_connections")
 }
 
+/// SAML assertion ids already accepted, so a captured response cannot be replayed on any process.
+model SamlAssertion {
+  orgId       String   @map("org_id") @db.Uuid
+  assertionId String   @map("assertion_id")
+  expiresAt   DateTime @map("expires_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@id([orgId, assertionId])
+  @@index([expiresAt])
+  @@map("saml_assertions")
+}
+
 enum ApiKeySubject {
   agent
   integration

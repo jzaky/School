@@ -1,6 +1,6 @@
 import { createServer } from "node:http";
 import { withTenant, disconnectAll } from "@aegis/db";
-import { assertApplicationProcess, auditAllEnforcementPaths, claimJobs, dispatchEvents, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, periodOf, prometheusText, purgeRateLimitBuckets, recomputeCalibration, recordOperationalAlerts, reconcileExecution, recoverStaleJobs, refreshSoftwareAdvisories, syncEntra, ENTRA_KEY, registerJobHandler, runJob, snapshotUsage, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
+import { assertApplicationProcess, initKeyring, auditAllEnforcementPaths, claimJobs, dispatchEvents, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, periodOf, prometheusText, purgeRateLimitBuckets, recomputeCalibration, recordOperationalAlerts, reconcileExecution, recoverStaleJobs, refreshSoftwareAdvisories, syncEntra, ENTRA_KEY, registerJobHandler, runJob, snapshotUsage, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
 import { rawPrisma } from "@aegis/db";
 import { registerModuleHandlers } from "./handlers.js";
 
@@ -12,6 +12,7 @@ function requireOrg(ctx: { orgId: string | null }): string {
 
 const log = logger.child({ component: "worker" });
 assertApplicationProcess("worker");
+await initKeyring();
 
 // ---- Core handlers ----
 registerJobHandler("approval.expire", async (payload, ctx) => {

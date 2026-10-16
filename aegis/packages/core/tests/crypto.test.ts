@@ -24,7 +24,7 @@ describe("canonical JSON", () => {
 describe("secret envelope", () => {
   it("round-trips and binds to its context", () => {
     const enc = encryptSecret("super-secret", "row:1");
-    expect(enc.startsWith("v1.")).toBe(true);
+    expect(enc.startsWith("v2.")).toBe(true);
     expect(decryptSecret(enc, "row:1")).toBe("super-secret");
     expect(() => decryptSecret(enc, "row:2")).toThrow();
     expect(() => decryptSecret(enc.slice(0, -2) + "zz", "row:1")).toThrow();

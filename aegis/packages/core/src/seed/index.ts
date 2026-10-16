@@ -22,9 +22,11 @@ import { seedDemoShadowAi } from "./demo-shadow-ai.js";
 import { seedDemoSoftware } from "./demo-software.js";
 import type { TenantRunner } from "../gateway/gateway.js";
 import { updateInjectionResponse } from "../shield/injection-response.js";
+import { initKeyring } from "../lib/keyring.js";
 
 export async function runSeed() {
   const started = Date.now();
+  await initKeyring();
   installShield();
   const t = await seedDemoTenant();
   await withTenant(t.orgId, (db) => seedDemoDataClasses(db, t.users.security_analyst!.ctx));

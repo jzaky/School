@@ -66,7 +66,8 @@ test.describe("control as owner", () => {
     await expect(page.getByText(/26 to 50 of \d+/)).toBeVisible();
     await page.goto("/gateway?status=denied");
     // A refund denial is decided by policy and therefore carries a trace; a destination or grant denial stops at the registry stage.
-    const row = page.locator("tbody tr", { hasText: "issue-refund" }).first();
+    // Lab clones (from the seeded attack simulation) are excluded: data protection stops some of their attacks before policy runs.
+    const row = page.locator("tbody tr", { hasText: "issue-refund", hasNotText: "Lab clone" }).first();
     await expect(row).toBeVisible();
     await row.click();
     await page.waitForURL(/\/gateway\/[0-9a-f-]{36}/);

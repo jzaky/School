@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   transpilePackages: ["@aegis/core", "@aegis/db", "@aegis/sdk"],
-  serverExternalPackages: ["@prisma/client", "argon2", "pino", "pdfkit", "pdf-parse", "mammoth", "ioredis"],
+  serverExternalPackages: ["@prisma/client", "argon2", "pino", "pdfkit", "pdf-parse", "mammoth", "ioredis", "@aws-sdk/client-kms"],
   experimental: { serverActions: { bodySizeLimit: "25mb" } },
   poweredByHeader: false,
   // Workspace packages use ESM-style ".js" import specifiers that point at ".ts" sources.

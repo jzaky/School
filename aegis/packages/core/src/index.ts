@@ -1,6 +1,8 @@
 export * from "./env.js";
 export * from "./lib/errors.js";
 export * from "./lib/crypto.js";
+export * from "./lib/keyring.js";
+export * from "./lib/secret-rotation.js";
 export * from "./lib/context.js";
 export * from "./lib/pagination.js";
 export { logger } from "./lib/logger.js";

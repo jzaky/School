@@ -8,7 +8,7 @@ import { SignedXml } from "xml-crypto";
 import { disconnectAll, rawPrisma, withTenant } from "@aegis/db";
 import { makeTestTenant, type TestTenant } from "./helpers.js";
 import { upsertSsoConnection } from "../src/identity/oidc.js";
-import { beginSamlLogin, completeSamlLogin, samlAcsUrl, samlEntityId, samlMetadata } from "../src/identity/saml.js";
+import { acceptAssertionOnce, beginSamlLogin, completeSamlLogin, samlAcsUrl, samlEntityId, samlMetadata } from "../src/identity/saml.js";
 import { registerUser } from "../src/identity/auth.js";
 import { createOrganization } from "../src/orgs/orgs.js";
 
@@ -75,6 +75,27 @@ describe("SAML single sign-on", () => {
     const once = issueResponse({ email });
     await completeSamlLogin({ samlResponse: once, relayState: await relayState() });
     await expect(completeSamlLogin({ samlResponse: once, relayState: await relayState() })).rejects.toThrow(/already used/);
+  });
+  it("keeps the replay record in the shared database, per organization, and lets expired ids go", async () => {
+    const id = `_assert-${randomUUID()}`;
+    const other = await makeTestTenant("saml-other");
+    try {
+      // Two concurrent attempts (as on two replicas): exactly one is accepted.
+      const results = await Promise.all([acceptAssertionOnce(t.orgId, id, 60_000), acceptAssertionOnce(t.orgId, id, 60_000)]);
+      expect(results.filter(Boolean)).toHaveLength(1);
+      expect(await acceptAssertionOnce(t.orgId, id, 60_000)).toBe(false);
+      // The record is a row, visible to any process, and scoped to its organization.
+      expect(await withTenant(t.orgId, (db) => db.samlAssertion.count({ where: { assertionId: id } }))).toBe(1);
+      expect(await withTenant(other.orgId, (db) => db.samlAssertion.count({ where: { assertionId: id } }))).toBe(0);
+      expect(await acceptAssertionOnce(other.orgId, id, 60_000)).toBe(true);
+      // Once expired, the id is cleaned up on the next check.
+      const old = `_assert-${randomUUID()}`;
+      expect(await acceptAssertionOnce(t.orgId, old, -1_000)).toBe(true);
+      await acceptAssertionOnce(t.orgId, `_assert-${randomUUID()}`, 60_000);
+      expect(await withTenant(t.orgId, (db) => db.samlAssertion.count({ where: { assertionId: old } }))).toBe(0);
+    } finally {
+      await other.cleanup();
+    }
   });
   it("refuses a forged relay state and never takes over an account from another organization", async () => {
     await expect(completeSamlLogin({ samlResponse: issueResponse({ email: `x-${Date.now()}@saml-test.example` }), relayState: "e30.deadbeef" })).rejects.toThrow(/Invalid SSO state/);

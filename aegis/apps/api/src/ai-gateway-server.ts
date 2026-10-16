@@ -1,4 +1,4 @@
-import { assertApplicationProcess, env, installShield, logger, startTelemetry } from "@aegis/core";
+import { assertApplicationProcess, env, initKeyring, installShield, logger, startTelemetry } from "@aegis/core";
 import { buildApp } from "./app.js";
 
 /**
@@ -6,6 +6,7 @@ import { buildApp } from "./app.js";
  * forwarding to model providers cannot take down approvals, policies or the action gateway.
  */
 assertApplicationProcess("api");
+await initKeyring();
 
 const telemetry = await startTelemetry("ai-gateway");
 installShield();

@@ -18,7 +18,22 @@ const schema = z.object({
   /** Which process this is (api, web, worker, migrate, script). Used by the startup guard. */
   AEGIS_PROCESS: z.enum(["api", "web", "worker", "migrate", "script"]).optional(),
   REDIS_URL: z.string().optional(),
-  AEGIS_MASTER_KEY: z.string().min(32, "AEGIS_MASTER_KEY must be 32 random bytes, base64"),
+  /** With AEGIS_KEY_PROVIDER=env: the 32-byte data key, base64. With a vault provider: that data key wrapped by the vault, base64. */
+  AEGIS_MASTER_KEY: z.string().min(32, "AEGIS_MASTER_KEY must be 32 random bytes, base64 (or a vault-wrapped data key)"),
+  /** Where the data key is held: in the environment, or wrapped by AWS KMS or Azure Key Vault (see lib/keyring.ts). */
+  AEGIS_KEY_PROVIDER: z.enum(["env", "aws-kms", "azure-keyvault"]).default("env"),
+  /** Id recorded in every new envelope; change it when rotating to a new data key. */
+  AEGIS_MASTER_KEY_ID: z.string().default("k1"),
+  /** Retired data keys still allowed to decrypt, "id:value,id:value", same form as AEGIS_MASTER_KEY. */
+  AEGIS_PREVIOUS_MASTER_KEYS: z.string().optional(),
+  /** AWS KMS: the key id or ARN that wraps the data key. Region and credentials come from the standard AWS settings. */
+  AEGIS_KMS_KEY_ID: z.string().optional(),
+  /** Azure Key Vault: the key identifier, https://<vault>.vault.azure.net/keys/<name>/<version>. */
+  AEGIS_AZURE_KEY_URL: z.string().optional(),
+  AZURE_TENANT_ID: z.string().optional(),
+  AZURE_CLIENT_ID: z.string().optional(),
+  AZURE_CLIENT_SECRET: z.string().optional(),
+  AZURE_AUTHORITY_HOST: z.string().default("https://login.microsoftonline.com"),
   AEGIS_SESSION_SECRET: z.string().min(32),
   EVIDENCE_SIGNING_KEY: z.string().optional(),
   /** Retired evidence public keys (SPKI PEM, base64, comma separated) kept so old checkpoints still verify after a rotation. */
@@ -70,6 +85,11 @@ export function env(): Env {
     cached = parsed.data;
   }
   return cached;
+}
+
+/** Tests only: re-read process.env on the next env() call. */
+export function resetEnvForTests(): void {
+  cached = undefined;
 }
 
 export function isProduction(): boolean {

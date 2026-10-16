@@ -1,5 +1,5 @@
 import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
-import { env } from "../env.js";
+import { currentDataKey, dataKeyById, dataKeys } from "./keyring.js";
 
 export function sha256Hex(input: string | Buffer): string {
   return createHash("sha256").update(input).digest("hex");
@@ -20,33 +20,59 @@ export function constantTimeEqual(a: string, b: string): boolean {
   return timingSafeEqual(ab, bb);
 }
 
-function masterKey(): Buffer {
-  const raw = Buffer.from(env().AEGIS_MASTER_KEY, "base64");
-  if (raw.length !== 32) throw new Error("AEGIS_MASTER_KEY must decode to 32 bytes");
-  return raw;
-}
-
 /**
- * AES-256-GCM envelope. Output format: v1.<iv>.<ciphertext>.<tag> (base64url).
- * The optional `aad` binds the ciphertext to a context (for example the row id) so a
- * ciphertext copied to another row fails to decrypt.
+ * AES-256-GCM envelope. Output format: v2.<key id>.<iv>.<ciphertext>.<tag> (base64url), written with
+ * the current data key (lib/keyring.ts). The optional `aad` binds the ciphertext to a context (for
+ * example the row id) so a ciphertext copied to another row fails to decrypt.
  */
 export function encryptSecret(plaintext: string, aad = ""): string {
+  const { id, key } = currentDataKey();
   const iv = randomBytes(12);
-  const cipher = createCipheriv("aes-256-gcm", masterKey(), iv);
+  const cipher = createCipheriv("aes-256-gcm", key, iv);
   if (aad) cipher.setAAD(Buffer.from(aad));
   const ct = Buffer.concat([cipher.update(plaintext, "utf8"), cipher.final()]);
   const tag = cipher.getAuthTag();
-  return ["v1", iv.toString("base64url"), ct.toString("base64url"), tag.toString("base64url")].join(".");
+  return ["v2", id, iv.toString("base64url"), ct.toString("base64url"), tag.toString("base64url")].join(".");
 }
 
-export function decryptSecret(envelope: string, aad = ""): string {
-  const [v, ivB, ctB, tagB] = envelope.split(".");
-  if (v !== "v1" || !ivB || !ctB || !tagB) throw new Error("Malformed secret envelope");
-  const decipher = createDecipheriv("aes-256-gcm", masterKey(), Buffer.from(ivB, "base64url"));
+function openWith(key: Buffer, ivB: string, ctB: string, tagB: string, aad: string): string {
+  const decipher = createDecipheriv("aes-256-gcm", key, Buffer.from(ivB, "base64url"));
   if (aad) decipher.setAAD(Buffer.from(aad));
   decipher.setAuthTag(Buffer.from(tagB, "base64url"));
   return Buffer.concat([decipher.update(Buffer.from(ctB, "base64url")), decipher.final()]).toString("utf8");
+}
+
+/**
+ * Opens an envelope. v2 names its key; v1 (written before key ids existed) is tried with each known
+ * key, current first, which GCM's tag makes unambiguous.
+ */
+export function decryptSecret(envelope: string, aad = ""): string {
+  const parts = envelope.split(".");
+  if (parts[0] === "v2" && parts.length === 5) {
+    const [, id, ivB, ctB, tagB] = parts as [string, string, string, string, string];
+    const k = dataKeyById(id);
+    if (!k) throw new Error(`No data key with id ${id} is configured (add it to AEGIS_PREVIOUS_MASTER_KEYS)`);
+    return openWith(k.key, ivB, ctB, tagB, aad);
+  }
+  if (parts[0] === "v1" && parts.length === 4) {
+    const [, ivB, ctB, tagB] = parts as [string, string, string, string];
+    let last: unknown;
+    for (const k of dataKeys()) {
+      try {
+        return openWith(k.key, ivB, ctB, tagB, aad);
+      } catch (e) {
+        last = e;
+      }
+    }
+    throw last instanceof Error ? last : new Error("No configured data key opens this envelope");
+  }
+  throw new Error("Malformed secret envelope");
+}
+
+/** The id of the key an envelope was written with ("v1" envelopes predate key ids). */
+export function envelopeKeyId(envelope: string): string | null {
+  const parts = envelope.split(".");
+  return parts[0] === "v2" && parts.length === 5 ? parts[1]! : null;
 }
 
 /**

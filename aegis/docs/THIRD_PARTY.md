@@ -20,6 +20,7 @@ Generated on 2026-10-11 from `pnpm licenses list -P` over production dependencie
 | argon2 | MIT | Password hashing (argon2id) |
 | jose | MIT | JWT and JWKS verification for OpenID Connect |
 | @node-saml/node-saml (with xml-crypto, @xmldom/xmldom, xml2js, xpath, xml-encryption) | MIT | SAML 2.0 single sign-on: request signing, response and assertion signature checks |
+| @aws-sdk/client-kms (and its @aws-sdk, @smithy dependencies) | Apache-2.0 | Optional AWS KMS key provider: unwraps the data key at startup when AEGIS_KEY_PROVIDER=aws-kms. Loaded only in that mode. |
 | ajv, ajv-formats | MIT | JSON Schema validation of tool parameters |
 | pino | MIT | Structured logging with redaction |
 | ioredis | MIT | Redis client |
