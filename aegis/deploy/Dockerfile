@@ -2,6 +2,7 @@
 #   docker build -f deploy/Dockerfile --target api    -t aegis-api .
 #   docker build -f deploy/Dockerfile --target worker -t aegis-worker .
 #   docker build -f deploy/Dockerfile --target web    -t aegis-web .
+#   docker build -f deploy/Dockerfile --target demo   -t aegis-demo .   (all three in one machine, hosted demo only)
 # Runs as a non-root user. No secrets are baked in; everything comes from the environment.
 FROM node:22-bookworm-slim AS base
 # pnpm is installed into a shared, read-only location at build time. The runtime user has no writable cache,
@@ -58,3 +59,11 @@ ENV AEGIS_STORAGE_DIR=/data/uploads AEGIS_PROCESS=web
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s CMD node -e "fetch('http://127.0.0.1:3000/login').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 CMD ["pnpm", "--filter", "@aegis/web", "start"]
+
+# ---- Hosted demo: api, worker and web in one machine sharing one volume (deploy/fly) ----
+FROM web-build AS demo
+RUN addgroup --system aegis && adduser --system --ingroup aegis --home /home/aegis aegis && chown -R aegis:aegis /app && mkdir -p /data/uploads && chown aegis:aegis /data/uploads
+# Starts as root only to hand the mounted volume to the aegis user; start-all.sh then drops to it.
+ENV NODE_ENV=production API_PORT=4000 AEGIS_STORAGE_DIR=/data/uploads
+EXPOSE 3000 4000
+CMD ["bash", "deploy/fly/start-all.sh"]

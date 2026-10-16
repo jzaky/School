@@ -18,7 +18,7 @@ describe("sso connections", () => {
     expect(row.emailDomains).toEqual(["example.com"]);
     expect(JSON.stringify(row)).not.toContain("top-secret");
     const raw = await withTenant(t.orgId, (db) => db.ssoConnection.findUniqueOrThrow({ where: { orgId: t.orgId } }));
-    expect(raw.clientSecretEnc.startsWith("v1.")).toBe(true);
+    expect(raw.clientSecretEnc.startsWith("v2.")).toBe(true);
     expect(raw.clientSecretEnc).not.toContain("top-secret");
     const read = await withTenant(t.orgId, (db) => getSsoConnection(db, t.ownerCtx));
     expect(read?.hasSecret).toBe(true);

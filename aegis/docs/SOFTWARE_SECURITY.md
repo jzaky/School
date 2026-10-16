@@ -111,3 +111,20 @@ AEGIS reads the outputs of these tools rather than bundling them. They run where
 - Registry metadata such as publish dates, maintainers and download counts, for judging age and maintenance. Scorecard covers part of this.
 - Inventory of installed applications, browser extensions and developer tools across devices. Requests cover what people ask for, and Shadow AI discovery covers AI applications seen in logs.
 - Lockfiles other than npm (`poetry.lock`, `go.sum` and others). An SBOM covers them in the meantime.
+
+## Dependency audit in CI
+
+This section is about AEGIS's own dependencies, not the customer software that the workflow above reviews. `pnpm audit --audit-level high` is a blocking step in CI. On 16 October 2026 it reported 7 high and 2 critical advisories, which were handled as follows:
+
+| Advisory | Package and path | Action |
+|---|---|---|
+| GHSA-q7rr-3cgh-j5r3, GHSA-45rx-2jwx-cxfr and protobufjs advisories | OpenTelemetry SDK (`packages/core`) | Upgraded to `@opentelemetry/sdk-node` 0.223 and SDK 2.12. `Resource` became `resourceFromAttributes`. Trace export was checked against a local OTLP receiver. |
+| GHSA-6g55-p6wh-862q, GHSA-r28c-9q8g-f849 | postcss pinned by `next` | Override `next>postcss: ^8.5.18`. Next.js still pins 8.4.31 in 15.5.28. |
+| GHSA-ggr8-5vv4-36mx | deepmerge-ts pinned by `@prisma/config` (migration tooling) | Override to `^8.0.2`. |
+| GHSA-5gmw-xhrv-c9v3, GHSA-85c8-ppgw-ccpr | tinypool under vitest (test runner only) | Override to `^2.1.2`. |
+| GHSA-4jqv-mc3x-m676, GHSA-mcj8-r9mp-w47p (moderate) | next | Upgraded to 15.5.28. |
+| GHSA-vfj7-8cjw-p6xm | braces, under `eslint-config-next` (lint only, never shipped) | No patched release exists. Accepted in `auditConfig.ignoreGhsas`, to be reviewed when one appears. |
+
+Still open at moderate (they do not block): vitest GHSA-82fw-gwwq-j7x9 (test runner; the fix needs vitest 4) and sprintf-js GHSA-hp3w-g68c-fv3c (through mammoth, no patched release).
+
+The same CI job runs Gitleaks 8.30.1 over the AEGIS history and Trivy 0.75.0 over the api and web images. Gitleaks is built through the Go module proxy, so its source is checked against the Go checksum database; Trivy is the release archive checked against the release checksum file. The QUANTOS_INTEGRATION.md note on the March 2026 Trivy release compromise applies: version 0.75.0 is after it, and mutable action tags are not used.

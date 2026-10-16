@@ -44,8 +44,8 @@ Policy documents and versions; approval decisions; evidence chain; downstream cr
 | T25 | A live payment credential is connected by mistake | Connector validates keys at storage and at use; only test-mode keys are accepted | Built for the Stripe connector |
 
 ## Known gaps
-- SAML exists (node-saml); its assertion replay cache is per process.
-- No Content-Security-Policy on the console yet.
-- No hardware-backed key storage for the evidence signing key or the credential vault key (environment variable; KMS integration is a documented next step).
+- SAML (node-saml) refuses a replayed assertion across every replica: the assertion id is recorded in the `saml_assertions` table (per organisation, row-level security) until it expires.
+- The console sends a nonce-based Content-Security-Policy with `strict-dynamic`; inline styles are still allowed.
+- The credential vault key can be held by AWS KMS or Azure Key Vault (`AEGIS_KEY_PROVIDER`), verified against local stand-ins only. The evidence signing key is still an environment variable; no hardware-backed signer yet.
 - Network-level egress enforcement for real downstream systems depends on the customer's deployment.
 - Injection detection is heuristic; false negatives expected; it is a signal, not a guarantee.

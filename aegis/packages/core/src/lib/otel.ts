@@ -14,10 +14,10 @@ export async function startTelemetry(component: string): Promise<{ shutdown: () 
   const { OTLPTraceExporter } = await import("@opentelemetry/exporter-trace-otlp-http");
   const { OTLPMetricExporter } = await import("@opentelemetry/exporter-metrics-otlp-http");
   const { PeriodicExportingMetricReader } = await import("@opentelemetry/sdk-metrics");
-  const { Resource } = await import("@opentelemetry/resources");
+  const { resourceFromAttributes } = await import("@opentelemetry/resources");
   const base = env().OTEL_EXPORTER_OTLP_ENDPOINT!.replace(/\/$/, "");
   const sdk = new NodeSDK({
-    resource: new Resource({ "service.name": `${env().OTEL_SERVICE_NAME}-${component}`, "deployment.environment": env().NODE_ENV }),
+    resource: resourceFromAttributes({ "service.name": `${env().OTEL_SERVICE_NAME}-${component}`, "deployment.environment": env().NODE_ENV }),
     traceExporter: new OTLPTraceExporter({ url: `${base}/v1/traces` }),
     metricReader: new PeriodicExportingMetricReader({ exporter: new OTLPMetricExporter({ url: `${base}/v1/metrics` }), exportIntervalMillis: 30_000 }),
   });

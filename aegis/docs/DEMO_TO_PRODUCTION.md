@@ -27,7 +27,7 @@ Build
 Test
 - Smoke: `GET /health`, `GET /ready`, then `AEGIS_API_URL=https://api.demo.example npx tsx scripts/smoke-refund-journey.mts` (12 checks over HTTP), then follow the seven steps on the public page `/site/demo` by hand: Getting started, the refund sample workflow, approving the AED 1,450 refund as Lina Mansour, the request receipt and evidence, the Thresholds form, the emergency pause drill, the evidence export.
 - The demo page shows the persona credentials only when `AEGIS_DEMO_MODE=true`; keep that flag off everywhere except the hosted demo.
-- Run the Playwright suite against the hosted URL: `E2E_BASE_URL=https://demo.example npx playwright test` after pointing `playwright.config.ts` at the URL (the config reads `E2E_BASE_URL` once that line is added; see the CI job for the pattern).
+- Browser tests against a live URL: `playwright.config.ts` reads `E2E_BASE_URL`. Locally: `cd apps/web && E2E_BASE_URL=https://demo.example npx playwright test` (add `AEGIS_API_URL=https://api.demo.example` for the two specs that call the API directly). From GitHub: run the workflow "AEGIS browser tests against a live URL" (`.github/workflows/aegis-live-e2e.yml`) with the URL; the `smoke` suite is read-only and safe anywhere, the `full` suite creates policies, approvals and agents, so run it only against a disposable demo deployment.
 - Load: `AEGIS_URL=https://api.demo.example PERF_SCENARIO=transfers npx tsx scripts/perf-gateway.mts 300 10` and compare with docs/PERFORMANCE.md.
 
 Exit criteria
@@ -39,7 +39,7 @@ Stripe test mode belongs here: store a prospect's or your own `sk_test_` key on 
 
 Build
 - Kubernetes manifests from `deploy/k8s`; two API replicas, one worker, two web replicas; PgBouncer in front of PostgreSQL; `AEGIS_DEMO_MODE=false`.
-- Secrets from the platform's secret manager, not from files. Start the KMS work here: keep `AEGIS_MASTER_KEY` and `EVIDENCE_SIGNING_KEY` in the secret manager, and plan the envelope-encryption change so the master key is held by the KMS (code seam: `packages/core/src/lib/crypto.ts`, `packages/core/src/evidence/ledger.ts`).
+- Secrets from the platform's secret manager, not from files. Move the credential vault key into a key vault here: set `AEGIS_KEY_PROVIDER=aws-kms` (with `AEGIS_KMS_KEY_ID`) or `azure-keyvault` (with `AEGIS_AZURE_KEY_URL`), wrap the data key with `pnpm --filter @aegis/core data-key wrap-current --provider <name>`, and store the wrapped value as `AEGIS_MASTER_KEY` (docs/SECURITY.md, "Key management"). The evidence signing key (`EVIDENCE_SIGNING_KEY`) is still read from the environment.
 - OpenTelemetry to a collector (`deploy/docker-compose.observability.yml` shows the collector config); dashboards for decision latency (`aegis.gateway.decision_latency_ms`), decisions by result, job queue depth, chain verification results.
 - Backups: daily base backup plus WAL archiving; alert if the last successful backup is older than a day.
 
@@ -47,7 +47,7 @@ Test
 - Restore drill from a real backup into a fresh database, then migrate, then `POST /v1/assurance/evidence/verify` for every tenant (docs/BACKUP_RECOVERY.md). Record the RTO achieved.
 - Failure tests from docs/AEGIS_ARCHITECTURE.md: stop PostgreSQL and confirm the gateway returns 503 and the SDK reports deny; kill the worker mid-run and confirm `recoverStaleJobs` resumes; expire an approval and confirm the late approval is refused; revoke an agent and confirm its key stops working within one request.
 - Multi-replica: run the load script against the load balancer; confirm idempotency holds across replicas (same key, two replicas, one execution).
-- Security: dependency scan (`pnpm audit`), container image scan, and the first external penetration test scoped to the API and console.
+- Security: the dependency audit, secret scan and container image scan already run as blocking CI steps (`.github/workflows/aegis-ci.yml`, job `security`); the first external penetration test, scoped to the API and console, belongs here (request for quotes: docs/PENTEST_RFQ.md).
 
 Exit criteria
 - Restore drill documented with times; failure tests green; penetration test findings triaged with high and critical fixed; a week of synthetic traffic without unexplained 5xx.
@@ -72,9 +72,9 @@ Exit criteria
 
 ## Stage 4: production readiness (gates, not tasks)
 
-- Keys in KMS or HSM; master key rotation procedure tested.
-- SAML if the customer requires it (not built; OIDC is).
-- Penetration test findings closed; dependency and image scans in CI as blocking steps.
+- Credential vault key held by the customer's KMS or Key Vault (built: `AEGIS_KEY_PROVIDER`; verified against local stand-ins only) and the rotation procedure (`data-key new`, `data-key rotate`) rehearsed on the staging database. The evidence signing key still comes from the environment; moving it to an HSM-backed signer is open.
+- SAML 2.0 sign-in is built (signature and audience checks, assertion replay refused across all replicas through the database); test it with the customer's identity provider before go-live. OIDC is built as well.
+- Penetration test findings closed. Dependency audit, secret scan and image scan are already blocking CI steps.
 - Runbooks: on-call, incident response for AEGIS itself, upgrade and rollback (migrations are forward-only; test rollback by restoring the pre-upgrade backup).
 - Support: SLA you can actually meet, status page, release notes.
 - Legal: license review of the two flagged packages (docs/THIRD_PARTY.md), the ISO control summaries, and the standards references on the website.
