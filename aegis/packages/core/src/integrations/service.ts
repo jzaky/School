@@ -6,7 +6,7 @@ import type { OrgContext } from "../lib/context.js";
 import { decryptSecret, encryptSecret, randomToken } from "../lib/crypto.js";
 import { notFound, validation } from "../lib/errors.js";
 import { assertPermission, slugSchema } from "../orgs/orgs.js";
-import { getDownstreamSystem, readIntegrationCredential, type DownstreamContext } from "../gateway/simulators.js";
+import { readIntegrationCredential, resolveDownstreamSystem, type DownstreamContext } from "../gateway/simulators.js";
 
 export async function listIntegrations(db: TenantDb, ctx: OrgContext) {
   assertPermission(ctx, "integrations:read");
@@ -43,9 +43,9 @@ export async function setIntegrationStatus(db: TenantDb, ctx: OrgContext, id: st
 export async function storeCredential(db: TenantDb, ctx: OrgContext, integrationId: string, name: string, secret: string, rotationDays = 90) {
   assertPermission(ctx, "integrations:write");
   // The downstream system may veto the secret before it reaches the vault (for example a live payments key).
-  const integ = await db.integration.findUnique({ where: { id: integrationId }, select: { key: true } });
+  const integ = await db.integration.findUnique({ where: { id: integrationId }, select: { key: true, type: true } });
   if (!integ) throw notFound("Integration");
-  const veto = getDownstreamSystem(integ.key)?.validateCredential?.(name, secret);
+  const veto = resolveDownstreamSystem(integ)?.validateCredential?.(name, secret);
   if (veto) throw validation(veto);
   const existing = await db.credential.findUnique({ where: { integrationId_name: { integrationId, name } } });
   if (existing) {
@@ -138,9 +138,9 @@ export interface ConnectionTestResult {
  */
 export async function testIntegrationConnection(run: IntegrationRunner, ctx: OrgContext, integrationId: string): Promise<ConnectionTestResult> {
   assertPermission(ctx, "integrations:write");
-  const integ = await run((db) => db.integration.findUnique({ where: { id: integrationId }, select: { id: true, key: true, orgId: true } }));
+  const integ = await run((db) => db.integration.findUnique({ where: { id: integrationId }, select: { id: true, key: true, type: true, orgId: true } }));
   if (!integ || integ.orgId !== ctx.orgId) throw notFound("Integration");
-  const system = getDownstreamSystem(integ.key);
+  const system = resolveDownstreamSystem(integ);
   const downstream: DownstreamContext = { orgId: ctx.orgId, integrationId: integ.id, run, credential: (name = "service-token") => run((db) => readIntegrationCredential(db, integ.id, name)) };
   let result: { ok: boolean; detail: string };
   if (!system) result = { ok: false, detail: `No downstream system is registered for ${integ.key}` };

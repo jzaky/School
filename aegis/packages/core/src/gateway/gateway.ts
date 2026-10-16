@@ -30,7 +30,7 @@ import { getShieldInspector } from "./shield-hook.js";
 import { escalateForInjection, getInjectionResponse } from "../shield/injection-response.js";
 import { escalateForModel, getModelGovernance, modelGateCheck } from "../governance/models.js";
 import { activeExceptionRules } from "../policy/exceptions.js";
-import { getDownstreamSystem, readIntegrationCredential, type DownstreamContext } from "./simulators.js";
+import { readIntegrationCredential, resolveDownstreamSystem, type DownstreamContext } from "./simulators.js";
 
 export const actionRequestInputSchema = z.object({
   tool: z.string().min(1).max(80),
@@ -657,7 +657,7 @@ export async function executeRequest(run: TenantRunner, ctx: OrgContext, actionR
     }
     const tool = req.toolId ? await db.tool.findUnique({ where: { id: req.toolId }, include: { integration: { omit: { settings: true, enforcementSummary: true } } } }) : null;
     const systemKey = tool?.integration?.key ?? "none";
-    const system = getDownstreamSystem(systemKey);
+    const system = tool?.integration ? resolveDownstreamSystem(tool.integration) : undefined;
     const definitiveFailure = !system || !tool?.integration ? `no downstream system registered for ${systemKey}` : tool.integration.status !== "active" ? `integration ${systemKey} is disabled` : null;
     // The grant is consumed before anything leaves the gateway; from here the request is `executing`.
     const check = await consumeGrant(db, grantToken, requestHashOf(req.toolKey, req.action, params), { now });
@@ -726,7 +726,7 @@ export async function reconcileExecution(run: TenantRunner, ctx: OrgContext, act
     if (req.status !== "executing" && req.status !== "unknown") throw conflict(`Request is ${req.status}; only executing or unknown requests reconcile`);
     const tool = req.toolId ? await db.tool.findUnique({ where: { id: req.toolId }, include: { integration: { omit: { settings: true, enforcementSummary: true } } } }) : null;
     const systemKey = tool?.integration?.key ?? "none";
-    const system = getDownstreamSystem(systemKey);
+    const system = tool?.integration ? resolveDownstreamSystem(tool.integration) : undefined;
     const grant = req.grants[0];
     const attempts = await db.executionReceipt.count({ where: { actionRequestId: req.id, status: "unknown" } });
     return { call: { systemKey, system, integrationId: tool?.integration?.id ?? null, attempts, req: { id: req.id, correlationId: req.correlationId, executionAttempts: req.executionAttempts, agentId: req.agentId, toolKey: req.toolKey }, downstream: { actionRequestId: req.id, idempotencyKey: req.downstreamIdempotencyKey ?? `aegis:${req.id}`, attempt: req.executionAttempts, toolKey: req.toolKey, action: req.action, params: req.params as Record<string, unknown>, correlationId: req.correlationId, agentSlug: req.agent.slug, grant: { requestHash: grant?.requestHash ?? "", consumedAt: grant?.consumedAt ?? new Date(0) } } } };

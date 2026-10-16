@@ -173,6 +173,7 @@ export async function verifyGrantDownstream(opts: { baseUrl: string; integration
 
 export * from "./guard.js";
 export * from "./adapters.js";
+export * from "./adapter-protocol.js";
 
 /** One fact the agent relied on. AEGIS compares it with the request and with other evidence for the same field. */
 export interface EvidenceItem {

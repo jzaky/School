@@ -2,6 +2,7 @@ import type { TenantDb } from "@aegis/db";
 import type { OrgContext } from "../lib/context.js";
 import { assertPermission } from "../orgs/orgs.js";
 import { ALPACA_SYSTEM_KEY } from "../gateway/connectors/alpaca.js";
+import { HTTPS_INTEGRATION_TYPE, HTTPS_SYSTEM_KEY } from "../gateway/connectors/https.js";
 import { STRIPE_SYSTEM_KEY } from "../gateway/connectors/stripe.js";
 
 /**
@@ -36,6 +37,7 @@ export interface CatalogEntry {
 export const INTEGRATION_CATALOG: CatalogEntry[] = [
   { key: STRIPE_SYSTEM_KEY, name: "Stripe refunds (test mode)", category: "actions", description: "Agents issue refunds through the gateway; AEGIS executes them with Stripe's idempotency keys and reconciles ambiguous outcomes. Live keys are refused.", status: "contract_tested", needs: "A Stripe test-mode secret key", configureHref: "/integrations", docs: "docs/CONNECTORS.md", vendor: "Stripe" },
   { key: ALPACA_SYSTEM_KEY, name: "Alpaca paper trading", category: "actions", description: "Paper-trading orders placed through the gateway under a trading mandate. Live trading keys are refused.", status: "contract_tested", needs: "An Alpaca paper-trading key", configureHref: "/integrations", docs: "docs/CONNECTORS.md", vendor: "Alpaca" },
+  { key: HTTPS_SYSTEM_KEY, name: "Any system over HTTPS (AEGIS execution protocol)", category: "actions", description: "Put AEGIS in front of your own system: add a small adapter that accepts signed execute calls and answers lookups by idempotency key. Ambiguous outcomes are reconciled, never retried blindly.", status: "contract_tested", needs: "An HTTPS adapter on your system and a signing secret of at least 32 characters", configureHref: "/integrations", docs: "docs/CONNECTORS.md" },
   { key: "simulators", name: "Demo systems (support, payments, CRM, email)", category: "actions", description: "Local simulators behind the demo tools, so every gateway outcome can be shown without touching a real system.", status: "simulated", needs: "Nothing", configureHref: "/integrations", docs: "docs/CONNECTORS.md" },
   { key: "oidc", name: "Single sign-on (OpenID Connect)", category: "identity", description: "Sign-in through your identity provider, for example Microsoft Entra ID, Okta or Google Workspace, with PKCE and email-domain routing.", status: "contract_tested", needs: "An OIDC application in your identity provider", configureHref: "/org/settings", docs: "docs/SECURITY.md" },
   { key: "saml", name: "Single sign-on (SAML 2.0)", category: "identity", description: "SAML sign-in with signature and audience checks.", status: "contract_tested", needs: "A SAML application and its signing certificate", configureHref: "/org/settings", docs: "docs/SECURITY.md" },
@@ -71,6 +73,10 @@ export async function catalogForOrg(db: TenantDb, ctx: OrgContext) {
       verifiedAt = mine.map((d) => d.verifiedAt).filter((x): x is Date => !!x).sort((a, b) => b.getTime() - a.getTime())[0] ?? null;
     } else if (e.key === STRIPE_SYSTEM_KEY || e.key === ALPACA_SYSTEM_KEY) {
       const mine = integrations.filter((i) => (i.settings as { system?: string } | null)?.system === e.key || i.key === e.key);
+      configured = mine.length;
+      verifiedAt = mine.filter((i) => i.lastHealthOk && i.lastHealthAt).map((i) => i.lastHealthAt!).sort((a, b) => b.getTime() - a.getTime())[0] ?? null;
+    } else if (e.key === HTTPS_SYSTEM_KEY) {
+      const mine = integrations.filter((i) => i.type === HTTPS_INTEGRATION_TYPE);
       configured = mine.length;
       verifiedAt = mine.filter((i) => i.lastHealthOk && i.lastHealthAt).map((i) => i.lastHealthAt!).sort((a, b) => b.getTime() - a.getTime())[0] ?? null;
     } else if (e.key === "oidc" || e.key === "saml") {

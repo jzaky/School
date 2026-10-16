@@ -13,7 +13,7 @@ import { CodeBlock } from "@/components/ui/code-block";
 import { Note } from "@/components/ui/note";
 import { Badge } from "@/components/ui/badge";
 
-const TYPES = ["banking", "support", "crm", "warehouse", "email", "http", "ticketing", "storage", "other"];
+const TYPES = ["https", "banking", "support", "crm", "warehouse", "email", "http", "ticketing", "storage", "other"];
 
 export function CreateIntegrationDialog({ canWrite }: { canWrite: boolean }) {
   const router = useRouter();

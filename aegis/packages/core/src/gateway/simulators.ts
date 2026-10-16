@@ -2,6 +2,7 @@ import type { TenantDb } from "@aegis/db";
 import { decryptSecret, hashObject } from "../lib/crypto.js";
 import { stripeTestConnector } from "./connectors/stripe.js";
 import { alpacaPaperConnector } from "./connectors/alpaca.js";
+import { HTTPS_INTEGRATION_TYPE, httpsConnector } from "./connectors/https.js";
 
 /**
  * Downstream systems: the things the gateway executes against once a request is allowed or
@@ -216,6 +217,14 @@ export function registerDownstreamSystem(s: DownstreamSystem) {
 }
 export function getDownstreamSystem(key: string): DownstreamSystem | undefined {
   return systems.get(key);
+}
+/**
+ * The system an integration executes against: one registered under the integration's own key (the
+ * simulators and sandbox connectors), otherwise the generic HTTPS connector for integrations of type
+ * "https" (any customer system that implements the AEGIS execution protocol).
+ */
+export function resolveDownstreamSystem(integration: { key: string; type: string }): DownstreamSystem | undefined {
+  return systems.get(integration.key) ?? (integration.type === HTTPS_INTEGRATION_TYPE ? httpsConnector : undefined);
 }
 export function listDownstreamSystems(): DownstreamSystem[] {
   return [...systems.values()];

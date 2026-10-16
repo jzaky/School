@@ -4,7 +4,7 @@ import type { OrgContext } from "../lib/context.js";
 import { forbidden, notFound } from "../lib/errors.js";
 import { hasPermission } from "../identity/permissions.js";
 import { createSecurityEvent } from "../shield/security-events.js";
-import { getDownstreamSystem, readIntegrationCredential, type DownstreamContext } from "./simulators.js";
+import { readIntegrationCredential, resolveDownstreamSystem, type DownstreamContext } from "./simulators.js";
 import type { TenantRunner } from "./gateway.js";
 
 /**
@@ -54,7 +54,7 @@ export async function auditEnforcementPath(run: TenantRunner, ctx: OrgContext, i
   const since = new Date(now.getTime() - (opts.windowHours ?? 24) * 3600_000);
   const integ = await run((db) => db.integration.findUnique({ where: { id: integrationId } }));
   if (!integ) throw notFound("Integration");
-  const system = getDownstreamSystem(integ.key);
+  const system = resolveDownstreamSystem(integ);
   const base = { integrationId, integrationKey: integ.key, windowStart: since.toISOString(), checkedAt: now.toISOString() };
   let result: EnforcementAuditResult;
   if (!system?.listRecentOperations) {
@@ -116,7 +116,7 @@ export type EnforcementStrength = "gateway_executes" | "downstream_verifies" | "
 export async function enforcementCoverage(db: TenantDb, ctx: OrgContext) {
   if (ctx.actor.type === "user" && !hasPermission(ctx.actor.permissions, "integrations:read")) throw forbidden("Missing permission integrations:read");
   const since = new Date((ctx.now ?? new Date()).getTime() - 30 * 24 * 3600_000);
-  const agents = await db.agent.findMany({ where: { isLab: false, orgId: ctx.orgId, status: { in: ["active", "registered", "suspended"] } }, select: { id: true, slug: true, name: true, status: true, tools: { where: { enabled: true, revokedAt: null }, select: { tool: { select: { key: true, integration: { select: { id: true, key: true, enforcementSummary: true, lastEnforcementAuditAt: true } } } } } } }, orderBy: { slug: "asc" } });
+  const agents = await db.agent.findMany({ where: { isLab: false, orgId: ctx.orgId, status: { in: ["active", "registered", "suspended"] } }, select: { id: true, slug: true, name: true, status: true, tools: { where: { enabled: true, revokedAt: null }, select: { tool: { select: { key: true, integration: { select: { id: true, key: true, type: true, enforcementSummary: true, lastEnforcementAuditAt: true } } } } } } }, orderBy: { slug: "asc" } });
   const modes = await db.actionRequest.groupBy({ by: ["agentId", "toolKey"], where: { orgId: ctx.orgId, createdAt: { gte: since } }, _count: { _all: true } });
   const agentMode = await db.$queryRaw<{ agent_id: string; tool_key: string; n: bigint }[]>`SELECT agent_id, tool_key, count(*)::bigint AS n FROM action_requests WHERE org_id = ${ctx.orgId}::uuid AND created_at >= ${since} AND context->>'executionMode' = 'agent' GROUP BY agent_id, tool_key`;
   const total = new Map(modes.map((m) => [`${m.agentId}:${m.toolKey}`, m._count._all]));
@@ -130,7 +130,7 @@ export async function enforcementCoverage(db: TenantDb, ctx: OrgContext) {
       const key = `${a.id}:${tool.key}`;
       const requests30d = total.get(key) ?? 0;
       const agentExecuted = selfRun.get(key) ?? 0;
-      const connector = tool.integration ? getDownstreamSystem(tool.integration.key) : undefined;
+      const connector = tool.integration ? resolveDownstreamSystem(tool.integration) : undefined;
       const strength: EnforcementStrength = !tool.integration ? "not_enforced" : agentExecuted > 0 ? (connector ? "downstream_verifies" : "self_reported") : connector ? "gateway_executes" : "self_reported";
       const summary = (tool.integration?.enforcementSummary ?? {}) as { observable?: boolean; bypass?: number; unknownRequest?: number; unauthorized?: number };
       return { toolKey: tool.key, integrationKey: tool.integration?.key ?? null, strength, requests30d, agentExecuted, observable: summary.observable ?? null, lastAuditAt: tool.integration?.lastEnforcementAuditAt?.toISOString() ?? null, outsideGateway: (summary.bypass ?? 0) + (summary.unknownRequest ?? 0) + (summary.unauthorized ?? 0) };

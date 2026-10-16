@@ -6,8 +6,9 @@ simulated systems. A connector implements the same interface against a real prov
 provider's sandbox or test mode. The gateway, policies, approvals, grants, evidence and console do
 not change; the console labels each integration `Simulated` or `Sandbox` from `settings.kind`.
 
-This document covers the first connector: Stripe refunds in test mode
-(`packages/core/src/gateway/connectors/stripe.ts`, system key `stripe-test`).
+This document covers three connectors: Stripe refunds in test mode
+(`packages/core/src/gateway/connectors/stripe.ts`, system key `stripe-test`), Alpaca paper trading,
+and a generic HTTPS connector that puts AEGIS in front of any customer system.
 
 ## Why Stripe test mode
 
@@ -234,6 +235,94 @@ response reconciled to the existing order, server error reconciled to failed, li
 store time, connection test. The real paper-account run (`scripts/alpaca-paper-check.mts`) needs a
 paper key from the owner and has not been made.
 
+
+## Third connector: any system over HTTPS (AEGIS execution protocol v1)
+
+`packages/core/src/gateway/connectors/https.ts`, system key `https-generic`. This is how AEGIS sits in
+front of a customer's own system (a licensing platform, a case system, an internal API) without
+custom code inside AEGIS. Any integration of type `https` uses it; the customer writes a small
+adapter on their side that speaks the protocol below.
+
+Setup in the console: create an integration of type `https` with the adapter's base URL, store a
+credential named `signing-secret` (at least 32 random characters; the adapter holds the same value)
+and, if the system also wants its own token, a credential named `bearer-token`. Run "Test
+connection", then enable the integration and attach tools and policies as for any other system.
+
+### Requests AEGIS sends
+
+| Request | When |
+|---|---|
+| `POST {base}/aegis/v1/execute` | An allowed or approved action, after the one-time grant is consumed |
+| `GET {base}/aegis/v1/operations/{idempotencyKey}` | Reconciliation of an attempt whose outcome was not known |
+| `GET {base}/aegis/v1/operations?since=<ISO 8601>` | The enforcement-path audit (actions that did not come through AEGIS) |
+| `GET {base}/aegis/v1/health` | The connection test |
+
+Every request carries:
+
+- `AEGIS-Timestamp`: Unix seconds.
+- `AEGIS-Signature`: `v1=<hex HMAC-SHA256 of "<timestamp>.<body>">` keyed with the signing secret. The
+  body is empty for GET requests. The adapter must compare in constant time and refuse a timestamp
+  more than 5 minutes old.
+- `Idempotency-Key` on execute: `aegis:<request id>`. The adapter must perform an operation at most
+  once per key and answer a repeat with the original outcome.
+- `Authorization: Bearer <token>` when a `bearer-token` credential is stored.
+
+The execute body:
+
+```json
+{
+  "protocol": "aegis-execution/1",
+  "requestId": "<uuid>",
+  "idempotencyKey": "aegis:<uuid>",
+  "attempt": 1,
+  "tool": "update-licence",
+  "action": "renew",
+  "params": { "licenceId": "L-1001", "fee": 500 },
+  "correlationId": "<caller correlation id or null>",
+  "agent": "<agent slug>",
+  "grant": { "requestHash": "<hash of the approved request>", "consumedAt": "<ISO 8601>" }
+}
+```
+
+### Answers the adapter gives
+
+Execute and the operation lookup answer `{"status": "succeeded" | "failed" | "pending", "reference":
+"<the system's own id>", "summary": {...}, "error": "<reason when failed>"}`. The operations list
+answers `{"operations": [{"reference", "idempotencyKey", "at", "summary"}]}`.
+
+How AEGIS reads the answer:
+
+| Answer | Outcome |
+|---|---|
+| 2xx with `status: succeeded` | succeeded |
+| 2xx with `status: failed` | failed (nothing happened) |
+| 2xx with `status: pending`, or an unreadable body | unknown, reconciled later |
+| 404 on the operation lookup | failed: the system has no record, so nothing happened |
+| 3xx (never followed) | failed |
+| 408, 409, 429, 5xx, timeout, dropped connection | unknown, reconciled later |
+| Any other 4xx | failed |
+
+An unknown outcome is never retried blindly: the gateway asks the adapter for the operation by its
+idempotency key, as for Stripe and Alpaca.
+
+### Network safety
+
+The base URL must be HTTPS and resolve to public addresses only. The address is checked when the
+call is made and pinned for the connection, so DNS rebinding cannot redirect it. Redirects are not
+followed, answers are capped at 64 KB and every call times out after 10 seconds. Plain HTTP and
+private addresses are allowed only when `AEGIS_ALLOW_PRIVATE_DESTINATIONS` is set, which production
+processes refuse to start with.
+
+### Verified locally against a stand-in adapter
+
+`packages/core/tests/https-connector.test.ts` runs a local adapter that checks the signature and the
+bearer token and keeps its own record of operations. It covers: the integration type resolving to
+the connector; a weak signing secret refused at store time; a signed connection test; one execution
+carrying the signature, the grant and the idempotency key; a refusal reported as failed; an adapter
+that acts and then errors, and one that acts and then drops the connection, both reported as unknown
+and then reconciled to the single real operation; the classification table above; the
+enforcement-path audit finding an operation that bypassed AEGIS; and plain HTTP or a private address
+refused when the development flag is off. No customer adapter has been run against it yet.
 
 ## Known interaction: identifiers that look like card numbers
 
