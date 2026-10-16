@@ -29,8 +29,8 @@ What you need: an Ubuntu 22.04 or 24.04 VM with 2 CPUs, 4 GB RAM, 20 GB disk, a 
 ```
 sudo apt update && sudo apt install -y git curl unzip postgresql-16 redis-server
 curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - && sudo apt install -y nodejs
-sudo corepack enable && sudo corepack prepare pnpm@10.28.0 --activate
-node -v && pnpm -v      # expect v22.x and 10.28.0
+sudo corepack enable && sudo corepack prepare pnpm@10.34.7 --activate
+node -v && pnpm -v      # expect v22.x and 10.34.7
 ```
 
 ### 2. Create the database and the two roles

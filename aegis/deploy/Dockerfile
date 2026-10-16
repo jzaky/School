@@ -8,7 +8,11 @@ FROM node:22-bookworm-slim AS base
 # pnpm is installed into a shared, read-only location at build time. The runtime user has no writable cache,
 # so without this corepack tries to download pnpm on every start and fails.
 ENV PNPM_HOME=/pnpm PATH=/pnpm:$PATH NEXT_TELEMETRY_DISABLED=1 COREPACK_HOME=/opt/corepack COREPACK_ENABLE_DOWNLOAD_PROMPT=0
-RUN corepack enable && corepack prepare pnpm@10.28.0 --activate && chmod -R a+rX /opt/corepack && apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates && rm -rf /var/lib/apt/lists/*
+# The npm bundled with the Node image is removed: AEGIS uses pnpm, and npm's own dependencies (tar, pacote,
+# sigstore) carry advisories the image scan in CI blocks on. Debian security updates are applied at build time.
+RUN corepack enable && corepack prepare pnpm@10.34.7 --activate && chmod -R a+rX /opt/corepack \
+  && rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx \
+  && apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 FROM base AS deps

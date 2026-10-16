@@ -128,3 +128,9 @@ This section is about AEGIS's own dependencies, not the customer software that t
 Still open at moderate (they do not block): vitest GHSA-82fw-gwwq-j7x9 (test runner; the fix needs vitest 4) and sprintf-js GHSA-hp3w-g68c-fv3c (through mammoth, no patched release).
 
 The same CI job runs Gitleaks 8.30.1 over the AEGIS history and Trivy 0.75.0 over the api and web images. Gitleaks is built through the Go module proxy, so its source is checked against the Go checksum database; Trivy is the release archive checked against the release checksum file. The QUANTOS_INTEGRATION.md note on the March 2026 Trivy release compromise applies: version 0.75.0 is after it, and mutable action tags are not used.
+
+The first run of the image scan on 16 October 2026 failed. Every finding it reported came from build tooling inside the image, not from AEGIS's own dependencies:
+- the npm bundled with the Node base image, through its copies of tar, pacote, sigstore, minimatch and picomatch;
+- pnpm 10.28.0.
+
+The images now remove the bundled npm, use pnpm 10.34.7 and apply Debian security updates at build time. CI and `packageManager` use the same pnpm version.
