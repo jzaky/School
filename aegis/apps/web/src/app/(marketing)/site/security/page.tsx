@@ -103,7 +103,7 @@ export default function SecurityPage() {
           </div>
           <div className="mk-card">
             <h3 className="mk-h3">No outbound calls to AI providers</h3>
-            <p className="mt-2 text-sm text-(--mk-muted)">No component calls an external model or AI service. Telemetry leaves the cluster only when an OTLP endpoint is configured. Email is disabled unless a provider key is set; the console provider logs instead.</p>
+            <p className="mt-2 text-sm text-(--mk-muted)">No component calls an external model or AI service. Telemetry leaves the cluster only when an OTLP endpoint is configured. Email copies of notifications are off unless an operator turns them on; they go through Resend when a key is set, otherwise the console provider only logs that a message would have been sent.</p>
           </div>
         </div>
         <Prose className="mt-8">

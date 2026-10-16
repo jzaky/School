@@ -2,6 +2,24 @@
 
 Updated at the end of each phase. `docs/IMPLEMENTATION_REPORT.md` has the current per-area breakdown (implemented, executed and verified, simulated, remaining).
 
+## Sellable-product hardening (2026-10-16): complete in code, waiting on the owner
+- Done:
+  - console CSP;
+  - SAML replay refused across replicas;
+  - KMS and Key Vault seam with rotation tooling;
+  - generic HTTPS connector (execution protocol v1);
+  - email copies of notifications through Resend;
+  - blocking dependency, secret and image scans in CI;
+  - live-URL browser test workflow;
+  - Fly demo kit;
+  - Resend and Slack validators;
+  - pentest RFQ.
+- See docs/AEGIS_BUILD_PROGRESS.md, "Sellable-product hardening R1 to R5".
+- Waiting on the owner:
+  - approval and a Fly account to publish the demo (docs/DEPLOY_FLY_DEMO.md);
+  - test credentials set in their own shell for Resend, Slack, Stripe test mode and an Entra test tenant (docs/INTEGRATION_VALIDATION.md);
+  - a budget and a choice of firm for the penetration test (docs/PENTEST_RFQ.md).
+
 ## Phase 10: DNRS follow-ups (2026-10-13): in progress
 - Done: score-band policy template (core 7 tests, browser 2 tests, seeded example); replay calibration (core 4 tests, browser 1 test); autonomy posture per agent and the boundary sentence on approvals (core 6 tests, browser 2 tests); AEGIS Trading (trading mandate template, simulated brokerage, Alpaca paper connector refusing live keys, demo scenario; core 13 tests, browser 4 tests; the paper-account run still needs an Alpaca paper key); ten further framework catalogs, the free public checker and the Proof page (core 3 tests, browser 2 tests). CI runs the browser suite against a production build; two production-only defects fixed (platform admin owner credential, report period navigation).
 - Next: autonomy posture and boundary sentence, AEGIS Trading (needs an Alpaca paper key), framework catalogs, free checker, Proof page.

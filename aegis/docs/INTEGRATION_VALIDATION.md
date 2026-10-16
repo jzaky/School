@@ -6,7 +6,7 @@ This document separates three kinds of evidence:
 - **Local stand-in:** automated tests against a local server that imitates the provider. This proves AEGIS's own logic, not the provider's behaviour.
 - **Not run:** the check exists but has not been run, usually because it needs a credential that only you can create.
 
-## Matrix (14 October 2026)
+## Matrix (16 October 2026)
 
 | Integration | Needs a credential | External, verified | Local stand-in | Record |
 |---|---|---|---|---|
@@ -14,6 +14,8 @@ This document separates three kinds of evidence:
 | Stripe (refunds, test mode) | Yes, a test-mode secret key | Not run | Yes (`stripe-connector.test.ts`, fake Stripe server) | none yet |
 | Alpaca (paper trading) | Yes, a paper-account key pair | Not run | Yes (`trading.test.ts`, fake Alpaca server) | none yet |
 | AI provider through the AI gateway | Yes, a provider API key | Not run | Yes (`ai-gateway.test.ts`, a recording stand-in) | none yet |
+| Resend (email copies of notifications) | Yes, a Resend API key and a sender it accepts | Not run | Yes (`notification-email.test.ts`, stand-in Resend API; the validator was also run against a local stand-in) | none yet; run `npx tsx scripts/validate/run.mts resend` |
+| Slack (event destination) | Yes, an incoming webhook URL | Not run | Yes (`destinations.test.ts`; the validator was also run against a local stand-in) | none yet; run `npx tsx scripts/validate/run.mts slack` |
 | Microsoft Entra ID (sign-ins and app consents) | Yes, an app registration in a test tenant, admin consent | Not run | Yes (`entra-connector.test.ts`, stand-in Microsoft identity platform and Graph) | none yet; run `npx tsx scripts/validate/run.mts entra` (docs/ENTRA_CONNECTOR.md) |
 
 All four providers answered from the build environment: OSV.dev with 200, and Stripe, Alpaca and OpenAI with 401 because no key was sent. So the remaining runs are blocked only by credentials, not by network access.
@@ -124,9 +126,48 @@ The steps are in `docs/ENTRA_CONNECTOR.md` under "Setting it up". You need:
 
 Then run `npx tsx scripts/validate/run.mts entra` with `AEGIS_VALIDATE_ENTRA_TENANT_ID`, `AEGIS_VALIDATE_ENTRA_CLIENT_ID` and, typed with `read -rs`, `AEGIS_VALIDATE_ENTRA_CLIENT_SECRET`. Sign-in logs are personal data about employees: use a test tenant, or get the tenant owner's written agreement first.
 
+### Resend, email (free tier)
+
+AEGIS uses Resend for the email copies of approval requests, quarantines, raised alerts and new incidents (`packages/core/src/notify/email.ts`, off unless `AEGIS_EMAIL_NOTIFICATIONS=true`).
+
+1. Create an account at resend.com.
+2. Under **API Keys**, create a key with **Sending access** only, restricted to one domain if you have verified one. It starts with `re_`.
+3. Pick the sender. Without a verified domain, Resend only accepts `onboarding@resend.dev` sending to your own account address. With a verified domain (**Domains**, then add the DNS records it lists), use an address on it, for example `AEGIS <alerts@yourdomain.com>`.
+4. On your machine:
+
+   ```
+   export AEGIS_VALIDATE_EMAIL_TO=you@yourdomain.com
+   export EMAIL_FROM="AEGIS <onboarding@resend.dev>"
+   read -rs RESEND_API_KEY && export RESEND_API_KEY
+   npx tsx scripts/validate/run.mts resend
+   ```
+
+The run sends one message, then sends it again with the same idempotency key and checks that Resend returns the same message id, so exactly one email arrives. The recipient address is not printed or recorded.
+
+### Slack, incoming webhook (free)
+
+1. At api.slack.com/apps, choose **Create New App**, then **From scratch**, in a test workspace or a test channel.
+2. Under **Incoming Webhooks**, turn them on, choose **Add New Webhook to Workspace** and pick the channel. Copy the URL; it starts with `https://hooks.slack.com/services/`. Treat it as a secret: anyone holding it can post to that channel.
+3. On your machine: `read -rs AEGIS_VALIDATE_SLACK_WEBHOOK_URL && export AEGIS_VALIDATE_SLACK_WEBHOOK_URL`, then `npx tsx scripts/validate/run.mts slack`.
+
+The run creates a temporary organization, adds a Slack destination through the same code as the console (network safety checks, pinned DNS, the Slack message format), sends the test event, and deletes the organization. One message appears in the channel.
+
+## Where each credential lives after the check
+
+| Credential | Local check | Hosted demo (Fly) | Production |
+|---|---|---|---|
+| `STRIPE_TEST_SECRET_KEY` | shell only, `read -rs` | not set; stored per organization in the console vault (Integrations) | same, test mode only |
+| `RESEND_API_KEY`, `EMAIL_FROM` | shell only | `fly secrets set` (with `AEGIS_EMAIL_NOTIFICATIONS=true`) | the platform's secret manager |
+| Slack webhook URL | shell only | stored per organization in the console (Integrations, Event destinations) | same |
+| Entra client secret | shell only | stored per organization in the console (Shadow AI, Entra) | same |
+
+None of them belongs in `.env` files that are committed, in GitHub, in a ticket or in a chat. CI never needs them: every connector is tested there against a local stand-in.
+
 ## What a pass does and does not show
 
 - **A Stripe pass shows** that AEGIS's refund connector, approvals and reconciliation agree with Stripe's real test-mode API. It does not show anything about live mode, which AEGIS refuses.
 - **An Alpaca pass shows** the same for paper orders.
 - **An AI provider pass shows** that the gateway forwards, masks and blocks correctly against that provider. It is not a review of the provider's own data handling.
+- **A Resend pass shows** that the email provider code is accepted by Resend and that its idempotency key prevents a second delivery. It does not show inbox placement; check the inbox.
+- **A Slack pass shows** that the destination code delivers to a real Slack webhook. The worker's batching and retries are tested separately against a stand-in.
 - **An OSV.dev pass shows** that AEGIS queries and reads the public vulnerability database correctly. A package with no advisory is not proven safe.

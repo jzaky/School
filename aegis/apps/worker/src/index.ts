@@ -1,6 +1,6 @@
 import { createServer } from "node:http";
 import { withTenant, disconnectAll } from "@aegis/db";
-import { assertApplicationProcess, initKeyring, auditAllEnforcementPaths, claimJobs, dispatchEvents, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, periodOf, prometheusText, purgeRateLimitBuckets, recomputeCalibration, recordOperationalAlerts, reconcileExecution, recoverStaleJobs, refreshSoftwareAdvisories, syncEntra, ENTRA_KEY, registerJobHandler, runJob, snapshotUsage, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
+import { assertApplicationProcess, initKeyring, auditAllEnforcementPaths, claimJobs, deliverNotificationEmails, dispatchEvents, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, periodOf, prometheusText, purgeRateLimitBuckets, recomputeCalibration, recordOperationalAlerts, reconcileExecution, recoverStaleJobs, refreshSoftwareAdvisories, syncEntra, ENTRA_KEY, registerJobHandler, runJob, snapshotUsage, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
 import { rawPrisma } from "@aegis/db";
 import { registerModuleHandlers } from "./handlers.js";
 
@@ -63,6 +63,15 @@ registerJobHandler("events.dispatch", async () => {
   for (const o of orgs) {
     const out = await dispatchEvents((fn) => withTenant(o.id, fn), o.id);
     if (out.delivered || out.failed) log.info({ orgId: o.id, delivered: out.delivered, failed: out.failed }, "events dispatched");
+  }
+});
+
+/** Email copies of approval requests, quarantines, alerts and incidents, when enabled (notify/email.ts). */
+registerJobHandler("notifications.email", async () => {
+  const orgs = await rawPrisma().organization.findMany({ select: { id: true } });
+  for (const o of orgs) {
+    const out = await deliverNotificationEmails((fn) => withTenant(o.id, fn), o.id);
+    if (out.sent || out.failed || out.retrying) log.info({ orgId: o.id, ...out }, "notification emails");
   }
 });
 
@@ -151,6 +160,7 @@ async function scheduleRecurring() {
   const minute = Math.floor(Date.now() / 60_000);
   await enqueueJob({ type: "approvals.sweep", payload: {}, idempotencyKey: `approvals.sweep:${minute}`, runAt: new Date() });
   await enqueueJob({ type: "executions.sweep", payload: {}, idempotencyKey: `executions.sweep:${minute}`, runAt: new Date() });
+  await enqueueJob({ type: "notifications.email", payload: {}, idempotencyKey: `notifications.email:${minute}`, runAt: new Date() });
   await enqueueJob({ type: "events.dispatch", payload: {}, idempotencyKey: `events.dispatch:${minute}`, runAt: new Date() });
   await enqueueJob({ type: "evidence.checkpoint", payload: {}, idempotencyKey: `evidence.checkpoint:${Math.floor(minute / 5)}`, runAt: new Date() });
   await enqueueJob({ type: "monitoring.run", payload: {}, idempotencyKey: `monitoring.run:${minute}`, runAt: new Date() });

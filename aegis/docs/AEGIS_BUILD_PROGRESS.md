@@ -593,3 +593,27 @@ The missed throughput target is explained in docs/PERFORMANCE.md, with the next 
 - Secure S5, secure execution workspaces.
 - A console Content-Security-Policy.
 - The live provider checks, once credentials are available.
+
+## Sellable-product hardening R1 to R5 (16 October 2026)
+
+**Built and tested:**
+
+| Item | What changed | Evidence |
+|---|---|---|
+| Console Content-Security-Policy | A nonce for each request with `strict-dynamic`, `object-src 'none'` and `frame-ancestors 'none'`. Closes K10. | `csp.spec.ts`, 3 browser tests, including that injected inline script does not run |
+| SAML replay | Assertion ids are recorded in the `saml_assertions` table for each organisation, so a replay is refused by every replica | `saml.test.ts`, including concurrent attempts |
+| Key-vault seam | The data key can be wrapped by AWS KMS or Azure Key Vault. Envelopes carry the key id (v2). There are rotation and re-encryption tooling (`data-key`) | `keyring.test.ts` (7 tests, against local KMS and Key Vault stand-ins) |
+| Generic HTTPS connector | Any customer system can sit behind AEGIS through a signed execution protocol, with idempotency keys, reconciliation and the enforcement-path audit. It comes with SDK helpers and a reference adapter | `https-connector.test.ts` (9 tests), `adapter-protocol.test.ts` (2 tests) |
+| Email copies of notifications | Approval requests, quarantines, alerts and incidents can be emailed through Resend. Off by default, idempotent, never to disabled users | `notification-email.test.ts` (4 tests, Resend stand-in) |
+| CI supply-chain checks | Blocking `pnpm audit` at high (advisories fixed by upgrades and overrides), a Gitleaks history scan and a Trivy scan of the images | `.github/workflows/aegis-ci.yml`, job `security` |
+| Live-URL browser tests | A workflow runs Playwright against a deployed URL (smoke or full) | `.github/workflows/aegis-live-e2e.yml` |
+| Hosted demo kit | A `demo` image target, Fly configuration and a step-by-step guide. The start script, privilege drop, shared volume and restart on a crash were tested in a local container | `docs/DEPLOY_FLY_DEMO.md` |
+| Validation | Resend and Slack checks added to the provider validation runner. Both were run against local stand-ins | `docs/INTEGRATION_VALIDATION.md` |
+| Penetration test | A request for quotation ready to send | `docs/PENTEST_RFQ.md` |
+
+**Not done here, and why:**
+- **Nothing is deployed.** Publishing needs the owner's approval and Fly account.
+- **No real provider checks.** None was run against a real Resend, Slack, Stripe or Entra account; they need the owner's test credentials, set in their own shell.
+- **No real key vault.** The vault providers were verified against stand-ins only.
+
+**Found along the way:** OpenTelemetry metric instruments are created when the module loads, before the SDK starts. Metric export through OTLP therefore records nothing, while trace export works. This was already the case before the upgrade. The Prometheus endpoint is not affected. It is left as a follow-up.

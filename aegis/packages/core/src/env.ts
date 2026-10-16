@@ -51,7 +51,14 @@ const schema = z.object({
   OTEL_EXPORTER_OTLP_ENDPOINT: z.string().optional(),
   OTEL_SERVICE_NAME: z.string().default("aegis"),
   RESEND_API_KEY: z.string().optional(),
+  /** Resend API base; only tests point it elsewhere. */
+  RESEND_API_BASE: z.string().default("https://api.resend.com"),
   EMAIL_FROM: z.string().default("aegis@example.com"),
+  /** Sends an email copy of approval requests, quarantines, raised alerts and new incidents (notify/email.ts). Off by default. */
+  AEGIS_EMAIL_NOTIFICATIONS: z
+    .string()
+    .default("false")
+    .transform((v) => v === "true" || v === "1"),
   LOG_LEVEL: z.string().default("info"),
   AEGIS_STORAGE_DIR: z.string().default(".uploads"),
   /** Lets event destinations point at private or loopback addresses (local fakes in tests). Refused in production. */
