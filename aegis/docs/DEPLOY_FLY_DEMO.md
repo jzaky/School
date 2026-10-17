@@ -10,7 +10,7 @@ This guide puts the AEGIS demo on a public HTTPS URL, with synthetic data only. 
 |---|---|---|
 | Console (web), Action Gateway API, worker | One app, one machine, image target `demo` (`deploy/Dockerfile`) | They share one volume for uploads. `deploy/fly/start-all.sh` runs the three processes as the unprivileged `aegis` user and exits if any of them dies, so Fly restarts the machine. |
 | PostgreSQL 16 | Fly Postgres app | The app connects as `aegis_app`, a non-owner role with row-level security. The owner password stays off the app machines. |
-| Redis | Upstash Redis through `fly redis` | Rate limits and queues. |
+| Redis | Upstash Redis through `fly redis` | Optional. AEGIS keeps its jobs and rate limits in PostgreSQL and does not read or write Redis; `REDIS_URL` is only reported by the deployment readiness check. |
 | Console URL | `https://<app>.fly.dev` | Port 443. |
 | API URL for agents and SDKs | `https://<app>.fly.dev:8443` | Port 8443, TLS handled by Fly. |
 
@@ -43,6 +43,8 @@ Keep the printed `postgres` password in your password manager. It is the owner r
 ```
 fly redis create --name aegis-demo-redis --region fra --no-replicas
 ```
+
+When asked "Would you like to enable eviction?", answer N (the default). AEGIS stores nothing in Redis today, so the answer has no effect, and eviction would be wrong for a queue later. You can also skip this step and leave `REDIS_URL` out of step 7.
 
 Keep the printed `redis://` URL for step 7.
 
