@@ -1,0 +1,217 @@
+/**
+ * The three demonstration scenarios. Each one drives the real gateway, policy engine, approval
+ * service and simulated downstream systems; nothing here is a frontend simulation. Every record it
+ * creates is labelled synthetic through the demo organization's demoMode flag.
+ */
+import { withTenant, type TenantDb } from "@aegis/db";
+import { decideApprovalAndExecute } from "../approvals/service.js";
+import { authorizeAndExecute, type GatewayResponse } from "../gateway/gateway.js";
+import { makeContext, type OrgContext } from "../lib/context.js";
+
+export interface DemoStep {
+  title: string;
+  detail: string;
+  requestId?: string;
+  outcome: string;
+  ok: boolean;
+}
+export interface DemoRun {
+  scenario: "banking" | "refunds" | "sensitive-data" | "trading" | "outcomes";
+  correlationId: string;
+  steps: DemoStep[];
+  startedAt: string;
+  finishedAt: string;
+}
+
+interface Actors {
+  orgId: string;
+  agentIds: Record<string, string>;
+  approverCtx: OrgContext;
+  now?: Date;
+  /** When true the approver decides automatically so the run completes without a human; otherwise the approval stays pending for the console. */
+  autoApprove: boolean;
+}
+
+function agentCtx(a: Actors, slug: string, correlationId: string): OrgContext {
+  const id = a.agentIds[slug];
+  if (!id) throw new Error(`demo agent ${slug} is missing`);
+  return makeContext(a.orgId, { type: "agent", id, label: slug }, { requestId: correlationId, now: a.now });
+}
+
+function summarize(r: GatewayResponse): string {
+  if (r.decision === "restrict" && r.status === "executed") return `Executed with limits: ${r.restrictions?.applied.join("; ") ?? "narrowed"} (${r.receipt?.reference ?? "receipt"})`;
+  if (r.status === "quarantined") return "Quarantined for security review";
+  if (r.status === "awaiting_information") return `More information needed: ${r.moreInformation?.fields.join(", ") ?? "details"}`;
+  if (r.status === "executed") return `Executed (${r.receipt?.reference ?? "receipt"})`;
+  if (r.status === "pending_approval") return `Approval required (${r.matchedRuleIds.join(", ") || "policy"})`;
+  if (r.status === "denied") return `Denied: ${r.reasons[0] ?? "policy"}`;
+  if (r.duplicate) return `Duplicate request returned original outcome (${r.status})`;
+  return r.status;
+}
+
+async function decide(a: Actors, requestId: string, decision: "approve" | "reject", comment: string) {
+  const run = <T>(fn: (db: TenantDb) => Promise<T>) => withTenant(a.orgId, fn);
+  const ap = await run((db) => db.approvalRequest.findFirstOrThrow({ where: { actionRequestId: requestId } }));
+  return decideApprovalAndExecute(run, { ...a.approverCtx, now: a.now }, ap.id, { decision, comment, requestHash: ap.requestHash });
+}
+const approve = (a: Actors, requestId: string, comment: string) => decide(a, requestId, "approve", comment);
+const reject = (a: Actors, requestId: string, comment: string) => decide(a, requestId, "reject", comment);
+
+/** Demo 1: a treasury agent attempts a simulated AED 250,000 transfer that exceeds its autonomous authority. */
+export async function runBankingDemo(a: Actors, opts: { decision?: "approve" | "reject" | "leave" } = {}): Promise<DemoRun> {
+  const startedAt = new Date().toISOString();
+  const correlationId = `demo-banking-${Date.now().toString(36)}`;
+  const ctx = agentCtx(a, "treasury-transfer-agent", correlationId);
+  const steps: DemoStep[] = [];
+  const small = await authorizeAndExecute(withTenant, ctx, { tool: "initiate-transfer", action: "transfer", resource: "payments-core", params: { fromAccount: "AE07 0331 2345 6789 0123 456", toAccount: "AE12 0260 0010 0000 1234 567", amount: 12500, currency: "AED", reference: "Payroll top-up (synthetic)" }, idempotencyKey: `${correlationId}-small`, justification: "Treasury ticket TR-2291: payroll float top-up", principal: { type: "user", ref: "treasury.analyst@meridian-demo.example" }, context: { ticket: "TR-2291" }, executionMode: "gateway" });
+  steps.push({ title: "AED 12,500 transfer within authority", detail: "Below the AED 50,000 autonomous limit during business hours", requestId: small.requestId, outcome: summarize(small), ok: small.status === "executed" || small.status === "pending_approval" });
+  const big = await authorizeAndExecute(withTenant, ctx, { tool: "initiate-transfer", action: "transfer", resource: "payments-core", params: { fromAccount: "AE07 0331 2345 6789 0123 456", toAccount: "AE45 0030 0000 9876 5432 100", amount: 250000, currency: "AED", reference: "Supplier settlement Q4 (synthetic)" }, idempotencyKey: `${correlationId}-250k`, justification: "Treasury ticket TR-2302: quarterly supplier settlement", principal: { type: "user", ref: "treasury.analyst@meridian-demo.example" }, context: { ticket: "TR-2302" }, executionMode: "gateway" });
+  steps.push({ title: "AED 250,000 transfer exceeds autonomous authority", detail: "Policy treasury-transfer-limits requires a manager approval between AED 50,000 and 1,000,000", requestId: big.requestId, outcome: summarize(big), ok: big.status === "pending_approval" });
+  const decision = opts.decision ?? (a.autoApprove ? "approve" : "leave");
+  if (big.status === "pending_approval" && decision !== "leave") {
+    const d = decision === "approve" ? await approve(a, big.requestId, "Verified beneficiary and instruction TR-2302 with treasury") : await reject(a, big.requestId, "Beneficiary not on the approved supplier list");
+    steps.push({ title: decision === "approve" ? "Manager approves" : "Manager rejects", detail: "Approval bound to the exact parameters; the simulated core banking service verified the execution grant before posting", requestId: big.requestId, outcome: d.status === "approved" ? (d.executed ? "Approved and executed by core banking (grant verified)" : "Approved") : "Rejected, nothing executed", ok: true });
+  } else if (big.status === "pending_approval") {
+    steps.push({ title: "Waiting for a manager in the Approval Center", detail: "The transfer stays unexecuted until an authorised approver decides or the request expires", requestId: big.requestId, outcome: "Pending approval", ok: true });
+  }
+  const huge = await authorizeAndExecute(withTenant, ctx, { tool: "initiate-transfer", action: "transfer", resource: "payments-core", params: { fromAccount: "AE07 0331 2345 6789 0123 456", toAccount: "AE45 0030 0000 9876 5432 100", amount: 1500000, currency: "AED", reference: "Unexpected (synthetic)" }, idempotencyKey: `${correlationId}-1-5m`, justification: "No ticket", principal: { type: "none" }, context: {}, executionMode: "gateway" });
+  steps.push({ title: "AED 1,500,000 transfer is denied outright", detail: "Above the AED 1,000,000 ceiling: denied before execution and a security event is raised", requestId: huge.requestId, outcome: summarize(huge), ok: huge.status === "denied" });
+  return { scenario: "banking", correlationId, steps, startedAt, finishedAt: new Date().toISOString() };
+}
+
+/** Demo 2: refund tiers, duplicates, expired approvals and modified parameters. */
+export async function runRefundDemo(a: Actors): Promise<DemoRun> {
+  const startedAt = new Date().toISOString();
+  const correlationId = `demo-refunds-${Date.now().toString(36)}`;
+  const ctx = agentCtx(a, "support-refund-agent", correlationId);
+  const steps: DemoStep[] = [];
+  const base = { tool: "issue-refund", action: "execute", resource: "support-tickets", principal: { type: "customer" as const, ref: "CUST-88213" }, context: { channel: "chat" }, executionMode: "gateway" as const };
+  // Order ids are unique per run so the duplicate-refund rule fires only where the scenario intends it to.
+  const run = correlationId.slice(-6).toUpperCase();
+  const order = (n: number) => `ORD-${n}-${run}`;
+
+  const auto = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: order(55120), customerId: "CUST-88213", amount: 180, currency: "AED", reason: "Damaged packaging" }, idempotencyKey: `${correlationId}-auto`, justification: "Customer reported damaged packaging with photos" });
+  steps.push({ title: "AED 180 refund issued automatically", detail: "Below the AED 500 autonomous limit", requestId: auto.requestId, outcome: summarize(auto), ok: auto.status === "executed" });
+
+  const dup = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: order(55120), customerId: "CUST-88213", amount: 180, currency: "AED", reason: "Damaged packaging" }, idempotencyKey: `${correlationId}-auto`, justification: "Retry after timeout" });
+  steps.push({ title: "Duplicate request with the same idempotency key", detail: "The gateway returns the original decision and the support platform is not called twice", requestId: dup.requestId, outcome: summarize(dup), ok: dup.duplicate === true });
+
+  const dupOrder = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: order(55120), customerId: "CUST-88213", amount: 95, currency: "AED", reason: "Customer asked again" }, idempotencyKey: `${correlationId}-dup-order`, justification: "Second request for the same order" });
+  steps.push({ title: "Second refund for the same order is refused", detail: "A new request for an order that was already refunded is denied by the duplicate-refund rule, even though the amount is within the autonomous band", requestId: dupOrder.requestId, outcome: summarize(dupOrder), ok: dupOrder.status === "denied" });
+
+  const mid = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: order(55377), customerId: "CUST-88213", amount: 1450, currency: "AED", reason: "Late delivery compensation" }, idempotencyKey: `${correlationId}-mid`, justification: "Customer escalated twice; goodwill compensation" });
+  steps.push({ title: "AED 1,450 refund needs a supervisor", detail: "Between AED 500 and 2,500: approval required, nothing executes yet", requestId: mid.requestId, outcome: summarize(mid), ok: mid.status === "pending_approval" });
+  if (mid.status === "pending_approval" && a.autoApprove) {
+    const d = await approve(a, mid.requestId, "Order verified, compensation agreed with team lead");
+    steps.push({ title: "Supervisor approves the AED 1,450 refund", detail: "Executed once through the support platform", requestId: mid.requestId, outcome: d.executed ? "Approved and executed" : d.status, ok: d.executed });
+  }
+
+  const big = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: order(55390), customerId: "CUST-88213", amount: 6200, currency: "AED", reason: "Full order refund" }, idempotencyKey: `${correlationId}-big`, justification: "Customer demands full refund" });
+  steps.push({ title: "AED 6,200 refund is prohibited", detail: "Above AED 2,500: denied, security event recorded", requestId: big.requestId, outcome: summarize(big), ok: big.status === "denied" });
+
+  // Expired approval: create a pending approval and expire it.
+  const stale = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: order(55401), customerId: "CUST-88213", amount: 900, currency: "AED", reason: "Wrong item" }, idempotencyKey: `${correlationId}-stale`, justification: "Wrong item shipped" });
+  if (stale.status === "pending_approval") {
+    const { expireApproval } = await import("../approvals/service.js");
+    await withTenant(a.orgId, async (db) => {
+      const ap = await db.approvalRequest.findFirstOrThrow({ where: { actionRequestId: stale.requestId } });
+      await db.approvalRequest.update({ where: { id: ap.id }, data: { expiresAt: new Date((a.now ?? new Date()).getTime() - 60_000) } });
+      await expireApproval(db, { ...a.approverCtx, now: a.now }, ap.id);
+    });
+    let outcome = "Expired without execution";
+    try {
+      await approve(a, stale.requestId, "late approval");
+      outcome = "Unexpected: late approval accepted";
+    } catch (e) {
+      outcome = `Late approval refused: ${e instanceof Error ? e.message : "error"}`;
+    }
+    steps.push({ title: "Expired approval cannot be used", detail: "The approval window elapsed; a late approval is refused and the refund never executes", requestId: stale.requestId, outcome, ok: outcome.startsWith("Late approval refused") });
+  }
+
+  // Modified parameters after approval: reuse the idempotency key with a different amount.
+  let modified: string;
+  try {
+    await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: order(55377), customerId: "CUST-88213", amount: 2450, currency: "AED", reason: "Late delivery compensation" }, idempotencyKey: `${correlationId}-mid`, justification: "Adjusted amount" });
+    modified = "Unexpected: accepted";
+  } catch (e) {
+    modified = `Rejected: ${e instanceof Error ? e.message : "conflict"}`;
+  }
+  steps.push({ title: "Modified parameters after approval", detail: "Replaying the approved request with a different amount is rejected; a new amount needs a new request and a new evaluation", requestId: mid.requestId, outcome: modified, ok: modified.startsWith("Rejected") });
+  return { scenario: "refunds", correlationId, steps, startedAt, finishedAt: new Date().toISOString() };
+}
+
+/** Demo 3: an agent attempts to send customer records to an unauthorised destination. */
+export async function runSensitiveDataDemo(a: Actors): Promise<DemoRun> {
+  const startedAt = new Date().toISOString();
+  const correlationId = `demo-egress-${Date.now().toString(36)}`;
+  const ctx = agentCtx(a, "marketing-outreach-agent", correlationId);
+  const steps: DemoStep[] = [];
+  const ok = await authorizeAndExecute(withTenant, ctx, { tool: "send-email", action: "send", params: { to: "campaigns@customers.meridian-demo.example", subject: "October offers (synthetic)", body: "Dear customer, here are this month's offers." }, idempotencyKey: `${correlationId}-ok`, justification: "Approved campaign OCT-14", principal: { type: "system" }, context: {}, executionMode: "gateway" });
+  steps.push({ title: "Campaign email to an approved domain", detail: "Allowed destination, no sensitive data classes detected", requestId: ok.requestId, outcome: summarize(ok), ok: ok.status === "executed" });
+  const exfil = await authorizeAndExecute(withTenant, ctx, { tool: "export-customer-records", action: "export", params: { segment: "gold-tier", destination: "https://files.partner-upload.example/inbox", fields: ["name", "email", "phone", "iban"] }, idempotencyKey: `${correlationId}-exfil`, justification: "Share the gold segment with the agency", principal: { type: "system" }, context: { source: "untrusted-email-instruction" }, executionMode: "gateway" });
+  steps.push({ title: "Export of customer records to an external destination", detail: "Blocked by the tool's destination allowlist and the customer-data-egress policy; security event raised", requestId: exfil.requestId, outcome: summarize(exfil), ok: exfil.status === "denied" });
+  const leak = await authorizeAndExecute(withTenant, ctx, { tool: "send-email", action: "send", params: { to: "agency@partner-upload.example", subject: "Customer list", body: "Customer 1: Ahmed, card 4111 1111 1111 1111, IBAN AE07 0331 2345 6789 0123 456" }, idempotencyKey: `${correlationId}-leak`, justification: "Agency asked for the list", principal: { type: "system" }, context: {}, executionMode: "gateway" });
+  steps.push({ title: "Email containing card and IBAN data to an external domain", detail: "Denied: destination outside the allowlist and sensitive data classes present", requestId: leak.requestId, outcome: summarize(leak), ok: leak.status === "denied" });
+  return { scenario: "sensitive-data", correlationId, steps, startedAt, finishedAt: new Date().toISOString() };
+}
+
+export type { Actors as DemoActors };
+
+/** Demo 4: AEGIS Trading. A portfolio agent places orders under the trading mandate; the broker is simulated. */
+export async function runTradingDemo(a: Actors): Promise<DemoRun> {
+  const startedAt = new Date().toISOString();
+  const correlationId = `demo-trading-${Date.now().toString(36)}`;
+  const ctx = agentCtx(a, "portfolio-trading-agent", correlationId);
+  const steps: DemoStep[] = [];
+  const run = correlationId.slice(-6).toUpperCase();
+  const ref = (n: number) => `SIG-${n}-${run}`;
+  const base = { tool: "submit-order", action: "execute", resource: "trading-book", principal: { type: "system" as const }, executionMode: "gateway" as const };
+  const small = await authorizeAndExecute(withTenant, ctx, { ...base, params: { symbol: "SPY", side: "buy", type: "limit", qty: 5, limitPrice: 520, notional: 2600, reference: ref(1), reason: "Rebalance toward 60/40 target" }, idempotencyKey: `${correlationId}-small`, justification: "Daily rebalance signal", context: { dayPnl: 120 } });
+  const afterHours = small.status === "pending_approval";
+  steps.push({ title: afterHours ? "USD 2,600 SPY order waits: outside market hours" : "USD 2,600 SPY order placed automatically", detail: afterHours ? "Below the USD 5,000 automatic limit, but requested outside 14:00 to 20:00 UTC, so a person decides" : "Below the USD 5,000 automatic limit, an allowed instrument, with a reason", requestId: small.requestId, outcome: summarize(small), ok: small.status === "executed" || small.status === "pending_approval" });
+
+  const mid = await authorizeAndExecute(withTenant, ctx, { ...base, params: { symbol: "AAPL", side: "buy", type: "limit", qty: 60, limitPrice: 230, notional: 13_800, reference: ref(2), reason: "Momentum signal above threshold" }, idempotencyKey: `${correlationId}-mid`, justification: "Signal strength 0.82", context: { dayPnl: 120 } });
+  steps.push({ title: "USD 13,800 AAPL order needs an approver", detail: "Between USD 5,000 and 50,000: a person decides within 30 minutes; nothing reaches the broker until then", requestId: mid.requestId, outcome: summarize(mid), ok: mid.status === "pending_approval" || mid.status === "executed" });
+  if (mid.status === "pending_approval" && a.autoApprove) {
+    const d = await approve(a, mid.requestId, "Within mandate, exposure checked in the broker");
+    steps.push({ title: "Approver releases the AAPL order", detail: "Executed once through the simulated brokerage with the approved parameters", requestId: mid.requestId, outcome: d.executed ? "Approved and executed" : d.status, ok: d.executed });
+  }
+
+  const huge = await authorizeAndExecute(withTenant, ctx, { ...base, params: { symbol: "NVDA", side: "buy", type: "market", qty: 400, notional: 72_000, reference: ref(3), reason: "Breakout" }, idempotencyKey: `${correlationId}-huge`, justification: "Breakout signal", context: { dayPnl: 120 } });
+  steps.push({ title: "USD 72,000 NVDA order is refused", detail: "Above the USD 50,000 ceiling: denied before any broker call, security event recorded", requestId: huge.requestId, outcome: summarize(huge), ok: huge.status === "denied" });
+
+  const offList = await authorizeAndExecute(withTenant, ctx, { ...base, params: { symbol: "GME", side: "buy", type: "market", qty: 20, notional: 600, reference: ref(4), reason: "Social sentiment spike" }, idempotencyKey: `${correlationId}-offlist`, justification: "Sentiment signal", context: { dayPnl: 120 } });
+  steps.push({ title: "GME order is refused: not on the instrument list", detail: "The mandate names the instruments the agent may trade; everything else is refused however small", requestId: offList.requestId, outcome: summarize(offList), ok: offList.status === "denied" });
+
+  const dup = await authorizeAndExecute(withTenant, ctx, { ...base, params: { symbol: "SPY", side: "buy", type: "limit", qty: 5, limitPrice: 520, notional: 2600, reference: ref(1), reason: "Rebalance toward 60/40 target" }, idempotencyKey: `${correlationId}-dup`, justification: "Signal fired again", context: { dayPnl: 120 } });
+  steps.push({ title: "Second order with the same reference is refused", detail: "The duplicate-order rule blocks a repeat of a reference already placed, even inside the automatic band", requestId: dup.requestId, outcome: summarize(dup), ok: dup.status === "denied" });
+
+  const loss = await authorizeAndExecute(withTenant, ctx, { ...base, params: { symbol: "MSFT", side: "buy", type: "market", qty: 3, notional: 1200, reference: ref(5), reason: "Dip buy" }, idempotencyKey: `${correlationId}-loss`, justification: "Dip signal", context: { dayPnl: -2600 } });
+  steps.push({ title: "Order after a USD 2,600 day loss is refused", detail: "The daily loss cap of USD 2,500 stops further orders for the day; a person must lift it by changing the policy", requestId: loss.requestId, outcome: summarize(loss), ok: loss.status === "denied" });
+
+  return { scenario: "trading", correlationId, steps, startedAt, finishedAt: new Date().toISOString() };
+}
+
+
+/** Demo 5: the three outcomes between allow and deny: narrowed, held for more information, quarantined. */
+export async function runOutcomesDemo(a: Actors): Promise<DemoRun> {
+  const startedAt = new Date().toISOString();
+  const correlationId = `demo-outcomes-${Date.now().toString(36)}`;
+  const ctx = agentCtx(a, "support-refund-agent", correlationId);
+  const steps: DemoStep[] = [];
+  const tag = correlationId.slice(-6).toUpperCase();
+  const base = { tool: "issue-refund", action: "execute", resource: "support-tickets", principal: { type: "customer" as const, ref: "CUST-44120" }, executionMode: "gateway" as const };
+
+  const goodwill = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: `ORD-61002-${tag}`, customerId: "CUST-44120", amount: 420, currency: "AED", reason: "Goodwill after a late delivery" }, idempotencyKey: `${correlationId}-goodwill`, justification: "Customer waited nine days for delivery", context: { goodwill: true, channel: "chat" } });
+  steps.push({ title: "AED 420 goodwill refund is reduced to AED 250, then runs", detail: "Rule goodwill-cap narrows the amount; the one-time permission slip covers only the reduced refund", requestId: goodwill.requestId, outcome: summarize(goodwill), ok: goodwill.decision === "restrict" && goodwill.status === "executed" });
+
+  const voiceKey = `${correlationId}-voice`;
+  const voice = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: `ORD-61017-${tag}`, customerId: "CUST-44120", amount: 140, currency: "AED", reason: "Item missing from parcel" }, idempotencyKey: voiceKey, justification: "Customer called the support line", context: { channel: "voice" } });
+  steps.push({ title: "Phone refund without a ticket waits for one", detail: "Rule voice-needs-ticket returns the request to the agent naming the missing field; nothing runs", requestId: voice.requestId, outcome: summarize(voice), ok: voice.status === "awaiting_information" });
+  const resubmitted = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: `ORD-61017-${tag}`, customerId: "CUST-44120", amount: 140, currency: "AED", reason: "Item missing from parcel" }, idempotencyKey: voiceKey, justification: "Customer called the support line", context: { channel: "voice", ticketRef: `SUP-${tag}` } });
+  steps.push({ title: "The agent resubmits with the ticket and the refund runs", detail: "Same idempotency key, now with the ticket reference: AEGIS decides again", requestId: resubmitted.requestId, outcome: summarize(resubmitted), ok: resubmitted.status === "executed" });
+
+  const takeover = await authorizeAndExecute(withTenant, ctx, { ...base, params: { orderId: `ORD-61033-${tag}`, customerId: "CUST-90871", amount: 310, currency: "AED", reason: "Customer requests refund to a new card" }, idempotencyKey: `${correlationId}-takeover`, justification: "Refund to a card added yesterday", context: { channel: "chat", riskSignal: "account_takeover_suspected" } });
+  steps.push({ title: "Refund on an account flagged for suspected takeover is quarantined", detail: "Rule takeover-hold raises a security event; a security reviewer must refuse it or send it to an approver", requestId: takeover.requestId, outcome: summarize(takeover), ok: takeover.status === "quarantined" });
+  return { scenario: "outcomes", correlationId, steps, startedAt, finishedAt: new Date().toISOString() };
+}

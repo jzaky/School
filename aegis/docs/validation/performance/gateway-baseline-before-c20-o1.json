@@ -1,0 +1,27 @@
+
+
+{
+  "at": "2026-10-14T12:10:16.487Z",
+  "base": "http://127.0.0.1:4000",
+  "organizations": 1,
+  "agentsPerOrg": 10,
+  "requests": 400,
+  "concurrency": 20,
+  "seconds": 57.08,
+  "throughputPerSecond": 7,
+  "perOrganizationPerSecond": [
+    7
+  ],
+  "latencyMs": {
+    "p50": 2118,
+    "p95": 5812,
+    "p99": 6481,
+    "max": 6892
+  },
+  "errorRate": 0,
+  "outcomes": {
+    "require_approval/pending_approval": 108,
+    "deny/denied": 114,
+    "allow/executed": 178
+  }
+}

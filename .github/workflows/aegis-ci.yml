@@ -1,0 +1,166 @@
+name: AEGIS CI
+
+on:
+  push:
+    paths: ["aegis/**", ".github/workflows/aegis-ci.yml"]
+  pull_request:
+    paths: ["aegis/**"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: aegis
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: aegis_owner
+          POSTGRES_PASSWORD: aegis_owner_dev
+          POSTGRES_DB: aegis
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U aegis_owner" --health-interval 5s --health-timeout 3s --health-retries 20
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+    env:
+      DATABASE_URL: postgresql://aegis_app:aegis_app_dev@127.0.0.1:5432/aegis
+      MIGRATION_DATABASE_URL: postgresql://aegis_owner:aegis_owner_dev@127.0.0.1:5432/aegis
+      AEGIS_APP_PASSWORD: aegis_app_dev
+      REDIS_URL: redis://127.0.0.1:6379
+      AEGIS_MASTER_KEY: ${{ secrets.AEGIS_TEST_MASTER_KEY || 'Y2ktb25seS1tYXN0ZXIta2V5LTMyLWJ5dGVzLW9rISE=' }}
+      AEGIS_SESSION_SECRET: ${{ secrets.AEGIS_TEST_SESSION_SECRET || 'Y2ktb25seS1zZXNzaW9uLXNlY3JldC0zMi1ieXRlcyEhISE=' }}
+      AEGIS_DEMO_MODE: "true"
+      NODE_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.34.7
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: aegis/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Generate evidence signing key for tests
+        run: echo "EVIDENCE_SIGNING_KEY=$(openssl genpkey -algorithm ed25519 | base64 -w0)" >> "$GITHUB_ENV"
+      - run: pnpm --filter @aegis/db generate
+      - name: Migrate and apply RLS
+        run: pnpm --filter @aegis/db migrate
+      - run: pnpm -r typecheck
+      - name: Lint (typescript-eslint for packages and services, eslint-config-next for the console)
+        run: pnpm -r lint
+      - name: Project style rule (no em dashes)
+        run: ./scripts/check-no-em-dash.sh
+      - name: Proof page figures match the repository
+        run: node scripts/proof-check.mjs
+      - name: Tenant isolation tests
+        run: pnpm --filter @aegis/db test
+      - name: Core tests (authorization, approvals, monitoring, shield, audit)
+        run: pnpm --filter @aegis/core test
+      - name: API tests
+        run: pnpm --filter @aegis/api test
+      - name: SDK adapter tests (TypeScript, fail-closed and framework wrappers)
+        run: pnpm --filter @aegis/sdk test
+      - name: MCP gateway tests (against a real stdio MCP server process)
+        run: pnpm --filter @aegis/mcp-gateway test
+      - name: Python SDK tests (standard library only)
+        working-directory: aegis/packages/sdk-python
+        run: python3 -m unittest discover -s tests -t .
+      # Blocking: any high or critical advisory fails the build. Accepted exceptions (no patched
+      # release) and the transitive overrides live in pnpm-workspace.yaml and docs/SOFTWARE_SECURITY.md.
+      - name: Dependency vulnerability scan (blocking at high)
+        run: pnpm audit --audit-level high
+      - name: Seed demo tenant (proves the full flow end to end)
+        run: pnpm --filter @aegis/core seed
+  security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.24"
+          cache: false
+      # Pinned versions, no third-party actions. Gitleaks is built through the Go module proxy, so its
+      # source is checked against the Go checksum database. Trivy is the release archive, checked
+      # against the release's checksum file. Versions after the March 2026 Trivy release compromise.
+      - name: Install Gitleaks 8.30.1 and Trivy 0.75.0
+        run: |
+          go install github.com/zricethezav/gitleaks/v8@v8.30.1
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+          mkdir -p "$RUNNER_TEMP/trivy" && cd "$RUNNER_TEMP/trivy"
+          base=https://github.com/aquasecurity/trivy/releases/download/v0.75.0
+          curl -fsSLO "$base/trivy_0.75.0_Linux-64bit.tar.gz"
+          curl -fsSLO "$base/trivy_0.75.0_checksums.txt"
+          grep " trivy_0.75.0_Linux-64bit.tar.gz$" trivy_0.75.0_checksums.txt | sha256sum -c -
+          tar -xzf trivy_0.75.0_Linux-64bit.tar.gz trivy
+          echo "$RUNNER_TEMP/trivy" >> "$GITHUB_PATH"
+      - name: Secret scan of the AEGIS history (blocking)
+        run: gitleaks git --config aegis/.gitleaks.toml --log-opts="-- aegis" --redact --no-banner --exit-code 1 .
+      - name: Build the container images
+        working-directory: aegis
+        run: |
+          docker build -f deploy/Dockerfile --target api -t aegis-api:ci .
+          docker build -f deploy/Dockerfile --target web -t aegis-web:ci .
+      # Blocking on fixable high and critical findings in the OS packages and the Node modules of the
+      # shipped images. Unfixed advisories are reported but do not block, since no upgrade exists.
+      - name: Container image scan (blocking on fixable high and critical)
+        env:
+          TRIVY_DISABLE_TELEMETRY: "true"
+        run: |
+          for img in aegis-api:ci aegis-web:ci; do
+            trivy image --skip-version-check --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 --no-progress "$img"
+          done
+  e2e:
+    runs-on: ubuntu-latest
+    needs: test
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: aegis
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_USER: aegis_owner, POSTGRES_PASSWORD: aegis_owner_dev, POSTGRES_DB: aegis }
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U aegis_owner" --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      DATABASE_URL: postgresql://aegis_app:aegis_app_dev@127.0.0.1:5432/aegis
+      MIGRATION_DATABASE_URL: postgresql://aegis_owner:aegis_owner_dev@127.0.0.1:5432/aegis
+      AEGIS_APP_PASSWORD: aegis_app_dev
+      AEGIS_MASTER_KEY: Y2ktb25seS1tYXN0ZXIta2V5LTMyLWJ5dGVzLW9rISE=
+      AEGIS_SESSION_SECRET: Y2ktb25seS1zZXNzaW9uLXNlY3JldC0zMi1ieXRlcyEhISE=
+      AEGIS_DEMO_MODE: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10.34.7 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm, cache-dependency-path: aegis/pnpm-lock.yaml }
+      - run: pnpm install --frozen-lockfile
+      - run: echo "EVIDENCE_SIGNING_KEY=$(openssl genpkey -algorithm ed25519 | base64 -w0)" >> "$GITHUB_ENV"
+      - run: pnpm --filter @aegis/db generate && pnpm --filter @aegis/db migrate && pnpm --filter @aegis/core seed
+      - run: npx playwright install --with-deps chromium
+        working-directory: aegis/apps/web
+      # The console runs as a production build, as it does in a deployment: no on-demand compilation, so
+      # pages answer at once and the server does not restart under load. Production processes refuse the
+      # owner credentials, so they are dropped from the environment of the two servers (migrate and seed
+      # above still use them).
+      - name: Build the console
+        run: pnpm --filter @aegis/web build
+      - name: Start API and web
+        run: |
+          (env -u MIGRATION_DATABASE_URL -u AEGIS_APP_PASSWORD pnpm --filter @aegis/api start &)
+          (env -u MIGRATION_DATABASE_URL -u AEGIS_APP_PASSWORD pnpm --filter @aegis/web start &)
+          for i in $(seq 1 60); do curl -sf http://localhost:3000/login >/dev/null && curl -sf http://localhost:4000/health >/dev/null && break; sleep 2; done
+      - run: npx playwright test --reporter=list
+        working-directory: aegis/apps/web
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with: { name: aegis-playwright-report, path: aegis/apps/web/playwright-report }

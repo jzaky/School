@@ -1,0 +1,38 @@
+{
+  "integration": "osv",
+  "mode": "external_verified",
+  "hosts": [
+    "api.osv.dev"
+  ],
+  "transport": "fetch through HTTPS_PROXY (build environment without direct egress); AEGIS's DNS-pinned sender was not used",
+  "startedAt": "2026-10-14T12:03:27.626Z",
+  "finishedAt": "2026-10-14T12:03:41.070Z",
+  "checks": [
+    {
+      "name": "known npm advisory found (lodash 4.17.20)",
+      "pass": true,
+      "detail": "5 advisories, e.g. GHSA-29mw-wpgm-hmr9 medium fixed 4.17.21; GHSA-35jh-r3h4-6jhm high fixed 4.17.21; GHSA-f23m-r3pf-42rh medium fixed 4.18.0"
+    },
+    {
+      "name": "known npm advisory found (minimist 1.2.5)",
+      "pass": true,
+      "detail": "GHSA-xvch-5gv4-984h"
+    },
+    {
+      "name": "PyPI ecosystem mapping works (django 3.2.0)",
+      "pass": true,
+      "detail": "66 advisories"
+    },
+    {
+      "name": "every finding has a severity and a reference",
+      "pass": true,
+      "detail": "72 findings"
+    },
+    {
+      "name": "internal package name never sent to OSV.dev",
+      "pass": true,
+      "detail": "73 requests inspected"
+    }
+  ],
+  "notes": []
+}

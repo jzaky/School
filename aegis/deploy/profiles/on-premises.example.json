@@ -1,0 +1,11 @@
+{
+  "model": "on_premises",
+  "name": "AEGIS on premises (example)",
+  "operator": "Customer IT",
+  "components": [
+    { "key": "servers", "kind": "hosting", "provider": "Customer data centre (deploy/docker-compose.yml or deploy/systemd)", "country": "unknown" },
+    { "key": "database", "kind": "database", "provider": "PostgreSQL 16 on customer servers", "country": "unknown", "encryptionAtRest": "unknown" }
+  ],
+  "backups": { "schedule": "Nightly pg_dump to customer backup storage (docs/BACKUP_RECOVERY.md)", "retentionDays": 30, "country": "unknown", "encrypted": false },
+  "secrets": { "source": "environment" }
+}

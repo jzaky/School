@@ -1,0 +1,16 @@
+{
+  "model": "single_tenant_managed",
+  "name": "AEGIS dedicated (UAE example)",
+  "operator": "AEGIS provider",
+  "components": [
+    { "key": "hosting", "kind": "hosting", "provider": "Cloud provider, UAE region", "region": "to be confirmed", "country": "AE", "notes": "Fill attestedBy and attestedAt only after confirming the region with the provider" },
+    { "key": "database", "kind": "database", "provider": "Managed PostgreSQL 16, UAE region", "region": "to be confirmed", "country": "AE", "encryptionAtRest": "customer_managed_keys" },
+    { "key": "cache", "kind": "cache", "provider": "Managed Redis 7, UAE region", "region": "to be confirmed", "country": "AE" },
+    { "key": "storage", "kind": "object_storage", "provider": "Encrypted volume, UAE region", "region": "to be confirmed", "country": "AE", "encryptionAtRest": "customer_managed_keys" },
+    { "key": "email", "kind": "email", "provider": "Customer's own mail relay", "country": "AE", "subprocessor": false },
+    { "key": "telemetry", "kind": "monitoring", "provider": "OpenTelemetry collector in the same region", "country": "AE", "holdsCustomerData": false }
+  ],
+  "backups": { "schedule": "Daily snapshots plus point-in-time recovery", "retentionDays": 35, "country": "AE", "encrypted": true },
+  "disasterRecovery": { "rpoMinutes": 15, "rtoMinutes": 240, "secondaryCountry": "AE", "runbook": "docs/BACKUP_RECOVERY.md" },
+  "secrets": { "source": "cloud_kms", "rotationDays": 90 }
+}

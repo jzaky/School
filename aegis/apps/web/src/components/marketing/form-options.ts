@@ -1,0 +1,2 @@
+export const INTERESTS = ["Control (authorization and gateway)", "Assurance (evidence and monitoring)", "Shield (data protection and tool security)", "Audit (framework assessment)", "Whole platform", "Private deployment review", "Partnership or integration", "Other"] as const;
+export const DEPLOYMENTS = ["Private deployment (Kubernetes)", "Private deployment (Docker Compose)", "Hosted evaluation environment", "Undecided"] as const;

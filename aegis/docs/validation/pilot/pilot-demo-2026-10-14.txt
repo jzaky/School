@@ -1,0 +1,39 @@
+AEGIS pilot demo against http://localhost:4000
+Agent: support-refund-agent (SIMULATED: this script uses the agent's API key; no language model)
+
+1. The agent refunds AED 120 for a damaged item (within policy)
+  [SIMULATED] agent calls issue-refund through the Action Gateway
+  [REAL     ] gateway decision: HTTP 200, status executed
+  [RESULT   ] executed once: support-platform-sim (SIMULATED refund system) reference RFD-90BAD5F3
+  PASS        allowed and executed exactly once
+
+2. The agent refunds AED 1,450 (above the automatic limit)
+  [REAL     ] gateway decision: HTTP 202, status pending_approval; nothing has executed
+  PASS        held for a person
+
+3. A viewer tries to approve, then the finance approver approves the exact parameters
+  [REAL     ] viewer approval: HTTP 403
+  PASS        a viewer cannot approve
+  [REAL     ] approver decision: HTTP 200, executed=true
+  [RESULT   ] executed once with a single-use grant: support-platform-sim (SIMULATED refund system) reference RFD-0F8C09F0
+  PASS        approved and executed exactly once
+
+4. The agent retries the AED 1,450 request with the amount changed to AED 2,450
+  [REAL     ] gateway: HTTP 409
+  PASS        changed parameters under the same request key are refused
+
+5. The agent refunds AED 6,200 (above the hard limit)
+  [REAL     ] gateway decision: HTTP 403, status denied, reasons: Refunds above AED 2,500 are refused
+  [RESULT   ] BLOCKED: no call was made to the refund system (no receipt exists)
+  PASS        denied before anything executed
+
+6. The auditor reads the evidence and verifies the ledger
+  [REAL     ] AED 120: 4 evidence events (gateway.executed, gateway.execution_started, gateway.decision.allow, gateway.request_received)
+  [REAL     ] AED 1,450: 4 evidence events (gateway.executed, gateway.execution_started, gateway.decision.require_approval, gateway.request_received)
+  [REAL     ] AED 6,200: 2 evidence events (gateway.decision.deny, gateway.request_received)
+  [REAL     ] ledger verification: HTTP 200, valid=true, events checked=3172
+  PASS        the hash chain and signed checkpoints verify
+
+What was real: the AEGIS API, policy evaluation, approvals, single-use grants, the database and the evidence ledger.
+What was simulated: the agent (this script, no language model) and the refund system unless a receipt above names an external system.
+All checks passed.

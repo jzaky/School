@@ -1,0 +1,21 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+onlyBuiltDependencies:
+  - argon2
+  - prisma
+  - "@prisma/client"
+  - "@prisma/engines"
+  - esbuild
+  - sharp
+# Security overrides for advisories in transitive dependencies (docs/SOFTWARE_SECURITY.md, "Dependency
+# audit in CI"). Each one moves a dependency to its first patched release; remove an entry once the
+# parent package ships the fix itself.
+overrides:
+  "next>postcss": "^8.5.18"
+  "@prisma/config>deepmerge-ts": "^8.0.2"
+  "vitest>tinypool": "^2.1.2"
+# Advisories with no patched release, reviewed and accepted; see docs/SOFTWARE_SECURITY.md.
+auditConfig:
+  ignoreGhsas:
+    - GHSA-vfj7-8cjw-p6xm
