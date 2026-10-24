@@ -14,9 +14,13 @@ on:
         required: false
         default: ""
       music_seconds:
-        description: "Length of the music bed"
+        description: "Length of the music bed (0 = keep the existing music)"
         required: false
         default: "420"
+      out:
+        description: "Output folder (repo path)"
+        required: false
+        default: "media/voiceover"
 
 permissions:
   contents: write
@@ -38,14 +42,15 @@ jobs:
           pip install -q torch --index-url https://download.pytorch.org/whl/cpu
           pip install -q "kokoro>=0.9.4" soundfile numpy
       - name: Narration
-        run: python scripts/media/tts.py --script "${{ inputs.script }}" --out media/voiceover --voice "${{ inputs.voice }}"
+        run: python scripts/media/tts.py --script "${{ inputs.script }}" --out "${{ inputs.out }}" --voice "${{ inputs.voice }}"
       - name: Music bed
+        if: ${{ inputs.music_seconds != '0' }}
         run: python scripts/media/music.py --seconds "${{ inputs.music_seconds }}" --out media/voiceover/music.mp3
       - name: Commit audio
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add media/voiceover
+          git add media/voiceover "${{ inputs.out }}"
           git commit -m "Video voiceover and music bed" || exit 0
           for i in 1 2 3 4 5; do
             git pull --rebase origin "${{ github.ref_name }}" && git push origin "HEAD:${{ github.ref_name }}" && break
