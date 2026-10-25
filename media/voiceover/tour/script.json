@@ -134,32 +134,27 @@
   {
    "id": "c05a",
    "chapter": "c05-conversations",
-   "pending": "request conversations",
-   "text": "Remember the email chain with the bus company in it? In Horizon, every request has its own conversation, right next to the request itself. Each message has a clear audience, and you choose it before you press send."
+   "text": "Remember the email chain with the bus company in it? In Horizon, every request has its own conversation, right there on the request. And every message has a clear audience, chosen before you press send."
   },
   {
    "id": "c05b",
    "chapter": "c05-conversations",
-   "pending": "request conversations",
-   "text": "Shared messages are seen by the family and the staff handling the request. Staff only notes stay between staff, so colleagues can coordinate without the family reading the internal back and forth. And private messages go only to the person they're meant for."
+   "text": "Family and staff messages are seen by the family and the staff handling the request. Staff only notes stay between staff, so colleagues can coordinate without the family reading the internal back and forth. And private notes go only to the people you pick. Nobody else, not even other staff."
   },
   {
    "id": "c05c",
    "chapter": "c05-conversations",
-   "pending": "request conversations",
-   "text": "Every message shows exactly who can read it. So no more reply all, no more forwarding chains, and no more sensitive details landing in the wrong inbox. And every message stays with the request, so the history never vanishes into someone's sent folder."
+   "text": "Every message shows exactly who can see it, and new ones are clearly marked. So no more reply all, no more forwarding chains, and no more sensitive details landing in the wrong inbox. Messages never appear in search, dashboards or reports, and the whole history stays with the request."
   },
   {
    "id": "c06a",
    "chapter": "c06-absence",
-   "pending": "private sick leave",
-   "text": "The same respect applies to sick leave. When Adam is unwell, Rania reports the absence from her phone, and she can keep the medical details private. His teachers see that he's away and when he's expected back, but not why. Only the staff who need the details can see them."
+   "text": "The same respect applies to sick leave. When Adam is unwell, Rania reports it from her phone and attaches the doctor's note. The reason stays private: only the family, the attendance office and the school nurse can see it."
   },
   {
    "id": "c06b",
    "chapter": "c06-absence",
-   "pending": "private sick leave",
-   "text": "Staff get the same privacy. When Daniel calls in sick, the reason stays between him and the people who manage leave. His colleagues simply see that he's away."
+   "text": "His teachers see that he's away and excused, but not why. Even the principal only sees that the absence is excused, and who reported it. Staff get the same privacy. When Thomas, a physics teacher, calls in sick, the reason stays with the people who manage leave. Daniel, who covers his class, just sees that a colleague is away, with the cover notes he needs."
   },
   {
    "id": "c06c",
@@ -169,14 +164,12 @@
   {
    "id": "c07a",
    "chapter": "c07-subjects",
-   "pending": "electives and AP guidance",
-   "text": "Now for the big one: subjects, electives, and where they lead. It starts with the school's own offer. Staff set up the subjects for each grade: core subjects, option blocks, and electives with prerequisites and places. And they can change them whenever they need to."
+   "text": "Now for the big one: subjects, electives, and where they lead. It starts with the school's own offer. Staff set up next year's courses for each grade: core subjects, option blocks, and electives with their prerequisites, including AP courses. They can change them whenever they need to, and they can even see how many students' university targets need each course."
   },
   {
    "id": "c07b",
    "chapter": "c07-subjects",
-   "pending": "electives and AP guidance",
-   "text": "When registration opens, students choose online, and parents see the same choices from their own account. Horizon checks prerequisites as they go, and when the window closes, classes fill themselves. Goodbye, final, final, version two."
+   "text": "When course selection opens, students choose online, and parents see the same choices from their own account. Horizon checks prerequisites as they go, then places every student in a class, and opens a new section when one fills up. Goodbye, spreadsheet called final, final, version two."
   },
   {
    "id": "c07c",
@@ -192,19 +185,20 @@
   {
    "id": "c07e",
    "chapter": "c07-subjects",
-   "text": "Horizon checks each programme against Adam's record, requirement by requirement, and tells him plainly: eligible, on track, or missing something, and exactly what."
+   "text": "Horizon checks every programme against Adam's record and plan, requirement by requirement, and tells him plainly: eligible, on track, or missing something, and exactly what. Right now, a hundred and thirty eight programmes at fifty eight universities are eligible or on track for him.",
+   "display": "Horizon checks every programme against Adam's record and plan, requirement by requirement, and tells him plainly: eligible, on track, or missing something, and exactly what. Right now, 138 programmes at 58 universities are eligible or on track for him."
   },
   {
    "id": "c07f",
    "chapter": "c07-subjects",
-   "pending": "electives and AP guidance",
-   "text": "It speaks AP, too. When a programme requires a particular AP course, Horizon says so clearly. When a strong regular course is just as acceptable, it says that too, so nobody signs up for four APs out of pure panic. And it only ever suggests classes the school really offers."
+   "text": "It speaks AP, too. When a programme requires a particular AP course, Horizon says so, in the university's own words. When a strong regular course is just as acceptable, it says that too. For Adam, AP Calculus BC is needed by three of his eight targets, but regular science courses are enough for all of them. So nobody signs up for four APs out of pure panic. And it only ever suggests classes the school really offers.",
+   "display": "It speaks AP, too. When a programme requires a particular AP course, Horizon says so, in the university's own words. When a strong regular course is just as acceptable, it says that too. For Adam, AP Calculus BC is needed by 3 of his 8 targets, but regular science courses are enough for all of them. So nobody signs up for four APs out of pure panic. And it only ever suggests classes the school really offers."
   },
   {
    "id": "c07g",
    "chapter": "c07-subjects",
-   "pending": "electives and AP guidance",
-   "text": "For every elective, Adam can see how many of his target programmes it keeps open. And he can try what if. What if I take AP Calculus? What if I swap Geography for Computer Science? He sees which programmes move into reach, and which drift away, before anything is saved."
+   "text": "Every elective shows how many of his targets need it, and how many programmes it keeps open. Choose AP Physics 1 over regular Physics, and ten more programmes stay open. Pick it, and Horizon spots that it already covers Manchester's requirement, so AP Computer Science is no longer needed. And he can try what if, before anything is saved.",
+   "display": "Every elective shows how many of his targets need it, and how many programmes it keeps open. Choose AP Physics 1 over regular Physics, and 10 more programmes stay open. Pick it, and Horizon spots that it already covers Manchester's requirement, so AP Computer Science is no longer needed. And he can try what if, before anything is saved."
   },
   {
    "id": "c07h",
