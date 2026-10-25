@@ -70,6 +70,14 @@
 - Schema (additive): InspectionMapping, CareerEvent, CareerEventRegistration, PartnerResource; enums CareerEventKind, CareerEventStatus, CareerRegistrationStatus. Migration 20261006000000_inspection_career_events. Permissions inspection.view and career.partners.
 - Tests: tests/unit/inspection.test.ts, tests/integration/inspection-events.test.ts, tests/e2e/inspection-events.spec.ts.
 
+## Request conversations and private absences (convo worktree branch)
+- Conversation on every request page (src/components/requests/conversation-panel.tsx, composer): Family and staff, Staff only and Private messages with icons, colours and a "Who can see this" line; private notes to chosen staff; unread badges on the request list and the request header; families see shared messages only and can reply, on phones too. Rules and notifications in src/server/requests/conversation.ts (no message text in notifications, audited writes, case-access for wellbeing and safeguarding matters with a recorded decision to notify the family).
+- Sick days private by design (src/server/access/absence-access.ts): new absence_report workflow (attendance office for illness, principal for planned absences), approved days excused on the register with the source and a link to the report, homeroom teacher told without the reason; reason, doctor's note and conversation only for the family, the attendance office and the nurse. Weekly class register on /classes/[id], homeroom card on the teacher home, reasons hidden on student profiles, the request list and approvals. Attachments through /api/requests/[id]/file (audited).
+- Staff absence: private reason separate from notes for cover; substitutes and colleagues see cover notes and "Absent, cover arranged" (fix: notifySubstitute no longer sends the reason); cover board shows the private reason only to absence.reasons holders; "Your cover lessons" panel on /timetable; approved leave requests create the absence with cover.
+- Schema (migration 20261025100000_request_conversations): RequestMessage, RequestThreadRead, enums MessageVisibility, AttendanceSource, StaffAbsenceReason; AttendanceRecord.source and requestId; StaffAbsence.reasonEn renamed coverNotes, plus reasonKind, privateReason, requestId. Permissions attendance.reasons and absence.reasons.
+- Seed (prisma/seed/conversations.ts, history.ts, academics/timetable.ts): Rania's threads (sick days with a nurse note, Yara's bus with staff-only and private notes, a letter), two other families (one in Arabic), Adam's sick days with a doctor's note, Daniel Carter's sick leave and a hospital appointment with cover notes.
+- Tests: tests/unit/absence-privacy.test.ts, tests/integration/conversations.test.ts (13), tests/e2e/conversations.spec.ts (5, en and ar).
+
 ## Broken
 - Nothing known. Production: https://myhorizon.up.railway.app (press Reset demo after each deploy to load new seed data).
 

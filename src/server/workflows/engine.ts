@@ -10,6 +10,7 @@ import { evaluateCondition } from "./conditions";
 import type { Assignee, NodeConfig, WorkflowGraph, WorkflowNode } from "./graph";
 import { resolveAssignee, resolveSingle, type RunContext } from "./resolve";
 import { applySubjectChange } from "@/server/registration/service";
+import { absenceFromLeave, applyExcusedAbsence } from "@/server/attendance/absences";
 
 type NodeResult = { state: "done"; handle?: string | null; output?: Record<string, unknown> } | { state: "waiting"; output?: Record<string, unknown> };
 
@@ -658,6 +659,20 @@ async function finalize(ec: ExecCtx, run: LoadedRun, ctx: RunContext, outcome: N
     });
   }
   await addTimeline(ec, run, ctx, outcome === "REJECTED" ? "rejected" : "completed", endLabel);
+  if (outcome !== "REJECTED" && outcome !== "CANCELLED") await afterApproval(ec, run, ctx);
+}
+
+/** Module hooks for approved requests: family absence reports reach the register, approved leave gets cover. */
+async function afterApproval(ec: ExecCtx, run: LoadedRun, ctx: RunContext) {
+  const key = run.request?.service?.key;
+  if (!run.request || !key) return;
+  if (key === "absence_request") {
+    await applyExcusedAbsence(ec, { id: run.request.id, studentId: run.request.studentId, requesterId: run.request.requesterId }, ctx.form);
+  } else if (key === "staff_leave") {
+    const res = await absenceFromLeave(ec, { id: run.request.id, requesterId: run.request.requesterId }, ctx.form);
+    if (res.absenceId) await addTimeline(ec, run, ctx, "status", { en: "Absence recorded and cover arranged", ar: "تم تسجيل الغياب وترتيب حصص الاحتياط" }, { staffOnly: false });
+    else if (res.skipped && res.skipped !== "IN_THE_PAST") await addTimeline(ec, run, ctx, "status", { en: "Cover was not arranged automatically. Please arrange it on the cover board.", ar: "لم يتم ترتيب الاحتياط تلقائيًا. يرجى ترتيبه من لوحة الاحتياط." }, { staffOnly: true });
+  }
 }
 
 /** Move a run forward until every active branch is waiting or the run has ended. Safe to call repeatedly. */

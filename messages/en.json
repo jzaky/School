@@ -434,7 +434,22 @@
     "open": "Open",
     "closed": "Closed",
     "overdue": "Overdue",
-    "searchPlaceholder": "Search by number or title"
+    "searchPlaceholder": "Search by number or title",
+    "unreadN": "{n, plural, one {1 new} other {# new}}",
+    "reasonPrivate": "Reason private",
+    "privacy": {
+      "studentTitle": "The reason for this absence is private",
+      "studentBody": "Only the family, the attendance office and the school nurse can see the reason and any doctor's note. You can see that the absence is excused and who reported it.",
+      "staffTitle": "The details of this leave are private",
+      "staffBody": "Only {name} and the people who manage staff absence can see the type of leave and any certificate. Substitutes see only the notes for cover.",
+      "excusedByParent": "Excused absence, reported by parent",
+      "excusedByStudent": "Excused absence, reported by the student",
+      "reportedByParent": "Absence reported by parent, being checked by the attendance office",
+      "reportedByStudent": "Absence reported by the student, being checked by the attendance office",
+      "studentVisibleTo": "Private: family, attendance office and nurse",
+      "staffVisibleTo": "Private: the requester and absence managers"
+    },
+    "messagesN": "{n, plural, one {1 message} other {# messages}}"
   },
   "approvals": {
     "title": "Approvals",
@@ -1247,7 +1262,9 @@
       "wellbeing_referral": "A wellbeing referral arrives",
       "safeguarding_new": "New safeguarding concern",
       "safeguarding_immediate": "Immediate danger alert",
-      "break_glass": "Emergency access used"
+      "break_glass": "Emergency access used",
+      "request_message": "A new message on a request",
+      "absence_excused": "A student in my homeroom is reported absent"
     }
   },
   "adminAudit": {
@@ -1335,7 +1352,12 @@
       "career_event_export": "Exported a university event list",
       "partner_resource_create": "Added a partner resource",
       "partner_resource_update": "Updated a partner resource",
-      "partner_resource_delete": "Deleted a partner resource"
+      "partner_resource_delete": "Deleted a partner resource",
+      "request_message_create": "Wrote a message on a request",
+      "request_messages_view": "Opened a protected request conversation",
+      "request_family_notify": "Decided to notify the family",
+      "request_file_view": "Opened a request attachment",
+      "request_file_denied": "Was refused a private attachment"
     }
   },
   "adminCompliance": {
@@ -2341,6 +2363,22 @@
       "inspectionPack": {
         "title": "Build the inspection evidence pack",
         "body": "Choose dates and download a bilingual PDF or CSV."
+      },
+      "requestConversation": {
+        "title": "Talk to the school on a request",
+        "body": "Open Yara's bus request: one thread with the school, and a new reply waiting for you."
+      },
+      "homeroomRegister": {
+        "title": "Check your homeroom register",
+        "body": "Adam is off sick. You see an excused absence reported by his parent, never the reason."
+      },
+      "requestThreads": {
+        "title": "One thread per request",
+        "body": "Open Yara Nasser's bus request: family messages, staff-only notes and a private note to the principal, each labelled."
+      },
+      "absenceReports": {
+        "title": "Check sick-day reports",
+        "body": "Adam Nasser's sick days: the doctor's note and a private note to the nurse. Teachers only see that he is excused."
       }
     }
   },
@@ -3657,7 +3695,36 @@
       "NOT_FREE": "That person is no longer free in this period.",
       "NOT_YOURS": "This cover is not assigned to you.",
       "REASON_REQUIRED": "Please give a reason."
-    }
+    },
+    "privateReason": "Reason (private)",
+    "chooseReason": "Choose a reason",
+    "privateReasonDetails": "Private details",
+    "privateReasonPlaceholder": "Optional details, for example a doctor's appointment at 10:00",
+    "privateReasonHelp": "Only you and the people who manage staff absence see this. Substitutes and colleagues never do.",
+    "privateReasonHelpManager": "Only the teacher, you and the people who manage staff absence see this. Substitutes and colleagues never do.",
+    "reasonKind": {
+      "SICK": "Sick leave",
+      "MEDICAL_APPOINTMENT": "Medical appointment",
+      "ANNUAL_LEAVE": "Annual leave",
+      "FAMILY": "Family reasons",
+      "PARENTAL_LEAVE": "Parental leave",
+      "RELIGIOUS": "Religious leave",
+      "TRAINING": "Training",
+      "SCHOOL_BUSINESS": "School business",
+      "PERSONAL": "Personal reasons",
+      "OTHER": "Other"
+    },
+    "privateLabel": "Private",
+    "privateReasonSeenBy": "Seen only by the absent person, whoever reported it and the people who manage staff absence",
+    "privateReasonHidden": "Only the absent person and the people who manage staff absence can see why",
+    "reasonPrivate": "Reason private",
+    "coverNotesShort": "Cover notes",
+    "onlyYouAndManagers": "Private: only you and the people who manage staff absence can see this.",
+    "coverNotices": "Your cover lessons",
+    "coverNoticesBody": "Lessons you are covering in the next two weeks, with the notes the teacher left.",
+    "absentCoverArranged": "Absent, cover arranged",
+    "noCoverNotes": "No notes for cover were left.",
+    "reasonNeverShared": "Why a colleague is away is private and never shared with substitutes."
   },
   "pathways": {
     "title": "Universities and pathways",
@@ -6274,6 +6341,10 @@
         "report": {
           "label": "Report own absence",
           "help": "Tell the school they will be absent."
+        },
+        "reasons": {
+          "label": "See why staff are absent",
+          "help": "Read the private reason for a staff absence or leave. Substitutes never see it."
         }
       },
       "cover": {
@@ -6460,6 +6531,12 @@
         "manage": {
           "label": "Manage integrations",
           "help": "Create and revoke API keys and set up scheduled sync with the school's own systems."
+        }
+      },
+      "attendance": {
+        "reasons": {
+          "label": "See why students are absent",
+          "help": "Read the reason and doctor's notes on absences reported by families. Teachers see only that an absence is excused."
         }
       }
     }
@@ -9167,5 +9244,125 @@
         }
       }
     }
+  },
+  "conversation": {
+    "title": "Conversation",
+    "subtitleFamily": "Messages between you and the school about this request. Only messages shared with your family appear here.",
+    "subtitleStaff": "One thread for everyone handling this request. Each message shows who can see it.",
+    "subtitleStaffRequester": "Messages between you and the team handling your request.",
+    "count": "{n, plural, =0 {No messages} one {1 message} other {# messages}}",
+    "legend": "Who can see each message",
+    "legendHint": {
+      "SHARED": "the family sees it",
+      "STAFF": "never shown to the family",
+      "PRIVATE": "only the people chosen"
+    },
+    "vis": {
+      "SHARED": "Family and staff",
+      "SHARED_REQUESTER": "Requester and team",
+      "STAFF": "Staff only",
+      "PRIVATE": "Private"
+    },
+    "privateWith": "Private: you and {names}",
+    "you": "You",
+    "newMessages": "New messages",
+    "familyNotifiedDecision": "Family notified by staff decision",
+    "sensitiveNoAuto": "Wellbeing or safeguarding matter: the family is never notified automatically. Sharing a message with them is a decision you record with a reason. Opening this conversation is recorded in the audit log.",
+    "sensitiveProtected": "Protected request: the family cannot see it, so messages here stay with staff. Opening this conversation is recorded in the audit log.",
+    "emptyTitle": "No messages yet",
+    "emptyFamily": "Have a question about this request? Write to the school here. Your message goes to the staff handling it.",
+    "emptyStaff": "Start the conversation. Choose who can see your message before you send it.",
+    "visibilityLabel": "Who can see this message",
+    "whoCanSee": "Who can see this:",
+    "theRequester": "the requester",
+    "listSeparator": ", ",
+    "hint": {
+      "family": "you, your family on this request and the staff handling it. Staff notes stay with staff.",
+      "shared": "{family} and the staff on this request. The family is told in the app and by email, without the message text.",
+      "sharedStaffRequest": "{family} and the staff on this request.",
+      "sharedSensitive": "{family} and the staff on this request. The family is not notified unless you record a decision below.",
+      "sharedRequester": "you and the team handling your request.",
+      "staff": "{n, plural, one {the 1 staff member} other {the # staff members}} who can see this request. Never shown to the family.",
+      "privatePick": "only you and the people you choose below.",
+      "privateTo": "only you and {names}. Nobody else, including other staff."
+    },
+    "sharedBlocked": "Families cannot see this protected request. To contact the family, record a parent notification decision on the case.",
+    "chooseRecipients": "Share this private note with",
+    "noTeam": "Nobody else on staff can see this request yet.",
+    "messageLabel": "Message",
+    "placeholderFamily": "Write to the school",
+    "placeholderShared": "Write to the family and the team",
+    "placeholderStaff": "Internal note for the team",
+    "placeholderPrivate": "Private note",
+    "notifyFamily": "Notify the family now",
+    "notifyFamilyHelp": "Your decision and its reason are recorded on the case.",
+    "notifyReason": "Reason for notifying the family",
+    "footStaff": "Messages never appear in search, dashboards or reports.",
+    "footFamily": "Emails only tell you a message is waiting. The text stays in Horizon.",
+    "sendReply": "Send",
+    "sendShared": "Send to family",
+    "sendStaff": "Add staff note",
+    "sendPrivate": "Send private note",
+    "sentShared": "Message sent",
+    "sentStaff": "Staff note added",
+    "sentPrivate": "Private note sent",
+    "error": {
+      "generic": "Something went wrong. Please try again.",
+      "NOT_FOUND": "This conversation is not available to you.",
+      "EMPTY": "Write a message first.",
+      "TOO_LONG": "The message is too long.",
+      "INVALID": "Please check the message and try again.",
+      "FORBIDDEN": "You cannot send this kind of message here.",
+      "PROTECTED": "Families cannot see this request. Choose Staff only or Private.",
+      "RECIPIENTS_REQUIRED": "Choose at least one person for a private note.",
+      "RECIPIENT_NOT_ALLOWED": "One of the people chosen cannot see this request.",
+      "REASON_REQUIRED": "Give a reason for notifying the family."
+    },
+    "placeholderTeam": "Write to the team handling your request",
+    "placeholderSharedRequester": "Write to the requester and the team"
+  },
+  "attendance": {
+    "registerTitle": "Register",
+    "weekOf": "Week of {date}",
+    "previousWeek": "Previous week",
+    "nextWeek": "Next week",
+    "student": "Student",
+    "minutesLate": "{n} minutes late",
+    "status": {
+      "PRESENT": "Present",
+      "LATE": "Late",
+      "ABSENT": "Absent",
+      "EXCUSED": "Excused"
+    },
+    "short": {
+      "PRESENT": "P",
+      "LATE": "L",
+      "ABSENT": "A",
+      "EXCUSED": "E"
+    },
+    "excused": "Excused absence",
+    "excusedByParent": "Excused absence, reported by parent",
+    "excusedByStudent": "Excused absence, reported by the student",
+    "excusedByOffice": "Excused absence, recorded by the school office",
+    "legendFamily": "Reported by the family",
+    "awayThisWeek": "Away this week",
+    "youSeeReasons": "You can see reasons (attendance team)",
+    "reasonsPrivate": "Reasons are private",
+    "reasonPrivateShort": "Reason private",
+    "nobodyAway": "Nobody was away this week.",
+    "nobodyAwayDay": "Everyone is in today.",
+    "seeReport": "Open report",
+    "reasonType": {
+      "illness": "Illness",
+      "medical_appointment": "Medical appointment",
+      "family_event": "Family event",
+      "travel": "Travel",
+      "religious_observance": "Religious observance",
+      "other": "Other"
+    },
+    "homeroomTitle": "{name} register",
+    "openRegister": "Open register",
+    "presentN": "{n} present",
+    "awayN": "{n} away"
   }
 }

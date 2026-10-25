@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { CalendarX, Loader2, UserRoundCog, X } from "lucide-react";
+import { CalendarX, Loader2, Lock, UserRoundCog, Users, X } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -66,6 +66,7 @@ export function DeclineCoverButton({ coverId, label }: { coverId: string; label:
 }
 
 export type TeacherOption = { id: string; name: string };
+const REASONS = ["SICK", "MEDICAL_APPOINTMENT", "ANNUAL_LEAVE", "FAMILY", "PARENTAL_LEAVE", "RELIGIOUS", "TRAINING", "SCHOOL_BUSINESS", "PERSONAL", "OTHER"] as const;
 export type PeriodOption = { periodNo: number; label: string };
 
 /** Report an absence. Without `teachers` it is for yourself; with them a cover manager picks the teacher. */
@@ -81,17 +82,31 @@ export function ReportAbsenceDialog({ teachers, periods, today, triggerLabel }: 
   const [p1, setP1] = useState<string>(String(periods[0]?.periodNo ?? 1));
   const [p2, setP2] = useState<string>(String(periods[periods.length - 1]?.periodNo ?? 1));
   const [notes, setNotes] = useState("");
+  const [reasonKind, setReasonKind] = useState<string>("");
+  const [privateReason, setPrivateReason] = useState("");
   const [pending, start] = useTransition();
   const needWho = Boolean(teachers);
   const valid = (!needWho || who) && from && to && to >= from && (allDay || Number(p2) >= Number(p1));
 
   const submit = () =>
     start(async () => {
-      const r = await reportAbsenceAction({ membershipId: needWho ? who : null, startsOn: from, endsOn: to, allDay, fromPeriod: allDay ? null : Number(p1), toPeriod: allDay ? null : Number(p2), notes: notes.trim() || null });
+      const r = await reportAbsenceAction({
+        membershipId: needWho ? who : null,
+        startsOn: from,
+        endsOn: to,
+        allDay,
+        fromPeriod: allDay ? null : Number(p1),
+        toPeriod: allDay ? null : Number(p2),
+        notes: notes.trim() || null,
+        reasonKind: (reasonKind || null) as never,
+        privateReason: privateReason.trim() || null,
+      });
       if (!r.ok) return void toast.error(err(r.error));
       toast.success(r.created === 0 ? t("absenceNoLessons") : t("absenceSaved", { covered: r.covered, total: r.created }));
       setOpen(false);
       setNotes("");
+      setReasonKind("");
+      setPrivateReason("");
       router.refresh();
     });
 
@@ -102,7 +117,7 @@ export function ReportAbsenceDialog({ teachers, periods, today, triggerLabel }: 
         {triggerLabel ?? t("reportAbsence")}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>{needWho ? t("markAbsentTitle") : t("reportAbsenceTitle")}</DialogTitle>
             <DialogDescription>{t("reportAbsenceBody")}</DialogDescription>
@@ -163,11 +178,34 @@ export function ReportAbsenceDialog({ teachers, periods, today, triggerLabel }: 
                 ))}
               </div>
             )}
-            <div className="space-y-1.5">
-              <Label htmlFor="abs-notes">{t("notesForCover")}</Label>
-              <Textarea id="abs-notes" value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={500} placeholder={t("notesPlaceholder")} data-testid="absence-notes" />
+            <fieldset className="space-y-2 rounded-lg border border-violet-200 bg-violet-50/50 p-3" data-testid="private-reason">
+              <legend className="flex items-center gap-1.5 px-1 text-sm font-medium text-violet-800">
+                <Lock className="size-3.5" />
+                {t("privateReason")}
+              </legend>
+              <Select value={reasonKind} onValueChange={setReasonKind}>
+                <SelectTrigger className="w-full bg-card" data-testid="absence-reason-kind">
+                  <SelectValue placeholder={t("chooseReason")} />
+                </SelectTrigger>
+                <SelectContent>
+                  {REASONS.map((k) => (
+                    <SelectItem key={k} value={k}>
+                      {t(`reasonKind.${k}`)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Textarea value={privateReason} onChange={(e) => setPrivateReason(e.target.value)} maxLength={500} rows={2} placeholder={t("privateReasonPlaceholder")} aria-label={t("privateReasonDetails")} className="bg-card" data-testid="absence-private-details" />
+              <p className="text-xs text-violet-800/80">{needWho ? t("privateReasonHelpManager") : t("privateReasonHelp")}</p>
+            </fieldset>
+            <fieldset className="space-y-1.5 rounded-lg border border-info/25 bg-info-soft/40 p-3">
+              <legend className="flex items-center gap-1.5 px-1 text-sm font-medium text-info">
+                <Users className="size-3.5" />
+                {t("notesForCover")}
+              </legend>
+              <Textarea id="abs-notes" value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={500} placeholder={t("notesPlaceholder")} aria-label={t("notesForCover")} className="bg-card" data-testid="absence-notes" />
               <p className="text-xs text-muted-foreground">{t("notesHelp")}</p>
-            </div>
+            </fieldset>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpen(false)}>

@@ -40,6 +40,7 @@ import { listableCaseWhere } from "@/server/access/case-access";
 import { schoolKpis } from "@/server/analytics/kpis";
 import { isRestrictedForViewer } from "@/server/access/request-access";
 import { FeesCard } from "@/components/fees/fees-card";
+import { HomeroomToday } from "@/components/attendance/class-register";
 
 const REFERRAL_SERVICES = ["academic_concern", "behavioral_referral", "wellbeing_referral", "learning_support_referral", "safeguarding_concern"];
 
@@ -116,7 +117,7 @@ export async function ParentHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs 
   const kids = links.map((l) => l.student);
   const since = new Date(Date.now() - 30 * 86400_000);
   const [attendance, homerooms, approvals] = await Promise.all([
-    ctx.db.attendanceRecord.groupBy({ by: ["studentId", "status"], where: { studentId: { in: kids.map((k) => k.id) }, date: { gte: since } }, _count: { _all: true } }),
+    ctx.db.attendanceRecord.groupBy({ by: ["studentId", "status"], where: { studentId: { in: kids.map((k) => k.id) }, date: { gte: since, lte: new Date() } }, _count: { _all: true } }),
     ctx.db.enrollment.findMany({ where: { studentId: { in: kids.map((k) => k.id) }, class: { isHomeroom: true } }, include: { class: true } }),
     ctx.db.approvalAssignee.findMany({ where: { membershipId: ctx.membershipId, status: "PENDING", approval: { status: "PENDING" } }, include: { approval: { include: { request: { include: { service: true } } } } } }),
   ]);
@@ -275,6 +276,7 @@ export async function TeacherHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs
           </Panel>
         </div>
         <div className="space-y-6">
+          <HomeroomToday ctx={ctx} prefs={prefs} />
           <MeetingsPanel ctx={ctx} prefs={prefs} limit={4} title={t("mySchedule")} />
           <TasksPanel ctx={ctx} prefs={prefs} limit={5} />
           <AnnouncementsPanel ctx={ctx} prefs={prefs} audience="staff" />

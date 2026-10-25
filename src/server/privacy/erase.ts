@@ -72,6 +72,8 @@ const DELETE = new Set([
   "Task",
   "TimelineEvent",
   "Message",
+  "RequestMessage",
+  "RequestThreadRead",
   "Document",
   "Submission",
 ]);
@@ -151,7 +153,7 @@ async function computeOps(db: AnyDb, orgId: string, subject: Subject, now: Date)
         const req = requestSubmissionIds.get(id);
         const fate = req ? (requestFate.get(req.id) ?? "anonymise") : "delete";
         add(model, fate, fate === "anonymise" ? "request_register" : req ? "retention_expired" : "no_legal_basis", req ? "request" : null, id);
-      } else if (model === "TimelineEvent" && typeof r.requestId === "string" && requestFate.get(r.requestId) !== "delete") {
+      } else if ((model === "TimelineEvent" || model === "RequestMessage") && typeof r.requestId === "string" && requestFate.get(r.requestId) !== "delete") {
         add(model, "anonymise", "request_register", "request", id);
       } else if (model === "AppointmentAttendee" && caseAppointmentIds.has(r.appointmentId as string)) {
         add(model, "retain", "linked_case", null, id);
@@ -251,11 +253,12 @@ export async function applyErasure(tx: TenantTx, orgId: string, subject: Subject
       }
     } else if (o.model === "Submission") count = (await tx.submission.updateMany({ where, data: { data: {} } })).count;
     else if (o.model === "TimelineEvent") count = (await tx.timelineEvent.updateMany({ where, data: { bodyEn: null, bodyAr: null, data: Prisma.DbNull } })).count;
+    else if (o.model === "RequestMessage") count = (await tx.requestMessage.updateMany({ where, data: { body: "Removed after a data request. / حُذفت بعد طلب بيانات." } })).count;
     else if (o.model === "StaffProfile") count = (await tx.staffProfile.updateMany({ where, data: { phone: null, bioEn: null, bioAr: null, officeEn: null, officeAr: null } })).count;
     else if (o.model === "DataSubjectRequest") count = (await tx.dataSubjectRequest.updateMany({ where, data: { subjectName: `Erased (${subject.reference})`, requesterName: "Erased / محذوف", detailsEn: null } })).count;
     record(o, count);
   }
-  const deleteOrder = ["AppointmentAttendee", "Appointment", "Task", "TimelineEvent", "Message", "Notification", "NotificationPreference", "SavedView", "FormDraft", "Submission", "Document"];
+  const deleteOrder = ["AppointmentAttendee", "Appointment", "Task", "TimelineEvent", "RequestMessage", "RequestThreadRead", "Message", "Notification", "NotificationPreference", "SavedView", "FormDraft", "Submission", "Document"];
   const rank = (m: string) => (deleteOrder.includes(m) ? deleteOrder.indexOf(m) : deleteOrder.length);
   const deletes = ops.filter((x) => x.action === "delete").sort((a, b) => rank(a.model) - rank(b.model) || a.model.localeCompare(b.model));
   for (const o of deletes) record(o, (await delegate(tx, o.model).deleteMany({ where: { orgId, id: { in: o.ids } } })).count);

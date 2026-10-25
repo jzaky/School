@@ -76,6 +76,13 @@ export function sampleData(schema: FormSchema | null, s: SeedStudent | null, req
   return { ...out, ...overrides };
 }
 
+/** YYYY-MM-DD of a day offset in Dubai (form date fields). */
+const dayKey = (offset: number, now = new Date()) => {
+  const d = new Date(now.getTime() + 4 * 3600_000);
+  d.setUTCDate(d.getUTCDate() + offset);
+  return d.toISOString().slice(0, 10);
+};
+
 export async function seedHistory(w: SeedWorld, base: ExecCtx) {
   const { db, orgId, now, staff } = w;
   const r = rng(424242);
@@ -165,8 +172,28 @@ export async function seedHistory(w: SeedWorld, base: ExecCtx) {
     await completeTasksFor(req.id, at(schoolDay(-21, now), 10, 0, now));
   }
   {
-    const req = await submit("absence_request", w.rania.membershipId, adam, at(schoolDay(-9, now), 7, 2, now));
-    await decide(req.id, daniel, "APPROVED", at(schoolDay(-9, now), 8, 15, now), "Get well soon, Adam.");
+    // A planned absence last month: a family wedding, approved by the principal.
+    const req = await submit("absence_request", w.rania.membershipId, adam, at(schoolDay(-31, now), 18, 40, now), {
+      absenceType: "family_event",
+      startDate: dayKey(schoolDay(-27, now), now),
+      endDate: dayKey(schoolDay(-27, now), now),
+      details: "Family wedding in Abu Dhabi. We travel on Thursday morning and Adam will be back on Monday.",
+    });
+    await decide(req.id, omar, "APPROVED", at(schoolDay(-30, now), 9, 10, now), "Approved. Please make sure Adam catches up on the homework from that day.");
+  }
+  {
+    // Adam's sick days this week: reported by Rania with a doctor's note, checked by the attendance office.
+    // The register shows "Excused absence, reported by parent"; only the family, the attendance office and the
+    // school nurse can read why (src/server/access/absence-access.ts).
+    const req = await submit("absence_request", w.rania.membershipId, adam, at(schoolDay(-2, now), 7, 2, now), {
+      absenceType: "illness",
+      startDate: dayKey(schoolDay(-2, now), now),
+      endDate: dayKey(schoolDay(-1, now), now),
+      details: "Adam has had a high temperature and a sore throat since last night. Our doctor diagnosed tonsillitis and advised two days of rest at home.",
+      medicalNote: { name: "Medical certificate - Adam Nasser.pdf", size: 184_320, key: "sample:medical-certificate", type: "application/pdf" },
+      declaration: true,
+    });
+    await decide(req.id, registrar, "APPROVED", at(schoolDay(-2, now), 8, 15, now), "Doctor's note received: two days of rest. Register updated.");
   }
   // Adam asks to join the robotics club. Waiting for Daniel.
   await submit("activity_registration", adam.membershipId, adam, at(schoolDay(-1, now), 15, 20, now), { activity: "robotics" });
@@ -249,16 +276,27 @@ export async function seedHistory(w: SeedWorld, base: ExecCtx) {
   // Homeroom approvals (absences, activities) and principal approvals
   // ------------------------------------------------------------------
   const nineA = grade(9).filter((s) => s.section === "A");
+  const ABSENCE_KINDS: Array<{ absenceType: string; details: string }> = [
+    { absenceType: "illness", details: "A cold and a temperature this morning." },
+    { absenceType: "medical_appointment", details: "Dental appointment at 10:00. Back after lunch." },
+    { absenceType: "illness", details: "Stomach upset overnight." },
+    { absenceType: "religious_observance", details: "Family Umrah trip." },
+    { absenceType: "illness", details: "Migraine, resting at home today." },
+    { absenceType: "travel", details: "Return flight from a family visit was delayed." },
+  ];
   for (let i = 0; i < 2; i++) {
     const s = nineA[i];
     const g = guardiansOf(s)[0];
-    await submit("absence_request", g.membershipId, s, at(schoolDay(-i, now), 6 + i, 45, now));
+    const k = ABSENCE_KINDS[i];
+    await submit("absence_request", g.membershipId, s, at(schoolDay(-i, now), 6 + i, 45, now), { ...k, startDate: dayKey(schoolDay(-i, now), now), endDate: dayKey(schoolDay(-i, now), now) });
   }
   for (let i = 0; i < 8; i++) {
     const s = r.pick(w.students.filter((x) => x.grade !== 9));
     const g = guardiansOf(s)[0];
     const day = schoolDay(-(3 + i * 6), now);
-    const req = await submit(i % 3 === 0 ? "early_pickup" : "absence_request", g.membershipId, s, at(day, 7, 10, now));
+    const pickup = i % 3 === 0;
+    const k = ABSENCE_KINDS[(i + 2) % ABSENCE_KINDS.length];
+    const req = await submit(pickup ? "early_pickup" : "absence_request", g.membershipId, s, at(day, 7, 10, now), pickup ? {} : { ...k, startDate: dayKey(day, now), endDate: dayKey(day, now) });
     const approver = await pendingApprover(req.id);
     if (approver) await decide(req.id, approver, "APPROVED", at(day, 9, 30, now));
   }
@@ -267,14 +305,17 @@ export async function seedHistory(w: SeedWorld, base: ExecCtx) {
     await submit("activity_registration", s.membershipId, s, at(schoolDay(-2, now), 14, 0, now), { activity: "debate" });
   }
   const teachersList = [...staff.values()].filter((s) => s.roles.includes("teacher"));
+  // Leave requests carry their dates; approved leave in the past needs no cover (see src/server/attendance/absences.ts).
+  const leave = (day: number, leaveType: string) => ({ leaveType, startDate: dayKey(day, now), endDate: dayKey(day, now), daysRequested: 1, ...(leaveType === "sick" ? { medicalCertificate: { name: "Medical certificate.pdf", size: 96_000, key: "sample:medical-certificate", type: "application/pdf" } } : {}) });
   for (let i = 0; i < 3; i++) {
     const t = teachersList[(i * 7) % teachersList.length];
-    await submit(i === 2 ? "field_trip_approval" : i === 1 ? "pd_request" : "staff_leave", t.membershipId, null, at(schoolDay(-i, now), 11 + i, 5, now));
+    const day = schoolDay(-i, now);
+    await submit(i === 2 ? "field_trip_approval" : i === 1 ? "pd_request" : "staff_leave", t.membershipId, null, at(day, 11 + i, 5, now), i === 0 ? leave(schoolDay(12, now), "annual") : {});
   }
   for (let i = 0; i < 5; i++) {
     const t = teachersList[(i * 5 + 3) % teachersList.length];
     const day = schoolDay(-(10 + i * 9), now);
-    const req = await submit(i % 2 ? "pd_request" : "staff_leave", t.membershipId, null, at(day, 12, 0, now));
+    const req = await submit(i % 2 ? "pd_request" : "staff_leave", t.membershipId, null, at(day, 12, 0, now), i % 2 ? {} : leave(day, i === 2 ? "compassionate" : "sick"));
     await decide(req.id, omar, "APPROVED", at(day + 1, 8, 50, now));
   }
 

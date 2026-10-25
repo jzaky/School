@@ -1,9 +1,9 @@
 import { getTranslations } from "next-intl/server";
-import { CalendarDays, ChevronLeft, ChevronRight, Settings2 } from "lucide-react";
+import { CalendarDays, ChevronLeft, ChevronRight, Lock, Settings2, StickyNote, UserRoundCheck } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { fmtDate } from "@/lib/format";
-import { personName } from "@/lib/i18n-data";
+import { personName, pick } from "@/lib/i18n-data";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { PageBody, PageHeader } from "@/components/app/page-header";
@@ -13,7 +13,7 @@ import { Pill } from "@/components/app/badges";
 import { Button } from "@/components/ui/button";
 import { WeekGrid } from "@/components/timetable/week-grid";
 import { CancelAbsenceButton, ReportAbsenceDialog } from "@/components/timetable/cover-actions";
-import { periodsOf, slotLessons, studentClassIds, teacherWeek, weekOf, yearOf, type GridData } from "@/server/timetable/queries";
+import { names, periodsOf, slotLessons, studentClassIds, teacherWeek, weekOf, yearOf, type GridData } from "@/server/timetable/queries";
 import { addDays, dateKey, keyToDate, weekdayOfKey } from "@/server/timetable/cover";
 import { dubaiDateKey } from "@/server/appointments/slots";
 
@@ -148,13 +148,75 @@ export default async function TimetablePage({ searchParams }: { searchParams: Pr
   );
 
   async function staffPanels() {
-    const [absences, covers] = await Promise.all([
+    const [absences, covers, upcomingCover] = await Promise.all([
       db.staffAbsence.findMany({ where: { membershipId: ctx.membershipId, status: { not: "CANCELLED" }, endsOn: { gte: keyToDate(today) } }, include: { covers: true }, orderBy: { startsOn: "asc" }, take: 10 }),
       db.coverAssignment.findMany({ where: { substituteId: ctx.membershipId, status: { in: ["ASSIGNED", "DONE"] }, date: { gte: keyToDate(addDays(today, -60)) } }, select: { date: true } }),
+      // Cover notices for this substitute: the lesson and the cover notes, never why the colleague is away.
+      db.coverAssignment.findMany({
+        where: { substituteId: ctx.membershipId, status: "ASSIGNED", date: { gte: keyToDate(today), lte: keyToDate(addDays(today, 14)) } },
+        select: { id: true, date: true, periodNo: true, classId: true, slotId: true, originalTeacherId: true, absence: { select: { coverNotes: true } } },
+        orderBy: [{ date: "asc" }, { periodNo: "asc" }],
+        take: 12,
+      }),
     ]);
     const thisWeek = covers.filter((c) => dateKey(c.date) >= monday && dateKey(c.date) <= addDays(monday, 6)).length;
+    const coverClasses = upcomingCover.length ? await db.schoolClass.findMany({ where: { id: { in: upcomingCover.map((c) => c.classId) } }, select: { id: true, nameEn: true, nameAr: true, room: true } }) : [];
+    const coverSlots = upcomingCover.length ? await db.timetableSlot.findMany({ where: { id: { in: upcomingCover.map((c) => c.slotId) } }, select: { id: true, room: true } }) : [];
+    const coverWho = await names(ctx, upcomingCover.map((c) => c.originalTeacherId));
+    const lessonOf = (day: number, no: number) => periods.find((p) => p.day === day && p.periodNo === no);
     return (
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2 [&>*]:min-w-0">
+        {upcomingCover.length > 0 && (
+          <Panel className="lg:col-span-2">
+            <PanelHeader title={t("coverNotices")} description={t("coverNoticesBody")} icon={<UserRoundCheck className="size-4" />} />
+            <ul className="grid gap-2 md:grid-cols-2" data-testid="cover-notices">
+              {upcomingCover.map((c) => {
+                const cls = coverClasses.find((x) => x.id === c.classId);
+                const room = coverSlots.find((x) => x.id === c.slotId)?.room ?? cls?.room;
+                const p = lessonOf(keyToDate(dateKey(c.date)).getUTCDay(), c.periodNo);
+                return (
+                  <li key={c.id} className="rounded-lg border border-gold/50 bg-gold-soft/50 p-3" data-testid="cover-notice">
+                    <div className="flex flex-wrap items-baseline justify-between gap-x-2">
+                      <span className="text-sm font-semibold">{cls ? pick(locale, cls.nameEn, cls.nameAr) : ""}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {fmtDate(prefs, c.date)} · {t("lessonN", { n: p?.lessonNo ?? c.periodNo })}
+                        {p && (
+                          <span className="ms-1 tabular-nums" dir="ltr">
+                            {p.start}
+                          </span>
+                        )}
+                        {room && (
+                          <>
+                            {" · "}
+                            {t("room")} <span dir="ltr">{room}</span>
+                          </>
+                        )}
+                      </span>
+                    </div>
+                    <div className="mt-1 text-xs">
+                      {t("coverFor", { name: coverWho.get(c.originalTeacherId) ?? "" })} <span className="text-muted-foreground">· {t("absentCoverArranged")}</span>
+                    </div>
+                    {c.absence.coverNotes ? (
+                      <p className="mt-2 flex items-start gap-1.5 rounded-md bg-card/80 px-2 py-1.5 text-xs" data-testid="cover-notes">
+                        <StickyNote className="mt-0.5 size-3 shrink-0 text-[oklch(0.55_0.1_80)]" />
+                        <span>
+                          <span className="font-medium">{t("notesForCover")}: </span>
+                          {c.absence.coverNotes}
+                        </span>
+                      </p>
+                    ) : (
+                      <p className="mt-2 text-xs text-muted-foreground">{t("noCoverNotes")}</p>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="mt-3 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+              <Lock className="size-3" />
+              {t("reasonNeverShared")}
+            </p>
+          </Panel>
+        )}
         <Panel>
           <PanelHeader title={t("myAbsences")} description={t("myAbsencesBody")} />
           {absences.length === 0 ? (
@@ -165,12 +227,30 @@ export default async function TimetablePage({ searchParams }: { searchParams: Pr
                 const ok = a.covers.filter((c) => c.status === "ASSIGNED" || c.status === "DONE").length;
                 return (
                   <li key={a.id} className="flex flex-wrap items-center justify-between gap-2 py-2.5" data-testid="my-absence">
-                    <div>
+                    <div className="min-w-0 space-y-1">
                       <div className="text-sm font-medium">
                         {fmtDate(prefs, a.startsOn)}
                         {dateKey(a.endsOn) !== dateKey(a.startsOn) && ` - ${fmtDate(prefs, a.endsOn)}`}
                       </div>
                       <div className="text-xs text-muted-foreground">{t("coveredOf", { covered: ok, total: a.covers.length })}</div>
+                      {(a.reasonKind || a.privateReason) && (
+                        <div className="inline-flex max-w-full items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-medium text-violet-700 ring-1 ring-inset ring-violet-200" data-testid="my-absence-reason">
+                          <Lock className="size-3 shrink-0" />
+                          <span className="min-w-0 truncate">
+                            {a.reasonKind ? t(`reasonKind.${a.reasonKind}`) : ""}
+                            {a.privateReason ? `${a.reasonKind ? " · " : ""}${a.privateReason}` : ""}
+                          </span>
+                        </div>
+                      )}
+                      {(a.reasonKind || a.privateReason) && <p className="text-[11px] text-muted-foreground">{t("onlyYouAndManagers")}</p>}
+                      {a.coverNotes && (
+                        <p className="flex items-start gap-1 text-[11px] text-muted-foreground">
+                          <StickyNote className="mt-0.5 size-3 shrink-0" />
+                          <span>
+                            {t("coverNotesShort")}: {a.coverNotes}
+                          </span>
+                        </p>
+                      )}
                     </div>
                     <div className="flex items-center gap-2">
                       <Pill tone={a.status === "COVERED" ? "success" : a.status === "PARTLY_COVERED" ? "warning" : "neutral"} dot>

@@ -49,7 +49,7 @@ export function Timeline({ items, empty }: { items: TimelineItem[]; empty?: Reac
                 </time>
               </div>
               {item.actor && <p className="text-xs text-muted-foreground">{item.actor}</p>}
-              {item.body && <p className="mt-1 whitespace-pre-line text-sm text-muted-foreground">{item.body}</p>}
+              {item.body && <p className="mt-1 whitespace-pre-line text-sm text-muted-foreground [unicode-bidi:plaintext]">{item.body}</p>}
             </div>
           </li>
         );

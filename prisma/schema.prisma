@@ -223,6 +223,39 @@ enum MessageChannel {
   WHATSAPP
 }
 
+/// Who can read a message in a request conversation (src/server/requests/conversation.ts).
+enum MessageVisibility {
+  /// Family and staff: the family (requester, guardians, the student where allowed) and the handling team.
+  SHARED
+  /// Staff only: an internal note for everyone on staff who can see the request. Never shown to families.
+  STAFF
+  /// Private: only the author and the staff members they chose.
+  PRIVATE
+}
+
+/// Where an attendance mark came from. Absences reported by the family keep their reason on the request.
+enum AttendanceSource {
+  REGISTER
+  PARENT
+  STUDENT
+  OFFICE
+}
+
+/// The private reason for a staff absence. Seen only by the absent person, the person who reported it
+/// and staff with absence.reasons; substitutes and colleagues never see it.
+enum StaffAbsenceReason {
+  SICK
+  MEDICAL_APPOINTMENT
+  ANNUAL_LEAVE
+  FAMILY
+  PARENTAL_LEAVE
+  RELIGIOUS
+  TRAINING
+  SCHOOL_BUSINESS
+  PERSONAL
+  OTHER
+}
+
 enum NotificationChannel {
   IN_APP
   EMAIL
@@ -760,6 +793,10 @@ model AttendanceRecord {
   date        DateTime         @db.Date
   status      AttendanceStatus
   minutesLate Int?
+  /// REGISTER for marks taken in class; PARENT or STUDENT when the family reported the absence.
+  source      AttendanceSource @default(REGISTER)
+  /// The absence report (Request) that excused this day. Its reason stays on the request.
+  requestId   String?
 
   student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
@@ -921,6 +958,7 @@ model Request {
   case       Case?             @relation(fields: [caseId], references: [id], onDelete: SetNull)
   runs       WorkflowRun[]
   approvals  ApprovalRequest[]
+  messages   RequestMessage[]
 
   @@unique([orgId, number])
   @@index([orgId, status])
@@ -1721,6 +1759,40 @@ model Message {
 
   @@index([orgId, caseId])
   @@index([orgId, requestId])
+}
+
+/// One message in a request conversation. Families only ever receive SHARED messages; STAFF notes are for
+/// staff who can see the request; PRIVATE notes for the author and `privateToIds`. Never searched or counted
+/// in analytics. Reads and writes go through src/server/requests/conversation.ts.
+model RequestMessage {
+  id             String            @id @default(cuid())
+  orgId          String
+  requestId      String
+  /// The author.
+  membershipId   String
+  visibility     MessageVisibility @default(SHARED)
+  /// PRIVATE only: the staff members, besides the author, who may read it.
+  privateToIds   String[]
+  body           String
+  /// Set when staff chose to notify the family on a wellbeing or safeguarding matter (a recorded decision).
+  familyNotified Boolean           @default(false)
+  createdAt      DateTime          @default(now())
+
+  request Request @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, requestId, createdAt])
+}
+
+/// When a member last opened a request conversation (unread indicators).
+model RequestThreadRead {
+  id           String   @id @default(cuid())
+  orgId        String
+  requestId    String
+  membershipId String
+  lastReadAt   DateTime
+
+  @@unique([requestId, membershipId])
+  @@index([orgId, membershipId])
 }
 
 model Notification {
@@ -2528,19 +2600,26 @@ enum CoverStatus {
 
 /// A teacher marked absent for a date range; cover is arranged for each affected lesson.
 model StaffAbsence {
-  id           String        @id @default(cuid())
-  orgId        String
-  membershipId String
-  startsOn     DateTime      @db.Date
-  endsOn       DateTime      @db.Date
-  allDay       Boolean       @default(true)
-  fromPeriod   Int?
-  toPeriod     Int?
-  reasonEn     String?
-  status       AbsenceStatus @default(REPORTED)
-  reportedById String
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id            String              @id @default(cuid())
+  orgId         String
+  membershipId  String
+  startsOn      DateTime            @db.Date
+  endsOn        DateTime            @db.Date
+  allDay        Boolean             @default(true)
+  fromPeriod    Int?
+  toPeriod      Int?
+  /// Private: why the person is away. Only the absent person, the reporter and absence.reasons holders see it.
+  reasonKind    StaffAbsenceReason?
+  /// Private: optional details for the reason. Never shown to substitutes or colleagues.
+  privateReason String?
+  /// Shared with substitutes: lesson instructions. Must not hold private or medical details.
+  coverNotes    String?
+  /// The leave request this absence came from, when it was approved through the staff_leave service.
+  requestId     String?
+  status        AbsenceStatus       @default(REPORTED)
+  reportedById  String
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
 
   covers CoverAssignment[]
 
@@ -3500,23 +3579,23 @@ enum LeadEmailStatus {
 /// A marketing lead from the public site: someone who asked for a career taster result or a school offer.
 /// Holds only what the visitor typed, with their consent time and the page it came from.
 model MarketingLead {
-  id              String            @id @default(cuid())
-  type            MarketingLeadType
+  id             String            @id @default(cuid())
+  type           MarketingLeadType
   /// Page the lead came from: "try" or "pricing".
-  source          String
-  name            String
-  email           String
-  role            MarketingLeadRole
-  schoolName      String?
-  locale          Locale            @default(en)
-  consentAt       DateTime
+  source         String
+  name           String
+  email          String
+  role           MarketingLeadRole
+  schoolName     String?
+  locale         Locale            @default(en)
+  consentAt      DateTime
   /// Version of the consent wording the visitor agreed to.
-  consentVersion  String
+  consentVersion String
   /// Taster: answers, scores and top areas. Offer: the estimator inputs.
-  payload         Json
-  emailStatus     LeadEmailStatus   @default(QUEUED)
-  emailSentAt     DateTime?
-  createdAt       DateTime          @default(now())
+  payload        Json
+  emailStatus    LeadEmailStatus   @default(QUEUED)
+  emailSentAt    DateTime?
+  createdAt      DateTime          @default(now())
 
   @@index([type, createdAt])
   @@index([createdAt])

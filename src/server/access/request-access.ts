@@ -39,6 +39,8 @@ export function requestWhere(ctx: Ctx): Prisma.RequestWhereInput {
     { approvals: { some: { assignees: { some: { membershipId: me } } } } },
     { case: { assigneeId: me } },
   ];
+  // The attendance team and the school nurse handle family absence reports (src/server/access/absence-access.ts).
+  if (ctx.can("attendance.reasons") || ctx.can("people.medical")) involved.push({ service: { key: "absence_request" }, sensitivity: { notIn: [...SENSITIVE] } });
   if (ctx.can("requests.view_all")) {
     return { orgId: ctx.orgId, OR: [{ sensitivity: { notIn: [...SENSITIVE] } }, ...involved] };
   }

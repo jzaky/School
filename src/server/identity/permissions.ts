@@ -64,6 +64,8 @@ export const PERMISSIONS = [
   "timetable.manage",
   "absence.report",
   "cover.manage",
+  "absence.reasons",
+  "attendance.reasons",
   "inspection.view",
   "career.partners",
   "integrations.manage",
@@ -103,6 +105,8 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
     descAr: "يدير إعدادات المدرسة والخدمات والنماذج ومسارات العمل والامتثال.",
     permissions: [
       "cover.manage",
+      "absence.reasons",
+      "attendance.reasons",
       "timetable.manage",
       "grades.view_all",
       "registration.manage",
@@ -153,6 +157,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "قيادة المدرسة مع الإشراف على جميع العمليات. الوصول إلى ملفات الحماية يخضع للتدقيق.",
     permissions: [
       "cover.manage",
+      "absence.reasons",
       "timetable.manage",
       "grades.view_all",
       "registration.manage",
@@ -188,6 +193,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
     descAr: "يتولى التسجيل والسجلات والوثائق الرسمية.",
     permissions: [
       "cover.manage",
+      "attendance.reasons",
       "timetable.manage",
       "grades.view_all",
       "registration.manage",
@@ -338,7 +344,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
     nameAr: "ممرض المدرسة",
     descEn: "Manages medical records and health visits.",
     descAr: "يدير السجلات الطبية والزيارات الصحية.",
-    permissions: [...STAFF_BASE, "people.medical", "appointments.host"],
+    permissions: [...STAFF_BASE, "people.medical", "attendance.reasons", "appointments.host"],
   },
   {
     key: "it_support",

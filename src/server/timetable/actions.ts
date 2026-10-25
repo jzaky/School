@@ -291,6 +291,8 @@ const absenceSchema = z.object({
   fromPeriod: z.number().int().min(1).max(20).nullable(),
   toPeriod: z.number().int().min(1).max(20).nullable(),
   notes: z.string().max(500).nullable(),
+  reasonKind: z.enum(["SICK", "MEDICAL_APPOINTMENT", "ANNUAL_LEAVE", "FAMILY", "PARENTAL_LEAVE", "RELIGIOUS", "TRAINING", "SCHOOL_BUSINESS", "PERSONAL", "OTHER"]).nullable().optional(),
+  privateReason: z.string().max(500).nullable().optional(),
 });
 
 /** Report an absence: your own (absence.report) or any teacher's (cover.manage). Cover is arranged straight away. */

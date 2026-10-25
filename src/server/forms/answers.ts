@@ -3,7 +3,7 @@ import { personName, pick, userName } from "@/lib/i18n-data";
 import type { FormSchema } from "./schema";
 import { fieldVisible } from "./logic";
 
-export type Answer = { id: string; label: string; value: string; kind: "text" | "signature" | "long" };
+export type Answer = { id: string; label: string; value: string; kind: "text" | "signature" | "long" | "file" };
 
 /** Turn stored submission data into readable label and value pairs in the viewer's language. */
 export async function formatAnswers(ctx: Ctx, schema: FormSchema, data: Record<string, unknown>): Promise<Answer[]> {
@@ -67,10 +67,17 @@ export async function formatAnswers(ctx: Ctx, schema: FormSchema, data: Record<s
         break;
       case "file":
         value = (v as { name?: string }).name ?? "";
+        kind = "file";
         break;
       case "long_text":
         value = String(v);
         kind = "long";
+        break;
+      case "date":
+        // Stored as YYYY-MM-DD; shown as a readable date in the viewer's language.
+        value = /^\d{4}-\d{2}-\d{2}$/.test(String(v))
+          ? new Intl.DateTimeFormat(locale === "ar" ? "ar-AE-u-nu-latn" : "en-GB", { weekday: "short", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(`${String(v)}T00:00:00Z`))
+          : String(v);
         break;
       default:
         value = String(v);

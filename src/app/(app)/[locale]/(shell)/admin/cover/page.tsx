@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { AlertTriangle, CalendarX, ChevronLeft, ChevronRight, ClipboardCheck, UserRoundCheck, Users } from "lucide-react";
+import { AlertTriangle, CalendarX, ChevronLeft, ChevronRight, ClipboardCheck, Lock, StickyNote, UserRoundCheck, Users } from "lucide-react";
+import { canSeeStaffAbsenceReason } from "@/server/access/absence-access";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { fmtDate, fmtNumber } from "@/lib/format";
@@ -175,7 +176,7 @@ export default async function CoverPage({ searchParams }: { searchParams: Promis
         )}
       </Panel>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2 [&>*]:min-w-0">
         <Panel>
           <PanelHeader title={t("upcomingAbsences")} description={t("upcomingAbsencesBody")} />
           {upcoming.length === 0 ? (
@@ -197,7 +198,7 @@ export default async function CoverPage({ searchParams }: { searchParams: Promis
               {fair.map((f) => (
                 <li key={f.id} className="text-sm">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="truncate">{who.get(f.id)}</span>
+                    <span className="min-w-0 truncate">{who.get(f.id)}</span>
                     <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{t("fairCounts", { total: f.total, week: f.week })}</span>
                   </div>
                   <div className="mt-1 h-1.5 rounded-full bg-muted">
@@ -227,9 +228,10 @@ export default async function CoverPage({ searchParams }: { searchParams: Promis
 
   function AbsenceRow({ a, name, cancel }: { a: (typeof upcoming)[number]; name: string; cancel?: boolean }) {
     const ok = a.covers.filter((c) => c.status === "ASSIGNED" || c.status === "DONE").length;
+    const seesReason = canSeeStaffAbsenceReason(ctx, a);
     return (
       <li className="flex flex-wrap items-center justify-between gap-2 py-2.5" data-testid="absence-row">
-        <div className="min-w-0">
+        <div className="min-w-0 space-y-1">
           <div className="truncate text-sm font-medium">{name}</div>
           <div className="text-xs text-muted-foreground">
             {fmtDate(prefs, a.startsOn)}
@@ -238,6 +240,28 @@ export default async function CoverPage({ searchParams }: { searchParams: Promis
             {a.allDay ? t("wholeDay") : t("someLessons")}
             {" · "}
             {t("coveredOf", { covered: ok, total: a.covers.length })}
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5">
+            {seesReason && (a.reasonKind || a.privateReason) ? (
+              <span className="inline-flex max-w-full items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-medium text-violet-700 ring-1 ring-inset ring-violet-200" title={t("privateReasonSeenBy")} data-testid="absence-reason">
+                <Lock className="size-3 shrink-0" />
+                <span className="min-w-0 truncate">
+                  {t("privateLabel")}: {a.reasonKind ? t(`reasonKind.${a.reasonKind}`) : ""}
+                  {a.privateReason ? `${a.reasonKind ? " · " : ""}${a.privateReason}` : ""}
+                </span>
+              </span>
+            ) : (a.reasonKind || a.privateReason) ? (
+              <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground" title={t("privateReasonHidden")} data-testid="absence-reason-hidden">
+                <Lock className="size-3" />
+                {t("reasonPrivate")}
+              </span>
+            ) : null}
+            {a.coverNotes && (
+              <span className="inline-flex max-w-full items-center gap-1 rounded-full bg-info-soft px-2 py-0.5 text-[11px] text-info" title={a.coverNotes}>
+                <StickyNote className="size-3 shrink-0" />
+                <span className="min-w-0 truncate">{t("coverNotesShort")}: {a.coverNotes}</span>
+              </span>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-2">

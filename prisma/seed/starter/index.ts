@@ -19,6 +19,8 @@ import { ensurePlanTemplates } from "@/server/curriculum/review";
 import { ensureGradeTemplate } from "@/server/grades/service";
 import { ensureTemplates as ensureApplicationTemplates } from "@/server/applications/service";
 import { ensureCareerEventTemplates } from "@/server/career-events/templates";
+import { ensureConversationTemplates } from "@/server/requests/conversation";
+import { ensureAbsenceTemplates } from "@/server/attendance/absences";
 import { ensureInspectionMapping } from "@/server/inspection/seed";
 import { SERVICES, SERVICE_CATEGORIES } from "../data/services";
 import { FORM_TEMPLATES } from "../data/forms";
@@ -238,6 +240,8 @@ export async function installStarterTemplate(db: Db, orgId: string, opts: Starte
   await ensurePlanTemplates(tx, orgId);
   await ensureApplicationTemplates(tx, orgId);
   await ensureCareerEventTemplates(tx, orgId);
+  await ensureConversationTemplates(tx, orgId);
+  await ensureAbsenceTemplates(tx, orgId);
 
   // --- Career catalogs ------------------------------------------------------------------------------
   if ((await db.aptitudeQuestion.count({ where: { orgId } })) === 0) {

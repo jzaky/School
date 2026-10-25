@@ -12,6 +12,7 @@ import { Pill } from "@/components/app/badges";
 import { Icon } from "@/components/icon";
 import { ApprovalPanel } from "@/components/requests/approval-panel";
 import { formatAnswers } from "@/server/forms/answers";
+import { absencePrivacy, canSeeAbsenceReason } from "@/server/access/absence-access";
 import type { FormSchema } from "@/server/forms/schema";
 
 export async function generateMetadata() {
@@ -43,7 +44,10 @@ export default async function ApprovalsPage() {
   const cards = await Promise.all(
     pending.map(async (p) => {
       const r = p.approval.request;
-      const answers = r?.submission ? (await formatAnswers(ctx, r.submission.formVersion.schema as unknown as FormSchema, r.submission.data as Record<string, unknown>)).filter((a) => a.kind !== "signature").slice(0, 6) : [];
+      // Absence reasons stay private even from an approver who may not read them (absence-access.ts).
+      const privacy = r ? absencePrivacy(r.service.key) : null;
+      const hidden = privacy && r && !canSeeAbsenceReason(ctx, r, r.submission?.data as Record<string, unknown> | null, { approver: true }) ? privacy.privateFields : [];
+      const answers = r?.submission ? (await formatAnswers(ctx, r.submission.formVersion.schema as unknown as FormSchema, r.submission.data as Record<string, unknown>)).filter((a) => a.kind !== "signature" && !hidden.includes(a.id)).slice(0, 6) : [];
       return { p, r, answers };
     }),
   );

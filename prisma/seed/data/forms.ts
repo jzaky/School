@@ -566,7 +566,10 @@ export const FORM_TEMPLATES: FormTemplate[] = [
     "absence_request",
     "attendance",
     t("Absence notification or request", "الإبلاغ عن غياب أو طلب إذن غياب"),
-    t("Planned absences during term time need approval from the Principal.", "يحتاج الغياب المخطط له خلال العام الدراسي إلى موافقة مدير المدرسة."),
+    t(
+      "Planned absences during term time need approval from the Principal. The reason and any medical note are private: only the attendance office and the school nurse can read them. Teachers see only that the absence is excused.",
+      "يحتاج الغياب المخطط له خلال العام الدراسي إلى موافقة مدير المدرسة. سبب الغياب وأي تقرير طبي معلومات خاصة لا يطّلع عليها إلا مكتب الحضور وممرضة المدرسة، ولا يرى المعلمون إلا أن الغياب بعذر.",
+    ),
     [
       {
         id: "absence",
@@ -602,7 +605,10 @@ export const FORM_TEMPLATES: FormTemplate[] = [
                 id: "medicalNote",
                 type: "file",
                 label: t("Medical certificate", "الشهادة الطبية"),
-                help: t("A medical certificate is required for illness absences of more than two days.", "يلزم إرفاق شهادة طبية في حال الغياب المرضي لأكثر من يومين."),
+                help: t(
+                  "A medical certificate is required for illness absences of more than two days. Only the attendance office and the school nurse can open it.",
+                  "يلزم إرفاق شهادة طبية في حال الغياب المرضي لأكثر من يومين. لا يفتحها إلا مكتب الحضور وممرضة المدرسة.",
+                ),
                 showIf: { fieldId: "absenceType", op: "in", value: ["illness", "medical_appointment"] },
               },
               {
@@ -2031,14 +2037,16 @@ export const FORM_TEMPLATES: FormTemplate[] = [
                 id: "medicalCertificate",
                 type: "file",
                 label: t("Medical certificate", "الشهادة الطبية"),
+                help: t("Private: only you and the people who manage staff absence can open it.", "خاص: لا يفتحها إلا أنت والمسؤولون عن غياب الموظفين."),
                 required: true,
                 showIf: { fieldId: "leaveType", op: "eq", value: "sick" },
               },
               {
                 id: "coverPlan",
                 type: "long_text",
-                label: t("Cover plan for your lessons", "خطة تغطية حصصك"),
-                maxLength: 1500,
+                label: t("Notes for cover", "ملاحظات للمعلم البديل"),
+                help: t("Substitutes see these lesson notes. Do not include private or medical details.", "يرى المعلمون البدلاء هذه الملاحظات. لا تذكر فيها تفاصيل خاصة أو طبية."),
+                maxLength: 500,
               },
               { id: "signature", type: "signature", label: t("Signature", "التوقيع"), required: true },
             ],
