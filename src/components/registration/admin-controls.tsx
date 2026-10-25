@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -19,8 +20,8 @@ export function useRegError() {
   return (code?: string) => (code && t.has(`error.${code}`) ? t(`error.${code}`) : t("error.generic"));
 }
 
-/** Open the registration window until a date (15:00 Dubai time), or close it now. */
-export function WindowControl({ open, deadlineDate }: { open: boolean; deadlineDate: string | null }) {
+/** Open the registration window until a date (15:00 Dubai time), or close it now. yearId: next year's course selection. */
+export function WindowControl({ open, deadlineDate, yearId = null }: { open: boolean; deadlineDate: string | null; yearId?: string | null }) {
   const t = useTranslations("registration");
   const err = useRegError();
   const router = useRouter();
@@ -31,7 +32,7 @@ export function WindowControl({ open, deadlineDate }: { open: boolean; deadlineD
 
   const save = (deadline: string | null) =>
     start(async () => {
-      const res = await setWindowAction({ deadline });
+      const res = await setWindowAction({ deadline, yearId });
       if (!res.ok) return void toast.error(err(res.error));
       toast.success(deadline ? t("windowOpened") : t("windowClosed"));
       setDialog(false);
@@ -42,13 +43,13 @@ export function WindowControl({ open, deadlineDate }: { open: boolean; deadlineD
     <>
       <Button variant="outline" onClick={() => setDialog(true)} data-testid="window-control">
         <CalendarClock className="size-4" />
-        {open ? t("changeDeadline") : t("openWindow")}
+        {open ? t("changeDeadline") : yearId ? t("next.openWindow") : t("openWindow")}
       </Button>
       <Dialog open={dialog} onOpenChange={setDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t("windowTitle")}</DialogTitle>
-            <DialogDescription>{t("windowBody")}</DialogDescription>
+            <DialogTitle>{yearId ? t("next.windowTitle") : t("windowTitle")}</DialogTitle>
+            <DialogDescription>{yearId ? t("next.windowBody") : t("windowBody")}</DialogDescription>
           </DialogHeader>
           <div className="space-y-1.5">
             <Label htmlFor="reg-deadline">{t("deadlineLabel")}</Label>
@@ -101,11 +102,42 @@ export function RunAllocationButton() {
 }
 
 export type SubjectOption = { id: string; code: string; label: string };
-export type OfferingValue = { id?: string; subjectId: string; kind: "CORE" | "OPTION"; optionBlock: string | null; prerequisites: string[]; periodsPerWeek: number };
+export type CourseOption = { id: string; label: string; curriculum: string; isAP: boolean };
+type Track = "BRITISH" | "IB" | "AMERICAN" | "UAE_MOE" | "JORDAN_TAWJIHI" | "CBSE" | "ISC" | "SABIS" | "OTHER";
+export type OfferingValue = {
+  id?: string;
+  subjectId: string;
+  kind: "CORE" | "OPTION";
+  optionBlock: string | null;
+  prerequisites: string[];
+  periodsPerWeek: number;
+  curriculum?: Track | null;
+  courseId?: string | null;
+  isAP?: boolean;
+};
 
 const BLOCKS = ["A", "B", "C", "D", "E", "F"];
+const TRACKS: Track[] = ["AMERICAN", "BRITISH", "IB", "UAE_MOE"];
+const ALL = "__all__";
+const NONE = "__none__";
 
-export function OfferingDialog({ grade, subjects, value, takenSubjectIds }: { grade: number; subjects: SubjectOption[]; value?: OfferingValue; takenSubjectIds: string[] }) {
+export function OfferingDialog({
+  grade,
+  subjects,
+  value,
+  takenSubjectIds,
+  courses = [],
+  yearId = null,
+}: {
+  grade: number;
+  subjects: SubjectOption[];
+  value?: OfferingValue;
+  takenSubjectIds: string[];
+  /** The school's catalog courses, to say what the offering counts as for universities. */
+  courses?: CourseOption[];
+  /** Next year's course selection (null: the current year). */
+  yearId?: string | null;
+}) {
   const t = useTranslations("registration");
   const err = useRegError();
   const router = useRouter();
@@ -118,13 +150,17 @@ export function OfferingDialog({ grade, subjects, value, takenSubjectIds }: { gr
   const [block, setBlock] = useState(value?.optionBlock ?? "A");
   const [prereq, setPrereq] = useState<string[]>(value?.prerequisites ?? []);
   const [periods, setPeriods] = useState(String(value?.periodsPerWeek ?? 4));
+  const [track, setTrack] = useState<Track | null>(value?.curriculum ?? null);
+  const [courseId, setCourseId] = useState<string | null>(value?.courseId ?? null);
+  const [isAP, setIsAP] = useState(value?.isAP ?? false);
+  const courseChoices = courses.filter((c) => !track || c.curriculum === track);
   const code = subjects.find((s) => s.id === subjectId)?.code;
   const periodsNum = Number(periods);
   const valid = subjectId && Number.isInteger(periodsNum) && periodsNum >= 1 && periodsNum <= 12;
 
   const submit = () =>
     start(async () => {
-      const res = await saveOfferingAction({ id: value?.id, gradeLevel: grade, subjectId, kind, optionBlock: kind === "OPTION" ? block : null, prerequisites: prereq, periodsPerWeek: periodsNum });
+      const res = await saveOfferingAction({ id: value?.id, gradeLevel: grade, subjectId, kind, optionBlock: kind === "OPTION" ? block : null, prerequisites: prereq, periodsPerWeek: periodsNum, yearId, curriculum: track, courseId, isAP });
       if (!res.ok) return void toast.error(err(res.error));
       toast.success(t("offeringSaved"));
       setOpen(false);
@@ -215,6 +251,56 @@ export function OfferingDialog({ grade, subjects, value, takenSubjectIds }: { gr
                 <Label htmlFor="offering-periods">{t("fieldPeriods")}</Label>
                 <Input id="offering-periods" type="number" min={1} max={12} value={periods} onChange={(e) => setPeriods(e.target.value)} dir="ltr" />
               </div>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="space-y-1.5">
+                <Label>{t("next.fieldTrack")}</Label>
+                <Select value={track ?? ALL} onValueChange={(v) => setTrack(v === ALL ? null : (v as Track))}>
+                  <SelectTrigger className="w-full" data-testid="offering-track">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={ALL}>{t("next.trackAll")}</SelectItem>
+                    {TRACKS.map((c) => (
+                      <SelectItem key={c} value={c}>
+                        {t(`next.track.${c}`)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label>{t("next.fieldCourse")}</Label>
+                <Select
+                  value={courseId ?? NONE}
+                  onValueChange={(v) => {
+                    const id = v === NONE ? null : v;
+                    setCourseId(id);
+                    const c = courses.find((x) => x.id === id);
+                    if (c) setIsAP(c.isAP);
+                  }}
+                >
+                  <SelectTrigger className="w-full" data-testid="offering-course">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={NONE}>{t("next.courseNone")}</SelectItem>
+                    {courseChoices.map((c) => (
+                      <SelectItem key={c.id} value={c.id}>
+                        {c.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <p className="-mt-2 text-xs text-muted-foreground">{t("next.courseHint")}</p>
+            <div className="flex items-start justify-between gap-3 rounded-lg border p-3">
+              <span>
+                <span className="block text-sm font-medium">{t("next.fieldAP")}</span>
+                <span className="block text-xs text-muted-foreground">{t("next.apHint")}</span>
+              </span>
+              <Switch checked={isAP} onCheckedChange={setIsAP} data-testid="offering-ap" aria-label={t("next.fieldAP")} />
             </div>
             <div className="space-y-1.5">
               <Label>{t("fieldPrereq")}</Label>

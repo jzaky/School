@@ -7,8 +7,9 @@
 // - A ProgramForEval is a programme with its CURRENT requirement rows: at most one general row
 //   (curriculum null) and one row per curriculum.
 // - evaluate() compares them line by line with three-valued logic (met, not met, unknown).
+import type { LevelGuide } from "./level-guide";
 
-export const ENGINE_VERSION = "pe-2";
+export const ENGINE_VERSION = "pe-3";
 
 export const CURRICULA = ["BRITISH", "IB", "AMERICAN", "UAE_MOE", "JORDAN_TAWJIHI", "CBSE", "ISC", "SABIS", "OTHER"] as const;
 export type Curriculum = (typeof CURRICULA)[number];
@@ -141,7 +142,10 @@ export type LineResult = {
   /** The result before unverified-requirement downgrading, for display. */
   underlying?: LineStatus;
   keys?: string[];
+  /** The level the line was checked against (see level-guide.ts; for American lines it follows the quote). */
   minimumLevel?: SubjectLevel | null;
+  /** Subject lines: how demanding the level is, in the curriculum's own terms (AP, A Level, HL...). */
+  guide?: LevelGuide;
   required?: string | number | null;
   have?: string | number | null;
   satisfiedBy?: SatisfiedBy[];

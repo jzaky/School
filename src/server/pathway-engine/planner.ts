@@ -5,8 +5,9 @@
 // 3. Propose a Grade 9 to 12 plan using ONLY courses the school offers, in the grades it offers them,
 //    with prerequisites in earlier grades and sensible core courses in every year.
 // AI never chooses courses or decides eligibility; it may only write a narrative summary of this output.
-import { applicableRows } from "./evaluate";
+import { applicableRows, guideFor } from "./evaluate";
 import { prerequisitesOf } from "./prereqs";
+import { isApCode } from "./level-guide";
 import { LEVEL_RANK, type CatalogCourse, type ProgramForEval, type StudentProfile, type SubjectLevel } from "./types";
 
 export type CareerFieldWeight = { careerKey: string; fieldKey: string; weight: number };
@@ -23,7 +24,8 @@ export type PlannerProgram = {
 };
 export type Goal = { careerKey?: string | null; fieldKeys?: string[]; countries?: string[] };
 
-export type SubjectNeed = { subjectKey: string; level: SubjectLevel | null; weight: number; required: boolean; programIds: string[] };
+/** onlyCodes: the line accepts only these AP courses (for example AP Calculus BC); other AP courses do not count. */
+export type SubjectNeed = { subjectKey: string; level: SubjectLevel | null; weight: number; required: boolean; programIds: string[]; onlyCodes?: string[] };
 export type PlanSource = "locked" | "requirement" | "recommended" | "prerequisite" | "core";
 export type PlanItemOut = {
   catalogId: string;
@@ -80,14 +82,15 @@ const maxLevel = (a: SubjectLevel | null, b: SubjectLevel | null) => (!a ? b : !
 
 /** Weighted subject needs of the target programmes for one curriculum. OR lines go to the most demanded key. */
 export function aggregateNeeds(targets: Array<{ p: PlannerProgram; weight: number }>, curriculum: string, catalog: CatalogCourse[]): SubjectNeed[] {
-  type Line = { keys: string[]; level: SubjectLevel | null; n: number; required: boolean; programId: string; weight: number };
+  type Line = { keys: string[]; level: SubjectLevel | null; n: number; required: boolean; programId: string; weight: number; onlyCodes?: string[] };
   const lines: Line[] = [];
   for (const { p, weight } of targets) {
     const { rows } = applicableRows(p.program, curriculum);
     for (const row of rows)
       for (const s of row.subjects) {
         const required = s.type === "REQUIRED" || s.type === "ONE_OF" || s.type === "TWO_OF";
-        lines.push({ keys: [...s.keys, ...(s.alternatives ?? [])], level: s.minimumLevel ?? null, n: s.type === "TWO_OF" ? 2 : 1, required, programId: p.id, weight: (required ? 1 : 0.3) * weight });
+        const guide = guideFor(s, row, curriculum);
+        lines.push({ keys: [...s.keys, ...(s.alternatives ?? [])], level: guide.effectiveLevel, n: s.type === "TWO_OF" ? 2 : 1, required, programId: p.id, weight: (required ? 1 : 0.3) * weight, onlyCodes: guide.onlyCodes });
       }
   }
   const offered = new Set(catalog.flatMap((c) => c.mappings.map((m) => m.subjectKey)));
@@ -100,6 +103,8 @@ export function aggregateNeeds(targets: Array<{ p: PlannerProgram; weight: numbe
     for (const key of ranked.slice(0, l.n)) {
       const n = needs.get(key) ?? { subjectKey: key, level: null, weight: 0, required: false, programIds: [] };
       n.level = maxLevel(n.level, l.level);
+      // The strictest course list wins (AP Calculus BC only beats AB or BC).
+      if (l.onlyCodes && (!n.onlyCodes || l.onlyCodes.length < n.onlyCodes.length)) n.onlyCodes = l.onlyCodes;
       n.weight += l.weight;
       n.required ||= l.required;
       if (!n.programIds.includes(l.programId)) n.programIds.push(l.programId);
@@ -175,14 +180,16 @@ export function planCourses(input: {
   }
 
   // 2. Requirement-driven courses, most demanded first.
+  const codeOk = (need: SubjectNeed, code: string | null | undefined) => !need.onlyCodes || !isApCode(code) || need.onlyCodes.includes(code!);
   const recordSatisfies = (need: SubjectNeed) =>
-    profile.courses.some((c) => c.status !== "PLANNED" && c.mappings.some((m) => m.subjectKey === need.subjectKey && (!need.level || LEVEL_RANK[m.level] >= LEVEL_RANK[need.level])));
-  const placedSatisfies = (need: SubjectNeed) => placed.some((p) => p.course?.mappings.some((m) => m.subjectKey === need.subjectKey && (!need.level || LEVEL_RANK[m.level] >= LEVEL_RANK[need.level])));
+    profile.courses.some((c) => c.status !== "PLANNED" && codeOk(need, c.code) && c.mappings.some((m) => m.subjectKey === need.subjectKey && (!need.level || LEVEL_RANK[m.level] >= LEVEL_RANK[need.level])));
+  const placedSatisfies = (need: SubjectNeed) => placed.some((p) => !!p.course && codeOk(need, p.course.code) && p.course.mappings.some((m) => m.subjectKey === need.subjectKey && (!need.level || LEVEL_RANK[m.level] >= LEVEL_RANK[need.level])));
   for (const need of needs) {
     if (!need.required && need.programIds.length < 2) continue;
     if (recordSatisfies(need) || placedSatisfies(need)) continue;
     const options = catalog
       .filter((c) => c.gradeLevels.some((g) => g >= startGrade))
+      .filter((c) => codeOk(need, c.code))
       .map((c) => ({ c, m: c.mappings.find((m) => m.subjectKey === need.subjectKey && (!need.level || LEVEL_RANK[m.level] >= LEVEL_RANK[need.level])) }))
       .filter((x) => x.m)
       .sort((a, b) => b.m!.rigor - a.m!.rigor || (a.c.code < b.c.code ? -1 : 1));

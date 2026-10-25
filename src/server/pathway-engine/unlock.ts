@@ -1,6 +1,7 @@
 // "Classes that open the most doors": simulate adding each course the school offers and count how
 // many target programmes change. Pure and deterministic, with a visible score breakdown.
-import { applicableRows, evaluate } from "./evaluate";
+import { applicableRows, evaluate, guideFor } from "./evaluate";
+import { meetsGuide } from "./level-guide";
 import { plannedCourse } from "./whatif";
 import { LEVEL_RANK, type CatalogCourse, type EvalResult, type MatchStatus, type ProgramForEval, type StudentProfile } from "./types";
 
@@ -27,7 +28,7 @@ export function earliestGrade(course: CatalogCourse, fromGrade: number): number 
 }
 
 /** Does the programme list a subject line, not met yet, that this course could fill (at the needed level)? */
-function linesFilledBy(course: CatalogCourse, program: ProgramForEval, curriculum: string, baseline: EvalResult): { required: boolean; recommended: boolean } {
+function linesFilledBy(course: CatalogCourse, gradeLevel: number, program: ProgramForEval, curriculum: string, baseline: EvalResult): { required: boolean; recommended: boolean } {
   const { rows } = applicableRows(program, curriculum);
   const met = new Set(baseline.lines.filter((l) => l.status === "met").map((l) => l.id));
   let required = false;
@@ -36,7 +37,8 @@ function linesFilledBy(course: CatalogCourse, program: ProgramForEval, curriculu
     for (const s of row.subjects) {
       if (met.has(s.id)) continue;
       const keys = [...s.keys, ...(s.alternatives ?? [])];
-      const fits = course.mappings.some((m) => keys.includes(m.subjectKey) && (!s.minimumLevel || LEVEL_RANK[m.level] >= LEVEL_RANK[s.minimumLevel]));
+      const guide = guideFor(s, row, curriculum);
+      const fits = course.mappings.some((m) => keys.includes(m.subjectKey) && meetsGuide(guide, { code: course.code, gradeLevel }, m.level, LEVEL_RANK));
       if (!fits) continue;
       if (s.type === "REQUIRED" || s.type === "ONE_OF" || s.type === "TWO_OF") required = true;
       else recommended = true;
@@ -70,7 +72,7 @@ export function rankUnlocks(
       const after = evaluate(next, p);
       if (OPEN.includes(after.status) && !OPEN.includes(before.status)) unlocked.push(p.id);
       else if (after.counts.requiredMissing < before.counts.requiredMissing) improved.push(p.id);
-      const f = linesFilledBy(course, p, profile.curriculum, before);
+      const f = linesFilledBy(course, gradeLevel, p, profile.curriculum, before);
       if (f.required) requiredBy.push(p.id);
       else if (f.recommended) recommendedBy++;
     });

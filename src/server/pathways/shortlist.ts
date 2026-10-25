@@ -47,6 +47,7 @@ export async function addProgramToShortlist(db: Db, orgId: string, input: { stud
       universityId: uni.id,
       programEn: program.nameEn,
       programAr: program.nameAr,
+      programId: program.id,
       category: input.category ?? categoryFor(check, uni.acceptanceRate),
       status: "RESEARCHING",
       deadline,

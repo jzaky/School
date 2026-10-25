@@ -15,6 +15,7 @@
 //   NEEDS_MANUAL_REVIEW (curriculum not covered, or a note to read) > POSSIBLY_ELIGIBLE (unknowns) >
 //   ON_TRACK (met, but some of it rests on predictions, plans or tests still to take) > ELIGIBLE.
 import { gradeRank, meetsGrade, parseGradeProfile } from "./grade-scales";
+import { levelGuide, meetsGuide, type LevelGuide } from "./level-guide";
 import {
   LEVEL_RANK,
   type Basis,
@@ -101,11 +102,11 @@ function bestMapping(course: StudentCourseInput, keys: string[]): CourseMapping 
   return best;
 }
 
-function candidateFor(course: StudentCourseInput, keys: string[], minLevel: SubjectLevel | null | undefined, minGrade: string | null | undefined): Candidate | null {
+function candidateFor(course: StudentCourseInput, keys: string[], guide: LevelGuide, minGrade: string | null | undefined): Candidate | null {
   const mapping = bestMapping(course, keys);
   if (!mapping) return null;
   const { basis, grade } = basisOf(course);
-  const levelOk = !minLevel || LEVEL_RANK[mapping.level] >= LEVEL_RANK[minLevel];
+  const levelOk = meetsGuide(guide, course, mapping.level, LEVEL_RANK);
   const base = { course, mapping, subjectKey: mapping.subjectKey, basis, grade, levelOk };
   if (!levelOk) return { ...base, status: "not_met" };
   const review = course.mappingStatus === "NEEDS_REVIEW" || mapping.confidence < MIN_MAPPING_CONFIDENCE;
@@ -150,8 +151,13 @@ function better(a: Candidate, b: Candidate): number {
 
 const worstBasis = (xs: Basis[]): Basis => (xs.includes("planned") ? "planned" : xs.includes("predicted") ? "predicted" : "final");
 
-function subjectLine(line: SubjectLine, row: RequirementRow, courses: StudentCourseInput[]): { result: LineResult; classes: ClassToTake | null } {
+/** Level guidance for a line: the row's curriculum, or the student's for a general row. */
+export const guideFor = (line: SubjectLine, row: { curriculum: string | null }, curriculum: string) => levelGuide(line, row.curriculum ?? curriculum);
+
+function subjectLine(line: SubjectLine, row: RequirementRow, courses: StudentCourseInput[], curriculum: string): { result: LineResult; classes: ClassToTake | null } {
   const keys = [...new Set([...line.keys, ...(line.alternatives ?? [])])];
+  const guide = guideFor(line, row, curriculum);
+  const minimumLevel = guide.effectiveLevel;
   const advisory = !COUNTED_SUBJECT_TYPES.has(line.type);
   const needed = line.type === "TWO_OF" ? 2 : 1;
   const common = {
@@ -161,7 +167,8 @@ function subjectLine(line: SubjectLine, row: RequirementRow, courses: StudentCou
     type: line.type,
     advisory,
     keys,
-    minimumLevel: line.minimumLevel ?? null,
+    minimumLevel,
+    guide,
     required: line.minimumGrade ?? null,
     confidence: row.confidence,
     evidenceQuote: line.evidenceQuote ?? null,
@@ -174,7 +181,7 @@ function subjectLine(line: SubjectLine, row: RequirementRow, courses: StudentCou
   // Candidates per key, best first.
   const byKey = new Map<string, Candidate[]>();
   for (const k of keys) {
-    const list = courses.map((c) => candidateFor(c, [k], line.minimumLevel, line.minimumGrade)).filter((c): c is Candidate => c !== null);
+    const list = courses.map((c) => candidateFor(c, [k], guide, line.minimumGrade)).filter((c): c is Candidate => c !== null);
     list.sort(better);
     byKey.set(k, list);
   }
@@ -225,7 +232,7 @@ function subjectLine(line: SubjectLine, row: RequirementRow, courses: StudentCou
   };
   // A class to take when no course at the needed level fills the slot (a low grade is a different gap).
   const atLevel = chosen.filter((c) => c.levelOk).length;
-  const classes = status === "not_met" && atLevel < needed ? { lineId: line.id, subjectKeys: keys, minimumLevel: line.minimumLevel ?? null, minimumGrade: line.minimumGrade ?? null, slots: needed - atLevel } : null;
+  const classes = status === "not_met" && atLevel < needed ? { lineId: line.id, subjectKeys: keys, minimumLevel, minimumGrade: line.minimumGrade ?? null, slots: needed - atLevel } : null;
   return { result, classes };
 }
 
@@ -380,10 +387,10 @@ export function evaluate(profile: StudentProfile, program: ProgramForEval): Eval
     const gp = gradeProfileLine(row, profile);
     if (gp) rowLines.push(gp);
     for (const s of row.subjects) {
-      const { result, classes } = subjectLine(s, row, profile.courses);
+      const { result, classes } = subjectLine(s, row, profile.courses, profile.curriculum);
       rowLines.push(result);
       if (classes) (result.advisory ? suggestedClasses : classesToTake).push(classes);
-      else if (result.advisory && result.status !== "met") suggestedClasses.push({ lineId: s.id, subjectKeys: result.keys ?? [], minimumLevel: s.minimumLevel ?? null, minimumGrade: s.minimumGrade ?? null, slots: 1 });
+      else if (result.advisory && result.status !== "met") suggestedClasses.push({ lineId: s.id, subjectKeys: result.keys ?? [], minimumLevel: result.minimumLevel ?? null, minimumGrade: s.minimumGrade ?? null, slots: 1 });
     }
     for (const g of groupTests(row.tests)) {
       const t = testLine(g, row, profile);
