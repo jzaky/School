@@ -3266,11 +3266,11 @@
       "error": "Could not update the university impact. Try again.",
       "intro": {
         "self": "Each option shows which of your {targets} target programmes need it, and how many of {checked} programmes worldwide it keeps open.",
-        "other": "Each option shows which of the student's {targets} target programmes need it, and how many of {checked} programmes worldwide it keeps open."
+        "other": "Each option shows which of {name}'s {targets} target programmes need it, and how many of {checked} programmes worldwide it keeps open."
       },
       "introNoTargets": {
         "self": "Each option shows how many of {checked} programmes worldwide it keeps open. Add universities to your list to see which ones need it.",
-        "other": "Each option shows how many of {checked} programmes worldwide it keeps open. The student has no university list yet."
+        "other": "Each option shows how many of {checked} programmes worldwide it keeps open. {name} has no university list yet."
       },
       "seeLevels": "Subject levels for every target",
       "updating": "Updating",
@@ -3303,7 +3303,9 @@
       },
       "summaryPrograms": "{n, plural, one {Keeps # programme open worldwide} other {Keeps # programmes open worldwide}}",
       "blocksLeft": "{done} of {total} blocks chosen. Choose one course in each block.",
-      "summaryEmpty": "Choose courses to see their university impact."
+      "summaryEmpty": "Choose courses to see their university impact.",
+      "explorePick": "Try other choices to see their university impact.",
+      "exploreNote": "View only. Choices you try here are not saved; the student, a parent or the registration team can save them."
     }
   },
   "grades": {
@@ -5154,7 +5156,14 @@
       "PORTFOLIO": "Portfolio",
       "REFERENCE": "Reference",
       "ESSAY": "Essay",
-      "OTHER": "Other requirement"
+      "OTHER": "Other requirement",
+      "NOT_ACCEPTED": "Not accepted for direct entry",
+      "FOUNDATION_REQUIRED": "Foundation year required",
+      "NOTE": "Note from the university",
+      "WORK_EXPERIENCE": "Work experience",
+      "HEALTH_CHECK": "Health check",
+      "ADMISSIONS_TEST": "Admissions test",
+      "ESSAYS": "Essays"
     },
     "section": {
       "overall": "Overall",

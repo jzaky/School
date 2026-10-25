@@ -119,7 +119,9 @@ export default async function SubjectsPage({ params, searchParams }: { params: P
   const canEdit = staffEdit || (!ctx.isStaff && win.open);
   const name = personName(student, locale);
   const title = ctx.isStudent ? t("subjectsTitle") : t("subjectsFor", { name });
-  const yearName = target ? pick(locale, target.nameEn, target.nameAr) : "";
+  // Year ranges such as 2027-2028 are isolated so they keep their order inside Arabic text.
+  const yr = (y: { nameEn: string; nameAr: string }) => `\u2066${pick(locale, y.nameEn, y.nameAr)}\u2069`;
+  const yearName = target ? yr(target) : "";
   const href = (y: "current" | "next") => `/subjects?${new URLSearchParams({ ...(ctx.isStudent ? {} : { student: student.id }), year: y }).toString()}`;
   const levelsHref = ctx.isStudent ? "/career/pathways#levels" : ctx.isParent ? `/career/pathways?student=${student.id}#levels` : `/career/pathways/${student.id}#levels`;
 
@@ -148,8 +150,8 @@ export default async function SubjectsPage({ params, searchParams }: { params: P
               data-testid={`year-tab-${y}`}
             >
               {y === "next"
-                ? t("next.tabNext", { grade: student.gradeLevel + 1, year: pick(locale, nextYear.nameEn, nextYear.nameAr) })
-                : t("next.tabCurrent", { grade: student.gradeLevel, year: pick(locale, years.year.nameEn, years.year.nameAr) })}
+                ? t("next.tabNext", { grade: student.gradeLevel + 1, year: yr(nextYear) })
+                : t("next.tabCurrent", { grade: student.gradeLevel, year: yr(years.year) })}
             </Link>
           ))}
         </nav>
@@ -201,6 +203,8 @@ export default async function SubjectsPage({ params, searchParams }: { params: P
           impact={impact}
           self={ctx.isStudent}
           levelsHref={levelsHref}
+          explore={ctx.isStaff && !staffEdit}
+          studentName={name}
         />
       )}
     </PageBody>

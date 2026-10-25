@@ -98,7 +98,7 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
         <div className="flex flex-wrap gap-1.5" data-testid="year-switch">
           {[false, true].map((n) => (
             <Link key={String(n)} href={yearHref(n)} className={cn("rounded-full border px-3 py-1 text-xs font-medium", n === isNext ? "border-brand bg-brand-soft text-brand" : "bg-card text-muted-foreground hover:text-foreground")} data-testid={`year-${n ? "next" : "current"}`}>
-              {n ? t("next.yearNext", { year: pick(locale, nextYear.nameEn, nextYear.nameAr) }) : t("next.yearCurrent", { year: pick(locale, thisYear.nameEn, thisYear.nameAr) })}
+              {n ? t("next.yearNext", { year: `\u2066${pick(locale, nextYear.nameEn, nextYear.nameAr)}\u2069` }) : t("next.yearCurrent", { year: `\u2066${pick(locale, thisYear.nameEn, thisYear.nameAr)}\u2069` })}
             </Link>
           ))}
         </div>
@@ -111,7 +111,7 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
           {win.deadline ? (win.open ? t("windowUntil", { date: fmtDateTime(prefs, win.deadline) }) : t("windowClosedOn", { date: fmtDateTime(prefs, win.deadline) })) : t("windowNever")}
         </span>
         <span className="text-muted-foreground">·</span>
-        <span className="text-muted-foreground">{pick(locale, year.nameEn, year.nameAr)}</span>
+        <span className="text-muted-foreground" dir="ltr">{pick(locale, year.nameEn, year.nameAr)}</span>
         {isNext && <span className="text-muted-foreground">· {t("next.noClassesYet")}</span>}
       </div>
       {isNext ? (
@@ -183,7 +183,13 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
     const gradeRegs = await db.subjectRegistration.findMany({ where: { academicYearId: year!.id, status: { in: [...ACTIVE] }, studentId: { in: students.map((s) => s.id) } } });
     const countBySubject = new Map<string, number>();
     for (const r of gradeRegs) countBySubject.set(r.subjectId, (countBySubject.get(r.subjectId) ?? 0) + 1);
-    const subjectOptions = subjects.map((s) => ({ id: s.id, code: s.code, label: pick(locale, s.nameEn, s.nameAr) }));
+    // Two subjects can share a name (the generic Physics and the American track's Physics): show the code then.
+    const labelCount = new Map<string, number>();
+    for (const s of subjects) labelCount.set(pick(locale, s.nameEn, s.nameAr), (labelCount.get(pick(locale, s.nameEn, s.nameAr)) ?? 0) + 1);
+    const subjectOptions = subjects.map((s) => {
+      const label = pick(locale, s.nameEn, s.nameAr);
+      return { id: s.id, code: s.code, label: (labelCount.get(label) ?? 0) > 1 ? `${label} (${s.code})` : label };
+    });
     const nameOfCode = (code: string) => {
       const s = subjects.find((x) => x.code === code);
       return s ? pick(locale, s.nameEn, s.nameAr) : code;
@@ -238,7 +244,7 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-4">
           <div className="flex items-center justify-between gap-2">
-            <h2 className="text-sm font-semibold">{isNext ? t("next.offeringsFor", { grade, year: pick(locale, year!.nameEn, year!.nameAr) }) : t("offeringsFor", { grade })}</h2>
+            <h2 className="text-sm font-semibold">{isNext ? t("next.offeringsFor", { grade, year: `\u2066${pick(locale, year!.nameEn, year!.nameAr)}\u2069` }) : t("offeringsFor", { grade })}</h2>
             <OfferingDialog grade={grade} yearId={isNext ? year!.id : null} subjects={subjectOptions} courses={courseOptions} takenSubjectIds={offerings.map((o) => o.subjectId)} />
           </div>
           {offerings.length === 0 ? (

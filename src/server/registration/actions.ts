@@ -176,7 +176,9 @@ export async function deleteOfferingAction(input: { id: string }) {
     if (!o) return fail("NOT_FOUND");
     const regs = await tx.subjectRegistration.findMany({ where: { orgId: ctx.orgId, academicYearId: o.academicYearId, subjectId: o.subjectId, status: { in: ["REQUESTED", "ALLOCATED", "WAITLISTED"] } }, select: { studentId: true } });
     if (regs.length) {
-      const inGrade = await tx.student.count({ where: { orgId: ctx.orgId, id: { in: regs.map((r) => r.studentId) }, gradeLevel: o.gradeLevel } });
+      // Next year's offerings are chosen by the students one grade below.
+      const offset = (await registrationYear(tx, ctx.orgId, o.academicYearId))?.gradeOffset ?? 0;
+      const inGrade = await tx.student.count({ where: { orgId: ctx.orgId, id: { in: regs.map((r) => r.studentId) }, gradeLevel: o.gradeLevel - offset } });
       if (inGrade > 0) return fail("IN_USE");
     }
     await tx.subjectOffering.delete({ where: { id: o.id } });

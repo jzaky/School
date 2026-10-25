@@ -623,8 +623,8 @@
           "يبيّن كل خيار أيّاً من برامجك المستهدفة الـ {targets} يتطلبه، وكم برنامجاً يُبقي متاحاً من أصل {checked} برنامجاً حول العالم."
         ],
         "other": [
-          "Each option shows which of the student's {targets} target programmes need it, and how many of {checked} programmes worldwide it keeps open.",
-          "يبيّن كل خيار أيّاً من البرامج المستهدفة الـ {targets} للطالب يتطلبه، وكم برنامجاً يُبقي متاحاً من أصل {checked} برنامجاً حول العالم."
+          "Each option shows which of {name}'s {targets} target programmes need it, and how many of {checked} programmes worldwide it keeps open.",
+          "يبيّن كل خيار أيّاً من البرامج المستهدفة الـ {targets} لـ {name} يتطلبه، وكم برنامجاً يُبقي متاحاً من أصل {checked} برنامجاً حول العالم."
         ]
       },
       "introNoTargets": {
@@ -633,8 +633,8 @@
           "يبيّن كل خيار كم برنامجاً يُبقي متاحاً من أصل {checked} برنامجاً حول العالم. أضف جامعات إلى قائمتك لترى أيها يتطلبه."
         ],
         "other": [
-          "Each option shows how many of {checked} programmes worldwide it keeps open. The student has no university list yet.",
-          "يبيّن كل خيار كم برنامجاً يُبقي متاحاً من أصل {checked} برنامجاً حول العالم. لا توجد قائمة جامعات للطالب بعد."
+          "Each option shows how many of {checked} programmes worldwide it keeps open. {name} has no university list yet.",
+          "يبيّن كل خيار كم برنامجاً يُبقي متاحاً من أصل {checked} برنامجاً حول العالم. لا توجد قائمة جامعات لـ {name} بعد."
         ]
       },
       "seeLevels": [
@@ -651,7 +651,7 @@
       ],
       "compareMore": [
         "{ap} keeps {n, plural, one {# more programme} other {# more programmes}} open than {regular}.",
-        "يُبقي اختيار {ap} {n, plural, one {برنامجاً إضافياً واحداً} two {برنامجين إضافيين} few {# برامج إضافية} many {# برنامجاً إضافياً} other {# برنامج إضافي}} متاحاً مقارنة بـ {regular}."
+        "يُبقي اختيار {ap} {n, plural, one {برنامجاً إضافياً واحداً} two {برنامجين إضافيين} few {# برامج إضافية} many {# برنامجاً إضافياً} other {# برنامج إضافي}} متاحاً مقارنة مع {regular}."
       ],
       "compareSame": [
         "{ap} and {regular} keep the same programmes open.",
@@ -735,11 +735,19 @@
       ],
       "blocksLeft": [
         "{done} of {total} blocks chosen. Choose one course in each block.",
-        "اخترت من {done} من أصل {total} مجموعات. اختر مادة واحدة من كل مجموعة."
+        "تم الاختيار في {done} من أصل {total} مجموعات. اختر مادة واحدة من كل مجموعة."
       ],
       "summaryEmpty": [
         "Choose courses to see their university impact.",
         "اختر المواد لترى أثرها على الجامعات."
+      ],
+      "explorePick": [
+        "Try other choices to see their university impact.",
+        "جرّب اختيارات أخرى لترى أثرها على الجامعات."
+      ],
+      "exploreNote": [
+        "View only. Choices you try here are not saved; the student, a parent or the registration team can save them.",
+        "للاطلاع فقط. لا تُحفظ الاختيارات التي تجرّبها هنا؛ يحفظها الطالب أو ولي الأمر أو فريق التسجيل."
       ]
     }
   },
@@ -805,6 +813,38 @@
           "مواد AP والمواد العادية للمسار الأمريكي، والإقبال على كل مادة، وعدد الطلاب الذين تتطلبها أهدافهم الجامعية."
         ]
       }
+    }
+  },
+  "catalog": {
+    "kind": {
+      "NOT_ACCEPTED": [
+        "Not accepted for direct entry",
+        "غير مقبول للقبول المباشر"
+      ],
+      "FOUNDATION_REQUIRED": [
+        "Foundation year required",
+        "تتطلب سنة تأسيسية"
+      ],
+      "NOTE": [
+        "Note from the university",
+        "ملاحظة من الجامعة"
+      ],
+      "WORK_EXPERIENCE": [
+        "Work experience",
+        "خبرة عملية"
+      ],
+      "HEALTH_CHECK": [
+        "Health check",
+        "فحص طبي"
+      ],
+      "ADMISSIONS_TEST": [
+        "Admissions test",
+        "اختبار قبول"
+      ],
+      "ESSAYS": [
+        "Essays",
+        "مقالات"
+      ]
     }
   }
 }

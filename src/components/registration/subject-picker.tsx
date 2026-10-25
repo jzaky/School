@@ -41,6 +41,8 @@ export function SubjectPicker({
   impact: initialImpact,
   self,
   levelsHref,
+  explore = false,
+  studentName = "",
 }: {
   studentId: string;
   yearId: string | null;
@@ -55,6 +57,9 @@ export function SubjectPicker({
   /** The student is looking at their own choices. */
   self: boolean;
   levelsHref: string;
+  /** Read-only staff (counselors): may try other choices to see their impact, never save them. */
+  explore?: boolean;
+  studentName?: string;
 }) {
   const t = useTranslations("registration");
   const locale = useLocale();
@@ -143,7 +148,7 @@ export function SubjectPicker({
             <p className="flex items-start gap-2">
               <GraduationCap className="mt-0.5 size-4 shrink-0 text-brand" />
               <span>
-                {totalTargets > 0 ? t(`impact.intro.${self ? "self" : "other"}`, { targets: totalTargets, checked: impact.checked }) : t(`impact.introNoTargets.${self ? "self" : "other"}`, { checked: impact.checked })}
+                {totalTargets > 0 ? t(`impact.intro.${self ? "self" : "other"}`, { targets: totalTargets, checked: impact.checked, name: studentName }) : t(`impact.introNoTargets.${self ? "self" : "other"}`, { checked: impact.checked, name: studentName })}
               </span>
             </p>
             <Link href={levelsHref} className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-brand hover:underline" data-testid="levels-link">
@@ -177,7 +182,7 @@ export function SubjectPicker({
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <h2 className="text-sm font-semibold">{t("blockN", { block })}</h2>
-                  <p className="mt-0.5 text-xs text-muted-foreground">{canEdit ? t("pickOne") : t("yourChoice")}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{canEdit ? t("pickOne") : explore ? t("impact.explorePick") : t("yourChoice")}</p>
                 </div>
                 {updating && impact && (
                   <span className="inline-flex items-center gap-1 text-xs text-muted-foreground" aria-live="polite">
@@ -224,13 +229,13 @@ export function SubjectPicker({
                       type="button"
                       role="radio"
                       aria-checked={selected}
-                      disabled={!canEdit || pending}
+                      disabled={(!canEdit && !explore) || pending}
                       onClick={() => setChosen((c) => ({ ...c, [block]: o.subjectId }))}
                       className={cn(
                         "flex items-start gap-2.5 rounded-lg border p-3 text-start transition-colors",
                         selected ? "border-brand bg-brand-soft/60 ring-1 ring-brand/30" : "hover:bg-muted/40",
-                        !canEdit && !selected && "opacity-60",
-                        !canEdit && "cursor-default",
+                        !canEdit && !explore && !selected && "opacity-60",
+                        !canEdit && !explore && "cursor-default",
                       )}
                       data-testid={`option-${o.code}`}
                     >
@@ -363,9 +368,9 @@ export function SubjectPicker({
             </Button>
           )
         ) : (
-          <p className="flex items-start gap-1.5 text-xs text-muted-foreground">
+          <p className="flex items-start gap-1.5 text-xs text-muted-foreground" data-testid="read-only-note">
             <Lock className="mt-0.5 size-3.5 shrink-0" />
-            {t("readOnly")}
+            {explore ? t("impact.exploreNote") : t("readOnly")}
           </p>
         )}
       </aside>
