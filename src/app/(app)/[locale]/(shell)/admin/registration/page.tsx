@@ -212,7 +212,7 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
             {pick(locale, o.nameEn, o.nameAr)}
             {o.isAP && (
               <Pill tone="violet" className="px-1.5 font-semibold">
-                <span data-testid="offering-ap">{t("impact.apBadge")}</span>
+                <span data-testid="offering-ap-badge">{t("impact.apBadge")}</span>
               </Pill>
             )}
             {o.curriculum && <Pill>{t(`next.track.${o.curriculum}`)}</Pill>}

@@ -20,7 +20,9 @@ import { at } from "../lib";
 const DAY = 86400_000;
 type Bi = { en: string; ar: string };
 
-/** American course subjects: curriculum course code and the generic subject whose department it joins. */
+/** American course subjects: curriculum course code and the generic subject whose department it joins.
+ * Courses whose name matches a subject the school already has (Physics, French, Economics) use that
+ * subject instead, so no two subjects share a name in pickers. */
 const US_SUBJECTS: Record<string, string> = {
   US_ENG10: "ENG",
   US_ENG11: "ENG",
@@ -32,7 +34,6 @@ const US_SUBJECTS: Record<string, string> = {
   AP_CALC_AB: "MATH",
   AP_CALC_BC: "MATH",
   AP_STATS: "MATH",
-  US_PHYS: "PHYS",
   AP_PHYS_1: "PHYS",
   AP_PHYS_C_MECH: "PHYS",
   US_CHEM_H: "CHEM",
@@ -43,12 +44,10 @@ const US_SUBJECTS: Record<string, string> = {
   US_WORLD_HIST: "HIST",
   AP_WORLD_HIST: "HIST",
   AP_MACRO: "ECON",
-  US_ECON: "ECON",
   AP_PSYCH: "PSY",
   US_BUSINESS: "BUS",
   US_ART: "ART",
   US_ROBOTICS: "DT",
-  US_FRENCH: "FR",
 };
 /** Courses the school catalog did not list yet, with the grades Horizon offers them in. */
 const EXTRA_SCHOOL_COURSES: Array<[string, number[], string]> = [
@@ -58,7 +57,9 @@ const EXTRA_SCHOOL_COURSES: Array<[string, number[], string]> = [
 
 type Spec = { subject: string; course: string; kind: "CORE" | "OPTION"; block?: string; periods: number; prereq?: string[]; notes?: Bi };
 const core = (subject: string, course: string, periods: number): Spec => ({ subject, course, kind: "CORE", periods });
-const opt = (block: string, course: string, periods: number, extra: Partial<Spec> = {}): Spec => ({ subject: course, course, kind: "OPTION", block, periods, ...extra });
+/** The school subject for a course: its own subject, or the existing one with the same name. */
+const SAME_NAME: Record<string, string> = { US_PHYS: "PHYS", US_FRENCH: "FR", US_ECON: "ECON" };
+const opt = (block: string, course: string, periods: number, extra: Partial<Spec> = {}): Spec => ({ subject: SAME_NAME[course] ?? course, course, kind: "OPTION", block, periods, ...extra });
 
 const AP_EXAM: Bi = { en: "Ends with the AP exam in May.", ar: "تنتهي باختبار AP في شهر مايو." };
 const NEXT_YEAR: Record<number, Spec[]> = {

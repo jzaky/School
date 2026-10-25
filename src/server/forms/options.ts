@@ -25,7 +25,17 @@ export async function loadPickerOptions(ctx: Ctx, schema: FormSchema | null) {
   const staffOptions: PickerOption[] = staff
     .map((m) => ({ value: m.id, label: userName(m.user, locale), hint: pick(locale, m.staffProfile?.jobTitleEn, m.staffProfile?.jobTitleAr), keywords: `${m.user.nameEn} ${m.user.nameAr ?? ""}` }))
     .sort((a, b) => a.label.localeCompare(b.label));
-  const subjectOptions: PickerOption[] = subjects.map((s) => ({ value: s.code, label: pick(locale, s.nameEn, s.nameAr), keywords: `${s.nameEn} ${s.nameAr} ${s.code}` }));
+  // Subjects taught this year (offered or with a class). Courses that only run next year (course
+  // selection) are left out; a school that has not set up offerings or classes sees every subject.
+  const year = await db.academicYear.findFirst({ where: { orgId, isCurrent: true }, select: { id: true } });
+  const taught = year
+    ? new Set([
+        ...(await db.subjectOffering.findMany({ where: { orgId, academicYearId: year.id }, select: { subjectId: true }, distinct: ["subjectId"] })).map((o) => o.subjectId),
+        ...(await db.schoolClass.findMany({ where: { orgId, academicYearId: year.id, subjectId: { not: null } }, select: { subjectId: true }, distinct: ["subjectId"] })).map((c) => c.subjectId!),
+      ])
+    : new Set<string>();
+  const listed = taught.size ? subjects.filter((s) => taught.has(s.id)) : subjects;
+  const subjectOptions: PickerOption[] = listed.map((s) => ({ value: s.code, label: pick(locale, s.nameEn, s.nameAr), keywords: `${s.nameEn} ${s.nameAr} ${s.code}` }));
   return { students: studentOptions, staff: staffOptions, subjects: subjectOptions, studentRows: students };
 }
 

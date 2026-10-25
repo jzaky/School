@@ -5827,25 +5827,25 @@
       },
       "take": {
         "course": {
-          "self": "Take {course}: {n} of your {total} targets need it",
-          "other": "Take {course}: {n} of {total} targets need it"
+          "self": "Take {course}: needed by {n} of your {total} targets",
+          "other": "Take {course}: needed by {n} of {total} targets"
         },
         "generic": {
           "AMERICAN": {
-            "self": "Take an AP course in {subject}: {n} of your {total} targets need it",
-            "other": "Take an AP course in {subject}: {n} of {total} targets need it"
+            "self": "Take an AP course in {subject}: needed by {n} of your {total} targets",
+            "other": "Take an AP course in {subject}: needed by {n} of {total} targets"
           },
           "BRITISH": {
-            "self": "Take A Level {subject}: {n} of your {total} targets need it",
-            "other": "Take A Level {subject}: {n} of {total} targets need it"
+            "self": "Take A Level {subject}: needed by {n} of your {total} targets",
+            "other": "Take A Level {subject}: needed by {n} of {total} targets"
           },
           "IB": {
-            "self": "Take {subject} at Higher Level: {n} of your {total} targets need it",
-            "other": "Take {subject} at Higher Level: {n} of {total} targets need it"
+            "self": "Take {subject} at Higher Level: needed by {n} of your {total} targets",
+            "other": "Take {subject} at Higher Level: needed by {n} of {total} targets"
           },
           "OTHER": {
-            "self": "Take {subject} at the advanced level: {n} of your {total} targets need it",
-            "other": "Take {subject} at the advanced level: {n} of {total} targets need it"
+            "self": "Take {subject} at the advanced level: needed by {n} of your {total} targets",
+            "other": "Take {subject} at the advanced level: needed by {n} of {total} targets"
           }
         }
       },

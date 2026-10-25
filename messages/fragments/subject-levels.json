@@ -200,52 +200,52 @@
       "take": {
         "course": {
           "self": [
-            "Take {course}: {n} of your {total} targets need it",
+            "Take {course}: needed by {n} of your {total} targets",
             "ادرس {course}: يتطلبها {n} من أصل {total} من برامجك المستهدفة"
           ],
           "other": [
-            "Take {course}: {n} of {total} targets need it",
+            "Take {course}: needed by {n} of {total} targets",
             "دراسة {course}: يتطلبها {n} من أصل {total} من البرامج المستهدفة"
           ]
         },
         "generic": {
           "AMERICAN": {
             "self": [
-              "Take an AP course in {subject}: {n} of your {total} targets need it",
+              "Take an AP course in {subject}: needed by {n} of your {total} targets",
               "ادرس مادة AP في {subject}: يتطلبها {n} من أصل {total} من برامجك المستهدفة"
             ],
             "other": [
-              "Take an AP course in {subject}: {n} of {total} targets need it",
+              "Take an AP course in {subject}: needed by {n} of {total} targets",
               "دراسة مادة AP في {subject}: يتطلبها {n} من أصل {total} من البرامج المستهدفة"
             ]
           },
           "BRITISH": {
             "self": [
-              "Take A Level {subject}: {n} of your {total} targets need it",
+              "Take A Level {subject}: needed by {n} of your {total} targets",
               "ادرس {subject} بمستوى A Level: يتطلبها {n} من أصل {total} من برامجك المستهدفة"
             ],
             "other": [
-              "Take A Level {subject}: {n} of {total} targets need it",
+              "Take A Level {subject}: needed by {n} of {total} targets",
               "دراسة {subject} بمستوى A Level: يتطلبها {n} من أصل {total} من البرامج المستهدفة"
             ]
           },
           "IB": {
             "self": [
-              "Take {subject} at Higher Level: {n} of your {total} targets need it",
+              "Take {subject} at Higher Level: needed by {n} of your {total} targets",
               "ادرس {subject} بالمستوى العالي: يتطلبها {n} من أصل {total} من برامجك المستهدفة"
             ],
             "other": [
-              "Take {subject} at Higher Level: {n} of {total} targets need it",
+              "Take {subject} at Higher Level: needed by {n} of {total} targets",
               "دراسة {subject} بالمستوى العالي: يتطلبها {n} من أصل {total} من البرامج المستهدفة"
             ]
           },
           "OTHER": {
             "self": [
-              "Take {subject} at the advanced level: {n} of your {total} targets need it",
+              "Take {subject} at the advanced level: needed by {n} of your {total} targets",
               "ادرس {subject} بالمستوى المتقدم: يتطلبها {n} من أصل {total} من برامجك المستهدفة"
             ],
             "other": [
-              "Take {subject} at the advanced level: {n} of {total} targets need it",
+              "Take {subject} at the advanced level: needed by {n} of {total} targets",
               "دراسة {subject} بالمستوى المتقدم: يتطلبها {n} من أصل {total} من البرامج المستهدفة"
             ]
           }
