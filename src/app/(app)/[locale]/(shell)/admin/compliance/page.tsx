@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { hostingInfo } from "@/lib/hosting";
 import { Archive, Bot, CheckCircle2, Clock, FileLock2, Globe2, IdCard, Scale, ShieldAlert, Timer, UserCheck, UserSearch } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
@@ -55,13 +56,14 @@ export default async function CompliancePage() {
   const basisOptions = ["consent", "contract_with_the_family", "legal_obligation", "vital_interests", "vital_interests_and_legal_obligation", "legitimate_interest_with_opt_out", "public_interest"];
   const canExit = ctx.can("school.manage");
 
-  const controls = [
+  const hosting = hostingInfo();
+  const controls: Array<{ key: string; ok: boolean; warnKey?: string }> = [
     { key: "rls", ok: true },
     { key: "encryption", ok: true },
     { key: "auditImmutable", ok: true },
     { key: "sensitiveAi", ok: !org.aiSensitiveDataEnabled },
     { key: "parentDecision", ok: true },
-    { key: "residency", ok: org.dataRegion.startsWith("me-") },
+    { key: "residency", ok: hosting.inUae, warnKey: hosting.region ? "warn" : "unknown" },
   ];
 
   return (
@@ -72,7 +74,7 @@ export default async function CompliancePage() {
         actions={
           <div className="flex flex-wrap gap-1.5">
             <Pill tone="info">{t("regulator", { regulator: label("regulators", org.regulator), emirate: label("emirates", org.emirate) })}</Pill>
-            <Pill tone="success">{t("region", { region: org.dataRegion })}</Pill>
+            {hosting.region ? <Pill tone={hosting.inUae ? "success" : "info"}>{t("region", { region: hosting.region })}</Pill> : <Pill tone="warning">{t("regionUnknown")}</Pill>}
           </div>
         }
       />
@@ -91,7 +93,7 @@ export default async function CompliancePage() {
               {c.ok ? <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-success" /> : <Clock className="mt-0.5 size-4 shrink-0 text-warning" />}
               <div>
                 <p className="text-sm font-medium">{t(`control.${c.key}.title`)}</p>
-                <p className="text-xs text-muted-foreground">{c.ok ? t(`control.${c.key}.ok`) : t(`control.${c.key}.warn`)}</p>
+                <p className="text-xs text-muted-foreground">{c.ok ? t(`control.${c.key}.ok`) : t(`control.${c.key}.${c.warnKey ?? "warn"}`, { region: hosting.region ?? "" })}</p>
               </div>
             </li>
           ))}

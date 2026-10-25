@@ -1383,7 +1383,8 @@
       "residency": {
         "title": "Data stays in the UAE",
         "ok": "Primary data is hosted in a UAE region.",
-        "warn": "Primary data is hosted outside the UAE."
+        "warn": "Primary data is hosted in {region}, outside the UAE. Cross-border transfer safeguards apply.",
+        "unknown": "The hosting region has not been confirmed yet."
       }
     },
     "aiTitle": "AI safeguards",
@@ -1512,7 +1513,8 @@
       "umm_al_quwain": "Umm Al Quwain",
       "ras_al_khaimah": "Ras Al Khaimah",
       "fujairah": "Fujairah"
-    }
+    },
+    "regionUnknown": "Hosting region: to be confirmed"
   },
   "adminTemplates": {
     "title": "Document templates",

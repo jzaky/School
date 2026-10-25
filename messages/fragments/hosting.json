@@ -1,0 +1,7 @@
+{"adminCompliance":{
+ "regionUnknown":["Hosting region: to be confirmed","منطقة الاستضافة: قيد التأكيد"],
+ "control":{"residency":{
+  "warn":["Primary data is hosted in {region}, outside the UAE. Cross-border transfer safeguards apply.","تُستضاف البيانات الأساسية في {region} خارج الإمارات، وتُطبّق ضمانات نقل البيانات عبر الحدود."],
+  "unknown":["The hosting region has not been confirmed yet.","لم يتم تأكيد منطقة الاستضافة بعد."]
+ }}
+}}

@@ -132,3 +132,7 @@ npm run db:seed             # seed the demo school
 npm run worker              # worker (loads .env when present)
 docker build -t school-os . # same image Railway builds
 ```
+
+## Hosting region (compliance page)
+- `HOSTING_REGION`: a readable label for where the platform actually runs, for example `EU West (Amsterdam)`. Shown on Administration > Compliance. When unset the page says the region is to be confirmed.
+- `DATA_RESIDENCY_UAE=true`: set only when primary data is really stored in a UAE region. It turns the "Data stays in the UAE" control green. Never set it otherwise.

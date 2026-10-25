@@ -41,6 +41,8 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq espeak-ng ffmpeg >/dev/null
           pip install -q torch --index-url https://download.pytorch.org/whl/cpu
           pip install -q "kokoro>=0.9.4" soundfile numpy
+          # spaCy 3.8.16 breaks the English model used by Kokoro (OverflowError); pin the last working set.
+          pip install -q "spacy==3.8.7" "preshed==3.0.10" "cymem==2.0.11" "murmurhash==1.0.13" "thinc==8.3.6" "srsly==2.5.1" "blis==1.3.0"
       - name: Narration
         run: python scripts/media/tts.py --script "${{ inputs.script }}" --out "${{ inputs.out }}" --voice "${{ inputs.voice }}"
       - name: Music bed
