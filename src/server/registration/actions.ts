@@ -7,7 +7,9 @@ import { getCtx, type Ctx } from "@/server/context";
 import { tenantTx } from "@/lib/tenant-db";
 import { audit } from "@/server/audit/audit";
 import { canSeeStudent } from "@/server/access/student-access";
-import { currentYear, getWindow, moveStudent, runAllocation, saveRegistration, setWindow } from "./service";
+import { currentYear, getWindow, moveStudent, registrationYear, runAllocation, saveRegistration, setWindow } from "./service";
+import { actorFromCtx, EngineAccessError } from "@/server/pathway-engine/access";
+import { electiveImpactFor } from "@/server/pathway-engine/levels-service";
 import { importRegistrationRows, previewRegistrationRows, RegImportTooLargeError } from "./import";
 import type { ChoiceError } from "@/lib/registration";
 
@@ -35,7 +37,7 @@ async function sourceFor(ctx: Ctx, studentId: string): Promise<RegistrationSourc
   return null;
 }
 
-const saveSchema = z.object({ studentId: z.string().min(1), optionSubjectIds: z.array(z.string().min(1)).max(20) });
+const saveSchema = z.object({ studentId: z.string().min(1), optionSubjectIds: z.array(z.string().min(1)).max(20), yearId: z.string().min(1).nullable().optional() });
 
 /** Submit a student's option choices. Core subjects are registered automatically. Allocation runs straight away. */
 export async function saveRegistrationAction(input: z.input<typeof saveSchema>) {
@@ -45,15 +47,17 @@ export async function saveRegistrationAction(input: z.input<typeof saveSchema>) 
   const d = parsed.data;
   const source = await sourceFor(ctx, d.studentId);
   if (!source) return fail("FORBIDDEN");
+  const target = await tenantTx(ctx.orgId, (tx) => registrationYear(tx, ctx.orgId, d.yearId));
+  if (!target) return fail("NO_YEAR");
   if (source !== "STAFF") {
-    const win = await tenantTx(ctx.orgId, (tx) => getWindow(tx, ctx.orgId));
+    const win = await tenantTx(ctx.orgId, (tx) => getWindow(tx, ctx.orgId, new Date(), { yearId: target.year.id, next: target.next }));
     if (!win.open) return fail("CLOSED");
   }
   const res = await tenantTx(
     ctx.orgId,
     async (tx) => {
-      const r = await saveRegistration(tx, ctx.orgId, { studentId: d.studentId, optionSubjectIds: d.optionSubjectIds, source, actorId: ctx.membershipId });
-      if (r.ok) await audit(tx, ctx.orgId, { ...actorOf(ctx), action: "registration.submit", entityType: "Student", entityId: d.studentId, meta: { source, options: d.optionSubjectIds.length, ...r.summary } });
+      const r = await saveRegistration(tx, ctx.orgId, { studentId: d.studentId, optionSubjectIds: d.optionSubjectIds, source, actorId: ctx.membershipId, academicYearId: target.year.id });
+      if (r.ok) await audit(tx, ctx.orgId, { ...actorOf(ctx), action: target.next ? "registration.select_next_year" : "registration.submit", entityType: "Student", entityId: d.studentId, meta: { source, yearId: target.year.id, options: d.optionSubjectIds.length, ...r.summary } });
       return r;
     },
     { timeout: 30_000 },
@@ -100,6 +104,7 @@ export async function moveStudentAction(input: z.input<typeof moveSchema>) {
   return { ok: true as const };
 }
 
+const CURRICULA = ["BRITISH", "IB", "AMERICAN", "UAE_MOE", "JORDAN_TAWJIHI", "CBSE", "ISC", "SABIS", "OTHER"] as const;
 const offeringSchema = z.object({
   id: z.string().optional(),
   gradeLevel: z.number().int().min(1).max(13),
@@ -108,6 +113,13 @@ const offeringSchema = z.object({
   optionBlock: z.string().trim().toUpperCase().regex(/^[A-Z]$/).nullable().optional(),
   prerequisites: z.array(z.string().trim().toUpperCase().min(1).max(20)).max(6),
   periodsPerWeek: z.number().int().min(1).max(12),
+  /** The year the offering is for: the current year (default) or next year's course selection. */
+  yearId: z.string().min(1).nullable().optional(),
+  /** The track: null for every track. */
+  curriculum: z.enum(CURRICULA).nullable().optional(),
+  /** The curriculum course it counts as for universities. */
+  courseId: z.string().min(1).nullable().optional(),
+  isAP: z.boolean().optional(),
 });
 
 /** Add or edit a subject offering for a grade in the current year. */
@@ -119,12 +131,25 @@ export async function saveOfferingAction(input: z.input<typeof offeringSchema>) 
   const d = parsed.data;
   if (d.kind === "OPTION" && !d.optionBlock) return fail("BLOCK_REQUIRED");
   const res = await tenantTx(ctx.orgId, async (tx): Promise<Fail | { ok: true }> => {
-    const year = await currentYear(tx, ctx.orgId);
-    if (!year) return fail("NO_YEAR");
+    const target = await registrationYear(tx, ctx.orgId, d.yearId);
+    if (!target) return fail("NO_YEAR");
+    const year = target.year;
     const subject = await tx.subject.findFirst({ where: { orgId: ctx.orgId, id: d.subjectId }, select: { code: true } });
     if (!subject) return fail("INVALID");
     if (d.prerequisites.includes(subject.code.toUpperCase())) return fail("SELF_PREREQ");
-    const data = { kind: d.kind, optionBlock: d.kind === "OPTION" ? d.optionBlock! : null, prerequisites: [...new Set(d.prerequisites)], periodsPerWeek: d.periodsPerWeek };
+    if (d.courseId) {
+      const course = await tx.curriculumCourse.findFirst({ where: { id: d.courseId, OR: [{ orgId: null }, { orgId: ctx.orgId }] }, select: { id: true } });
+      if (!course) return fail("INVALID");
+    }
+    const data = {
+      kind: d.kind,
+      optionBlock: d.kind === "OPTION" ? d.optionBlock! : null,
+      prerequisites: [...new Set(d.prerequisites)],
+      periodsPerWeek: d.periodsPerWeek,
+      ...(d.curriculum !== undefined ? { curriculum: d.curriculum } : {}),
+      ...(d.courseId !== undefined ? { courseId: d.courseId } : {}),
+      ...(d.isAP !== undefined ? { isAP: d.isAP } : {}),
+    };
     if (d.id) {
       const existing = await tx.subjectOffering.findFirst({ where: { orgId: ctx.orgId, id: d.id } });
       if (!existing) return fail("NOT_FOUND");
@@ -162,7 +187,7 @@ export async function deleteOfferingAction(input: { id: string }) {
   return res;
 }
 
-const windowSchema = z.object({ deadline: z.string().datetime({ offset: true }).nullable() });
+const windowSchema = z.object({ deadline: z.string().datetime({ offset: true }).nullable(), yearId: z.string().min(1).nullable().optional() });
 
 /** Open the registration window until a deadline, or close it now (deadline null). */
 export async function setWindowAction(input: z.input<typeof windowSchema>) {
@@ -173,10 +198,15 @@ export async function setWindowAction(input: z.input<typeof windowSchema>) {
   const now = new Date();
   const deadline = parsed.data.deadline ? new Date(parsed.data.deadline) : now;
   if (parsed.data.deadline && deadline.getTime() <= now.getTime()) return fail("PAST_DEADLINE");
-  await tenantTx(ctx.orgId, async (tx) => {
-    const ev = await setWindow(tx, ctx.orgId, deadline, ctx.membershipId);
-    await audit(tx, ctx.orgId, { ...actorOf(ctx), action: parsed.data.deadline ? "registration.window_open" : "registration.window_close", entityType: "CalendarEvent", entityId: ev.id, meta: { deadline: deadline.toISOString() } });
+  const done = await tenantTx(ctx.orgId, async (tx) => {
+    const target = await registrationYear(tx, ctx.orgId, parsed.data.yearId);
+    if (!target) return false;
+    const next = target.next ? { yearId: target.year.id, nameEn: target.year.nameEn, nameAr: target.year.nameAr } : undefined;
+    const ev = await setWindow(tx, ctx.orgId, deadline, ctx.membershipId, { next });
+    await audit(tx, ctx.orgId, { ...actorOf(ctx), action: parsed.data.deadline ? "registration.window_open" : "registration.window_close", entityType: "CalendarEvent", entityId: ev.id, meta: { deadline: deadline.toISOString(), yearId: target.year.id } });
+    return true;
   });
+  if (!done) return fail("NO_YEAR");
   refresh();
   revalidatePath("/[locale]/calendar", "page");
   return { ok: true as const };
@@ -209,6 +239,23 @@ export async function importRegistrationsAction(input: { fileName: string; rows:
     return { ok: true as const, total: res.total, succeeded: res.succeeded, failed: res.failed, allocation: res.allocation };
   } catch (e) {
     if (e instanceof RegImportTooLargeError) return fail("TOO_MANY_ROWS");
+    throw e;
+  }
+}
+
+const impactSchema = z.object({ studentId: z.string().min(1), yearId: z.string().min(1).nullable().optional(), chosen: z.array(z.string().min(1)).max(20) });
+
+/** University impact of each option in a student's picker, for the choices made so far. Read only. */
+export async function electiveImpactAction(input: z.input<typeof impactSchema>) {
+  const parsed = impactSchema.safeParse(input);
+  if (!parsed.success) return fail("INVALID");
+  const ctx = await getCtx();
+  if (!(await canSeeStudent(ctx, parsed.data.studentId))) return fail("FORBIDDEN");
+  try {
+    const impact = await electiveImpactFor(await actorFromCtx(ctx), parsed.data.studentId, { yearId: parsed.data.yearId, chosen: parsed.data.chosen });
+    return { ok: true as const, impact };
+  } catch (e) {
+    if (e instanceof EngineAccessError) return fail("FORBIDDEN");
     throw e;
   }
 }

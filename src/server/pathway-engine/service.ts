@@ -73,7 +73,7 @@ export type LoadedProfile = { student: StudentSummary; profile: StudentProfile; 
 type MappingRow = { courseId: string; orgId: string | null; canonicalSubjectKey: string; level: SubjectLevel; rigorScore: number; confidence: number };
 
 /** Mappings per curriculum course: global rows, overridden by the school's own rows for the same subject. */
-async function mappingsFor(db: TenantDb, orgId: string, courseIds: string[]): Promise<Map<string, CourseMapping[]>> {
+export async function mappingsFor(db: TenantDb, orgId: string, courseIds: string[]): Promise<Map<string, CourseMapping[]>> {
   const out = new Map<string, CourseMapping[]>();
   if (!courseIds.length) return out;
   const rows: MappingRow[] = await db.curriculumCourseMapping.findMany({ where: { courseId: { in: courseIds }, ...catalogScope(orgId) } });

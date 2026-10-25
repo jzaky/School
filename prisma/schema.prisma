@@ -2088,18 +2088,24 @@ enum RegistrationSource {
 
 /// A subject offered to a grade in a year: core (everyone) or an option in a block.
 model SubjectOffering {
-  id             String       @id @default(cuid())
+  id             String            @id @default(cuid())
   orgId          String
   academicYearId String
   subjectId      String
   gradeLevel     Int
-  kind           OfferingKind @default(CORE)
+  kind           OfferingKind      @default(CORE)
   optionBlock    String?
   prerequisites  String[]
-  periodsPerWeek Int          @default(4)
+  periodsPerWeek Int               @default(4)
   notesEn        String?
   notesAr        String?
-  createdAt      DateTime     @default(now())
+  /// The track the offering is for (American, British...). Null: every track.
+  curriculum     SchoolCurriculum?
+  /// The curriculum course it counts as for universities (CurriculumCourse id), for example AP Calculus BC.
+  courseId       String?
+  /// An Advanced Placement course.
+  isAP           Boolean           @default(false)
+  createdAt      DateTime          @default(now())
 
   @@unique([orgId, academicYearId, subjectId, gradeLevel])
   @@index([orgId])

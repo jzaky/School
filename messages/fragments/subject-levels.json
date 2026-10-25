@@ -1,0 +1,810 @@
+{
+  "engine": {
+    "guide": {
+      "cls": {
+        "AP_REQUIRED": [
+          "AP required",
+          "يتطلب مادة AP"
+        ],
+        "AP_ADVICE": [
+          "AP recommended",
+          "يُفضَّل مادة AP"
+        ],
+        "AP_OR_REGULAR": [
+          "AP or a regular course",
+          "AP أو مادة عادية"
+        ],
+        "SENIOR": [
+          "Senior-level course",
+          "مادة من الصفوف العليا"
+        ],
+        "ANY_LEVEL": [
+          "Any level",
+          "أي مستوى"
+        ],
+        "A_LEVEL": [
+          "A Level",
+          "مستوى A Level"
+        ],
+        "AS_LEVEL": [
+          "AS Level",
+          "مستوى AS"
+        ],
+        "GCSE": [
+          "GCSE",
+          "مستوى GCSE"
+        ],
+        "IB_HL": [
+          "Higher Level (HL)",
+          "المستوى العالي (HL)"
+        ],
+        "IB_SL": [
+          "Standard Level (SL)",
+          "المستوى العادي (SL)"
+        ]
+      },
+      "level": {
+        "FOUNDATION": [
+          "Foundation level",
+          "مستوى تأسيسي"
+        ],
+        "STANDARD": [
+          "Standard level",
+          "مستوى قياسي"
+        ],
+        "ADVANCED": [
+          "Advanced level",
+          "مستوى متقدم"
+        ],
+        "HIGHER": [
+          "Higher level",
+          "مستوى عالٍ"
+        ]
+      },
+      "hint": {
+        "AP_REQUIRED": [
+          "The university's page asks for an AP course or AP exam scores.",
+          "تطلب صفحة الجامعة مادة AP أو درجات في اختبارات AP."
+        ],
+        "BC_ONLY": [
+          "Only AP Calculus BC meets this. AP Calculus AB does not.",
+          "لا يستوفي هذا الشرط إلا التفاضل والتكامل BC (AP)، ولا يكفي التفاضل والتكامل AB."
+        ],
+        "AP_OR_REGULAR": [
+          "AP is one accepted route. A regular course is another.",
+          "مادة AP طريق مقبول، والمادة العادية طريق آخر مقبول."
+        ],
+        "SENIOR": [
+          "A Grade {grade} course or an AP course meets this. The page does not ask for AP.",
+          "تستوفيه مادة من الصف {grade} أو مادة AP. لا تطلب الصفحة مادة AP."
+        ],
+        "ANY_LEVEL": [
+          "A regular course is enough. The page states no level.",
+          "تكفي المادة العادية. لا تحدد الصفحة مستوى معيناً."
+        ],
+        "A_LEVEL": [
+          "A full A Level in the subject.",
+          "شهادة A Level كاملة في المادة."
+        ],
+        "AS_LEVEL": [
+          "An AS Level is enough.",
+          "يكفي مستوى AS."
+        ],
+        "GCSE": [
+          "A GCSE or IGCSE is enough.",
+          "يكفي مستوى GCSE أو IGCSE."
+        ],
+        "IB_HL": [
+          "The subject at Higher Level.",
+          "المادة بالمستوى العالي."
+        ],
+        "IB_SL": [
+          "Standard Level is enough.",
+          "يكفي المستوى العادي."
+        ]
+      }
+    },
+    "levels": {
+      "title": [
+        "Subject levels for the targets",
+        "مستويات المواد للبرامج المستهدفة"
+      ],
+      "desc": {
+        "AMERICAN": [
+          "What each target programme asks for in each subject: an AP course, or whether a regular course is enough. Read from each university's own page.",
+          "ما يطلبه كل برنامج مستهدف في كل مادة: مادة AP، أم أن المادة العادية تكفي. مأخوذ من صفحة كل جامعة."
+        ],
+        "BRITISH": [
+          "What each target programme asks for in each subject: an A Level, or whether GCSE is enough. Read from each university's own page.",
+          "ما يطلبه كل برنامج مستهدف في كل مادة: مستوى A Level، أم أن GCSE يكفي. مأخوذ من صفحة كل جامعة."
+        ],
+        "IB": [
+          "What each target programme asks for in each subject: Higher Level, or whether Standard Level is enough. Read from each university's own page.",
+          "ما يطلبه كل برنامج مستهدف في كل مادة: المستوى العالي، أم أن المستوى العادي يكفي. مأخوذ من صفحة كل جامعة."
+        ],
+        "OTHER": [
+          "What each target programme asks for in each subject, and at what level. Read from each university's own page.",
+          "ما يطلبه كل برنامج مستهدف في كل مادة وبأي مستوى. مأخوذ من صفحة كل جامعة."
+        ]
+      },
+      "source": {
+        "shortlist": [
+          "{n, plural, one {# programme on the university list} other {# programmes on the university list}}",
+          "{n, plural, zero {لا برامج في قائمة الجامعات} one {برنامج واحد في قائمة الجامعات} two {برنامجان في قائمة الجامعات} few {# برامج في قائمة الجامعات} many {# برنامجاً في قائمة الجامعات} other {# برنامج في قائمة الجامعات}}"
+        ],
+        "goal": [
+          "{n, plural, one {# programme that matches the goal} other {# programmes that match the goal}}",
+          "{n, plural, zero {لا برامج تطابق الهدف} one {برنامج واحد يطابق الهدف} two {برنامجان يطابقان الهدف} few {# برامج تطابق الهدف} many {# برنامجاً يطابق الهدف} other {# برنامج يطابق الهدف}}"
+        ],
+        "none": [
+          "No targets yet",
+          "لا برامج مستهدفة بعد"
+        ]
+      },
+      "empty": [
+        "No target programmes yet. Add universities to the list, or set a goal above, to see the level each subject needs.",
+        "لا توجد برامج مستهدفة بعد. أضف جامعات إلى القائمة أو حدد هدفاً في الأعلى لترى المستوى الذي تحتاجه كل مادة."
+      ],
+      "noLines": [
+        "The target programmes list no subject requirements for this curriculum.",
+        "لا تذكر البرامج المستهدفة متطلبات مواد لهذا المنهج."
+      ],
+      "legend": {
+        "high": {
+          "AMERICAN": [
+            "Needs AP",
+            "يتطلب AP"
+          ],
+          "BRITISH": [
+            "Needs A Level",
+            "يتطلب A Level"
+          ],
+          "IB": [
+            "Needs Higher Level",
+            "يتطلب المستوى العالي"
+          ],
+          "OTHER": [
+            "Needs the advanced level",
+            "يتطلب المستوى المتقدم"
+          ]
+        },
+        "regular": {
+          "all": [
+            "Regular course is enough",
+            "تكفي المادة العادية"
+          ]
+        },
+        "advice": {
+          "all": [
+            "Recommends it",
+            "يوصي بها"
+          ]
+        },
+        "none": {
+          "all": [
+            "Does not ask",
+            "لا يطلبها"
+          ]
+        }
+      },
+      "family": {
+        "sciences": [
+          "Sciences",
+          "العلوم"
+        ],
+        "english": [
+          "English",
+          "اللغة الإنجليزية"
+        ]
+      },
+      "take": {
+        "course": {
+          "self": [
+            "Take {course}: {n} of your {total} targets need it",
+            "ادرس {course}: يتطلبها {n} من أصل {total} من برامجك المستهدفة"
+          ],
+          "other": [
+            "Take {course}: {n} of {total} targets need it",
+            "دراسة {course}: يتطلبها {n} من أصل {total} من البرامج المستهدفة"
+          ]
+        },
+        "generic": {
+          "AMERICAN": {
+            "self": [
+              "Take an AP course in {subject}: {n} of your {total} targets need it",
+              "ادرس مادة AP في {subject}: يتطلبها {n} من أصل {total} من برامجك المستهدفة"
+            ],
+            "other": [
+              "Take an AP course in {subject}: {n} of {total} targets need it",
+              "دراسة مادة AP في {subject}: يتطلبها {n} من أصل {total} من البرامج المستهدفة"
+            ]
+          },
+          "BRITISH": {
+            "self": [
+              "Take A Level {subject}: {n} of your {total} targets need it",
+              "ادرس {subject} بمستوى A Level: يتطلبها {n} من أصل {total} من برامجك المستهدفة"
+            ],
+            "other": [
+              "Take A Level {subject}: {n} of {total} targets need it",
+              "دراسة {subject} بمستوى A Level: يتطلبها {n} من أصل {total} من البرامج المستهدفة"
+            ]
+          },
+          "IB": {
+            "self": [
+              "Take {subject} at Higher Level: {n} of your {total} targets need it",
+              "ادرس {subject} بالمستوى العالي: يتطلبها {n} من أصل {total} من برامجك المستهدفة"
+            ],
+            "other": [
+              "Take {subject} at Higher Level: {n} of {total} targets need it",
+              "دراسة {subject} بالمستوى العالي: يتطلبها {n} من أصل {total} من البرامج المستهدفة"
+            ]
+          },
+          "OTHER": {
+            "self": [
+              "Take {subject} at the advanced level: {n} of your {total} targets need it",
+              "ادرس {subject} بالمستوى المتقدم: يتطلبها {n} من أصل {total} من برامجك المستهدفة"
+            ],
+            "other": [
+              "Take {subject} at the advanced level: {n} of {total} targets need it",
+              "دراسة {subject} بالمستوى المتقدم: يتطلبها {n} من أصل {total} من البرامج المستهدفة"
+            ]
+          }
+        }
+      },
+      "enough": {
+        "regular": {
+          "self": [
+            "Regular {subject} is enough for all your targets",
+            "تكفي مادة {subject} العادية لجميع برامجك المستهدفة"
+          ],
+          "other": [
+            "Regular {subject} is enough for every target",
+            "تكفي مادة {subject} العادية لجميع البرامج المستهدفة"
+          ]
+        },
+        "standard": {
+          "self": [
+            "{subject} at the standard level is enough for all your targets",
+            "يكفي المستوى القياسي في {subject} لجميع برامجك المستهدفة"
+          ],
+          "other": [
+            "{subject} at the standard level is enough for every target",
+            "يكفي المستوى القياسي في {subject} لجميع البرامج المستهدفة"
+          ]
+        },
+        "senior": {
+          "self": [
+            "A Grade {grade} {subject} course is enough for all your targets",
+            "تكفي مادة {subject} في الصف {grade} لجميع برامجك المستهدفة"
+          ],
+          "other": [
+            "A Grade {grade} {subject} course is enough for every target",
+            "تكفي مادة {subject} في الصف {grade} لجميع البرامج المستهدفة"
+          ]
+        },
+        "sciences": {
+          "regular": {
+            "self": [
+              "Regular science courses are enough for all your targets",
+              "تكفي مواد العلوم العادية لجميع برامجك المستهدفة"
+            ],
+            "other": [
+              "Regular science courses are enough for every target",
+              "تكفي مواد العلوم العادية لجميع البرامج المستهدفة"
+            ]
+          },
+          "standard": {
+            "self": [
+              "Science at the standard level is enough for all your targets",
+              "يكفي المستوى القياسي في العلوم لجميع برامجك المستهدفة"
+            ],
+            "other": [
+              "Science at the standard level is enough for every target",
+              "يكفي المستوى القياسي في العلوم لجميع البرامج المستهدفة"
+            ]
+          }
+        }
+      },
+      "advice": {
+        "self": [
+          "{subject}: recommended by {n} of your {total} targets, at any level",
+          "{subject}: يوصي بها {n} من أصل {total} من برامجك المستهدفة، بأي مستوى"
+        ],
+        "other": [
+          "{subject}: recommended by {n} of {total} targets, at any level",
+          "{subject}: يوصي بها {n} من أصل {total} من البرامج المستهدفة، بأي مستوى"
+        ]
+      },
+      "alsoRegular": [
+        "{n, plural, one {# accepts a regular course} other {# accept a regular course}}: {names}",
+        "{n, plural, zero {لا برامج تقبل مادة عادية} one {برنامج واحد يقبل مادة عادية} two {برنامجان يقبلان مادة عادية} few {# برامج تقبل مادة عادية} many {# برنامجاً يقبل مادة عادية} other {# برنامج يقبل مادة عادية}}: {names}"
+      ],
+      "bcOnly": [
+        "{n, plural, one {# accepts only Calculus BC} other {# accept only Calculus BC}}",
+        "{n, plural, zero {لا برامج تشترط BC} one {برنامج واحد لا يقبل إلا BC} two {برنامجان لا يقبلان إلا BC} few {# برامج لا تقبل إلا BC} many {# برنامجاً لا يقبل إلا BC} other {# برنامج لا يقبل إلا BC}}"
+      ],
+      "askedBy": [
+        "Asked for by {n} of {total}: {names}",
+        "يطلبها {n} من أصل {total}: {names}"
+      ],
+      "alsoAdvice": [
+        "Recommended by {names}",
+        "يوصي بها: {names}"
+      ],
+      "onPlan": {
+        "self": [
+          "On your plan: {courses}",
+          "في خطتك: {courses}"
+        ],
+        "other": [
+          "On the plan: {courses}",
+          "في الخطة: {courses}"
+        ]
+      },
+      "notOnPlan": {
+        "self": [
+          "Not on your plan yet",
+          "ليست في خطتك بعد"
+        ],
+        "other": [
+          "Not on the plan yet",
+          "ليست في الخطة بعد"
+        ]
+      },
+      "offered": [
+        "{school} offers {course} in Grade {grade}",
+        "تطرح {school} مادة {course} في الصف {grade}"
+      ],
+      "notOffered": [
+        "{school} does not offer {course} yet",
+        "لا تطرح {school} مادة {course} بعد"
+      ],
+      "offeredList": [
+        "{school} offers {courses}",
+        "تطرح {school}: {courses}"
+      ],
+      "showQuotes": [
+        "Show what each university says",
+        "اعرض ما تقوله كل جامعة"
+      ],
+      "viaExamRule": [
+        "From the AP exam rule",
+        "من شرط اختبارات AP"
+      ],
+      "noQuote": [
+        "No quote stored for this line.",
+        "لا يوجد اقتباس محفوظ لهذا البند."
+      ],
+      "footer": [
+        "Every level comes from the university's official page, quoted above. A regular course means a non-AP course, such as an Honors course.",
+        "كل مستوى مأخوذ من الصفحة الرسمية للجامعة كما هو مقتبس أعلاه. المادة العادية هي مادة ليست من مواد AP، مثل مادة بمستوى الشرف."
+      ],
+      "choices": {
+        "self": [
+          "Choose your courses",
+          "اختر موادك"
+        ],
+        "other": [
+          "Course choices",
+          "اختيارات المواد"
+        ]
+      }
+    },
+    "world": {
+      "title": [
+        "Options worldwide",
+        "الخيارات حول العالم"
+      ],
+      "withPlan": [
+        "Checked against the record and the current plan.",
+        "مقارنة بالسجل والخطة الحالية."
+      ],
+      "recordOnly": [
+        "Checked against the record so far (no plan yet).",
+        "مقارنة بالسجل حتى الآن (لا توجد خطة بعد)."
+      ],
+      "checked": {
+        "self": [
+          "{school} checked {programs} programmes at {universities} universities in {countries} countries for you.",
+          "راجعت {school} لك {programs} برنامجاً في {universities} جامعة في {countries} دولة."
+        ],
+        "other": [
+          "{school} checked {programs} programmes at {universities} universities in {countries} countries for {name}.",
+          "راجعت {school} {programs} برنامجاً في {universities} جامعة في {countries} دولة لـ {name}."
+        ]
+      },
+      "openLabel": [
+        "eligible or on track",
+        "مؤهَّل أو على المسار الصحيح"
+      ],
+      "openWhere": [
+        "at {universities} universities in {countries} countries",
+        "في {universities} جامعة في {countries} دولة"
+      ],
+      "byCountry": [
+        "Where they are (eligible or on track, of all checked)",
+        "أين تقع (المؤهَّل أو على المسار من مجموع ما رُوجع)"
+      ],
+      "countryLine": [
+        "{open} of {programs}",
+        "{open} من {programs}"
+      ]
+    }
+  },
+  "registration": {
+    "viewOnly": [
+      "View only",
+      "للاطلاع فقط"
+    ],
+    "next": {
+      "subtitle": [
+        "Grade {grade} courses for {year}",
+        "مواد الصف {grade} للعام {year}"
+      ],
+      "tabsLabel": [
+        "School year",
+        "العام الدراسي"
+      ],
+      "tabNext": [
+        "Next year: Grade {grade} ({year})",
+        "العام القادم: الصف {grade} ({year})"
+      ],
+      "tabCurrent": [
+        "This year: Grade {grade} ({year})",
+        "هذا العام: الصف {grade} ({year})"
+      ],
+      "bannerOpen": [
+        "Course selection for {year} is open until {date}. Choose one course in each block.",
+        "اختيار مواد العام {year} مفتوح حتى {date}. اختر مادة واحدة من كل مجموعة."
+      ],
+      "bannerClosed": [
+        "Course selection for {year} closed on {date}.",
+        "أُغلق اختيار مواد العام {year} في {date}."
+      ],
+      "bannerNotOpen": [
+        "Course selection for {year} has not opened yet.",
+        "لم يُفتح اختيار مواد العام {year} بعد."
+      ],
+      "submit": [
+        "Submit my choices",
+        "إرسال اختياراتي"
+      ],
+      "submitted": [
+        "Choices for next year saved",
+        "تم حفظ اختيارات العام القادم"
+      ],
+      "registeredState": [
+        "Choices saved. Classes are set when the year starts.",
+        "تم حفظ الاختيارات. تُحدد الشعب عند بداية العام."
+      ],
+      "yearCurrent": [
+        "{year}: this year",
+        "{year}: هذا العام"
+      ],
+      "yearNext": [
+        "{year}: course selection",
+        "{year}: اختيار المواد"
+      ],
+      "windowOpen": [
+        "Course selection open",
+        "اختيار المواد مفتوح"
+      ],
+      "windowClosedPill": [
+        "Course selection closed",
+        "اختيار المواد مغلق"
+      ],
+      "noClassesYet": [
+        "Classes are set when the year starts",
+        "تُحدد الشعب عند بداية العام"
+      ],
+      "statChose": [
+        "Students who chose",
+        "الطلاب الذين اختاروا"
+      ],
+      "statChoices": [
+        "Options chosen",
+        "المواد الاختيارية المختارة"
+      ],
+      "statAp": [
+        "AP courses chosen",
+        "مواد AP المختارة"
+      ],
+      "statGrades": [
+        "Grades with options",
+        "الصفوف ذات المواد الاختيارية"
+      ],
+      "offeringsFor": [
+        "Courses for Grade {grade} in {year}",
+        "مواد الصف {grade} للعام {year}"
+      ],
+      "progressTitle": [
+        "Who has chosen",
+        "من أكمل الاختيار"
+      ],
+      "progressBody": [
+        "{done} of {total} students now in Grade {grade} have chosen all their courses.",
+        "أكمل {done} من أصل {total} من طلاب الصف {grade} الحالي اختيار جميع موادهم."
+      ],
+      "openWindow": [
+        "Open course selection",
+        "فتح اختيار المواد"
+      ],
+      "windowTitle": [
+        "Course selection for next year",
+        "اختيار مواد العام القادم"
+      ],
+      "windowBody": [
+        "While it is open, students and parents choose next year's courses, one in each block. The deadline also appears on the school calendar.",
+        "خلال فترة الاختيار يختار الطلاب وأولياء الأمور مواد العام القادم، مادة واحدة من كل مجموعة. ويظهر الموعد النهائي في تقويم المدرسة أيضاً."
+      ],
+      "fieldTrack": [
+        "Track",
+        "المسار"
+      ],
+      "trackAll": [
+        "Every track",
+        "جميع المسارات"
+      ],
+      "track": {
+        "AMERICAN": [
+          "American",
+          "الأمريكي"
+        ],
+        "BRITISH": [
+          "British",
+          "البريطاني"
+        ],
+        "IB": [
+          "IB",
+          "البكالوريا الدولية"
+        ],
+        "UAE_MOE": [
+          "UAE MoE",
+          "وزارة التربية الإماراتية"
+        ],
+        "JORDAN_TAWJIHI": [
+          "Tawjihi",
+          "التوجيهي"
+        ],
+        "CBSE": [
+          "CBSE",
+          "CBSE"
+        ],
+        "ISC": [
+          "ISC",
+          "ISC"
+        ],
+        "SABIS": [
+          "SABIS",
+          "SABIS"
+        ],
+        "OTHER": [
+          "Other",
+          "آخر"
+        ]
+      },
+      "fieldCourse": [
+        "Counts for universities as",
+        "تُحتسب لدى الجامعات على أنها"
+      ],
+      "courseNone": [
+        "Not linked",
+        "غير مرتبطة"
+      ],
+      "courseHint": [
+        "Link the curriculum course so students see which universities need it and how many programmes it keeps open.",
+        "اربط المادة بمادة المنهج ليرى الطلاب الجامعات التي تتطلبها وعدد البرامج التي تُبقيها متاحة."
+      ],
+      "fieldAP": [
+        "AP course",
+        "مادة AP"
+      ],
+      "apHint": [
+        "Shows an AP badge to students and parents.",
+        "تظهر شارة AP للطلاب وأولياء الأمور."
+      ],
+      "countsAs": [
+        "Counts as {course}",
+        "تُحتسب على أنها {course}"
+      ],
+      "neededByTargets": [
+        "{count, plural, one {Needed by # student's targets} other {Needed by # students' targets}}",
+        "{count, plural, zero {لا تتطلبها أهداف أي طالب} one {تتطلبها أهداف طالب واحد} two {تتطلبها أهداف طالبين} few {تتطلبها أهداف # طلاب} many {تتطلبها أهداف # طالباً} other {تتطلبها أهداف # طالب}}"
+      ]
+    },
+    "impact": {
+      "error": [
+        "Could not update the university impact. Try again.",
+        "تعذّر تحديث الأثر على الجامعات. حاول مرة أخرى."
+      ],
+      "intro": {
+        "self": [
+          "Each option shows which of your {targets} target programmes need it, and how many of {checked} programmes worldwide it keeps open.",
+          "يبيّن كل خيار أيّاً من برامجك المستهدفة الـ {targets} يتطلبه، وكم برنامجاً يُبقي متاحاً من أصل {checked} برنامجاً حول العالم."
+        ],
+        "other": [
+          "Each option shows which of the student's {targets} target programmes need it, and how many of {checked} programmes worldwide it keeps open.",
+          "يبيّن كل خيار أيّاً من البرامج المستهدفة الـ {targets} للطالب يتطلبه، وكم برنامجاً يُبقي متاحاً من أصل {checked} برنامجاً حول العالم."
+        ]
+      },
+      "introNoTargets": {
+        "self": [
+          "Each option shows how many of {checked} programmes worldwide it keeps open. Add universities to your list to see which ones need it.",
+          "يبيّن كل خيار كم برنامجاً يُبقي متاحاً من أصل {checked} برنامجاً حول العالم. أضف جامعات إلى قائمتك لترى أيها يتطلبه."
+        ],
+        "other": [
+          "Each option shows how many of {checked} programmes worldwide it keeps open. The student has no university list yet.",
+          "يبيّن كل خيار كم برنامجاً يُبقي متاحاً من أصل {checked} برنامجاً حول العالم. لا توجد قائمة جامعات للطالب بعد."
+        ]
+      },
+      "seeLevels": [
+        "Subject levels for every target",
+        "مستويات المواد لكل البرامج المستهدفة"
+      ],
+      "updating": [
+        "Updating",
+        "جارٍ التحديث"
+      ],
+      "compareTitle": [
+        "{ap} or {regular}?",
+        "{ap} أم {regular}؟"
+      ],
+      "compareMore": [
+        "{ap} keeps {n, plural, one {# more programme} other {# more programmes}} open than {regular}.",
+        "يُبقي اختيار {ap} {n, plural, one {برنامجاً إضافياً واحداً} two {برنامجين إضافيين} few {# برامج إضافية} many {# برنامجاً إضافياً} other {# برنامج إضافي}} متاحاً مقارنة بـ {regular}."
+      ],
+      "compareSame": [
+        "{ap} and {regular} keep the same programmes open.",
+        "يُبقي {ap} و{regular} البرامج نفسها متاحة."
+      ],
+      "apOnly": {
+        "self": [
+          "Only {ap} counts for {names}.",
+          "لا يُحتسب إلا {ap} لدى {names}."
+        ],
+        "other": [
+          "Only {ap} counts for {names}.",
+          "لا يُحتسب إلا {ap} لدى {names}."
+        ]
+      },
+      "either": [
+        "Either one counts for {names}.",
+        "أيٌّ منهما يُحتسب لدى {names}."
+      ],
+      "apBadge": [
+        "AP",
+        "AP"
+      ],
+      "regularBadge": [
+        "Regular",
+        "عادية"
+      ],
+      "neededFor": {
+        "self": [
+          "Needed for {n} of your {total} targets",
+          "مطلوبة في {n} من أصل {total} من برامجك المستهدفة"
+        ],
+        "other": [
+          "Needed for {n} of {total} targets",
+          "مطلوبة في {n} من أصل {total} من البرامج المستهدفة"
+        ]
+      },
+      "neededNone": {
+        "self": [
+          "Not needed for your targets",
+          "لا تتطلبها برامجك المستهدفة"
+        ],
+        "other": [
+          "Not needed for the targets",
+          "لا تتطلبها البرامج المستهدفة"
+        ]
+      },
+      "keepsHint": [
+        "Programmes, of {checked} worldwide, where this course meets a subject requirement that nothing on the record or in the other choices meets yet.",
+        "البرامج، من أصل {checked} حول العالم، التي تستوفي فيها هذه المادة متطلب مادة لا يستوفيه شيء آخر في السجل أو في الاختيارات الأخرى بعد."
+      ],
+      "keepsOpen": [
+        "Keeps {n, plural, one {# more programme} other {# more programmes}} open",
+        "{n, plural, zero {لا تضيف برامج متاحة} one {تُبقي برنامجاً إضافياً واحداً متاحاً} two {تُبقي برنامجين إضافيين متاحين} few {تُبقي # برامج إضافية متاحة} many {تُبقي # برنامجاً إضافياً متاحاً} other {تُبقي # برنامج إضافي متاحاً}}"
+      ],
+      "keepsNone": [
+        "No extra programmes",
+        "لا برامج إضافية"
+      ],
+      "notLinked": [
+        "Not linked to a university course yet.",
+        "غير مرتبطة بمادة جامعية بعد."
+      ],
+      "summaryTitle": [
+        "University impact of these choices",
+        "أثر هذه الاختيارات على الجامعات"
+      ],
+      "summaryTargets": {
+        "self": [
+          "Needed for {n} of your {total} targets",
+          "مطلوبة في {n} من أصل {total} من برامجك المستهدفة"
+        ],
+        "other": [
+          "Needed for {n} of {total} targets",
+          "مطلوبة في {n} من أصل {total} من البرامج المستهدفة"
+        ]
+      },
+      "summaryPrograms": [
+        "{n, plural, one {Keeps # programme open worldwide} other {Keeps # programmes open worldwide}}",
+        "{n, plural, zero {لا تُبقي برامج متاحة حول العالم} one {تُبقي برنامجاً واحداً متاحاً حول العالم} two {تُبقي برنامجين متاحين حول العالم} few {تُبقي # برامج متاحة حول العالم} many {تُبقي # برنامجاً متاحاً حول العالم} other {تُبقي # برنامج متاحاً حول العالم}}"
+      ],
+      "blocksLeft": [
+        "{done} of {total} blocks chosen. Choose one course in each block.",
+        "اخترت من {done} من أصل {total} مجموعات. اختر مادة واحدة من كل مجموعة."
+      ],
+      "summaryEmpty": [
+        "Choose courses to see their university impact.",
+        "اختر المواد لترى أثرها على الجامعات."
+      ]
+    }
+  },
+  "guide": {
+    "steps": {
+      "chooseSubjects": {
+        "title": [
+          "Choose next year's courses",
+          "اختر مواد العام القادم"
+        ],
+        "body": [
+          "Each option shows which of your target universities need it, whether AP or a regular course is enough, and how many programmes it keeps open.",
+          "يبيّن كل خيار أيّ جامعاتك المستهدفة تتطلبه، وهل تلزم مادة AP أم تكفي المادة العادية، وكم برنامجاً يُبقي متاحاً."
+        ]
+      },
+      "subjectLevels": {
+        "title": [
+          "See the level each subject needs",
+          "اعرف المستوى الذي تحتاجه كل مادة"
+        ],
+        "body": [
+          "For every target university: AP required, AP or a regular course, or any level, quoted from its own page.",
+          "لكل جامعة مستهدفة: مادة AP مطلوبة، أو AP أو مادة عادية، أو أي مستوى، مع اقتباس من صفحتها."
+        ]
+      },
+      "childSubjects": {
+        "title": [
+          "Choose courses with a child",
+          "اختيار المواد مع الأبناء"
+        ],
+        "body": [
+          "Switch between Adam and Yara. For Adam's Grade 10 choices, see which universities need each course and where AP matters.",
+          "بدّل بين آدم ويارا. في اختيارات آدم للصف العاشر، اعرف الجامعات التي تتطلب كل مادة ومتى تهم مواد AP."
+        ]
+      },
+      "childSubjectLevels": {
+        "title": [
+          "Subject levels for Adam's universities",
+          "مستويات المواد لجامعات آدم"
+        ],
+        "body": [
+          "Which subjects his target universities need and whether a regular course is enough.",
+          "المواد التي تطلبها جامعاته المستهدفة وهل تكفي المادة العادية."
+        ]
+      },
+      "studentSubjectLevels": {
+        "title": [
+          "Review a student's subject levels",
+          "راجع مستويات المواد لطالب"
+        ],
+        "body": [
+          "Open Adam Nasser: what each of his targets asks for, AP or regular, with the official quotes.",
+          "افتح ملف آدم نصار: ما يطلبه كل برنامج مستهدف، AP أو مادة عادية، مع الاقتباسات الرسمية."
+        ]
+      },
+      "courseSelection": {
+        "title": [
+          "Run next year's course selection",
+          "أدِر اختيار مواد العام القادم"
+        ],
+        "body": [
+          "AP and regular electives for the American track, demand per course and how many students' university targets need each one.",
+          "مواد AP والمواد العادية للمسار الأمريكي، والإقبال على كل مادة، وعدد الطلاب الذين تتطلبها أهدافهم الجامعية."
+        ]
+      }
+    }
+  }
+}
