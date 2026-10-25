@@ -1,0 +1,326 @@
+{
+ "title": "Horizon Full Tour",
+ "voice": "af_heart",
+ "speed": 1.0,
+ "notes": "Narration for the long product tour. 'text' is spoken; 'display' (when present) is what the subtitles show. Segments marked pending describe features that are still being built and are finalised against the real screens before recording.",
+ "segments": [
+  {
+   "id": "c01a",
+   "chapter": "c01-patchwork",
+   "text": "Let's be honest about how most schools run today. A parent emails the office, and copies in the class teacher, the head of year, the deputy head and, somehow, the bus company."
+  },
+  {
+   "id": "c01b",
+   "chapter": "c01-patchwork",
+   "text": "A sick note gets forwarded, and forwarded again, until half the staff room knows about a child's tonsils."
+  },
+  {
+   "id": "c01c",
+   "chapter": "c01-patchwork",
+   "text": "The electives live in a spreadsheet called final, final, version two. And when a student asks what she needs for engineering in Canada, someone googles it, one university at a time, at eleven at night.",
+   "display": "The electives live in a spreadsheet called final, final, version two. And when a student asks what she needs for engineering in Canada, someone googles it, one university at a time, at 11 at night."
+  },
+  {
+   "id": "c01d",
+   "chapter": "c01-patchwork",
+   "text": "Nothing is joined up. Nobody can see where anything is. And private things don't stay private."
+  },
+  {
+   "id": "c02a",
+   "chapter": "c02-meet",
+   "text": "Enter Horizon. One platform for every school procedure, built for schools in the UAE, and fully bilingual in Arabic and English. Students, parents and staff each get their own portal, and everyone sees only what their role allows. Every request has an owner, a deadline and a record."
+  },
+  {
+   "id": "c02b",
+   "chapter": "c02-meet",
+   "text": "Today we're spending a day at Horizon International School Dubai, a fictional demo school with real, working data: ninety nine students, forty six staff, and one hundred and thirteen parents and guardians. Let's meet the people you'll be following.",
+   "display": "Today we're spending a day at Horizon International School Dubai, a fictional demo school with real, working data: 99 students, 46 staff, and 113 parents and guardians. Let's meet the people you'll be following."
+  },
+  {
+   "id": "q-rania",
+   "chapter": "c02-meet",
+   "voice": "af_bella",
+   "text": "Two kids, one school, and zero time for paperwork."
+  },
+  {
+   "id": "q-adam",
+   "chapter": "c02-meet",
+   "voice": "am_puck",
+   "text": "I want to build AI. I just need to know which classes get me there."
+  },
+  {
+   "id": "q-daniel",
+   "chapter": "c02-meet",
+   "voice": "bm_george",
+   "text": "I'd rather be teaching than chasing forms."
+  },
+  {
+   "id": "q-sarah",
+   "chapter": "c02-meet",
+   "voice": "bf_emma",
+   "text": "Every student has a story. I need the whole picture."
+  },
+  {
+   "id": "q-layla",
+   "chapter": "c02-meet",
+   "voice": "af_kore",
+   "text": "Fifteen countries, hundreds of programmes. Let's find the right one.",
+   "display": "15 countries, hundreds of programmes. Let's find the right one."
+  },
+  {
+   "id": "q-aisha",
+   "chapter": "c02-meet",
+   "voice": "af_sarah",
+   "text": "If it's a process, I want it in one place."
+  },
+  {
+   "id": "q-omar",
+   "chapter": "c02-meet",
+   "voice": "am_michael",
+   "text": "I just want to know how the school is really doing."
+  },
+  {
+   "id": "q-khalid",
+   "chapter": "c02-meet",
+   "voice": "am_fenrir",
+   "text": "Some things are only for the people who need to know."
+  },
+  {
+   "id": "c03a",
+   "chapter": "c03-homes",
+   "text": "Everyone starts the day on their own home page, and the menu changes with the role, so nobody wades through features they'll never use."
+  },
+  {
+   "id": "c03b",
+   "chapter": "c03-homes",
+   "text": "Adam sees his requests, his upcoming exams and trips, and a nudge to explore careers. Rania sees both of her children in one place, with anything that needs her approval right at the top. Quick services sit right on the page, so asking the school for something is two taps away."
+  },
+  {
+   "id": "c03c",
+   "chapter": "c03-homes",
+   "text": "Daniel gets his classes, his referrals and his tasks, plus a clear red button for safeguarding concerns. Sarah's home is her caseload: new referrals, today's meetings, and the follow ups that are due. Layla sees her career cases and the students waiting for her review."
+  },
+  {
+   "id": "c03d",
+   "chapter": "c03-homes",
+   "text": "Aisha and Omar see how the whole school is running: request volumes, resolution times and service levels. And Omar can switch everything to Arabic, right to left, in one click."
+  },
+  {
+   "id": "c03e",
+   "chapter": "c03-homes",
+   "text": "Khalid's home is different. It's restricted: only he, his deputy, and staff he explicitly grants can see it."
+  },
+  {
+   "id": "c04a",
+   "chapter": "c04-services",
+   "text": "Let's start with something every school does all day long: requests. Rania needs an enrollment letter for Adam's visa. On her phone, she opens Services, picks the school document, chooses English and Arabic, and submits. No email, no phone call, no chasing."
+  },
+  {
+   "id": "c04b",
+   "chapter": "c04-services",
+   "text": "The request now follows the school's own process, step by step, with an owner and a deadline for each one. Mona, the registrar, finds it waiting in her approvals. One click, and her decision is recorded with her name and the time. Every request gets its own reference number, and anything running late is flagged as overdue, so it can't quietly slip through the cracks."
+  },
+  {
+   "id": "c04c",
+   "chapter": "c04-services",
+   "text": "Horizon produces the official letter instantly, on the school's letterhead, in both languages, with properly joined Arabic script. Rania gets a notification, and the letter is waiting in her documents. She could even watch every step live, like tracking a parcel, without sending a single email asking for an update."
+  },
+  {
+   "id": "c04d",
+   "chapter": "c04-services",
+   "text": "And it isn't just letters. Twenty nine services come ready to use, from changing a subject and booking a parent meeting, to exam access arrangements, learning support and IT help. The school decides who can ask for each one and how quickly it should be handled, and the administrator can adjust the forms and the approval steps without writing any code.",
+   "display": "And it isn't just letters. 29 services come ready to use, from changing a subject and booking a parent meeting, to exam access arrangements, learning support and IT help. The school decides who can ask for each one and how quickly it should be handled, and the administrator can adjust the forms and the approval steps without writing any code."
+  },
+  {
+   "id": "c05a",
+   "chapter": "c05-conversations",
+   "pending": "request conversations",
+   "text": "Remember the email chain with the bus company in it? In Horizon, every request has its own conversation, right next to the request itself. Each message has a clear audience, and you choose it before you press send."
+  },
+  {
+   "id": "c05b",
+   "chapter": "c05-conversations",
+   "pending": "request conversations",
+   "text": "Shared messages are seen by the family and the staff handling the request. Staff only notes stay between staff, so colleagues can coordinate without the family reading the internal back and forth. And private messages go only to the person they're meant for."
+  },
+  {
+   "id": "c05c",
+   "chapter": "c05-conversations",
+   "pending": "request conversations",
+   "text": "Every message shows exactly who can read it. So no more reply all, no more forwarding chains, and no more sensitive details landing in the wrong inbox. And every message stays with the request, so the history never vanishes into someone's sent folder."
+  },
+  {
+   "id": "c06a",
+   "chapter": "c06-absence",
+   "pending": "private sick leave",
+   "text": "The same respect applies to sick leave. When Adam is unwell, Rania reports the absence from her phone, and she can keep the medical details private. His teachers see that he's away and when he's expected back, but not why. Only the staff who need the details can see them."
+  },
+  {
+   "id": "c06b",
+   "chapter": "c06-absence",
+   "pending": "private sick leave",
+   "text": "Staff get the same privacy. When Daniel calls in sick, the reason stays between him and the people who manage leave. His colleagues simply see that he's away."
+  },
+  {
+   "id": "c06c",
+   "chapter": "c06-absence",
+   "text": "And then Horizon takes care of the knock on effects. For each of his lessons, it finds a free teacher from the right department, assigns the cover, and lets them know. Aisha sees the day's cover board, with anything still uncovered flagged at the top, and cover is shared out fairly over the term."
+  },
+  {
+   "id": "c07a",
+   "chapter": "c07-subjects",
+   "pending": "electives and AP guidance",
+   "text": "Now for the big one: subjects, electives, and where they lead. It starts with the school's own offer. Staff set up the subjects for each grade: core subjects, option blocks, and electives with prerequisites and places. And they can change them whenever they need to."
+  },
+  {
+   "id": "c07b",
+   "chapter": "c07-subjects",
+   "pending": "electives and AP guidance",
+   "text": "When registration opens, students choose online, and parents see the same choices from their own account. Horizon checks prerequisites as they go, and when the window closes, classes fill themselves. Goodbye, final, final, version two."
+  },
+  {
+   "id": "c07c",
+   "chapter": "c07-subjects",
+   "text": "But choosing an elective in Grade 9 is really a choice about the future. So Horizon connects every subject to university entry requirements, anywhere in the world. Adam wants to become an AI engineer, maybe in the UK, the US, Canada, or right here in the UAE."
+  },
+  {
+   "id": "c07d",
+   "chapter": "c07-subjects",
+   "text": "Horizon's catalog covers three hundred and sixty six programmes at one hundred and sixteen universities in fifteen countries. For three hundred and eleven of those programmes, the requirements come from the university's own official pages, with the exact wording, a link to the source, and the date they were checked.",
+   "display": "Horizon's catalog covers 366 programmes at 116 universities in 15 countries. For 311 of those programmes, the requirements come from the university's own official pages, with the exact wording, a link to the source, and the date they were checked."
+  },
+  {
+   "id": "c07e",
+   "chapter": "c07-subjects",
+   "text": "Horizon checks each programme against Adam's record, requirement by requirement, and tells him plainly: eligible, on track, or missing something, and exactly what."
+  },
+  {
+   "id": "c07f",
+   "chapter": "c07-subjects",
+   "pending": "electives and AP guidance",
+   "text": "It speaks AP, too. When a programme requires a particular AP course, Horizon says so clearly. When a strong regular course is just as acceptable, it says that too, so nobody signs up for four APs out of pure panic. And it only ever suggests classes the school really offers."
+  },
+  {
+   "id": "c07g",
+   "chapter": "c07-subjects",
+   "pending": "electives and AP guidance",
+   "text": "For every elective, Adam can see how many of his target programmes it keeps open. And he can try what if. What if I take AP Calculus? What if I swap Geography for Computer Science? He sees which programmes move into reach, and which drift away, before anything is saved."
+  },
+  {
+   "id": "c07h",
+   "chapter": "c07-subjects",
+   "text": "When he's happy, Horizon builds his Grade 9 to 12 plan, and he sends it to his counselor. Sarah reviews it, adds a note, and approves it. And Rania sees the approved plan on her phone, in Arabic, so the whole family is finally on the same page. Teenager included."
+  },
+  {
+   "id": "c08a",
+   "chapter": "c08-applications",
+   "text": "Fast forward to Grade 12, and the plan becomes applications. Every application is tracked from shortlist to offer, each with its own checklist. Deadlines turn into tasks and reminders, so nothing sneaks up on anyone."
+  },
+  {
+   "id": "c08b",
+   "chapter": "c08-applications",
+   "text": "When a student needs a recommendation letter, it lands on the teacher's task list with a due date. Sarah sees every student on one board, and moves an application along with a simple drag. Each card shows the route, the deadline, and how much of the checklist is done."
+  },
+  {
+   "id": "c08c",
+   "chapter": "c08-applications",
+   "text": "When universities visit, students and parents sign up for fairs and information sessions in one tap, and the event drops straight into their calendar. And for younger students, it all starts with a ten minute career assessment, and a bilingual career report the family can keep.",
+   "display": "When universities visit, students and parents sign up for fairs and information sessions in one tap, and the event drops straight into their calendar. And for younger students, it all starts with a 10 minute career assessment, and a bilingual career report the family can keep."
+  },
+  {
+   "id": "c09a",
+   "chapter": "c09-care",
+   "text": "Some of the most important work in a school is also the most sensitive. When Daniel is worried about a student, he refers them to the counselor in a few clicks. Sarah picks up the case with its full history."
+  },
+  {
+   "id": "c09b",
+   "chapter": "c09-care",
+   "text": "Her notes are versioned: change one, and the original is kept, so nothing can ever be quietly rewritten. She books a meeting with the family straight from the case, and agrees an action plan that turns into tasks for everyone involved. Her case list shows priorities and service level timers, so nothing urgent waits in a pile."
+  },
+  {
+   "id": "c09c",
+   "chapter": "c09-care",
+   "text": "Wellbeing and safeguarding cases follow stricter rules. When a teacher raises a safeguarding concern, it goes straight to Khalid, the designated safeguarding lead, and to nobody else. The teacher only sees that it was received and is being handled."
+  },
+  {
+   "id": "c09d",
+   "chapter": "c09-care",
+   "text": "These cases never appear in search, dashboards or reports. Every single view is written to the audit log. And parents are never notified automatically. Telling a family is always a recorded staff decision, with a reason."
+  },
+  {
+   "id": "c10a",
+   "chapter": "c10-academics",
+   "text": "Horizon also runs the academic day. The weekly timetable is generated without clashes, and every teacher, student and parent sees their own week. Teachers see their classes and rosters, and any cover lesson appears right on their timetable."
+  },
+  {
+   "id": "c10b",
+   "chapter": "c10-academics",
+   "text": "Daniel enters marks in a gradebook that feels like a spreadsheet: type, tab, or paste a whole column from Excel, and it saves as he goes. Nothing reaches families until he publishes. Then students and parents see averages and trends, and term report cards are produced in both languages."
+  },
+  {
+   "id": "c10c",
+   "chapter": "c10-academics",
+   "text": "Lesson plans are written against the curriculum standards, so the head of department can see what's covered, and what's missing."
+  },
+  {
+   "id": "c10d",
+   "chapter": "c10-academics",
+   "text": "Trips come with consent letters. Parents give or decline consent with one tap, while the trip leader watches a live consent board instead of counting paper slips. And exam timetables are published as a PDF and land on every family's calendar, with invigilation duties on the staff side."
+  },
+  {
+   "id": "c11a",
+   "chapter": "c11-phone",
+   "text": "For parents, Horizon lives on the phone. It installs straight to the home screen like an app, no app store required. Updates arrive as push notifications and, when the school switches it on, on WhatsApp too. Anything sensitive never shows details in a notification: just a short line, and a link that needs a sign in."
+  },
+  {
+   "id": "c11b",
+   "chapter": "c11-phone",
+   "text": "From the sofa, Rania can approve a request, give consent for a trip, book a meeting with a teacher, pay fees through the school's own payment link, and download Adam's bilingual career report. In English, or in Arabic, right to left. Every page works on a phone, with no pinching and zooming."
+  },
+  {
+   "id": "c12a",
+   "chapter": "c12-leaders",
+   "text": "For school leaders, all this daily work becomes a clear picture. Omar sees request volumes, resolution times and service levels, week by week, and sensitive cases are always left out of the numbers. Pilot measures show adoption at a glance: how many staff are active, and how many parents have joined. Leaders can even ask questions in plain words, like which services are slowest this month, and get an answer from the school's own figures."
+  },
+  {
+   "id": "c12b",
+   "chapter": "c12-leaders",
+   "text": "When inspectors come, the inspection evidence pack gathers the records the school already keeps, for any period, as a bilingual PDF."
+  },
+  {
+   "id": "c12c",
+   "chapter": "c12-leaders",
+   "text": "And privacy is built in for the UAE data protection law. Requests to see or delete personal data are tracked with due dates. Everything held about one person can be exported in one step, and erasure always shows a preview first, and asks for a typed confirmation."
+  },
+  {
+   "id": "c13a",
+   "chapter": "c13-start",
+   "text": "Getting started takes days, not months. A school signs up and gets a working setup straight away: services, forms, letters, roles, bell times and the UAE calendar. The setup wizard adds the logo, colors and school year."
+  },
+  {
+   "id": "c13b",
+   "chapter": "c13-start",
+   "text": "The import center brings in staff, students, families and classes from the spreadsheets the school already has, and checks every row before anything is saved. Staff are invited by email, and parents join with a school code. Every letter, form and message the school sends can be edited, in both languages."
+  },
+  {
+   "id": "c13c",
+   "chapter": "c13-start",
+   "text": "And if you run a group of schools, the group dashboard compares every school side by side, and shares services and letters between them."
+  },
+  {
+   "id": "c14a",
+   "chapter": "c14-trust",
+   "text": "Underneath it all is trust. Every school's data is kept apart inside the database itself. Roles decide who sees what, and the principal can check exactly what any person can see, and why. And the school can export all of its own data at any time."
+  },
+  {
+   "id": "c14b",
+   "chapter": "c14-trust",
+   "text": "Every sensitive action is recorded in an audit log that can't be edited. And AI helps with drafts and summaries, but on sensitive matters it only ever writes a draft. A person always decides."
+  },
+  {
+   "id": "c15a",
+   "chapter": "c15-close",
+   "text": "One platform for every school procedure, in Arabic and English, for students, parents and staff. That's Horizon. To see it at your school, contact Nexus AI Assurance. We'd love to show you around."
+  }
+ ]
+}
