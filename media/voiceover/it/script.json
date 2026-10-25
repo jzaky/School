@@ -6,15 +6,39 @@
  "segments": [
   {
    "id": "it00a-pain",
-   "text": "Most schools run on a patchwork. Requests arrive by email and in chat groups, forms are on paper, records sit in spreadsheets, and the same data is typed into several different systems. Sensitive concerns end up in inboxes, nobody can see who looked at what, and when a parent or an inspector asks for evidence, it takes days to find. For IT, that means more tools to support, more accounts to manage, and more places for data to leak."
+   "text": "Most schools run on a patchwork. Requests arrive by email and in chat groups, forms are on paper, records sit in spreadsheets, and the same data is typed into several different systems. Sensitive concerns end up in inboxes, nobody can see who looked at what, and when a parent or an inspector asks for evidence, it takes days to find. For IT, that means more tools to support, more accounts to manage, and more places for data to leak.",
+   "speed": 0.78,
+   "pause": 0.7,
+   "holds": [
+    0,
+    1,
+    2,
+    3
+   ]
   },
   {
    "id": "it00b-why",
-   "text": "Horizon replaces that patchwork with one secure platform. Three things set it apart. First, every procedure in one place, in Arabic and English, with an owner, a deadline and a full record. Second, safeguarding and privacy built in from the start, not added later. Third, university guidance checked against each university's own published requirements. And it is built for UAE schools, their regulators and their data protection law."
+   "text": "Horizon replaces that patchwork with one secure platform. Three things set it apart. First, every procedure in one place, in Arabic and English, with an owner, a deadline and a full record. Second, safeguarding and privacy built in from the start, not added later. Third, university guidance checked against each university's own published requirements. And it is built for UAE schools, their regulators and their data protection law.",
+   "speed": 0.78,
+   "pause": 0.7,
+   "holds": {
+    "0": 2.0,
+    "1": 1.0,
+    "2": 3.0,
+    "3": 4.0,
+    "4": 3.5,
+    "5": 2.0
+   }
   },
   {
    "id": "it01-open",
-   "text": "This briefing is for the IT team. In the next few minutes we will cover what Horizon is, how each school's data is kept separate, who can see what, how people sign in, how data gets in and out, how sensitive records, conversations and sick leave stay private, how subject choices connect to university requirements, and what we would need from you for a pilot. Everything you see is the live product, running with a fictional demo school."
+   "text": "This briefing is for the IT team. In the next few minutes we will cover what Horizon is, how each school's data is kept separate, who can see what, how people sign in, how data gets in and out, how sensitive records, conversations and sick leave stay private, how subject choices connect to university requirements, and what we would need from you for a pilot. Everything you see is the live product, running with a fictional demo school.",
+   "speed": 0.78,
+   "pause": 0.7,
+   "holds": [
+    1,
+    2
+   ]
   },
   {
    "id": "it02-what",
