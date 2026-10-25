@@ -74,6 +74,16 @@ The story: "I want to become an AI Engineer and maybe study in the UK, the US or
 8. Switch to **Rania Nasser** (Parent), ideally in Arabic. **University planning** > **Course plan**: the plan shows as approved (معتمدة) with Sarah's note. Parents can view but not edit.
 9. Switch to **Layla Hassan** (Career Advisor), or stay as Sarah. **Catalog review** > **Changes**: real changes found by comparing each university's current official page with its archived copy from last year, for example Birmingham Medicine "Grade profile lowered from A*AA to AAA" and Durham Law "IB points lowered from 38 to 37", with the before and after, the quotes and the affected students. Then **Applications**: the board of Grade 12 applications by stage, with the next deadline on each card.
 
+## 10. Conversations and private absences (4 minutes) - Rania, Aisha, Daniel, Mona
+
+The story: "Emails between people where everybody sees everything, and sick notes forwarded around." Covered end to end by `tests/e2e/conversations.spec.ts`.
+
+1. **Rania Nasser** (Parent), on a phone if possible: **Requests**. Yara's **School bus request** has a "1 new" badge. Open it: the header shows the message count, the **Conversation** panel shows only messages shared with the family, each marked **Family and staff**, with a "New messages" divider. Write a reply and press **Send**. The hint under the box says who will read it.
+2. **Aisha Rahman** (Admin): **Requests** > **All** > the same bus request. The same thread now also shows a **Staff only** note between Aisha and Mona (amber, dashed) and **Private** notes between Aisha and the principal (violet, "Private: you and Omar Al Mansoori"). In the composer, switch between **Family and staff**, **Staff only** and **Private**: the "Who can see this" line changes; for Private pick Omar. Point out: notifications never carry the message text, and messages never appear in search or reports.
+3. **Daniel Carter** (Teacher): **Home** > **Homeroom 9A register** card: "Adam Nasser, Excused absence, reported by parent", with a lock. **Open register**: the week grid shows E with a dot for the days the family reported, and "Reason private". He cannot open the sick-day report itself.
+4. **Mona Al Awadhi** (Registrar, attendance office): **Requests** > **All** > Adam's absence report (ABS): the reason, the doctor's note (opens a PDF, audited) and a private note between Mona and the school nurse. Omar (Principal) opening the same report sees only "The reason for this absence is private".
+5. Staff sickness: **Daniel** > **Timetable** > **Your cover lessons**: the class, the time and the cover notes, "Absent, cover arranged", never the reason. **Aisha** > **Absence and cover**: each absence shows a violet "Private: Sick leave" chip and the cover notes separately; **Mona** sees "Reason private" on the same board. **Mark a teacher absent** shows the private reason and the notes for cover as two separate, labelled boxes.
+
 ## Close
 
 - Everything shown works in Arabic. Switch language on any page.

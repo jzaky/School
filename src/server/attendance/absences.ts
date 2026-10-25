@@ -82,7 +82,14 @@ export async function applyExcusedAbsence(ec: ExecCtx, request: { id: string; st
       actorId: ec.actorId ?? null,
       kind: "status",
       titleEn: n === 1 ? "Attendance register updated: 1 school day excused" : `Attendance register updated: ${n} school days excused`,
-      titleAr: n === 1 ? "تم تحديث سجل الحضور: يوم دراسي واحد بعذر" : `تم تحديث سجل الحضور: ${n} أيام دراسية بعذر`,
+      titleAr:
+        n === 1
+          ? "تم تحديث سجل الحضور: يوم دراسي واحد بعذر"
+          : n === 2
+            ? "تم تحديث سجل الحضور: يومان دراسيان بعذر"
+            : n <= 10
+              ? `تم تحديث سجل الحضور: ${n} أيام دراسية بعذر`
+              : `تم تحديث سجل الحضور: ${n} يومًا دراسيًا بعذر`,
       createdAt: ec.now,
     },
   });

@@ -176,7 +176,7 @@ export default async function CoverPage({ searchParams }: { searchParams: Promis
         )}
       </Panel>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2 [&>*]:min-w-0">
         <Panel>
           <PanelHeader title={t("upcomingAbsences")} description={t("upcomingAbsencesBody")} />
           {upcoming.length === 0 ? (
@@ -198,7 +198,7 @@ export default async function CoverPage({ searchParams }: { searchParams: Promis
               {fair.map((f) => (
                 <li key={f.id} className="text-sm">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="truncate">{who.get(f.id)}</span>
+                    <span className="min-w-0 truncate">{who.get(f.id)}</span>
                     <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{t("fairCounts", { total: f.total, week: f.week })}</span>
                   </div>
                   <div className="mt-1 h-1.5 rounded-full bg-muted">
@@ -245,7 +245,7 @@ export default async function CoverPage({ searchParams }: { searchParams: Promis
             {seesReason && (a.reasonKind || a.privateReason) ? (
               <span className="inline-flex max-w-full items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-medium text-violet-700 ring-1 ring-inset ring-violet-200" title={t("privateReasonSeenBy")} data-testid="absence-reason">
                 <Lock className="size-3 shrink-0" />
-                <span className="truncate">
+                <span className="min-w-0 truncate">
                   {t("privateLabel")}: {a.reasonKind ? t(`reasonKind.${a.reasonKind}`) : ""}
                   {a.privateReason ? `${a.reasonKind ? " · " : ""}${a.privateReason}` : ""}
                 </span>
@@ -259,7 +259,7 @@ export default async function CoverPage({ searchParams }: { searchParams: Promis
             {a.coverNotes && (
               <span className="inline-flex max-w-full items-center gap-1 rounded-full bg-info-soft px-2 py-0.5 text-[11px] text-info" title={a.coverNotes}>
                 <StickyNote className="size-3 shrink-0" />
-                <span className="truncate">{t("coverNotesShort")}: {a.coverNotes}</span>
+                <span className="min-w-0 truncate">{t("coverNotesShort")}: {a.coverNotes}</span>
               </span>
             )}
           </div>

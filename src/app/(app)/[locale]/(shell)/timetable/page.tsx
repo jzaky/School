@@ -165,7 +165,7 @@ export default async function TimetablePage({ searchParams }: { searchParams: Pr
     const coverWho = await names(ctx, upcomingCover.map((c) => c.originalTeacherId));
     const lessonOf = (day: number, no: number) => periods.find((p) => p.day === day && p.periodNo === no);
     return (
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2 [&>*]:min-w-0">
         {upcomingCover.length > 0 && (
           <Panel className="lg:col-span-2">
             <PanelHeader title={t("coverNotices")} description={t("coverNoticesBody")} icon={<UserRoundCheck className="size-4" />} />
@@ -236,7 +236,7 @@ export default async function TimetablePage({ searchParams }: { searchParams: Pr
                       {(a.reasonKind || a.privateReason) && (
                         <div className="inline-flex max-w-full items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-medium text-violet-700 ring-1 ring-inset ring-violet-200" data-testid="my-absence-reason">
                           <Lock className="size-3 shrink-0" />
-                          <span className="truncate">
+                          <span className="min-w-0 truncate">
                             {a.reasonKind ? t(`reasonKind.${a.reasonKind}`) : ""}
                             {a.privateReason ? `${a.reasonKind ? " · " : ""}${a.privateReason}` : ""}
                           </span>

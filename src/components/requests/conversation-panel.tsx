@@ -116,7 +116,7 @@ export async function ConversationPanel({ ctx, prefs, requestId }: { ctx: Ctx; p
                         {fmtRelative(prefs, m.createdAt)}
                       </time>
                     </header>
-                    <p dir="auto" className="whitespace-pre-line text-start text-sm leading-relaxed">{m.body}</p>
+                    <p className="whitespace-pre-line text-sm leading-relaxed [unicode-bidi:plaintext]">{m.body}</p>
                       <footer className="mt-2 flex flex-wrap items-center gap-1.5">
                         <span className={cn("inline-flex max-w-full items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ring-1 ring-inset", VIS_STYLE[m.visibility].chip)} data-testid="message-visibility">
                           <I className="size-3 shrink-0" />
