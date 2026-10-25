@@ -47,7 +47,7 @@ export function RequestStepper({ stages }: { stages: StepperStage[] }) {
               </div>
               {s.state === "current" && <p className="mt-0.5 text-xs font-medium text-[oklch(0.55_0.14_65)]">{s.who ? t("waitingFor", { name: s.who }) : t("inProgress")}</p>}
               {s.state !== "current" && s.who && <p className="mt-0.5 text-xs text-muted-foreground">{s.who}</p>}
-              {s.comment && <p className="mt-2 rounded-lg bg-muted/60 px-3 py-2 text-sm text-foreground/80">“{s.comment}”</p>}
+              {s.comment && <p dir="auto" className="mt-2 rounded-lg bg-muted/60 px-3 py-2 text-start text-sm text-foreground/80">“{s.comment}”</p>}
               {s.signed && (
                 <p className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-success/25 bg-success-soft px-2 py-1 text-xs text-success">
                   <PenLine className="size-3.5" />

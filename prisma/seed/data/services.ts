@@ -180,7 +180,7 @@ const RAW_SERVICES: ServiceInput[] = [
     },
     icon: "calendar-x",
     audience: ["student", "parent"],
-    workflowKey: "simple_approval",
+    workflowKey: "absence_report",
     appointmentTypeKey: null,
     slaHours: 24,
     sensitivity: "STANDARD",

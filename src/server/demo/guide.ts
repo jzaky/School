@@ -18,6 +18,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
   ],
   parent: [
     { key: "children", href: "/children" },
+    { key: "requestConversation", href: "/requests" },
     { key: "childSubjects", href: "/subjects" },
     { key: "childGrades", href: "/grades" },
     { key: "examTimetable", href: "/exams" },
@@ -33,6 +34,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "pathwayChild", href: "/career/pathways" },
   ],
   teacher: [
+    { key: "homeroomRegister", href: "/classes" },
     { key: "gradebook", href: "/grades" },
     { key: "refer", href: "/services/academic_concern" },
     { key: "myClasses", href: "/classes" },
@@ -86,6 +88,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "inspectionPack", href: "/admin/inspection" },
   ],
   admin: [
+    { key: "requestThreads", href: "/requests?tab=all" },
     { key: "schoolSetupWizard", href: "/setup?step=done" },
     { key: "importCenter", href: "/admin/import" },
     { key: "servicesAdmin", href: "/admin/services" },
@@ -102,6 +105,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "joinRequests", href: "/admin/join-requests" },
   ],
   registrar: [
+    { key: "absenceReports", href: "/requests?tab=all" },
     { key: "approvals", href: "/approvals" },
     { key: "registration", href: "/admin/registration?tab=rosters" },
     { key: "documents", href: "/documents" },

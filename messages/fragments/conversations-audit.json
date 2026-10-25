@@ -1,0 +1,11 @@
+{
+"adminAudit": {
+  "actions": {
+    "request_message_create": ["Wrote a message on a request", "كتب رسالة على طلب"],
+    "request_messages_view": ["Opened a protected request conversation", "فتح محادثة طلب محمي"],
+    "request_family_notify": ["Decided to notify the family", "قرر إبلاغ الأسرة"],
+    "request_file_view": ["Opened a request attachment", "فتح مرفق طلب"],
+    "request_file_denied": ["Was refused a private attachment", "رُفض وصوله إلى مرفق خاص"]
+  }
+}
+}

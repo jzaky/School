@@ -10,6 +10,8 @@ import { PageBody, PageHeader } from "@/components/app/page-header";
 import { EmptyState } from "@/components/app/empty-state";
 import { Pill } from "@/components/app/badges";
 import { Button } from "@/components/ui/button";
+import { ClassRegister } from "@/components/attendance/class-register";
+import { formatPrefs } from "@/server/format";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -21,8 +23,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 const SOURCE_TONE = { STUDENT: "info", PARENT: "gold", STAFF: "neutral", IMPORT: "violet", SUBJECT_CHANGE: "brand" } as const;
 
-export default async function ClassRosterPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ClassRosterPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ date?: string }> }) {
   const { id } = await params;
+  const sp = await searchParams;
   const ctx = await getCtx();
   if (!ctx.isStaff) notFound();
   const { db, locale } = ctx;
@@ -80,6 +83,7 @@ export default async function ClassRosterPage({ params }: { params: Promise<{ id
         {teacher ? <Pill tone="brand">{userName(teacher.user, locale)}</Pill> : <Pill tone="warning">{t("teacherTbc")}</Pill>}
         {cls.optionBlock && <Pill tone="info">{t("blockN", { block: cls.optionBlock })}</Pill>}
       </div>
+      {students.length > 0 && <ClassRegister ctx={ctx} prefs={await formatPrefs(ctx)} classId={cls.id} students={students.map((e) => e.student)} anchor={sp.date} />}
       {students.length === 0 ? (
         <EmptyState icon={<Users className="size-5" />} title={t("rosterEmpty")} body={t("rosterEmptyBody")} />
       ) : (

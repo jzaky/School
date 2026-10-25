@@ -1,0 +1,194 @@
+{
+"conversation": {
+  "title": ["Conversation", "المحادثة"],
+  "subtitleFamily": ["Messages between you and the school about this request. Only messages shared with your family appear here.", "الرسائل بينك وبين المدرسة بشأن هذا الطلب. لا يظهر هنا إلا ما شاركته المدرسة مع أسرتك."],
+  "subtitleStaff": ["One thread for everyone handling this request. Each message shows who can see it.", "محادثة واحدة لكل من يتابع هذا الطلب، وتوضح كل رسالة من يمكنه رؤيتها."],
+  "subtitleStaffRequester": ["Messages between you and the team handling your request.", "الرسائل بينك وبين الفريق الذي يتابع طلبك."],
+  "count": ["{n, plural, =0 {No messages} one {1 message} other {# messages}}", "{n, plural, =0 {لا توجد رسائل} one {رسالة واحدة} two {رسالتان} few {# رسائل} many {# رسالة} other {# رسالة}}"],
+  "legend": ["Who can see each message", "من يمكنه رؤية كل رسالة"],
+  "legendHint": {
+    "SHARED": ["the family sees it", "تراها الأسرة"],
+    "STAFF": ["never shown to the family", "لا تظهر للأسرة أبدًا"],
+    "PRIVATE": ["only the people chosen", "للأشخاص المختارين فقط"]
+  },
+  "vis": {
+    "SHARED": ["Family and staff", "الأسرة والموظفون"],
+    "SHARED_REQUESTER": ["Requester and team", "مقدم الطلب والفريق"],
+    "STAFF": ["Staff only", "للموظفين فقط"],
+    "PRIVATE": ["Private", "خاصة"]
+  },
+  "privateWith": ["Private: you and {names}", "خاصة: أنت و{names}"],
+  "you": ["You", "أنت"],
+  "newMessages": ["New messages", "رسائل جديدة"],
+  "familyNotifiedDecision": ["Family notified by staff decision", "أُبلغت الأسرة بقرار من الموظفين"],
+  "sensitiveNoAuto": ["Wellbeing or safeguarding matter: the family is never notified automatically. Sharing a message with them is a decision you record with a reason. Opening this conversation is recorded in the audit log.", "مسألة رفاه أو حماية: لا تُبلَّغ الأسرة تلقائيًا أبدًا. مشاركة رسالة معها قرار تسجله مع سببه. يُسجَّل فتح هذه المحادثة في سجل التدقيق."],
+  "sensitiveProtected": ["Protected request: the family cannot see it, so messages here stay with staff. Opening this conversation is recorded in the audit log.", "طلب محمي: لا تستطيع الأسرة رؤيته، لذا تبقى الرسائل هنا بين الموظفين. يُسجَّل فتح هذه المحادثة في سجل التدقيق."],
+  "emptyTitle": ["No messages yet", "لا توجد رسائل بعد"],
+  "emptyFamily": ["Have a question about this request? Write to the school here. Your message goes to the staff handling it.", "هل لديك سؤال عن هذا الطلب؟ اكتب للمدرسة هنا وستصل رسالتك إلى الموظفين المتابعين له."],
+  "emptyStaff": ["Start the conversation. Choose who can see your message before you send it.", "ابدأ المحادثة، واختر من يمكنه رؤية رسالتك قبل إرسالها."],
+  "visibilityLabel": ["Who can see this message", "من يمكنه رؤية هذه الرسالة"],
+  "whoCanSee": ["Who can see this:", "من يرى هذه الرسالة:"],
+  "theRequester": ["the requester", "مقدم الطلب"],
+  "listSeparator": [", ", "، "],
+  "hint": {
+    "family": ["you, your family on this request and the staff handling it. Staff notes stay with staff.", "أنت وأسرتك في هذا الطلب والموظفون المتابعون له. أما ملاحظات الموظفين فتبقى بينهم."],
+    "shared": ["{family} and the staff on this request. The family is told in the app and by email, without the message text.", "{family} والموظفون في هذا الطلب. تُبلَّغ الأسرة في التطبيق وبالبريد الإلكتروني دون نص الرسالة."],
+    "sharedStaffRequest": ["{family} and the staff on this request.", "{family} والموظفون في هذا الطلب."],
+    "sharedSensitive": ["{family} and the staff on this request. The family is not notified unless you record a decision below.", "{family} والموظفون في هذا الطلب. لا تُبلَّغ الأسرة إلا إذا سجلت قرارًا أدناه."],
+    "sharedRequester": ["you and the team handling your request.", "أنت والفريق الذي يتابع طلبك."],
+    "staff": ["{n, plural, one {the 1 staff member} other {the # staff members}} who can see this request. Never shown to the family.", "{n, plural, one {موظف واحد} two {موظفان} few {# موظفين} many {# موظفًا} other {# موظف}} ممن يمكنهم رؤية هذا الطلب. لا تظهر للأسرة أبدًا."],
+    "privatePick": ["only you and the people you choose below.", "أنت والأشخاص الذين تختارهم أدناه فقط."],
+    "privateTo": ["only you and {names}. Nobody else, including other staff.", "أنت و{names} فقط، ولا أحد غيركم حتى من الموظفين."]
+  },
+  "sharedBlocked": ["Families cannot see this protected request. To contact the family, record a parent notification decision on the case.", "لا تستطيع الأسر رؤية هذا الطلب المحمي. للتواصل مع الأسرة، سجّل قرار إبلاغ ولي الأمر في الحالة."],
+  "chooseRecipients": ["Share this private note with", "شارك هذه الملاحظة الخاصة مع"],
+  "noTeam": ["Nobody else on staff can see this request yet.", "لا يوجد موظف آخر يمكنه رؤية هذا الطلب حاليًا."],
+  "messageLabel": ["Message", "الرسالة"],
+  "placeholderFamily": ["Write to the school", "اكتب رسالة إلى المدرسة"],
+  "placeholderShared": ["Write to the family and the team", "اكتب للأسرة والفريق"],
+  "placeholderStaff": ["Internal note for the team", "ملاحظة داخلية للفريق"],
+  "placeholderTeam": ["Write to the team handling your request", "اكتب إلى الفريق الذي يتابع طلبك"],
+  "placeholderSharedRequester": ["Write to the requester and the team", "اكتب إلى مقدم الطلب والفريق"],
+  "placeholderPrivate": ["Private note", "ملاحظة خاصة"],
+  "notifyFamily": ["Notify the family now", "أبلغ الأسرة الآن"],
+  "notifyFamilyHelp": ["Your decision and its reason are recorded on the case.", "يُسجَّل قرارك وسببه في الحالة."],
+  "notifyReason": ["Reason for notifying the family", "سبب إبلاغ الأسرة"],
+  "footStaff": ["Messages never appear in search, dashboards or reports.", "لا تظهر الرسائل في البحث أو لوحات المتابعة أو التقارير."],
+  "footFamily": ["Emails only tell you a message is waiting. The text stays in Horizon.", "يخبرك البريد الإلكتروني بوجود رسالة فقط، ويبقى نصها في هورايزن."],
+  "sendReply": ["Send", "إرسال"],
+  "sendShared": ["Send to family", "إرسال للأسرة"],
+  "sendStaff": ["Add staff note", "إضافة ملاحظة للموظفين"],
+  "sendPrivate": ["Send private note", "إرسال ملاحظة خاصة"],
+  "sentShared": ["Message sent", "تم إرسال الرسالة"],
+  "sentStaff": ["Staff note added", "تمت إضافة الملاحظة للموظفين"],
+  "sentPrivate": ["Private note sent", "تم إرسال الملاحظة الخاصة"],
+  "error": {
+    "generic": ["Something went wrong. Please try again.", "حدث خطأ ما. يرجى المحاولة مرة أخرى."],
+    "NOT_FOUND": ["This conversation is not available to you.", "هذه المحادثة غير متاحة لك."],
+    "EMPTY": ["Write a message first.", "اكتب رسالة أولًا."],
+    "TOO_LONG": ["The message is too long.", "الرسالة طويلة جدًا."],
+    "INVALID": ["Please check the message and try again.", "يرجى مراجعة الرسالة والمحاولة مرة أخرى."],
+    "FORBIDDEN": ["You cannot send this kind of message here.", "لا يمكنك إرسال هذا النوع من الرسائل هنا."],
+    "PROTECTED": ["Families cannot see this request. Choose Staff only or Private.", "لا تستطيع الأسر رؤية هذا الطلب. اختر للموظفين فقط أو خاصة."],
+    "RECIPIENTS_REQUIRED": ["Choose at least one person for a private note.", "اختر شخصًا واحدًا على الأقل للملاحظة الخاصة."],
+    "RECIPIENT_NOT_ALLOWED": ["One of the people chosen cannot see this request.", "أحد الأشخاص المختارين لا يمكنه رؤية هذا الطلب."],
+    "REASON_REQUIRED": ["Give a reason for notifying the family.", "اذكر سبب إبلاغ الأسرة."]
+  }
+},
+"requests": {
+  "unreadN": ["{n, plural, one {1 new} other {# new}}", "{n, plural, one {رسالة جديدة} two {رسالتان جديدتان} few {# رسائل جديدة} many {# رسالة جديدة} other {# رسالة جديدة}}"],
+  "reasonPrivate": ["Reason private", "السبب خاص"],
+  "messagesN": ["{n, plural, one {1 message} other {# messages}}", "{n, plural, one {رسالة واحدة} two {رسالتان} few {# رسائل} many {# رسالة} other {# رسالة}}"],
+  "privacy": {
+    "studentTitle": ["The reason for this absence is private", "سبب هذا الغياب خاص"],
+    "studentBody": ["Only the family, the attendance office and the school nurse can see the reason and any doctor's note. You can see that the absence is excused and who reported it.", "لا يطّلع على السبب وأي تقرير طبي إلا الأسرة ومكتب الحضور وممرضة المدرسة. يمكنك أن ترى أن الغياب بعذر ومن أبلغ عنه."],
+    "staffTitle": ["The details of this leave are private", "تفاصيل هذه الإجازة خاصة"],
+    "staffBody": ["Only {name} and the people who manage staff absence can see the type of leave and any certificate. Substitutes see only the notes for cover.", "لا يطّلع على نوع الإجازة وأي شهادة إلا {name} والمسؤولون عن غياب الموظفين. ولا يرى المعلمون البدلاء إلا ملاحظات الاحتياط."],
+    "excusedByParent": ["Excused absence, reported by parent", "غياب بعذر، أبلغ عنه ولي الأمر"],
+    "excusedByStudent": ["Excused absence, reported by the student", "غياب بعذر، أبلغ عنه الطالب"],
+    "reportedByParent": ["Absence reported by parent, being checked by the attendance office", "غياب أبلغ عنه ولي الأمر، ويراجعه مكتب الحضور"],
+    "reportedByStudent": ["Absence reported by the student, being checked by the attendance office", "غياب أبلغ عنه الطالب، ويراجعه مكتب الحضور"],
+    "studentVisibleTo": ["Private: family, attendance office and nurse", "خاص: الأسرة ومكتب الحضور والممرضة"],
+    "staffVisibleTo": ["Private: the requester and absence managers", "خاص: مقدم الطلب والمسؤولون عن الغياب"]
+  }
+},
+"attendance": {
+  "registerTitle": ["Register", "سجل الحضور"],
+  "weekOf": ["Week of {date}", "أسبوع {date}"],
+  "previousWeek": ["Previous week", "الأسبوع السابق"],
+  "nextWeek": ["Next week", "الأسبوع التالي"],
+  "student": ["Student", "الطالب"],
+  "minutesLate": ["{n} minutes late", "متأخر {n} دقيقة"],
+  "status": {
+    "PRESENT": ["Present", "حاضر"],
+    "LATE": ["Late", "متأخر"],
+    "ABSENT": ["Absent", "غائب"],
+    "EXCUSED": ["Excused", "غياب بعذر"]
+  },
+  "short": {
+    "PRESENT": ["P", "ح"],
+    "LATE": ["L", "ت"],
+    "ABSENT": ["A", "غ"],
+    "EXCUSED": ["E", "ع"]
+  },
+  "excused": ["Excused absence", "غياب بعذر"],
+  "excusedByParent": ["Excused absence, reported by parent", "غياب بعذر، أبلغ عنه ولي الأمر"],
+  "excusedByStudent": ["Excused absence, reported by the student", "غياب بعذر، أبلغ عنه الطالب"],
+  "excusedByOffice": ["Excused absence, recorded by the school office", "غياب بعذر، سجله مكتب المدرسة"],
+  "legendFamily": ["Reported by the family", "أبلغت عنه الأسرة"],
+  "awayThisWeek": ["Away this week", "الغائبون هذا الأسبوع"],
+  "youSeeReasons": ["You can see reasons (attendance team)", "يمكنك رؤية الأسباب (فريق الحضور)"],
+  "reasonsPrivate": ["Reasons are private", "الأسباب خاصة"],
+  "reasonPrivateShort": ["Reason private", "السبب خاص"],
+  "nobodyAway": ["Nobody was away this week.", "لم يغب أحد هذا الأسبوع."],
+  "nobodyAwayDay": ["Everyone is in today.", "الجميع حاضرون اليوم."],
+  "seeReport": ["Open report", "فتح البلاغ"],
+  "reasonType": {
+    "illness": ["Illness", "مرض"],
+    "medical_appointment": ["Medical appointment", "موعد طبي"],
+    "family_event": ["Family event", "مناسبة عائلية"],
+    "travel": ["Travel", "سفر"],
+    "religious_observance": ["Religious observance", "مناسبة دينية"],
+    "other": ["Other", "سبب آخر"]
+  },
+  "homeroomTitle": ["{name} register", "سجل حضور {name}"],
+  "openRegister": ["Open register", "فتح السجل"],
+  "presentN": ["{n} present", "{n} حاضر"],
+  "awayN": ["{n} away", "{n} غائب"]
+},
+"timetable": {
+  "privateReason": ["Reason (private)", "السبب (خاص)"],
+  "chooseReason": ["Choose a reason", "اختر السبب"],
+  "privateReasonDetails": ["Private details", "تفاصيل خاصة"],
+  "privateReasonPlaceholder": ["Optional details, for example a doctor's appointment at 10:00", "تفاصيل اختيارية، مثل موعد عند الطبيب الساعة 10:00"],
+  "privateReasonHelp": ["Only you and the people who manage staff absence see this. Substitutes and colleagues never do.", "لا يطّلع على هذا إلا أنت والمسؤولون عن غياب الموظفين، ولا يراه المعلمون البدلاء أو الزملاء أبدًا."],
+  "privateReasonHelpManager": ["Only the teacher, you and the people who manage staff absence see this. Substitutes and colleagues never do.", "لا يطّلع على هذا إلا المعلم وأنت والمسؤولون عن غياب الموظفين، ولا يراه المعلمون البدلاء أو الزملاء أبدًا."],
+  "reasonKind": {
+    "SICK": ["Sick leave", "إجازة مرضية"],
+    "MEDICAL_APPOINTMENT": ["Medical appointment", "موعد طبي"],
+    "ANNUAL_LEAVE": ["Annual leave", "إجازة سنوية"],
+    "FAMILY": ["Family reasons", "ظروف عائلية"],
+    "PARENTAL_LEAVE": ["Parental leave", "إجازة والدية"],
+    "RELIGIOUS": ["Religious leave", "إجازة دينية"],
+    "TRAINING": ["Training", "تدريب"],
+    "SCHOOL_BUSINESS": ["School business", "مهمة مدرسية"],
+    "PERSONAL": ["Personal reasons", "أسباب شخصية"],
+    "OTHER": ["Other", "أخرى"]
+  },
+  "privateLabel": ["Private", "خاص"],
+  "privateReasonSeenBy": ["Seen only by the absent person, whoever reported it and the people who manage staff absence", "لا يطّلع عليه إلا الموظف الغائب ومن أبلغ عن الغياب والمسؤولون عن غياب الموظفين"],
+  "privateReasonHidden": ["Only the absent person and the people who manage staff absence can see why", "لا يعرف السبب إلا الموظف الغائب والمسؤولون عن غياب الموظفين"],
+  "reasonPrivate": ["Reason private", "السبب خاص"],
+  "coverNotesShort": ["Cover notes", "ملاحظات الاحتياط"],
+  "onlyYouAndManagers": ["Private: only you and the people who manage staff absence can see this.", "خاص: لا يطّلع عليه إلا أنت والمسؤولون عن غياب الموظفين."],
+  "coverNotices": ["Your cover lessons", "حصص الاحتياط المسندة إليك"],
+  "coverNoticesBody": ["Lessons you are covering in the next two weeks, with the notes the teacher left.", "الحصص التي تغطيها خلال الأسبوعين القادمين، مع الملاحظات التي تركها المعلم."],
+  "absentCoverArranged": ["Absent, cover arranged", "غائب، وتم ترتيب الاحتياط"],
+  "noCoverNotes": ["No notes for cover were left.", "لم تُترك ملاحظات للاحتياط."],
+  "reasonNeverShared": ["Why a colleague is away is private and never shared with substitutes.", "سبب غياب الزميل خاص ولا يُشارك مع المعلمين البدلاء."]
+},
+"guide": {
+  "steps": {
+    "requestConversation": {"title": ["Talk to the school on a request", "تحدّث مع المدرسة داخل الطلب"], "body": ["Open Yara's bus request: one thread with the school, and a new reply waiting for you.", "افتح طلب الحافلة الخاص بيارا: محادثة واحدة مع المدرسة، ورد جديد بانتظارك."]},
+    "homeroomRegister": {"title": ["Check your homeroom register", "راجع سجل حضور فصلك"], "body": ["Adam is off sick. You see an excused absence reported by his parent, never the reason.", "آدم غائب بسبب المرض. ترى أن الغياب بعذر وأن ولي الأمر أبلغ عنه، دون أن ترى السبب."]},
+    "requestThreads": {"title": ["One thread per request", "محادثة واحدة لكل طلب"], "body": ["Open Yara Nasser's bus request: family messages, staff-only notes and a private note to the principal, each labelled.", "افتح طلب الحافلة الخاص بيارا ناصر: رسائل الأسرة وملاحظات الموظفين وملاحظة خاصة للمدير، وكل منها موضح من يراه."]},
+    "absenceReports": {"title": ["Check sick-day reports", "راجع بلاغات الغياب المرضي"], "body": ["Adam Nasser's sick days: the doctor's note and a private note to the nurse. Teachers only see that he is excused.", "غياب آدم ناصر المرضي: التقرير الطبي وملاحظة خاصة للممرضة. لا يرى المعلمون إلا أن غيابه بعذر."]}
+  }
+},
+"settings": {
+  "kinds": {
+    "request_message": ["A new message on a request", "رسالة جديدة على طلب"],
+    "absence_excused": ["A student in my homeroom is reported absent", "الإبلاغ عن غياب طالب في فصلي"]
+  }
+},
+"access": {
+  "perms": {
+    "absence": {
+      "reasons": {"label": ["See why staff are absent", "معرفة أسباب غياب الموظفين"], "help": ["Read the private reason for a staff absence or leave. Substitutes never see it.", "الاطلاع على السبب الخاص لغياب موظف أو إجازته، ولا يراه المعلمون البدلاء."]}
+    },
+    "attendance": {
+      "reasons": {"label": ["See why students are absent", "معرفة أسباب غياب الطلاب"], "help": ["Read the reason and doctor's notes on absences reported by families. Teachers see only that an absence is excused.", "الاطلاع على السبب والتقارير الطبية في بلاغات الغياب من الأسر، ولا يرى المعلمون إلا أن الغياب بعذر."]}
+    }
+  }
+}
+}

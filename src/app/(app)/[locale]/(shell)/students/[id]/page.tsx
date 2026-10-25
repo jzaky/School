@@ -16,6 +16,7 @@ import { RevealId } from "@/components/students/reveal-id";
 import { listableCaseWhere } from "@/server/access/case-access";
 import { requestWhere, isRestrictedForViewer } from "@/server/access/request-access";
 import { audit } from "@/server/audit/audit";
+import { excusedLabelKey, seesStudentAbsenceReasons } from "@/server/access/absence-access";
 
 export default async function StudentPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -23,6 +24,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
   if (!ctx.can("people.view")) notFound();
   const t = await getTranslations("students");
   const ts = await getTranslations("status");
+  const ta = await getTranslations("attendance");
   const prefs = await formatPrefs(ctx);
   const { db, orgId, locale } = ctx;
   const s = await db.student.findUnique({ where: { id }, include: { guardians: { include: { guardian: true } }, careerProf: true } });
@@ -35,7 +37,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
       .findMany({ where: { AND: [listableCaseWhere(ctx, "dashboard"), { studentId: s.id }] }, select: { id: true } })
       .then((visible) => db.appointment.findMany({ where: { orgId, studentId: s.id, OR: [{ caseId: null }, { caseId: { in: visible.map((v) => v.id) } }] }, include: { type: true }, orderBy: { startsAt: "desc" }, take: 6 })),
     db.enrollment.findMany({ where: { studentId: s.id }, include: { class: { include: { subject: true } } } }),
-    db.attendanceRecord.findMany({ where: { studentId: s.id, date: { gte: since } }, orderBy: { date: "asc" } }),
+    db.attendanceRecord.findMany({ where: { studentId: s.id, date: { gte: since, lte: new Date() } }, orderBy: { date: "asc" } }),
     db.document.findMany({ where: { studentId: s.id, caseId: null, sensitivity: { in: ctx.can("documents.sensitive") || ctx.can("people.reveal_ids") ? ["STANDARD", "CONFIDENTIAL"] : ["STANDARD"] } }, orderBy: { createdAt: "desc" }, take: 6 }),
     db.careerRecommendation.findMany({ where: { studentId: s.id }, include: { career: true }, orderBy: { rank: "asc" }, take: 3 }),
   ]);
@@ -116,11 +118,32 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
               {attendance.map((a) => (
                 <span
                   key={a.id}
-                  title={`${dubaiDayKey(a.date)}: ${t(`att.${a.status}`)}`}
+                  title={`${dubaiDayKey(a.date)}: ${a.status === "EXCUSED" ? ta(excusedLabelKey(a.source)) : t(`att.${a.status}`)}`}
                   className={cn("size-4 rounded-sm", a.status === "PRESENT" ? "bg-success/70" : a.status === "LATE" ? "bg-warning/80" : a.status === "EXCUSED" ? "bg-info/60" : "bg-danger/80")}
                 />
               ))}
             </div>
+            {attendance.some((a) => a.requestId) && (
+              <ul className="mt-3 space-y-1" data-testid="reported-absences">
+                {attendance
+                  .filter((a) => a.requestId)
+                  .slice(-4)
+                  .map((a) => (
+                    <li key={a.id} className="flex flex-wrap items-center gap-x-2 text-xs">
+                      <span className="size-2 rounded-sm bg-info/60" />
+                      <span className="tabular-nums text-muted-foreground">{fmtDate(prefs, a.date)}</span>
+                      <span>{ta(excusedLabelKey(a.source))}</span>
+                      {seesStudentAbsenceReasons(ctx) ? (
+                        <Link href={`/requests/${a.requestId}`} className="font-medium text-brand hover:underline">
+                          {ta("seeReport")}
+                        </Link>
+                      ) : (
+                        <span className="text-muted-foreground">· {ta("reasonPrivateShort")}</span>
+                      )}
+                    </li>
+                  ))}
+              </ul>
+            )}
             <div className="mt-3 flex flex-wrap gap-4 text-xs text-muted-foreground">
               {(["PRESENT", "LATE", "EXCUSED", "ABSENT"] as const).map((k) => (
                 <span key={k} className="flex items-center gap-1.5">

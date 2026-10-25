@@ -2,7 +2,7 @@
 // On a new absence, every lesson the teacher has in the range gets a CoverAssignment: a free substitute
 // when there is one (see cover-picker.ts), otherwise UNCOVERED. Substitutes are notified with an
 // idempotency key per cover assignment and substitute; the head of department gets a summary.
-import type { CoverStatus } from "@prisma/client";
+import type { CoverStatus, StaffAbsenceReason } from "@prisma/client";
 import type { ExecCtx, Tx } from "@/server/db";
 import { notify } from "@/server/notify/notify";
 import { busyKey, pickSubstitutes, rankCandidates, type CoverCandidate, type CoverLesson } from "./cover-picker";
@@ -173,11 +173,12 @@ async function notifySubstitute(ec: ExecCtx, yearId: string, coverId: string) {
   const slot = await tx.timetableSlot.findFirst({ where: { orgId, id: c.slotId }, select: { room: true } });
   const names = await memberNames(tx, orgId, [c.originalTeacherId]);
   const vars = await lessonVars(tx, orgId, yearId, { classId: c.classId, date: dateKey(c.date), periodNo: c.periodNo, room: slot?.room ?? null });
-  const notes = c.absence.reasonEn?.trim();
+  // Substitutes get the cover notes only. The private reason for the absence never leaves the absence record.
+  const notes = c.absence.coverNotes?.trim();
   await notify(ec, {
     recipients: [c.substituteId],
     templateKey: "cover_assigned",
-    vars: { ...vars, teacher: names.get(c.originalTeacherId) ?? { en: "", ar: "" }, notes: notes ? { en: `Notes: ${notes}`, ar: `ملاحظات: ${notes}` } : "" },
+    vars: { ...vars, teacher: names.get(c.originalTeacherId) ?? { en: "", ar: "" }, notes: notes ? { en: `Notes for cover: ${notes}`, ar: `ملاحظات للمعلم البديل: ${notes}` } : "" },
     href: "/timetable",
     kind: "cover_assigned",
     idempotencyBase: `cover:${c.id}:${c.substituteId}`,
@@ -203,7 +204,11 @@ export type AbsenceInput = {
   allDay: boolean;
   fromPeriod?: number | null;
   toPeriod?: number | null;
+  /** Shared with substitutes: lesson instructions. */
   notes?: string | null;
+  /** Private: why the person is away (see src/server/access/absence-access.ts). */
+  reasonKind?: StaffAbsenceReason | null;
+  privateReason?: string | null;
   reportedById: string;
 };
 
@@ -229,12 +234,15 @@ export async function reportAbsence(ec: ExecCtx, input: AbsenceInput) {
       allDay: input.allDay,
       fromPeriod: input.allDay ? null : input.fromPeriod,
       toPeriod: input.allDay ? null : input.toPeriod,
-      reasonEn: input.notes?.trim() || null,
+      coverNotes: input.notes?.trim() || null,
+      reasonKind: input.reasonKind ?? null,
+      privateReason: input.privateReason?.trim() || null,
       reportedById: input.reportedById,
       createdAt: ec.now,
     },
   });
-  await tx.auditEvent.create({ data: { orgId, actorId: input.reportedById, action: "absence.report", entityType: "StaffAbsence", entityId: absence.id, meta: { membershipId: input.membershipId, startsOn: input.startsOn, endsOn: input.endsOn, allDay: input.allDay } as never } });
+  // The audit row records that a private reason was given, never the reason itself.
+  await tx.auditEvent.create({ data: { orgId, actorId: input.reportedById, action: "absence.report", entityType: "StaffAbsence", entityId: absence.id, meta: { membershipId: input.membershipId, startsOn: input.startsOn, endsOn: input.endsOn, allDay: input.allDay, privateReason: Boolean(input.reasonKind || input.privateReason) } as never } });
   const result = await arrangeCover(ec, absence.id);
   return { absence, ...result };
 }

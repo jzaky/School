@@ -1,7 +1,7 @@
 // Demo data for the timetable module: teacher qualifications, a UAE bell schedule, generated lessons,
 // a staff absence today with cover arranged (one lesson left uncovered) and a few past absences.
 // Safe to re-run: every step skips when its data already exists. Uses only db, orgId and now.
-import type { PrismaClient } from "@prisma/client";
+import type { PrismaClient, StaffAbsenceReason } from "@prisma/client";
 import type { SeedWorld } from "../demo";
 import type { Tx } from "@/server/db";
 import { execCtx } from "@/server/db";
@@ -58,7 +58,7 @@ export async function seedTimetable(w: World) {
   for (const [m, load] of loads) await db.teacherSubject.updateMany({ where: { orgId, membershipId: m, maxPeriodsPerWeek: { lt: load } }, data: { maxPeriodsPerWeek: load } });
 
   // 4. Absences and cover.
-  if ((await db.staffAbsence.count({ where: { orgId } })) === 0) await seedAbsences(db, orgId, now);
+  if ((await db.staffAbsence.count({ where: { orgId, requestId: null } })) === 0) await seedAbsences(db, orgId, now);
 }
 
 async function fallbackBlocks(w: World, yearId: string) {
@@ -140,6 +140,9 @@ async function seedAbsences(db: PrismaClient, orgId: string, now: Date) {
     endsOn: todayKey,
     allDay: true,
     notes: "Worksheets and slides are in the shared Science drive. Students continue the practice questions.",
+    // Private: only the teacher and the people who manage staff absence see this. Substitutes get the notes above.
+    reasonKind: "SICK",
+    privateReason: "High temperature since last night. Expects to be back tomorrow.",
     reportedById: absent.membershipId,
   });
   const covers = await db.coverAssignment.findMany({ where: { orgId, absenceId: res.absence.id }, orderBy: { periodNo: "asc" } });
@@ -162,12 +165,12 @@ async function seedAbsences(db: PrismaClient, orgId: string, now: Date) {
 
   // History: past absences across departments, all covered.
   const teachers = [...new Set(slots.map((s) => s.teacherMembershipId).filter(Boolean) as string[])].filter((m) => m !== absent.membershipId && m !== daniel?.membershipId).sort();
-  const past = [
-    { offset: -3, notes: "Medical appointment in the morning.", periods: [2, 5] as [number, number] },
-    { offset: -8, notes: "Year 10 practice papers are on the shared drive." },
-    { offset: -14, notes: "Training day at KHDA." },
-    { offset: -17, notes: "Family matter." },
-    { offset: -21, notes: "Please collect homework at the end of the lesson." },
+  const past: Array<{ offset: number; notes: string; reasonKind: StaffAbsenceReason; privateReason?: string; periods?: [number, number] }> = [
+    { offset: -3, notes: "Grade 10 continue the revision booklet, pages 14 to 18.", reasonKind: "MEDICAL_APPOINTMENT", privateReason: "Hospital check-up in the morning.", periods: [2, 5] },
+    { offset: -8, notes: "Year 10 practice papers are on the shared drive.", reasonKind: "SICK", privateReason: "Flu." },
+    { offset: -14, notes: "Students watch the documentary linked on the class page and answer the questions.", reasonKind: "TRAINING", privateReason: "Curriculum training day." },
+    { offset: -17, notes: "Silent reading, then the vocabulary quiz in the blue folder.", reasonKind: "FAMILY", privateReason: "Family emergency, back the next day." },
+    { offset: -21, notes: "Please collect homework at the end of the lesson.", reasonKind: "SICK" },
   ];
   for (let i = 0; i < past.length; i++) {
     const p = past[i];
@@ -182,6 +185,8 @@ async function seedAbsences(db: PrismaClient, orgId: string, now: Date) {
       fromPeriod: p.periods?.[0] ?? null,
       toPeriod: p.periods?.[1] ?? null,
       notes: p.notes,
+      reasonKind: p.reasonKind,
+      privateReason: p.privateReason ?? null,
       reportedById: i % 2 ? reporter : who,
     });
     await db.coverAssignment.updateMany({ where: { orgId, absenceId: r.absence.id, status: "ASSIGNED" }, data: { status: "DONE" } });

@@ -761,6 +761,70 @@ export const WORKFLOW_TEMPLATES: WorkflowTemplate[] = [
     ),
   },
   {
+    key: "absence_report",
+    name: { en: "Absence report", ar: "الإبلاغ عن الغياب" },
+    description: {
+      en: "Illness and medical appointments go to the attendance office only; planned absences need the principal. Approved days are marked as excused on the register and the homeroom teacher is told, without the reason.",
+      ar: "يذهب الغياب المرضي والمواعيد الطبية إلى مكتب الحضور فقط، ويحتاج الغياب المخطط له إلى موافقة مدير المدرسة. تُسجَّل الأيام المعتمدة غيابًا بعذر في سجل الحضور ويُبلَّغ معلم الفصل دون ذكر السبب.",
+    },
+    graph: graph(
+      [
+        start("Absence reported", "تم الإبلاغ عن الغياب"),
+        [
+          "is_medical",
+          "condition",
+          {
+            label: { en: "Illness or medical?", ar: "مرض أو موعد طبي؟" },
+            condition: { field: "form.absenceType", op: "in", value: ["illness", "medical_appointment"] },
+          },
+        ],
+        [
+          "attendance",
+          "approval",
+          {
+            label: { en: "Attendance office", ar: "مكتب الحضور" },
+            mode: "PARALLEL_ANY",
+            approvers: [{ assignee: { kind: "role", role: "registrar" }, label: { en: "Attendance office", ar: "مكتب الحضور" } }],
+            dueInHours: 24,
+          },
+        ],
+        [
+          "principal",
+          "approval",
+          {
+            label: { en: "Principal", ar: "مدير المدرسة" },
+            mode: "PARALLEL_ANY",
+            approvers: [{ assignee: { kind: "role", role: "principal" }, label: { en: "Principal", ar: "مدير المدرسة" } }],
+            dueInHours: 48,
+          },
+          1,
+        ],
+        [
+          "notify",
+          "notify",
+          {
+            label: { en: "Tell the family", ar: "إبلاغ الأسرة" },
+            recipients: [{ kind: "requester" }],
+            template: "request_completed",
+            channels: ["IN_APP", "EMAIL"],
+          },
+        ],
+        endOk("end", "Excused on the register", "مسجّل غيابًا بعذر"),
+        endRejected("end_rejected", 2),
+      ],
+      [
+        ["start", "is_medical"],
+        ["is_medical", "attendance", "true"],
+        ["is_medical", "principal", "false"],
+        ["attendance", "notify", "approved"],
+        ["attendance", "end_rejected", "rejected"],
+        ["principal", "notify", "approved"],
+        ["principal", "end_rejected", "rejected"],
+        ["notify", "end"],
+      ],
+    ),
+  },
+  {
     key: "simple_ticket",
     name: { en: "Service Ticket", ar: "تذكرة خدمة" },
     description: {

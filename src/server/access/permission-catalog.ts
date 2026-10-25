@@ -17,7 +17,7 @@ export const PERMISSION_GROUPS: Array<{ key: string; permissions: Permission[] }
   },
   { key: "people", permissions: ["people.view", "people.manage", "people.invite", "people.reveal_ids", "people.medical"] },
   { key: "grades", permissions: ["grades.view_own", "grades.enter", "grades.view_all", "registration.submit", "registration.manage"] },
-  { key: "timetable", permissions: ["calendar.view", "calendar.manage", "timetable.manage", "absence.report", "cover.manage"] },
+  { key: "timetable", permissions: ["calendar.view", "calendar.manage", "timetable.manage", "absence.report", "cover.manage", "absence.reasons", "attendance.reasons"] },
   { key: "meetings", permissions: ["appointments.book", "appointments.host", "appointments.manage"] },
   { key: "documents", permissions: ["documents.view", "documents.manage", "documents.sensitive", "documents.templates"] },
   {
@@ -39,6 +39,8 @@ export const SENSITIVE_PERMISSIONS: Permission[] = [
   "safeguarding.refer",
   "cases.wellbeing",
   "people.medical",
+  "absence.reasons",
+  "attendance.reasons",
   "people.reveal_ids",
   "audit.view",
   "roles.manage",

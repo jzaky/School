@@ -28,7 +28,7 @@ export default async function ChildPage({ params }: { params: Promise<{ id: stri
   const s = links.find((l) => l.studentId === id)!.student;
   const [enrollments, attendance, requests, appts, docs, recs, assessed] = await Promise.all([
     db.enrollment.findMany({ where: { studentId: id }, include: { class: { include: { subject: true } } } }),
-    db.attendanceRecord.findMany({ where: { studentId: id, date: { gte: new Date(Date.now() - 42 * 86400_000) } }, orderBy: { date: "asc" } }),
+    db.attendanceRecord.findMany({ where: { studentId: id, date: { gte: new Date(Date.now() - 42 * 86400_000), lte: new Date() } }, orderBy: { date: "asc" } }),
     db.request.findMany({ where: { AND: [requestWhere(ctx), { studentId: id }] }, include: { service: true }, orderBy: { submittedAt: "desc" }, take: 6 }),
     db.appointment.findMany({ where: { orgId, studentId: id, caseId: null }, include: { type: true }, orderBy: { startsAt: "desc" }, take: 5 }),
     db.document.findMany({ where: { studentId: id, visibleToFamily: true }, orderBy: { createdAt: "desc" } }),

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { AlertTriangle, CalendarClock, CheckCircle2, ChevronLeft, Download, FileText, FolderOpen, Lock, MapPin, Phone } from "lucide-react";
+import { AlertTriangle, CalendarCheck, CalendarClock, CheckCircle2, ChevronLeft, Download, FileText, FolderOpen, Lock, MapPin, MessagesSquare, Paperclip, Phone, ShieldCheck } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { fmtDate, fmtDateTime, fmtRelative } from "@/lib/format";
@@ -20,6 +20,10 @@ import { requestStages } from "@/server/requests/stages";
 import { formatAnswers } from "@/server/forms/answers";
 import { canViewCase } from "@/server/access/case-access";
 import type { FormSchema } from "@/server/forms/schema";
+import { ConversationPanel } from "@/components/requests/conversation-panel";
+import { threadAccess, unreadByRequest, visibleMessageWhere } from "@/server/requests/conversation";
+import { Pill } from "@/components/app/badges";
+import { absencePrivacy, canSeeAbsenceReason } from "@/server/access/absence-access";
 
 export default async function RequestPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ submitted?: string; danger?: string }> }) {
   const { id } = await params;
@@ -47,7 +51,18 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
       : db.timelineEvent.findMany({ where: { requestId: request.id, ...(ctx.isStaff ? {} : { staffOnly: false }) }, orderBy: { createdAt: "desc" }, take: 40 }),
   ]);
   const stages = restricted ? [] : await requestStages(ctx, request);
-  const answers = !restricted && request.submission ? await formatAnswers(ctx, request.submission.formVersion.schema as unknown as FormSchema, request.submission.data as Record<string, unknown>) : [];
+  const allAnswers = !restricted && request.submission ? await formatAnswers(ctx, request.submission.formVersion.schema as unknown as FormSchema, request.submission.data as Record<string, unknown>) : [];
+  // Absence reasons and medical notes are private (src/server/access/absence-access.ts).
+  const privacy = absencePrivacy(request.service.key);
+  const formData = (request.submission?.data ?? null) as Record<string, unknown> | null;
+  const amApprover = privacy && ctx.isStaff ? (await db.approvalAssignee.count({ where: { membershipId: ctx.membershipId, approval: { requestId: request.id } } })) > 0 : false;
+  const reasonVisible = canSeeAbsenceReason(ctx, request, formData, { approver: amApprover });
+  const answers = reasonVisible || !privacy ? allAnswers : allAnswers.filter((a) => !privacy.privateFields.includes(a.id));
+  // Conversation summary for the header (computed before the thread is opened and marked read below).
+  const thread = restricted ? null : await threadAccess(ctx, request.id);
+  const msgCount = thread ? await db.requestMessage.count({ where: { AND: [{ requestId: request.id }, visibleMessageWhere(ctx)] } }) : 0;
+  const unreadCount = thread ? ((await unreadByRequest(ctx, [request])).get(request.id) ?? 0) : 0;
+  const requesterIsParent = requester?.id ? (await db.membershipRole.count({ where: { membershipId: requester.id, role: { key: "parent" } } })) > 0 : false;
   const hosts = appointments.length ? await db.membership.findMany({ where: { id: { in: appointments.map((a) => a.hostId) } }, include: { user: true } }) : [];
   const theCase = request.caseId && ctx.isStaff ? await db.case.findUnique({ where: { id: request.caseId } }) : null;
   const caseVisible = theCase ? await canViewCase(ctx, theCase, { audit: false }) : false;
@@ -119,6 +134,13 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
               <RequestStatusBadge status={request.status} restricted={restricted} />
               {!restricted && request.priority !== "MEDIUM" && <PriorityBadge priority={request.priority} />}
               {!restricted && request.currentStepEn && open && <span className="text-sm text-muted-foreground">{pick(locale, request.currentStepEn, request.currentStepAr)}</span>}
+              {thread && msgCount > 0 && (
+                <a href="#conversation" className="inline-flex items-center gap-1.5 rounded-full border bg-card px-2.5 py-0.5 text-xs font-medium hover:border-brand/40 hover:text-brand" data-testid="conversation-jump">
+                  <MessagesSquare className="size-3.5" />
+                  {t("messagesN", { n: msgCount })}
+                  {unreadCount > 0 && <span className="rounded-full bg-brand px-1.5 text-[10px] font-semibold text-brand-foreground">{t("unreadN", { n: unreadCount })}</span>}
+                </a>
+              )}
             </div>
           </div>
         </div>
@@ -144,12 +166,43 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
             <Panel className="p-6">
               <PanelHeader title={t("progress")} description={request.slaDueAt && open ? t("expectedBy", { date: fmtDate(prefs, request.slaDueAt) }) : undefined} />
               <RequestStepper
-                stages={stages.map((s) => ({ id: s.id, label: s.label, state: s.state, who: s.who, comment: s.comment, signed: s.signed, when: s.at ? fmtDateTime(prefs, s.at) : null }))}
+                stages={stages.map((s) => ({ id: s.id, label: s.label, state: s.state, who: s.who, comment: reasonVisible ? s.comment : null, signed: s.signed, when: s.at ? fmtDateTime(prefs, s.at) : null }))}
               />
             </Panel>
+            {privacy && !reasonVisible && (
+              <Panel className="flex items-start gap-4 border-violet-200 bg-violet-50/50 p-5" >
+                <span className="grid size-10 shrink-0 place-items-center rounded-full bg-violet-100 text-violet-700">
+                  <Lock className="size-5" />
+                </span>
+                <div className="min-w-0" data-testid="reason-private">
+                  <div className="text-sm font-semibold">{privacy.subject === "student" ? t("privacy.studentTitle") : t("privacy.staffTitle")}</div>
+                  <p className="mt-1 max-w-xl text-sm text-muted-foreground">
+                    {privacy.subject === "student" ? t("privacy.studentBody") : t("privacy.staffBody", { name: requester ? userName(requester.user, locale) : "" })}
+                  </p>
+                  {privacy.subject === "student" && (
+                    <div className="mt-3">
+                      <Pill tone="info">
+                        <CalendarCheck className="size-3" />
+                        {request.status === "COMPLETED" ? (requesterIsParent ? t("privacy.excusedByParent") : t("privacy.excusedByStudent")) : requesterIsParent ? t("privacy.reportedByParent") : t("privacy.reportedByStudent")}
+                      </Pill>
+                    </div>
+                  )}
+                </div>
+              </Panel>
+            )}
             {answers.length > 0 && (
               <Panel className="p-6">
-                <PanelHeader title={t("details")} />
+                <PanelHeader
+                  title={t("details")}
+                  action={
+                    privacy && reasonVisible ? (
+                      <Pill tone="violet" className="max-w-[60%] whitespace-normal">
+                        <ShieldCheck className="size-3 shrink-0" />
+                        {privacy.subject === "student" ? t("privacy.studentVisibleTo") : t("privacy.staffVisibleTo")}
+                      </Pill>
+                    ) : undefined
+                  }
+                />
                 <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
                   {answers.map((a) => (
                     <div key={a.id} className={a.kind !== "text" ? "sm:col-span-2" : undefined}>
@@ -158,6 +211,11 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
                         {a.kind === "signature" && a.value.startsWith("data:image") ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={a.value} alt={a.label} className="h-16 rounded border bg-white" />
+                        ) : a.kind === "file" ? (
+                          <a href={`/api/requests/${request.id}/file?field=${encodeURIComponent(a.id)}`} target="_blank" rel="noopener" className="inline-flex max-w-full items-center gap-1.5 rounded-md border bg-muted/40 px-2.5 py-1.5 text-sm font-medium hover:border-brand/40 hover:text-brand" data-testid="request-file">
+                            <Paperclip className="size-3.5 shrink-0" />
+                            <span className="truncate">{a.value}</span>
+                          </a>
                         ) : (
                           a.value
                         )}
@@ -167,6 +225,7 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
                 </dl>
               </Panel>
             )}
+            <ConversationPanel ctx={ctx} prefs={prefs} requestId={request.id} />
             <Panel className="p-6">
               <PanelHeader title={t("activity")} />
               <Timeline
@@ -176,7 +235,7 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
                     id: e.id,
                     kind: e.kind,
                     title: pick(locale, e.titleEn, e.titleAr),
-                    body: pick(locale, e.bodyEn, e.bodyAr) || null,
+                    body: reasonVisible ? pick(locale, e.bodyEn, e.bodyAr) || null : null,
                     when: fmtRelative(prefs, e.createdAt),
                     whenTitle: fmtDateTime(prefs, e.createdAt),
                     actor: actor ? userName(actor.user, locale) : null,
