@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { BookOpen, CheckCircle2, ClipboardCheck, FileSpreadsheet, Layers, UserPlus, Users } from "lucide-react";
+import { BookOpen, CheckCircle2, ClipboardCheck, FileSpreadsheet, GraduationCap, Layers, Target, UserPlus, Users } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { fmtDateTime, fmtNumber } from "@/lib/format";
@@ -10,7 +10,9 @@ import { tenantTx } from "@/lib/tenant-db";
 import { Link } from "@/i18n/navigation";
 import { blocksOf } from "@/lib/registration";
 import { registrationTemplateCsv } from "@/lib/registration-csv";
-import { currentYear, getWindow, offeringsFor } from "@/server/registration/service";
+import { currentYear, getWindow, offeringsFor, selectionYear } from "@/server/registration/service";
+import { actorFromCtx } from "@/server/pathway-engine/access";
+import { electiveImpactFor, studentTargets } from "@/server/pathway-engine/levels-service";
 import { DEFAULT_CAPACITY } from "@/server/registration/allocate";
 import { PageBody, PageHeader } from "@/components/app/page-header";
 import { Panel, PanelHeader } from "@/components/app/panel";
@@ -29,21 +31,24 @@ type Tab = "offerings" | "rosters" | "import";
 const TABS: Tab[] = ["offerings", "rosters", "import"];
 const ACTIVE = ["REQUESTED", "ALLOCATED", "WAITLISTED"] as const;
 
-export default async function RegistrationAdminPage({ searchParams }: { searchParams: Promise<{ tab?: string; grade?: string; subject?: string }> }) {
+export default async function RegistrationAdminPage({ searchParams }: { searchParams: Promise<{ tab?: string; grade?: string; subject?: string; year?: string }> }) {
   const sp = await searchParams;
   const ctx = await getCtx();
   if (!ctx.can("registration.manage")) notFound();
   const t = await getTranslations("registration");
   const prefs = await formatPrefs(ctx);
   const { db, locale, orgId } = ctx;
-  const tab: Tab = TABS.includes(sp.tab as Tab) ? (sp.tab as Tab) : "offerings";
-
-  const { year, win, gradeLevels } = await tenantTx(orgId, async (tx) => {
-    const y = await currentYear(tx, orgId);
-    const w = await getWindow(tx, orgId);
+  const { year, thisYear, nextYear, isNext, win, gradeLevels } = await tenantTx(orgId, async (tx) => {
+    const current = await currentYear(tx, orgId);
+    const next = current ? await selectionYear(tx, orgId) : null;
+    const pickNext = !!next && sp.year === "next";
+    const y = pickNext ? next : current;
+    const w = y ? await getWindow(tx, orgId, new Date(), { yearId: y.id, next: pickNext }) : { eventId: null, deadline: null, open: false };
     const g = y ? await tx.subjectOffering.groupBy({ by: ["gradeLevel"], where: { orgId, academicYearId: y.id }, orderBy: { gradeLevel: "asc" } }) : [];
-    return { year: y, win: w, gradeLevels: g.map((x) => x.gradeLevel) };
+    return { year: y, thisYear: current, nextYear: next, isNext: pickNext, win: w, gradeLevels: g.map((x) => x.gradeLevel) };
   });
+  // Next year's course selection has no classes yet: only the offerings tab applies.
+  const tab: Tab = isNext ? "offerings" : TABS.includes(sp.tab as Tab) ? (sp.tab as Tab) : "offerings";
   if (!year) {
     return (
       <PageBody>
@@ -52,20 +57,30 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
       </PageBody>
     );
   }
+  // Next year: the students who move up into each grade (a Grade 9 student chooses Grade 10 courses).
+  const offset = isNext ? 1 : 0;
   const studentGrades = await db.student.groupBy({ by: ["gradeLevel"], where: { status: "ACTIVE" }, orderBy: { gradeLevel: "asc" } });
-  const grades = [...new Set([...gradeLevels, ...studentGrades.map((g) => g.gradeLevel)])].sort((a, b) => a - b);
+  const grades = isNext ? gradeLevels : [...new Set([...gradeLevels, ...studentGrades.map((g) => g.gradeLevel)])].sort((a, b) => a - b);
   const requested = sp.grade && /^\d{1,2}$/.test(sp.grade) ? Number(sp.grade) : null;
   const grade = requested !== null && grades.includes(requested) ? requested : (gradeLevels.find((g) => g >= 10) ?? grades[0] ?? 10);
 
-  const [studentCount, regStudents, allocated, waiting, sections] = await Promise.all([
-    db.student.count({ where: { status: "ACTIVE" } }),
+  // Next year: the cohort is the students on the tracks the offerings are for, in the grade below.
+  const nextOptions = isNext ? await db.subjectOffering.findMany({ where: { academicYearId: year.id }, select: { subjectId: true, kind: true, isAP: true, curriculum: true } }) : [];
+  const nextTracks = [...new Set(nextOptions.map((o) => o.curriculum))];
+  const cohort = isNext ? { gradeLevel: { in: gradeLevels.map((g) => g - 1) }, ...(nextTracks.includes(null) ? {} : { curriculum: { in: nextTracks.filter((c): c is NonNullable<typeof c> => !!c) } }) } : {};
+  const [studentCount, regStudents, allocated, waiting, sections, optionChoices, apChoices] = await Promise.all([
+    db.student.count({ where: { status: "ACTIVE", ...cohort } }),
     db.subjectRegistration.groupBy({ by: ["studentId"], where: { academicYearId: year.id, status: { in: [...ACTIVE] } } }),
     db.subjectRegistration.count({ where: { academicYearId: year.id, status: "ALLOCATED" } }),
     db.subjectRegistration.count({ where: { academicYearId: year.id, status: { in: ["REQUESTED", "WAITLISTED"] } } }),
     db.schoolClass.count({ where: { academicYearId: year.id, isHomeroom: false, subjectId: { not: null } } }),
+    isNext ? db.subjectRegistration.count({ where: { academicYearId: year.id, status: { in: [...ACTIVE] }, subjectId: { in: nextOptions.filter((o) => o.kind === "OPTION").map((o) => o.subjectId) } } }) : Promise.resolve(0),
+    isNext ? db.subjectRegistration.count({ where: { academicYearId: year.id, status: { in: [...ACTIVE] }, subjectId: { in: nextOptions.filter((o) => o.isAP).map((o) => o.subjectId) } } }) : Promise.resolve(0),
   ]);
 
-  const tabHref = (tb: Tab, g = grade) => `/admin/registration?${new URLSearchParams({ ...(tb !== "offerings" ? { tab: tb } : {}), ...(tb !== "import" ? { grade: String(g) } : {}) }).toString()}`;
+  const yearParam: Record<string, string> = isNext ? { year: "next" } : {};
+  const tabHref = (tb: Tab, g = grade) => `/admin/registration?${new URLSearchParams({ ...yearParam, ...(tb !== "offerings" ? { tab: tb } : {}), ...(tb !== "import" ? { grade: String(g) } : {}) }).toString()}`;
+  const yearHref = (next: boolean) => `/admin/registration${next ? "?year=next" : ""}`;
 
   return (
     <PageBody>
@@ -74,30 +89,49 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
         description={t("adminSubtitle")}
         actions={
           <>
-            <WindowControl open={win.open} deadlineDate={win.open && win.deadline ? new Date(win.deadline.getTime() + 4 * 3600_000).toISOString().slice(0, 10) : null} />
-            <RunAllocationButton />
+            <WindowControl open={win.open} deadlineDate={win.open && win.deadline ? new Date(win.deadline.getTime() + 4 * 3600_000).toISOString().slice(0, 10) : null} yearId={isNext ? year.id : null} />
+            {!isNext && <RunAllocationButton />}
           </>
         }
       />
+      {nextYear && thisYear && (
+        <div className="flex flex-wrap gap-1.5" data-testid="year-switch">
+          {[false, true].map((n) => (
+            <Link key={String(n)} href={yearHref(n)} className={cn("rounded-full border px-3 py-1 text-xs font-medium", n === isNext ? "border-brand bg-brand-soft text-brand" : "bg-card text-muted-foreground hover:text-foreground")} data-testid={`year-${n ? "next" : "current"}`}>
+              {n ? t("next.yearNext", { year: `\u2066${pick(locale, nextYear.nameEn, nextYear.nameAr)}\u2069` }) : t("next.yearCurrent", { year: `\u2066${pick(locale, thisYear.nameEn, thisYear.nameAr)}\u2069` })}
+            </Link>
+          ))}
+        </div>
+      )}
       <div className="flex flex-wrap items-center gap-2 rounded-xl border bg-card px-4 py-3 text-sm shadow-xs" data-testid="window-status">
         <Pill tone={win.open ? "success" : "neutral"} dot>
-          {win.open ? t("windowOpen") : t("windowClosedPill")}
+          {isNext ? (win.open ? t("next.windowOpen") : t("next.windowClosedPill")) : win.open ? t("windowOpen") : t("windowClosedPill")}
         </Pill>
         <span className="text-muted-foreground">
           {win.deadline ? (win.open ? t("windowUntil", { date: fmtDateTime(prefs, win.deadline) }) : t("windowClosedOn", { date: fmtDateTime(prefs, win.deadline) })) : t("windowNever")}
         </span>
         <span className="text-muted-foreground">·</span>
-        <span className="text-muted-foreground">{pick(locale, year.nameEn, year.nameAr)}</span>
+        <span className="text-muted-foreground" dir="ltr">{pick(locale, year.nameEn, year.nameAr)}</span>
+        {isNext && <span className="text-muted-foreground">· {t("next.noClassesYet")}</span>}
       </div>
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatCard label={t("statRegistered")} value={`${fmtNumber(prefs, regStudents.length)} / ${fmtNumber(prefs, studentCount)}`} icon={<Users className="size-4" />} />
-        <StatCard label={t("statAllocated")} value={fmtNumber(prefs, allocated)} icon={<CheckCircle2 className="size-4" />} tone="success" />
-        <StatCard label={t("statWaiting")} value={fmtNumber(prefs, waiting)} icon={<ClipboardCheck className="size-4" />} tone={waiting ? "warning" : "success"} />
-        <StatCard label={t("statSections")} value={fmtNumber(prefs, sections)} icon={<Layers className="size-4" />} tone="info" />
-      </div>
+      {isNext ? (
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <StatCard label={t("next.statChose")} value={`${fmtNumber(prefs, regStudents.length)} / ${fmtNumber(prefs, studentCount)}`} icon={<Users className="size-4" />} />
+          <StatCard label={t("next.statChoices")} value={fmtNumber(prefs, optionChoices)} icon={<ClipboardCheck className="size-4" />} tone="info" />
+          <StatCard label={t("next.statAp")} value={fmtNumber(prefs, apChoices)} icon={<GraduationCap className="size-4" />} tone="brand" />
+          <StatCard label={t("next.statGrades")} value={fmtNumber(prefs, gradeLevels.length)} icon={<Layers className="size-4" />} tone="success" />
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <StatCard label={t("statRegistered")} value={`${fmtNumber(prefs, regStudents.length)} / ${fmtNumber(prefs, studentCount)}`} icon={<Users className="size-4" />} />
+          <StatCard label={t("statAllocated")} value={fmtNumber(prefs, allocated)} icon={<CheckCircle2 className="size-4" />} tone="success" />
+          <StatCard label={t("statWaiting")} value={fmtNumber(prefs, waiting)} icon={<ClipboardCheck className="size-4" />} tone={waiting ? "warning" : "success"} />
+          <StatCard label={t("statSections")} value={fmtNumber(prefs, sections)} icon={<Layers className="size-4" />} tone="info" />
+        </div>
+      )}
 
       <nav className="flex gap-1 overflow-x-auto border-b" aria-label={t("adminTitle")}>
-        {TABS.map((tb) => (
+        {(isNext ? (["offerings"] as Tab[]) : TABS).map((tb) => (
           <Link key={tb} href={tabHref(tb)} className={cn("-mb-px whitespace-nowrap border-b-2 px-3 py-2 text-sm font-medium", tab === tb ? "border-brand text-foreground" : "border-transparent text-muted-foreground hover:text-foreground")} data-testid={`tab-${tb}`}>
             {t(`tab.${tb}`)}
           </Link>
@@ -122,14 +156,40 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
 
   async function offeringsTab() {
     const offerings = await tenantTx(orgId, (tx) => offeringsFor(tx, orgId, year!.id, grade));
-    const [subjects, students] = await Promise.all([
+    // The cohort: students in the grade (next year: the grade below), on the tracks the offerings are for.
+    const tracks = new Set(offerings.map((o) => o.curriculum));
+    const trackFilter = offerings.length && !tracks.has(null) ? { curriculum: { in: [...tracks].filter((c): c is NonNullable<typeof c> => !!c) } } : {};
+    const [subjects, students, schoolCourses] = await Promise.all([
       db.subject.findMany({ orderBy: { nameEn: "asc" } }),
-      db.student.findMany({ where: { gradeLevel: grade, status: "ACTIVE" }, orderBy: [{ section: "asc" }, { lastNameEn: "asc" }] }),
+      db.student.findMany({ where: { gradeLevel: grade - offset, status: "ACTIVE", ...trackFilter }, orderBy: [{ section: "asc" }, { lastNameEn: "asc" }] }),
+      db.schoolCourse.findMany({ where: { active: true } }),
     ]);
+    const catalogCourses = schoolCourses.length ? await db.curriculumCourse.findMany({ where: { id: { in: schoolCourses.map((c) => c.courseId) } }, orderBy: [{ curriculum: "asc" }, { nameEn: "asc" }] }) : [];
+    const courseOptions = catalogCourses.map((c) => ({ id: c.id, label: pick(locale, c.nameEn, c.nameAr), curriculum: c.curriculum, isAP: c.qualification === "AP" }));
+    const courseName = new Map(catalogCourses.map((c) => [c.id, pick(locale, c.nameEn, c.nameAr)]));
+    // How many students' university targets need each linked elective (students with a target list only).
+    const needCount = new Map<string, number>();
+    if (offerings.some((o) => o.kind === "OPTION" && o.courseId) && students.length) {
+      const actor = await actorFromCtx(ctx);
+      if (actor.can("pathways.view")) {
+        const withTargets = (await db.shortlistEntry.findMany({ where: { studentId: { in: students.map((s) => s.id) } }, select: { studentId: true }, distinct: ["studentId"] })).map((r) => r.studentId).slice(0, 40);
+        for (const sid of withTargets) {
+          if (!(await studentTargets(actor, sid)).ids.length) continue;
+          const imp = await electiveImpactFor(actor, sid, { yearId: year!.id, chosen: [] });
+          for (const [subjectId, r] of Object.entries(imp?.options ?? {})) if (r.targets.length) needCount.set(subjectId, (needCount.get(subjectId) ?? 0) + 1);
+        }
+      }
+    }
     const gradeRegs = await db.subjectRegistration.findMany({ where: { academicYearId: year!.id, status: { in: [...ACTIVE] }, studentId: { in: students.map((s) => s.id) } } });
     const countBySubject = new Map<string, number>();
     for (const r of gradeRegs) countBySubject.set(r.subjectId, (countBySubject.get(r.subjectId) ?? 0) + 1);
-    const subjectOptions = subjects.map((s) => ({ id: s.id, code: s.code, label: pick(locale, s.nameEn, s.nameAr) }));
+    // Two subjects can share a name (the generic Physics and the American track's Physics): show the code then.
+    const labelCount = new Map<string, number>();
+    for (const s of subjects) labelCount.set(pick(locale, s.nameEn, s.nameAr), (labelCount.get(pick(locale, s.nameEn, s.nameAr)) ?? 0) + 1);
+    const subjectOptions = subjects.map((s) => {
+      const label = pick(locale, s.nameEn, s.nameAr);
+      return { id: s.id, code: s.code, label: (labelCount.get(label) ?? 0) > 1 ? `${label} (${s.code})` : label };
+    });
     const nameOfCode = (code: string) => {
       const s = subjects.find((x) => x.code === code);
       return s ? pick(locale, s.nameEn, s.nameAr) : code;
@@ -148,16 +208,33 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
     const row = (o: (typeof offerings)[number]) => (
       <li key={o.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5" data-testid="offering-row">
         <div className="min-w-0 flex-1">
-          <div className="text-sm font-medium">{pick(locale, o.nameEn, o.nameAr)}</div>
+          <div className="flex flex-wrap items-center gap-1.5 text-sm font-medium">
+            {pick(locale, o.nameEn, o.nameAr)}
+            {o.isAP && (
+              <Pill tone="violet" className="px-1.5 font-semibold">
+                <span data-testid="offering-ap-badge">{t("impact.apBadge")}</span>
+              </Pill>
+            )}
+            {o.curriculum && <Pill>{t(`next.track.${o.curriculum}`)}</Pill>}
+          </div>
           <div className="flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
             <span>{t("periodsN", { count: o.periodsPerWeek })}</span>
             {o.prerequisites.length > 0 && <span>· {t("requires", { subjects: o.prerequisites.map(nameOfCode).join(locale === "ar" ? "، " : ", ") })}</span>}
+            {o.courseId && courseName.get(o.courseId) && courseName.get(o.courseId) !== pick(locale, o.nameEn, o.nameAr) && <span>· {t("next.countsAs", { course: courseName.get(o.courseId)! })}</span>}
           </div>
           {(o.notesEn || o.notesAr) && <div className="mt-0.5 text-xs text-muted-foreground">{pick(locale, o.notesEn, o.notesAr)}</div>}
         </div>
-        <span className="text-xs tabular-nums text-muted-foreground">{t("studentsN", { count: countBySubject.get(o.subjectId) ?? 0 })}</span>
+        <div className="flex flex-col items-end gap-0.5 text-xs tabular-nums">
+          <span className="text-muted-foreground" data-testid="offering-demand">{t("studentsN", { count: countBySubject.get(o.subjectId) ?? 0 })}</span>
+          {(needCount.get(o.subjectId) ?? 0) > 0 && (
+            <span className="inline-flex items-center gap-1 text-brand" data-testid="offering-need">
+              <Target className="size-3" />
+              {t("next.neededByTargets", { count: needCount.get(o.subjectId)! })}
+            </span>
+          )}
+        </div>
         <div className="flex items-center">
-          <OfferingDialog grade={grade} subjects={subjectOptions} takenSubjectIds={[]} value={{ id: o.id, subjectId: o.subjectId, kind: o.kind, optionBlock: o.optionBlock, prerequisites: o.prerequisites, periodsPerWeek: o.periodsPerWeek }} />
+          <OfferingDialog grade={grade} yearId={isNext ? year!.id : null} subjects={subjectOptions} courses={courseOptions} takenSubjectIds={[]} value={{ id: o.id, subjectId: o.subjectId, kind: o.kind, optionBlock: o.optionBlock, prerequisites: o.prerequisites, periodsPerWeek: o.periodsPerWeek, curriculum: o.curriculum, courseId: o.courseId, isAP: o.isAP }} />
           <DeleteOfferingButton id={o.id} inUse={(countBySubject.get(o.subjectId) ?? 0) > 0} />
         </div>
       </li>
@@ -167,8 +244,8 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-4">
           <div className="flex items-center justify-between gap-2">
-            <h2 className="text-sm font-semibold">{t("offeringsFor", { grade })}</h2>
-            <OfferingDialog grade={grade} subjects={subjectOptions} takenSubjectIds={offerings.map((o) => o.subjectId)} />
+            <h2 className="text-sm font-semibold">{isNext ? t("next.offeringsFor", { grade, year: `\u2066${pick(locale, year!.nameEn, year!.nameAr)}\u2069` }) : t("offeringsFor", { grade })}</h2>
+            <OfferingDialog grade={grade} yearId={isNext ? year!.id : null} subjects={subjectOptions} courses={courseOptions} takenSubjectIds={offerings.map((o) => o.subjectId)} />
           </div>
           {offerings.length === 0 ? (
             <EmptyState icon={<BookOpen className="size-5" />} title={t("noOfferings")} body={t("noOfferingsBody")} />
@@ -188,7 +265,7 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
           )}
         </div>
         <Panel className="h-fit">
-          <PanelHeader title={t("progressTitle")} description={t("progressBody", { done: students.length - missing.length, total: students.length })} icon={<UserPlus className="size-4" />} />
+          <PanelHeader title={isNext ? t("next.progressTitle") : t("progressTitle")} description={isNext ? t("next.progressBody", { done: students.length - missing.length, total: students.length, grade: grade - 1 }) : t("progressBody", { done: students.length - missing.length, total: students.length })} icon={<UserPlus className="size-4" />} />
           {missing.length === 0 ? (
             <p className="text-sm text-muted-foreground">{students.length ? t("allRegistered") : t("noStudentsInGrade")}</p>
           ) : (
@@ -196,7 +273,7 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
               {missing.map((s) => (
                 <li key={s.id} className="flex items-center justify-between gap-2 py-2 text-sm">
                   <span className="min-w-0 truncate">{personName(s, locale)}</span>
-                  <Link href={`/subjects?student=${s.id}`} className="shrink-0 text-xs font-medium text-brand hover:underline">
+                  <Link href={`/subjects?student=${s.id}${isNext ? "&year=next" : ""}`} className="shrink-0 text-xs font-medium text-brand hover:underline">
                     {t("registerOnBehalf")}
                   </Link>
                 </li>

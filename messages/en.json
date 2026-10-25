@@ -2169,12 +2169,12 @@
         "body": "Subject changes waiting on Computing."
       },
       "chooseSubjects": {
-        "title": "Choose your subjects",
-        "body": "Core subjects are automatic; pick one option per block and see your classes."
+        "title": "Choose next year's courses",
+        "body": "Each option shows which of your target universities need it, whether AP or a regular course is enough, and how many programmes it keeps open."
       },
       "childSubjects": {
-        "title": "Register subjects for a child",
-        "body": "Switch between Adam and Yara and review each subject choice."
+        "title": "Choose courses with a child",
+        "body": "Switch between Adam and Yara. For Adam's Grade 10 choices, see which universities need each course and where AP matters."
       },
       "myClasses": {
         "title": "See my classes",
@@ -2379,6 +2379,22 @@
       "absenceReports": {
         "title": "Check sick-day reports",
         "body": "Adam Nasser's sick days: the doctor's note and a private note to the nurse. Teachers only see that he is excused."
+      },
+      "subjectLevels": {
+        "title": "See the level each subject needs",
+        "body": "For every target university: AP required, AP or a regular course, or any level, quoted from its own page."
+      },
+      "childSubjectLevels": {
+        "title": "Subject levels for Adam's universities",
+        "body": "Which subjects his target universities need and whether a regular course is enough."
+      },
+      "studentSubjectLevels": {
+        "title": "Review a student's subject levels",
+        "body": "Open Adam Nasser: what each of his targets asks for, AP or regular, with the official quotes."
+      },
+      "courseSelection": {
+        "title": "Run next year's course selection",
+        "body": "AP and regular electives for the American track, demand per course and how many students' university targets need each one."
       }
     }
   },
@@ -3235,6 +3251,99 @@
       "STAFF": "Staff",
       "IMPORT": "Import",
       "SUBJECT_CHANGE": "Subject change"
+    },
+    "viewOnly": "View only",
+    "next": {
+      "subtitle": "Grade {grade} courses for {year}",
+      "tabsLabel": "School year",
+      "tabNext": "Next year: Grade {grade} ({year})",
+      "tabCurrent": "This year: Grade {grade} ({year})",
+      "bannerOpen": "Course selection for {year} is open until {date}. Choose one course in each block.",
+      "bannerClosed": "Course selection for {year} closed on {date}.",
+      "bannerNotOpen": "Course selection for {year} has not opened yet.",
+      "submit": "Submit my choices",
+      "submitted": "Choices for next year saved",
+      "registeredState": "Choices saved. Classes are set when the year starts.",
+      "yearCurrent": "{year}: this year",
+      "yearNext": "{year}: course selection",
+      "windowOpen": "Course selection open",
+      "windowClosedPill": "Course selection closed",
+      "noClassesYet": "Classes are set when the year starts",
+      "statChose": "Students who chose",
+      "statChoices": "Options chosen",
+      "statAp": "AP courses chosen",
+      "statGrades": "Grades with options",
+      "offeringsFor": "Courses for Grade {grade} in {year}",
+      "progressTitle": "Who has chosen",
+      "progressBody": "{done} of {total} students now in Grade {grade} have chosen all their courses.",
+      "openWindow": "Open course selection",
+      "windowTitle": "Course selection for next year",
+      "windowBody": "While it is open, students and parents choose next year's courses, one in each block. The deadline also appears on the school calendar.",
+      "fieldTrack": "Track",
+      "trackAll": "Every track",
+      "track": {
+        "AMERICAN": "American",
+        "BRITISH": "British",
+        "IB": "IB",
+        "UAE_MOE": "UAE MoE",
+        "JORDAN_TAWJIHI": "Tawjihi",
+        "CBSE": "CBSE",
+        "ISC": "ISC",
+        "SABIS": "SABIS",
+        "OTHER": "Other"
+      },
+      "fieldCourse": "Counts for universities as",
+      "courseNone": "Not linked",
+      "courseHint": "Link the curriculum course so students see which universities need it and how many programmes it keeps open.",
+      "fieldAP": "AP course",
+      "apHint": "Shows an AP badge to students and parents.",
+      "countsAs": "Counts as {course}",
+      "neededByTargets": "{count, plural, one {Needed by # student's targets} other {Needed by # students' targets}}"
+    },
+    "impact": {
+      "error": "Could not update the university impact. Try again.",
+      "intro": {
+        "self": "Each option shows which of your {targets} target programmes need it, and how many of {checked} programmes worldwide it keeps open.",
+        "other": "Each option shows which of {name}'s {targets} target programmes need it, and how many of {checked} programmes worldwide it keeps open."
+      },
+      "introNoTargets": {
+        "self": "Each option shows how many of {checked} programmes worldwide it keeps open. Add universities to your list to see which ones need it.",
+        "other": "Each option shows how many of {checked} programmes worldwide it keeps open. {name} has no university list yet."
+      },
+      "seeLevels": "Subject levels for every target",
+      "updating": "Updating",
+      "compareTitle": "{ap} or {regular}?",
+      "compareMore": "{ap} keeps {n, plural, one {# more programme} other {# more programmes}} open than {regular}.",
+      "compareSame": "{ap} and {regular} keep the same programmes open.",
+      "apOnly": {
+        "self": "Only {ap} counts for {names}.",
+        "other": "Only {ap} counts for {names}."
+      },
+      "either": "Either one counts for {names}.",
+      "apBadge": "AP",
+      "regularBadge": "Regular",
+      "neededFor": {
+        "self": "Needed for {n} of your {total} targets",
+        "other": "Needed for {n} of {total} targets"
+      },
+      "neededNone": {
+        "self": "Not needed for your targets",
+        "other": "Not needed for the targets"
+      },
+      "keepsHint": "Programmes, of {checked} worldwide, where this course meets a subject requirement that nothing on the record or in the other choices meets yet.",
+      "keepsOpen": "Keeps {n, plural, one {# more programme} other {# more programmes}} open",
+      "keepsNone": "No extra programmes",
+      "notLinked": "Not linked to a university course yet.",
+      "summaryTitle": "University impact of these choices",
+      "summaryTargets": {
+        "self": "Needed for {n} of your {total} targets",
+        "other": "Needed for {n} of {total} targets"
+      },
+      "summaryPrograms": "{n, plural, one {Keeps # programme open worldwide} other {Keeps # programmes open worldwide}}",
+      "blocksLeft": "{done} of {total} blocks chosen. Choose one course in each block.",
+      "summaryEmpty": "Choose courses to see their university impact.",
+      "explorePick": "Try other choices to see their university impact.",
+      "exploreNote": "View only. Choices you try here are not saved; the student, a parent or the registration team can save them."
     }
   },
   "grades": {
@@ -5114,7 +5223,14 @@
       "PORTFOLIO": "Portfolio",
       "REFERENCE": "Reference",
       "ESSAY": "Essay",
-      "OTHER": "Other requirement"
+      "OTHER": "Other requirement",
+      "NOT_ACCEPTED": "Not accepted for direct entry",
+      "FOUNDATION_REQUIRED": "Foundation year required",
+      "NOTE": "Note from the university",
+      "WORK_EXPERIENCE": "Work experience",
+      "HEALTH_CHECK": "Health check",
+      "ADMISSIONS_TEST": "Admissions test",
+      "ESSAYS": "Essays"
     },
     "section": {
       "overall": "Overall",
@@ -5707,7 +5823,164 @@
         }
       }
     },
-    "officialBanner": "Entry requirements come from each university's official pages, with the exact wording and the date we checked. Universities change requirements, so always confirm on the official page before applying."
+    "officialBanner": "Entry requirements come from each university's official pages, with the exact wording and the date we checked. Universities change requirements, so always confirm on the official page before applying.",
+    "guide": {
+      "cls": {
+        "AP_REQUIRED": "AP required",
+        "AP_ADVICE": "AP recommended",
+        "AP_OR_REGULAR": "AP or a regular course",
+        "SENIOR": "Senior-level course",
+        "ANY_LEVEL": "Any level",
+        "A_LEVEL": "A Level",
+        "AS_LEVEL": "AS Level",
+        "GCSE": "GCSE",
+        "IB_HL": "Higher Level (HL)",
+        "IB_SL": "Standard Level (SL)"
+      },
+      "level": {
+        "FOUNDATION": "Foundation level",
+        "STANDARD": "Standard level",
+        "ADVANCED": "Advanced level",
+        "HIGHER": "Higher level"
+      },
+      "hint": {
+        "AP_REQUIRED": "The university's page asks for an AP course or AP exam scores.",
+        "BC_ONLY": "Only AP Calculus BC meets this. AP Calculus AB does not.",
+        "AP_OR_REGULAR": "AP is one accepted route. A regular course is another.",
+        "SENIOR": "A Grade {grade} course or an AP course meets this. The page does not ask for AP.",
+        "ANY_LEVEL": "A regular course is enough. The page states no level.",
+        "A_LEVEL": "A full A Level in the subject.",
+        "AS_LEVEL": "An AS Level is enough.",
+        "GCSE": "A GCSE or IGCSE is enough.",
+        "IB_HL": "The subject at Higher Level.",
+        "IB_SL": "Standard Level is enough."
+      }
+    },
+    "levels": {
+      "title": "Subject levels for the targets",
+      "desc": {
+        "AMERICAN": "What each target programme asks for in each subject: an AP course, or whether a regular course is enough. Read from each university's own page.",
+        "BRITISH": "What each target programme asks for in each subject: an A Level, or whether GCSE is enough. Read from each university's own page.",
+        "IB": "What each target programme asks for in each subject: Higher Level, or whether Standard Level is enough. Read from each university's own page.",
+        "OTHER": "What each target programme asks for in each subject, and at what level. Read from each university's own page."
+      },
+      "source": {
+        "shortlist": "{n, plural, one {# programme on the university list} other {# programmes on the university list}}",
+        "goal": "{n, plural, one {# programme that matches the goal} other {# programmes that match the goal}}",
+        "none": "No targets yet"
+      },
+      "empty": "No target programmes yet. Add universities to the list, or set a goal above, to see the level each subject needs.",
+      "noLines": "The target programmes list no subject requirements for this curriculum.",
+      "legend": {
+        "high": {
+          "AMERICAN": "Needs AP",
+          "BRITISH": "Needs A Level",
+          "IB": "Needs Higher Level",
+          "OTHER": "Needs the advanced level"
+        },
+        "regular": {
+          "all": "Regular course is enough"
+        },
+        "advice": {
+          "all": "Recommends it"
+        },
+        "none": {
+          "all": "Does not ask"
+        }
+      },
+      "family": {
+        "sciences": "Sciences",
+        "english": "English"
+      },
+      "take": {
+        "course": {
+          "self": "Take {course}: needed by {n} of your {total} targets",
+          "other": "Take {course}: needed by {n} of {total} targets"
+        },
+        "generic": {
+          "AMERICAN": {
+            "self": "Take an AP course in {subject}: needed by {n} of your {total} targets",
+            "other": "Take an AP course in {subject}: needed by {n} of {total} targets"
+          },
+          "BRITISH": {
+            "self": "Take A Level {subject}: needed by {n} of your {total} targets",
+            "other": "Take A Level {subject}: needed by {n} of {total} targets"
+          },
+          "IB": {
+            "self": "Take {subject} at Higher Level: needed by {n} of your {total} targets",
+            "other": "Take {subject} at Higher Level: needed by {n} of {total} targets"
+          },
+          "OTHER": {
+            "self": "Take {subject} at the advanced level: needed by {n} of your {total} targets",
+            "other": "Take {subject} at the advanced level: needed by {n} of {total} targets"
+          }
+        }
+      },
+      "enough": {
+        "regular": {
+          "self": "Regular {subject} is enough for all your targets",
+          "other": "Regular {subject} is enough for every target"
+        },
+        "standard": {
+          "self": "{subject} at the standard level is enough for all your targets",
+          "other": "{subject} at the standard level is enough for every target"
+        },
+        "senior": {
+          "self": "A Grade {grade} {subject} course is enough for all your targets",
+          "other": "A Grade {grade} {subject} course is enough for every target"
+        },
+        "sciences": {
+          "regular": {
+            "self": "Regular science courses are enough for all your targets",
+            "other": "Regular science courses are enough for every target"
+          },
+          "standard": {
+            "self": "Science at the standard level is enough for all your targets",
+            "other": "Science at the standard level is enough for every target"
+          }
+        }
+      },
+      "advice": {
+        "self": "{subject}: recommended by {n} of your {total} targets, at any level",
+        "other": "{subject}: recommended by {n} of {total} targets, at any level"
+      },
+      "alsoRegular": "{n, plural, one {# accepts a regular course} other {# accept a regular course}}: {names}",
+      "bcOnly": "{n, plural, one {# accepts only Calculus BC} other {# accept only Calculus BC}}",
+      "askedBy": "Asked for by {n} of {total}: {names}",
+      "alsoAdvice": "Recommended by {names}",
+      "onPlan": {
+        "self": "On your plan: {courses}",
+        "other": "On the plan: {courses}"
+      },
+      "notOnPlan": {
+        "self": "Not on your plan yet",
+        "other": "Not on the plan yet"
+      },
+      "offered": "{school} offers {course} in Grade {grade}",
+      "notOffered": "{school} does not offer {course} yet",
+      "offeredList": "{school} offers {courses}",
+      "showQuotes": "Show what each university says",
+      "viaExamRule": "From the AP exam rule",
+      "noQuote": "No quote stored for this line.",
+      "footer": "Every level comes from the university's official page, quoted above. A regular course means a non-AP course, such as an Honors course.",
+      "choices": {
+        "self": "Choose your courses",
+        "other": "Course choices"
+      }
+    },
+    "world": {
+      "title": "Options worldwide",
+      "withPlan": "Checked against the record and the current plan.",
+      "recordOnly": "Checked against the record so far (no plan yet).",
+      "checked": {
+        "self": "{school} checked {programs} programmes at {universities} universities in {countries} countries for you.",
+        "other": "{school} checked {programs} programmes at {universities} universities in {countries} countries for {name}."
+      },
+      "openLabel": "eligible or on track",
+      "openWhere": "at {universities} universities in {countries} countries",
+      "byCountry": "Where they are (eligible or on track, of all checked)",
+      "countryLine": "{open} of {programs}"
+    }
   },
   "transcripts": {
     "confidence": "{pct}% match",

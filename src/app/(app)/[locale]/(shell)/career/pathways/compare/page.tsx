@@ -16,6 +16,7 @@ import { StudentPicker } from "@/components/pathways/pathway-client";
 import { countryLabel } from "@/components/pathways/pathway-ui";
 import { ConfidenceBadge, LineStatusIcon, StatusChip } from "@/components/pathway-engine/ui";
 import { lineText, subjectList, testName, type Tr } from "@/components/pathway-engine/labels";
+import { LevelChip } from "@/components/pathway-engine/level-chip";
 import { CompareSwitcher, ParamSelect } from "@/components/discovery/client";
 import { engineFocus } from "@/server/pathway-engine/page-data";
 import { subjectNames } from "@/server/pathway-engine/page-data";
@@ -113,7 +114,7 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
   const cellText = (l: LineResult, col: CompareColumn): string => {
     if (l.kind === "subject") {
       const parts = [t(`type.${l.type}`)];
-      if (l.minimumLevel) parts.push(te(`level.${l.minimumLevel}`));
+      if (l.minimumLevel && !l.guide) parts.push(te(`level.${l.minimumLevel}`));
       if (l.required) parts.push(te("line.minGrade", { grade: String(l.required) }));
       return parts.join(te("line.sep"));
     }
@@ -128,7 +129,10 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
       <div className="flex items-start gap-1.5" data-testid="compare-cell" data-status={student ? l.status : undefined}>
         {student && <LineStatusIcon status={l.status} advisory={l.advisory} className="mt-0.5" />}
         <div className="min-w-0 text-sm">
-          <div>{cellText(l, col)}</div>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span>{cellText(l, col)}</span>
+            {l.kind === "subject" && <LevelChip guide={l.guide} advisory={l.advisory} />}
+          </div>
           {student && !l.advisory && l.status === "not_met" && <div className="text-xs text-danger">{l.have !== null && l.have !== undefined && l.have !== "" ? te("program.have", { have: String(l.have) }) : te("program.missing")}</div>}
           {student && l.status === "unknown" && l.reason && <div className="text-xs text-info">{te(`reason.${l.reason}`)}</div>}
           {student && l.status === "met" && l.satisfiedBy?.length ? <div className="text-xs text-muted-foreground">{te("program.satisfiedBy", { courses: l.satisfiedBy.map((c) => pick(locale, c.nameEn, c.nameAr)).join(te("line.and")) })}</div> : null}

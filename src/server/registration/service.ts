@@ -1,7 +1,7 @@
 // Subject registration and class allocation against the database.
 // Every function takes a transaction client that is already scoped to one organization
 // (tenantTx in request code, the owner client in seeds) plus that organization's id.
-import type { Prisma, RegistrationSource } from "@prisma/client";
+import type { Prisma, RegistrationSource, SchoolCurriculum } from "@prisma/client";
 import { checkChoices, type ChoiceError, type OfferingLite } from "@/lib/registration";
 import { allocateGroup, DEFAULT_CAPACITY, type AllocRequest } from "./allocate";
 
@@ -17,11 +17,46 @@ export async function currentYear(tx: Tx, orgId: string) {
   );
 }
 
-export type OfferingRow = OfferingLite & { id: string; gradeLevel: number; periodsPerWeek: number; nameEn: string; nameAr: string; notesEn: string | null; notesAr: string | null };
+/**
+ * The year after the current one, when the school has set it up: course selection for next year
+ * happens there (a Grade 9 student chooses Grade 10 courses). Null when there is none.
+ */
+export async function selectionYear(tx: Tx, orgId: string) {
+  const current = await currentYear(tx, orgId);
+  if (!current) return null;
+  return tx.academicYear.findFirst({ where: { orgId, id: { not: current.id }, startsOn: { gt: current.startsOn } }, orderBy: { startsOn: "asc" } });
+}
 
-/** Offerings for a grade in a year, core first, then by block and subject name. */
-export async function offeringsFor(tx: Tx, orgId: string, academicYearId: string, gradeLevel?: number): Promise<OfferingRow[]> {
-  const rows = await tx.subjectOffering.findMany({ where: { orgId, academicYearId, ...(gradeLevel !== undefined ? { gradeLevel } : {}) } });
+/** The year a registration is for: the current year (default) or the next one. Null when neither. */
+export async function registrationYear(tx: Tx, orgId: string, yearId?: string | null) {
+  const current = await currentYear(tx, orgId);
+  if (!current) return null;
+  if (!yearId || yearId === current.id) return { year: current, next: false, gradeOffset: 0 };
+  const next = await selectionYear(tx, orgId);
+  return next && next.id === yearId ? { year: next, next: true, gradeOffset: 1 } : null;
+}
+
+export type OfferingRow = OfferingLite & {
+  id: string;
+  gradeLevel: number;
+  periodsPerWeek: number;
+  nameEn: string;
+  nameAr: string;
+  notesEn: string | null;
+  notesAr: string | null;
+  curriculum: SchoolCurriculum | null;
+  courseId: string | null;
+  isAP: boolean;
+};
+
+/**
+ * Offerings for a grade in a year, core first, then by block and subject name. With a curriculum,
+ * only offerings for that track and for every track.
+ */
+export async function offeringsFor(tx: Tx, orgId: string, academicYearId: string, gradeLevel?: number, curriculum?: SchoolCurriculum | null): Promise<OfferingRow[]> {
+  const rows = await tx.subjectOffering.findMany({
+    where: { orgId, academicYearId, ...(gradeLevel !== undefined ? { gradeLevel } : {}), ...(curriculum ? { OR: [{ curriculum: null }, { curriculum }] } : {}) },
+  });
   const subjects = await tx.subject.findMany({ where: { orgId, id: { in: rows.map((r) => r.subjectId) } } });
   const sub = new Map(subjects.map((s) => [s.id, s]));
   return rows
@@ -41,6 +76,9 @@ export async function offeringsFor(tx: Tx, orgId: string, academicYearId: string
         periodsPerWeek: r.periodsPerWeek,
         notesEn: r.notesEn,
         notesAr: r.notesAr,
+        curriculum: r.curriculum,
+        courseId: r.courseId,
+        isAP: r.isAP,
       };
     })
     .sort((a, b) => a.gradeLevel - b.gradeLevel || (a.kind === b.kind ? 0 : a.kind === "CORE" ? -1 : 1) || (a.optionBlock ?? "").localeCompare(b.optionBlock ?? "") || a.nameEn.localeCompare(b.nameEn));
@@ -172,17 +210,20 @@ export type SaveResult = { ok: true; summary: AllocationSummary } | { ok: false;
 /**
  * Register a student: core subjects automatically, plus one option per block.
  * Options no longer chosen are dropped. Then allocation runs for this student.
+ * With academicYearId set to next year, this is course selection: the student chooses next
+ * year's grade, and no classes are allocated until that year is set up.
  */
 export async function saveRegistration(
   tx: Tx,
   orgId: string,
-  input: { studentId: string; optionSubjectIds: string[]; source: RegistrationSource; actorId: string | null; requireAllBlocks?: boolean; skipAllocation?: boolean },
+  input: { studentId: string; optionSubjectIds: string[]; source: RegistrationSource; actorId: string | null; requireAllBlocks?: boolean; skipAllocation?: boolean; academicYearId?: string | null },
 ): Promise<SaveResult> {
-  const year = await currentYear(tx, orgId);
-  if (!year) return { ok: false, error: "NO_YEAR" };
-  const student = await tx.student.findFirst({ where: { orgId, id: input.studentId }, select: { id: true, gradeLevel: true } });
+  const target = await registrationYear(tx, orgId, input.academicYearId);
+  if (!target) return { ok: false, error: "NO_YEAR" };
+  const { year } = target;
+  const student = await tx.student.findFirst({ where: { orgId, id: input.studentId }, select: { id: true, gradeLevel: true, curriculum: true } });
   if (!student) return { ok: false, error: "NOT_FOUND" };
-  const offerings = await offeringsFor(tx, orgId, year.id, student.gradeLevel);
+  const offerings = await offeringsFor(tx, orgId, year.id, student.gradeLevel + target.gradeOffset, student.curriculum);
   if (offerings.length === 0) return { ok: false, error: "NO_OFFERINGS" };
   const prior = await priorSubjectCodes(tx, orgId, student.id, year);
   const errors = checkChoices(offerings, input.optionSubjectIds, prior, { requireAllBlocks: input.requireAllBlocks });
@@ -204,7 +245,7 @@ export async function saveRegistration(
       await tx.subjectRegistration.update({ where: { id: row.id }, data: { status: "DROPPED" } });
     }
   }
-  const summary = input.skipAllocation
+  const summary = input.skipAllocation || target.next
     ? { groups: 0, placed: 0, moved: 0, removed: 0, sectionsCreated: 0, registrationsUpdated: 0 }
     : await runAllocation(tx, orgId, year.id, { studentIds: [student.id] });
   return { ok: true, summary };
@@ -272,29 +313,35 @@ export async function moveStudent(tx: Tx, orgId: string, input: { registrationId
 
 export const WINDOW_MARKER = "registration_window";
 export const WINDOW_AUDIENCE = ["student", "parent", "staff", WINDOW_MARKER];
+/** Course selection for next year carries this tag as well, so each year has its own window. */
+export const yearTag = (yearId: string) => "year:" + yearId;
 
 export type RegistrationWindow = { eventId: string | null; deadline: Date | null; open: boolean };
 
-export async function getWindow(tx: Tx, orgId: string, now = new Date()): Promise<RegistrationWindow> {
-  const ev = await tx.calendarEvent.findFirst({ where: { orgId, kind: "DEADLINE", audience: { has: WINDOW_MARKER } }, orderBy: { startsAt: "desc" } });
+/** The window for the current year, or for next year's course selection (next with that year's id). */
+export async function getWindow(tx: Tx, orgId: string, now = new Date(), opts: { yearId?: string | null; next?: boolean } = {}): Promise<RegistrationWindow> {
+  const events = await tx.calendarEvent.findMany({ where: { orgId, kind: "DEADLINE", audience: { has: WINDOW_MARKER } }, orderBy: { startsAt: "desc" }, take: 20 });
+  const tagged = (a: string[]) => a.some((x) => x.startsWith("year:"));
+  const ev = opts.next && opts.yearId ? events.find((e) => e.audience.includes(yearTag(opts.yearId!))) : events.find((e) => !tagged(e.audience) || (!!opts.yearId && e.audience.includes(yearTag(opts.yearId))));
   if (!ev) return { eventId: null, deadline: null, open: false };
   return { eventId: ev.id, deadline: ev.startsAt, open: ev.startsAt.getTime() > now.getTime() };
 }
 
-/** Open the window until `deadline`, or close it now (deadline = now). */
-export async function setWindow(tx: Tx, orgId: string, deadline: Date, ownerId: string | null) {
-  const current = await getWindow(tx, orgId);
+/** Open the window until deadline, or close it now (deadline = now). next: next year's course selection. */
+export async function setWindow(tx: Tx, orgId: string, deadline: Date, ownerId: string | null, opts: { next?: { yearId: string; nameEn: string; nameAr: string } } = {}) {
+  const n = opts.next;
+  const current = await getWindow(tx, orgId, new Date(), n ? { yearId: n.yearId, next: true } : {});
   const endsAt = new Date(deadline.getTime() + 60 * 60_000);
   const data = {
     kind: "DEADLINE" as const,
-    titleEn: "Subject registration deadline",
-    titleAr: "الموعد النهائي لتسجيل المواد الدراسية",
-    descEn: "Students and parents choose one subject in each option block before this time.",
-    descAr: "يختار الطلاب وأولياء الأمور مادة واحدة من كل مجموعة اختيارية قبل هذا الموعد.",
+    titleEn: n ? "Course selection deadline for " + n.nameEn : "Subject registration deadline",
+    titleAr: n ? "الموعد النهائي لاختيار مواد العام " + n.nameAr : "الموعد النهائي لتسجيل المواد الدراسية",
+    descEn: n ? "Students and parents choose next year's courses, one in each option block, before this time." : "Students and parents choose one subject in each option block before this time.",
+    descAr: n ? "يختار الطلاب وأولياء الأمور مواد العام القادم، مادة واحدة من كل مجموعة اختيارية، قبل هذا الموعد." : "يختار الطلاب وأولياء الأمور مادة واحدة من كل مجموعة اختيارية قبل هذا الموعد.",
     startsAt: deadline,
     endsAt,
     allDay: false,
-    audience: WINDOW_AUDIENCE,
+    audience: n ? [...WINDOW_AUDIENCE, yearTag(n.yearId)] : WINDOW_AUDIENCE,
     ownerId,
   };
   if (current.eventId) return tx.calendarEvent.update({ where: { id: current.eventId }, data });

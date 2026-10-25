@@ -23,6 +23,7 @@ import { STATUS_ORDER } from "./labels";
 import { StatusChip } from "./ui";
 import { AiSummary, GoalForm, NextStepCard, PlanBuilder, WhatIfPanel, type NextStepState } from "./client";
 import { CatalogNotice } from "@/components/pathway-engine/catalog-notice";
+import { SubjectLevelsPanel, WorldwidePanel } from "./levels-panel";
 
 export const GOAL_COUNTRIES = ["GB", "US", "CA", "AE", "SA", "AU", "IE", "NL", "DE", "SG", "HK", "JO", "CH"];
 type Tab = "overview" | "plan" | "whatIf" | "courses";
@@ -111,7 +112,11 @@ export async function HubView({ ctx, focus }: { ctx: Ctx; focus: EngineFocus }) 
       </div>
 
       {!hasGoal ? (
-        <EmptyState icon={<GraduationCap className="size-5" />} title={t("noGoalTitle")} body={focus.canEdit ? t("noGoalBody") : t("noGoalBodyView")} />
+        <>
+          <EmptyState icon={<GraduationCap className="size-5" />} title={t("noGoalTitle")} body={focus.canEdit ? t("noGoalBody") : t("noGoalBodyView")} />
+          <WorldwidePanel ctx={ctx} focus={focus} />
+          <SubjectLevelsPanel ctx={ctx} focus={focus} />
+        </>
       ) : (
         <>
           <section>
@@ -128,6 +133,9 @@ export async function HubView({ ctx, focus }: { ctx: Ctx; focus: EngineFocus }) 
               ))}
             </div>
           </section>
+
+          <WorldwidePanel ctx={ctx} focus={focus} />
+          <SubjectLevelsPanel ctx={ctx} focus={focus} />
 
           <div className="grid gap-4 lg:grid-cols-5 [&>*]:min-w-0">
             <Panel className="lg:col-span-3">

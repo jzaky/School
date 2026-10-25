@@ -15,6 +15,7 @@ import { StudentPicker } from "@/components/pathways/pathway-client";
 import { countryLabel } from "@/components/pathways/pathway-ui";
 import { ConfidenceBadge, LineStatusIcon, StatusChip } from "@/components/pathway-engine/ui";
 import { lineText, subjectList, type Tr } from "@/components/pathway-engine/labels";
+import { LevelChip } from "@/components/pathway-engine/level-chip";
 import { engineFocus, pathwayHref, subjectNames } from "@/server/pathway-engine/page-data";
 import { getCurrentPlan, getProgramDetail, loadStudentProfile } from "@/server/pathway-engine/service";
 import { evaluate } from "@/server/pathway-engine/evaluate";
@@ -62,7 +63,8 @@ export default async function ProgramPage({ params, searchParams }: { params: Pr
       {withStatus ? <LineStatusIcon status={l.status} advisory={l.advisory} className="mt-0.5" /> : <span className="mt-2 size-1.5 shrink-0 rounded-full bg-muted-foreground/50" />}
       <div className="min-w-0 flex-1 space-y-1">
         <div className="flex flex-wrap items-center gap-1.5 text-sm">
-          <span className="font-medium">{lineText(tr, l, names, locale, rows)}</span>
+          <span className="font-medium">{lineText(tr, l, names, locale, rows, { level: !l.guide })}</span>
+          {l.kind === "subject" && <LevelChip guide={l.guide} advisory={l.advisory} />}
           {l.advisory && <Pill>{l.kind === "additional" ? t("program.step") : t("program.advice")}</Pill>}
         </div>
         {withStatus && l.satisfiedBy && l.satisfiedBy.length > 0 && l.status !== "not_met" && (

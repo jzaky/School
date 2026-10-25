@@ -1,5 +1,6 @@
 // Text for engine results. Pure: works with next-intl translators on the server and the client.
 import type { LineResult, MatchStatus, RequirementRow } from "@/server/pathway-engine/types";
+import type { LevelClass, LevelGuide } from "@/server/pathway-engine/level-guide";
 
 export type Tr = { (key: string, values?: Record<string, string | number>): string; has: (key: string) => boolean };
 const opt = (t: Tr, key: string, fallback: string) => (t.has(key) ? t(key) : fallback);
@@ -23,12 +24,43 @@ export function testName(t: Tr, code: string): string {
   return opt(t, `test.${code}`, code.replace(/_/g, " "));
 }
 
-/** One sentence describing a requirement line. rows lets language lines list every accepted test. */
-export function lineText(t: Tr, l: LineResult, names: SubjectNames, locale: string, rows: RequirementRow[] = []): string {
+/** Tone per level class: the advanced course stands out, "any level" reads as good news. */
+export const LEVEL_TONE: Record<LevelClass, "violet" | "info" | "gold" | "success" | "neutral"> = {
+  AP_REQUIRED: "violet",
+  AP_OR_REGULAR: "info",
+  SENIOR: "gold",
+  ANY_LEVEL: "success",
+  A_LEVEL: "violet",
+  AS_LEVEL: "info",
+  GCSE: "info",
+  IB_HL: "violet",
+  IB_SL: "info",
+  LEVEL: "neutral",
+};
+
+/** The level in the curriculum's own words: "AP required", "A Level", "Higher Level (HL)", "Any level". Null when there is nothing to say. */
+export function levelLabel(t: Tr, guide: LevelGuide | undefined, advisory = false): string | null {
+  if (!guide) return null;
+  if (guide.cls === "LEVEL") return guide.storedLevel ? t(`guide.level.${guide.storedLevel}`) : null;
+  if (advisory && guide.cls === "AP_REQUIRED") return t("guide.cls.AP_ADVICE");
+  return t(`guide.cls.${guide.cls}`);
+}
+
+/** A longer explanation of the level, for a hover hint. */
+export function levelHint(t: Tr, guide: LevelGuide | undefined): string | null {
+  if (!guide) return null;
+  if (guide.cls === "SENIOR") return t("guide.hint.SENIOR", { grade: guide.fromGrade ?? 12 });
+  if (guide.cls === "AP_REQUIRED" && guide.onlyCodes?.length === 1 && guide.onlyCodes[0] === "AP_CALC_BC") return t("guide.hint.BC_ONLY");
+  return t.has(`guide.hint.${guide.cls}`) ? t(`guide.hint.${guide.cls}`) : null;
+}
+
+/** One sentence describing a requirement line. rows lets language lines list every accepted test.
+ * opts.level false leaves the level out (when a level chip is shown next to it). */
+export function lineText(t: Tr, l: LineResult, names: SubjectNames, locale: string, rows: RequirementRow[] = [], opts: { level?: boolean } = {}): string {
   switch (l.kind) {
     case "subject": {
       const subjects = subjectList(l.keys, names, locale, t);
-      const level = l.minimumLevel ? t(`level.${l.minimumLevel}`) : null;
+      const level = opts.level === false ? null : l.guide ? levelLabel(t, l.guide, l.advisory) : l.minimumLevel ? t(`level.${l.minimumLevel}`) : null;
       const grade = l.required ? t("line.minGrade", { grade: String(l.required) }) : null;
       const detail = [level, grade].filter(Boolean).join(t("line.sep"));
       const head = l.type === "TWO_OF" ? t("line.twoOf", { subjects }) : l.type === "ONE_OF" || (l.keys?.length ?? 0) > 1 ? t("line.oneOf", { subjects }) : subjects;
