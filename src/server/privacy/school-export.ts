@@ -95,8 +95,13 @@ export async function runSchoolExport(job: SchoolExportJob, opts: { now?: Date }
     const sensitiveCases = new Set((await db.case.findMany({ where: { orgId, sensitivity: { in: ["WELLBEING", "SAFEGUARDING"] } }, select: { id: true } })).map((c) => c.id));
     const sensitiveNotes = new Set((await db.caseNote.findMany({ where: { orgId, caseId: { in: [...sensitiveCases] } }, select: { id: true } })).map((n) => n.id));
     const sensitivePlans = new Set((await db.actionPlan.findMany({ where: { orgId, caseId: { in: [...sensitiveCases] } }, select: { id: true } })).map((p) => p.id));
+    // Conversations on wellbeing and safeguarding requests follow their request.
+    const sensitiveRequests = new Set(
+      (await db.request.findMany({ where: { orgId, OR: [{ sensitivity: { in: ["WELLBEING", "SAFEGUARDING"] } }, { caseId: { in: [...sensitiveCases] } }] }, select: { id: true } })).map((r) => r.id),
+    );
     const isRestricted = (model: string, r: Record<string, unknown>) =>
       (model === "Case" && sensitiveCases.has(r.id as string)) ||
+      ((model === "RequestMessage" || model === "RequestThreadRead") && sensitiveRequests.has(r.requestId as string)) ||
       (typeof r.caseId === "string" && sensitiveCases.has(r.caseId)) ||
       (typeof r.sensitivity === "string" && SENSITIVE.includes(r.sensitivity)) ||
       (model === "CaseNoteVersion" && sensitiveNotes.has(r.noteId as string)) ||
