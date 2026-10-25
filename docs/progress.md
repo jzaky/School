@@ -156,3 +156,9 @@
 - Schema (additive, migration 20261025120000_offering_levels): SubjectOffering.curriculum, courseId, isAP.
 - Seed: prisma/seed/academics/subject-levels.ts (next academic year, American next-year offerings for Grades 10 to 12, more American-track students and their choices, Adam's extra targets).
 - Tests: tests/unit/pathway-engine/level-guide.test.ts, tests/unit/pathway-engine/levels.test.ts, tests/integration/subject-levels.test.ts.
+
+## Videos: full tour and extended IT briefing (Oct 2026)
+- docs/sales/Horizon-Full-Tour.mp4 (15:22, 16 chapters, the subjects and universities chapter is the longest at 2:44) and docs/sales/Horizon-IT-Briefing.mp4 (9:58, 18 chapters, up from 6:24; the old cut is kept as Horizon-IT-Briefing-v1.mp4). Share copies are 720p parts under 28 MB each (Horizon-Full-Tour-web-part1..5, Horizon-IT-Briefing-web-part1..4). All git-ignored.
+- Narration: media/voiceover/tour/script.json and media/voiceover/it/script.json. Pipeline scripts and subtitle files live in the session scratchpad (tour/).
+- Every on-screen number was counted from the demo or catalog data after a reset. The status page was not filmed (a local run is not representative of production).
+- Fixed from the film review: the counselor note on the plan uses dir="auto" (English note in the Arabic view), and the plan summary no longer calls official requirements "example data" or calls goal-matching programmes "targets".

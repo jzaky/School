@@ -5594,7 +5594,7 @@
       "button": "Draft a summary",
       "again": "Draft again",
       "draft": "Draft, check before sharing",
-      "summary": "Your plan has {courses} classes across Grades {grades}. With it, {open} of {total} target programmes look on track and {missing} still miss at least one requirement. The requirements shown are example data to confirm with each university and your counselor.",
+      "summary": "Your plan has {courses} classes across Grades {grades}. With it, {open} of the {total} programmes that fit your goal look on track and {missing} still miss at least one requirement. Requirements come from each university's official pages; always confirm on the official page and with your counselor before applying.",
       "stepStart": "Start with your Grade {grade} classes: {courses}.",
       "stepTalk": "Talk your plan through with your counselor.",
       "stepMissing": "Open the programmes that still miss a requirement and check the details.",

@@ -151,7 +151,7 @@ export async function planSummaryAction(studentId: string): Promise<Ok<{ summary
     subjectId: plan.id,
     instructions:
       "Write a short, encouraging draft summary of this Grade 9 to 12 course plan for a secondary student. Use ONLY the facts. Do not add, remove or change any course, grade, status or requirement, and never decide eligibility. " +
-      "Mention how many target programmes look open and what is still missing, and remind them that requirement data is example data to confirm with the university and their counselor.",
+      "Mention how many of the programmes that fit their goal look open and what is still missing, and remind them that requirements come from each university's official pages and should be confirmed there and with their counselor before applying.",
     facts,
     outputShape: '{ "summary": "2 to 4 sentences", "steps": ["short next step", "..."] }',
     validate: (v): v is PlanSummary => !!v && typeof (v as PlanSummary).summary === "string" && Array.isArray((v as PlanSummary).steps),

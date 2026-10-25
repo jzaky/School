@@ -261,7 +261,7 @@ export function PlanBuilder({
           )}
         </div>
         {plan.counselorNote && (
-          <p className="mt-3 rounded-lg bg-muted px-3 py-2 text-sm" data-testid="counselor-note">
+          <p className="mt-3 rounded-lg bg-muted px-3 py-2 text-sm" data-testid="counselor-note" dir="auto">
             <span className="font-medium">{t("counselorNote")}: </span>
             {plan.counselorNote}
           </p>

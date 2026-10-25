@@ -1,0 +1,7 @@
+{
+"engine": {
+  "aiSummary": {
+    "summary": ["Your plan has {courses} classes across Grades {grades}. With it, {open} of the {total} programmes that fit your goal look on track and {missing} still miss at least one requirement. Requirements come from each university's official pages; always confirm on the official page and with your counselor before applying.", "تضم خطتك {courses} مادة في الصفوف {grades}. ومع هذه الخطة يبدو {open} من أصل {total} برنامجًا يناسب هدفك على المسار الصحيح، وما زال {missing} منها ينقصه شرط واحد على الأقل. الشروط مأخوذة من الصفحات الرسمية لكل جامعة، فاحرص دائمًا على تأكيدها من الصفحة الرسمية ومع مرشدك قبل التقديم."]
+  }
+}
+}
