@@ -1,6 +1,7 @@
 // Shared shapes for the import center: kinds, row issues, previews and results.
 // Row issues carry a row number, a column key and a code (plus positions inside a list cell), never the
 // cell's value, so an error report can be stored and shown without repeating personal data.
+import { MIN_GRADE_LEVEL, parseGradeLevel } from "@/lib/grade-levels";
 
 export const IMPORT_KINDS = ["staff", "students", "classes", "enrollments", "registrations"] as const;
 export type ImportKind = (typeof IMPORT_KINDS)[number];
@@ -72,26 +73,40 @@ export function finishPreview(kind: ImportKind, rows: PreviewRow[], unknownHeade
   return { kind, rows, total: rows.length, valid, invalid: rows.length - valid, counts: countActions(rows), unknownHeaders, notes };
 }
 
-/** Grade list such as "9-12", "9, 10, 11" or "Grade 9; Grade 10". Returns null when a part is not a grade. */
-export function parseGradeList(value: string | null | undefined, min = 0, max = 13): number[] | null {
+/**
+ * Grade list such as "9-12", "9, 10, 11", "Grade 9; Grade 10", "KG1-5", "KG1, KG2" or "الصف 1 إلى الصف 6".
+ * Kindergarten is KG1 = -1 and KG2 = 0 (see parseGradeLevel). Returns null when a part is not a grade.
+ */
+export function parseGradeList(value: string | null | undefined, min = MIN_GRADE_LEVEL, max = 13): number[] | null {
   const text = String(value ?? "").trim();
   if (!text) return [];
   const out = new Set<number>();
-  const RANGE = /^(\d{1,2})\s*(?:-|\u2013|\u2014|to|الى|إلى)\s*(?:grade\s*|g\s*|الصف\s*)?(\d{1,2})$/i;
+  const inRange = (g: number | null): g is number => g !== null && g >= min && g <= max;
+  const one = (s: string) => parseGradeLevel(s.replace(/\byears?\s*/gi, "").replace(/\by(?=\d)/gi, "").trim());
   for (const partRaw of text.split(/[;,|\u060C\u061B]+/)) {
-    const part = partRaw.replace(/\b(grade|year)s?\b|الصفوف|الصف/gi, " ").replace(/\b[gy](?=\d)/gi, "").replace(/\s+/g, " ").trim();
+    const part = partRaw.replace(/\bgrades\b|\u0627\u0644\u0635\u0641\u0648\u0641/gi, " ").replace(/\s+/g, " ").trim();
     if (!part) continue;
-    const range = RANGE.exec(part);
-    if (range) {
-      const [a, b] = [Number(range[1]), Number(range[2])];
-      if (a > b || a < min || b > max) return null;
-      for (let g = a; g <= b; g++) out.add(g);
+    const single = one(part);
+    if (single !== null) {
+      if (!inRange(single)) return null;
+      out.add(single);
       continue;
     }
+    // A range: try each separator ("-", en dash, "to", "إلى") until both ends are grades.
+    let done = false;
+    for (const m of part.matchAll(/\s*(?:-|\u2013|\u2014|\bto\b|\u0627\u0644\u0649|\u0625\u0644\u0649)\s*/gi)) {
+      const a = one(part.slice(0, m.index));
+      const b = one(part.slice((m.index ?? 0) + m[0].length));
+      if (a === null || b === null) continue;
+      if (a > b || !inRange(a) || !inRange(b)) return null;
+      for (let g = a; g <= b; g++) out.add(g);
+      done = true;
+      break;
+    }
+    if (done) continue;
     for (const token of part.split(" ")) {
-      if (!/^\d{1,2}$/.test(token)) return null;
-      const g = Number(token);
-      if (g < min || g > max) return null;
+      const g = one(token);
+      if (!inRange(g)) return null;
       out.add(g);
     }
   }

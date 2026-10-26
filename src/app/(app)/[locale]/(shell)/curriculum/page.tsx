@@ -17,6 +17,7 @@ import { DraftUnitDialog } from "@/components/curriculum/draft-unit";
 import { canUseCurriculum, currentTerms, visiblePlanWhere } from "@/server/curriculum/access";
 import { curriculumShell } from "@/server/curriculum/shell";
 import { computeCoverage, heatLevel } from "@/server/curriculum/coverage";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export async function generateMetadata() {
   const t = await getTranslations("curriculum");
@@ -29,6 +30,7 @@ export default async function CoveragePage({ searchParams }: { searchParams: Pro
   const sp = await searchParams;
   const ctx = await getCtx();
   const t = await getTranslations("curriculum");
+  const tg = await getTranslations("gradeLevel");
   if (!canUseCurriculum(ctx)) {
     return (
       <PageBody>
@@ -133,7 +135,7 @@ export default async function CoveragePage({ searchParams }: { searchParams: Pro
           </div>
         )}
         <p className="text-xs text-muted-foreground">
-          {subject ? pick(locale, subject.nameEn, subject.nameAr) : ""} · {t("gradeN", { grade: fw.gradeLevel ?? 0 })} · {cls ? pick(locale, cls.nameEn, cls.nameAr) : t("coverage.allClasses")}
+          {subject ? pick(locale, subject.nameEn, subject.nameAr) : ""} · {fw.gradeLevel === null ? "" : gradeLabel(tg, fw.gradeLevel)} · {cls ? pick(locale, cls.nameEn, cls.nameAr) : t("coverage.allClasses")}
           {fw.sourceEn ? ` · ${fw.sourceEn}` : ""}
         </p>
       </div>

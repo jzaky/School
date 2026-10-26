@@ -69,7 +69,7 @@ export function SubjectSearch({ onPick, autoFocus }: { onPick: (hit: SubjectHit)
                   <span className="block truncate text-sm font-medium">{locale === "ar" ? h.nameAr : h.nameEn}</span>
                   <span className="block truncate text-xs text-muted-foreground">
                     <span dir="ltr">{h.reference}</span>
-                    {h.kind === "student" && h.detail ? ` · ${t("gradeN", { n: h.detail })}` : h.detail ? ` · ${h.detail}` : ""}
+                    {h.detail ? ` · ${h.detail}` : ""}
                   </span>
                 </span>
                 <Pill tone={h.kind === "student" ? "brand" : h.kind === "guardian" ? "info" : "neutral"}>{t(`kind.${h.kind}`)}</Pill>

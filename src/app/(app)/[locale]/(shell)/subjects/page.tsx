@@ -20,6 +20,7 @@ import { Pill } from "@/components/app/badges";
 import { SubjectPicker, type PickerOffering } from "@/components/registration/subject-picker";
 import { SelectionBanner } from "@/components/registration/selection-status";
 import { ExceptionButton, HelpersCard, RevokeExceptionButton, SignOffButton, StatusPill } from "@/components/registration/assist-controls";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export async function generateMetadata() {
   const t = await getTranslations("registration");
@@ -31,6 +32,7 @@ export default async function SubjectsPage({ params, searchParams }: { params: P
   const sp = await searchParams;
   const ctx = await getCtx();
   const t = await getTranslations("registration");
+  const tg = await getTranslations("gradeLevel");
   const ts = await getTranslations("selection");
   const prefs = await formatPrefs(ctx);
   const { db, locale, orgId } = ctx;
@@ -169,7 +171,7 @@ export default async function SubjectsPage({ params, searchParams }: { params: P
 
   return (
     <PageBody>
-      <PageHeader title={title} description={which === "next" ? t("next.subtitle", { grade, year: yearName }) : t("subjectsSubtitle", { grade, year: yearName })} />
+      <PageHeader title={title} description={which === "next" ? t("next.subtitleLabel", { grade: gradeLabel(tg, grade), year: yearName }) : t("subjectsSubtitleLabel", { grade: gradeLabel(tg, grade), year: yearName })} />
       {children.length > 1 && (
         <div className="flex flex-wrap gap-1.5" data-testid="child-switcher">
           {children.map((c) => (
@@ -188,7 +190,7 @@ export default async function SubjectsPage({ params, searchParams }: { params: P
               className={cn("-mb-px whitespace-nowrap border-b-2 px-3 py-2 text-sm font-medium", which === y ? "border-brand text-foreground" : "border-transparent text-muted-foreground hover:text-foreground")}
               data-testid={`year-tab-${y}`}
             >
-              {y === "next" ? t("next.tabNext", { grade: student.gradeLevel + 1, year: yr(nextYear) }) : t("next.tabCurrent", { grade: student.gradeLevel, year: yr(years.year) })}
+              {y === "next" ? t("next.tabNextLabel", { grade: gradeLabel(tg, student.gradeLevel + 1), year: yr(nextYear) }) : t("next.tabCurrentLabel", { grade: gradeLabel(tg, student.gradeLevel), year: yr(years.year) })}
             </Link>
           ))}
         </nav>

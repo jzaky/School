@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getOptionalCtx } from "@/server/context";
 import { audit } from "@/server/audit/audit";
 import { canManageTrip } from "@/server/trips/access";
+import { gradeCode } from "@/lib/grade-levels";
 
 export const runtime = "nodejs";
 
@@ -33,7 +34,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   for (const { p, s } of rows) {
     const g = links.find((l) => l.studentId === s.id)?.guardian;
     const d = deciders.find((m) => m.id === p.decidedById);
-    lines.push([s.studentNo, `${s.firstNameEn} ${s.lastNameEn}`, `${s.gradeLevel}${s.section ?? ""}`, p.consent, d?.user.nameEn ?? "", p.decidedAt?.toISOString() ?? "", p.noteEn ?? "", g ? `${g.firstNameEn} ${g.lastNameEn}` : "", g?.phone ?? ""].map(cell).join(","));
+    lines.push([s.studentNo, `${s.firstNameEn} ${s.lastNameEn}`, `${gradeCode(s.gradeLevel)}${s.section ? (s.gradeLevel <= 0 ? ` ${s.section}` : s.section) : ""}`, p.consent, d?.user.nameEn ?? "", p.decidedAt?.toISOString() ?? "", p.noteEn ?? "", g ? `${g.firstNameEn} ${g.lastNameEn}` : "", g?.phone ?? ""].map(cell).join(","));
   }
   await audit(ctx.db, ctx.orgId, { actorId: ctx.membershipId, actorUserId: ctx.user.id, action: "trip.export", entityType: "Trip", entityId: trip.id, meta: { rows: rows.length } });
   return new NextResponse("﻿" + lines.join("\n"), {

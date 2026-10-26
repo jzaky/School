@@ -6,6 +6,7 @@ import { visibleStudentIds } from "@/server/access/student-access";
 import { listableCaseWhere } from "@/server/access/case-access";
 import { catalogScope } from "@/server/pathways/scope";
 import { searchTokens } from "@/server/discovery/search";
+import { gradeTextIn } from "@/server/common/grade-text";
 
 export type SearchHit = { kind: "student" | "request" | "case" | "service" | "university" | "program"; id: string; title: string; subtitle: string; href: string };
 
@@ -33,7 +34,7 @@ export async function searchAction(q: string): Promise<SearchHit[]> {
   if (ctx.isStaff && ctx.can("people.view")) {
     const students = await db.student.findMany({ where: studentWhere, take: 6, orderBy: { firstNameEn: "asc" } });
     for (const s of students)
-      hits.push({ kind: "student", id: s.id, title: personName(s, locale), subtitle: `${s.studentNo} · ${s.gradeLevel}${s.section ?? ""}`, href: `/students/${s.id}` });
+      hits.push({ kind: "student", id: s.id, title: personName(s, locale), subtitle: `${s.studentNo} · ${gradeTextIn(locale, s.gradeLevel, s.section, { short: true })}`, href: `/students/${s.id}` });
   }
 
   const requestWhere = {

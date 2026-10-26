@@ -158,7 +158,7 @@ export default async function UniversitiesPage({ searchParams }: { searchParams:
         description={t("subtitle")}
         actions={
           <>
-            {focus.options.length > 0 && <StudentPicker students={focus.options} current={focus.student?.id ?? null} />}
+            {(focus.search || focus.options.length > 0) && <StudentPicker students={focus.options} current={focus.student?.id ?? null} search={focus.search} />}
             {focus.student && (
               <Button asChild variant="outline" size="sm">
                 <Link href={link("/career/universities/results")} data-testid="my-results">

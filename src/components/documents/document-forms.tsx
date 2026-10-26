@@ -12,7 +12,8 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { PickerCombobox, type PickerOption } from "@/components/forms/picker-combobox";
+import { StudentSearchPicker } from "@/components/forms/search-picker";
+import type { PickHit } from "@/server/people/search-actions";
 import { addVersionAction, createDocumentAction, setFamilyVisibilityAction } from "@/server/documents/actions";
 
 type FileRef = { key: string; name: string; size: number; type: string };
@@ -34,15 +35,13 @@ function useErr() {
 
 export function UploadDocument({
   categories,
-  students,
-  defaultStudentId,
+  defaultStudent,
   caseId,
   caseLabel,
   canShare,
 }: {
   categories: Array<{ id: string; label: string; sensitive: boolean }>;
-  students: PickerOption[];
-  defaultStudentId?: string;
+  defaultStudent?: PickHit | null;
   caseId?: string;
   caseLabel?: string;
   canShare: boolean;
@@ -56,7 +55,7 @@ export function UploadDocument({
   const [titleEn, setTitleEn] = useState("");
   const [titleAr, setTitleAr] = useState("");
   const [categoryId, setCategoryId] = useState("");
-  const [studentId, setStudentId] = useState(defaultStudentId ?? "");
+  const [studentId, setStudentId] = useState(defaultStudent?.value ?? "");
   const [share, setShare] = useState(false);
   const [expiresAt, setExpiresAt] = useState("");
   const category = categories.find((c) => c.id === categoryId);
@@ -147,7 +146,7 @@ export function UploadDocument({
             {!caseId && (
               <div className="space-y-1.5">
                 <Label>{t("student")}</Label>
-                <PickerCombobox options={students} value={studentId} onChange={setStudentId} placeholder={t("chooseStudent")} testId="document-student" />
+                <StudentSearchPicker value={studentId} selected={defaultStudent} onChange={(v) => setStudentId(v)} placeholder={t("chooseStudent")} testId="document-student" />
               </div>
             )}
             {canShare && (

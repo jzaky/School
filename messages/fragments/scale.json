@@ -1,0 +1,116 @@
+{
+  "gradeLevel": {
+    "withSection": [
+      "{level, select, kg1 {KG1 {section}} kg2 {KG2 {section}} other {Grade {grade}{section}}}",
+      "{level, select, kg1 {الروضة الأولى {section}} kg2 {الروضة الثانية {section}} other {الصف {grade}{section}}}"
+    ],
+    "shortWithSection": [
+      "{level, select, kg1 {KG1 {section}} kg2 {KG2 {section}} other {{grade}{section}}}",
+      "{level, select, kg1 {روضة 1 {section}} kg2 {روضة 2 {section}} other {{grade}{section}}}"
+    ]
+  },
+  "paging": {
+    "showing": [
+      "Showing {from} to {to} of {total}",
+      "عرض {from} إلى {to} من أصل {total}"
+    ],
+    "none": [
+      "Nothing to show",
+      "لا توجد نتائج"
+    ],
+    "page": [
+      "Page {page} of {pages}",
+      "الصفحة {page} من {pages}"
+    ],
+    "prev": [
+      "Previous",
+      "السابق"
+    ],
+    "next": [
+      "Next",
+      "التالي"
+    ],
+    "firstPage": [
+      "This is the first page",
+      "هذه هي الصفحة الأولى"
+    ],
+    "lastPage": [
+      "This is the last page",
+      "هذه هي الصفحة الأخيرة"
+    ],
+    "searching": [
+      "Searching...",
+      "جارٍ البحث..."
+    ],
+    "searchFailed": [
+      "Search did not work. Try again.",
+      "تعذّر البحث. حاول مرة أخرى."
+    ],
+    "typeToNarrow": [
+      "Showing the first 20 matches. Type more of the name to narrow the list.",
+      "تظهر أول 20 نتيجة. اكتب جزءًا أكبر من الاسم لتضييق القائمة."
+    ]
+  },
+  "joinRequests": {
+    "claimByNameLabel": [
+      "{name}, {grade}",
+      "{name}، {grade}"
+    ]
+  },
+  "home": {
+    "studentSubtitleLabel": [
+      "{grade}. Here is what is happening for you today.",
+      "{grade}. إليك ما يخصك اليوم."
+    ],
+    "startsOn": [
+      "Starts on {date}",
+      "يبدأ الدراسة في {date}"
+    ],
+    "noAttendanceYet": [
+      "No attendance marks yet",
+      "لا توجد سجلات حضور بعد"
+    ]
+  },
+  "children": {
+    "startsOn": [
+      "Starts school on {date}. Attendance appears from the first day.",
+      "يبدأ الدراسة في {date}، ويظهر الحضور ابتداءً من اليوم الأول."
+    ]
+  },
+  "registration": {
+    "offeringsForLabel": [
+      "Subjects for {grade}",
+      "مواد {grade}"
+    ],
+    "addOfferingTitleLabel": [
+      "Add a subject to {grade}",
+      "إضافة مادة إلى {grade}"
+    ],
+    "subjectsSubtitleLabel": [
+      "{grade}, {year}",
+      "{grade}، {year}"
+    ],
+    "next": {
+      "subtitleLabel": [
+        "{grade} courses for {year}",
+        "مواد {grade} للعام {year}"
+      ],
+      "tabNextLabel": [
+        "Next year: {grade} ({year})",
+        "العام القادم: {grade} ({year})"
+      ],
+      "tabCurrentLabel": [
+        "This year: {grade} ({year})",
+        "هذا العام: {grade} ({year})"
+      ],
+      "offeringsForLabel": [
+        "Courses for {grade} in {year}",
+        "مواد {grade} للعام {year}"
+      ],
+      "progressBodyLabel": [
+        "{done} of {total} students now in {grade} have chosen all their courses.",
+        "أكمل {done} من أصل {total} من طلاب {grade} الحالي اختيار جميع موادهم."
+      ]
+    }
+  }
+}

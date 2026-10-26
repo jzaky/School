@@ -98,7 +98,7 @@ export async function moveStudentAction(input: z.input<typeof moveSchema>) {
 const CURRICULA = ["BRITISH", "IB", "AMERICAN", "UAE_MOE", "JORDAN_TAWJIHI", "CBSE", "ISC", "SABIS", "OTHER"] as const;
 const offeringSchema = z.object({
   id: z.string().optional(),
-  gradeLevel: z.number().int().min(1).max(13),
+  gradeLevel: z.number().int().min(-1).max(13),
   subjectId: z.string().min(1),
   kind: z.enum(["CORE", "OPTION"]),
   optionBlock: z.string().trim().toUpperCase().regex(/^[A-Z]$/).nullable().optional(),

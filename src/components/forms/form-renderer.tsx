@@ -15,11 +15,14 @@ import { fieldVisible, sectionVisible, validateValues, type FieldError, type For
 import type { FormField, FormSchema, I18nText } from "@/server/forms/schema";
 import { SignaturePad } from "./signature-pad";
 import { PickerCombobox, type PickerOption } from "./picker-combobox";
+import { StudentSearchPicker } from "./search-picker";
 
 export type RendererOptions = {
   students: PickerOption[];
   staff: PickerOption[];
   subjects: PickerOption[];
+  /** Search students on the server instead of listing them (staff who can see every student). */
+  studentSearch?: boolean;
 };
 
 export type FormRendererProps = {
@@ -458,7 +461,11 @@ function Field({
       break;
     }
     case "student_picker":
-      control = <PickerCombobox id={id} options={options.students} value={str} onChange={onChange} disabled={locked} placeholder={t("chooseStudent")} testId={`picker-${f.id}`} />;
+      control = options.studentSearch ? (
+        <StudentSearchPicker id={id} value={str} selected={options.students.find((o) => o.value === str) ?? null} onChange={(v) => onChange(v)} disabled={locked} placeholder={t("chooseStudent")} testId={`picker-${f.id}`} />
+      ) : (
+        <PickerCombobox id={id} options={options.students} value={str} onChange={onChange} disabled={locked} placeholder={t("chooseStudent")} testId={`picker-${f.id}`} />
+      );
       break;
     case "staff_picker":
       control = <PickerCombobox id={id} options={options.staff} value={str} onChange={onChange} disabled={locked} placeholder={t("chooseStaff")} testId={`picker-${f.id}`} />;

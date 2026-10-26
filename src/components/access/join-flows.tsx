@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { cn } from "@/lib/utils";
 import { acceptInviteAction, checkJoinCodeAction, continueWithProviderAction, joinWithCodeAction, signOutToJoinAction } from "@/server/access/join-actions";
 import { SchoolBadge } from "./join-frame";
+import { ALL_GRADE_LEVELS, gradeLabel } from "@/lib/grade-levels";
 
 type Mode = "create" | "signin";
 type Providers = { google: boolean; microsoft: boolean };
@@ -235,6 +236,7 @@ function childValid(c: ChildForm, kind: Kind) {
 
 function ChildFields({ index, value, onChange, onRemove, kind }: { index: number; value: ChildForm; onChange: (v: ChildForm) => void; onRemove?: () => void; kind: Kind }) {
   const t = useTranslations("join");
+  const tg = useTranslations("gradeLevel");
   const set = (patch: Partial<ChildForm>) => onChange({ ...value, ...patch });
   const byNumber = kind === "STUDENT" || value.method === "number";
   return (
@@ -276,9 +278,9 @@ function ChildFields({ index, value, onChange, onRemove, kind }: { index: number
                 <SelectValue placeholder={t("choose")} />
               </SelectTrigger>
               <SelectContent>
-                {Array.from({ length: 13 }, (_, i) => i + 1).map((g) => (
+                {ALL_GRADE_LEVELS.map((g) => (
                   <SelectItem key={g} value={String(g)}>
-                    {t("gradeN", { grade: g })}
+                    {gradeLabel(tg, g)}
                   </SelectItem>
                 ))}
               </SelectContent>

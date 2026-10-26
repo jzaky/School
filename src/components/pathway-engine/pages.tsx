@@ -18,12 +18,12 @@ export async function engineMetadata() {
 }
 
 /** Static routes: students see themselves, parents their child (?student=), staff get the student list. */
-export async function StaticPathwayPage({ tab, sp }: { tab: Tab; sp: { student?: string; q?: string; tab?: string } }) {
+export async function StaticPathwayPage({ tab, sp }: { tab: Tab; sp: { student?: string; q?: string; tab?: string; page?: string } }) {
   const ctx = await getCtx();
   if (!ctx.can("pathways.view")) notFound();
   if (ctx.isStaff) {
     if (sp.student) return <StudentPathwayPage tab={tab} studentId={sp.student} />;
-    return <StaffStudentList ctx={ctx} q={sp.q ?? ""} tab={sp.tab ?? "all"} />;
+    return <StaffStudentList ctx={ctx} q={sp.q ?? ""} tab={sp.tab ?? "all"} page={sp.page} />;
   }
   const focus = await engineFocus(ctx, sp.student);
   if (!focus.student) {

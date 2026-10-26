@@ -49,7 +49,7 @@ export function deadlineView(d: ResolvedDeadline, prefs: FormatPrefs, now: Date)
 
 export async function loadCards(ctx: Ctx, prefs: FormatPrefs, where: Prisma.ApplicationWhereInput, now = new Date()): Promise<AppCard[]> {
   const { db, orgId, locale } = ctx;
-  const apps = await db.application.findMany({ where: { orgId, ...where }, include: { items: { select: { status: true, dueAt: true } } }, orderBy: { createdAt: "asc" }, take: 500 });
+  const apps = await db.application.findMany({ where: { orgId, ...where }, include: { items: { select: { status: true, dueAt: true } } }, orderBy: { createdAt: "asc" }, take: 5000 });
   if (!apps.length) return [];
   const [students, unis, programs, counselors, dl] = await Promise.all([
     db.student.findMany({ where: { id: { in: [...new Set(apps.map((a) => a.studentId))] } } }),

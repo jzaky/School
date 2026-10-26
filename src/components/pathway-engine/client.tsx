@@ -28,6 +28,7 @@ import {
 import type { MatchStatus } from "@/server/pathway-engine/types";
 import { subjectList, type SubjectNames, type Tr } from "./labels";
 import { StatusChip } from "./ui";
+import { gradeLabel } from "@/lib/grade-levels";
 
 type Opt = { value: string; label: string };
 const GRADES = [9, 10, 11, 12];
@@ -132,6 +133,7 @@ export function PlanBuilder({
   isStudent: boolean;
 }) {
   const t = useTranslations("engine.plan");
+  const tg = useTranslations("gradeLevel");
   const ts = useTranslations("engine");
   const err = useErr();
   const router = useRouter();
@@ -278,7 +280,7 @@ export function PlanBuilder({
           return (
             <section key={g} className={cn("rounded-xl border bg-card p-3 shadow-xs", g < studentGrade && "bg-muted/30")} data-testid={`plan-grade-${g}`}>
               <h3 className="mb-2 flex items-center justify-between text-sm font-semibold">
-                {t("grade", { grade: g })}
+                {gradeLabel(tg, g)}
                 <span className="text-xs font-normal text-muted-foreground">{t("coursesN", { n: rec.length + planned.length })}</span>
               </h3>
               <ul className="space-y-2">
@@ -431,6 +433,7 @@ export function WhatIfPanel({
   studentQuery: string;
 }) {
   const t = useTranslations("engine.whatIf");
+  const tg = useTranslations("gradeLevel");
   const te = useTranslations("engine") as unknown as Tr;
   const err = useErr();
   const [changes, setChanges] = useState<Change[]>([]);
@@ -533,7 +536,7 @@ export function WhatIfPanel({
                   <SelectContent>
                     {addCourse.gradeLevels.map((g) => (
                       <SelectItem key={g} value={String(g)}>
-                        {t("gradeN", { grade: g })}
+                        {gradeLabel(tg, g)}
                       </SelectItem>
                     ))}
                   </SelectContent>

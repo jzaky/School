@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { pick } from "@/lib/i18n-data";
 import type { EditorOptions } from "@/components/curriculum/plan-editor";
 import { currentTerms } from "./access";
+import { gradeLabel as gradeText } from "@/lib/grade-levels";
 
 /** Everything the plan editor needs: subject and grade choices, classes, terms and standards with coverage counts. */
 export async function editorOptions(ctx: Ctx): Promise<EditorOptions> {
@@ -14,8 +15,8 @@ export async function editorOptions(ctx: Ctx): Promise<EditorOptions> {
     db.schoolClass.findMany({ where: { isHomeroom: false, subjectId: { not: null }, academicYear: { isCurrent: true } }, orderBy: [{ gradeLevel: "asc" }, { nameEn: "asc" }] }),
     currentTerms(ctx),
   ]);
-  const t = await getTranslations("curriculum");
-  const gradeLabel = (g: number) => t("gradeN", { grade: g });
+  const tg = await getTranslations("gradeLevel");
+  const gradeLabel = (g: number) => gradeText(tg, g);
   const combos = new Map<string, { subjectId: string; grade: number; label: string; mine: boolean }>();
   const add = (subjectId: string, grade: number, mine: boolean) => {
     const s = subjects.find((x) => x.id === subjectId);

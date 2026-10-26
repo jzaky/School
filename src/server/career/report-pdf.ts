@@ -60,9 +60,9 @@ export async function renderCareerReportPdf(data: CareerReportData, letterhead?:
   // Student
   const issued = fmtDates(data.issuedAt);
   drawLtr(doc, data.student.en, M, 86, half, { size: 15, font: FONTS.bold, color: NAVY });
-  drawLtr(doc, `Student no. ${data.student.studentNo}  ·  Grade ${data.student.grade}  ·  Issued ${issued.en}`, M, 108, half, { size: 9, color: MUTED });
+  drawLtr(doc, `Student no. ${data.student.studentNo}  ·  ${data.student.grade.en}  ·  Issued ${issued.en}`, M, 108, half, { size: 9, color: MUTED });
   drawRtl(doc, data.student.ar, xAr, 82, half, { size: 15, font: FONTS.bold, color: NAVY });
-  drawRtl(doc, `الرقم ${data.student.studentNo}  ·  الصف ${data.student.grade}  ·  تاريخ الإصدار ${issued.ar}`, xAr, 104, half, { size: 9, color: MUTED });
+  drawRtl(doc, `الرقم ${data.student.studentNo}  ·  ${data.student.grade.ar}  ·  تاريخ الإصدار ${issued.ar}`, xAr, 104, half, { size: 9, color: MUTED });
   let y = 140;
 
   // 1. Assessment

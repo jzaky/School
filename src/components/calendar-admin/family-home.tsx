@@ -8,11 +8,13 @@ import { Link } from "@/i18n/navigation";
 import { Panel, PanelHeader } from "@/components/app/panel";
 import { Pill } from "@/components/app/badges";
 import { CONSENT_TONE } from "@/components/trips/tones";
+import { gradeLabel } from "@/lib/grade-levels";
 
 /** Home panel for students and parents: next exams and upcoming trips (with consent still needed). */
 export async function SchoolDatesPanel({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs }) {
   const t = await getTranslations("exams");
   const tt = await getTranslations("trips");
+  const tg = await getTranslations("gradeLevel");
   const kids = ctx.isStudent ? (ctx.membership.student ? [ctx.membership.student] : []) : (ctx.membership.guardian?.links.map((l) => l.student) ?? []);
   if (!kids.length) return null;
   const now = new Date();
@@ -56,7 +58,7 @@ export async function SchoolDatesPanel({ ctx, prefs }: { ctx: Ctx; prefs: Format
               <li key={e.id} className="flex items-center justify-between gap-2 text-sm">
                 <span className="truncate">
                   {pick(ctx.locale, e.titleEn, e.titleAr)}
-                  {grades.length > 1 && <span className="ms-1 text-xs text-muted-foreground">({t("gradeN", { grade: e.gradeLevel })})</span>}
+                  {grades.length > 1 && <span className="ms-1 text-xs text-muted-foreground">({gradeLabel(tg, e.gradeLevel)})</span>}
                 </span>
                 <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
                   {fmtDate(prefs, e.startsAt, "short")} · {fmtTime(prefs, e.startsAt)}

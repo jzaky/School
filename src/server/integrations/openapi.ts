@@ -22,10 +22,12 @@ function itemSchema(columns: ColumnSpec[], skip: (key: string) => boolean = () =
       ? { description, oneOf: [{ type: "string" }, { type: "array", items: { type: "string" } }] }
       : c.key === "homeroom"
         ? { description, oneOf: [{ type: "boolean" }, { type: "string" }] }
-        : c.key === "grade" || c.key === "capacity"
-          ? { description, oneOf: [{ type: "integer" }, { type: "string" }] }
-          : c.key === "grades"
-            ? { description: `${description} For example "9-12".`, oneOf: [{ type: "string" }, { type: "array", items: { type: "integer" } }] }
+        : c.key === "grade"
+          ? { description: `${description} An integer (-1 KG1, 0 KG2, 1 to 12) or text such as "KG1", "KG2", "PK", "Grade 9" or "الروضة الأولى".`, oneOf: [{ type: "integer" }, { type: "string" }] }
+          : c.key === "capacity"
+            ? { description, oneOf: [{ type: "integer" }, { type: "string" }] }
+            : c.key === "grades"
+              ? { description: `${description} For example "9-12" or "KG1-5" (-1 is KG1, 0 is KG2).`, oneOf: [{ type: "string" }, { type: "array", items: { type: "integer" } }] }
             : { description, type: "string" };
   }
   return { type: "object", required: columns.filter((c) => c.required && !skip(c.key)).map((c) => c.key), properties };
@@ -97,6 +99,7 @@ export function openApiDocument(baseUrl: string) {
   (student.properties as Record<string, Schema>).guardians = { type: "array", maxItems: MAX_GUARDIANS, items: { $ref: "#/components/schemas/Guardian" }, description: "Matched by email. Guardians are added and updated, never removed." };
   const str = { type: "string" };
   const strN = { type: "string", nullable: true };
+  const grade = { type: "integer", description: "Grade level as an integer: -1 is KG1, 0 is KG2, 1 to 12 are Grades 1 to 12." };
   return {
     openapi: "3.0.3",
     info: {
@@ -137,10 +140,10 @@ export function openApiDocument(baseUrl: string) {
         "students",
         "students with guardians",
         "#/components/schemas/StudentInput",
-        { type: "object", properties: { id: str, student_no: str, first_name_en: str, last_name_en: str, first_name_ar: str, last_name_ar: str, grade: { type: "integer" }, section: strN, date_of_birth: strN, status: str, guardians: { type: "array", items: { type: "object" } } } },
+        { type: "object", properties: { id: str, student_no: str, first_name_en: str, last_name_en: str, first_name_ar: str, last_name_ar: str, grade, section: strN, date_of_birth: strN, status: str, guardians: { type: "array", items: { type: "object" } } } },
         [
           { name: "status", in: "query", schema: { type: "string", enum: ["ACTIVE", "INACTIVE", "GRADUATED", "WITHDRAWN"] } },
-          { name: "grade", in: "query", schema: { type: "integer" } },
+          { name: "grade", in: "query", description: "Grade level: -1 (KG1), 0 (KG2) or 1 to 12. KG1 and KG2 are also accepted.", schema: { type: "string" } },
         ],
         MAX_BATCH.students,
       ),
@@ -149,7 +152,7 @@ export function openApiDocument(baseUrl: string) {
         "staff",
         "staff",
         "#/components/schemas/StaffInput",
-        { type: "object", properties: { id: str, name_en: str, name_ar: strN, email: str, status: str, roles: { type: "array", items: str }, department: strN, job_title_en: strN, job_title_ar: strN, subjects: { type: "array", items: str }, grades: { type: "array", items: { type: "integer" } } } },
+        { type: "object", properties: { id: str, name_en: str, name_ar: strN, email: str, status: str, roles: { type: "array", items: str }, department: strN, job_title_en: strN, job_title_ar: strN, subjects: { type: "array", items: str }, grades: { type: "array", items: grade } } },
         [],
         MAX_BATCH.staff,
       ),
@@ -158,7 +161,7 @@ export function openApiDocument(baseUrl: string) {
         "classes",
         "classes of the current year",
         "#/components/schemas/ClassInput",
-        { type: "object", properties: { id: str, class_code: strN, name_en: str, name_ar: str, subject: strN, grade: { type: "integer" }, section: strN, teacher_email: strN, room: strN, capacity: { type: "integer", nullable: true }, homeroom: { type: "boolean" }, option_block: strN, student_count: { type: "integer" } } },
+        { type: "object", properties: { id: str, class_code: strN, name_en: str, name_ar: str, subject: strN, grade, section: strN, teacher_email: strN, room: strN, capacity: { type: "integer", nullable: true }, homeroom: { type: "boolean" }, option_block: strN, student_count: { type: "integer" } } },
         [],
         MAX_BATCH.classes,
       ),

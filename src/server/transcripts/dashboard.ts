@@ -43,8 +43,8 @@ async function scopedStudents(actor: EngineActor, f: DashboardFilters): Promise<
   return actor.db.student.findMany({
     where,
     select: { id: true, firstNameEn: true, lastNameEn: true, firstNameAr: true, lastNameAr: true, gradeLevel: true, curriculum: true },
+    // Every student in scope (Grade 9 and up is a few hundred in a full-size school): the dashboard aggregates them all.
     orderBy: [{ gradeLevel: "desc" }, { lastNameEn: "asc" }],
-    take: 800,
   });
 }
 

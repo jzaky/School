@@ -1,5 +1,7 @@
 // Builds merge-field values for document templates in both languages.
 import type { Tx } from "@/server/db";
+import { gradeCode } from "@/lib/grade-levels";
+import { gradeTextIn, upgradeGradeMergeFields } from "@/server/common/grade-text";
 
 function fmtDate(d: Date | null | undefined, locale: "en" | "ar") {
   if (!d) return "";
@@ -38,7 +40,8 @@ export async function buildMergeData(
     "student.fullName": student ? `${student.firstNameEn} ${student.lastNameEn}` : "",
     "student.fullNameAr": student ? `${student.firstNameAr} ${student.lastNameAr}` : "",
     "student.studentNo": student?.studentNo ?? "",
-    "student.grade": student ? String(student.gradeLevel) : "",
+    "student.grade": student ? gradeCode(student.gradeLevel) : "",
+    "student.gradeName": student ? gradeTextIn(locale, student.gradeLevel) : "",
     "student.dateOfBirth": fmtDate(student?.dateOfBirth, locale),
     "student.nationality": (locale === "ar" ? student?.nationalityAr : student?.nationalityEn) ?? "",
     "student.enrolledOn": fmtDate(student?.enrolledOn, locale),
@@ -54,7 +57,7 @@ export async function buildMergeData(
 }
 
 export function applyMerge(body: string, values: Record<string, string>) {
-  return body.replace(/\{\{([\w.]+)\}\}/g, (_, k: string) => values[k] ?? "");
+  return upgradeGradeMergeFields(body).replace(/\{\{([\w.]+)\}\}/g, (_, k: string) => values[k] ?? "");
 }
 
 /** Merge fields available to every letter template. */
@@ -63,6 +66,7 @@ export const MERGE_FIELD_KEYS = [
   "student.fullNameAr",
   "student.studentNo",
   "student.grade",
+  "student.gradeName",
   "student.dateOfBirth",
   "student.nationality",
   "student.enrolledOn",

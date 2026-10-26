@@ -14,6 +14,9 @@ import { CurriculumNav } from "@/components/curriculum/curriculum-nav";
 import { AiDraftedBadge, PlanStatusBadge } from "@/components/curriculum/badges";
 import { canUseCurriculum, visiblePlanWhere } from "@/server/curriculum/access";
 import { curriculumShell } from "@/server/curriculum/shell";
+import { gradeLabel } from "@/lib/grade-levels";
+import { Pager, pageHref } from "@/components/app/pager";
+import { pageWindow } from "@/server/common/paging";
 
 export async function generateMetadata() {
   const t = await getTranslations("curriculum");
@@ -22,10 +25,11 @@ export async function generateMetadata() {
 
 const STATUSES = ["DRAFT", "SUBMITTED", "CHANGES_REQUESTED", "APPROVED"] as const;
 
-export default async function PlansPage({ searchParams }: { searchParams: Promise<{ tab?: string; status?: string; q?: string }> }) {
+export default async function PlansPage({ searchParams }: { searchParams: Promise<{ tab?: string; status?: string; q?: string; page?: string }> }) {
   const sp = await searchParams;
   const ctx = await getCtx();
   const t = await getTranslations("curriculum");
+  const tg = await getTranslations("gradeLevel");
   if (!canUseCurriculum(ctx)) {
     return (
       <PageBody>
@@ -47,11 +51,9 @@ export default async function PlansPage({ searchParams }: { searchParams: Promis
       q ? { OR: [{ titleEn: { contains: q, mode: "insensitive" } }, { titleAr: { contains: q } }] } : {},
     ],
   };
-  const [shell, plans, mineCount] = await Promise.all([
-    curriculumShell(ctx),
-    db.lessonPlan.findMany({ where, orderBy: [{ plannedFor: "asc" }, { weekNo: "asc" }, { createdAt: "asc" }], take: 200, include: { _count: { select: { standards: true } } } }),
-    db.lessonPlan.count({ where: { authorId: ctx.membershipId } }),
-  ]);
+  const [shell, total, mineCount] = await Promise.all([curriculumShell(ctx), db.lessonPlan.count({ where }), db.lessonPlan.count({ where: { authorId: ctx.membershipId } })]);
+  const win = pageWindow(sp.page, total);
+  const plans = await db.lessonPlan.findMany({ where, orderBy: [{ plannedFor: "asc" }, { weekNo: "asc" }, { createdAt: "asc" }, { id: "asc" }], skip: win.skip, take: win.take, include: { _count: { select: { standards: true } } } });
   const [subjects, classes, authors] = await Promise.all([
     db.subject.findMany({ where: { id: { in: [...new Set(plans.map((p) => p.subjectId))] } } }),
     db.schoolClass.findMany({ where: { id: { in: [...new Set(plans.map((p) => p.classId).filter(Boolean) as string[])] } } }),
@@ -117,7 +119,7 @@ export default async function PlansPage({ searchParams }: { searchParams: Promis
                         {p.aiDrafted && <AiDraftedBadge />}
                       </div>
                       <div className="text-xs text-muted-foreground">
-                        {subject ? pick(locale, subject.nameEn, subject.nameAr) : ""} · {t("gradeN", { grade: p.gradeLevel })} · {t("plans.standardsCount", { count: p._count.standards })}
+                        {subject ? pick(locale, subject.nameEn, subject.nameAr) : ""} · {gradeLabel(tg, p.gradeLevel)} · {t("plans.standardsCount", { count: p._count.standards })}
                         {tab !== "mine" && author ? ` · ${userName(author.user, locale)}` : ""}
                       </div>
                     </div>
@@ -135,6 +137,9 @@ export default async function PlansPage({ searchParams }: { searchParams: Promis
               );
             })}
           </ul>
+          <div className="border-t bg-muted/20 px-5 py-1">
+            <Pager win={win} prefs={prefs} href={(n) => pageHref("/curriculum/plans", { tab: sp.tab, status: sp.status, q: sp.q }, n)} />
+          </div>
         </div>
       )}
     </PageBody>

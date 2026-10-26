@@ -53,7 +53,7 @@ export default async function ProgramPage({ params, searchParams }: { params: Pr
         description={t("programMeta", { degree: p.degree, years: fmt(p.durationYears), field: t(`field.${p.field}`) })}
         actions={
           <>
-            {focus.options.length > 0 && <StudentPicker students={focus.options} current={focus.student?.id ?? null} />}
+            {(focus.search || focus.options.length > 0) && <StudentPicker students={focus.options} current={focus.student?.id ?? null} search={focus.search} />}
             {focus.student && focus.canAdd && <AddToShortlistButton programId={p.id} studentId={focus.student.id} inShortlist={inShortlist} />}
           </>
         }

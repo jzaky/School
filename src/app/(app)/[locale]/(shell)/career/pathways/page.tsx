@@ -2,6 +2,6 @@ import { StaticPathwayPage, engineMetadata } from "@/components/pathway-engine/p
 
 export const generateMetadata = engineMetadata;
 
-export default async function Page({ searchParams }: { searchParams: Promise<{ student?: string; q?: string; tab?: string }> }) {
+export default async function Page({ searchParams }: { searchParams: Promise<{ student?: string; q?: string; tab?: string; page?: string }> }) {
   return <StaticPathwayPage tab="overview" sp={await searchParams} />;
 }

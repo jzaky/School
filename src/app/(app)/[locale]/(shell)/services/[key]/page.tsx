@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { gradeLabel } from "@/lib/grade-levels";
 import { ChevronLeft, Lock, ShieldAlert, Timer } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { pick, personName } from "@/lib/i18n-data";
@@ -31,6 +32,7 @@ export default async function ServicePage({ params, searchParams }: { params: Pr
   const sp = await searchParams;
   const ctx = await getCtx();
   const t = await getTranslations("services");
+  const tg = await getTranslations("gradeLevel");
   const { db, orgId, locale } = ctx;
   const service = await db.serviceDefinition.findUnique({ where: { orgId_key: { orgId, key } }, include: { form: true, workflow: true } });
   if (!service || !service.isActive) notFound();
@@ -49,7 +51,7 @@ export default async function ServicePage({ params, searchParams }: { params: Pr
   else if (sp.student && (await canSeeStudent(ctx, sp.student))) studentId = sp.student;
 
   const [options, prefill, draft] = await Promise.all([
-    loadPickerOptions(ctx, schema),
+    loadPickerOptions(ctx, schema, { selectedStudentId: studentId }),
     prefillValues(ctx, schema, studentId),
     version ? db.formDraft.findUnique({ where: { formVersionId_membershipId_serviceId: { formVersionId: version.id, membershipId: ctx.membershipId, serviceId: service.id } } }) : null,
   ]);
@@ -93,8 +95,7 @@ export default async function ServicePage({ params, searchParams }: { params: Pr
                     data-testid={`child-${c.firstNameEn.toLowerCase()}`}
                     className={c.id === studentId ? "rounded-full border border-brand bg-brand px-3 py-1.5 text-sm text-brand-foreground" : "rounded-full border px-3 py-1.5 text-sm hover:bg-muted"}
                   >
-                    {personName(c, locale)} · {c.gradeLevel}
-                    {c.section}
+                    {personName(c, locale)} · {gradeLabel(tg, c.gradeLevel, c.section, { short: true })}
                   </Link>
                 ))}
               </div>
@@ -107,7 +108,7 @@ export default async function ServicePage({ params, searchParams }: { params: Pr
             schema={booking && schema ? withoutBookingFields(schema) : schema}
             initialValues={initialValues}
             initialStep={draft?.step ?? 0}
-            options={{ students: options.students, staff: options.staff, subjects: options.subjects }}
+            options={{ students: options.students, staff: options.staff, subjects: options.subjects, studentSearch: options.studentSearch }}
             studentId={studentId}
             lockedFields={ctx.isStudent || ctx.isParent ? ["student"] : []}
             booking={booking}

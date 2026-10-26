@@ -13,6 +13,7 @@ import { EmptyState } from "@/components/app/empty-state";
 import { CaseStatusBadge, Pill, PriorityBadge, SensitivityBadge } from "@/components/app/badges";
 import { SlaCountdown } from "@/components/cases/sla";
 import { listableCaseWhere } from "@/server/access/case-access";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export async function generateMetadata() {
   const t = await getTranslations("cases");
@@ -26,6 +27,7 @@ export default async function CasesPage({ searchParams }: { searchParams: Promis
   const ctx = await getCtx();
   if (!ctx.can("cases.view")) notFound();
   const t = await getTranslations("cases");
+  const tg = await getTranslations("gradeLevel");
   const ts = await getTranslations("status");
   const prefs = await formatPrefs(ctx);
   const { db, orgId, membershipId, locale } = ctx;
@@ -101,7 +103,7 @@ export default async function CasesPage({ searchParams }: { searchParams: Promis
                         <span className="min-w-0">
                           <span className="block truncate font-medium group-hover:text-brand">{personName(c.student, locale)}</span>
                           <span className="text-xs text-muted-foreground">
-                            {t("grade", { grade: `${c.student.gradeLevel}${c.student.section ?? ""}` })}
+                            {gradeLabel(tg, c.student.gradeLevel, c.student.section)}
                           </span>
                         </span>
                       </Link>

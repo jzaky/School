@@ -5,6 +5,7 @@ import type { ExecCtx, Tx } from "@/server/db";
 import { notify } from "@/server/notify/notify";
 import { audit } from "@/server/audit/audit";
 import { ensureCalendarTemplates } from "./templates";
+import { gradeTextIn } from "@/server/common/grade-text";
 
 export class TripError extends Error {
   constructor(public code: string) {
@@ -113,7 +114,8 @@ export async function publishTrip(ec: ExecCtx, input: { tripId: string; actorId:
       const student = (locale: "en" | "ar") => ({
         "student.fullName": `${s.firstNameEn} ${s.lastNameEn}`,
         "student.fullNameAr": `${s.firstNameAr} ${s.lastNameAr}`,
-        "student.grade": `${s.gradeLevel}${s.section ?? ""}`,
+        "student.grade": gradeTextIn(locale, s.gradeLevel, s.section, { short: true }),
+        "student.gradeName": gradeTextIn(locale, s.gradeLevel, s.section),
         ...tripMerge(locale),
       });
       const version = await tx.documentVersion.create({

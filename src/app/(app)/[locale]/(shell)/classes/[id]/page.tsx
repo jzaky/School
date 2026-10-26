@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { ClassRegister } from "@/components/attendance/class-register";
 import { formatPrefs } from "@/server/format";
 import { awaitingAuthority } from "@/server/admissions/page-data";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -31,6 +32,7 @@ export default async function ClassRosterPage({ params, searchParams }: { params
   if (!ctx.isStaff) notFound();
   const { db, locale } = ctx;
   const t = await getTranslations("registration");
+  const tg = await getTranslations("gradeLevel");
   const cls = await db.schoolClass.findUnique({ where: { id }, include: { subject: true, enrollments: { include: { student: true } } } });
   if (!cls) notFound();
   const seesAll = ctx.can("registration.manage");
@@ -56,7 +58,7 @@ export default async function ClassRosterPage({ params, searchParams }: { params
       </Button>
       <PageHeader
         title={pick(locale, cls.nameEn, cls.nameAr)}
-        description={[cls.isHomeroom ? t("homeroom") : cls.subject ? pick(locale, cls.subject.nameEn, cls.subject.nameAr) : "", t("gradeN", { grade: cls.gradeLevel }), cls.room ? t("roomN", { room: cls.room }) : ""].filter(Boolean).join(" · ")}
+        description={[cls.isHomeroom ? t("homeroom") : cls.subject ? pick(locale, cls.subject.nameEn, cls.subject.nameAr) : "", gradeLabel(tg, cls.gradeLevel), cls.room ? t("roomN", { room: cls.room }) : ""].filter(Boolean).join(" · ")}
         actions={
           <>
             {(ctx.can("attendance.take") || ctx.can("attendance.manage")) && (cls.teacherMembershipId === ctx.membershipId || ctx.can("attendance.manage")) && (
@@ -129,7 +131,7 @@ export default async function ClassRosterPage({ params, searchParams }: { params
                   <span className="col-start-2 text-xs text-muted-foreground md:col-start-auto md:text-sm">
                     <span dir="ltr">{e.student.studentNo}</span>
                   </span>
-                  <span className="col-start-2 text-xs md:col-start-auto md:text-sm">{t("homeroomN", { grade: e.student.gradeLevel, section: e.student.section ?? "" })}</span>
+                  <span className="col-start-2 text-xs md:col-start-auto md:text-sm">{gradeLabel(tg, e.student.gradeLevel, e.student.section, { short: true })}</span>
                   <span className="col-start-2 md:col-start-auto">{src ? <Pill tone={SOURCE_TONE[src]}>{t(`source.${src}`)}</Pill> : <span className="text-xs text-muted-foreground">{cls.isHomeroom ? t("homeroomMember") : t("sourceNone")}</span>}</span>
                 </li>
               );

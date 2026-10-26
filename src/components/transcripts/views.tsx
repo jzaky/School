@@ -86,7 +86,8 @@ export async function ImportsView({ ctx, studentParam }: { ctx: Ctx; studentPara
     listImports(actor),
     ctx.isStudent
       ? ctx.db.student.findMany({ where: { id: selfId ?? "none", orgId: ctx.orgId } })
-      : ctx.db.student.findMany({ where: { orgId: ctx.orgId, status: "ACTIVE", gradeLevel: { gte: 6 } }, orderBy: [{ gradeLevel: "desc" }, { lastNameEn: "asc" }], take: 600 }),
+      : // Every student who can upload a transcript (Grade 8 and up), no cap: the form searches them in the browser.
+        ctx.db.student.findMany({ where: { orgId: ctx.orgId, status: "ACTIVE", gradeLevel: { gte: 8 } }, select: { id: true, firstNameEn: true, lastNameEn: true, firstNameAr: true, lastNameAr: true, gradeLevel: true, curriculum: true }, orderBy: [{ gradeLevel: "desc" }, { lastNameEn: "asc" }] }),
   ]);
   const names = new Map(students.map((s) => [s.id, personName(s, ctx.locale)]));
   const missing = imports.map((i) => i.studentId).filter((id): id is string => !!id && !names.has(id));
@@ -101,7 +102,7 @@ export async function ImportsView({ ctx, studentParam }: { ctx: Ctx; studentPara
         {showForm && (
           <Panel className="lg:col-span-3">
             <PanelHeader title={t("new.title")} icon={<Upload className="size-4" />} description={ctx.isStudent ? t("new.descStudent") : t("new.desc")} />
-            <NewImportForm students={ctx.isStudent ? null : opts.filter((o) => o.grade >= 8)} self={self} initialStudentId={studentParam && names.has(studentParam) ? studentParam : null} />
+            <NewImportForm students={ctx.isStudent ? null : opts} self={self} initialStudentId={studentParam && names.has(studentParam) ? studentParam : null} />
           </Panel>
         )}
         <Panel className={showForm ? "lg:col-span-2" : "lg:col-span-5"}>

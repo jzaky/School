@@ -4,7 +4,7 @@ import { Clock, Download, KeyRound, Link2, MailCheck, MailX, Send, Users } from 
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { fmtDate, fmtNumber } from "@/lib/format";
-import { personName, pick, userName } from "@/lib/i18n-data";
+import { pick, userName } from "@/lib/i18n-data";
 import { Link } from "@/i18n/navigation";
 import { audienceOfRole } from "@/server/access/permission-catalog";
 import { ensureJoinCode, toRow, type InviteRow } from "@/server/access/invitations";
@@ -19,6 +19,9 @@ import { Button } from "@/components/ui/button";
 import { AccessTabs } from "@/components/access/access-tabs";
 import { BulkStaffDialog, FamilyJoinUrl, FamilyQr, InviteDialog, InviteFamiliesButton, InviteRowActions, RegenerateCodeButton, StaffLinkDialog } from "@/components/access/invite-forms";
 import { SignInSettings } from "@/components/access/sign-in-settings";
+import type { Prisma } from "@prisma/client";
+import { Pager, pageHref } from "@/components/app/pager";
+import { pageWindow } from "@/server/common/paging";
 
 export async function generateMetadata() {
   const t = await getTranslations("adminInvites");
@@ -30,7 +33,7 @@ const STATE_TONE: Record<InviteState, Tone> = { PENDING: "info", ACCEPTED: "succ
 const STATES: InviteState[] = ["PENDING", "ACCEPTED", "EXPIRED", "REVOKED"];
 const ORDER = SYSTEM_ROLES.map((r) => r.key);
 
-export default async function InvitationsPage({ searchParams }: { searchParams: Promise<{ tab?: string; state?: string }> }) {
+export default async function InvitationsPage({ searchParams }: { searchParams: Promise<{ tab?: string; state?: string; page?: string }> }) {
   const sp = await searchParams;
   const ctx = await getCtx();
   // The Head of IT (signin.manage without people.invite) sees only the sign-in tab.
@@ -43,20 +46,35 @@ export default async function InvitationsPage({ searchParams }: { searchParams: 
   const tab: Tab = signInOnly ? "signin" : sp.tab === "links" || sp.tab === "signin" ? sp.tab : "invites";
   const stateFilter = STATES.includes(sp.state as InviteState) ? (sp.state as InviteState) : null;
 
-  const [roles, invitations] = await Promise.all([
+  // Personal invitations are paged with real counts (a school inviting every family sends thousands); staff links
+  // are few and listed in full.
+  const live = { revokedAt: null, uses: { lt: db.invitation.fields.maxUses } } satisfies Prisma.InvitationWhereInput;
+  const stateWhere: Record<InviteState, Prisma.InvitationWhereInput> = {
+    PENDING: { ...live, expiresAt: { gt: now } },
+    ACCEPTED: { revokedAt: null, uses: { gte: db.invitation.fields.maxUses } },
+    EXPIRED: { ...live, expiresAt: { lte: now } },
+    REVOKED: { revokedAt: { not: null } },
+  };
+  const personalWhere: Prisma.InvitationWhereInput = { email: { not: null }, ...(stateFilter ? stateWhere[stateFilter] : {}) };
+  const [roles, linkRows, pendingCount, acceptedCount, expiredCount, listTotal] = await Promise.all([
     db.role.findMany({ select: { id: true, key: true, nameEn: true, nameAr: true, descEn: true, descAr: true } }),
-    db.invitation.findMany({ orderBy: { createdAt: "desc" }, take: 300 }),
+    db.invitation.findMany({ where: { email: null }, orderBy: { createdAt: "desc" }, take: 100 }),
+    db.invitation.count({ where: { email: { not: null }, ...stateWhere.PENDING } }),
+    db.invitation.count({ where: { email: { not: null }, ...stateWhere.ACCEPTED } }),
+    db.invitation.count({ where: { email: { not: null }, ...stateWhere.EXPIRED } }),
+    db.invitation.count({ where: personalWhere }),
   ]);
+  const win = pageWindow(sp.page, listTotal);
+  const invitations = tab === "invites" ? await db.invitation.findMany({ where: personalWhere, orderBy: [{ createdAt: "desc" }, { id: "asc" }], skip: win.skip, take: win.take }) : [];
   roles.sort((a, b) => (ORDER.indexOf(a.key) === -1 ? 999 : ORDER.indexOf(a.key)) - (ORDER.indexOf(b.key) === -1 ? 999 : ORDER.indexOf(b.key)) || a.nameEn.localeCompare(b.nameEn));
   const roleName = (key: string) => {
     const r = roles.find((x) => x.key === key);
     return r ? pick(locale, r.nameEn, r.nameAr) : key;
   };
   const staffRoles = roles.filter((r) => audienceOfRole(r.key) === "staff").map((r) => ({ key: r.key, label: pick(locale, r.nameEn, r.nameAr), description: pick(locale, r.descEn, r.descAr) }));
-  const rows = invitations.map((i) => toRow(i, now));
-  const personal = rows.filter((r) => !r.isLink);
-  const links = rows.filter((r) => r.isLink);
-  const counts = { pending: personal.filter((r) => r.state === "PENDING").length, accepted: personal.filter((r) => r.state === "ACCEPTED").length, expired: personal.filter((r) => r.state === "EXPIRED").length };
+  const personal = invitations.map((i) => toRow(i, now));
+  const links = linkRows.map((i) => toRow(i, now));
+  const counts = { pending: pendingCount, accepted: acceptedCount, expired: expiredCount };
 
   return (
     <PageBody>
@@ -109,12 +127,11 @@ export default async function InvitationsPage({ searchParams }: { searchParams: 
   );
 
   async function inviteActions() {
-    const [students, departments, waitingFamilies] = await Promise.all([
-      db.student.findMany({ where: { status: "ACTIVE" }, select: { id: true, studentNo: true, gradeLevel: true, section: true, firstNameEn: true, lastNameEn: true, firstNameAr: true, lastNameAr: true, membershipId: true }, orderBy: [{ gradeLevel: "asc" }, { lastNameEn: "asc" }], take: 3000 }),
+    const [accountlessCount, departments, waitingFamilies] = await Promise.all([
+      db.student.count({ where: { status: "ACTIVE", membershipId: null } }),
       db.department.findMany({ orderBy: { nameEn: "asc" }, select: { id: true, nameEn: true, nameAr: true } }),
       db.guardian.count({ where: { membershipId: null, email: { not: null }, links: { some: {} } } }),
     ]);
-    const opt = (s: (typeof students)[number]) => ({ value: s.id, label: personName(s, locale), hint: `${s.studentNo} · ${t("gradeN", { grade: s.gradeLevel })}`, keywords: `${s.firstNameEn} ${s.lastNameEn} ${s.firstNameAr} ${s.lastNameAr} ${s.studentNo}` });
     return (
       <>
         <InviteFamiliesButton waiting={waitingFamilies} />
@@ -122,15 +139,14 @@ export default async function InvitationsPage({ searchParams }: { searchParams: 
         <InviteDialog
           roles={staffRoles}
           departments={departments.map((d) => ({ id: d.id, label: pick(locale, d.nameEn, d.nameAr) }))}
-          students={students.map(opt)}
-          accountless={students.filter((s) => !s.membershipId).map(opt)}
+          accountlessCount={accountlessCount}
         />
       </>
     );
   }
 
   async function invitesTab() {
-    const list = stateFilter ? personal.filter((r) => r.state === stateFilter) : personal;
+    const list = personal;
     const creators = await db.membership.findMany({ where: { id: { in: [...new Set(list.map((r) => r.createdById))] } }, select: { id: true, user: { select: { nameEn: true, nameAr: true } } } });
     const cols = "lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_120px_minmax(0,1fr)_200px]";
     return (
@@ -184,6 +200,9 @@ export default async function InvitationsPage({ searchParams }: { searchParams: 
                   <InviteRowActions id={r.id} canResend={r.state === "PENDING" || r.state === "EXPIRED"} canRevoke={r.state === "PENDING"} />
                 </div>
               ))}
+            </div>
+            <div className="border-t bg-muted/20 px-5 py-1">
+              <Pager win={win} prefs={prefs} href={(p) => pageHref("/admin/invitations", { state: sp.state }, p)} />
             </div>
           </div>
         )}

@@ -2,6 +2,7 @@
 // Shared by the browser preview and the server import, so both apply the same rules.
 // Error entries carry only the row number, the field name and an error code, never the cell value.
 import { headerIndex, resolveHeader, templateCsv as bilingualTemplate, type ColumnSpec } from "./imports/headers";
+import { MIN_GRADE_LEVEL, parseGradeLevel } from "./grade-levels";
 
 export const CSV_HEADERS = [
   "student_no",
@@ -28,7 +29,8 @@ export type CsvRow = Record<CsvField, string>;
 
 export const REQUIRED_HEADERS: CsvField[] = ["student_no", "first_name_en", "last_name_en", "grade"];
 export const MAX_IMPORT_ROWS = 2000;
-export const MIN_GRADE = 1;
+/** KG1 (-1) to Grade 13 (a Year 13 in British-curriculum files). */
+export const MIN_GRADE = MIN_GRADE_LEVEL;
 export const MAX_GRADE = 13;
 
 export const RELATIONSHIPS: Record<string, { en: string; ar: string }> = {
@@ -155,11 +157,10 @@ export function emiratesIdLast4(dashed: string) {
   return dashed.slice(-9, -2).slice(-4);
 }
 
+/** "9", "Grade 9", "KG1", "KG 2", "PK", "KG", "الروضة الأولى", "الصف التاسع" and more (see parseGradeLevel). */
 export function parseGrade(value: string): number | null {
-  const v = value.replace(/^(grade|g)\s*/i, "");
-  if (!/^\d{1,2}$/.test(v)) return null;
-  const n = Number(v);
-  return n >= MIN_GRADE && n <= MAX_GRADE ? n : null;
+  const n = parseGradeLevel(value);
+  return n !== null && n >= MIN_GRADE && n <= MAX_GRADE ? n : null;
 }
 
 export function isEmail(value: string) {

@@ -9,6 +9,7 @@ import { localClock } from "@/server/attendance/settings";
 import { isUnexplained, resolveCode } from "@/server/attendance/codes";
 import { round1 } from "@/server/attendance/maths";
 import { keyToDate } from "@/server/timetable/cover";
+import { gradeLabel } from "@/lib/grade-levels";
 import { initials, personName, pick, userName } from "@/lib/i18n-data";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
@@ -26,7 +27,8 @@ export default async function ChildPage({ params }: { params: Promise<{ id: stri
   const links = ctx.membership.guardian?.links ?? [];
   if (!links.some((l) => l.studentId === id)) notFound();
   const t = await getTranslations("children");
-  const ts = await getTranslations("students");
+  const tg = await getTranslations("gradeLevel");
+  const th = await getTranslations("home");
   const tr = await getTranslations("careerReport");
   const prefs = await formatPrefs(ctx);
   const { db, orgId, locale } = ctx;
@@ -34,7 +36,7 @@ export default async function ChildPage({ params }: { params: Promise<{ id: stri
   // Attendance: this child's own record only (term to date), with the school's codes.
   const { range } = await resolveRange(db, {}, localClock(new Date(), ctx.org.timezone || "Asia/Dubai").dateKey);
   const [enrollments, summary, requests, appts, docs, recs, assessed] = await Promise.all([
-    db.enrollment.findMany({ where: { studentId: id }, include: { class: { include: { subject: true } } } }),
+    db.enrollment.findMany({ where: { studentId: id, status: "ACTIVE", class: { academicYear: { isCurrent: true } } }, include: { class: { include: { subject: true } } } }),
     studentSummary(db, id, range),
     db.request.findMany({ where: { AND: [requestWhere(ctx), { studentId: id }] }, include: { service: true }, orderBy: { submittedAt: "desc" }, take: 6 }),
     db.appointment.findMany({ where: { orgId, studentId: id, caseId: null }, include: { type: true }, orderBy: { startsAt: "desc" }, take: 5 }),
@@ -46,6 +48,8 @@ export default async function ChildPage({ params }: { params: Promise<{ id: stri
   const nameOf = (mid: string | null) => (mid ? userName(teachers.find((m) => m.id === mid)?.user, locale) : "");
   const ta = await getTranslations("attendance.child");
   const pct = summary.pct === null ? null : round1(summary.pct);
+  // A child enrolled ahead of their first day has no attendance yet: say when they start instead of a percentage.
+  const startsOn = s.enrolledOn && s.enrolledOn.getTime() > Date.now() ? s.enrolledOn : null;
   const recent = summary.days.slice(-30);
   const unexplained = summary.days.filter((d) => {
     const c = resolveCode(summary.codes, d.code, d.status);
@@ -68,8 +72,12 @@ export default async function ChildPage({ params }: { params: Promise<{ id: stri
         <div className="flex-1">
           <h1 className="text-2xl font-semibold tracking-tight">{personName(s, locale)}</h1>
           <div className="mt-1 flex flex-wrap gap-2">
-            <Pill tone="brand">{ts("gradeN", { grade: `${s.gradeLevel}${s.section ?? ""}` })}</Pill>
-            {pct !== null && <Pill tone={pct >= 95 ? "success" : pct >= 90 ? "warning" : "danger"}>{t("attendance", { pct })}</Pill>}
+            <Pill tone="brand" data-testid="child-grade">{gradeLabel(tg, s.gradeLevel, s.section)}</Pill>
+            {startsOn ? (
+              <Pill tone="info" data-testid="child-starts">{th("startsOn", { date: fmtDate(prefs, startsOn, "medium") })}</Pill>
+            ) : (
+              pct !== null && <Pill tone={pct >= 95 ? "success" : pct >= 90 ? "warning" : "danger"}>{t("attendance", { pct })}</Pill>
+            )}
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -92,7 +100,7 @@ export default async function ChildPage({ params }: { params: Promise<{ id: stri
           <Panel>
             <PanelHeader title={ta("title")} description={ta("termToDate", { from: fmtDate(prefs, keyToDate(range.from), "medium"), to: fmtDate(prefs, keyToDate(range.to), "medium") })} />
             {summary.tally.possible === 0 ? (
-              <p className="text-sm text-muted-foreground">{ta("none")}</p>
+              <p className="text-sm text-muted-foreground">{startsOn ? t("startsOn", { date: fmtDate(prefs, startsOn, "long") }) : ta("none")}</p>
             ) : (
               <div className="space-y-4" data-testid="child-attendance">
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">

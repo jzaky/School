@@ -11,6 +11,7 @@ import { Pill } from "@/components/app/badges";
 import { EmptyState } from "@/components/app/empty-state";
 import { Button } from "@/components/ui/button";
 import { CareerOverview } from "@/components/career/career-overview";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export async function generateMetadata() {
   const t = await getTranslations("career");
@@ -22,6 +23,7 @@ export default async function CareerPage({ searchParams }: { searchParams: Promi
   const ctx = await getCtx();
   const t = await getTranslations("career");
   const prefs = await formatPrefs(ctx);
+  const tg = await getTranslations("gradeLevel");
   if (ctx.isStudent && ctx.membership.student) {
     const tp = await getTranslations("partners");
     const tn = await getTranslations("nav");
@@ -125,7 +127,7 @@ export default async function CareerPage({ searchParams }: { searchParams: Promi
                   <span className="min-w-0 flex-1">
                     <span className="block font-medium">{personName(a.student, locale)}</span>
                     <span className="text-xs text-muted-foreground">
-                      {t("gradeN", { grade: a.student.gradeLevel })} · {fmtRelative(prefs, a.completedAt)}
+                      {gradeLabel(tg, a.student.gradeLevel)} · {fmtRelative(prefs, a.completedAt)}
                     </span>
                   </span>
                   {chosen && <Pill tone="brand">{pick(locale, chosen.titleEn, chosen.titleAr)}</Pill>}

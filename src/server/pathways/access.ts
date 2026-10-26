@@ -1,6 +1,7 @@
 import "server-only";
 import type { Ctx } from "@/server/context";
 import { visibleStudentIds } from "@/server/access/student-access";
+import { PATHWAY_MIN_GRADE } from "@/lib/grade-levels";
 
 /** Staff who confirm results and scores entered by students and parents. */
 export const canConfirm = (ctx: Ctx) => ctx.isStaff && (ctx.can("pathways.manage") || ctx.can("career.advise"));
@@ -18,10 +19,12 @@ export async function resolvePathwayStudent(ctx: Ctx, requested?: string | null)
   const ids = await pathwayStudentIds(ctx);
   if (ids !== null && ids.length === 0) return null;
   const id = requested && (ids === null || ids.includes(requested)) ? requested : null;
-  if (id) return ctx.db.student.findFirst({ where: { id, orgId: ctx.orgId } });
+  // Parents plan with children in Grade 9 and above (students keep their own page at any grade).
+  const minGrade = ctx.isParent ? { gradeLevel: { gte: PATHWAY_MIN_GRADE } } : {};
+  if (id) return ctx.db.student.findFirst({ where: { id, orgId: ctx.orgId, ...minGrade } });
   if (ids === null) return null;
   // Parents with several children start with the oldest, who is closest to applying.
-  return ctx.db.student.findFirst({ where: { id: { in: ids }, orgId: ctx.orgId }, orderBy: { gradeLevel: "desc" } });
+  return ctx.db.student.findFirst({ where: { id: { in: ids }, orgId: ctx.orgId, ...minGrade }, orderBy: { gradeLevel: "desc" } });
 }
 
 /** May this member change results and scores for the student? Students and parents edit their own, advising staff anyone. */

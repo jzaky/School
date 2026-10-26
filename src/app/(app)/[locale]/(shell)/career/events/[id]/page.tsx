@@ -16,6 +16,8 @@ import { KIND_TONE, STATE_TONE } from "@/components/career-events/tones";
 import { actingStudents, canManageEvents } from "@/server/career-events/access";
 import { closesAt, gradeEligible, registrationState } from "@/server/career-events/service";
 import { dubaiDayKey } from "@/server/inspection/range";
+import { gradeLabel } from "@/lib/grade-levels";
+import { gradeChoices } from "@/server/students/grade-options";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -25,16 +27,16 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return { title: ev ? pick(ctx.locale, ev.titleEn, ev.titleAr) : t("title") };
 }
 
-const GRADES = [6, 7, 8, 9, 10, 11, 12];
 const timeKey = (d: Date) => new Date(d.getTime() + 4 * 3_600_000).toISOString().slice(11, 16);
 
 export default async function CareerEventPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const ctx = await getCtx();
   const t = await getTranslations("careerEvents");
-  const tc = await getTranslations("common");
+  const tg = await getTranslations("gradeLevel");
   const prefs = await formatPrefs(ctx);
   const { db, locale } = ctx;
+  const GRADES = await gradeChoices(db);
   const now = new Date();
   const ev = await db.careerEvent.findFirst({ where: { orgId: ctx.orgId, id } });
   if (!ev) notFound();
@@ -218,7 +220,7 @@ export default async function CareerEventPage({ params }: { params: Promise<{ id
                     <span className="min-w-0 flex-1">
                       <span className="block text-sm font-medium">{personName(s!, locale)}</span>
                       <span className="text-xs text-muted-foreground">
-                        {tc("gradeN", { grade: `${s!.gradeLevel}${s!.section ?? ""}` })} · {fmtDate(prefs, r.registeredAt)}
+                        {gradeLabel(tg, s!.gradeLevel, s!.section)} · {fmtDate(prefs, r.registeredAt)}
                       </span>
                     </span>
                     {r.attended != null && <Pill tone={r.attended ? "success" : "neutral"}>{r.attended ? t("attended") : t("absent")}</Pill>}

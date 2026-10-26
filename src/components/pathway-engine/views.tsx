@@ -24,6 +24,7 @@ import { StatusChip } from "./ui";
 import { AiSummary, GoalForm, NextStepCard, PlanBuilder, WhatIfPanel, type NextStepState } from "./client";
 import { CatalogNotice } from "@/components/pathway-engine/catalog-notice";
 import { SubjectLevelsPanel, WorldwidePanel } from "./levels-panel";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export const GOAL_COUNTRIES = ["GB", "US", "CA", "AE", "SA", "AU", "IE", "NL", "DE", "SG", "HK", "JO", "CH"];
 type Tab = "overview" | "plan" | "whatIf" | "courses";
@@ -41,7 +42,7 @@ export async function EngineHeader({ ctx, focus, tab }: { ctx: Ctx; focus: Engin
   return (
     <>
       <PageHeader
-        eyebrow={ctx.isStudent ? undefined : t("studentLine", { name: s.name, grade: s.gradeLevel, curriculum: t(`curriculum.${s.curriculum}`) })}
+        eyebrow={ctx.isStudent ? undefined : `${s.name} · ${gradeLabel(await getTranslations("gradeLevel"), s.gradeLevel)} · ${t(`curriculum.${s.curriculum}`)}`}
         title={t("title")}
         description={ctx.isStudent ? t("subtitle") : t("subtitleStaff")}
         actions={focus.options.length > 0 ? <StudentPicker students={focus.options} current={s.id} /> : undefined}

@@ -2,6 +2,7 @@
 import PDFDocument from "pdfkit";
 import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY, type Letterhead } from "@/server/documents/pdf";
 import type { ReportCardData } from "./report-card";
+import { gradeTextIn } from "@/server/common/grade-text";
 
 function fmtDates(iso: string) {
   const d = new Date(iso);
@@ -41,12 +42,11 @@ export async function renderReportCardPdf(data: ReportCardData, letterhead?: Let
 
   // Student block
   const d = fmtDates(data.issuedAt);
-  const cls = `${data.student.grade}${data.student.section ?? ""}`;
   drawLtr(doc, data.student.en, M, 86, half, { size: 15, font: FONTS.bold, color: NAVY });
-  drawLtr(doc, `Student no. ${data.student.studentNo}  ·  Grade ${cls}`, M, 108, half, { size: 9, color: MUTED });
+  drawLtr(doc, `Student no. ${data.student.studentNo}  ·  ${gradeTextIn("en", data.student.grade, data.student.section)}`, M, 108, half, { size: 9, color: MUTED });
   drawLtr(doc, `${data.term.en}  ·  ${data.year.en}  ·  Issued ${d.en}`, M, 122, half, { size: 9, color: MUTED });
   drawRtl(doc, data.student.ar, W / 2 + 10, 82, half, { size: 15, font: FONTS.bold, color: NAVY });
-  drawRtl(doc, `الرقم ${data.student.studentNo}  ·  الصف ${cls}`, W / 2 + 10, 104, half, { size: 9, color: MUTED });
+  drawRtl(doc, `الرقم ${data.student.studentNo}  ·  ${gradeTextIn("ar", data.student.grade, data.student.section)}`, W / 2 + 10, 104, half, { size: 9, color: MUTED });
   drawRtl(doc, `${data.term.ar}  ·  ${data.year.ar}  ·  تاريخ الإصدار ${d.ar}`, W / 2 + 10, 120, half, { size: 9, color: MUTED });
 
   // Overall summary

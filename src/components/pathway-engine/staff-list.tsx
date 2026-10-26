@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { GraduationCap, Search } from "lucide-react";
-import type { CoursePlanStatus } from "@prisma/client";
+import type { CoursePlanStatus, Prisma } from "@prisma/client";
 import type { Ctx } from "@/server/context";
 import { personName } from "@/lib/i18n-data";
 import { Link } from "@/i18n/navigation";
@@ -9,33 +9,53 @@ import { EmptyState } from "@/components/app/empty-state";
 import { FilterBar } from "@/components/app/filter-bar";
 import { Pill } from "@/components/app/badges";
 import { StaffPathwayLinks } from "@/components/transcripts/views";
+import { Pager, pageHref } from "@/components/app/pager";
+import { formatPrefs } from "@/server/format";
+import { gradeLabel, PATHWAY_MIN_GRADE } from "@/lib/grade-levels";
+import { pageWindow, searchTerm } from "@/server/common/paging";
+import { studentSearchWhere } from "@/server/students/grade-options";
 
 const PLAN_TONE: Record<CoursePlanStatus, "success" | "warning" | "neutral"> = { APPROVED: "success", PROPOSED: "warning", DRAFT: "neutral", ARCHIVED: "neutral" };
 
-/** Staff entry point: Grade 9 to 12 students with their plan status, plans waiting for approval first. */
-export async function StaffStudentList({ ctx, q, tab }: { ctx: Ctx; q: string; tab: string }) {
+/**
+ * Staff entry point: Grade 9 to 12 students with their plan status, plans waiting for approval first. Paged on the
+ * server with real counts, so a 400-student senior school lists everyone.
+ */
+export async function StaffStudentList({ ctx, q, tab, page }: { ctx: Ctx; q: string; tab: string; page?: string }) {
   const t = await getTranslations("engine");
   const td = await getTranslations("discovery");
+  const tg = await getTranslations("gradeLevel");
+  const prefs = await formatPrefs(ctx);
   const { db, orgId, locale } = ctx;
-  const needle = q.trim();
-  const students = await db.student.findMany({
-    where: {
-      orgId,
-      status: "ACTIVE",
-      gradeLevel: { gte: 9 },
-      ...(needle ? { OR: [{ firstNameEn: { contains: needle, mode: "insensitive" } }, { lastNameEn: { contains: needle, mode: "insensitive" } }, { firstNameAr: { contains: needle } }, { lastNameAr: { contains: needle } }] } : {}),
-    },
-    orderBy: [{ gradeLevel: "desc" }, { lastNameEn: "asc" }],
-    take: 400,
-  });
-  const plans = await db.studentCoursePlan.findMany({ where: { orgId, studentId: { in: students.map((s) => s.id) }, status: { in: ["DRAFT", "PROPOSED", "APPROVED"] } }, orderBy: { updatedAt: "desc" } });
+  const needle = searchTerm(q);
+  const base: Prisma.StudentWhereInput = { orgId, status: "ACTIVE", gradeLevel: { gte: PATHWAY_MIN_GRADE }, ...(needle ? studentSearchWhere(needle) : {}) };
+  // Latest plan per student (a school has at most a few hundred plans).
+  const plans = await db.studentCoursePlan.findMany({ where: { orgId, status: { in: ["DRAFT", "PROPOSED", "APPROVED"] } }, select: { studentId: true, status: true }, orderBy: { updatedAt: "desc" } });
   const planBy = new Map<string, (typeof plans)[number]>();
   for (const p of plans) if (!planBy.has(p.studentId)) planBy.set(p.studentId, p);
-  const rank = (id: string) => ({ PROPOSED: 0, DRAFT: 1, APPROVED: 2, ARCHIVED: 3 })[planBy.get(id)?.status ?? "ARCHIVED"] ?? 3;
-  let rows = [...students].sort((a, b) => rank(a.id) - rank(b.id));
-  if (tab === "awaiting") rows = rows.filter((s) => planBy.get(s.id)?.status === "PROPOSED");
-  if (tab === "withPlan") rows = rows.filter((s) => planBy.has(s.id));
-  const awaiting = students.filter((s) => planBy.get(s.id)?.status === "PROPOSED").length;
+  const proposedIds = [...planBy.values()].filter((p) => p.status === "PROPOSED").map((p) => p.studentId);
+  const plannedIds = [...planBy.keys()];
+  const order: Prisma.StudentOrderByWithRelationInput[] = [{ gradeLevel: "desc" }, { lastNameEn: "asc" }, { id: "asc" }];
+  const [allCount, awaiting, withPlan] = await Promise.all([
+    db.student.count({ where: base }),
+    db.student.count({ where: { AND: [base, { id: { in: proposedIds } }] } }),
+    db.student.count({ where: { AND: [base, { id: { in: plannedIds } }] } }),
+  ]);
+  let rows: Awaited<ReturnType<typeof db.student.findMany>> = [];
+  let win;
+  if (tab === "awaiting" || tab === "withPlan") {
+    const where = { AND: [base, { id: { in: tab === "awaiting" ? proposedIds : plannedIds } }] };
+    win = pageWindow(page, tab === "awaiting" ? awaiting : withPlan);
+    rows = await db.student.findMany({ where, orderBy: order, skip: win.skip, take: win.take });
+  } else {
+    // Waiting plans first, then everyone else: page across the two lists.
+    win = pageWindow(page, allCount);
+    const first = win.skip < awaiting ? await db.student.findMany({ where: { AND: [base, { id: { in: proposedIds } }] }, orderBy: order, skip: win.skip, take: win.take }) : [];
+    const rest = win.take - first.length;
+    const second = rest > 0 ? await db.student.findMany({ where: { AND: [base, { id: { notIn: proposedIds } }] }, orderBy: order, skip: Math.max(0, win.skip - awaiting), take: rest }) : [];
+    rows = [...first, ...second];
+  }
+  const keep = { q: q || undefined, tab: tab === "all" ? undefined : tab };
 
   return (
     <PageBody>
@@ -54,15 +74,16 @@ export async function StaffStudentList({ ctx, q, tab }: { ctx: Ctx; q: string; t
       />
       <FilterBar
         tabs={[
-          { value: "all", label: t("staff.all"), count: students.length },
+          { value: "all", label: t("staff.all"), count: allCount },
           { value: "awaiting", label: t("staff.awaiting"), count: awaiting },
-          { value: "withPlan", label: t("staff.withPlan"), count: planBy.size },
+          { value: "withPlan", label: t("staff.withPlan"), count: withPlan },
         ]}
         searchPlaceholder={t("staff.search")}
       />
       {rows.length === 0 ? (
         <EmptyState icon={<GraduationCap className="size-5" />} title={t("staff.empty")} />
       ) : (
+        <>
         <ul className="divide-y overflow-hidden rounded-xl border bg-card shadow-xs" data-testid="pathway-students">
           {rows.map((s) => {
             const p = planBy.get(s.id);
@@ -72,7 +93,7 @@ export async function StaffStudentList({ ctx, q, tab }: { ctx: Ctx; q: string; t
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-medium">{personName(s, locale)}</span>
                     <span className="block truncate text-xs text-muted-foreground">
-                      {t("staff.gradeLine", { grade: s.gradeLevel, curriculum: t(`curriculum.${s.curriculum}`) })}
+                      {gradeLabel(tg, s.gradeLevel, s.section)} · {t(`curriculum.${s.curriculum}`)}
                     </span>
                   </span>
                   {p ? <Pill tone={PLAN_TONE[p.status]} dot>{t(`planStatus.${p.status}`)}</Pill> : <Pill>{t("staff.noPlan")}</Pill>}
@@ -81,6 +102,8 @@ export async function StaffStudentList({ ctx, q, tab }: { ctx: Ctx; q: string; t
             );
           })}
         </ul>
+        <Pager win={win} prefs={prefs} href={(n) => pageHref("/career/pathways", keep, n)} />
+        </>
       )}
     </PageBody>
   );

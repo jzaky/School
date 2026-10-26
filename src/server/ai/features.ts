@@ -5,6 +5,7 @@ import { getCtx, type Ctx } from "@/server/context";
 import { canViewCase, SENSITIVE } from "@/server/access/case-access";
 import { schoolKpis } from "@/server/analytics/kpis";
 import { generateAi, reviewAi } from "./provider";
+import { gradeTextIn } from "@/server/common/grade-text";
 
 const isStrArr = (v: unknown): v is string[] => Array.isArray(v) && v.every((x) => typeof x === "string");
 
@@ -60,7 +61,7 @@ function briefFallback(ctx: Ctx, data: NonNullable<Awaited<ReturnType<typeof cas
     const chosen = extra.chosen ? (ar ? extra.chosen.titleAr : extra.chosen.titleEn) : null;
     return ar
       ? {
-          summary: `يطلب ${name} (الصف ${c.student.gradeLevel}) جلسة توجيه مهني. ${chosen ? `اختار مسار ${chosen} بعد إكمال اختبار الميول.` : top.length ? `أبرز المهن المقترحة من الاختبار: ${top.join("، ")}.` : "لم يُكمل اختبار الميول بعد."} نسبة حضوره خلال آخر 30 يومًا ${extra.attendancePct}%.`,
+          summary: `يطلب ${name} (${gradeTextIn("ar", c.student.gradeLevel)}) جلسة توجيه مهني. ${chosen ? `اختار مسار ${chosen} بعد إكمال اختبار الميول.` : top.length ? `أبرز المهن المقترحة من الاختبار: ${top.join("، ")}.` : "لم يُكمل اختبار الميول بعد."} نسبة حضوره خلال آخر 30 يومًا ${extra.attendancePct}%.`,
           keyPoints: [
             ...(top.length ? [`أعلى نسب التوافق: ${extra.recs.slice(0, 3).map((r) => `${r.career.titleAr} ${r.matchScore}%`).join("، ")}`] : []),
             `المواد الحالية: ${extra.enrollments.map((e) => e.class.subject?.nameAr).filter(Boolean).join("، ")}`,
@@ -75,7 +76,7 @@ function briefFallback(ctx: Ctx, data: NonNullable<Awaited<ReturnType<typeof cas
           watchFor: ["توافق المواد الحالية مع متطلبات القبول الجامعي", "مواعيد التقديم الجامعي القادمة"],
         }
       : {
-          summary: `${name} (Grade ${c.student.gradeLevel}) asked for career guidance. ${chosen ? `After the aptitude assessment they chose ${chosen}.` : top.length ? `Top matches from the assessment: ${top.join(", ")}.` : "The aptitude assessment is not complete yet."} Attendance over the last 30 days is ${extra.attendancePct}%.`,
+          summary: `${name} (${gradeTextIn("en", c.student.gradeLevel)}) asked for career guidance. ${chosen ? `After the aptitude assessment they chose ${chosen}.` : top.length ? `Top matches from the assessment: ${top.join(", ")}.` : "The aptitude assessment is not complete yet."} Attendance over the last 30 days is ${extra.attendancePct}%.`,
           keyPoints: [
             ...(top.length ? [`Strongest matches: ${extra.recs.slice(0, 3).map((r) => `${r.career.titleEn} ${r.matchScore}%`).join(", ")}`] : []),
             `Current subjects: ${extra.enrollments.map((e) => e.class.subject?.nameEn).filter(Boolean).join(", ")}`,
@@ -92,13 +93,13 @@ function briefFallback(ctx: Ctx, data: NonNullable<Awaited<ReturnType<typeof cas
   }
   return ar
     ? {
-        summary: `حالة ${c.type === "ACADEMIC" ? "أكاديمية" : "دعم"} تخص ${name} (الصف ${c.student.gradeLevel})، مفتوحة منذ ${Math.round((Date.now() - c.openedAt.getTime()) / 86400_000)} يومًا. نسبة الحضور خلال 30 يومًا ${extra.attendancePct}%.`,
+        summary: `حالة ${c.type === "ACADEMIC" ? "أكاديمية" : "دعم"} تخص ${name} (${gradeTextIn("ar", c.student.gradeLevel)})، مفتوحة منذ ${Math.round((Date.now() - c.openedAt.getTime()) / 86400_000)} يومًا. نسبة الحضور خلال 30 يومًا ${extra.attendancePct}%.`,
         keyPoints: notes.length ? notes.map((n) => n.slice(0, 160)) : ["لا توجد ملاحظات مسجلة بعد"],
         questions: ["كيف تسير الأمور معك في المدرسة هذه الأيام؟", "ما الذي يجعل هذه المادة صعبة الآن؟", "ما الذي ساعدك سابقًا عندما واجهت صعوبة؟", "من تحب أن يدعمك في المدرسة وفي البيت؟"],
         watchFor: ["التغيرات في الحضور والواجبات", "مدى تواصل الأسرة ومشاركتها"],
       }
     : {
-        summary: `${c.type === "ACADEMIC" ? "Academic support" : "Support"} case for ${name} (Grade ${c.student.gradeLevel}), open for ${Math.round((Date.now() - c.openedAt.getTime()) / 86400_000)} days. Attendance over the last 30 days is ${extra.attendancePct}%.`,
+        summary: `${c.type === "ACADEMIC" ? "Academic support" : "Support"} case for ${name} (${gradeTextIn("en", c.student.gradeLevel)}), open for ${Math.round((Date.now() - c.openedAt.getTime()) / 86400_000)} days. Attendance over the last 30 days is ${extra.attendancePct}%.`,
         keyPoints: notes.length ? notes.map((n) => n.slice(0, 160)) : ["No notes recorded yet"],
         questions: ["How are things going at school at the moment?", "What makes this subject feel hard right now?", "What has helped before when something was difficult?", "Who would you like support from, at school and at home?"],
         watchFor: ["Changes in attendance and homework completion", "How engaged the family is"],

@@ -2,7 +2,9 @@ import "server-only";
 // Programme search and comparison for the University planning module. Reads the shared catalog through
 // the tenant client (global rows plus the school's own), and uses the pathway engine for match status.
 import type { Ctx } from "@/server/context";
+import { getTranslations } from "next-intl/server";
 import { personName } from "@/lib/i18n-data";
+import { gradeLabel } from "@/lib/grade-levels";
 import { catalogScope } from "@/server/pathways/scope";
 import { evaluate, homeCurriculumFor } from "@/server/pathway-engine/evaluate";
 import type { EngineFocus } from "@/server/pathway-engine/page-data";
@@ -15,11 +17,18 @@ import { buildProgramWhere, filterAndSort, paginate, PAGE_SIZE, type DiscoveryQu
 
 export type SearchResultItem = { meta: ProgramMeta; match: (MatchInfo & { cached: boolean }) | null };
 
-/** Students advising staff can pick on the search and compare pages (Grade 9 and up). Empty for others. */
+/** Whether advising staff search for a student (Grade 9 and up) on the search and compare pages. */
+export function staffCanSearchStudents(ctx: Ctx, focus: EngineFocus) {
+  return ctx.isStaff && focus.actor.visibleStudentIds === null && ctx.can("people.view");
+}
+
+/** The student in focus as the picker's current option (staff search the rest on the server). Empty for others. */
 export async function staffStudentOptions(ctx: Ctx, focus: EngineFocus) {
-  if (!ctx.isStaff || focus.actor.visibleStudentIds !== null || !ctx.can("people.view")) return [];
-  const rows = await ctx.db.student.findMany({ where: { orgId: ctx.orgId, gradeLevel: { gte: 9 }, status: "ACTIVE" }, orderBy: [{ gradeLevel: "desc" }, { lastNameEn: "asc" }], take: 400, select: { id: true, firstNameEn: true, lastNameEn: true, firstNameAr: true, lastNameAr: true, gradeLevel: true, section: true } });
-  return rows.map((s) => ({ value: s.id, label: `${personName(s, ctx.locale)} (${s.gradeLevel}${s.section ?? ""})` }));
+  if (!staffCanSearchStudents(ctx, focus) || !focus.student) return [];
+  const s = await ctx.db.student.findUnique({ where: { id: focus.student.id }, select: { id: true, firstNameEn: true, lastNameEn: true, firstNameAr: true, lastNameAr: true, gradeLevel: true, section: true } });
+  if (!s) return [];
+  const tg = await getTranslations("gradeLevel");
+  return [{ value: s.id, label: `${personName(s, ctx.locale)} (${gradeLabel(tg, s.gradeLevel, s.section, { short: true })})` }];
 }
 
 /** Match status and missing count for many programmes, evaluated in memory (used to filter and sort). */

@@ -9,6 +9,7 @@ import { dateKey, keyToDate } from "@/server/timetable/cover";
 import { resolveCode, type Code } from "./codes";
 import { addTo, attendancePct, emptyTally, merge, type Tally } from "./maths";
 import { loadCodes } from "./settings";
+import { gradeCode } from "@/lib/grade-levels";
 
 export type Range = { from: string; to: string; termId: string | null };
 
@@ -195,6 +196,18 @@ export async function studentSummary(db: TenantDb, studentId: string, range: Ran
   return { tally, pct: attendancePct(tally), days, codes };
 }
 
+/**
+ * Attendance percentage per student over a date range, with the school's codes (the same maths as the reports).
+ * null for a student with no counted marks yet, for example a child who has not started: never shown as 100%.
+ */
+export async function attendancePctFor(db: TenantDb, studentIds: string[], from: Date, to: Date): Promise<Map<string, number | null>> {
+  if (!studentIds.length) return new Map();
+  const { codes } = await loadCodes(db);
+  const groups = await db.attendanceRecord.groupBy({ by: ["studentId", "code", "status"], where: { studentId: { in: studentIds }, date: { gte: from, lte: to } }, _count: { _all: true }, _sum: { minutesLate: true } });
+  const tallies = tallyGroups(groups as unknown as Group[], codes);
+  return new Map(studentIds.map((id) => [id, attendancePct(tallies.get(id) ?? emptyTally())]));
+}
+
 // ---------------------------------------------------------------------------
 // Exports
 // ---------------------------------------------------------------------------
@@ -225,7 +238,7 @@ export function exportTable(rows: StudentRow[], locale: "en" | "ar"): Array<Arra
       r.studentNo,
       locale === "ar" ? r.firstNameAr || r.firstNameEn : r.firstNameEn,
       locale === "ar" ? r.lastNameAr || r.lastNameEn : r.lastNameEn,
-      r.gradeLevel,
+      gradeCode(r.gradeLevel),
       r.homeroom ? (locale === "ar" ? r.homeroom.ar : r.homeroom.en) : "",
       t.possible,
       t.attended,

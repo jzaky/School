@@ -2,6 +2,7 @@
 // school's own class code (for example 10A-MATH); see src/server/imports/classes.ts for how a code maps to a
 // class without a code column. Lookups are passed in so the rules are pure and unit-tested.
 import { isEmail, parseGrade } from "@/lib/people-csv";
+import { KG1, KG2 } from "@/lib/grade-levels";
 import { parseYesNo, splitCodes, templateCsv, type ColumnSpec } from "./headers";
 import { matchByName } from "./staff";
 import type { SheetRecord } from "./table";
@@ -214,8 +215,11 @@ export function parseEnrollmentRecords(records: SheetRecord[], lookups: Pick<Cla
 
 /** Default class names when the file leaves them empty. */
 export function defaultClassName(row: { homeroom: boolean; gradeLevel: number; section: string | null }, subject: { nameEn: string; nameAr: string } | null) {
-  const tag = `${row.gradeLevel}${row.section ?? ""}`;
-  if (row.homeroom || !subject) return { en: `Homeroom ${tag}`, ar: `فصل الرعاية ${tag}` };
-  return { en: `${subject.nameEn} ${tag}`, ar: `${subject.nameAr} ${tag}` };
+  // Kindergarten classes read "KG1 A" / "الروضة الأولى A"; other grades "9A".
+  const kg = row.gradeLevel === KG1 ? { en: "KG1", ar: "الروضة الأولى" } : row.gradeLevel === KG2 ? { en: "KG2", ar: "الروضة الثانية" } : null;
+  const tagEn = kg ? `${kg.en}${row.section ? ` ${row.section}` : ""}` : `${row.gradeLevel}${row.section ?? ""}`;
+  const tagAr = kg ? `${kg.ar}${row.section ? ` ${row.section}` : ""}` : `${row.gradeLevel}${row.section ?? ""}`;
+  if (row.homeroom || !subject) return { en: `Homeroom ${tagEn}`, ar: `فصل الرعاية ${tagAr}` };
+  return { en: `${subject.nameEn} ${tagEn}`, ar: `${subject.nameAr} ${tagAr}` };
 }
 

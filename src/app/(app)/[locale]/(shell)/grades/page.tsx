@@ -18,6 +18,7 @@ import { NewAssessmentButton, type AssessmentRow, type TermOption } from "@/comp
 import { BandSettings, ClassPicker } from "@/components/grades/grade-controls";
 import { FamilyGrades, bandTone } from "@/components/grades/family-view";
 import { canUseGradebook, defaultTerm, familyGrades, gradebookClasses, loadBands, loadGradebook, staffOverview, termFor, termHasPublished, viewerFromCtx } from "@/server/grades/queries";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export async function generateMetadata() {
   const t = await getTranslations("grades");
@@ -187,6 +188,7 @@ export default async function GradesPage({ searchParams }: { searchParams: Promi
     const threshold = [50, 60, 70].includes(Number(sp.below)) ? Number(sp.below) : 60;
     const data = await staffOverview(v, threshold);
     if (!data) notFound();
+    const tg = await getTranslations("gradeLevel");
     const pct = (n: number | null) => (n === null ? "-" : `${fmtNumber(prefs, n, { maximumFractionDigits: 1 })}%`);
     const canProfile = ctx.can("people.view");
     return (
@@ -218,7 +220,7 @@ export default async function GradesPage({ searchParams }: { searchParams: Promi
                   <div className="flex flex-wrap gap-2">
                     {s.classes.map((c) => (
                       <Link key={c.id} href={`/grades?class=${c.id}`} className="flex min-w-0 items-center gap-2 rounded-lg border bg-card px-2.5 py-1.5 text-xs hover:border-brand/30 hover:bg-muted/40">
-                        <span className="font-medium">{t("gradeLevel", { grade: c.gradeLevel })}</span>
+                        <span className="font-medium">{gradeLabel(tg, c.gradeLevel)}</span>
                         <span className="h-1.5 w-14 rounded-full bg-muted">
                           <span className="block h-1.5 rounded-full bg-brand" style={{ width: `${Math.max(0, Math.min(100, c.average ?? 0))}%` }} />
                         </span>

@@ -4,6 +4,7 @@ import type { CoursePlanStatus } from "@prisma/client";
 import type { TenantDb } from "@/lib/tenant-db";
 import type { Permission } from "@/server/identity/permissions";
 import { DIMENSIONS, DIMENSION_LABELS, type Dimension } from "./dimensions";
+import { gradeBiText } from "@/server/common/grade-text";
 
 type T = { en: string; ar: string };
 
@@ -31,7 +32,7 @@ export function careerReportAudience(v: ReportViewer, studentId: string): "famil
 
 export type CareerReportData = {
   school: T;
-  student: T & { studentNo: string; grade: string };
+  student: T & { studentNo: string; grade: T };
   issuedAt: string;
   assessment: { completedAt: string; scores: Array<T & { key: Dimension; score: number }> } | null;
   careers: Array<T & { cluster: T; score: number; reviewed: boolean; chosen: boolean }>;
@@ -123,7 +124,7 @@ export async function buildCareerReport(db: TenantDb, orgId: string, studentId: 
       en: `${student.firstNameEn} ${student.lastNameEn}`,
       ar: `${student.firstNameAr || student.firstNameEn} ${student.lastNameAr || student.lastNameEn}`,
       studentNo: student.studentNo,
-      grade: `${student.gradeLevel}${student.section ?? ""}`,
+      grade: gradeBiText(student.gradeLevel, student.section),
     },
     issuedAt: now.toISOString(),
     assessment:

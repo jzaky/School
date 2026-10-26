@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/app/empty-state";
 import { Button } from "@/components/ui/button";
 import { DeleteFrameworkButton, DeleteStandardButton, FrameworkDialog, ImportStandardsDialog, StandardDialog } from "@/components/curriculum/framework-forms";
 import { codePrefix } from "@/server/curriculum/parse";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -22,6 +23,7 @@ export default async function FrameworkPage({ params }: { params: Promise<{ id: 
   const { id } = await params;
   const ctx = await getCtx();
   const t = await getTranslations("curriculum");
+  const tg = await getTranslations("gradeLevel");
   if (!ctx.isStaff || !ctx.can("curriculum.manage")) {
     return (
       <PageBody>
@@ -46,7 +48,7 @@ export default async function FrameworkPage({ params }: { params: Promise<{ id: 
         {t("frameworks.title")}
       </Link>
       <PageHeader
-        eyebrow={`${subject ? pick(locale, subject.nameEn, subject.nameAr) : t("frameworks.noSubject")} · ${t("gradeN", { grade: fw.gradeLevel ?? 0 })}`}
+        eyebrow={`${subject ? pick(locale, subject.nameEn, subject.nameAr) : t("frameworks.noSubject")} · ${fw.gradeLevel === null ? "" : gradeLabel(tg, fw.gradeLevel)}`}
         title={pick(locale, fw.nameEn, fw.nameAr)}
         description={fw.sourceEn ?? t("frameworks.detailBody")}
         actions={

@@ -20,6 +20,8 @@ import { canManageTrip } from "@/server/trips/access";
 import { tripDates } from "@/server/trips/service";
 import { applyMerge, type MergeData } from "@/server/documents/merge";
 import { dayKey } from "@/server/exams/schedule";
+import { gradeLabel } from "@/lib/grade-levels";
+import { gradeChoices } from "@/server/students/grade-options";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -29,7 +31,6 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return { title: trip ? pick(ctx.locale, trip.titleEn, trip.titleAr) : t("title") };
 }
 
-const GRADES = [6, 7, 8, 9, 10, 11, 12];
 const CONSENTS: TripConsent[] = ["GRANTED", "DECLINED", "PENDING"];
 
 export default async function TripPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ consent?: string }> }) {
@@ -37,8 +38,10 @@ export default async function TripPage({ params, searchParams }: { params: Promi
   const sp = await searchParams;
   const ctx = await getCtx();
   const t = await getTranslations("trips");
+  const tg = await getTranslations("gradeLevel");
   const prefs = await formatPrefs(ctx);
   const { db, locale } = ctx;
+  const GRADES = await gradeChoices(db);
   const trip = await db.trip.findUnique({ where: { id } });
   if (!trip) notFound();
   const manage = canManageTrip(ctx, trip);
@@ -81,7 +84,7 @@ export default async function TripPage({ params, searchParams }: { params: Promi
         </div>
         {(trip.gradeLevels.length > 0 || trip.classIds.length > 0) && ctx.isStaff && (
           <div className="text-muted-foreground">
-            {trip.gradeLevels.map((g) => t("gradeN", { grade: g })).join(", ")}
+            {trip.gradeLevels.map((g) => gradeLabel(tg, g)).join(", ")}
             {trip.classIds.length > 0 && ` ${t("plusClasses", { count: trip.classIds.length })}`}
           </div>
         )}
@@ -162,7 +165,7 @@ export default async function TripPage({ params, searchParams }: { params: Promi
               <div className="flex flex-wrap items-center justify-between gap-2" data-testid="consent-card">
                 <div>
                   <div className="font-semibold">{personName(kid, locale)}</div>
-                  <div className="text-xs text-muted-foreground">{t("gradeN", { grade: kid.gradeLevel })}</div>
+                  <div className="text-xs text-muted-foreground">{gradeLabel(tg, kid.gradeLevel)}</div>
                 </div>
                 <Pill tone={CONSENT_TONE[p.consent]} dot>
                   <span data-testid="consent-status">{t(`consent.${p.consent}`)}</span>
@@ -253,7 +256,7 @@ export default async function TripPage({ params, searchParams }: { params: Promi
                             {personName(s, locale)}
                           </Link>
                           <span className="ms-2 text-xs text-muted-foreground">
-                            {s.gradeLevel}
+                            {gradeLabel(tg, s.gradeLevel, null, { short: true })}
                             {s.section ?? ""}
                           </span>
                           {p.noteEn && <div className="text-xs text-muted-foreground">&ldquo;{p.noteEn}&rdquo;</div>}

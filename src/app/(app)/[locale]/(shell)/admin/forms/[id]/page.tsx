@@ -70,7 +70,7 @@ export default async function FormBuilderPage({ params, searchParams }: { params
         return { id: v.id, version: v.version, when: fmtDateTime(prefs, v.publishedAt), by: by ? userName(by.user, locale) : "", submissions: v._count.submissions, current: v.id === form?.publishedVersionId };
       })}
       services={(form?.services ?? []).map((s) => ({ id: s.id, key: s.key, name: pick(locale, s.nameEn, s.nameAr), active: s.isActive }))}
-      options={{ students: options.students, staff: options.staff, subjects: options.subjects }}
+      options={{ students: options.students, staff: options.staff, subjects: options.subjects, studentSearch: options.studentSearch }}
       openAi={isNew && sp.ai === "1"}
     />
   );

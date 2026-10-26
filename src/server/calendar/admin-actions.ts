@@ -109,7 +109,7 @@ function eventData(input: EventInput) {
     endsAt = dubai(input.endDate, mins(input.endTime!));
     if (endsAt <= startsAt) return { error: "INVALID_TIMES" } as const;
   }
-  const grades = [...new Set(input.gradeLevels.filter((g) => Number.isInteger(g) && g >= 0 && g <= 13))].sort((a, b) => a - b);
+  const grades = [...new Set(input.gradeLevels.filter((g) => Number.isInteger(g) && g >= -1 && g <= 13))].sort((a, b) => a - b);
   return {
     data: {
       kind: input.kind,

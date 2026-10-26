@@ -3,6 +3,8 @@ import { getOptionalCtx } from "@/server/context";
 import { defaultTimetableStudent, timetableStudents, publishedSittings } from "@/server/exams/queries";
 import { renderExamTimetablePdf } from "@/server/exams/timetable-pdf";
 import { loadLogo } from "@/server/documents/letterhead";
+import { gradeCode } from "@/lib/grade-levels";
+import { gradeBiText } from "@/server/common/grade-text";
 
 export const runtime = "nodejs";
 
@@ -22,10 +24,11 @@ export async function GET(req: Request) {
   } else {
     if (!ctx.isStaff) return NextResponse.json({ error: "forbidden" }, { status: 403 });
     grade = Number(sp.get("grade"));
-    if (!Number.isInteger(grade) || grade < 1 || grade > 13) return NextResponse.json({ error: "invalid" }, { status: 400 });
+    if (!Number.isInteger(grade) || grade < -1 || grade > 13) return NextResponse.json({ error: "invalid" }, { status: 400 });
   }
   const sittings = await publishedSittings(ctx, grade);
-  const who = student ? { en: `${student.firstNameEn} ${student.lastNameEn}, Grade ${grade}`, ar: `${student.firstNameAr} ${student.lastNameAr}، الصف ${grade}` } : { en: `Grade ${grade}`, ar: `الصف ${grade}` };
+  const g = gradeBiText(grade);
+  const who = student ? { en: `${student.firstNameEn} ${student.lastNameEn}, ${g.en}`, ar: `${student.firstNameAr} ${student.lastNameAr}، ${g.ar}` } : g;
   const pdf = await renderExamTimetablePdf({
     school: { en: ctx.org.nameEn, ar: ctx.org.nameAr },
     heading: { en: "Exam timetable", ar: "جدول الامتحانات" },
@@ -35,6 +38,6 @@ export async function GET(req: Request) {
     logo: await loadLogo(ctx.org.logoUrl),
   });
   return new NextResponse(new Uint8Array(pdf), {
-    headers: { "Content-Type": "application/pdf", "Content-Disposition": `inline; filename="exam-timetable-grade-${grade}.pdf"`, "Cache-Control": "private, no-store" },
+    headers: { "Content-Type": "application/pdf", "Content-Disposition": `inline; filename="exam-timetable-${gradeCode(grade).toLowerCase()}.pdf"`, "Cache-Control": "private, no-store" },
   });
 }

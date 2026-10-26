@@ -66,7 +66,7 @@ export async function saveTripAction(input: TripInput): Promise<Result> {
   if (!KEY_RE.test(input.consentDeadline)) return { ok: false, error: "DEADLINE_REQUIRED" };
   const consentDeadline = dubai(input.consentDeadline, "23:59");
   if (consentDeadline > startsAt) return { ok: false, error: "DEADLINE_AFTER_TRIP" };
-  const grades = [...new Set(input.gradeLevels.filter((g) => Number.isInteger(g) && g >= 1 && g <= 13))];
+  const grades = [...new Set(input.gradeLevels.filter((g) => Number.isInteger(g) && g >= -1 && g <= 13))];
   const classes = input.classIds.length ? await ctx.db.schoolClass.findMany({ where: { id: { in: input.classIds } }, select: { id: true } }) : [];
   if (!grades.length && !classes.length) return { ok: false, error: "AUDIENCE_REQUIRED" };
   const cost = input.costAed != null && Number.isFinite(input.costAed) ? Math.max(0, Math.round(input.costAed)) : null;

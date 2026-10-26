@@ -24,6 +24,8 @@ import { names, periodsOf, slotLessons, yearOf, type GridData } from "@/server/t
 import { DEFAULT_PERIODS } from "@/server/timetable/service";
 import { assignTeachers } from "@/server/timetable/assign";
 import type { GenerateReport } from "@/server/timetable/service";
+import { gradeLabel } from "@/lib/grade-levels";
+import { gradeChoices } from "@/server/students/grade-options";
 
 export async function generateMetadata() {
   const t = await getTranslations("timetable");
@@ -38,6 +40,7 @@ export default async function AdminTimetablePage({ searchParams }: { searchParam
   const ctx = await getCtx();
   if (!ctx.can("timetable.manage")) notFound();
   const t = await getTranslations("timetable");
+  const tg = await getTranslations("gradeLevel");
   const prefs = await formatPrefs(ctx);
   const { db, locale } = ctx;
   const tab: Tab = TABS.includes(sp.tab as Tab) ? (sp.tab as Tab) : "generate";
@@ -115,7 +118,7 @@ export default async function AdminTimetablePage({ searchParams }: { searchParam
         ))}
       </nav>
 
-      {tab === "teachers" && teachersTab()}
+      {tab === "teachers" && (await teachersTab())}
       {tab === "bell" && bellTab()}
       {tab === "assign" && assignTab()}
       {tab === "generate" && (await generateTab())}
@@ -123,7 +126,7 @@ export default async function AdminTimetablePage({ searchParams }: { searchParam
     </PageBody>
   );
 
-  function teachersTab() {
+  async function teachersTab() {
     const rows: TeacherRow[] = staff.map((m) => {
       const mine = quals.filter((q) => q.membershipId === m.id);
       const load = classes.filter((c) => c.teacherMembershipId === m.id).reduce((n, c) => n + periodsOfClass(c), 0);
@@ -136,7 +139,7 @@ export default async function AdminTimetablePage({ searchParams }: { searchParam
         quals: mine.map((q) => ({ subjectId: q.subjectId, subject: subjName(q.subjectId), grades: q.gradeLevels })).sort((a, b) => a.subject.localeCompare(b.subject)),
       };
     });
-    return <TeacherSubjectsTable rows={rows} subjects={subjects.map((s) => ({ id: s.id, name: pick(locale, s.nameEn, s.nameAr) }))} />;
+    return <TeacherSubjectsTable rows={rows} subjects={subjects.map((s) => ({ id: s.id, name: pick(locale, s.nameEn, s.nameAr) }))} grades={await gradeChoices(db)} />;
   }
 
   function bellTab() {
@@ -240,7 +243,7 @@ export default async function AdminTimetablePage({ searchParams }: { searchParam
     const rooms = [...new Set((await db.timetableSlot.findMany({ where: { academicYearId: year!.id, room: { not: null } }, select: { room: true }, distinct: ["room"] })).map((r) => r.room!))].sort();
     const teacherIds = [...new Set(classes.map((c) => c.teacherMembershipId).filter(Boolean) as string[])];
     const options = {
-      grade: grades.map((g) => ({ value: String(g), label: t("gradeN", { grade: g }) })),
+      grade: grades.map((g) => ({ value: String(g), label: gradeLabel(tg, g) })),
       class: classes.map((c) => ({ value: c.id, label: pick(locale, c.nameEn, c.nameAr) })),
       teacher: teacherIds.map((id) => ({ value: id, label: staffName(id) })).sort((a, b) => a.label.localeCompare(b.label)),
       room: rooms.map((r) => ({ value: r, label: r })),

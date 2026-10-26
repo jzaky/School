@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { personName, pick } from "@/lib/i18n-data";
 import { showFirstRun } from "@/server/access/first-run";
 import { DismissFirstRun } from "./first-run-dismiss";
+import { gradeLabel } from "@/lib/grade-levels";
 
 type Tip = { key: string; href: string; icon: React.ReactNode };
 
@@ -12,6 +13,7 @@ type Tip = { key: string; href: string; icon: React.ReactNode };
 export async function FirstRunCard({ ctx, audience }: { ctx: Ctx; audience: "parent" | "teacher" }) {
   if (!(await showFirstRun(ctx.membership))) return null;
   const t = await getTranslations("firstRun");
+  const tg = await getTranslations("gradeLevel");
   const kids = audience === "parent" ? (ctx.membership.guardian?.links ?? []).map((l) => l.student) : [];
   const tips: Tip[] =
     audience === "parent"
@@ -43,7 +45,7 @@ export async function FirstRunCard({ ctx, audience }: { ctx: Ctx; audience: "par
             <Link key={k.id} href={`/children/${k.id}`} className="inline-flex items-center gap-1.5 rounded-full border bg-card px-3 py-1 text-sm hover:border-brand/40" data-testid="first-run-child">
               <GraduationCap className="size-4 text-brand" />
               {personName(k, ctx.locale)}
-              <span className="text-xs text-muted-foreground">{t("gradeN", { grade: k.gradeLevel })}</span>
+              <span className="text-xs text-muted-foreground">{gradeLabel(tg, k.gradeLevel)}</span>
             </Link>
           ))}
         </div>

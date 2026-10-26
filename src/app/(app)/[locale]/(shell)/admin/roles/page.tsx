@@ -123,18 +123,8 @@ export default async function RolesPage({ searchParams }: { searchParams: Promis
   }
 
   async function accessCheck() {
-    const members = await db.membership.findMany({
-      where: { status: { in: ["ACTIVE", "SUSPENDED", "INVITED"] }, roles: { some: {} } },
-      include: { user: { select: { nameEn: true, nameAr: true, email: true } }, roles: { where: { OR: [{ expiresAt: null }, { expiresAt: { gt: now } }] }, include: { role: { select: { key: true, nameEn: true, nameAr: true } } } } },
-      orderBy: { user: { nameEn: "asc" } },
-      take: 2000,
-    });
-    const options = members.map((m) => ({
-      value: m.id,
-      label: userName(m.user, locale),
-      hint: m.roles.map((r) => pick(locale, r.role.nameEn, r.role.nameAr)).join(", "),
-      keywords: `${m.user.nameEn} ${m.user.nameAr ?? ""} ${m.user.email}`,
-    }));
+    // Everyone is searched on the server (a full-size school has thousands of family members); only the person
+    // being checked is loaded here.
     const person = sp.person
       ? await db.membership.findUnique({ where: { id: sp.person }, include: { user: true, roles: { include: { role: true } } } })
       : null;
@@ -153,7 +143,7 @@ export default async function RolesPage({ searchParams }: { searchParams: Promis
               <p className="text-xs text-muted-foreground">{t("checkBody")}</p>
             </div>
           </div>
-          <AccessCheckPicker options={options} value={person?.id ?? ""} />
+          <AccessCheckPicker value={person?.id ?? ""} selected={person ? { value: person.id, label: userName(person.user, locale), hint: person.roles.map((r) => pick(locale, r.role.nameEn, r.role.nameAr)).join(", ") } : null} />
         </Panel>
         {!person ? (
           <EmptyState icon={<ShieldCheck className="size-5" />} title={t("checkEmpty")} body={t("checkEmptyBody")} />
