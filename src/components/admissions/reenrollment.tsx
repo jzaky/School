@@ -128,12 +128,14 @@ export function RecordAnswer({ windowId, studentId, current }: { windowId: strin
   );
 }
 
-type Answer = { intent: "RETURNING" | "LEAVING"; reasonKey: string | null; reasonNote: string | null; leavingDate: string | null };
+type Intent = "RETURNING" | "LEAVING";
+type Answer = { intent: Intent; reasonKey: string | null; reasonNote: string | null; leavingDate: string | null };
 
 function AnswerForm({ onSubmit, pending, initial }: { onSubmit: (v: Answer) => void; pending: boolean; initial: string | null }) {
   const t = useTranslations("admissions.reenroll");
   const tr = useTranslations("admissions.leavingReason");
-  const [intent, setIntent] = useState<"RETURNING" | "LEAVING">(initial === "LEAVING" ? "LEAVING" : "RETURNING");
+  // Nothing is chosen until the family (or staff) picks an answer, so an unanswered child never looks answered.
+  const [intent, setIntent] = useState<Intent | null>(initial === "LEAVING" || initial === "RETURNING" ? initial : null);
   const [reason, setReason] = useState("");
   const [note, setNote] = useState("");
   const [date, setDate] = useState("");
@@ -170,7 +172,7 @@ function AnswerForm({ onSubmit, pending, initial }: { onSubmit: (v: Answer) => v
         </>
       )}
       <DialogFooter>
-        <Button disabled={pending || (intent === "LEAVING" && !reason)} onClick={() => onSubmit({ intent, reasonKey: intent === "LEAVING" ? reason : null, reasonNote: note || null, leavingDate: intent === "LEAVING" && date ? date : null })} data-testid="answer-save">
+        <Button disabled={pending || !intent || (intent === "LEAVING" && !reason)} title={!intent ? t("chooseFirst") : intent === "LEAVING" && !reason ? t("chooseReason") : undefined} onClick={() => intent && onSubmit({ intent, reasonKey: intent === "LEAVING" ? reason : null, reasonNote: note || null, leavingDate: intent === "LEAVING" && date ? date : null })} data-testid="answer-save">
           {pending && <Loader2 className="size-4 animate-spin" />}
           {t("save")}
         </Button>
@@ -191,6 +193,7 @@ export function ChildAnswer({ windowId, studentId, name, grade, current, reason 
           <div className="font-medium">{name}</div>
           <div className="text-xs text-muted-foreground">{grade}</div>
         </div>
+        {!current && <span className="rounded-full bg-warning-soft px-2.5 py-0.5 text-xs font-medium text-[oklch(0.5_0.13_65)]">{t("noAnswer")}</span>}
         {current && !editing && (
           <div className="flex items-center gap-2">
             <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-medium", current === "RETURNING" ? "bg-success-soft text-success" : "bg-danger-soft text-danger")}>

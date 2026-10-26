@@ -206,7 +206,7 @@ export function ApplyStatus(props: {
                 <div className={cn("text-[11px]", m.mine ? "text-brand-foreground/80" : "text-muted-foreground")}>
                   {m.mine ? t("you") : (m.author ?? t("admissionsTeam"))} · {fmt(m.createdAt)}
                 </div>
-                <div className="whitespace-pre-wrap break-words">{m.body}</div>
+                <div className="whitespace-pre-wrap break-words" dir="auto">{m.body}</div>
               </li>
             ))}
           </ul>

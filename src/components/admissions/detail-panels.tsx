@@ -153,7 +153,7 @@ export function StaffConversation({ applicationId, messages, manage, draft }: { 
                   </Pill>
                 )}
               </div>
-              <div className="whitespace-pre-wrap break-words">{m.body}</div>
+              <div className="whitespace-pre-wrap break-words" dir="auto">{m.body}</div>
             </li>
           ))}
         </ul>

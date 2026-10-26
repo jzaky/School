@@ -40,6 +40,12 @@ export default async function RegistrationSheet({ params }: { params: Promise<{ 
   const tAr = await getTranslations({ locale: "ar", namespace: "admissions.sheet" });
   const tgEn = await getTranslations({ locale: "en", namespace: "gradeLevel" });
   const tgAr = await getTranslations({ locale: "ar", namespace: "gradeLevel" });
+  const tcEn = await getTranslations({ locale: "en", namespace: "admissions.form.curriculum" });
+  const tcAr = await getTranslations({ locale: "ar", namespace: "admissions.form.curriculum" });
+  const curriculum = (loc: "en" | "ar") => {
+    const tc = loc === "en" ? tcEn : tcAr;
+    return s.curriculum && tc.has(s.curriculum) ? tc(s.curriculum) : (s.curriculum ?? "");
+  };
   const t = await getTranslations("admissions.sheet");
   const dec = (v: string | null) => {
     if (!v) return "";
@@ -66,7 +72,7 @@ export default async function RegistrationSheet({ params }: { params: Promise<{ 
     ["emiratesId", eid, eid],
     ["passport", passport, passport],
     ["grade", `${tgEn("label", gradeLevelValues(s.gradeLevel))}${s.section ? ` ${s.section}` : ""}`, `${tgAr("label", gradeLevelValues(s.gradeLevel))}${s.section ? ` ${s.section}` : ""}`],
-    ["curriculum", s.curriculum, s.curriculum],
+    ["curriculum", curriculum("en"), curriculum("ar")],
     ["enrolledOn", d(s.enrolledOn, "en"), d(s.enrolledOn, "ar")],
     ...(app?.homeLanguage ? [["homeLanguage", languageName(app.homeLanguage, "en"), languageName(app.homeLanguage, "ar")] as [string, string, string]] : []),
     ...(schooling?.attended ? [["previousSchool", `${schooling.schoolName ?? ""}, ${countryName(schooling.country, "en")}`, `${schooling.schoolName ?? ""}، ${countryName(schooling.country, "ar")}`] as [string, string, string]] : []),

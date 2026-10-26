@@ -152,10 +152,11 @@ export default async function ReenrollmentAdminPage({ searchParams }: { searchPa
             { value: "leaving", label: t("leaving"), count: tot.leaving },
             { value: "all", label: t("all"), count: tot.eligible },
           ]}
-          chipParam="grade"
-          chips={[{ value: "", label: t("allGrades") }, ...summary.map((r) => ({ value: String(r.grade), label: tg("label", gradeLevelValues(r.grade)) }))]}
           searchPlaceholder={t("search")}
         />
+        <div className="mt-2">
+          <FilterBar chipParam="grade" chips={[{ value: "", label: t("allGrades") }, ...summary.map((r) => ({ value: String(r.grade), label: tg("label", gradeLevelValues(r.grade)) }))]} />
+        </div>
         <ul className="mt-3 divide-y" data-testid="reenroll-students">
           {students.rows.map((s) => (
             <li key={s.id} className="flex flex-wrap items-center gap-3 py-2.5">

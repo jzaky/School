@@ -10386,7 +10386,9 @@
         "INVALID_STAGE": "The family has not accepted the offer yet.",
         "NOT_FOUND": "This application no longer exists.",
         "generic": "Something went wrong. Please try again."
-      }
+      },
+      "invitesBodyNotSent": "Not sent by email. Copy a link and share it with the family.",
+      "eventTimes": "{n} times"
     },
     "registration": {
       "title": "Government registration",
@@ -10512,7 +10514,8 @@
         "YEAR": "This academic year is not set up.",
         "generic": "Something went wrong. Please try again."
       },
-      "currency": "AED"
+      "currency": "AED",
+      "feeNeedsSection": "Add a section first"
     },
     "export": {
       "stage": "Stage",
@@ -10684,7 +10687,10 @@
         "YEAR": "One of the years no longer exists.",
         "INVALID": "Some settings need attention. Check the names and document types.",
         "generic": "Something went wrong. Please try again."
-      }
+      },
+      "noNextYear": "Next year is not set up yet. Add it on the calendar to take applications for it.",
+      "addYear": "Add next year",
+      "noNextYearAsk": "Next year is not set up yet. Ask a school administrator to add it on the calendar."
     },
     "health": {
       "title": "Health review for applications",
@@ -10775,7 +10781,8 @@
         "CLOSED": "Re-enrollment is closed.",
         "ALREADY_PLANNED": "A withdrawal is already recorded for this student.",
         "generic": "Something went wrong. Please try again."
-      }
+      },
+      "chooseFirst": "Choose returning or leaving first"
     },
     "family": {
       "title": "Next year's places",

@@ -50,6 +50,13 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
   };
   const fmt = (dt: Date | null | undefined, time = false) => (dt ? new Intl.DateTimeFormat(L === "ar" ? "ar-AE-u-nu-latn" : "en-GB", { day: "numeric", month: "short", year: "numeric", ...(time ? { hour: "numeric", minute: "2-digit" } : {}), timeZone: "Asia/Dubai" }).format(dt) : "");
   const manage = canManageAdmissions(ctx);
+  // Repeated non-stage events by the same person close together (for example several uploads) show once with a count.
+  const history: Array<(typeof d.events)[number] & { times: number }> = [];
+  for (const e of d.events) {
+    const last = history[history.length - 1];
+    if (last && !e.toStage && !last.toStage && last.kind === e.kind && last.actorMembershipId === e.actorMembershipId && Math.abs(e.createdAt.getTime() - last.createdAt.getTime()) < 2 * 3600_000) last.times += 1;
+    else history.push({ ...e, times: 1 });
+  }
   const seats = year ? await gradeSeats(asTx(ctx.db), ctx.orgId, year, app.gradeLevel) : null;
   const fee = app.seatFeeFils ?? d.capacity?.seatFeeFils ?? 0;
   const feeDue = seatFeeRequired(settings.stages, fee);
@@ -319,10 +326,13 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
           <Panel>
             <PanelHeader title={t("history")} icon={<History className="size-4" />} />
             <ol className="space-y-2.5 text-sm" data-testid="history">
-              {d.events.map((e) => (
+              {history.map((e) => (
                 <li key={e.id} className="relative ps-4">
                   <span className="absolute start-0 top-1.5 size-2 rounded-full bg-brand/60" />
-                  <div>{e.toStage ? t("eventStage", { stage: stageLabel(e.toStage) }) : t(`event.${e.kind}`)}</div>
+                  <div>
+                    {e.toStage ? t("eventStage", { stage: stageLabel(e.toStage) }) : t(`event.${e.kind}`)}
+                    {e.times > 1 && <span className="text-muted-foreground"> · {t("eventTimes", { n: e.times })}</span>}
+                  </div>
                   <div className="text-xs text-muted-foreground">
                     {fmt(e.createdAt, true)} · {e.actorMembershipId ? memberName(e.actorMembershipId) : t("theFamily")}
                   </div>

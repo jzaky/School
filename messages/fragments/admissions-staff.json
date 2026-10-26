@@ -1244,7 +1244,15 @@
           "Something went wrong. Please try again.",
           "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
         ]
-      }
+      },
+      "invitesBodyNotSent": [
+        "Not sent by email. Copy a link and share it with the family.",
+        "لم تُرسل بالبريد الإلكتروني. انسخوا الرابط وشاركوه مع الأسرة."
+      ],
+      "eventTimes": [
+        "{n} times",
+        "عدد المرات: {n}"
+      ]
     },
     "registration": {
       "title": [
@@ -1688,6 +1696,10 @@
       "currency": [
         "AED",
         "درهم"
+      ],
+      "feeNeedsSection": [
+        "Add a section first",
+        "أضيفوا شعبة أولًا"
       ]
     },
     "export": {
@@ -2328,7 +2340,19 @@
           "Something went wrong. Please try again.",
           "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
         ]
-      }
+      },
+      "noNextYear": [
+        "Next year is not set up yet. Add it on the calendar to take applications for it.",
+        "لم يُضف العام القادم بعد. أضيفوه في التقويم لاستقبال الطلبات له."
+      ],
+      "addYear": [
+        "Add next year",
+        "إضافة العام القادم"
+      ],
+      "noNextYearAsk": [
+        "Next year is not set up yet. Ask a school administrator to add it on the calendar.",
+        "لم يُضف العام القادم بعد. اطلبوا من مسؤول المدرسة إضافته في التقويم."
+      ]
     },
     "health": {
       "title": [
@@ -2668,7 +2692,11 @@
           "Something went wrong. Please try again.",
           "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
         ]
-      }
+      },
+      "chooseFirst": [
+        "Choose returning or leaving first",
+        "اختاروا أولًا: سيعود أو سيغادر"
+      ]
     },
     "family": {
       "title": [

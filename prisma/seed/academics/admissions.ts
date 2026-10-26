@@ -18,6 +18,8 @@ import { DEFAULT_DOC_TYPES, docTypesFor } from "@/server/admissions/config";
 import { eidHash } from "@/server/admissions/secure";
 import { nameDobKey } from "@/server/admissions/rules";
 import { entryYearOf } from "@/server/admissions/settings";
+import { nextSequence } from "@/server/common/sequence";
+import { nextApplicationNo } from "@/server/admissions/numbers";
 
 type Bi = { en: string; ar: string };
 const b = (en: string, ar: string): Bi => ({ en, ar });
@@ -253,7 +255,9 @@ export async function seedAdmissions(w: SeedWorld) {
     const staffMember = a.staffChild;
     // Stage dates: spread from the submission date to a day or two ago.
     const span = Math.max(1, a.ago - 1);
-    const dates = path.map((_, i) => new Date(submitted.getTime() + Math.round((span * DAY * i) / Math.max(1, path.length - 1)) * 0.9));
+    // Each later step on its own day within office hours (the family's own steps in the evening).
+    const stepDay = (i: number) => -a.ago + Math.round((span * 0.9 * i) / Math.max(1, path.length - 1));
+    const dates = path.map((s, i) => (i === 0 ? submitted : s === "OFFER_ACCEPTED" ? at(stepDay(i), 19 + (seq % 3), (seq * 11) % 60, now) : at(stepDay(i), 8 + ((seq + i * 3) % 7), (seq * 7 + i * 13) % 60, now)));
     const last = dates[dates.length - 1];
     const offerIdx = path.indexOf("OFFER_MADE");
     const offerAt = offerIdx >= 0 ? dates[offerIdx] : null;
@@ -323,7 +327,7 @@ export async function seedAdmissions(w: SeedWorld) {
     docs.push(...sampleDocs(appId, a.grade, a.nat, new Date(submitted.getTime() - DAY), complete && a.stage !== "DOCUMENTS_PENDING", path.includes("ASSESSED")));
     if (assessIdx >= 0) {
       const booked = a.stage === "ASSESSMENT_BOOKED";
-      const start = booked ? at(1 + (seq % 6), 9 + (seq % 4), 0, now) : new Date(dates[assessIdx].getTime() + 5 * DAY);
+      const start = booked ? at(1 + (seq % 6), 9 + (seq % 4), 0, now) : at(stepDay(assessIdx) + 5, 9 + (seq % 5), seq % 2 ? 30 : 0, now);
       const apptId = id();
       appointments.push({ id: apptId, orgId, typeId: type.id, hostId: hanaId, bookedById: hanaId, studentId: null, startsAt: start, endsAt: new Date(start.getTime() + 45 * 60_000), status: booked ? "CONFIRMED" : "COMPLETED", locationEn: "Admissions office", locationAr: "مكتب القبول", notesEn: `${number}: ${a.first.en} ${a.last.en}`, createdAt: dates[assessIdx] });
       attendees.push({ orgId, appointmentId: apptId, membershipId: hanaId });
@@ -408,6 +412,8 @@ export async function seedAdmissions(w: SeedWorld) {
   }
 
   await db.admissionApplication.createMany({ data: appRows });
+  // Application numbers above were assigned here, so the school's counter continues after them.
+  await db.sequence.upsert({ where: { orgId_key: { orgId, key: `ADM-${entry}` } }, create: { orgId, key: `ADM-${entry}`, value: seq }, update: { value: seq } });
   await db.admissionEvent.createMany({ data: events });
   await db.admissionDocument.createMany({ data: docs });
   await db.admissionMessage.createMany({ data: messages });
@@ -445,7 +451,7 @@ export async function seedAdmissions(w: SeedWorld) {
       data: {
         id: appId,
         orgId,
-        number: `ADM-${entryYearOf(current)}-${String(90 + i).padStart(4, "0")}`,
+        number: await nextApplicationNo(tx, orgId, entryYearOf(current)),
         applicantUserId: user.id,
         academicYearId: current.id,
         gradeLevel: j.grade,
@@ -534,7 +540,8 @@ export async function seedAdmissions(w: SeedWorld) {
     const sid = id();
     await db.student.create({ data: { id: sid, orgId, studentNo: `HIS-${23900 + i}`, firstNameEn: f.first.en, lastNameEn: f.last.en, firstNameAr: f.first.ar, lastNameAr: f.last.ar, gradeLevel: f.grade, section: "A", dateOfBirth: new Date(Date.UTC(entryYearOf(current) - f.grade - 5, 2 + i, 8)), gender: i === 0 ? "M" : "F", nationalityEn: i === 0 ? "Pakistan" : "Jordan", nationalityAr: i === 0 ? "باكستان" : "الأردن", status: "WITHDRAWN", enrolledOn: new Date(Date.UTC(entryYearOf(current) - 3, 7, 25)), curriculum: "AMERICAN" } });
     const wdId = id();
-    const tcNumber = `TC-${new Date(at(-f.ago, 9, 0, now).getTime() + 4 * 3600_000).getUTCFullYear()}-${String(i + 1).padStart(4, "0")}`;
+    const tcYear = new Date(dateOnly(-f.ago, now).getTime() + 4 * 3600_000).getUTCFullYear();
+    const tcNumber = `TC-${tcYear}-${String(await nextSequence(tx, orgId, `TC-${tcYear}`)).padStart(4, "0")}`;
     const wd = await db.studentWithdrawal.create({ data: { id: wdId, orgId, studentId: sid, leavingDate: dateOnly(-f.ago, now), reasonKey: f.reason, destination: f.dest, status: "COMPLETED", source: "STAFF", tcNumber, tcIssuedAt: at(-f.ago, 11, 0, now), createdById: hanaId, completedById: registrar ?? hanaId, completedAt: at(-f.ago, 11, 0, now), createdAt: at(-f.ago - 12, 10, 0, now) } });
     const doc = await db.document.create({ data: { orgId, categoryId: lettersCat, titleEn: tcTemplate.nameEn, titleAr: tcTemplate.nameAr, studentId: sid, sensitivity: "STANDARD", source: "GENERATED", templateId: tcTemplate.id, uploadedById: registrar ?? hanaId, visibleToFamily: true, createdAt: at(-f.ago, 11, 0, now) } });
     const v = await db.documentVersion.create({ data: { orgId, documentId: doc.id, version: 1, storageKey: `render:${TC_TEMPLATE_KEY}`, fileName: `${tcNumber}.pdf`, mimeType: "application/pdf", sizeBytes: 0, renderData: (await tcMergeData(tx, orgId, wd)) as never, output: "BILINGUAL", createdById: registrar ?? hanaId, createdAt: at(-f.ago, 11, 0, now) } });

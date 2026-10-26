@@ -330,7 +330,7 @@ export function EnrollDialog({ open, onOpenChange, applicationId, homerooms, sec
             {result.invites.length > 0 && (
               <div className="space-y-2 rounded-lg border p-3">
                 <p className="font-medium">{t("invitesTitle")}</p>
-                <p className="text-xs text-muted-foreground">{t("invitesBody")}</p>
+                <p className="text-xs text-muted-foreground">{result.invites.every((i) => i.emailed) ? t("invitesBody") : t("invitesBodyNotSent")}</p>
                 {result.invites.map((i) => (
                   <div key={i.token} className="flex items-center gap-2">
                     <span className="min-w-0 flex-1 truncate text-xs" dir="ltr">{i.email}</span>

@@ -37,7 +37,7 @@ export function DocumentUploads({ slug, applicationId, docTypes, docs, editable 
       const body = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; doc?: DocRow };
       if (!res.ok || !body.doc) return void toast.error(t.has(`errors.${body.error}`) ? t(`errors.${body.error}`) : t("errors.generic"));
       setRows((r) => [...r, body.doc!]);
-      toast.success(t("uploaded"));
+      // The row turns green with the file listed (announced through aria-live); no toast, which would cover the list on a phone.
       router.refresh();
     } finally {
       setBusy(null);
@@ -56,7 +56,7 @@ export function DocumentUploads({ slug, applicationId, docTypes, docs, editable 
   return (
     <div className="space-y-3">
       <p className="text-xs text-muted-foreground">{t("rules")}</p>
-      <ul className="space-y-2">
+      <ul className="space-y-2" aria-live="polite">
         {docTypes.map((d) => {
           const files = rows.filter((r) => r.typeKey === d.key);
           const ok = files.some((f) => f.status !== "REJECTED");

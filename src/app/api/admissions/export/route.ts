@@ -32,6 +32,8 @@ export async function GET(req: Request) {
   const tg = await getTranslations("gradeLevel");
   const t = await getTranslations("admissions.export");
   const ts = await getTranslations("admissions.stage");
+  const tc = await getTranslations("admissions.form.curriculum");
+  const tsh = await getTranslations("admissions.sheet");
   const grade = (g: number) => tg("label", gradeLevelValues(g));
   const years = await admissionYears(tx, ctx.orgId);
   const year = years.find((y) => y.id === url.searchParams.get("year")) ?? years.find((y) => !y.isCurrent) ?? years[0];
@@ -93,7 +95,7 @@ export async function GET(req: Request) {
     rows = regs.map((r) => {
       const s = students.find((x) => x.id === r.studentId)!;
       const g = s?.guardians[0]?.guardian;
-      return s ? [s.studentNo, s.firstNameEn, s.lastNameEn, s.firstNameAr, s.lastNameAr, s.dateOfBirth?.toISOString().slice(0, 10) ?? "", s.gender ?? "", L === "ar" ? s.nationalityAr ?? "" : s.nationalityEn ?? "", full ? dec(s.emiratesIdEnc) : s.emiratesIdLast4 ? `***${s.emiratesIdLast4}` : "", full ? dec(s.passportEnc) : s.passportLast4 ? `***${s.passportLast4}` : "", grade(s.gradeLevel), s.section ?? "", s.curriculum, s.enrolledOn?.toISOString().slice(0, 10) ?? "", g ? `${g.firstNameEn} ${g.lastNameEn}` : "", g?.phone ?? "", g?.email ?? ""] : [];
+      return s ? [s.studentNo, s.firstNameEn, s.lastNameEn, s.firstNameAr, s.lastNameAr, s.dateOfBirth?.toISOString().slice(0, 10) ?? "", s.gender ? tsh(s.gender === "F" ? "female" : "male") : "", L === "ar" ? s.nationalityAr ?? "" : s.nationalityEn ?? "", full ? dec(s.emiratesIdEnc) : s.emiratesIdLast4 ? `***${s.emiratesIdLast4}` : "", full ? dec(s.passportEnc) : s.passportLast4 ? `***${s.passportLast4}` : "", grade(s.gradeLevel), s.section ?? "", tc.has(s.curriculum) ? tc(s.curriculum) : s.curriculum, s.enrolledOn?.toISOString().slice(0, 10) ?? "", g ? `${g.firstNameEn} ${g.lastNameEn}` : "", g?.phone ?? "", g?.email ?? ""] : [];
     });
     name = `registration-${regKind.toLowerCase()}`;
   } else {

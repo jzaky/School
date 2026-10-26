@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { ArrowDown, ArrowUp, Loader2, Plus, Save, Trash2 } from "lucide-react";
-import { useRouter } from "@/i18n/navigation";
+import { useRouter, Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { ALL_GRADE_LEVELS, gradeLevelValues } from "@/lib/grade-levels";
 import { Button } from "@/components/ui/button";
@@ -43,7 +43,7 @@ const PRESETS = [
   { key: "mar31", month: 3, day: 31 },
 ];
 
-export function SettingsForm({ slug, shortName, years, initial }: { slug: string; shortName: string; years: Array<{ value: string; label: string; current: boolean }>; initial: Initial }) {
+export function SettingsForm({ slug, shortName, years, initial, canAddYear }: { slug: string; shortName: string; years: Array<{ value: string; label: string; current: boolean }>; initial: Initial; canAddYear: boolean }) {
   const t = useTranslations("admissions.settings");
   const ts = useTranslations("admissions.stage");
   const tg = useTranslations("gradeLevel");
@@ -119,6 +119,16 @@ export function SettingsForm({ slug, shortName, years, initial }: { slug: string
               </label>
             ))}
           </div>
+          {!years.some((y) => !y.current) && (
+            <p className="mt-2 flex flex-wrap items-center gap-2 rounded-lg bg-info-soft px-3 py-2 text-xs text-info" data-testid="no-next-year">
+              {canAddYear ? t("noNextYear") : t("noNextYearAsk")}
+              {canAddYear && (
+                <Link href="/admin/calendar" className="font-semibold underline underline-offset-2">
+                  {t("addYear")}
+                </Link>
+              )}
+            </p>
+          )}
         </div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <Field id="introEn" label={t("introEn")} optional>

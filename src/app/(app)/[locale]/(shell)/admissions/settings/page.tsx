@@ -26,6 +26,7 @@ export default async function AdmissionsSettingsPage() {
       <SettingsForm
         slug={ctx.org.slug}
         shortName={ctx.org.shortNameEn ?? ctx.org.nameEn}
+        canAddYear={ctx.can("calendar.manage")}
         years={years.map((y) => ({ value: y.id, label: pick(ctx.locale, y.nameEn, y.nameAr), current: y.isCurrent }))}
         initial={{
           publicOpen: s.publicOpen,

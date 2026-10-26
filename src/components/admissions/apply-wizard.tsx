@@ -109,7 +109,7 @@ export function ApplyWizard(props: {
         router.push(`/apply/${props.slug}`);
         return;
       }
-      toast.success(tw("saved"));
+      // Moving to the next step is the confirmation; a toast here would cover the buttons on a phone.
       go(ORDER[ORDER.indexOf(s) + 1]);
     });
 

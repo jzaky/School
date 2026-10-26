@@ -26,6 +26,11 @@ async function phone(browser: Browser, locale: Locale) {
   return { context, page, errors };
 }
 
+/** Optional screenshots for review: set ADM_SHOTS to a folder. */
+async function shot(page: Page, name: string) {
+  if (process.env.ADM_SHOTS) await page.screenshot({ path: `${process.env.ADM_SHOTS}/${name}.png`, fullPage: true });
+}
+
 async function noSidewaysScroll(page: Page) {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
@@ -51,6 +56,7 @@ test.describe.serial("admissions", () => {
       await page.goto(`/${locale}/apply/horizon`);
       await expect(page.locator("html")).toHaveAttribute("dir", locale === "ar" ? "rtl" : "ltr");
       await noSidewaysScroll(page);
+      await shot(page, `family-${locale}-1-start`);
       await page.locator("[data-testid=acc-name]").fill(`Lina ${fam.last}`);
       await page.locator("[data-testid=acc-email]").fill(fam.email);
       await page.locator("[data-testid=acc-password]").fill(PASSWORD);
@@ -79,6 +85,7 @@ test.describe.serial("admissions", () => {
       await page.locator("[data-testid=f-nationality]").selectOption("JO");
       await expect(page.locator("[data-testid=age-warning]")).toHaveCount(0);
       await noSidewaysScroll(page);
+      await shot(page, `family-${locale}-2-child`);
       await page.locator("[data-testid=save-next]").click();
 
       // 2. Previous schooling: none yet.
@@ -94,6 +101,7 @@ test.describe.serial("admissions", () => {
       await page.locator("[data-testid=g0-email]").fill(fam.email);
       await page.locator("[data-testid=g0-phone]").fill("+971 50 555 0188");
       await noSidewaysScroll(page);
+      await shot(page, `family-${locale}-3-family`);
       await page.locator("[data-testid=save-next]").click();
 
       // 4. Health and support.
@@ -108,6 +116,9 @@ test.describe.serial("admissions", () => {
         await expect(page.locator(`[data-testid=doc-${key}]`)).toContainText(`${key}.pdf`);
       }
       await noSidewaysScroll(page);
+      await page.mouse.move(1, 1);
+      await expect(page.locator("[data-sonner-toast]")).toHaveCount(0);
+      await shot(page, `family-${locale}-4-documents`);
       await page.locator("[data-testid=docs-continue]").click();
 
       // 6. Review and submit.
@@ -116,6 +127,7 @@ test.describe.serial("admissions", () => {
       await page.locator("[data-testid=submit-application]").click();
       await expect(page.locator("[data-testid=family-status]")).toBeVisible();
       await noSidewaysScroll(page);
+      await shot(page, `family-${locale}-5-submitted`);
       expect(errors, errors.join("\n")).toEqual([]);
     });
   }
@@ -130,10 +142,14 @@ test.describe.serial("admissions", () => {
 
     // Assessment, outcome and offer.
     await page.locator("[data-testid=btn-assessment]").click();
-    const when = new Date(Date.now() + 21 * 86_400_000).toISOString().slice(0, 10);
-    await page.locator("[data-testid=assess-date]").fill(when);
-    await page.locator("[data-testid=assess-time]").fill(`13:${String(5 * (Date.now() % 11)).padStart(2, "0")}`);
-    await page.locator("[data-testid=assess-submit]").click();
+    // A random slot weeks ahead; if the officer is already booked then, try another.
+    for (let attempt = 0; attempt < 6; attempt++) {
+      const when = new Date(Date.now() + (20 + Math.floor(Math.random() * 60)) * 86_400_000).toISOString().slice(0, 10);
+      await page.locator("[data-testid=assess-date]").fill(when);
+      await page.locator("[data-testid=assess-time]").fill(`${String(8 + Math.floor(Math.random() * 6)).padStart(2, "0")}:${String(5 * Math.floor(Math.random() * 12)).padStart(2, "0")}`);
+      await page.locator("[data-testid=assess-submit]").click();
+      if (await page.locator("[data-testid=assessment-dialog]").waitFor({ state: "detached", timeout: 8_000 }).then(() => true, () => false)) break;
+    }
     await expect(page.locator("[data-testid=assessment-dialog]")).toHaveCount(0);
     await page.locator("[data-testid=btn-outcome]").click();
     await page.locator("[data-testid=outcome-RECOMMENDED]").click();
@@ -150,6 +166,7 @@ test.describe.serial("admissions", () => {
     await fam.page.locator("[data-testid=accept-offer]").click();
     await expect(fam.page.locator("[data-testid=seat-fee]")).toBeVisible();
     await noSidewaysScroll(fam.page);
+    await shot(fam.page, "family-ar-6-offer-accepted");
 
     // Staff record the seat booking payment and enroll.
     await page.reload();
@@ -162,6 +179,7 @@ test.describe.serial("admissions", () => {
     await expect(page.locator("[data-testid=enroll-result]")).toBeVisible();
     const invite = await page.locator("[data-testid=invite-link]").first().getAttribute("href");
     expect(invite).toMatch(/^\/join\/[A-Za-z0-9_-]+$/);
+    await shot(page, "staff-en-enrolled");
     await context.close();
 
     // The new family signs in with the account they applied with and sees their child.
@@ -173,6 +191,7 @@ test.describe.serial("admissions", () => {
     await fam.page.goto("/ar/children");
     await expect(fam.page.getByText(/سلمى/).first()).toBeVisible();
     await noSidewaysScroll(fam.page);
+    await shot(fam.page, "family-ar-7-portal-children");
     expect(fam.errors, fam.errors.join("\n")).toEqual([]);
   });
 

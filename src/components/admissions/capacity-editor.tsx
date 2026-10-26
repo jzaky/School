@@ -94,7 +94,7 @@ export function CapacityEditor({ yearId, rows, editable, current }: { yearId: st
                       {editable ? (
                         <div className="flex items-center gap-1">
                           <span className="text-xs text-muted-foreground">{t("currency")}</span>
-                          <Input value={s.seatFee} onChange={(e) => set(r.grade, { seatFee: e.target.value.replace(/[^\d.,]/g, "") })} placeholder="0.00" inputMode="decimal" dir="ltr" className="h-8 w-28" disabled={!s.sectionSeats.length} aria-label={t("seatFee")} />
+                          <Input value={s.seatFee} onChange={(e) => set(r.grade, { seatFee: e.target.value.replace(/[^\d.,]/g, "") })} placeholder="0.00" inputMode="decimal" dir="ltr" className="h-8 w-28" disabled={!s.sectionSeats.length} title={s.sectionSeats.length ? undefined : t("feeNeedsSection")} aria-label={t("seatFee")} />
                         </div>
                       ) : (
                         <span className="tabular-nums">{s.seatFee ? tm("money", { amount: s.seatFee }) : "-"}</span>
