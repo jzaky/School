@@ -1,26 +1,28 @@
 {
  "title": "Horizon for IT teams (extended briefing)",
  "voice": "af_heart",
- "speed": 1.0,
+ "speed": 0.8,
  "notes": "Segments ending in -x extend an existing section and play right after it. Segments marked pending describe a feature that is still being built and are finalised against the real screens before recording. The original segments keep their wording so their visuals stay in sync.",
  "segments": [
   {
-   "id": "it00a-pain",
-   "text": "Most schools run on a patchwork. Requests arrive by email and in chat groups, forms are on paper, records sit in spreadsheets, and the same data is typed into several different systems. Sensitive concerns end up in inboxes, nobody can see who looked at what, and when a parent or an inspector asks for evidence, it takes days to find. For IT, that means more tools to support, more accounts to manage, and more places for data to leak.",
-   "speed": 0.78,
-   "pause": 0.7,
+   "id": "it00-brand",
+   "title": "it00-brand",
+   "text": "Horizon is one platform for school operations and student services, in Arabic and English. This briefing is for school IT teams.",
    "holds": [
-    0,
-    1,
-    2,
-    3
+    1
+   ]
+  },
+  {
+   "id": "it00a-challenges",
+   "title": "it00a-challenges",
+   "text": "Schools face the same challenges today. Requests arrive by email and in chat groups. Forms are on paper, and records sit in spreadsheets. The same data is typed into several systems. Sensitive concerns end up in personal inboxes, with no record of who looked at them. Gathering evidence for a parent or an inspector takes days. For IT, that means more tools to support, more accounts to manage, and more places for data to leak.",
+   "holds": [
+    6
    ]
   },
   {
    "id": "it00b-why",
    "text": "Horizon replaces that patchwork with one secure platform. Three things set it apart. First, every procedure in one place, in Arabic and English, with an owner, a deadline and a full record. Second, safeguarding and privacy built in from the start, not added later. Third, university guidance checked against each university's own published requirements. And it is built for UAE schools, their regulators and their data protection law.",
-   "speed": 0.78,
-   "pause": 0.7,
    "holds": {
     "0": 2.0,
     "1": 1.0,
@@ -32,90 +34,148 @@
   },
   {
    "id": "it01-open",
-   "text": "This briefing is for the IT team. In the next few minutes we will cover what Horizon is, how each school's data is kept separate, who can see what, how people sign in, how data gets in and out, how sensitive records, conversations and sick leave stay private, how subject choices connect to university requirements, and what we would need from you for a pilot. Everything you see is the live product, running with a fictional demo school.",
-   "speed": 0.78,
-   "pause": 0.7,
+   "title": "it01-open",
+   "text": "In the next few minutes we will cover what Horizon is, how each school's data is kept separate, who can see what, how people sign in, how data gets in and out, how sensitive records, conversations and sick leave stay private, how subject choices connect to university requirements, and what we would need from you for a pilot. Everything you see is the live product, running with a fictional demo school.",
    "holds": [
-    1,
-    2
+    0,
+    1
    ]
   },
   {
    "id": "it02-what",
-   "text": "Horizon is a web platform for school operations and student services: requests and approvals, official letters, meetings, counseling, safeguarding, grades and university guidance, in Arabic and English. It runs in the browser on any device. There is nothing to install on your network, and families can add it to their phone's home screen like an app."
+   "text": "Horizon is a web platform for school operations and student services: requests and approvals, official letters, meetings, counseling, safeguarding, grades and university guidance, in Arabic and English. It runs in the browser on any device. There is nothing to install on your network, and families can add it to their phone's home screen like an app.",
+   "holds": "all",
+   "hold": 1.2
   },
   {
    "id": "it02-what-x",
-   "text": "Every role works the same way. Students, parents, teachers, counselors, administrators, leaders and the safeguarding lead each get their own home page and their own menu, with only the features their role uses."
+   "text": "Every role works the same way. Students, parents, teachers, counselors, administrators, leaders and the safeguarding lead each get their own home page and their own menu, with only the features their role uses.",
+   "holds": "all",
+   "hold": 1.2
   },
   {
    "id": "it03-isolation",
-   "text": "Each school is a separate tenant. Separation is enforced inside the database itself, not only in the application. Every record belongs to one school, and the database refuses to return another school's rows, even if the application asked for them. The application connects with a restricted account that cannot change these rules. Identity numbers are encrypted field by field, and all traffic is encrypted in transit."
+   "text": "Each school is a separate tenant. Separation is enforced inside the database itself, not only in the application. Every record belongs to one school, and the database refuses to return another school's rows, even if the application asked for them. The application connects with a restricted account that cannot change these rules. Identity numbers are encrypted field by field, and all traffic is encrypted in transit.",
+   "holds": "all",
+   "hold": 1.2
   },
   {
    "id": "it03-isolation-x",
-   "text": "In practice, a mistake on one screen cannot show one school's records to another school. The separation is covered by an automated isolation test suite, and a group of schools sees totals across its schools, never another school's student records."
+   "text": "In practice, a mistake on one screen cannot show one school's records to another school. The separation is covered by an automated isolation test suite, and a group of schools sees totals across its schools, never another school's student records.",
+   "holds": "all",
+   "hold": 1.2
   },
   {
    "id": "it04-signin",
-   "text": "Staff sign in with a password, or with your school's Microsoft or Google work accounts, and you can link a staff email domain. Access is role based. The principal manages roles in plain language, with a typed confirmation for anything sensitive, and the access check shows exactly what any person can see, and which role grants it."
+   "text": "Staff sign in with a password, or with your school's Microsoft or Google work accounts, and you can link a staff email domain. Access is role based. The principal manages roles in plain language, with a typed confirmation for anything sensitive, and the access check shows exactly what any person can see, and which role grants it.",
+   "holds": "all",
+   "hold": 1.2
   },
   {
    "id": "it04-signin-x",
-   "text": "Families join with a school code and their child's details, and every join request is approved by the school before anyone sees anything."
+   "text": "Families join with a school code and their child's details, and every join request is approved by the school before anyone sees anything.",
+   "holds": "all",
+   "hold": 1.2
   },
   {
    "id": "it04b-access",
-   "text": "So who sees what? Horizon comes with twelve built-in staff roles, from teacher and counselor to registrar, school nurse and designated safeguarding lead, plus parent and student. The school can copy and adjust any of them. Permissions are written in plain language and grouped by area, and roles that reach sensitive records are clearly flagged. Parents only ever see their own children, students only see themselves, and the menu each person sees follows their role.",
-   "display": "So who sees what? Horizon comes with 12 built-in staff roles, from teacher and counselor to registrar, school nurse and designated safeguarding lead, plus parent and student. The school can copy and adjust any of them. Permissions are written in plain language and grouped by area, and roles that reach sensitive records are clearly flagged. Parents only ever see their own children, students only see themselves, and the menu each person sees follows their role."
+   "title": "it04b-access",
+   "text": "Horizon comes with twelve built-in staff roles, from teacher and counselor to registrar, school nurse and designated safeguarding lead, plus parent and student. The school can copy and adjust any of them. Permissions are written in plain language and grouped by area, and roles that reach sensitive records are clearly flagged. Parents only ever see their own children, and students only see themselves. Each person's home page and menu follow their role, so a teacher, a counselor and a parent each see a different set of features.",
+   "display": "Horizon comes with 12 built-in staff roles, from teacher and counselor to registrar, school nurse and designated safeguarding lead, plus parent and student. The school can copy and adjust any of them. Permissions are written in plain language and grouped by area, and roles that reach sensitive records are clearly flagged. Parents only ever see their own children, and students only see themselves. Each person's home page and menu follow their role, so a teacher, a counselor and a parent each see a different set of features.",
+   "holds": [
+    0,
+    2,
+    3
+   ]
   },
   {
    "id": "it05-data",
-   "text": "Getting data in does not need a project. The import center reads CSV or Excel exports from your current system, with English or Arabic headers, and shows every row before anything is saved. Importing again updates records and never creates duplicates. For ongoing updates, Horizon can pull a scheduled export from your student information system every hour or every day, or your team can use the API, with keys that are scoped, revocable and rate limited."
+   "text": "Getting data in does not need a project. The import center reads CSV or Excel exports from your current system, with English or Arabic headers, and shows every row before anything is saved. Importing again updates records and never creates duplicates. For ongoing updates, Horizon can pull a scheduled export from your student information system every hour or every day, or your team can use the API, with keys that are scoped, revocable and rate limited.",
+   "holds": "all",
+   "hold": 1.2
   },
   {
    "id": "it05-data-x",
-   "text": "It works the other way too. The school can export all of its own data at any time, so nothing is locked in."
+   "text": "It works the other way too. The school can export all of its own data at any time, so nothing is locked in.",
+   "holds": "all",
+   "hold": 1.2
   },
   {
    "id": "it06-sensitive",
-   "text": "Wellbeing and safeguarding records go through a single access module. They never appear in search, dashboards, analytics or group reports. Parents are never notified automatically: telling a family is a recorded staff decision, with a reason. Every view of a sensitive record is written to an audit log that the application can add to, but never edit or delete."
+   "text": "Wellbeing and safeguarding records go through a single access module. They never appear in search, dashboards, analytics or group reports. Parents are never notified automatically: telling a family is a recorded staff decision, with a reason. Every view of a sensitive record is written to an audit log that the application can add to, but never edit or delete.",
+   "holds": "all",
+   "hold": 1.2
   },
   {
    "id": "it06-sensitive-x",
-   "text": "Access follows need to know. Emergency access exists for urgent situations, but every use of it is logged, and the safeguarding lead can see that log."
+   "text": "Access follows need to know. Emergency access exists for urgent situations, but every use of it is logged, and the safeguarding lead can see that log.",
+   "holds": "all",
+   "hold": 1.2
   },
   {
    "id": "it06b-conversations",
-   "text": "Conversations about a request stay on the request, not in personal inboxes. Every message carries an audience: family and staff, staff only, or private to named people, and before anything is sent, the composer says exactly who will see it. Families are told about a new message in the app and by email, without the message text. And messages never appear in search, dashboards or reports."
+   "title": "it06b-conversations",
+   "text": "Conversations about a request stay on the request, not in personal inboxes. Every message carries an audience: family and staff, staff only, or private to named people. Before anything is sent, the composer says exactly who will see it. Staff only messages are never shown to the family, so colleagues can coordinate on the same request. Families are told about a new message in the app and by email, without the message text. Messages never appear in search, dashboards or reports.",
+   "holds": [
+    1,
+    2,
+    3,
+    4
+   ]
   },
   {
    "id": "it06c-absence",
-   "text": "Sick leave follows the same principle. When a family reports an illness, the reason and any doctor's note are visible only to the family, the attendance office and the school nurse. Teachers see that the student is away and excused, and so does the principal, but not why. For staff absence, the private reason is kept apart from the cover notes, so a substitute gets what they need to teach the lesson, and nothing more."
+   "title": "it06c-absence",
+   "text": "Sick leave follows the same principle. When a family reports an illness, the reason and any doctor's note are visible only to the family, the attendance office and the school nurse. Teachers see that the student is away and excused, and so does the principal, but not why. For staff absence, the private reason is visible only to the people who manage leave. Cover is assigned to a free teacher, and the substitute sees the lesson notes and nothing more.",
+   "holds": [
+    1,
+    2,
+    3
+   ]
   },
   {
    "id": "it07-ai",
-   "text": "Where AI helps with drafts and summaries, sensitive information is never sent to it unless the school explicitly allows it, and anything AI writes about a sensitive matter is only a draft until a person approves it."
+   "text": "Where AI helps with drafts and summaries, sensitive information is never sent to it unless the school explicitly allows it, and anything AI writes about a sensitive matter is only a draft until a person approves it.",
+   "holds": "all",
+   "hold": 1.2
   },
   {
    "id": "it07-ai-x",
-   "text": "The school can also switch AI drafting off entirely, and the product keeps working without it."
+   "text": "The school can also switch AI drafting off entirely, and the product keeps working without it.",
+   "holds": "all",
+   "hold": 1.2
   },
   {
    "id": "it08-privacy",
-   "text": "For the UAE Personal Data Protection Law, Horizon keeps a register of processing purposes and retention periods, and tracks data subject requests with due dates. Everything held about one person can be exported in one step, with protected content withheld. Erasure shows a preview first, keeps only what the school must retain, in anonymised form, and asks for a typed confirmation. If the school ever leaves, it can export all of its data itself."
+   "text": "For the UAE Personal Data Protection Law, Horizon keeps a register of processing purposes and retention periods, and tracks data subject requests with due dates. Everything held about one person can be exported in one step, with protected content withheld. Erasure shows a preview first, keeps only what the school must retain, in anonymised form, and asks for a typed confirmation. If the school ever leaves, it can export all of its data itself.",
+   "holds": "all",
+   "hold": 1.2
   },
   {
    "id": "it08b-subjects",
-   "text": "University guidance is built on the same care. Each student's subject choices are linked to entry requirements taken from universities' own official pages, with the source and the date each one was checked. Horizon tells a required AP course apart from one where a strong regular course is accepted, and it only suggests classes the school actually offers. A counselor approves each plan before the family sees it as approved."
+   "title": "it08b-subjects",
+   "text": "University guidance is built on the same care. Staff set up next year's electives, including AP courses, with option blocks and prerequisites. Each student's choices are checked against entry requirements taken from universities' own official pages, with the source and the date each one was checked. The catalog covers three hundred and sixty six programmes at one hundred and sixteen universities in fifteen countries. Horizon tells a required AP course apart from one where a regular course is accepted, and it only suggests classes the school actually offers. A counselor approves each plan before the family sees it as approved.",
+   "display": "University guidance is built on the same care. Staff set up next year's electives, including AP courses, with option blocks and prerequisites. Each student's choices are checked against entry requirements taken from universities' own official pages, with the source and the date each one was checked. The catalog covers 366 programmes at 116 universities in 15 countries. Horizon tells a required AP course apart from one where a regular course is accepted, and it only suggests classes the school actually offers. A counselor approves each plan before the family sees it as approved.",
+   "holds": [
+    1,
+    2,
+    3,
+    4
+   ]
   },
   {
    "id": "it09-reliability",
-   "text": "Reliability is checked every morning. An automated run signs in as every role, in both languages, on desktop and phone, and walks through every page and the main flows. A public status page shows ninety days of history. Updates are released centrally, with nothing for your team to install."
+   "text": "Reliability is checked every morning. An automated run signs in as every role, in both languages, on desktop and phone, and walks through every page and the main flows. A public status page shows ninety days of history. Updates are released centrally, with nothing for your team to install.",
+   "holds": "all",
+   "hold": 1.2
   },
   {
    "id": "it10-pilot",
-   "text": "For a pilot, the IT effort is light. If you want single sign-on, register Horizon in your Microsoft or Google tenant. Confirm the staff email domain. And if you want automatic updates, provide a scheduled export from your student system. We run the rest of the setup with the school's administrator, and we will answer your security questionnaire. Thank you. We are happy to take your questions."
+   "text": "For a pilot, the IT effort is light. If you want single sign-on, register Horizon in your Microsoft or Google tenant. Confirm the staff email domain. And if you want automatic updates, provide a scheduled export from your student system. We run the rest of the setup with the school's administrator, and we will answer your security questionnaire. Thank you. We are happy to take your questions.",
+   "holds": "all",
+   "hold": 1.2
   }
- ]
+ ],
+ "pause": 0.7,
+ "hold": 2.0
 }
