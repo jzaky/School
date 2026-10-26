@@ -5,6 +5,7 @@ import { GraduationCap } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { initials, personName, pick } from "@/lib/i18n-data";
+import { fmtNumber } from "@/lib/format";
 import { gradeLabel } from "@/lib/grade-levels";
 import { Link } from "@/i18n/navigation";
 import { PageBody, PageHeader } from "@/components/app/page-header";
@@ -51,7 +52,7 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
   const keep = { grade: sp.grade, q: sp.q, class: sp.class };
   return (
     <PageBody>
-      <PageHeader title={cls ? pick(locale, cls.nameEn, cls.nameAr) : t("title")} description={t("subtitle", { count: total })} />
+      <PageHeader title={cls ? pick(locale, cls.nameEn, cls.nameAr) : t("title")} description={t("subtitle", { count: fmtNumber(prefs, total) })} />
       <FilterBar chipParam="grade" chips={[{ value: "", label: t("allGrades") }, ...grades.map((g) => ({ value: String(g), label: gradeLabel(tg, g) }))]} searchPlaceholder={t("search")} />
       {students.length === 0 ? (
         <EmptyState icon={<GraduationCap className="size-5" />} title={t("empty")} />

@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import type { InviteKind, Prisma } from "@prisma/client";
 import { identityDb, tenantDb, tenantTx, userScope } from "@/lib/tenant-db";
 import { isEmail, parseDate } from "@/lib/people-csv";
+import { MIN_GRADE_LEVEL } from "@/lib/grade-levels";
 import { audit } from "@/server/audit/audit";
 import { findInvitationByToken, findSchoolByJoinCode, schoolById, type PublicSchool } from "@/server/platform/join-lookup";
 import { hit, peek } from "./rate-limit";
@@ -218,7 +219,7 @@ function normName(s: string) {
 export function cleanClaim(c: ChildClaim): ChildClaim | null {
   const studentNo = c.studentNo?.trim().toUpperCase().slice(0, 40) || null;
   const dob = c.dateOfBirth?.trim() ? parseDate(c.dateOfBirth.trim()) : null;
-  const grade = typeof c.grade === "number" && Number.isInteger(c.grade) && c.grade >= 0 && c.grade <= 13 ? c.grade : null;
+  const grade = typeof c.grade === "number" && Number.isInteger(c.grade) && c.grade >= MIN_GRADE_LEVEL && c.grade <= 13 ? c.grade : null;
   const fullName = c.fullName?.trim().replace(/\s+/g, " ").slice(0, 120) || null;
   if (studentNo && dob) return { studentNo, dateOfBirth: dob };
   if (grade !== null && fullName && fullName.split(" ").length >= 2) return { grade, fullName };

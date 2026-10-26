@@ -9,6 +9,7 @@ import { parseGrade } from "@/lib/people-csv";
 import { parseGradeList } from "@/lib/imports/types";
 import { gradeBiText, gradeTextIn, upgradeGradeMergeFields } from "@/server/common/grade-text";
 import { applyMerge } from "@/server/documents/merge";
+import { cleanClaim } from "@/server/access/join";
 
 const tEn = createTranslator({ locale: "en", messages: en, namespace: "gradeLevel" }) as unknown as GradeTranslator;
 const tAr = createTranslator({ locale: "ar", messages: ar, namespace: "gradeLevel" }) as unknown as GradeTranslator;
@@ -141,5 +142,13 @@ describe("letter templates", () => {
     expect(applyMerge("Grade {{student.grade}}", { "student.grade": "KG1", "student.gradeName": "KG1" })).toBe("KG1");
     expect(applyMerge("الصف {{student.grade}}", { "student.grade": "KG1", "student.gradeName": "الروضة الأولى" })).toBe("الروضة الأولى");
     expect(applyMerge("Grade {{student.grade}}", { "student.grade": "9", "student.gradeName": "Grade 9" })).toBe("Grade 9");
+  });
+});
+
+describe("joining as a parent of a kindergarten child", () => {
+  it("accepts KG1 and KG2 as the grade of a claimed child", () => {
+    expect(cleanClaim({ grade: KG1, fullName: "Nabil Al Hammadi" })).toEqual({ grade: KG1, fullName: "Nabil Al Hammadi" });
+    expect(cleanClaim({ grade: KG2, fullName: "نبيل الحمادي" })).toEqual({ grade: KG2, fullName: "نبيل الحمادي" });
+    expect(cleanClaim({ grade: -2, fullName: "Nabil Al Hammadi" })).toBeNull();
   });
 });

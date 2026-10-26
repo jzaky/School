@@ -70,7 +70,10 @@ describe("headers", () => {
     expect(parseGradeList("10 11 12")).toEqual([10, 11, 12]);
     expect(parseGradeList("")).toEqual([]);
     expect(parseGradeList("12-9")).toBeNull();
-    expect(parseGradeList("KG1")).toBeNull();
+    // Kindergarten grades are accepted (KG1 = -1, KG2 = 0); an unknown grade name is not.
+    expect(parseGradeList("KG1")).toEqual([-1]);
+    expect(parseGradeList("KG1-2")).toEqual([-1, 0, 1, 2]);
+    expect(parseGradeList("KG3")).toBeNull();
   });
 
   it("converts Excel day numbers to dates", () => {
