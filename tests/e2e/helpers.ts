@@ -30,6 +30,10 @@ export async function loginAs(browser: Browser, persona: Persona, locale: Locale
   page.on("response", (r) => {
     if (r.status() >= 500) errors.push(`http ${r.status()} ${r.url()}`);
   });
+  // Any content security policy violation fails the test that uses this session.
+  page.on("console", (m) => {
+    if (m.type() === "error" && /Content[ -]Security[ -]Policy/i.test(m.text())) errors.push(`csp on ${new URL(page.url()).pathname}: ${m.text().slice(0, 300)}`);
+  });
   await page.goto("/demo");
   await page.locator(`[data-testid=enter-${persona}]`).click();
   await page.waitForURL(new RegExp(`/${locale}/home`), { timeout: 120_000 });
