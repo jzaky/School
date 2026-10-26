@@ -4,6 +4,7 @@
 // with a surface, which excludes sensitive cases unless this module allows that surface.
 import type { Prisma, Sensitivity } from "@prisma/client";
 import type { Ctx } from "@/server/context";
+import type { TenantDb, TenantTx } from "@/lib/tenant-db";
 import { audit } from "@/server/audit/audit";
 
 export const SENSITIVE: Sensitivity[] = ["WELLBEING", "SAFEGUARDING"];
@@ -160,6 +161,22 @@ export async function subjectExportDecision(
 /** Parents are never notified automatically about sensitive cases (rule 7). */
 export function familyMayBeAutoNotified(sensitivity: Sensitivity) {
   return !SENSITIVE.includes(sensitivity);
+}
+
+/**
+ * Students whose families must not get automatic messages from routine processes (for example the unexplained
+ * absence message): an open WELLBEING or SAFEGUARDING case, or an open request of that sensitivity, about the
+ * student (rule 7). Returns only ids, never anything about the case, so callers can route the matter to staff
+ * without learning why. Not a view of a case, so nothing is audited.
+ */
+export async function studentsHeldFromAutoContact(client: TenantDb | TenantTx, orgId: string, studentIds: string[]): Promise<Set<string>> {
+  if (!studentIds.length) return new Set();
+  const db = client as TenantTx;
+  const [cases, requests] = await Promise.all([
+    db.case.findMany({ where: { orgId, studentId: { in: studentIds }, sensitivity: { in: SENSITIVE }, status: { notIn: ["RESOLVED", "CLOSED"] } }, select: { studentId: true } }),
+    db.request.findMany({ where: { orgId, studentId: { in: studentIds }, sensitivity: { in: SENSITIVE }, status: { notIn: ["COMPLETED", "REJECTED", "CANCELLED", "DRAFT"] } }, select: { studentId: true } }),
+  ]);
+  return new Set([...cases.map((c) => c.studentId), ...(requests.map((r) => r.studentId).filter(Boolean) as string[])]);
 }
 
 /**

@@ -9637,5 +9637,9 @@
     "openRegister": "فتح السجل",
     "presentN": "{n} حاضر",
     "awayN": "{n} غائب"
+  },
+  "gradeLevel": {
+    "label": "{level, select, kg1 {الروضة الأولى} kg2 {الروضة الثانية} other {الصف {grade}}}",
+    "short": "{level, select, kg1 {روضة 1} kg2 {روضة 2} other {{grade}}}"
   }
 }

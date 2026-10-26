@@ -797,11 +797,229 @@ model AttendanceRecord {
   source      AttendanceSource @default(REGISTER)
   /// The absence report (Request) that excused this day. Its reason stays on the request.
   requestId   String?
+  /// The school's attendance code (AttendanceCode.code). Null on older rows: the status alone applies.
+  code        String?
+  /// Who last set the mark on a register (null for imports and absence reports).
+  markedById  String?
+  updatedAt   DateTime         @default(now()) @updatedAt
 
   student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, date])
   @@index([orgId, date])
+}
+
+// ---------------------------------------------------------------------------
+// Attendance: codes, registers, lesson marks, follow-up and alerts (src/server/attendance)
+// ---------------------------------------------------------------------------
+
+/// How a code counts in attendance percentages.
+enum AttendanceCountsAs {
+  /// A possible session the student attended (present, late, approved school activity, remote learning).
+  PRESENT
+  /// A possible session the student missed (authorised or unauthorised).
+  ABSENT
+  /// Not a possible session (for example not required to attend). Left out of percentages.
+  NOT_COUNTED
+}
+
+/// One attendance code of a school: what teachers and the office mark, and how it counts.
+model AttendanceCode {
+  id         String             @id @default(cuid())
+  orgId      String
+  /// Short code shown on registers, for example P, L, A, E.
+  code       String
+  labelEn    String
+  labelAr    String
+  countsAs   AttendanceCountsAs
+  /// For absences: authorised (excused) or unauthorised.
+  authorised Boolean            @default(false)
+  /// Counts as a late arrival in lateness reports.
+  late       Boolean            @default(false)
+  /// Statistical category for reports (see src/server/attendance/codes.ts).
+  category   String
+  /// The code says why a student is away (for example illness). Only attendance.reasons holders see it;
+  /// everyone else sees a plain excused absence.
+  private    Boolean            @default(false)
+  /// The one-tap button this code backs on registers: present, late, absent, excused or activity.
+  quick      String?
+  active     Boolean            @default(true)
+  sortOrder  Int                @default(0)
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  @@unique([orgId, code])
+}
+
+/// Who keeps the official register.
+enum RegisterMode {
+  /// Teachers take registers in Horizon; Horizon is the source of truth.
+  HORIZON
+  /// The school takes registers in another system; marks arrive through the API.
+  EXTERNAL
+}
+
+/// A school's attendance settings. One row per school; missing means the defaults in src/server/attendance/settings.ts.
+model AttendanceSettings {
+  id                  String       @id @default(cuid())
+  orgId               String       @unique
+  mode                RegisterMode @default(HORIZON)
+  /// Daily registration (morning register) starts at this local time, HH:MM.
+  dailyStart          String       @default("07:30")
+  /// Teachers may mark late for this many minutes after a register starts; later needs attendance.manage.
+  lateCutoffMin       Int          @default(30)
+  /// Registers close at this local time on the day; changes after closing need attendance.manage.
+  closeTime           String       @default("15:30")
+  /// Guardians of students absent without a report are contacted from this local time, HH:MM.
+  followUpTime        String       @default("09:30")
+  /// Send the unexplained absence message to guardians automatically.
+  autoNotify          Boolean      @default(true)
+  /// Persistent absence: alert when term-to-date attendance falls below this percentage.
+  persistentThreshold Float        @default(90)
+  /// Persistent absence: only after this many possible sessions in the term.
+  persistentMinDays   Int          @default(10)
+  /// Grade levels that take only a daily register (no per-lesson registers), for example KG.
+  dailyOnlyGrades     Int[]        @default([-1, 0])
+  /// Regulator absence limit (off by default). Sharjah (SPEA) preset: 10 consecutive or 15 total school days of
+  /// unexcused absence in the academic year. Staff are alerted at limitWarnPct of either limit and on reaching it.
+  limitEnabled        Boolean      @default(false)
+  limitConsecutive    Int          @default(10)
+  limitTotal          Int          @default(15)
+  limitWarnPct        Int          @default(70)
+  /// Heads of year: grade level (as text) to membership ids. They receive persistent absence alerts.
+  headsOfYear         Json         @default("{}")
+  updatedById         String?
+  updatedAt           DateTime     @updatedAt
+}
+
+enum RegisterKind {
+  /// Morning registration by homeroom. Its marks are the student's daily AttendanceRecord.
+  DAILY
+  /// One lesson from the timetable.
+  LESSON
+}
+
+/// A register for one class on one date: the daily homeroom register (periodNo 0) or one lesson.
+model AttendanceRegister {
+  id         String       @id @default(cuid())
+  orgId      String
+  kind       RegisterKind
+  classId    String
+  date       DateTime     @db.Date
+  /// 0 for the daily register, otherwise the bell period of the lesson.
+  periodNo   Int          @default(0)
+  slotId     String?
+  /// Set when a cover teacher takes the register for this lesson.
+  coverId    String?
+  takenById  String?
+  takenAt    DateTime?
+  closedById String?
+  closedAt   DateTime?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  marks AttendanceLessonMark[]
+
+  @@unique([classId, date, periodNo])
+  @@index([orgId, date])
+}
+
+/// One student's mark on a lesson register. Daily marks live in AttendanceRecord.
+model AttendanceLessonMark {
+  id          String           @id @default(cuid())
+  orgId       String
+  registerId  String
+  studentId   String
+  date        DateTime         @db.Date
+  code        String
+  status      AttendanceStatus
+  minutesLate Int?
+  source      AttendanceSource @default(REGISTER)
+  requestId   String?
+  markedById  String?
+  updatedAt   DateTime         @updatedAt
+
+  register AttendanceRegister @relation(fields: [registerId], references: [id], onDelete: Cascade)
+
+  @@unique([registerId, studentId])
+  @@index([orgId, date])
+  @@index([orgId, studentId, date])
+}
+
+enum FollowUpStatus {
+  /// Absent without a report; nobody has reached the family yet.
+  OPEN
+  /// Staff have tried to reach the family (call or message), still unexplained.
+  CONTACTED
+  /// The absence is explained and recoded.
+  EXPLAINED
+}
+
+/// One unexplained absence (a student, a day) for the attendance office. Also the idempotency anchor for the
+/// automatic guardian message: one row per student and day, and the message is claimed by setting notifiedAt.
+model AttendanceFollowUp {
+  id            String         @id @default(cuid())
+  orgId         String
+  studentId     String
+  date          DateTime       @db.Date
+  status        FollowUpStatus @default(OPEN)
+  /// When the automatic message to guardians was sent.
+  notifiedAt    DateTime?
+  /// Why no automatic message was sent: HELD (a wellbeing or safeguarding flag), OFF (school setting), NO_GUARDIAN.
+  heldReason    String?
+  explainedCode String?
+  explainedById String?
+  explainedAt   DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  contacts AttendanceContact[]
+
+  @@unique([studentId, date])
+  @@index([orgId, date, status])
+}
+
+/// The call and message log of a follow-up. Notes may hold what a family said; only the attendance office reads them.
+model AttendanceContact {
+  id         String   @id @default(cuid())
+  orgId      String
+  followUpId String
+  /// CALL, MESSAGE, NOTE or AUTO_MESSAGE
+  kind       String
+  /// For calls: REACHED, NO_ANSWER or VOICEMAIL.
+  outcome    String?
+  note       String?
+  /// Why staff messaged a family the school asked to contact by hand (rule 7 decision).
+  reason     String?
+  byId       String?
+  createdAt  DateTime @default(now())
+
+  followUp AttendanceFollowUp @relation(fields: [followUpId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, followUpId])
+}
+
+/// An attendance alert to staff, never with reasons. One per student, period and kind: the unique key makes the
+/// alert and its notifications idempotent.
+/// - PERSISTENT: term-to-date attendance fell below the school's threshold (period: the term).
+/// - LIMIT_WARNING / LIMIT_REACHED: unexcused absence neared or reached the regulator's limit (period: the year).
+model AttendanceAlert {
+  id          String    @id @default(cuid())
+  orgId       String
+  studentId   String
+  kind        String    @default("PERSISTENT")
+  periodId    String
+  percent     Float?
+  threshold   Float?
+  possible    Int?
+  /// Longest run of consecutive school days of unexcused absence, and the total, when the alert was raised.
+  consecutive Int?
+  total       Int?
+  createdAt   DateTime  @default(now())
+  resolvedAt  DateTime?
+
+  @@unique([studentId, periodId, kind])
+  @@index([orgId, periodId])
 }
 
 // ---------------------------------------------------------------------------
@@ -2217,24 +2435,47 @@ enum AssessmentKind {
 }
 
 model Assessment {
-  id          String         @id @default(cuid())
-  orgId       String
-  classId     String
-  termId      String?
-  titleEn     String
-  titleAr     String
-  kind        AssessmentKind @default(TEST)
-  maxScore    Float          @default(100)
-  weight      Float          @default(1)
-  dueAt       DateTime?
-  publishedAt DateTime?
-  createdById String
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id            String         @id @default(cuid())
+  orgId         String
+  classId       String
+  termId        String?
+  titleEn       String
+  titleAr       String
+  kind          AssessmentKind @default(TEST)
+  maxScore      Float          @default(100)
+  weight        Float          @default(1)
+  dueAt         DateTime?
+  publishedAt   DateTime?
+  /// Who published it (the teacher, or a grades.publish holder when the school uses a publisher).
+  publishedById String?
+  /// "Teachers submit, a publisher releases": the teacher marked the assessment ready for release.
+  readyAt       DateTime?
+  readyById     String?
+  createdById   String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   grades Grade[]
 
   @@index([orgId, classId])
+  @@index([orgId, readyAt])
+}
+
+/// Who releases grades and report cards to families.
+enum GradePublishMode {
+  /// Teachers publish their own assessments (and report cards are visible when created).
+  TEACHER
+  /// Teachers mark work ready; holders of grades.publish release it.
+  PUBLISHER
+}
+
+/// A school's grade publishing settings. Missing means TEACHER.
+model GradeSettings {
+  id          String           @id @default(cuid())
+  orgId       String           @unique
+  publishMode GradePublishMode @default(TEACHER)
+  updatedById String?
+  updatedAt   DateTime         @updatedAt
 }
 
 model Grade {

@@ -16,8 +16,9 @@ export const PERMISSION_GROUPS: Array<{ key: string; permissions: Permission[] }
     permissions: ["safeguarding.refer", "safeguarding.view", "safeguarding.manage", "safeguarding.export", "safeguarding.break_glass"],
   },
   { key: "people", permissions: ["people.view", "people.manage", "people.invite", "people.reveal_ids", "people.medical"] },
-  { key: "grades", permissions: ["grades.view_own", "grades.enter", "grades.view_all", "registration.submit", "registration.manage"] },
-  { key: "timetable", permissions: ["calendar.view", "calendar.manage", "timetable.manage", "absence.report", "cover.manage", "absence.reasons", "attendance.reasons"] },
+  { key: "grades", permissions: ["grades.view_own", "grades.enter", "grades.publish", "grades.view_all", "registration.submit", "registration.manage"] },
+  { key: "attendance", permissions: ["attendance.take", "attendance.view_all", "attendance.manage", "attendance.reasons"] },
+  { key: "timetable", permissions: ["calendar.view", "calendar.manage", "timetable.manage", "absence.report", "cover.manage", "absence.reasons"] },
   { key: "meetings", permissions: ["appointments.book", "appointments.host", "appointments.manage"] },
   { key: "documents", permissions: ["documents.view", "documents.manage", "documents.sensitive", "documents.templates"] },
   {
@@ -26,7 +27,7 @@ export const PERMISSION_GROUPS: Array<{ key: string; permissions: Permission[] }
   },
   { key: "teaching", permissions: ["curriculum.plan", "curriculum.review", "curriculum.manage", "trips.manage", "trips.consent", "comms.send"] },
   { key: "insights", permissions: ["analytics.view", "inspection.view", "ai.use", "ai.admin_insights"] },
-  { key: "admin", permissions: ["admin.access", "school.manage", "roles.manage", "compliance.manage", "audit.view", "demo.reset", "integrations.manage"] },
+  { key: "admin", permissions: ["admin.access", "school.manage", "roles.manage", "signin.manage", "compliance.manage", "audit.view", "demo.reset", "integrations.manage"] },
   { key: "portals", permissions: ["family.portal", "student.portal"] },
 ];
 
@@ -45,6 +46,7 @@ export const SENSITIVE_PERMISSIONS: Permission[] = [
   "audit.view",
   "roles.manage",
   "integrations.manage",
+  "signin.manage",
 ];
 
 export function isSensitivePermission(p: string): boolean {

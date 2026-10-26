@@ -136,6 +136,12 @@ async function main() {
           return forEachOrg("applications.reminders", async (orgId) => (await import("@/server/applications/reminders")).runApplicationReminders(orgId));
         case "careerEvents.reminders":
           return forEachOrg("careerEvents.reminders", async (orgId) => (await import("@/server/career-events/reminders")).runCareerEventReminders(orgId));
+        case "attendance.followup":
+          // Unexplained absences: guardians are messaged once per student and day from each school's follow-up time.
+          return forEachOrg("attendance.followup", async (orgId) => (await import("@/server/attendance/followup")).runFollowUp(orgId));
+        case "attendance.alerts":
+          // Persistent absence and the regulator absence limit: staff are told once per student and period, without reasons.
+          return forEachOrg("attendance.alerts", async (orgId) => (await import("@/server/attendance/alerts")).runAttendanceAlerts(orgId));
         case "test.idempotent":
           return handlers.testIdempotent(job.data as TestIdempotentJob);
         default:
@@ -166,6 +172,10 @@ async function main() {
     await maintenance.upsertJobScheduler("applications.reminders", { pattern: "45 3 * * *", tz: "UTC" }, { name: "applications.reminders", opts: { attempts: 3 } });
     // Hourly: university fair and visit reminders about a day before the event (each sent once).
     await maintenance.upsertJobScheduler("careerEvents.reminders", { pattern: "20 * * * *", tz: "UTC" }, { name: "careerEvents.reminders", opts: { attempts: 3 } });
+    // Every 5 minutes: each school's unexplained absence follow-up runs once its own follow-up time has passed.
+    await maintenance.upsertJobScheduler("attendance.followup", { every: 5 * 60_000 }, { name: "attendance.followup", opts: { attempts: 2, removeOnComplete: 100, removeOnFail: 100 } });
+    // Hourly, on school days and weekends alike (the job itself skips when no term is running).
+    await maintenance.upsertJobScheduler("attendance.alerts", { pattern: "40 * * * *", tz: "UTC" }, { name: "attendance.alerts", opts: { attempts: 2 } });
     if (demoMode) {
       // 22:00 UTC is 02:00 in Dubai.
       await maintenance.upsertJobScheduler("demo-reset", { pattern: "0 22 * * *", tz: "UTC" }, { name: "demo-reset", opts: { attempts: 2 } });

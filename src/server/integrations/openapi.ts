@@ -119,7 +119,15 @@ export function openApiDocument(baseUrl: string) {
         AttendanceInput: {
           type: "object",
           required: ["student_no", "date", "status"],
-          properties: { student_no: str, date: { type: "string", format: "date" }, status: { type: "string", enum: ["present", "absent", "late", "excused"] }, minutes_late: { type: "integer", minimum: 0, maximum: 600 } },
+          description:
+            "One student's daily mark. When the school's setting is \"Horizon is our register\", a day already marked on a Horizon register (or excused by an approved absence report) is not changed and comes back as an error with code horizon_register; new days are added. When the setting is \"Our register is in another system\", the API is the register and overwrites marks, except that an absence excused by an approved report stays excused.",
+          properties: {
+            student_no: str,
+            date: { type: "string", format: "date" },
+            status: { type: "string", enum: ["present", "absent", "late", "excused"] },
+            code: { type: "string", description: "Optional. One of the school's attendance codes (for example P, L, A, E). When given it decides the status." },
+            minutes_late: { type: "integer", minimum: 0, maximum: 600 },
+          },
         },
       },
     },
@@ -168,7 +176,7 @@ export function openApiDocument(baseUrl: string) {
         "attendance",
         "daily attendance",
         "#/components/schemas/AttendanceInput",
-        { type: "object", properties: { id: str, student_no: str, date: str, status: str, minutes_late: { type: "integer", nullable: true } } },
+        { type: "object", properties: { id: str, student_no: str, date: str, status: str, code: strN, source: { type: "string", enum: ["register", "parent", "student", "office"] }, minutes_late: { type: "integer", nullable: true } } },
         [
           { name: "from", in: "query", schema: { type: "string", format: "date" }, description: "Default: 30 days ago." },
           { name: "to", in: "query", schema: { type: "string", format: "date" }, description: "Default: today." },

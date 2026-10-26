@@ -9637,5 +9637,9 @@
     "openRegister": "Open register",
     "presentN": "{n} present",
     "awayN": "{n} away"
+  },
+  "gradeLevel": {
+    "label": "{level, select, kg1 {KG1} kg2 {KG2} other {Grade {grade}}}",
+    "short": "{level, select, kg1 {KG1} kg2 {KG2} other {{grade}}}"
   }
 }

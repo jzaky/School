@@ -69,6 +69,11 @@ export const PERMISSIONS = [
   "inspection.view",
   "career.partners",
   "integrations.manage",
+  "attendance.take",
+  "attendance.manage",
+  "attendance.view_all",
+  "grades.publish",
+  "signin.manage",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
@@ -107,6 +112,9 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "cover.manage",
       "absence.reasons",
       "attendance.reasons",
+      "attendance.manage",
+      "attendance.view_all",
+      "signin.manage",
       "timetable.manage",
       "grades.view_all",
       "registration.manage",
@@ -158,6 +166,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
     permissions: [
       "cover.manage",
       "absence.reasons",
+      "attendance.view_all",
       "timetable.manage",
       "grades.view_all",
       "registration.manage",
@@ -194,6 +203,8 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
     permissions: [
       "cover.manage",
       "attendance.reasons",
+      "attendance.manage",
+      "attendance.view_all",
       "timetable.manage",
       "grades.view_all",
       "registration.manage",
@@ -217,6 +228,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
     descAr: "يقود القسم ويعتمد طلبات المواد والمناهج.",
     permissions: [
       "cover.manage",
+      "attendance.take",
       "grades.enter",
       "grades.view_all",
       "trips.manage",
@@ -236,6 +248,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
     descEn: "Teaches classes, refers students and meets parents.",
     descAr: "يدرّس الصفوف ويحيل الطلاب ويلتقي بأولياء الأمور.",
     permissions: [
+      "attendance.take",
       "grades.enter",
       "trips.manage",
       "curriculum.plan",
@@ -257,6 +270,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "applications.manage",
       "catalog.review",
       "grades.view_all",
+      "attendance.view_all",
       "pathways.view",
       ...STAFF_BASE,
       "cases.manage",
@@ -317,6 +331,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "safeguarding.view",
       "safeguarding.manage",
       "safeguarding.export",
+      "attendance.view_all",
       "appointments.host",
       "documents.sensitive",
       "audit.view",
@@ -353,6 +368,17 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
     descEn: "Resolves IT requests.",
     descAr: "يعالج طلبات الدعم التقني.",
     permissions: [...STAFF_BASE, "requests.process"],
+  },
+  {
+    // Runs the school's systems and releases grades. No case or safeguarding access: it does not get
+    // cases.view, roles.manage or people.manage (each could open or grant sensitive records). Raising a
+    // safeguarding concern stays, as for every member of staff.
+    key: "head_of_it",
+    nameEn: "Head of IT",
+    nameAr: "رئيس قسم تقنية المعلومات",
+    descEn: "Runs integrations, API keys and sign-in, and releases grades and report cards to families.",
+    descAr: "يدير التكاملات ومفاتيح الربط البرمجي وإعدادات تسجيل الدخول، ويعتمد نشر الدرجات وبطاقات التقارير للأسر.",
+    permissions: [...STAFF_BASE.filter((p) => p !== "cases.view"), "grades.publish", "integrations.manage", "signin.manage", "requests.process"],
   },
   {
     key: "student",

@@ -13,6 +13,9 @@ import { ImportError, type ImportActor } from "@/server/imports/access";
 import { flushEffects } from "@/server/queue-core";
 import { audit } from "@/server/audit/audit";
 import { STAFF_ROLE_KEYS } from "@/server/identity/permissions";
+import type { AttendanceStatus } from "@prisma/client";
+import { codeForStatus, resolveCode, statusOf, visibleCode } from "@/server/attendance/codes";
+import { loadCodes, loadSettings } from "@/server/attendance/settings";
 
 export const API_ERROR_MESSAGES = {
   UNAUTHORIZED: "A valid API key is required in the Authorization header (Bearer).",
@@ -114,6 +117,14 @@ async function upsertStudents(actor: ImportActor, items: Array<Record<string, un
 const ATTENDANCE_STATUS = { present: "PRESENT", absent: "ABSENT", late: "LATE", excused: "EXCUSED" } as const;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 
+/**
+ * Upsert daily marks. Which side keeps the register follows the school's attendance setting
+ * (src/server/attendance/settings.ts, documented in the OpenAPI description and docs/guides/attendance.md):
+ * - HORIZON ("Horizon is our register"): days already marked on a Horizon register or excused by an approved
+ *   absence report are left alone (error horizon_register); days with no mark yet are added.
+ * - EXTERNAL ("Our register is in another system"): the API overwrites, except that an absence excused by an
+ *   approved report stays excused when the API says the student was absent.
+ */
 export async function upsertAttendance(actor: ImportActor, body: unknown, source: string, now = new Date()): Promise<UpsertResult> {
   let items: Array<Record<string, unknown>>;
   try {
@@ -121,30 +132,37 @@ export async function upsertAttendance(actor: ImportActor, body: unknown, source
   } catch (e) {
     asApiError(e);
   }
+  const db = tenantDb(actor.orgId);
+  const [settings, { codes }] = await Promise.all([loadSettings(db), loadCodes(db)]);
   const errors: ApiIssue[] = [];
   const latest = now.getTime() + 86_400_000;
-  type Row = { index: number; studentNo: string; date: Date; status: (typeof ATTENDANCE_STATUS)[keyof typeof ATTENDANCE_STATUS]; minutesLate: number | null };
+  type Row = { index: number; studentNo: string; date: Date; status: (typeof ATTENDANCE_STATUS)[keyof typeof ATTENDANCE_STATUS]; code: string; minutesLate: number | null };
   const rows: Row[] = [];
   const seen = new Set<string>();
   items.forEach((it, index) => {
     const studentNo = normStudentNo(toCell(it.student_no));
     const dateText = toCell(it.date);
     const statusText = toCell(it.status).toLowerCase() as keyof typeof ATTENDANCE_STATUS;
+    const codeText = toCell(it.code).toUpperCase();
     const minutesText = toCell(it.minutes_late);
     const before = errors.length;
     if (!studentNo) errors.push({ index, field: "student_no", code: "required" });
     const date = DATE.test(dateText) ? new Date(`${dateText}T00:00:00Z`) : null;
     if (!date || Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== dateText || date.getTime() > latest) errors.push({ index, field: "date", code: dateText ? "date" : "required" });
-    const status = ATTENDANCE_STATUS[statusText];
+    const byCode = codeText ? codes.find((c) => c.code === codeText && c.active) : undefined;
+    if (codeText && !byCode) errors.push({ index, field: "code", code: "code" });
+    const status = byCode ? statusOf(byCode) : ATTENDANCE_STATUS[statusText];
     if (!status) errors.push({ index, field: "status", code: statusText ? "status" : "required" });
     const minutes = minutesText ? Number(minutesText) : null;
     if (minutes !== null && (!Number.isInteger(minutes) || minutes < 0 || minutes > 600)) errors.push({ index, field: "minutes_late", code: "number" });
     const k = `${studentNo}|${dateText}`;
     if (errors.length === before && seen.has(k)) errors.push({ index, field: "date", code: "duplicate" });
     seen.add(k);
-    if (errors.length === before) rows.push({ index, studentNo, date: date!, status: status!, minutesLate: status === "LATE" ? minutes : null });
+    if (errors.length === before) {
+      const code = byCode ?? codeForStatus(codes, status!);
+      rows.push({ index, studentNo, date: date!, status: status!, code: code?.code ?? "", minutesLate: status === "LATE" ? minutes : null });
+    }
   });
-  const db = tenantDb(actor.orgId);
   const numbers = [...new Set(rows.map((r) => r.studentNo))];
   const students = numbers.length ? await db.student.findMany({ where: { studentNo: { in: numbers, mode: "insensitive" } }, select: { id: true, studentNo: true } }) : [];
   const idOf = new Map(students.map((s) => [normStudentNo(s.studentNo), s.id]));
@@ -162,19 +180,31 @@ export async function upsertAttendance(actor: ImportActor, body: unknown, source
       const res = await tenantTx(
         actor.orgId,
         async (tx) => {
-          const existing = await tx.attendanceRecord.findMany({ where: { OR: chunk.map((r) => ({ studentId: idOf.get(r.studentNo)!, date: r.date })) }, select: { id: true, studentId: true, date: true, status: true, minutesLate: true } });
+          const existing = await tx.attendanceRecord.findMany({ where: { OR: chunk.map((r) => ({ studentId: idOf.get(r.studentNo)!, date: r.date })) }, select: { id: true, studentId: true, date: true, status: true, code: true, minutesLate: true, markedById: true, requestId: true } });
           const byKey = new Map(existing.map((e) => [`${e.studentId}|${e.date.toISOString().slice(0, 10)}`, e]));
-          const out = { created: 0, updated: 0, unchanged: 0 };
+          const out = { created: 0, updated: 0, unchanged: 0, locked: [] as number[] };
           for (const r of chunk) {
             const studentId = idOf.get(r.studentNo)!;
             const cur = byKey.get(`${studentId}|${r.date.toISOString().slice(0, 10)}`);
             if (!cur) {
-              await tx.attendanceRecord.create({ data: { orgId: actor.orgId, studentId, date: r.date, status: r.status, minutesLate: r.minutesLate } });
+              await tx.attendanceRecord.create({ data: { orgId: actor.orgId, studentId, date: r.date, status: r.status, code: r.code || null, minutesLate: r.minutesLate } });
               out.created++;
-            } else if (cur.status !== r.status || (cur.minutesLate ?? null) !== r.minutesLate) {
-              await tx.attendanceRecord.update({ where: { id: cur.id }, data: { status: r.status, minutesLate: r.minutesLate } });
-              out.updated++;
-            } else out.unchanged++;
+              continue;
+            }
+            const takenHere = !!cur.markedById || !!cur.requestId;
+            if (settings.mode === "HORIZON" && takenHere) {
+              if (cur.status === r.status && (cur.minutesLate ?? null) === r.minutesLate) out.unchanged++;
+              else out.locked.push(r.index);
+              continue;
+            }
+            // External register: an approved absence report keeps the day excused.
+            const keepExcused = !!cur.requestId && r.status === "ABSENT";
+            if (keepExcused || (cur.status === r.status && (cur.code ?? "") === r.code && (cur.minutesLate ?? null) === r.minutesLate)) {
+              out.unchanged++;
+              continue;
+            }
+            await tx.attendanceRecord.update({ where: { id: cur.id }, data: { status: r.status, code: r.code || null, minutesLate: r.minutesLate, source: "REGISTER", requestId: null, markedById: null } });
+            out.updated++;
           }
           return out;
         },
@@ -183,13 +213,14 @@ export async function upsertAttendance(actor: ImportActor, body: unknown, source
       created += res.created;
       updated += res.updated;
       unchanged += res.unchanged;
+      for (const index of res.locked) errors.push({ index, field: "date", code: "horizon_register" });
     } catch {
       for (const r of chunk) errors.push({ index: r.index, field: "row", code: "failed" });
     }
   }
   const failed = new Set(errors.map((e) => e.index)).size;
-  await audit(db, actor.orgId, { actorId: actor.membershipId, actorUserId: actor.userId, action: "integrations.attendance_upsert", entityType: "AttendanceRecord", meta: { source, total: items.length, created, updated, unchanged, failed } });
-  const known = new Set(["student_no", "date", "status", "minutes_late"]);
+  await audit(db, actor.orgId, { actorId: actor.membershipId, actorUserId: actor.userId, action: "integrations.attendance_upsert", entityType: "AttendanceRecord", meta: { source, mode: settings.mode, total: items.length, created, updated, unchanged, failed } });
+  const known = new Set(["student_no", "date", "status", "code", "minutes_late"]);
   const unknown = [...new Set(items.flatMap((it) => Object.keys(it).filter((k) => !known.has(k))))].slice(0, 30);
   return { import_id: null, total: items.length, created, updated, unchanged, failed, errors: errors.sort((a, b) => a.index - b.index), unknown_fields: unknown };
 }
@@ -394,8 +425,14 @@ export async function listAttendance(orgId: string, sp: URLSearchParams, now = n
     orderBy: { id: "asc" },
     take: limit + 1,
     ...cursorArgs(cursor),
-    select: { id: true, date: true, status: true, minutesLate: true, student: { select: { studentNo: true } } },
+    select: { id: true, date: true, status: true, code: true, source: true, minutesLate: true, student: { select: { studentNo: true } } },
   });
   const { rows: page, next } = paged(rows, limit);
-  return { data: page.map((r) => ({ id: r.id, student_no: r.student.studentNo, date: iso(r.date), status: r.status.toLowerCase(), minutes_late: r.minutesLate })), next_cursor: next };
+  // Private codes (for example illness) are reported as the plain excused code: the API never carries reasons.
+  const { codes } = await loadCodes(tenantDb(orgId));
+  const shown = (code: string | null, status: AttendanceStatus) => {
+    const c = resolveCode(codes, code, status);
+    return c ? visibleCode(codes, c, false).code : null;
+  };
+  return { data: page.map((r) => ({ id: r.id, student_no: r.student.studentNo, date: iso(r.date), status: r.status.toLowerCase(), code: shown(r.code, r.status), source: r.source.toLowerCase(), minutes_late: r.minutesLate })), next_cursor: next };
 }
