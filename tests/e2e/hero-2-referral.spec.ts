@@ -18,8 +18,11 @@ for (const locale of LOCALES) {
     await toFirstStep(t);
     await pickOption(t, "picker-student", "Adam Nasser");
     await pickOption(t, "picker-subject", "Physics");
-    await t.locator("[data-testid=opt-concernAreas-grades_declining]").click();
-    await t.locator("[data-testid=opt-concernAreas-missing_homework]").click();
+    // A saved draft can already have these on; clicking again would turn them off.
+    for (const area of ["grades_declining", "missing_homework"]) {
+      const chip = t.locator(`[data-testid=opt-concernAreas-${area}]`);
+      if ((await chip.getAttribute("aria-pressed")) !== "true") await chip.click();
+    }
     await t.locator("#f-observations").fill(note);
     await t.locator("[data-testid=form-next]").click();
     await t.locator("[data-testid=opt-urgency-medium]").click();

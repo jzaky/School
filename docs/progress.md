@@ -82,6 +82,7 @@
 ## Broken
 - Nothing known. Production: https://myhorizon.up.railway.app (press Reset demo after each deploy to load new seed data).
 - Fixed: the meetings list stopped at 30 upcoming meetings, so on a demo that had not been reset a newly booked meeting could be missing from the list. Both lists now page (25 upcoming, 15 past per page) and the live check goes through the pages.
+- Fixed: a form draft could be saved a moment after the request was submitted (the debounced auto-save ran after the submit), so the next visit opened a stale draft. Auto-save now stops when the submit starts and resumes only if the submit fails.
 
 ## Self-serve schools: sign-up, setup wizard and per-school customization (onboarding)
 - Starter template (prisma/seed/starter): `installStarterTemplate(db, orgId, { curricula, locale, now })` installs roles, departments, subjects, main campus, current year with terms, UAE holidays and term breaks (stable ids, Islamic dates marked estimated), a UAE bell schedule, grade bands per curriculum family, the service catalog with forms, workflows and appointment types, document categories and letters, all message templates (including module ones and email_verification), career catalogs, compliance defaults (purposes, retention, processors listed unapproved) and the course catalog for the chosen curricula. Idempotent; replaces the demo school's name in texts for new schools. The demo seed now builds on it (demo reset about 20 s).

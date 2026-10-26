@@ -52,6 +52,9 @@ export function FormRenderer({ schema, initialValues, initialStep = 0, options, 
   const [submitting, setSubmitting] = useState(false);
   const [draftState, setDraftState] = useState<"idle" | "saving" | "saved">("idle");
   const dirty = useRef(false);
+  const draftTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Set while submitting: a draft saved after the submit would come back as a stale draft next time.
+  const sealed = useRef(false);
   const total = schema.steps.length;
   const current = schema.steps[step];
 
@@ -63,12 +66,15 @@ export function FormRenderer({ schema, initialValues, initialStep = 0, options, 
 
   // Auto-save drafts, debounced.
   useEffect(() => {
-    if (!onDraft || preview || !dirty.current) return;
+    if (!onDraft || preview || !dirty.current || sealed.current) return;
     const h = setTimeout(async () => {
+      draftTimer.current = null;
+      if (sealed.current) return;
       setDraftState("saving");
       await onDraft(values, step);
       setDraftState("saved");
     }, 1200);
+    draftTimer.current = h;
     return () => clearTimeout(h);
   }, [values, step, onDraft, preview]);
 
@@ -94,9 +100,17 @@ export function FormRenderer({ schema, initialValues, initialStep = 0, options, 
       return;
     }
     setSubmitting(true);
+    sealed.current = true;
+    if (draftTimer.current) clearTimeout(draftTimer.current);
     try {
       const res = await onSubmit(values);
-      if (res && !res.ok && res.fieldErrors?.length) setErrors(res.fieldErrors);
+      if (res && !res.ok) {
+        sealed.current = false;
+        if (res.fieldErrors?.length) setErrors(res.fieldErrors);
+      }
+    } catch (e) {
+      sealed.current = false;
+      throw e;
     } finally {
       setSubmitting(false);
     }
