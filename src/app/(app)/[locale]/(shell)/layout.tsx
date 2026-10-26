@@ -21,7 +21,7 @@ export default async function ShellLayout({ children }: { children: React.ReactN
   const ctx = await getCtx();
   const { db, orgId, membershipId, locale } = ctx;
   const tRoles = await getTranslations("roles");
-  const [approvals, tasks, unread, personas, joinRequests, schools, groupRoles] = await Promise.all([
+  const [approvals, tasks, unread, personas, joinRequests, schools, groupRoles, reenrollmentOpen] = await Promise.all([
     db.approvalAssignee.count({ where: { orgId, membershipId, status: "PENDING", approval: { status: "PENDING" } } }),
     db.task.count({ where: { orgId, assigneeId: membershipId, status: { in: ["TODO", "IN_PROGRESS"] } } }),
     db.notification.count({ where: { orgId, recipientId: membershipId, readAt: null } }),
@@ -31,6 +31,7 @@ export default async function ShellLayout({ children }: { children: React.ReactN
     ctx.can("people.manage") || ctx.can("people.invite") ? db.joinRequest.count({ where: { orgId, status: "PENDING" } }) : Promise.resolve(0),
     listUserOrganizations(ctx.user.id),
     groupRolesForUser(ctx.user.id),
+    ctx.isParent ? db.reenrollmentWindow.count({ where: { orgId, closedAt: null, opensAt: { lte: new Date() }, closesAt: { gt: new Date() } } }).then((n) => n > 0) : Promise.resolve(false),
   ]);
   const personaMembers = personas.length
     ? await db.membership.findMany({ where: { id: { in: personas.map((p) => p.membershipId) } }, include: { user: true } })
@@ -38,7 +39,7 @@ export default async function ShellLayout({ children }: { children: React.ReactN
   const name = userName(ctx.user, locale);
   const primaryRole = ctx.roles[0];
   // Switched-off modules disappear from the navigation and the guide.
-  const nav = filterNav(ctx.org, buildNav(ctx, { approvals, tasks, notifications: unread, joinRequests, group: groupRoles.length > 0 }));
+  const nav = filterNav(ctx.org, buildNav(ctx, { approvals, tasks, notifications: unread, joinRequests, group: groupRoles.length > 0, reenrollmentOpen }));
   const tGuide = await getTranslations("guide");
   const guideSteps = personas.length && ctx.persona ? (GUIDE_STEPS[ctx.persona] ?? []).filter((s) => pathEnabled(ctx.org, s.href)) : [];
   // New schools: administrators see a banner until the founding administrator confirms their email.

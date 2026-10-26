@@ -146,6 +146,8 @@ async function main() {
         case "attendance.alerts":
           // Persistent absence and the regulator absence limit: staff are told once per student and period, without reasons.
           return forEachOrg("attendance.alerts", async (orgId) => (await import("@/server/attendance/alerts")).runAttendanceAlerts(orgId));
+        case "admissions.daily":
+          return forEachOrg("admissions.daily", async (orgId) => (await import("@/server/admissions/jobs")).runAdmissionsDaily(orgId));
         case "test.idempotent":
           return handlers.testIdempotent(job.data as TestIdempotentJob);
         default:
@@ -176,6 +178,8 @@ async function main() {
     await maintenance.upsertJobScheduler("applications.reminders", { pattern: "45 3 * * *", tz: "UTC" }, { name: "applications.reminders", opts: { attempts: 3 } });
     // 20:05 UTC is 00:05 in Dubai: time-limited role assignments that ended yesterday are removed and audited.
     await maintenance.upsertJobScheduler("access.expiry", { pattern: "5 20 * * *", tz: "UTC" }, { name: "access.expiry", opts: { attempts: 3 } });
+    // 04:05 UTC is 08:05 in Dubai: re-enrollment notices and reminders, and students admitted for a year that started.
+    await maintenance.upsertJobScheduler("admissions.daily", { pattern: "5 4 * * *", tz: "UTC" }, { name: "admissions.daily", opts: { attempts: 3 } });
     // Hourly: university fair and visit reminders about a day before the event (each sent once).
     await maintenance.upsertJobScheduler("careerEvents.reminders", { pattern: "20 * * * *", tz: "UTC" }, { name: "careerEvents.reminders", opts: { attempts: 3 } });
     // Every 15 minutes: course selection notices when a window opens, 3 days and 1 day before it closes, and when it closes (each sent once).

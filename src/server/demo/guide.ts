@@ -37,6 +37,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "universityFairsParent", href: "/career/events" },
     { key: "pathwayChild", href: "/career/pathways" },
     { key: "childSubjectLevels", href: "/career/pathways#levels" },
+    { key: "reenrollmentFamily", href: "/reenrollment" },
   ],
   teacher: [
     { key: "classSession", href: "/subjects/session" },
@@ -120,6 +121,20 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "examsAdmin", href: "/admin/exams" },
     { key: "invitePeople", href: "/admin/invitations" },
     { key: "joinRequests", href: "/admin/join-requests" },
+    { key: "admissionsBoard", href: "/admissions" },
+    { key: "admissionsSettings", href: "/admissions/settings" },
+  ],
+  admissions: [
+    { key: "admissionsBoard", href: "/admissions" },
+    { key: "admissionsOffer", href: "/admissions/applications?stage=ASSESSED" },
+    { key: "admissionsEnroll", href: "/admissions/applications?stage=SEAT_PAID" },
+    { key: "admissionsWaitlist", href: "/admissions/waitlist" },
+    { key: "admissionsCapacity", href: "/admissions/capacity" },
+    { key: "admissionsRegistration", href: "/admissions/registration" },
+    { key: "admissionsReenrollment", href: "/admissions/reenrollment" },
+    { key: "admissionsLeavers", href: "/admissions/withdrawals" },
+    { key: "admissionsReports", href: "/admissions/reports" },
+    { key: "admissionsPublic", href: "/apply/horizon" },
   ],
   registrar: [
     { key: "attendanceOffice", href: "/attendance/office" },

@@ -16,6 +16,7 @@ export const PERMISSION_GROUPS: Array<{ key: string; permissions: Permission[] }
     permissions: ["safeguarding.refer", "safeguarding.view", "safeguarding.manage", "safeguarding.export", "safeguarding.break_glass"],
   },
   { key: "people", permissions: ["people.view", "people.manage", "people.invite", "people.reveal_ids", "people.medical"] },
+  { key: "admissions", permissions: ["admissions.view", "admissions.manage", "admissions.enroll"] },
   { key: "grades", permissions: ["grades.view_own", "grades.enter", "grades.publish", "grades.view_all", "registration.submit", "registration.manage", "registration.assist"] },
   { key: "attendance", permissions: ["attendance.take", "attendance.view_all", "attendance.manage", "attendance.reasons"] },
   { key: "timetable", permissions: ["calendar.view", "calendar.manage", "timetable.manage", "absence.report", "cover.manage", "absence.reasons"] },

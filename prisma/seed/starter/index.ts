@@ -22,6 +22,7 @@ import { ensureCareerEventTemplates } from "@/server/career-events/templates";
 import { ensureConversationTemplates } from "@/server/requests/conversation";
 import { ensureAbsenceTemplates } from "@/server/attendance/absences";
 import { ensureAccessAlertTemplate } from "@/server/access/access-alerts";
+import { ensureAdmissionSetup } from "@/server/admissions/templates";
 import { ensureInspectionMapping } from "@/server/inspection/seed";
 import { SERVICES, SERVICE_CATEGORIES } from "../data/services";
 import { FORM_TEMPLATES } from "../data/forms";
@@ -244,6 +245,7 @@ export async function installStarterTemplate(db: Db, orgId: string, opts: Starte
   await ensureConversationTemplates(tx, orgId);
   await ensureAbsenceTemplates(tx, orgId);
   await ensureAccessAlertTemplate(tx, orgId);
+  await ensureAdmissionSetup(tx, orgId);
 
   // --- Career catalogs ------------------------------------------------------------------------------
   if ((await db.aptitudeQuestion.count({ where: { orgId } })) === 0) {

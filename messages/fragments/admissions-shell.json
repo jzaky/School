@@ -1,0 +1,89 @@
+{
+  "nav": {
+    "admissions": ["Admissions", "القبول والتسجيل"],
+    "admissionsHealth": ["Applications health review", "المراجعة الصحية للطلبات"],
+    "reenrollment": ["Next year's places", "مقاعد العام القادم"]
+  },
+  "roles": {
+    "admissions_officer": ["Admissions Officer", "مسؤول القبول والتسجيل"]
+  },
+  "access": {
+    "groups": {
+      "admissions": ["Admissions and enrollment", "القبول والتسجيل"]
+    },
+    "groupHelp": {
+      "admissions": ["Applications, offers, enrollment, re-enrollment and leavers.", "طلبات الالتحاق والعروض والقيد وإعادة التسجيل والمغادرون."]
+    },
+    "perms": {
+      "admissions": {
+        "view": {
+          "label": ["See admissions", "الاطلاع على القبول"],
+          "help": ["The admissions board, applications (without health details), waiting list, places and reports.", "لوحة القبول والطلبات (دون التفاصيل الصحية) وقائمة الانتظار والمقاعد والتقارير."]
+        },
+        "manage": {
+          "label": ["Run admissions", "إدارة القبول"],
+          "help": ["Move applications, book assessments, message families, make offers, record payments, re-enrollment and settings.", "نقل الطلبات وحجز التقييمات ومراسلة الأسر وتقديم العروض وتسجيل الدفعات وإعادة التسجيل والإعدادات."]
+        },
+        "enroll": {
+          "label": ["Enroll and withdraw students", "قيد الطلاب وسحبهم"],
+          "help": ["Create student records from accepted applications, complete withdrawals and record government registration.", "إنشاء سجلات الطلاب من الطلبات المقبولة وإتمام الانسحاب وتسجيل الإجراءات الحكومية."]
+        }
+      }
+    }
+  },
+  "guide": {
+    "intro": {
+      "admissions": ["You are Hana, the admissions officer, filling next year's places from KG1 to Grade 12.", "أنتِ هناء، مسؤولة القبول والتسجيل، تملئين مقاعد العام القادم من الروضة الأولى حتى الصف الثاني عشر."]
+    },
+    "steps": {
+      "admissionsBoard": {
+        "title": ["Admissions board", "لوحة القبول"],
+        "body": ["Every application by stage, from new to enrolled. Drag a card or use its menu.", "جميع الطلبات حسب المرحلة من الجديدة حتى المقيّدة. اسحبوا البطاقة أو استخدموا قائمتها."]
+      },
+      "admissionsOffer": {
+        "title": ["Make an offer", "تقديم عرض"],
+        "body": ["Open an assessed application, make an offer with a deadline and download the bilingual letter.", "افتحوا طلبًا تم تقييمه وقدّموا عرضًا بموعد للرد ونزّلوا الخطاب ثنائي اللغة."]
+      },
+      "admissionsEnroll": {
+        "title": ["Enroll in one click", "القيد بنقرة واحدة"],
+        "body": ["A paid seat becomes a student record, with the family linked and invited to the portal.", "يتحول المقعد المسدد إلى سجل طالب، مع ربط الأسرة ودعوتها إلى البوابة."]
+      },
+      "admissionsWaitlist": {
+        "title": ["Waiting list", "قائمة الانتظار"],
+        "body": ["Ordered by priority (siblings, staff children) and then by date.", "مرتبة حسب الأولوية (الإخوة وأبناء الموظفين) ثم حسب التاريخ."]
+      },
+      "admissionsCapacity": {
+        "title": ["Places per grade", "المقاعد لكل صف"],
+        "body": ["Sections, places, seat booking amounts and live counts for next year.", "الشعب والمقاعد ومبالغ حجز المقاعد والأعداد الحالية للعام القادم."]
+      },
+      "admissionsRegistration": {
+        "title": ["Government registration", "التسجيل الحكومي"],
+        "body": ["New students waiting for the authority's approval, with a ready-to-type registration sheet.", "الطلاب الجدد بانتظار موافقة الجهة المختصة، مع ورقة تسجيل جاهزة للإدخال."]
+      },
+      "admissionsReenrollment": {
+        "title": ["Re-enrollment", "إعادة التسجيل"],
+        "body": ["Who is returning next year, who is leaving and why, and reminders to families who have not answered.", "من سيعود في العام القادم ومن سيغادر ولماذا، والتذكيرات للأسر التي لم ترد."]
+      },
+      "admissionsLeavers": {
+        "title": ["Leavers", "المغادرون"],
+        "body": ["Complete a withdrawal and issue a bilingual transfer certificate.", "أتمّوا الانسحاب وأصدروا شهادة نقل ثنائية اللغة."]
+      },
+      "admissionsReports": {
+        "title": ["Admissions reports", "تقارير القبول"],
+        "body": ["Funnel, conversion, places against enrolled, nationalities and ages, with exports.", "مراحل القبول ونسب التحويل والمقاعد مقابل المقيّدين والجنسيات والأعمار، مع التصدير."]
+      },
+      "admissionsPublic": {
+        "title": ["The family's view", "ما تراه الأسرة"],
+        "body": ["The school's own application page, in English and Arabic, on any phone.", "صفحة التقديم الخاصة بالمدرسة باللغتين العربية والإنجليزية على أي هاتف."]
+      },
+      "admissionsSettings": {
+        "title": ["Admissions settings", "إعدادات القبول"],
+        "body": ["Age cut-off, admission numbers, stages, required documents and the registration authority.", "تاريخ احتساب العمر وأرقام القيد والمراحل والمستندات المطلوبة وجهة التسجيل."]
+      },
+      "reenrollmentFamily": {
+        "title": ["Next year's places", "مقاعد العام القادم"],
+        "body": ["Confirm whether Adam and Yara return next year.", "أكدوا ما إذا كان آدم ويارا سيعودان في العام القادم."]
+      }
+    }
+  }
+}
