@@ -6,7 +6,7 @@
 // Every virtual user signs in first through the credentials flow (sign-in throughput is reported separately).
 // Each concurrency level uses fresh people, so 4 levels x 250 journeys = 1,000 different parents for "report".
 // Usage: npx tsx scripts/load-test.ts --base http://localhost:3149 [--scenarios report,register,fees]
-//        [--levels 10,25,50,100] [--journeys 250] [--teachers 120] [--out results.json]
+//        [--levels 10,25,50,100] [--journeys 250] [--teachers 120] [--open-registers] [--out results.json]
 // Reads people and ids with MIGRATION_DATABASE_URL (owner role, like the seeds). Uses Node's built-in fetch.
 import { cpus, totalmem } from "node:os";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
@@ -23,6 +23,7 @@ const LEVELS = arg("levels", "10,25,50,100").split(",").map(Number);
 const JOURNEYS = Number(arg("journeys", "250"));
 const TEACHERS = Number(arg("teachers", "120"));
 const OUT = arg("out", "");
+const OPEN_REGISTERS = process.argv.includes("--open-registers");
 const PASSWORD = process.env.SCALE_PASSWORD ?? "ScaleTest2026!";
 const SLUG = "scale-test";
 
@@ -84,6 +85,22 @@ async function people() {
   } finally {
     await db.$disconnect();
   }
+}
+
+/** Set the synthetic school's register close time to 23:59; returns a function that puts the old time back. */
+async function keepRegistersOpen() {
+  const db = new PrismaClient({ datasourceUrl: process.env.MIGRATION_DATABASE_URL });
+  const org = await db.organization.findUniqueOrThrow({ where: { slug: SLUG } });
+  const before = await db.attendanceSettings.findUnique({ where: { orgId: org.id }, select: { closeTime: true } });
+  if (!before) {
+    await db.$disconnect();
+    return null;
+  }
+  await db.attendanceSettings.update({ where: { orgId: org.id }, data: { closeTime: "23:59" } });
+  return async () => {
+    await db.attendanceSettings.update({ where: { orgId: org.id }, data: { closeTime: before.closeTime } });
+    await db.$disconnect();
+  };
 }
 
 /** The server action id of saveRegisterAction in the running build (from Next's server reference manifest). */
@@ -166,6 +183,10 @@ async function main() {
     const out: Record<string, unknown> = {};
     const actionId = saveRegisterActionId();
     if (!actionId) log("register: saveRegisterAction id not found in .next; saving is skipped");
+    // Teachers can only save before the school's close time (15:30 Dubai by default). Outside school hours,
+    // --open-registers keeps the synthetic school's registers open until 23:59 for the run, then restores it.
+    const restoreClose = OPEN_REGISTERS ? await keepRegistersOpen() : null;
+    if (!OPEN_REGISTERS) log("register: saving needs open registers; run before the close time or pass --open-registers");
     const group = teachers.slice(0, TEACHERS);
     const { sessions, stats } = await signInAll(group.map((t) => t.email), 20, ipOffset);
     ipOffset += group.length;
@@ -190,6 +211,7 @@ async function main() {
       log(`register c=${c}: ${sum.requestsPerSecond} req/s, p50 ${sum.all.p50} ms, p95 ${sum.all.p95} ms, p99 ${sum.all.p99} ms, errors ${(sum.all.errorRate * 100).toFixed(1)}%`);
     }
     results.register = { signIn: stats, teachers: group.length, ...out };
+    if (restoreClose) await restoreClose();
   }
 
   if (SCENARIOS.includes("fees")) {

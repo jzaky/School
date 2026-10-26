@@ -1,8 +1,7 @@
 // Small HTTP helpers for the capacity scripts (scripts/page-timing.ts and scripts/load-test.ts).
 // Signs in through the Auth.js credentials flow (GET /api/auth/csrf, then POST /api/auth/callback/password,
 // the same endpoints the sign-in form uses) and keeps the session cookies. Uses the fetch built into Node 20+.
-// Each virtual user sends its own X-Forwarded-For address, the way real families arrive through Railway's proxy;
-// without it every sign-in would come from one address and hit the per-address sign-in limit.
+// Each virtual user gets its own client address, as families arriving through Railway's proxy do.
 
 export type Session = { email: string; ip: string; cookies: Map<string, string> };
 export type Timed = { status: number; ms: number; bytes: number; location: string | null; error?: string };

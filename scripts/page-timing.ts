@@ -16,6 +16,8 @@ const BASE = arg("base", "http://localhost:3149");
 const RUNS = Number(arg("runs", "7"));
 const LABEL = arg("label", "run");
 const OUT = arg("out", "");
+/** Comma-separated parts of page names to measure (default: every page). */
+const ONLY = arg("only", "").split(",").map((x) => x.trim().toLowerCase()).filter(Boolean);
 const PASSWORD = process.env.SCALE_PASSWORD ?? "ScaleTest2026!";
 const SLUG = "scale-test";
 
@@ -71,7 +73,8 @@ async function discover(): Promise<Page[]> {
 }
 
 const EMAILS: Record<string, string> = {
-  admin: "admin@staff.scale.example",
+  // SCALE_ADMIN_EMAIL: another school admin when this one has hit the sign-in limit (10 attempts in 15 minutes per address).
+  admin: process.env.SCALE_ADMIN_EMAIL ?? "admin@staff.scale.example",
   principal: "principal@staff.scale.example",
   teacher: "teacher@staff.scale.example",
   dsl: "dsl@staff.scale.example",
@@ -80,10 +83,10 @@ const EMAILS: Record<string, string> = {
 };
 
 async function main() {
-  const pages = await discover();
+  const pages = (await discover()).filter((p) => !ONLY.length || ONLY.some((o) => p.name.toLowerCase().includes(o)));
   const sessions = new Map<string, Session>();
   let n = 1;
-  for (const role of Object.keys(EMAILS)) sessions.set(role, await signIn(BASE, EMAILS[role], PASSWORD, ipFor(n++)));
+  for (const role of new Set(pages.map((p) => p.role))) sessions.set(role, await signIn(BASE, EMAILS[role], PASSWORD, ipFor(n++)));
   const results: Array<{ role: string; name: string; path: string; status: number; bytes: number; p50: number; p95: number; max: number; runs: number[] }> = [];
   for (const p of pages) {
     const s = sessions.get(p.role)!;
