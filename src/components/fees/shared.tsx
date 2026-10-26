@@ -61,7 +61,7 @@ export function Pager({ page, total, pageSize, href }: { page: number; total: nu
       <div className="flex gap-2">
         {page > 1 ? (
           <Button asChild variant="outline" size="sm">
-            <Link href={href(page - 1)}>
+            <Link prefetch={false} href={href(page - 1)}>
               <ChevronLeft className="size-4 rtl:rotate-180" />
               {t("prev")}
             </Link>
@@ -74,7 +74,7 @@ export function Pager({ page, total, pageSize, href }: { page: number; total: nu
         )}
         {page < pages ? (
           <Button asChild variant="outline" size="sm">
-            <Link href={href(page + 1)} data-testid="pager-next">
+            <Link prefetch={false} href={href(page + 1)} data-testid="pager-next">
               {t("next")}
               <ChevronRight className="size-4 rtl:rotate-180" />
             </Link>
@@ -118,6 +118,9 @@ export function FinanceTabs({ active, can }: { active: (typeof FINANCE_SECTIONS)
         <Link
           key={s.key}
           href={s.href}
+          // Finance pages run aggregates; prefetching every section on each page load wastes database work, and
+          // prefetches racing a click stalled navigation in testing.
+          prefetch={false}
           data-testid={`fin-tab-${s.key}`}
           className={cn("shrink-0 rounded-md px-3 py-1.5 text-sm font-medium transition", active === s.key ? "bg-brand-soft text-brand" : "text-muted-foreground hover:bg-muted hover:text-foreground")}
           aria-current={active === s.key ? "page" : undefined}

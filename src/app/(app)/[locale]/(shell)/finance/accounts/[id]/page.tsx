@@ -53,6 +53,8 @@ export default async function AccountPage({ params, searchParams }: { params: Pr
     : [[], [], [], []];
   const childOpts = d.students.map((s) => ({ value: s.id, label: personName(s, L) }));
   const open = d.invoices.filter((i) => i.kind === "TAX" && (i.status === "OPEN" || i.status === "PARTIAL"));
+  // Open proformas (for example a seat booking) can be paid too: a payment that covers one turns it into a tax invoice.
+  const payable = [...open, ...d.invoices.filter((i) => i.kind === "PROFORMA" && i.status === "OPEN")];
   const payer = d.account.payerType === "SPONSOR" ? d.account.sponsorName : d.payer ? personName(d.payer, L) : null;
   const guardians = [...new Map(d.linkedGuardians.map((l) => [l.guardian.id, { value: l.guardian.id, label: personName(l.guardian, L) }])).values()];
   const refundable = d.payments.filter((p) => unallocatedOf(p) > 0).map((p) => ({ id: p.id, label: p.number ?? "", availableFils: unallocatedOf(p) }));
@@ -78,7 +80,7 @@ export default async function AccountPage({ params, searchParams }: { params: Pr
         }
         actions={
           <>
-            {canCollect && <RecordPaymentDialog accountId={d.account.id} invoices={open.map((i) => ({ id: i.id, number: i.number, balanceFils: balanceOf(i) }))} locale={L} />}
+            {canCollect && <RecordPaymentDialog accountId={d.account.id} invoices={payable.map((i) => ({ id: i.id, number: i.number, balanceFils: balanceOf(i) }))} locale={L} />}
             {canManage && <BillFamilyDialog accountId={d.account.id} parts={parts} />}
             {canManage && <AddChargeDialog accountId={d.account.id} items={items.map((i) => ({ id: i.id, label: pick(L, i.nameEn, i.nameAr), amountFils: i.amountFils }))} students={childOpts} />}
             {canManage && (
@@ -215,7 +217,7 @@ export default async function AccountPage({ params, searchParams }: { params: Pr
               {d.invoices.map((i) => (
                 <li key={i.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm">
                   <div className="min-w-0">
-                    <Link href={`/finance/invoices/${i.id}`} className="font-medium hover:underline">
+                    <Link prefetch={false} href={`/finance/invoices/${i.id}`} className="font-medium hover:underline">
                       <bdi>{i.number}</bdi>
                     </Link>
                     <div className="text-xs text-muted-foreground">

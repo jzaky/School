@@ -3,11 +3,12 @@
 // family never interleave. Issued documents are never edited: corrections are credit notes, a bounced cheque or a
 // credit note releases allocations with negative rows (append only, see prisma/rls.sql).
 import type { FeeItemKind, FeePaymentMethod, InvoiceKind, Prisma } from "@prisma/client";
-import type { Tx } from "@/server/db";
+import { execCtx, type Effect, type Tx } from "@/server/db";
 import { audit } from "@/server/audit/audit";
 import { loadFinanceConfig, sellerFor, taxInvoiceBlockers, type FinanceConfig } from "./config";
 import { allocateFifo, bpOf, computeLine, dubaiDayNumber, invoiceStatusFor, totalsOf, vatOf, type ComputedLine, type LineInput } from "./money";
 import { nextDocNumber } from "./numbering";
+import { SEAT_REF_PREFIX, seatPaidHandler } from "./hooks";
 
 export class FeeError extends Error {
   constructor(public code: string) {
@@ -440,7 +441,8 @@ function validatePayment(input: RecordPaymentInput) {
  * Record money received. A cheque dated after today is held (post-dated) and allocated when it clears; everything
  * else is cleared at once, gets a receipt number and is allocated. The same idempotency key never records twice.
  */
-export async function recordPayment(tx: Tx, orgId: string, input: RecordPaymentInput, actor: Actor) {
+/** effects: where follow-up side effects go (for example the seat booking email), run by the caller after commit. */
+export async function recordPayment(tx: Tx, orgId: string, input: RecordPaymentInput, actor: Actor, effects?: Effect[]) {
   validatePayment(input);
   const existing = await tx.feePayment.findUnique({ where: { orgId_idempotencyKey: { orgId, idempotencyKey: input.idempotencyKey } } });
   if (existing) return { payment: existing, duplicate: true as const, discountFils: 0 };
@@ -475,11 +477,11 @@ export async function recordPayment(tx: Tx, orgId: string, input: RecordPaymentI
     provider: input.provider ?? "manual",
   });
   if (held) return { payment, duplicate: false as const, discountFils: 0 };
-  const res = await clearAndAllocate(tx, orgId, payment.id, input.receivedAt, actor, input.invoiceIds ?? [], input.earlyDiscountInvoiceId ?? null, input.earlyAt ?? null);
+  const res = await clearAndAllocate(tx, orgId, payment.id, input.receivedAt, actor, input.invoiceIds ?? [], input.earlyDiscountInvoiceId ?? null, input.earlyAt ?? null, effects);
   return { payment: res.payment, duplicate: false as const, discountFils: res.discountFils };
 }
 
-async function clearAndAllocate(tx: Tx, orgId: string, paymentId: string, clearedAt: Date, actor: Actor, preferred: string[], earlyInvoiceId: string | null, earlyAt: Date | null = null) {
+async function clearAndAllocate(tx: Tx, orgId: string, paymentId: string, clearedAt: Date, actor: Actor, preferredIn: string[], earlyInvoiceId: string | null, earlyAt: Date | null = null, effects?: Effect[]) {
   const cfg = await loadFinanceConfig(tx, orgId);
   let payment = await tx.feePayment.findFirstOrThrow({ where: { id: paymentId, orgId } });
   const number = payment.number ?? (await nextDocNumber(tx, orgId, "RCT", cfg.receiptPrefix, clearedAt));
@@ -493,6 +495,7 @@ async function clearAndAllocate(tx: Tx, orgId: string, paymentId: string, cleare
     }
   }
   let free = unallocatedOf(payment);
+  const { preferred, converted } = await convertCoveredProformas(tx, orgId, payment.accountId, preferredIn, actor, clearedAt);
   const open = await openTaxInvoices(tx, orgId, payment.accountId);
   const first = preferred.map((id) => open.find((o) => o.id === id)).filter((x): x is NonNullable<typeof x> => Boolean(x));
   const firstPlan: Array<{ invoiceId: string; amountFils: number }> = [];
@@ -503,18 +506,90 @@ async function clearAndAllocate(tx: Tx, orgId: string, paymentId: string, cleare
     free -= take;
   }
   const rest = allocateFifo(free, open.filter((o) => !first.some((f) => f.id === o.id)));
-  await allocate(tx, orgId, payment.id, [...firstPlan, ...rest.allocations]);
+  const plan = [...firstPlan, ...rest.allocations];
+  await allocate(tx, orgId, payment.id, plan);
+  // A converted proforma was covered by this payment together with credit the family already had: take that too.
+  for (const invoiceId of converted) await topUpFromCredit(tx, orgId, payment.accountId, invoiceId);
   payment = await tx.feePayment.findFirstOrThrow({ where: { id: payment.id, orgId } });
+  await settleSeatBookings(tx, orgId, [...plan.map((a) => a.invoiceId), ...converted], clearedAt, actor, effects);
   return { payment, discountFils };
 }
 
+/** Allocate the account's unallocated payments (oldest first) to one invoice, up to its balance. */
+async function topUpFromCredit(tx: Tx, orgId: string, accountId: string, invoiceId: string) {
+  const inv = await tx.invoice.findFirst({ where: { id: invoiceId, orgId } });
+  let need = inv ? balanceOf(inv) : 0;
+  if (need <= 0) return;
+  const payments = await tx.feePayment.findMany({ where: { orgId, accountId, status: "CLEARED" }, orderBy: [{ receivedAt: "asc" }, { createdAt: "asc" }] });
+  for (const p of payments) {
+    if (need <= 0) break;
+    const take = Math.min(unallocatedOf(p), need);
+    if (take <= 0) continue;
+    await allocate(tx, orgId, p.id, [{ invoiceId, amountFils: take }]);
+    need -= take;
+  }
+}
+
+/**
+ * A proforma is a request for payment, not a receivable. When the family's money (this payment plus any credit it
+ * already has) covers one in full, it becomes a tax invoice first: the proformas chosen for this payment, or, when
+ * the family has no open tax invoice, its oldest proformas. Until then a part payment stays as family credit.
+ * Returns the preferred list with proformas replaced by their tax invoices, and the converted invoice ids.
+ */
+async function convertCoveredProformas(tx: Tx, orgId: string, accountId: string, preferred: string[], actor: Actor, at: Date) {
+  const proformas = await tx.invoice.findMany({ where: { orgId, accountId, kind: "PROFORMA", status: "OPEN" }, orderBy: [{ dueDate: "asc" }, { issueDate: "asc" }] });
+  if (!proformas.length) return { preferred, converted: [] as string[] };
+  const cleared = await tx.feePayment.findMany({ where: { orgId, accountId, status: "CLEARED" }, select: { amountFils: true, allocatedFils: true, refundedFils: true, status: true } });
+  const free = cleared.reduce((sum, p) => sum + unallocatedOf(p), 0);
+  const chosen = preferred.length
+    ? preferred.map((id) => proformas.find((p) => p.id === id)).filter((x): x is NonNullable<typeof x> => Boolean(x))
+    : (await openTaxInvoices(tx, orgId, accountId)).length
+      ? []
+      : proformas;
+  const out = [...preferred];
+  const converted: string[] = [];
+  let left = free;
+  for (const pf of chosen) {
+    if (pf.totalFils > left) continue;
+    const inv = await convertProforma(tx, orgId, pf.id, actor, at);
+    left -= pf.totalFils;
+    converted.push(inv.id);
+    const i = out.indexOf(pf.id);
+    if (i >= 0) out[i] = inv.id;
+    else out.push(inv.id);
+  }
+  return { preferred: out, converted };
+}
+
+/**
+ * A seat booking invoice paid in full moves the application on (admissions registers the handler). Exactly once is
+ * the handler's job (markSeatPaid ignores a second call). An admissions error never undoes the payment.
+ */
+async function settleSeatBookings(tx: Tx, orgId: string, invoiceIds: string[], at: Date, actor: Actor, effects?: Effect[]) {
+  const handler = seatPaidHandler();
+  if (!handler || !invoiceIds.length) return;
+  const paid = await tx.invoice.findMany({
+    where: { orgId, id: { in: [...new Set(invoiceIds)] }, kind: "TAX", status: "PAID", sourceRef: { startsWith: SEAT_REF_PREFIX } },
+    select: { id: true, number: true, sourceRef: true },
+  });
+  for (const inv of paid) {
+    const applicationId = (inv.sourceRef ?? "").slice(SEAT_REF_PREFIX.length);
+    try {
+      await handler(execCtx(tx, orgId, { now: at, effects: effects ?? [], actorId: actor.membershipId }), { applicationId, reference: inv.number });
+    } catch (e) {
+      // Not found, or no longer waiting for the seat payment: the payment stands and nothing else changes.
+      console.warn("[fees] seat booking hook skipped", inv.number, e instanceof Error ? e.message.slice(0, 80) : "error");
+    }
+  }
+}
+
 /** A held (post-dated) cheque has been paid in: give the receipt number and allocate it. */
-export async function clearCheque(tx: Tx, orgId: string, paymentId: string, clearedAt: Date, actor: Actor) {
+export async function clearCheque(tx: Tx, orgId: string, paymentId: string, clearedAt: Date, actor: Actor, effects?: Effect[]) {
   const p = await tx.feePayment.findFirst({ where: { id: paymentId, orgId } });
   if (!p) throw new FeeError("NOT_FOUND");
   if (p.status !== "HELD") throw new FeeError("NOT_HELD");
   await lockAccount(tx, orgId, p.accountId);
-  const res = await clearAndAllocate(tx, orgId, p.id, clearedAt, actor, [], null);
+  const res = await clearAndAllocate(tx, orgId, p.id, clearedAt, actor, [], null, null, effects);
   await logMoney(tx, orgId, actor, "fees.payment.clear", "FeePayment", p.id, { amountFils: p.amountFils, number: res.payment.number });
   return res.payment;
 }

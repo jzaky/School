@@ -62,7 +62,7 @@ export default async function AccountsPage({ searchParams }: { searchParams: Pro
             <ul className="divide-y" data-testid="account-list">
               {rows.map((r) => (
                 <li key={r.id}>
-                  <Link href={`/finance/accounts/${r.id}`} className="grid gap-1 px-4 py-3 text-sm hover:bg-muted/40 md:grid-cols-[1fr_6rem_9rem_9rem_9rem] md:items-center md:gap-3" data-testid="account-row">
+                  <Link prefetch={false} href={`/finance/accounts/${r.id}`} className="grid gap-1 px-4 py-3 text-sm hover:bg-muted/40 md:grid-cols-[1fr_6rem_9rem_9rem_9rem] md:items-center md:gap-3" data-testid="account-row">
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2 font-medium">
                         <span className="truncate">{pick(L, r.nameEn, r.nameAr)}</span>

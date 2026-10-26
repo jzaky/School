@@ -46,7 +46,6 @@ export const SENSITIVE_PERMISSIONS: Permission[] = [
   "audit.view",
   "roles.manage",
   "integrations.manage",
-  "fees.refund.approve",
 ];
 
 export function isSensitivePermission(p: string): boolean {

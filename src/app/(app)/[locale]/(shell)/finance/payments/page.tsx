@@ -52,7 +52,7 @@ export default async function PaymentsPage({ searchParams }: { searchParams: Pro
               return (
                 <li key={r.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm">
                   <div className="min-w-0">
-                    <Link href={`/finance/accounts/${r.accountId}`} className="font-medium hover:underline">
+                    <Link prefetch={false} href={`/finance/accounts/${r.accountId}`} className="font-medium hover:underline">
                       {a ? pick(L, a.nameEn, a.nameAr) : ""}
                     </Link>
                     <div className="text-xs text-muted-foreground">
@@ -86,7 +86,7 @@ export default async function PaymentsPage({ searchParams }: { searchParams: Pro
               <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm" data-testid="payment-row">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <Link href={`/finance/accounts/${p.accountId}`} className="font-medium hover:underline">
+                    <Link prefetch={false} href={`/finance/accounts/${p.accountId}`} className="font-medium hover:underline">
                       {p.account ? pick(L, p.account.nameEn, p.account.nameAr) : ""}
                     </Link>
                     <span className="text-xs text-muted-foreground">{p.number ? <bdi>{p.number}</bdi> : t("payments.noReceiptYet")}</span>

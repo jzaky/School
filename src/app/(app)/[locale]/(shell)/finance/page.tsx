@@ -225,7 +225,7 @@ export default async function FinanceOverview() {
                 return (
                   <li key={p.id} className="flex items-center justify-between gap-3 px-5 py-3 text-sm">
                     <div className="min-w-0">
-                      <Link href={`/finance/accounts/${p.accountId}`} className="block truncate font-medium hover:underline">
+                      <Link prefetch={false} href={`/finance/accounts/${p.accountId}`} className="block truncate font-medium hover:underline">
                         {a ? pick(L, a.nameEn, a.nameAr) : ""}
                       </Link>
                       <div className="text-xs text-muted-foreground">

@@ -177,7 +177,7 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
                   {fam.rows.map((r) => (
                     <tr key={r.accountId}>
                       <td className="px-4 py-2">
-                        <Link href={`/finance/accounts/${r.accountId}`} className="font-medium hover:underline">
+                        <Link prefetch={false} href={`/finance/accounts/${r.accountId}`} className="font-medium hover:underline">
                           {pick(L, r.nameEn, r.nameAr)}
                         </Link>
                         <div className="text-xs text-muted-foreground">

@@ -68,7 +68,7 @@ export default async function ApprovalsPage() {
                 <li key={r.id} className="flex flex-wrap items-center justify-between gap-3 px-5 py-3 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">
-                      <Link href={`/finance/accounts/${r.accountId}`} className="hover:underline">
+                      <Link prefetch={false} href={`/finance/accounts/${r.accountId}`} className="hover:underline">
                         {a ? pick(L, a.nameEn, a.nameAr) : ""}
                       </Link>{" "}
                       · <Money fils={r.amountFils} locale={L} />
@@ -96,19 +96,19 @@ export default async function ApprovalsPage() {
           <ul className="divide-y" data-testid="pending-awards">
             {awards.map((a) => {
               const acc = profiles.find((p) => p.studentId === a.studentId)?.accountId;
-              const value = a.discount.method === "PERCENT" ? `${(a.discount.percentBp ?? 0) / 100}%` : formatAed(a.discount.amountFils ?? 0, L);
+              const value = a.discount.method === "PERCENT" ? `${(a.discount.percentBp ?? 0) / 100}%` : `${formatAed(a.discount.amountFils ?? 0, L)} ${t("setup.perYear")}`;
               return (
                 <li key={a.id} className="flex flex-wrap items-center justify-between gap-3 px-5 py-3 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">
                       {acc ? (
-                        <Link href={`/finance/accounts/${acc}`} className="hover:underline">
+                        <Link prefetch={false} href={`/finance/accounts/${acc}`} className="hover:underline">
                           {student(a.studentId)}
                         </Link>
                       ) : (
                         student(a.studentId)
                       )}{" "}
-                      · {pick(L, a.discount.nameEn, a.discount.nameAr)} ({value})
+                      · {pick(L, a.discount.nameEn, a.discount.nameAr)} · <bdi>{value}</bdi>
                     </div>
                     <div className="text-xs text-muted-foreground">
                       {a.reason} · {t("approvals.askedBy", { name: who(a.requestedById), date: fmtDate(prefs, a.createdAt) })}

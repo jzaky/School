@@ -125,7 +125,7 @@ export async function seedFees(w: SeedWorld) {
   // --- Discounts -------------------------------------------------------------------------------
   await saveDiscount(tx, orgId, { code: "STAFF50", kind: "STAFF_CHILD", nameEn: "Staff child discount 50%", nameAr: "خصم أبناء الموظفين 50%", method: "PERCENT", percentBp: 5000, amountFils: null, requiresApproval: false, active: true }, fo);
   await saveDiscount(tx, orgId, { code: "SCHOL25", kind: "SCHOLARSHIP", nameEn: "Academic excellence scholarship 25%", nameAr: "منحة التفوق الأكاديمي 25%", method: "PERCENT", percentBp: 2500, amountFils: null, requiresApproval: true, active: true }, fo);
-  await saveDiscount(tx, orgId, { code: "BURSARY6K", kind: "BURSARY", nameEn: "Financial assistance bursary (AED 6,000 a year)", nameAr: "إعانة مالية (6,000 درهم سنويًا)", method: "FIXED", percentBp: null, amountFils: aed(6_000), requiresApproval: true, active: true }, fo);
+  await saveDiscount(tx, orgId, { code: "BURSARY6K", kind: "BURSARY", nameEn: "Financial assistance bursary", nameAr: "إعانة مالية", method: "FIXED", percentBp: null, amountFils: aed(6_000), requiresApproval: true, active: true }, fo);
   await saveDiscount(tx, orgId, { code: "SPORT15", kind: "OTHER", nameEn: "Sports scholarship 15%", nameAr: "منحة رياضية 15%", method: "PERCENT", percentBp: 1500, amountFils: null, requiresApproval: true, active: true }, fo);
   const discounts = await db.feeDiscount.findMany({ where: { orgId } });
   const disc = (code: string) => discounts.find((d) => d.code === code)!;

@@ -125,7 +125,7 @@ export default async function BillingPage({ searchParams }: { searchParams: Prom
                         {t("billing.totalBilled")} <Money fils={r.totalFils} locale={L} className="font-medium text-foreground" />
                       </span>
                       {r.status === "COMPLETED" && (
-                        <Link href={`/finance/invoices?run=${r.id}`} className="text-brand hover:underline">
+                        <Link prefetch={false} href={`/finance/invoices?run=${r.id}`} className="text-brand hover:underline">
                           {t("billing.viewInvoices")}
                         </Link>
                       )}

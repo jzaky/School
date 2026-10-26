@@ -56,7 +56,7 @@ export default async function InvoicesPage({ searchParams }: { searchParams: Pro
             <ul className="divide-y" data-testid="invoice-list">
               {rows.map((r) => (
                 <li key={r.id}>
-                  <Link href={`/finance/invoices/${r.id}`} className="grid gap-1 px-4 py-3 text-sm hover:bg-muted/40 lg:grid-cols-[9rem_1fr_7rem_7rem_8rem_8rem] lg:items-center lg:gap-3">
+                  <Link prefetch={false} href={`/finance/invoices/${r.id}`} className="grid gap-1 px-4 py-3 text-sm hover:bg-muted/40 lg:grid-cols-[9rem_1fr_7rem_7rem_8rem_8rem] lg:items-center lg:gap-3">
                     <span className="flex items-center justify-between gap-2 font-medium lg:block">
                       <bdi>{r.number}</bdi>
                       <span className="lg:hidden">

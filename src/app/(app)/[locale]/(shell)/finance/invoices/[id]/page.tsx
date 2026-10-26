@@ -34,6 +34,8 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
   const seller = inv.seller as unknown as Seller;
   const today = new Date(`${todayKey()}T00:00:00+04:00`);
   const open = inv.kind === "TAX" && (inv.status === "OPEN" || inv.status === "PARTIAL");
+  // A proforma paid in full becomes a tax invoice (the payment form does that).
+  const payable = open || (inv.kind === "PROFORMA" && inv.status === "OPEN");
   const [credit, early] = await Promise.all([
     inv.kind === "TAX" && ctx.can("fees.manage") ? tenantTx(ctx.orgId, (tx) => creditableLines(tx, ctx.orgId, inv.id)) : Promise.resolve(null),
     open ? tenantTx(ctx.orgId, (tx) => earlyPaymentOffer(tx, ctx.orgId, inv.id, new Date())) : Promise.resolve(null),
@@ -43,7 +45,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
 
   return (
     <PageBody className="max-w-5xl">
-      <Link href={d.account ? `/finance/accounts/${d.account.id}` : "/finance/invoices"} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+      <Link prefetch={false} href={d.account ? `/finance/accounts/${d.account.id}` : "/finance/invoices"} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
         <ArrowLeft className="size-4 rtl:rotate-180" />
         {d.account ? pick(L, d.account.nameEn, d.account.nameAr) : t("invoices.title")}
       </Link>
@@ -67,7 +69,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
             {open && ctx.can("fees.collect") && <ReminderButton invoiceId={inv.id} disabledReason={reminderBlock} />}
             {credit && ctx.can("fees.manage") && <CreditNoteDialog invoiceId={inv.id} locale={L} lines={credit.lines.map((l) => ({ id: l.line.id, description: pick(L, l.line.descriptionEn, l.line.descriptionAr), netLeft: l.netLeft, vatRateBp: l.line.vatRateBp }))} />}
             {inv.kind === "PROFORMA" && inv.status === "OPEN" && ctx.can("fees.manage") && <CancelProformaButton invoiceId={inv.id} />}
-            {open && ctx.can("fees.collect") && d.account && (
+            {payable && ctx.can("fees.collect") && d.account && (
               <RecordPaymentDialog
                 accountId={d.account.id}
                 invoices={[{ id: inv.id, number: inv.number, balanceFils: d.balanceFils }]}
@@ -219,7 +221,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
               {d.converted && (
                 <li>
                   {t("invoice.convertedTo")}{" "}
-                  <Link href={`/finance/invoices/${d.converted.id}`} className="font-medium text-brand hover:underline">
+                  <Link prefetch={false} href={`/finance/invoices/${d.converted.id}`} className="font-medium text-brand hover:underline">
                     <bdi>{d.converted.number}</bdi>
                   </Link>
                 </li>
@@ -227,7 +229,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
               {d.from && (
                 <li>
                   {t("invoice.convertedFrom")}{" "}
-                  <Link href={`/finance/invoices/${d.from.id}`} className="font-medium text-brand hover:underline">
+                  <Link prefetch={false} href={`/finance/invoices/${d.from.id}`} className="font-medium text-brand hover:underline">
                     <bdi>{d.from.number}</bdi>
                   </Link>
                 </li>

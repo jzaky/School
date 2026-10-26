@@ -432,6 +432,7 @@ export async function recordPaymentAction(input: PaymentForm): Promise<Result<{ 
           earlyDiscountInvoiceId: input.takeEarlyDiscount ? input.invoiceId : null,
         },
         actorOf(ctx),
+        ec.effects,
       );
       if (!res.duplicate && res.payment.status === "CLEARED") await notifyReceipt(ec, res.payment);
       return { paymentId: res.payment.id, held: res.payment.status === "HELD", duplicate: res.duplicate };
@@ -448,7 +449,7 @@ export async function clearChequeAction(paymentId: string, clearedOn: string): P
   if (!KEY_RE.test(clearedOn)) return { ok: false, error: "INVALID_DATES" };
   try {
     await run(ctx, async (ec) => {
-      const p = await clearCheque(ec.tx, ctx.orgId, paymentId, new Date(dayAt(clearedOn).getTime() + 12 * 3_600_000), actorOf(ctx));
+      const p = await clearCheque(ec.tx, ctx.orgId, paymentId, new Date(dayAt(clearedOn).getTime() + 12 * 3_600_000), actorOf(ctx), ec.effects);
       await notifyReceipt(ec, p);
     });
     return done();

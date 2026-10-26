@@ -12,7 +12,7 @@ This guide is for the finance office, school leaders and administrators. It expl
 | Parents | See their own family's invoices, receipts, balance and due dates under Fees. |
 | Students | Never see fees. |
 
-The permissions behind these roles are: `fees.view`, `fees.manage`, `fees.collect`, `fees.refund.approve` and `fees.reports`. A school can give them to other roles on Administration, Roles. Approving refunds is a sensitive permission and always needs a second person: nobody can approve a request they made themselves.
+The permissions behind these roles are: `fees.view`, `fees.manage`, `fees.collect`, `fees.refund.approve` and `fees.reports`. A school can give them to other roles on Administration, Roles. Approving refunds and awards always needs a second person: nobody can approve a request they made themselves.
 
 Every change to money (an invoice, a payment, a credit note, a refund, an award, a setting) is recorded in the audit log with who did it and when.
 
@@ -144,4 +144,4 @@ Online payment needs a payment provider set up for the platform and switched on 
 
 ## 12. Admissions: seat booking
 
-When the admissions team books a seat for an applicant, Horizon creates a proforma invoice for the seat deposit on an applicant family account, and a payment link when online payment is set up. Once paid, the tax invoice is issued automatically.
+When a family accepts an offer, Horizon creates a proforma invoice for the seat booking on an applicant family account (one per application, however often the offer is accepted). The family pays it by bank transfer, cash or cheque quoting the proforma number, and the finance office records the payment on the proforma (open it from Invoices, Proformas, and choose **Record payment**). A payment that covers the proforma, together with any earlier part payment, issues the tax invoice automatically, and the application moves to "Seat booking paid" once. A part payment stays as credit on the applicant account until the rest arrives.

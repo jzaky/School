@@ -12,7 +12,8 @@ import { billAccount, createBillingRun, partWithShare, processBillingBatch } fro
 import { saveFeeItem, savePlan } from "@/server/fees/schedule";
 import { syncFamilyAccounts, parentAccountIds } from "@/server/fees/accounts";
 import { sendDueFeeReminders } from "@/server/fees/notices";
-import { createSeatBookingCharge } from "@/server/fees/seat-booking";
+import { createSeatBookingCharge, feesSeatBookingProvider } from "@/server/fees/seat-booking";
+import { registerSeatPaidHandler } from "@/server/fees/hooks";
 import { handlePaymentWebhook } from "@/server/payments/links";
 import { consoleSecret, consoleSignedEvent } from "@/server/payments/providers";
 import { signPayload } from "@/server/payments/signature";
@@ -320,6 +321,43 @@ describe("seat booking and webhooks", () => {
     const taxInv = await owner.invoice.findUniqueOrThrow({ where: { id: pf.convertedToId! } });
     expect(taxInv).toMatchObject({ kind: "TAX", status: "PAID", totalFils: 250_000 });
     expect(await owner.feePayment.count({ where: { orgId: A.orgId, idempotencyKey: `link:${link.id}` } })).toBe(1);
+  });
+
+  it("as the admissions provider: one charge per application, and paying it in full tells admissions once", async () => {
+    const calls: Array<{ applicationId: string; reference: string }> = [];
+    registerSeatPaidHandler(async (_ec, input) => {
+      calls.push(input);
+      return calls.length === 1 ? "paid" : "already";
+    });
+    try {
+      const req = { orgId: A.orgId, applicationId: uid("app"), applicationNumber: "ADM-2027-0007", amountFils: 300_000, currency: "AED" as const, payerEmail: "family@fees.test", description: { en: "Seat booking: Lina Test (ADM-2027-0007)", ar: "حجز مقعد: لينا اختبار (ADM-2027-0007)" }, idempotencyKey: "" };
+      req.idempotencyKey = `seat:${req.applicationId}`;
+      const charge = (n: number) => tx((t) => feesSeatBookingProvider.createCharge(execCtx(t, A.orgId, { now: new Date(now.getTime() + n) }), req));
+      const c1 = await charge(0);
+      const c2 = await charge(1000);
+      expect(c1.reference).toMatch(/^PF-/);
+      expect(c2.reference).toBe(c1.reference);
+      expect(c1.payUrl).toBeNull();
+      const pf = await owner.invoice.findFirstOrThrow({ where: { orgId: A.orgId, number: c1.reference } });
+      expect(pf).toMatchObject({ kind: "PROFORMA", status: "OPEN", totalFils: 300_000, sourceRef: `seat:${req.applicationId}` });
+      // A part payment stays as family credit and admissions hears nothing.
+      await tx((t) => recordPayment(t, A.orgId, { accountId: pf.accountId, method: "BANK_TRANSFER", amountFils: 100_000, receivedAt: now, reference: "FT-SEAT-1", idempotencyKey: uid("seat-part") }, actor()));
+      expect(calls).toHaveLength(0);
+      expect((await owner.invoice.findUniqueOrThrow({ where: { id: pf.id } })).status).toBe("OPEN");
+      // The rest, chosen against the proforma: it becomes a tax invoice, is paid, and admissions is told once.
+      await tx((t) => recordPayment(t, A.orgId, { accountId: pf.accountId, method: "BANK_TRANSFER", amountFils: 200_000, receivedAt: now, reference: "FT-SEAT-2", idempotencyKey: uid("seat-rest"), invoiceIds: [pf.id] }, actor()));
+      const converted = await owner.invoice.findUniqueOrThrow({ where: { id: pf.id } });
+      expect(converted.status).toBe("CONVERTED");
+      // The family's earlier part payment is taken too, so the tax invoice is paid in full.
+      const taxInv = await owner.invoice.findUniqueOrThrow({ where: { id: converted.convertedToId! } });
+      expect(taxInv).toMatchObject({ kind: "TAX", status: "PAID", totalFils: 300_000, paidFils: 300_000 });
+      expect(calls).toEqual([{ applicationId: req.applicationId, reference: taxInv.number }]);
+      // Paying more later never calls admissions again for this application.
+      await tx((t) => recordPayment(t, A.orgId, { accountId: pf.accountId, method: "CASH", amountFils: 5_000, receivedAt: now, idempotencyKey: uid("seat-extra") }, actor()));
+      expect(calls).toHaveLength(1);
+    } finally {
+      registerSeatPaidHandler(null);
+    }
   });
 });
 

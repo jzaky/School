@@ -59,6 +59,12 @@ export default async function FeesPage({ searchParams }: { searchParams: Promise
   const cfg = await loadFinanceConfig(ctx.db, ctx.orgId);
   const { available } = onlinePaymentAvailable(cfg.onlinePayments);
   const today = new Date(`${todayKey()}T00:00:00+04:00`);
+  // An instalment shows its period; a one-off invoice shows what it is for (its first line) instead of a generic label.
+  const invoiceTitle = (i: (typeof st.invoices)[number]) => {
+    if (i.kind === "PROFORMA") return tf("invoice.proforma");
+    const first = i.lines[0] ? pick(L, i.lines[0].descriptionEn, i.lines[0].descriptionAr).split(":")[0] : "";
+    return pick(L, i.periodLabelEn, i.periodLabelAr) || first || tf("invoice.taxInvoice");
+  };
   const open = st.invoices.filter((i) => (i.kind === "TAX" && (i.status === "OPEN" || i.status === "PARTIAL")) || (i.kind === "PROFORMA" && i.status === "OPEN"));
   const held = st.payments.filter((p) => p.status === "HELD");
   const receipts = st.payments.filter((p) => p.number);
@@ -136,7 +142,7 @@ export default async function FeesPage({ searchParams }: { searchParams: Promise
               <li key={i.id} className={cn("flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between", sp.invoice === i.id && "bg-brand-soft/40")}>
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="font-medium">{i.kind === "PROFORMA" ? tf("invoice.proforma") : pick(L, i.periodLabelEn, i.periodLabelAr) || tf("invoice.taxInvoice")}</span>
+                    <span className="font-medium">{invoiceTitle(i)}</span>
                     <InvoiceStatus status={i.status} kind={i.kind} overdue={i.kind === "TAX" && i.dueDate < today} />
                   </div>
                   <div className="text-xs text-muted-foreground">
@@ -221,7 +227,7 @@ export default async function FeesPage({ searchParams }: { searchParams: Promise
             {st.invoices.map((i) => (
               <li key={i.id} className="flex items-center justify-between gap-3 px-5 py-3 text-sm">
                 <div className="min-w-0">
-                  <div className="truncate font-medium">{i.kind === "PROFORMA" ? tf("invoice.proforma") : pick(L, i.periodLabelEn, i.periodLabelAr) || tf("invoice.taxInvoice")}</div>
+                  <div className="truncate font-medium">{invoiceTitle(i)}</div>
                   <div className="text-xs text-muted-foreground">
                     <bdi>{i.number}</bdi> · {fmtDate(prefs, i.issueDate)}
                   </div>

@@ -125,6 +125,7 @@ export async function handlePaymentWebhook(providerKey: string, rawBody: string,
           earlyAt: link.createdAt,
         },
         SYSTEM,
+        effects,
       );
       await tx.paymentLink.update({ where: { id: link.id }, data: { status: "PAID", paidAt: now, paymentId: res.payment.id } });
       if (!res.duplicate) await notifyReceipt(ec, res.payment);
