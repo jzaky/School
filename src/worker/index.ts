@@ -173,10 +173,11 @@ async function main() {
       await maintenance.removeJobScheduler("demo-reset");
     }
   }
-  // Weekly requirement page refresh (Sunday 01:10 UTC). Skips cleanly without an owner database URL.
+  // Daily requirement page refresh (01:10 UTC, 05:10 Dubai). Skips cleanly without an owner database URL.
   const catalogQueue = queue(catalogJobs.CATALOG_QUEUE);
   if (catalogQueue) {
-    await catalogQueue.upsertJobScheduler("catalog-refresh-weekly", { pattern: "10 1 * * 0", tz: "UTC" }, { name: catalogJobs.REFRESH_JOB, data: {}, opts: { attempts: 2 } });
+    await catalogQueue.removeJobScheduler("catalog-refresh-weekly");
+    await catalogQueue.upsertJobScheduler("catalog-refresh-daily", { pattern: "10 1 * * *", tz: "UTC" }, { name: catalogJobs.REFRESH_JOB, data: {}, opts: { attempts: 2 } });
   }
   // Scheduled sync sources: every 5 minutes; each source runs once per hourly or daily slot.
   const integrationsQueue = queue("integrations");

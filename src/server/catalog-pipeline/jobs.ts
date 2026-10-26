@@ -1,5 +1,5 @@
 // Background jobs for the requirement pipeline (queue "catalog"):
-// - "catalog.refresh": weekly (and on demand from "Check now"): fetch due sources, extract changed ones.
+// - "catalog.refresh": daily (and on demand from "Check now"): fetch due sources, extract changed ones.
 // - "catalog.scorecard": on demand: College Scorecard import into the global University catalog.
 // Idempotent: extraction is keyed by (source, contentHash, model, prompt version); Scorecard rows are
 // matched by scorecardId. Without an owner database URL the jobs log a skip and succeed.
@@ -43,7 +43,7 @@ export async function runCatalogRefresh(
     return { skipped: "no_owner_url" };
   }
   const now = opts.now ?? new Date();
-  const sources = data.sourceIds?.length ? await db.requirementSource.findMany({ where: { id: { in: data.sourceIds } } }) : await dueSources(db, now, opts.limit ?? 50);
+  const sources = data.sourceIds?.length ? await db.requirementSource.findMany({ where: { id: { in: data.sourceIds } } }) : await dueSources(db, now, opts.limit ?? 600);
   const counts: RefreshCounts = { checked: 0, inserted: 0, unchanged: 0, changed: 0, failed: 0, extracted: 0, cached: 0, shadowed: 0 };
   const robotsCache = new Map();
   const vocab = await loadVocab(db);

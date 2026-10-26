@@ -81,7 +81,7 @@ After the call: the school sends the staff invitations and the family letter or 
 - The school's own administrators change everything: names, logo, colors, services, forms, approval routes, letters, notification texts, subjects, departments, roles, modules, calendar.
 - Imports are idempotent: re-running a file updates rather than duplicates. A staff re-import adds roles and subjects but never removes them, so a file can never lock anyone out. Every import shows a preview with row-level errors before anything is saved, and is kept in the import history.
 - Letters, report cards, exam timetables and the join poster carry the school's own logo, name, address and seal automatically.
-- The university requirements catalog is shared by all schools and refreshes itself weekly from official pages; changes wait in a review queue.
+- The university requirements catalog is shared by all schools and refreshes itself daily from official pages; changes wait in a review queue.
 - A GitHub job checks the live site every morning at 06:45 Dubai time for every role, in both languages, on desktop and phone.
 - Deploys only happen when app code changes.
 

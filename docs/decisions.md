@@ -285,3 +285,6 @@ Ambiguities resolved during the build. Newest last.
 - Both videos explain what each section does for each person, never how it is built: no code, architecture internals, catalog pipeline or source review, engine scoring, API keys, settings screens, hostnames, URL bar or pricing. Form and workflow builders appear only as short outcome shots.
 - Class allocation is described as "places every student in a class, and opens a new section when one fills up", matching the code (it runs on submit or when an admin runs it), not "when the window closes".
 - "Targets" means the student's university list (8 for Adam); the overview and plan summary talk about "programmes that fit your goal" (up to 24), so the two numbers are never presented as the same thing.
+
+## Requirement page checks daily (Oct 2026)
+- The official requirement pages are checked every day at 01:10 UTC (05:10 Dubai), up to 600 pages a run, instead of weekly. A page counts as due when it was last fetched more than a day ago. Changes still wait in the review queue before students and families see them. The job runs in the worker service, so it needs the worker deployed with an owner database URL.

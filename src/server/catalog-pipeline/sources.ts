@@ -7,7 +7,7 @@
 import type { Prisma } from "@prisma/client";
 import { SOURCE_TYPES, type SourceType } from "./types";
 
-export const REFRESH_INTERVAL_DAYS = 7;
+export const REFRESH_INTERVAL_DAYS = 1;
 const OFFICIAL = ["OFFICIAL_UNIVERSITY", "OFFICIAL_ADMISSIONS", "OFFICIAL_BODY"];
 
 /** Seeded variants map onto the four source types (OFFICIAL_ADMISSIONS is a university's own admissions page). */
