@@ -195,3 +195,9 @@ REVOKE DELETE ON TABLE "FeePayment" FROM app_user;
 REVOKE UPDATE, DELETE ON TABLE "FeeAllocation" FROM app_user;
 REVOKE DELETE ON TABLE "FeeRefund" FROM app_user;
 REVOKE DELETE ON TABLE "PaymentEvent" FROM app_user;
+
+-- 10. Government reporting (src/server/govreports). Tenant isolation comes from section 2. The log of files
+-- generated from a return and the log of submissions to the authority are append-only: the app can add to them
+-- but never change or remove a row.
+REVOKE UPDATE, DELETE ON TABLE "GovReturnExport" FROM app_user;
+REVOKE UPDATE, DELETE ON TABLE "GovSubmission" FROM app_user;

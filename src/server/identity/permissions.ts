@@ -83,6 +83,8 @@ export const PERMISSIONS = [
   "fees.collect",
   "fees.refund.approve",
   "fees.reports",
+  "government.reports",
+  "government.view",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
@@ -167,6 +169,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "admissions.manage",
       "admissions.enroll",
       "fees.view",
+      "government.reports",
     ],
   },
   {
@@ -210,6 +213,8 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "fees.view",
       "fees.reports",
       "fees.refund.approve",
+      // Sees government returns and signs them off; preparing and sending them is government.reports.
+      "government.view",
     ],
   },
   {
@@ -239,6 +244,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "admissions.view",
       "admissions.manage",
       "admissions.enroll",
+      "government.reports",
     ],
   },
   {

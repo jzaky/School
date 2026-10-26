@@ -124,6 +124,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("compliance.manage")) admin.push({ key: "compliance", href: "/admin/compliance", icon: "scale" });
   if (c("audit.view")) admin.push({ key: "auditLog", href: "/admin/audit", icon: "scroll-text" });
   if (c("inspection.view")) admin.push({ key: "inspection", href: "/admin/inspection", icon: "clipboard-list" });
+  if (c("government.reports") || c("government.view")) admin.push({ key: "government", href: "/admin/government", icon: "landmark" });
   if (c("school.manage") || ctx.roles.includes("principal")) admin.push({ key: "referral", href: "/admin/referral", icon: "gift" });
   const sections: NavSection[] = [
     { key: "sectionWork", items: work },

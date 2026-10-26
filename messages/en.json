@@ -170,7 +170,8 @@
     "admissionsHealth": "Applications health review",
     "reenrollment": "Next year's places",
     "rostering": "Rostering",
-    "finance": "Finance"
+    "finance": "Finance",
+    "government": "Government reporting"
   },
   "shell": {
     "openMenu": "Open menu",
@@ -1287,7 +1288,8 @@
       "fee_invoice": "New fee invoices",
       "fee_reminder": "Fee reminders",
       "fee_receipt": "Payment receipts",
-      "fee_approval": "Finance approvals (refunds and awards)"
+      "fee_approval": "Finance approvals (refunds and awards)",
+      "gov_due_reminder": "A government return is due soon"
     }
   },
   "adminAudit": {
@@ -2634,6 +2636,34 @@
       "financeApprovals": {
         "title": "Approve a refund",
         "body": "Refunds and bursaries wait for a second person."
+      },
+      "govCensus": {
+        "title": "Open the draft census",
+        "body": "See the draft census for KHDA, built from today's student records."
+      },
+      "govFix": {
+        "title": "Fix a problem before sending",
+        "body": "Fill in a missing nationality or record a registration reference, and watch the check list shrink."
+      },
+      "govExport": {
+        "title": "Export Excel, CSV and PDF",
+        "body": "Each file is logged with a version and a checksum."
+      },
+      "govSubmit": {
+        "title": "Record the submission",
+        "body": "Enter the reference KHDA gave you, against the file you sent."
+      },
+      "govDueDates": {
+        "title": "Keep the due date calendar",
+        "body": "Add the authority's dates; the team is reminded 14 and 3 days before."
+      },
+      "govLog": {
+        "title": "Review the submission log",
+        "body": "Who sent which return, when, and the authority's reference."
+      },
+      "govSignOff": {
+        "title": "Sign off the census",
+        "body": "Review the figures and sign off as principal; your name and the date go on the PDF."
       }
     }
   },
@@ -6781,7 +6811,8 @@
       "portals": "Portals",
       "attendance": "Attendance",
       "admissions": "Admissions and enrollment",
-      "finance": "Finance and fees"
+      "finance": "Finance and fees",
+      "government": "Government reporting"
     },
     "groupHelp": {
       "requests": "Asking for things and getting them done.",
@@ -6799,7 +6830,8 @@
       "portals": "Which home screen this person gets.",
       "attendance": "Registers, follow-up and attendance reports.",
       "admissions": "Applications, offers, enrollment, re-enrollment and leavers.",
-      "finance": "Fee setup, billing, payments, refunds and finance reports."
+      "finance": "Fee setup, billing, payments, refunds and finance reports.",
+      "government": "Returns to the education authority: census, registration, attendance, staff and results."
     },
     "perms": {
       "services": {
@@ -7212,6 +7244,16 @@
         "reports": {
           "label": "Finance reports and exports",
           "help": "Run aging, VAT, cash book and other reports and export them."
+        }
+      },
+      "government": {
+        "reports": {
+          "label": "Prepare government returns",
+          "help": "Create returns, fix the problems they find, export Excel, CSV and PDF files, record submissions and keep the due date calendar."
+        },
+        "view": {
+          "label": "View and sign off government returns",
+          "help": "See returns, the submission log and due dates, download the summary PDF and sign off a return as principal."
         }
       }
     }
@@ -13683,5 +13725,464 @@
       "toHome": "Back to home"
     },
     "aed": "AED"
+  },
+  "govReports": {
+    "title": "Government reporting",
+    "subtitle": "Returns for {authority}, built from the data already in Horizon. Check them, export them and keep a record of what was sent.",
+    "span": "{from} to {to}",
+    "fewer": "Fewer than {n}",
+    "notRecorded": "Not recorded",
+    "notRecordedInHorizon": "Not recorded in Horizon",
+    "noSection": "No section",
+    "totalRow": "Total",
+    "present": "On file",
+    "missing": "Missing",
+    "limitOffShort": "Limit not switched on",
+    "gender": {
+      "M": "Male",
+      "F": "Female"
+    },
+    "kind": {
+      "CENSUS": "Enrollment census",
+      "REGISTRATION": "Learner registration list",
+      "ATTENDANCE": "Attendance return",
+      "STAFF": "Staff return",
+      "RESULTS": "Results summary",
+      "OTHER": "Other"
+    },
+    "kindHelp": {
+      "CENSUS": "Students on roll on the census date by grade, section, gender and nationality, people of determination, admissions and leavers, and age against grade.",
+      "REGISTRATION": "New admissions, transfers in, re-enrollments and withdrawals in the period, with each learner's registration status and reference.",
+      "ATTENDANCE": "Attendance rate by grade, unauthorised absence, and students at or over the regulator's absence limit.",
+      "STAFF": "Teachers and staff by role, from staff records, with the fields Horizon does not hold marked as not recorded.",
+      "RESULTS": "Internal assessment results by grade and subject from the gradebook, and AP entries."
+    },
+    "titleOn": "{kind}, {date}",
+    "asAt": "As at {date}",
+    "censusPeriod": "Census date {date}. Admissions and leavers from {from} to {to}.",
+    "period": "{from} to {to}",
+    "movement": {
+      "ADMISSION": "New admission",
+      "TRANSFER_IN": "Transfer in (UAE school)",
+      "FROM_ABROAD": "Transfer in (from abroad)",
+      "READMISSION": "Re-enrollment of a former student",
+      "WITHDRAWAL": "Withdrawal"
+    },
+    "regStatus": {
+      "NONE": "No registration record",
+      "NOT_SUBMITTED": "Not submitted",
+      "SUBMITTED": "Submitted",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected"
+    },
+    "col": {
+      "measure": "Measure",
+      "value": "Value",
+      "grade": "Grade",
+      "sections": "Sections",
+      "male": "Male",
+      "female": "Female",
+      "total": "Total",
+      "emirati": "Emirati",
+      "otherNationalities": "Other nationalities",
+      "joined": "New admissions",
+      "section": "Section",
+      "genderUnknown": "Gender not recorded",
+      "nationalityUnknown": "Nationality not recorded",
+      "nationality": "Nationality",
+      "students": "Students",
+      "percent": "Percent",
+      "expectedAge": "Usual age",
+      "atExpectedAge": "At usual age",
+      "younger": "Younger",
+      "older": "Older",
+      "noDob": "No date of birth",
+      "grades": "Grades",
+      "sen": "People of determination",
+      "movement": "Movement",
+      "date": "Date",
+      "studentNo": "Student number",
+      "firstNameEn": "First name (English)",
+      "lastNameEn": "Last name (English)",
+      "firstNameAr": "First name (Arabic)",
+      "lastNameAr": "Last name (Arabic)",
+      "dateOfBirth": "Date of birth",
+      "gender": "Gender",
+      "emiratesId": "Emirates ID",
+      "curriculum": "Curriculum",
+      "otherSchool": "Previous school or destination",
+      "tcNumber": "Transfer certificate",
+      "regStatus": "Registration status",
+      "reference": "Authority reference",
+      "submittedOn": "Submitted on",
+      "decidedOn": "Decided on",
+      "possible": "Possible sessions",
+      "attended": "Attended",
+      "attendancePct": "Attendance %",
+      "authorised": "Authorised absences",
+      "unauthorised": "Unauthorised absences",
+      "unexplained": "Still unexplained",
+      "late": "Late",
+      "name": "Name",
+      "consecutiveDays": "Longest run of unexcused days",
+      "totalDays": "Unexcused days in the year",
+      "role": "Role",
+      "staff": "Staff",
+      "employeeNo": "Employee number",
+      "jobTitle": "Job title",
+      "department": "Department",
+      "roles": "Roles in Horizon",
+      "qualification": "Qualification",
+      "licence": "Teaching licence or permit number",
+      "field": "Field",
+      "status": "Status",
+      "subject": "Subject",
+      "studentsWithResults": "Students with results",
+      "averagePct": "Average %",
+      "entries": "Entries",
+      "averageScore": "Average score",
+      "leavers": "Leavers"
+    },
+    "tables": {
+      "summary": "Summary",
+      "grades": "Students by grade",
+      "sections": "Students by grade and section",
+      "nationality": "Students by nationality",
+      "age": "Age against grade",
+      "ageNote": "Age on {date}, the admissions cut-off date. The usual age is 4 in KG1, 5 in KG2, 6 in Grade 1, and so on.",
+      "sen": "People of determination",
+      "senNote": "Counts only. Neighbouring grades are merged so that no group shown has fewer than {n} students; a smaller total is shown as fewer than {n}.",
+      "learners": "Learners",
+      "movements": "Movements by registration status",
+      "attendanceGrades": "Attendance by grade",
+      "attendanceNote": "From the daily register. Unauthorised absences include absences not yet explained.",
+      "limit": "Students at or over the absence limit",
+      "limitNote": "The school's limit: {consecutive} consecutive or {total} total school days of unexcused absence in the school year to date.",
+      "limitOff": "The regulator absence limit is not switched on in attendance settings, so no student is listed.",
+      "roles": "Staff by role",
+      "rolesNote": "A member of staff with two roles is counted under both. Teaching staff are teachers and heads of department.",
+      "staffNationality": "Staff by nationality",
+      "staffNationalityNote": "Horizon does not hold staff nationality. Add it from your HR records before sending.",
+      "gaps": "Fields Horizon does not hold",
+      "gapsNote": "Authorities usually ask for these. They are left blank rather than guessed: complete them from HR records.",
+      "staffList": "Staff list",
+      "results": "Results by grade and subject",
+      "resultsNote": "Published internal assessments in the period, each student's weighted average per subject. Groups with fewer than {n} students show no average, and band counts below {n} show as fewer than {n}.",
+      "ap": "Advanced Placement entries",
+      "apNone": "No AP results are recorded in Horizon. The exams timetable lists sittings, not entries per student.",
+      "apFew": "Fewer than {n} AP results are recorded, so they are not broken down.",
+      "apNote": "From AP results recorded on student records."
+    },
+    "measure": {
+      "onRoll": "Students on roll",
+      "male": "Male",
+      "female": "Female",
+      "genderUnknown": "Gender not recorded",
+      "emirati": "Emirati",
+      "otherNationalities": "Other nationalities",
+      "nationalityUnknown": "Nationality not recorded",
+      "nationalityCount": "Nationalities",
+      "sen": "People of determination",
+      "joined": "New admissions in the period",
+      "sections": "Sections",
+      "attendancePct": "Attendance %",
+      "possible": "Possible sessions",
+      "unauthorised": "Unauthorised absences",
+      "unexplained": "Absences still unexplained",
+      "limitReached": "Students at or over the absence limit",
+      "limitWarning": "Students near the absence limit",
+      "teachingStaff": "Teaching staff",
+      "allStaff": "All staff",
+      "leavers": "Leavers in the period"
+    },
+    "gap": {
+      "nationality": "Staff nationality",
+      "gender": "Staff gender",
+      "qualification": "Qualifications",
+      "licence": "Teaching licence or permit to practise number"
+    },
+    "pdf": {
+      "footer": "Page {page}. Version {version}. Generated by Horizon from the school's records.",
+      "authority": "Authority",
+      "period": "Period",
+      "version": "Version",
+      "checksum": "Data checksum",
+      "generated": "Generated by",
+      "formatNotice": "Horizon standard format. {authority} does not publish a file format for this return: format to be confirmed with {authority}. Copy the figures into the authority's portal.",
+      "problemsWarning": "{n, plural, one {# problem} other {# problems}} open in the checks when this file was generated. Review them before sending.",
+      "signOff": "Principal sign-off",
+      "signedBy": "Signed off by {who} on {date}.",
+      "signOffStale": "The data has changed since this sign-off. Ask the principal to sign off again before sending.",
+      "notSigned": "Not signed off yet.",
+      "name": "Name",
+      "signature": "Signature",
+      "date": "Date",
+      "noRows": "Nothing to show for this period."
+    },
+    "sheet": {
+      "about": "About",
+      "field": "Field",
+      "value": "Value",
+      "warning": "Warning",
+      "school": "School",
+      "return": "Return",
+      "generatedBy": "Generated by",
+      "generatedAt": "Generated at (UTC)",
+      "format": "Format",
+      "ids": "Identity numbers",
+      "idsNotice": "This file contains full Emirates ID numbers. Store and send it securely, and delete local copies after submission.",
+      "gap": "Not held in Horizon"
+    },
+    "reminder": {
+      "today": "today",
+      "tomorrow": "tomorrow",
+      "inDays": "in {n, plural, one {# day} other {# days}}"
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "SIGNED_OFF": "Signed off",
+      "SUBMITTED": "Submitted"
+    },
+    "tabs": {
+      "returns": "Returns",
+      "due": "Due dates",
+      "log": "Submission log"
+    },
+    "authorityCard": {
+      "title": "Your authority: {authority}",
+      "body": "None of the UAE education authorities publishes a file format or an API for these returns. Horizon builds each one in its own standard layout, marked format to be confirmed with {authority}, for you to copy into the authority's portal.",
+      "change": "Change in admissions settings",
+      "guide": "What each authority publishes"
+    },
+    "stats": {
+      "nextDue": "Next due date",
+      "noneDue": "None scheduled",
+      "drafts": "Returns in progress",
+      "submitted": "Sent in the last 12 months",
+      "dueIn": "{date}, in {n, plural, one {# day} other {# days}}",
+      "dueToday": "{date}, today",
+      "overdue": "{date}, {n, plural, one {# day} other {# days}} ago"
+    },
+    "list": {
+      "empty": "No returns yet",
+      "emptyBody": "Create a return for a census date or a period. Horizon builds it from your student, attendance, staff and gradebook records.",
+      "emptyView": "The registrar or the school administrator prepares returns. They appear here for you to review and sign off.",
+      "lastFile": "Latest file: version {version}, {when}",
+      "noFile": "No file generated yet",
+      "reference": "Reference {ref}",
+      "open": "Open"
+    },
+    "new": {
+      "button": "New return",
+      "title": "New return",
+      "body": "Choose what to report and the date. You can check and export it straight away.",
+      "kind": "Return",
+      "asOfCensus": "Census date",
+      "asOfStaff": "As at",
+      "asOfPeriod": "Last day of the period",
+      "from": "First day of the period",
+      "fromHelp": "Leave empty to start at the beginning of the school year.",
+      "label": "Name (optional)",
+      "labelPlaceholder": "For example: October census",
+      "due": "For due date (optional)",
+      "noDue": "Not linked to a due date",
+      "create": "Create return",
+      "created": "Return created"
+    },
+    "detail": {
+      "back": "Government reporting",
+      "checks": "Checks before sending",
+      "checksBody": "Fix what you can here; each problem links to the record. Identity numbers are never shown, only whether one is on file.",
+      "noProblems": "No problems found. This return is ready to send.",
+      "problemCount": "{count, plural, one {# problem to review} other {# problems to review}}",
+      "notes": "Notes",
+      "more": "And {n} more",
+      "data": "The return",
+      "dataBody": "Built from current records. Files carry both English and Arabic headers.",
+      "files": "Files and submissions",
+      "filesBody": "Every file generated from this return, with its version and checksum, and every submission to the authority.",
+      "noFiles": "No file has been generated from this return yet.",
+      "version": "Version {version}",
+      "nextVersion": "Files now: version {version}",
+      "file": "{format} ({lang})",
+      "withIds": "Full Emirates IDs",
+      "withProblems": "{n, plural, one {# problem} other {# problems}} open",
+      "by": "{name}, {when}",
+      "checksum": "Checksum {sum}",
+      "submission": "Sent on {date}, reference {ref}",
+      "submissionBy": "Recorded by {name}. File version {version}.",
+      "signedOff": "Signed off by {name} on {date}",
+      "signedStale": "The data has changed since the sign-off",
+      "notSigned": "Not signed off yet",
+      "submittedChanged": "The data has changed since this return was sent. A new file would be version {version}.",
+      "delete": "Delete draft",
+      "deleteConfirm": "Delete this draft? No file has been generated from it.",
+      "deleted": "Draft deleted",
+      "openRecord": "Open record",
+      "lang": {
+        "en": "English",
+        "ar": "Arabic"
+      }
+    },
+    "rule": {
+      "missing_eid": "Emirates ID missing",
+      "missing_nationality": "Nationality missing",
+      "missing_dob": "Date of birth missing",
+      "missing_gender": "Gender missing",
+      "age_grade": "Age outside the grade's range",
+      "no_reference": "No registration reference",
+      "duplicate_eid": "Same Emirates ID on two records",
+      "duplicate_name_dob": "Same name and date of birth on two records",
+      "staff_missing_title": "Job title missing",
+      "staff_missing_employee_no": "Employee number missing",
+      "staff_missing_department": "No department",
+      "unexplained_absences": "Absences still unexplained",
+      "limit_off": "Regulator absence limit is off",
+      "unpublished_results": "Assessments not yet published"
+    },
+    "ruleDetail": {
+      "age_grade_under": "Age {age} on the cut-off date; usually {expected} in this grade",
+      "age_grade_over": "Age {age} on the cut-off date; usually {expected} in this grade",
+      "duplicate": "Also: {other}",
+      "unexplained_absences": "{n, plural, one {# absence session} other {# absence sessions}} in the period not explained yet; they count as unauthorised.",
+      "limit_off": "Switch it on in attendance settings to list students at or over the limit.",
+      "unpublished_results": "{n, plural, one {# assessment} other {# assessments}} in the period not published yet and left out.",
+      "staff": "Update it in People."
+    },
+    "fix": {
+      "button": "Fix",
+      "title": "Complete details for {name}",
+      "body": "Saved to the student's record and recorded in the audit log. Only the fields you fill in change.",
+      "dob": "Date of birth",
+      "gender": "Gender",
+      "choose": "Choose",
+      "nationality": "Nationality",
+      "eid": "Emirates ID",
+      "eidHelp": "15 digits starting 784. Stored encrypted.",
+      "save": "Save",
+      "saved": "Saved. The checks are updated.",
+      "noPermission": "Only staff who can manage people can change student records."
+    },
+    "reference": {
+      "button": "Record reference",
+      "title": "Registration reference for {name}",
+      "body": "The reference {authority} gave for this learner's registration. It is saved on the admissions registration record.",
+      "status": "Status",
+      "submitted": "Submitted, reference received",
+      "approved": "Approved",
+      "ref": "Reference",
+      "date": "Date",
+      "save": "Save",
+      "saved": "Reference saved",
+      "noPermission": "Recording registration needs the enroll permission in admissions."
+    },
+    "export": {
+      "excel": "Excel",
+      "csv": "CSV",
+      "pdf": "Summary PDF",
+      "pdfEn": "Summary PDF (English)",
+      "pdfAr": "Summary PDF (Arabic)",
+      "menu": "Export",
+      "warnTitle": "Export with open problems?",
+      "warnBody": "{n, plural, one {# problem} other {# problems}} still open. The file will say so, and this export is recorded in the audit log.",
+      "continue": "Export anyway",
+      "cancel": "Cancel",
+      "withIds": "Include full Emirates ID numbers",
+      "withIdsHelp": "For typing into the authority's portal. The download is recorded in the audit log.",
+      "idsNeedPermission": "Full Emirates ID numbers need the permission to reveal identity numbers.",
+      "started": "Your download has started",
+      "csvHint": "The CSV holds the main table; Excel holds every table."
+    },
+    "signOff": {
+      "button": "Sign off",
+      "again": "Sign off again",
+      "title": "Sign off this return",
+      "body": "You sign off the figures as they stand now. Your name, title and today's date go on the summary PDF. If the data changes, the sign-off shows as out of date.",
+      "as": "Signing as {name}",
+      "problems": "{n, plural, one {# problem} other {# problems}} still open in the checks.",
+      "confirm": "I have reviewed this return",
+      "save": "Sign off",
+      "saved": "Signed off",
+      "onlyPrincipal": "Signed off by the principal"
+    },
+    "submit": {
+      "button": "Record submission",
+      "title": "Record a submission",
+      "body": "Choose the file you sent to {authority} and enter the reference it gave you.",
+      "file": "File sent",
+      "fileOption": "Version {version}, {format}, {when}",
+      "date": "Date sent",
+      "ref": "Authority reference",
+      "note": "Note (optional)",
+      "save": "Record submission",
+      "saved": "Submission recorded",
+      "needFile": "Export a file first; the submission records which file was sent.",
+      "notSigned": "This return is not signed off by the principal yet."
+    },
+    "due": {
+      "add": "Add due date",
+      "edit": "Edit",
+      "title": "Due date",
+      "body": "Holders of the permission to prepare government returns are reminded 14 days and 3 days before.",
+      "titleEn": "Title (English)",
+      "titleAr": "Title (Arabic)",
+      "kind": "Return",
+      "dueOn": "Due on",
+      "notes": "Notes (optional)",
+      "save": "Save",
+      "saved": "Due date saved",
+      "done": "Mark done",
+      "reopen": "Reopen",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this due date? Its reminders stop.",
+      "deleted": "Due date deleted",
+      "start": "Start return",
+      "openReturn": "Open return",
+      "empty": "No due dates yet",
+      "emptyBody": "Add the dates your authority sets, for example the census date. Horizon reminds the team 14 and 3 days before.",
+      "inDays": "In {n, plural, one {# day} other {# days}}",
+      "today": "Today",
+      "overdue": "{n, plural, one {# day} other {# days}} overdue",
+      "doneOn": "Done {date}",
+      "upcoming": "Upcoming",
+      "past": "Done and past",
+      "reminders": "Reminders 14 and 3 days before"
+    },
+    "log": {
+      "empty": "Nothing sent yet",
+      "emptyBody": "When a return is sent, record the authority's reference on the return. It appears here.",
+      "sentOn": "Sent on",
+      "return": "Return",
+      "file": "File",
+      "reference": "Reference",
+      "recordedBy": "Recorded by"
+    },
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "FORBIDDEN": "You do not have permission to do this.",
+      "INVALID": "Please check the details and try again.",
+      "KIND": "Choose a return.",
+      "DATE": "Enter a valid date.",
+      "DATE_FUTURE": "That date is too far ahead.",
+      "PERIOD": "The period must start on or before its last day.",
+      "PERIOD_LONG": "A period can be at most 400 days.",
+      "NOT_FOUND": "Not found. It may have been removed.",
+      "HAS_FILES": "Files were generated from this return, so it is kept.",
+      "EXPORT": "Choose the file you sent.",
+      "REFERENCE": "Enter the authority's reference.",
+      "TITLE": "Enter a title.",
+      "DOB": "Enter a date of birth between 2 and 25 years ago.",
+      "GENDER": "Choose a gender.",
+      "NATIONALITY": "Choose a nationality.",
+      "EID": "Enter a 15-digit Emirates ID starting 784.",
+      "NOTHING": "Fill in at least one field.",
+      "FORBIDDEN_IDS": "Full Emirates ID numbers need the permission to reveal identity numbers.",
+      "NO_IDS_HERE": "Only the learner registration list can include Emirates ID numbers."
+    },
+    "loading": "Building the return",
+    "errorTitle": "This page could not be loaded",
+    "errorBody": "Please try again. If it keeps happening, tell your school administrator.",
+    "retry": "Try again",
+    "fewerShort": "<{n}"
   }
 }

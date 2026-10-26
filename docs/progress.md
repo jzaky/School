@@ -226,3 +226,15 @@
 - Tests: tests/unit/fees-money.test.ts (23), tests/integration/fees.test.ts (14: gapless numbering under concurrency, invoice maths, early payment, allocation and overpayment, refund four eyes, credit notes, post-dated and returned cheques, billing runs in batches with resume, reminders and the safeguarding hold, parent visibility, seat booking and webhook idempotency, the admissions seat booking provider and seat paid hook (once), tenant isolation of fee tables).
 - Guide: docs/guides/fees.md. Decisions: docs/decisions.md (Fees and invoicing).
 - Not done: N-Genius and Telr payment confirmation (documented TODO; adapters report not ready), per-school merchant credentials, statement PDF (statements are on screen), partial refunds through the online provider, instalment plan changes for a family mid-year (finance issues a credit note and bills again).
+
+## Government reporting (gov worktree, Oct 2026)
+- /admin/government: returns for the school's authority (admissions setting: SPEA DALEEL, MoE Al Manhal, KHDA, ADEK or custom) with tabs for returns, due dates and the submission log; /admin/government/[id] for one return (checks, tables, files and submissions).
+- Returns: enrollment census, learner registration list, attendance return, staff return, results summary, each for a census date or a period, KG labels throughout. Excel (a sheet per table, English and Arabic header rows, About sheet), CSV (main table, bilingual headers), summary PDF in English or Arabic with the principal's sign-off. API: /api/government/export.
+- Checks before sending with fixes in place (identity fields, registration reference) and links to the record; never shows an Emirates ID. Export with open problems is confirmed, flagged in the file and audited.
+- File log with version, SHA-256 of the file and of the data, submissions with the authority's reference; both append-only and audited.
+- Due date calendar with reminders 14 and 3 days before to holders of government.reports (worker job government.reminders, idempotent JobRun claims).
+- Privacy: full Emirates IDs only in the registration list with people.reveal_ids (audited confidential); no health details; people of determination merged to groups of at least 5; small results groups suppressed.
+- Permissions: government.reports (school_admin, registrar), government.view (principal).
+- Schema: migration 20261026210000_government_reporting (GovReturn, GovReturnExport, GovSubmission, GovDueDate), rls.sql section 10.
+- Demo: prisma/seed/academics/government.ts. KHDA; last term's census submitted (signed off, two files, reference CNS-2026-04127); a draft census with four problems; six due dates, reminders already in the bell. Guide steps for registrar, admin and principal.
+- Guide: docs/guides/government-reporting.md (with what each authority publishes, and what is format to be confirmed). Tests: tests/unit/govreports.test.ts, tests/integration/government.test.ts, tests/e2e/government.spec.ts.

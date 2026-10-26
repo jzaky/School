@@ -101,6 +101,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "inspectionPack", href: "/admin/inspection" },
     { key: "financeReports", href: "/finance/reports" },
     { key: "financeApprovals", href: "/finance/approvals" },
+    { key: "govSignOff", href: "/admin/government?open=draft" },
   ],
   admin: [
     { key: "accessReport", href: "/admin/roles/report" },
@@ -128,6 +129,8 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "joinRequests", href: "/admin/join-requests" },
     { key: "admissionsBoard", href: "/admissions" },
     { key: "admissionsSettings", href: "/admissions/settings" },
+    { key: "govDueDates", href: "/admin/government?tab=due" },
+    { key: "govLog", href: "/admin/government?tab=log" },
   ],
   admissions: [
     { key: "admissionsBoard", href: "/admissions" },
@@ -151,6 +154,11 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "documents", href: "/documents" },
     { key: "templates", href: "/admin/templates" },
     { key: "timetableSetup", href: "/admin/timetable" },
+    { key: "govCensus", href: "/admin/government?open=draft" },
+    { key: "govFix", href: "/admin/government?open=draft" },
+    { key: "govExport", href: "/admin/government?open=draft" },
+    { key: "govSubmit", href: "/admin/government?open=draft" },
+    { key: "govDueDates", href: "/admin/government?tab=due" },
   ],
   head_of_it: [
     { key: "publishQueue", href: "/grades/publish" },

@@ -165,6 +165,9 @@ async function main() {
           return forEachOrg("fees.reminders", async (orgId) => (await import("@/server/fees/jobs")).runFeeReminders(orgId));
         case "fees.resume":
           return forEachOrg("fees.resume", async (orgId) => (await import("@/server/fees/jobs")).resumeStaleBillingRuns(orgId));
+        case "government.reminders":
+          // Government return due dates: holders of government.reports are reminded 14 and 3 days before (each once).
+          return forEachOrg("government.reminders", async (orgId) => (await import("@/server/govreports/reminders")).runGovReminders(orgId));
         case "test.idempotent":
           return handlers.testIdempotent(job.data as TestIdempotentJob);
         default:
@@ -197,6 +200,8 @@ async function main() {
     await maintenance.upsertJobScheduler("access.expiry", { pattern: "5 20 * * *", tz: "UTC" }, { name: "access.expiry", opts: { attempts: 3 } });
     // 04:05 UTC is 08:05 in Dubai: re-enrollment notices and reminders, and students admitted for a year that started.
     await maintenance.upsertJobScheduler("admissions.daily", { pattern: "5 4 * * *", tz: "UTC" }, { name: "admissions.daily", opts: { attempts: 3 } });
+    // 04:15 UTC is 08:15 in Dubai: government return due date reminders.
+    await maintenance.upsertJobScheduler("government.reminders", { pattern: "15 4 * * *", tz: "UTC" }, { name: "government.reminders", opts: { attempts: 3 } });
     // Hourly: university fair and visit reminders about a day before the event (each sent once).
     await maintenance.upsertJobScheduler("careerEvents.reminders", { pattern: "20 * * * *", tz: "UTC" }, { name: "careerEvents.reminders", opts: { attempts: 3 } });
     // Every 15 minutes: course selection notices when a window opens, 3 days and 1 day before it closes, and when it closes (each sent once).
