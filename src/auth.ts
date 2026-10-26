@@ -3,7 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
 import { randomUUID } from "node:crypto";
-import bcrypt from "bcryptjs";
+import { passwordMatches } from "@/server/identity/password";
 import { z } from "zod";
 import { headers } from "next/headers";
 import { identityDb, publicOrgBySlug, tenantDb } from "@/lib/tenant-db";
@@ -75,8 +75,9 @@ const providers: NextAuthConfig["providers"] = [
       if (!parsed.success) return null;
       if (!(await passwordSignInAllowed(parsed.data.email))) return null;
       const user = await identityDb.user.findUnique({ where: { email: parsed.data.email.toLowerCase() } });
+      // Same work whether or not the account exists, so timing reveals nothing.
+      const ok = await passwordMatches(parsed.data.password, user?.passwordHash);
       if (!user?.passwordHash) return null;
-      const ok = await bcrypt.compare(parsed.data.password, user.passwordHash);
       if (!ok) {
         const m = await resolveActiveMembership(user.id, user.lastActiveOrgId, { includePending: true });
         if (m) await auditPasswordSignIn(m.orgId, m.id, user.id, "wrong_password");

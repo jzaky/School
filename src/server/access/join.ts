@@ -4,6 +4,7 @@
 import bcrypt from "bcryptjs";
 import type { InviteKind, Prisma } from "@prisma/client";
 import { identityDb, tenantDb, tenantTx, userScope } from "@/lib/tenant-db";
+import { passwordMatches } from "@/server/identity/password";
 import { isEmail, parseDate } from "@/lib/people-csv";
 import { audit } from "@/server/audit/audit";
 import { findInvitationByToken, findSchoolByJoinCode, schoolById, type PublicSchool } from "@/server/platform/join-lookup";
@@ -59,7 +60,7 @@ export async function resolveAccount(input: AccountInput, opts: { ip: string; pr
   if (!limit.ok) throw new JoinError("RATE_LIMITED");
   const existing = await identityDb.user.findUnique({ where: { email } });
   if (input.mode === "signin") {
-    if (!existing?.passwordHash || !(await bcrypt.compare(input.password, existing.passwordHash))) throw new JoinError("CREDENTIALS");
+    if (!(await passwordMatches(input.password, existing?.passwordHash)) || !existing) throw new JoinError("CREDENTIALS");
     return { userId: existing.id, email, nameEn: existing.nameEn, nameAr: existing.nameAr, created: false };
   }
   const name = input.name.trim().replace(/\s+/g, " ");
