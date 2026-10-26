@@ -29,6 +29,8 @@ export function FilterBar({
 
   const set = (key: string, value: string | null) => {
     const next = new URLSearchParams(sp.toString());
+    // A new filter or search starts again from the first page of a paginated list.
+    next.delete("page");
     if (value) next.set(key, value);
     else next.delete(key);
     start(() => router.replace(`${pathname}?${next.toString()}`));

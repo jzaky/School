@@ -7,6 +7,8 @@ import IORedis from "ioredis";
 import type { DeliverJob, ReminderJob, ResumeJob, TestIdempotentJob } from "./handlers";
 import type { RefreshJob, ScorecardJob } from "@/server/catalog-pipeline/jobs";
 import type { SchoolExportJob } from "@/server/privacy/school-export";
+// Fees as the admissions seat booking provider, so fee code run by the worker sees the same hooks as the web server.
+import "@/server/fees/admissions-link";
 
 async function loadDotenv() {
   // Local development convenience. In production the platform injects variables and .env is absent.
@@ -98,6 +100,11 @@ async function main() {
           throw new Error(`unknown job ${job.name}`);
       }
     },
+    // Fees: billing runs in batches (each batch queues the next; see src/server/fees/billing.ts).
+    fees: async (job: Job) => {
+      if (job.name !== "billing.batch") throw new Error(`unknown job ${job.name}`);
+      return (await import("@/server/fees/jobs")).runBillingBatchJob(job.data as { orgId: string; runId: string; n: number });
+    },
     privacy: async (job: Job) => {
       if (job.name !== schoolExport.SCHOOL_EXPORT_JOB) throw new Error(`unknown job ${job.name}`);
       return schoolExport.runSchoolExport(job.data as SchoolExportJob);
@@ -154,6 +161,10 @@ async function main() {
           return forEachOrg("attendance.alerts", async (orgId) => (await import("@/server/attendance/alerts")).runAttendanceAlerts(orgId));
         case "admissions.daily":
           return forEachOrg("admissions.daily", async (orgId) => (await import("@/server/admissions/jobs")).runAdmissionsDaily(orgId));
+        case "fees.reminders":
+          return forEachOrg("fees.reminders", async (orgId) => (await import("@/server/fees/jobs")).runFeeReminders(orgId));
+        case "fees.resume":
+          return forEachOrg("fees.resume", async (orgId) => (await import("@/server/fees/jobs")).resumeStaleBillingRuns(orgId));
         case "test.idempotent":
           return handlers.testIdempotent(job.data as TestIdempotentJob);
         default:
@@ -194,6 +205,10 @@ async function main() {
     await maintenance.upsertJobScheduler("attendance.followup", { every: 5 * 60_000 }, { name: "attendance.followup", opts: { attempts: 2, removeOnComplete: 100, removeOnFail: 100 } });
     // Hourly, on school days and weekends alike (the job itself skips when no term is running).
     await maintenance.upsertJobScheduler("attendance.alerts", { pattern: "40 * * * *", tz: "UTC" }, { name: "attendance.alerts", opts: { attempts: 2 } });
+    // 04:10 UTC is 08:10 in Dubai: fee reminders before and after due dates (each stage sent once per invoice).
+    await maintenance.upsertJobScheduler("fees.reminders", { pattern: "10 4 * * *", tz: "UTC" }, { name: "fees.reminders", opts: { attempts: 3 } });
+    // Every 5 minutes: billing runs with no progress for a while continue from their cursor.
+    await maintenance.upsertJobScheduler("fees.resume", { every: 5 * 60_000 }, { name: "fees.resume", opts: { attempts: 1, removeOnComplete: 100, removeOnFail: 100 } });
     if (demoMode) {
       // 22:00 UTC is 02:00 in Dubai.
       await maintenance.upsertJobScheduler("demo-reset", { pattern: "0 22 * * *", tz: "UTC" }, { name: "demo-reset", opts: { attempts: 2 } });

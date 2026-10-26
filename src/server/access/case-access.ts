@@ -180,6 +180,14 @@ export async function studentsHeldFromAutoContact(client: TenantDb | TenantTx, o
 }
 
 /**
+ * The same rule for fee reminders and other routine messages, called from a Prisma transaction client.
+ * Returns student ids only, never case details; callers must not show why a message was held.
+ */
+export async function studentsWithAutomatedContactHeld(tx: Prisma.TransactionClient, orgId: string, studentIds: string[]): Promise<Set<string>> {
+  return studentsHeldFromAutoContact(tx as unknown as TenantTx, orgId, studentIds);
+}
+
+/**
  * Inspection evidence pack (src/server/inspection). Members who may view the pack see sensitive cases
  * only as aggregate counts and timings, never as a list.
  */

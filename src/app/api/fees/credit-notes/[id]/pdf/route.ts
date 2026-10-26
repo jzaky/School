@@ -1,0 +1,12 @@
+import { NextResponse } from "next/server";
+import { getOptionalCtx } from "@/server/context";
+import { creditNotePdfResponse } from "@/server/fees/documents";
+
+export const runtime = "nodejs";
+
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const ctx = await getOptionalCtx();
+  if (!ctx) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  const { id } = await params;
+  return creditNotePdfResponse(ctx, id, new URL(req.url).searchParams.get("inline") === "1");
+}

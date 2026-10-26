@@ -101,7 +101,7 @@ for (const f of walk(path.join(root, "src"), [".tsx"])) {
 }
 
 // PDF drawing, recharts margins and AI prompt text use "left"/"right" as values, not classes.
-const NOT_CLASSES = /src\/server\/documents\/pdf\.ts|src\/server\/ai\/features\.ts|trend-chart\.tsx/;
+const NOT_CLASSES = /src\/server\/documents\/pdf\.ts|src\/server\/fees\/pdf\.ts|src\/server\/ai\/features\.ts|trend-chart\.tsx/;
 for (const f of walk(path.join(root, "src"), [".ts", ".tsx"])) {
   if (NOT_CLASSES.test(f)) continue;
   for (const h of findPhysicalClasses(readFileSync(f, "utf8"))) problems.push(`direction class ${path.relative(root, f)}:${h.line} ${h.match}`);

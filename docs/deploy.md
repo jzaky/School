@@ -75,6 +75,12 @@ Put shared values in Project > Settings > Shared Variables and reference them fr
 | `UAEPASS_BASE`, `UAEPASS_SCOPE`, `UAEPASS_ACR_VALUES` | web | Overrides for tests. Defaults: the base for `UAEPASS_ENV`, scope `urn:uae:digitalid:profile:general`, acr_values `urn:safelayer:tws:policies:authentication:level:low`. |
 | `INTEGRATIONS_ALLOW_PRIVATE_URLS` | web, worker | `true` lets roster connections, school identity providers and integration exports reach private addresses and plain http. Only for local development and tests (mock providers on 127.0.0.1). Never set it in production: it turns off the protection against requests to internal addresses. |
 | `EMAIL_FROM` | worker | Sender, for example `Horizon School <no-reply@yourdomain.com>` on a domain verified in Resend. Default `Horizon School <onboarding@resend.dev>` (Resend test sender, delivers only to the Resend account owner). |
+| `PAYMENTS_PROVIDER` | both | Online fee payment provider: `console` (built-in test checkout, no money moves, labelled as a test), `stripe`, `ngenius` or `telr`. Unset means "Online payment is not set up" and families pay by the school's other methods. N-Genius and Telr can create orders but do not confirm payments yet, so they stay off (see docs/guides/fees.md). |
+| `PAYMENTS_TEST_SECRET` | both | Signing secret for the `console` test checkout's webhook. |
+| `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | both | Stripe Checkout. Webhook URL: `AUTH_URL/api/payments/webhook/stripe`. |
+| `NGENIUS_API_KEY`, `NGENIUS_OUTLET_REF`, `NGENIUS_API_BASE` | both | Network International N-Genius (payment confirmation still to do). |
+| `TELR_STORE_ID`, `TELR_AUTH_KEY`, `TELR_TEST_MODE` | both | Telr (payment confirmation still to do). |
+| `FEES_SEAT_BOOKING` | both | `on` makes accepting an admissions offer create a seat booking proforma in Fees. Otherwise staff use "Mark paid" on the application. |
 | `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET` | web | Cloudflare R2 (S3 API) for documents. Used only when all four are set. Files are served through signed URLs. |
 | `LOCAL_UPLOAD_DIR` | web | Fallback directory for documents when R2 is not set. Default `/app/.uploads`, which is lost on every redeploy. For a demo without R2, attach a Railway volume and point this at its mount path. |
 | `ANTHROPIC_API_KEY` | web | Enables the Anthropic AI provider. Without it the built-in (non-network) provider is used. |

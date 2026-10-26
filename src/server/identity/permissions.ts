@@ -78,6 +78,11 @@ export const PERMISSIONS = [
   "admissions.view",
   "admissions.manage",
   "admissions.enroll",
+  "fees.view",
+  "fees.manage",
+  "fees.collect",
+  "fees.refund.approve",
+  "fees.reports",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
@@ -161,6 +166,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "admissions.view",
       "admissions.manage",
       "admissions.enroll",
+      "fees.view",
     ],
   },
   {
@@ -201,6 +207,9 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "demo.reset",
       "inspection.view",
       "admissions.view",
+      "fees.view",
+      "fees.reports",
+      "fees.refund.approve",
     ],
   },
   {
@@ -411,6 +420,14 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
     descEn: "Runs integrations, API keys and sign-in, and releases grades and report cards to families.",
     descAr: "يدير التكاملات ومفاتيح الربط البرمجي وإعدادات تسجيل الدخول، ويعتمد نشر الدرجات وبطاقات التقارير للأسر.",
     permissions: [...STAFF_BASE.filter((p) => p !== "cases.view"), "grades.publish", "integrations.manage", "signin.manage", "requests.process"],
+  },
+  {
+    key: "finance_officer",
+    nameEn: "Finance Officer",
+    nameAr: "مسؤول الشؤون المالية",
+    descEn: "Sets up fees, bills families, records payments and runs finance reports.",
+    descAr: "يعدّ الرسوم ويصدر فواتير الأسر ويسجّل المدفوعات ويستخرج التقارير المالية.",
+    permissions: [...STAFF_BASE, "fees.view", "fees.manage", "fees.collect", "fees.reports"],
   },
   {
     key: "student",
