@@ -1,363 +1,528 @@
 {
  "title": "Horizon Full Tour",
  "voice": "af_heart",
- "speed": 1.0,
- "notes": "Narration for the long product tour. 'text' is spoken; 'display' (when present) is what the subtitles show. Segments marked pending describe features that are still being built and are finalised against the real screens before recording.",
+ "speed": 0.8,
+ "pause": 0.7,
+ "hold": 2.0,
+ "notes": "Narration for the restructured product walkthrough, in the owner's order: subjects, electives and university requirements first, then messages, absence and sick leave, then every other section. 'text' is spoken; 'display' (when present) is what the subtitles show. 'holds' lists sentences followed by a 2 s narration-free hold.",
  "segments": [
   {
-   "id": "c01a",
-   "chapter": "c01-patchwork",
-   "text": "Let's be honest about how most schools run today. A parent emails the office, and copies in the class teacher, the head of year, the deputy head and, somehow, the bus company.",
-   "speed": 0.75,
-   "pause": 0.7,
-   "holds": [
-    1
-   ]
-  },
-  {
-   "id": "c01b",
-   "chapter": "c01-patchwork",
-   "text": "A sick note gets forwarded, and forwarded again, until half the staff room knows about a child's tonsils.",
-   "speed": 0.78,
-   "pause": 0.7,
+   "id": "o1",
+   "text": "Horizon is one platform for school operations and student services, in Arabic and English.",
    "holds": [
     0
    ]
   },
   {
-   "id": "c01c",
-   "chapter": "c01-patchwork",
-   "text": "The electives live in a spreadsheet called final, final, version two. And when a student asks what she needs for engineering in Canada, someone googles it, one university at a time, at eleven at night.",
-   "display": "The electives live in a spreadsheet called final, final, version two. And when a student asks what she needs for engineering in Canada, someone googles it, one university at a time, at 11 at night.",
-   "speed": 0.78,
-   "pause": 0.7,
+   "id": "o2",
+   "text": "This walkthrough explains each part of the platform in turn. It starts with subjects, electives and university requirements, then messages, absence and sick leave, and then every other section.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s01-0",
+   "text": "Choosing electives affects which university programmes stay open to a student, and Horizon connects the two. Staff set up next year's subjects. Students and parents choose them online. Every choice is checked against university entry requirements, and a counselor approves the plan.",
+   "holds": [
+    4
+   ]
+  },
+  {
+   "id": "s01-a1",
+   "text": "Aisha Rahman, the school administrator, opens Subject registration and selects next year, twenty twenty seven to twenty twenty eight. Each grade has core subjects, which every student takes, and option blocks, from which each student chooses one course.",
+   "display": "Aisha Rahman, the school administrator, opens Subject registration and selects next year, 2027 to 2028. Each grade has core subjects, which every student takes, and option blocks, from which each student chooses one course.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s01-a2",
+   "text": "To add an elective, she selects Add subject, chooses the subject, sets it as an option in Block D, and links it to the matching course in the university catalog. Because the course is an AP course, the AP switch turns on, and students and parents will see an AP badge. She also sets Mathematics as a prerequisite, and saves.",
+   "holds": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "s01-a3",
+   "text": "Offerings can be changed at any time. She opens an existing course, changes the periods per week, and saves. The block and the prerequisites are changed in the same way.",
+   "holds": [
+    2
+   ]
+  },
+  {
+   "id": "s01-a4",
+   "text": "For each course, she sees how many students have chosen it so far, and how many students' university targets need it. Once choices are in, Horizon places each student in a class, and opens a new section when one is full.",
    "holds": [
     0,
     1
    ]
   },
   {
-   "id": "c01d",
-   "chapter": "c01-patchwork",
-   "text": "Nothing is joined up. Nobody can see where anything is. And private things don't stay private.",
-   "speed": 0.75,
-   "pause": 0.7,
+   "id": "s01-b1",
+   "text": "Adam Nasser, a Grade 9 student, opens My subjects. Course selection for next year is open until the twelfth of November, and he chooses one course in each block.",
+   "display": "Adam Nasser, a Grade 9 student, opens My subjects. Course selection for next year is open until 12 November, and he chooses one course in each block.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s01-b2",
+   "text": "Each option shows how many of his eight target programmes need it, and how many programmes worldwide it keeps open. In Block A, AP Physics 1 keeps ten more programmes open than regular Physics, because the University of Manchester accepts only the AP course.",
+   "display": "Each option shows how many of his 8 target programmes need it, and how many programmes worldwide it keeps open. In Block A, AP Physics 1 keeps 10 more programmes open than regular Physics, because the University of Manchester accepts only the AP course.",
+   "holds": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "s01-b3",
+   "text": "Prerequisites are checked as he chooses: AP Physics 1 requires Mathematics, which he has met. When he selects AP Physics 1, the summary updates, and AP Computer Science A is no longer needed, because AP Physics 1 already meets Manchester's requirement for physics or computer science.",
+   "holds": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "s01-c1",
+   "text": "Horizon's university catalog covers three hundred and sixty six programmes at one hundred and sixteen universities in fifteen countries. For three hundred and eleven of these programmes, the entry requirements come from each university's official pages.",
+   "display": "Horizon's university catalog covers 366 programmes at 116 universities in 15 countries. For 311 of these programmes, the entry requirements come from each university's official pages.",
+   "holds": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "s01-c2",
+   "text": "Adam's goal is to become an AI engineer, with the United Kingdom, the United States, Canada and the United Arab Emirates as target countries.",
+   "holds": [
+    0
+   ]
+  },
+  {
+   "id": "s01-c3",
+   "text": "Horizon checked three hundred and eleven programmes at one hundred and eleven universities for him. One hundred and thirty eight programmes at fifty eight universities in fourteen countries are eligible or on track. Each programme has a clear status: eligible, on track, possibly eligible, needs review, or missing requirements.",
+   "display": "Horizon checked 311 programmes at 111 universities for him. 138 programmes at 58 universities in 14 countries are eligible or on track. Each programme has a clear status: eligible, on track, possibly eligible, needs review, or missing requirements.",
+   "holds": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "s01-c4",
+   "text": "On a programme page, such as Computer Science at the University of Manchester, each requirement is quoted in the university's own words, with a link to the source and the date it was checked. Horizon checks each line against Adam's record and plan, and shows which are met, which are planned, and which are still open.",
+   "holds": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "s01-c5",
+   "text": "Where a programme requires a specific AP course, the requirement is marked AP required, and for students on other curricula the page shows the A Level and IB Higher Level requirements. Where a regular course is accepted, it is marked any level, or AP or a regular course.",
+   "holds": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "s01-c6",
+   "text": "The Subject levels panel brings this together across all eight targets. In mathematics, AP Calculus BC is needed by three of his eight targets. In sciences, a regular course is enough for all of them. Horizon only suggests courses that the school offers, such as AP Calculus BC in Grade 12.",
+   "display": "The Subject levels panel brings this together across all 8 targets. In mathematics, AP Calculus BC is needed by 3 of his 8 targets. In sciences, a regular course is enough for all of them. Horizon only suggests courses that the school offers, such as AP Calculus BC in Grade 12.",
+   "holds": [
+    1,
+    2,
+    3
+   ]
+  },
+  {
+   "id": "s01-c7",
+   "text": "Programmes can also be compared side by side, with each subject requirement lined up across the universities.",
+   "holds": [
+    0
+   ]
+  },
+  {
+   "id": "s01-d1",
+   "text": "Rania Nasser, Adam's mother, sees the same subject choices from her own account, with the same guidance on what each option keeps open.",
+   "holds": [
+    0
+   ]
+  },
+  {
+   "id": "s01-d2",
+   "text": "Everything is also available in Arabic, right to left. The subject levels for each university read the same way in Arabic.",
+   "holds": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "s01-e1",
+   "text": "When Adam is ready, he sends his Grade 9 to 12 course plan for approval. Sarah Ahmed, the school counselor, sees it in her list as waiting for approval.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s01-e2",
+   "text": "Before deciding, she can try what-if changes without saving anything. Dropping AP Calculus BC, for example, shows the three programmes that would change.",
+   "display": "Before deciding, she can try what-if changes without saving anything. Dropping AP Calculus BC, for example, shows the 3 programmes that would change.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s01-e3",
+   "text": "She adds a note for Adam and approves the plan. The family then sees the approved plan and the counselor's note, in English or Arabic.",
+   "holds": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "s02-0",
+   "text": "Messages about a request stay with the request. The people handling it see the whole conversation, and any message can be kept between staff, or made private.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s02-1",
+   "text": "Each request has its own conversation. Rania opens her school bus request, and new messages are marked, so she can see what has changed.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s02-2",
+   "text": "Every message has an audience: family and staff, staff only, or private to named people. Before sending, the composer shows exactly who will see the message.",
+   "holds": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "s02-3",
+   "text": "Staff only messages are never shown to the family, and private messages are seen only by the people chosen.",
+   "holds": [
+    0
+   ]
+  },
+  {
+   "id": "s02-4",
+   "text": "The family is told about a new message in the app and by email, without the message text. Side by side, the family sees only family and staff messages, while staff see the whole thread. Messages never appear in search, dashboards or reports.",
+   "holds": [
+    0,
+    1,
+    2
+   ]
+  },
+  {
+   "id": "s03-0",
+   "text": "Absence reasons, including medical details, are visible only to the people who need them. Everyone else sees only that a student or teacher is away and excused.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s03-1",
+   "text": "Rania reports Adam's absence from her phone, chooses illness as the reason, and attaches the doctor's note. The reason and the note are marked private.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s03-2",
+   "text": "Only the family, the attendance office and the school nurse can see the reason and the note.",
+   "holds": [
+    0
+   ]
+  },
+  {
+   "id": "s03-3",
+   "text": "In Daniel Carter's register, Adam is shown as away and excused, without the reason. The principal also sees only that the absence is excused, and who reported it.",
+   "holds": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "s03-4",
+   "text": "When a teacher reports sick leave, the reason is visible only to the staff who manage leave. Horizon finds a free teacher for each lesson and assigns the cover. The substitute sees that a colleague is away, with the lesson notes, and nothing more. The cover board flags any lesson still uncovered, and shares cover fairly across the term.",
+   "holds": [
+    0,
+    2,
+    3
+   ]
+  },
+  {
+   "id": "s04-0",
+   "text": "Services are the requests that families and staff make every day, such as letters, meetings and changes. Each request follows the school's own approval steps, with an owner and a deadline.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s04-1",
+   "text": "Rania opens Services on her phone, chooses Request a school document, selects an enrollment letter in English and Arabic, and submits.",
+   "holds": [
+    0
+   ]
+  },
+  {
+   "id": "s04-2",
+   "text": "Mona Al Awadhi, the registrar, finds the request in her approvals and approves it. Her decision is recorded with her name and the time.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s04-3",
+   "text": "Horizon issues the official letter on the school's letterhead, in English and Arabic. Rania is notified, and the letter is in her documents.",
+   "holds": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "s04-4",
+   "text": "Every request has a reference number and shows each step as it happens. Requests past their deadline are flagged as overdue.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s04-5",
+   "text": "Twenty nine services are ready to use. The school decides who can request each one, and how quickly it should be handled. Administrators can adjust the forms and the approval steps without writing code.",
+   "display": "29 services are ready to use. The school decides who can request each one, and how quickly it should be handled. Administrators can adjust the forms and the approval steps without writing code.",
+   "holds": [
+    0,
+    2
+   ]
+  },
+  {
+   "id": "s05-0",
+   "text": "In Grade 12, the course plan turns into university applications, tracked from shortlist to offer.",
+   "holds": [
+    0
+   ]
+  },
+  {
+   "id": "s05-1",
+   "text": "Each application has its own checklist. Deadlines become tasks and reminders.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s05-2",
+   "text": "When a student needs a recommendation letter, the request arrives on the teacher's task list with a due date.",
+   "holds": [
+    0
+   ]
+  },
+  {
+   "id": "s05-3",
+   "text": "The counselor sees every student on one board, and moves an application to the next stage by dragging its card. Each card shows the application route, the deadline and the checklist progress.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s05-4",
+   "text": "Students and parents register for university fairs and information sessions, and the event is added to their calendar. Younger students start with a ten minute career assessment. They then receive a career report in English and Arabic.",
+   "holds": [
+    0,
+    2
+   ]
+  },
+  {
+   "id": "s06-0",
+   "text": "Counselling, wellbeing and safeguarding records are the most sensitive in a school, so they follow stricter rules.",
+   "holds": [
+    0
+   ]
+  },
+  {
+   "id": "s06-1",
+   "text": "When a teacher is concerned about a student, he refers them to the counselor in a few steps. The counselor opens the case with its full history.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s06-2",
+   "text": "Case notes are versioned: when a note is changed, the original is kept. The counselor books a meeting with the family from the case, and agrees an action plan that becomes tasks. The case list shows priorities and service level timers.",
+   "holds": [
+    0,
+    1,
+    2
+   ]
+  },
+  {
+   "id": "s06-3",
+   "text": "A teacher raises a safeguarding concern in a few steps. It goes directly to the designated safeguarding lead, Khalid Yousef, and to nobody else. The teacher who raised it sees only that it was received and is being handled.",
+   "holds": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "s06-4",
+   "text": "Wellbeing and safeguarding cases never appear in search, dashboards or reports. Every view is written to the audit log. Parents are never notified automatically: informing a family is a recorded staff decision, with a reason.",
+   "holds": [
+    0,
+    1,
+    2
+   ]
+  },
+  {
+   "id": "s07-0",
+   "text": "Horizon also runs the academic day: the timetable, cover, grades, lesson planning, trips and exams.",
+   "holds": [
+    0
+   ]
+  },
+  {
+   "id": "s07-1",
+   "text": "The weekly timetable is generated without clashes. Every teacher, student and parent sees their own week. Cover lessons appear on the covering teacher's timetable.",
+   "holds": [
+    0,
+    2
+   ]
+  },
+  {
+   "id": "s07-2",
+   "text": "Teachers enter marks in a gradebook that works like a spreadsheet, including pasting a column from Excel. Nothing reaches families until the teacher publishes.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s07-3",
+   "text": "Students and parents then see averages and trends. Term report cards are produced in English and Arabic.",
+   "holds": [
+    1
+   ]
+  },
+  {
+   "id": "s07-4",
+   "text": "Lesson plans are linked to curriculum standards, so the head of department can see what has been covered and what is missing.",
+   "holds": [
+    0
+   ]
+  },
+  {
+   "id": "s07-5",
+   "text": "Each trip comes with a consent letter. Parents give or decline consent on their phone. The trip leader follows a live consent board. Exam timetables are published as a PDF and added to family calendars. Staff see their invigilation duties.",
+   "holds": [
+    2,
+    4
+   ]
+  },
+  {
+   "id": "s08-0",
+   "text": "Parents use Horizon on their phone, without installing anything from an app store.",
+   "holds": [
+    0
+   ]
+  },
+  {
+   "id": "s08-1",
+   "text": "Horizon installs to the home screen like an app. Updates arrive as push notifications. When the school enables it, they also arrive on WhatsApp. Notifications about sensitive matters show only a short line, and a link that requires sign in.",
+   "holds": [
+    0,
+    3
+   ]
+  },
+  {
+   "id": "s08-2",
+   "text": "From the phone, a parent can approve a request. They can book a meeting with a teacher. They can pay fees through the school's own payment link.",
    "holds": [
     2
    ]
   },
   {
-   "id": "c02a",
-   "chapter": "c02-meet",
-   "text": "Enter Horizon. One platform for every school procedure, built for schools in the UAE, and fully bilingual in Arabic and English. Students, parents and staff each get their own portal, and everyone sees only what their role allows. Every request has an owner, a deadline and a record.",
-   "speed": 0.78,
-   "pause": 0.7,
-   "holds": {
-    "0": 2.0,
-    "1": 3.0,
-    "2": 2.0,
-    "3": 2.0
-   }
+   "id": "s08-3",
+   "text": "Every page works in English. The same pages work in Arabic, right to left, and are designed for a phone screen.",
+   "holds": [
+    1
+   ]
   },
   {
-   "id": "c02b",
-   "chapter": "c02-meet",
-   "text": "Today we're spending a day at Horizon International School Dubai, a fictional demo school with real, working data: ninety nine students, forty six staff, and one hundred and thirteen parents and guardians. Let's meet the people you'll be following.",
-   "display": "Today we're spending a day at Horizon International School Dubai, a fictional demo school with real, working data: 99 students, 46 staff, and 113 parents and guardians. Let's meet the people you'll be following.",
-   "speed": 0.78,
-   "pause": 0.7,
-   "holds": {
-    "0": 3.0,
-    "1": 1.0
-   }
+   "id": "s09-1",
+   "text": "The principal sees request volumes, resolution times and service levels, week by week. Sensitive cases are always excluded from these figures. Pilot measures show how many staff are active, and how many parents have joined. Leaders can also ask questions in plain words, and get answers from the school's own figures.",
+   "holds": [
+    1,
+    3
+   ]
   },
   {
-   "id": "q-rania",
-   "chapter": "c02-meet",
-   "voice": "af_bella",
-   "text": "Two kids, one school, and zero time for paperwork.",
-   "speed": 0.82
+   "id": "s09-2",
+   "text": "For inspections, the evidence pack gathers the records the school already keeps, for any period. It is produced as a PDF in English and Arabic.",
+   "holds": [
+    1
+   ]
   },
   {
-   "id": "q-adam",
-   "chapter": "c02-meet",
-   "voice": "am_puck",
-   "text": "I want to build AI. I just need to know which classes get me there.",
-   "speed": 0.82
+   "id": "s09-3",
+   "text": "For the UAE data protection law, requests to see or delete personal data are tracked with due dates. Everything held about one person can be exported in one step. Erasure shows a preview first, and asks for a typed confirmation.",
+   "holds": [
+    0,
+    2
+   ]
   },
   {
-   "id": "q-daniel",
-   "chapter": "c02-meet",
-   "voice": "bm_george",
-   "text": "I'd rather be teaching than chasing forms.",
-   "speed": 0.82
+   "id": "s10-1",
+   "text": "A school can start using Horizon within days. After signing up, the school has a working setup with services, forms, letters, roles, bell times and the UAE calendar. The setup wizard adds the logo, colors and school year.",
+   "holds": [
+    2
+   ]
   },
   {
-   "id": "q-sarah",
-   "chapter": "c02-meet",
-   "voice": "bf_emma",
-   "text": "Every student has a story. I need the whole picture.",
-   "speed": 0.82
+   "id": "s10-2",
+   "text": "The import center brings in staff, students, families and classes from existing spreadsheets, and checks every row before anything is saved.",
+   "holds": [
+    0
+   ]
   },
   {
-   "id": "q-layla",
-   "chapter": "c02-meet",
-   "voice": "af_kore",
-   "text": "Fifteen countries, hundreds of programmes. Let's find the right one.",
-   "display": "15 countries, hundreds of programmes. Let's find the right one.",
-   "speed": 0.82
+   "id": "s10-3",
+   "text": "Staff are invited by email, and parents join with a school code. Every letter, form and message can be edited, in English and Arabic.",
+   "holds": [
+    1
+   ]
   },
   {
-   "id": "q-aisha",
-   "chapter": "c02-meet",
-   "voice": "af_sarah",
-   "text": "If it's a process, I want it in one place.",
-   "speed": 0.82
+   "id": "s10-4",
+   "text": "For a group of schools, the group dashboard compares every school side by side, and shares services and letters between them.",
+   "holds": [
+    0
+   ]
   },
   {
-   "id": "q-omar",
-   "chapter": "c02-meet",
-   "voice": "am_michael",
-   "text": "I just want to know how the school is really doing.",
-   "speed": 0.82
+   "id": "s11-1",
+   "text": "Each school's data is kept separate inside the database itself. Roles decide who sees what, and the principal can check exactly what any person can see, and why. The school can export all of its own data at any time.",
+   "holds": [
+    0,
+    1,
+    2
+   ]
   },
   {
-   "id": "q-khalid",
-   "chapter": "c02-meet",
-   "voice": "am_fenrir",
-   "text": "Some things are only for the people who need to know.",
-   "speed": 0.82
+   "id": "s11-2",
+   "text": "Every sensitive action is recorded in an audit log that cannot be edited. AI can help with drafts and summaries, but on sensitive matters it only writes a draft, and a person always decides.",
+   "holds": [
+    0,
+    1
+   ]
   },
   {
-   "id": "c03a",
-   "chapter": "c03-homes",
-   "text": "Everyone starts the day on their own home page, and the menu changes with the role, so nobody wades through features they'll never use."
-  },
-  {
-   "id": "c03b",
-   "chapter": "c03-homes",
-   "text": "Adam sees his requests, his upcoming exams and trips, and a nudge to explore careers. Rania sees both of her children in one place, with anything that needs her approval right at the top. Quick services sit right on the page, so asking the school for something is two taps away."
-  },
-  {
-   "id": "c03c",
-   "chapter": "c03-homes",
-   "text": "Daniel gets his classes, his referrals and his tasks, plus a clear red button for safeguarding concerns. Sarah's home is her caseload: new referrals, today's meetings, and the follow ups that are due. Layla sees her career cases and the students waiting for her review."
-  },
-  {
-   "id": "c03d",
-   "chapter": "c03-homes",
-   "text": "Aisha and Omar see how the whole school is running: request volumes, resolution times and service levels. And Omar can switch everything to Arabic, right to left, in one click."
-  },
-  {
-   "id": "c03e",
-   "chapter": "c03-homes",
-   "text": "Khalid's home is different. It's restricted: only he, his deputy, and staff he explicitly grants can see it."
-  },
-  {
-   "id": "c04a",
-   "chapter": "c04-services",
-   "text": "Let's start with something every school does all day long: requests. Rania needs an enrollment letter for Adam's visa. On her phone, she opens Services, picks the school document, chooses English and Arabic, and submits. No email, no phone call, no chasing."
-  },
-  {
-   "id": "c04b",
-   "chapter": "c04-services",
-   "text": "The request now follows the school's own process, step by step, with an owner and a deadline for each one. Mona, the registrar, finds it waiting in her approvals. One click, and her decision is recorded with her name and the time. Every request gets its own reference number, and anything running late is flagged as overdue, so it can't quietly slip through the cracks."
-  },
-  {
-   "id": "c04c",
-   "chapter": "c04-services",
-   "text": "Horizon produces the official letter instantly, on the school's letterhead, in both languages, with properly joined Arabic script. Rania gets a notification, and the letter is waiting in her documents. She could even watch every step live, like tracking a parcel, without sending a single email asking for an update."
-  },
-  {
-   "id": "c04d",
-   "chapter": "c04-services",
-   "text": "And it isn't just letters. Twenty nine services come ready to use, from changing a subject and booking a parent meeting, to exam access arrangements, learning support and IT help. The school decides who can ask for each one and how quickly it should be handled, and the administrator can adjust the forms and the approval steps without writing any code.",
-   "display": "And it isn't just letters. 29 services come ready to use, from changing a subject and booking a parent meeting, to exam access arrangements, learning support and IT help. The school decides who can ask for each one and how quickly it should be handled, and the administrator can adjust the forms and the approval steps without writing any code."
-  },
-  {
-   "id": "c05a",
-   "chapter": "c05-conversations",
-   "text": "Remember the email chain with the bus company in it? In Horizon, every request has its own conversation, right there on the request. And every message has a clear audience, chosen before you press send."
-  },
-  {
-   "id": "c05b",
-   "chapter": "c05-conversations",
-   "text": "Family and staff messages are seen by the family and the staff handling the request. Staff only notes stay between staff, so colleagues can coordinate without the family reading the internal back and forth. And private notes go only to the people you pick. Nobody else, not even other staff."
-  },
-  {
-   "id": "c05c",
-   "chapter": "c05-conversations",
-   "text": "Every message shows exactly who can see it, and new ones are clearly marked. So no more reply all, no more forwarding chains, and no more sensitive details landing in the wrong inbox. Messages never appear in search, dashboards or reports, and the whole history stays with the request."
-  },
-  {
-   "id": "c06a",
-   "chapter": "c06-absence",
-   "text": "The same respect applies to sick leave. When Adam is unwell, Rania reports it from her phone and attaches the doctor's note. The reason stays private: only the family, the attendance office and the school nurse can see it."
-  },
-  {
-   "id": "c06b",
-   "chapter": "c06-absence",
-   "text": "His teachers see that he's away and excused, but not why. Even the principal only sees that the absence is excused, and who reported it. Staff get the same privacy. When Thomas, a physics teacher, calls in sick, the reason stays with the people who manage leave. Daniel, who covers his class, just sees that a colleague is away, with the cover notes he needs."
-  },
-  {
-   "id": "c06c",
-   "chapter": "c06-absence",
-   "text": "And then Horizon takes care of the knock on effects. For each of his lessons, it finds a free teacher from the right department, assigns the cover, and lets them know. Aisha sees the day's cover board, with anything still uncovered flagged at the top, and cover is shared out fairly over the term."
-  },
-  {
-   "id": "c07a",
-   "chapter": "c07-subjects",
-   "text": "Now for the big one: subjects, electives, and where they lead. It starts with the school's own offer. Staff set up next year's courses for each grade: core subjects, option blocks, and electives with their prerequisites, including AP courses. They can change them whenever they need to, and they can even see how many students' university targets need each course."
-  },
-  {
-   "id": "c07b",
-   "chapter": "c07-subjects",
-   "text": "When course selection opens, students choose online, and parents see the same choices from their own account. Horizon checks prerequisites as they go, then places every student in a class, and opens a new section when one fills up. Goodbye, spreadsheet called final, final, version two."
-  },
-  {
-   "id": "c07c",
-   "chapter": "c07-subjects",
-   "text": "But choosing an elective in Grade 9 is really a choice about the future. So Horizon connects every subject to university entry requirements, anywhere in the world. Adam wants to become an AI engineer, maybe in the UK, the US, Canada, or right here in the UAE."
-  },
-  {
-   "id": "c07d",
-   "chapter": "c07-subjects",
-   "text": "Horizon's catalog covers three hundred and sixty six programmes at one hundred and sixteen universities in fifteen countries. For three hundred and eleven of those programmes, the requirements come from the university's own official pages, with the exact wording, a link to the source, and the date they were checked.",
-   "display": "Horizon's catalog covers 366 programmes at 116 universities in 15 countries. For 311 of those programmes, the requirements come from the university's own official pages, with the exact wording, a link to the source, and the date they were checked."
-  },
-  {
-   "id": "c07e",
-   "chapter": "c07-subjects",
-   "text": "Horizon checks every programme against Adam's record and plan, requirement by requirement, and tells him plainly: eligible, on track, or missing something, and exactly what. Right now, a hundred and thirty eight programmes at fifty eight universities are eligible or on track for him.",
-   "display": "Horizon checks every programme against Adam's record and plan, requirement by requirement, and tells him plainly: eligible, on track, or missing something, and exactly what. Right now, 138 programmes at 58 universities are eligible or on track for him."
-  },
-  {
-   "id": "c07f",
-   "chapter": "c07-subjects",
-   "text": "It speaks AP, too. When a programme requires a particular AP course, Horizon says so, in the university's own words. When a strong regular course is just as acceptable, it says that too. For Adam, AP Calculus BC is needed by three of his eight targets, but regular science courses are enough for all of them. So nobody signs up for four APs out of pure panic. And it only ever suggests classes the school really offers.",
-   "display": "It speaks AP, too. When a programme requires a particular AP course, Horizon says so, in the university's own words. When a strong regular course is just as acceptable, it says that too. For Adam, AP Calculus BC is needed by 3 of his 8 targets, but regular science courses are enough for all of them. So nobody signs up for four APs out of pure panic. And it only ever suggests classes the school really offers."
-  },
-  {
-   "id": "c07g",
-   "chapter": "c07-subjects",
-   "text": "Every elective shows how many of his targets need it, and how many programmes it keeps open. Choose AP Physics 1 over regular Physics, and ten more programmes stay open. Pick it, and Horizon spots that it already covers Manchester's requirement, so AP Computer Science is no longer needed. And he can try what if, before anything is saved.",
-   "display": "Every elective shows how many of his targets need it, and how many programmes it keeps open. Choose AP Physics 1 over regular Physics, and 10 more programmes stay open. Pick it, and Horizon spots that it already covers Manchester's requirement, so AP Computer Science is no longer needed. And he can try what if, before anything is saved."
-  },
-  {
-   "id": "c07h",
-   "chapter": "c07-subjects",
-   "text": "When he's happy, Horizon builds his Grade 9 to 12 plan, and he sends it to his counselor. Sarah reviews it, adds a note, and approves it. And Rania sees the approved plan on her phone, in Arabic, so the whole family is finally on the same page. Teenager included."
-  },
-  {
-   "id": "c08a",
-   "chapter": "c08-applications",
-   "text": "Fast forward to Grade 12, and the plan becomes applications. Every application is tracked from shortlist to offer, each with its own checklist. Deadlines turn into tasks and reminders, so nothing sneaks up on anyone."
-  },
-  {
-   "id": "c08b",
-   "chapter": "c08-applications",
-   "text": "When a student needs a recommendation letter, it lands on the teacher's task list with a due date. Sarah sees every student on one board, and moves an application along with a simple drag. Each card shows the route, the deadline, and how much of the checklist is done."
-  },
-  {
-   "id": "c08c",
-   "chapter": "c08-applications",
-   "text": "When universities visit, students and parents sign up for fairs and information sessions in one tap, and the event drops straight into their calendar. And for younger students, it all starts with a ten minute career assessment, and a bilingual career report the family can keep.",
-   "display": "When universities visit, students and parents sign up for fairs and information sessions in one tap, and the event drops straight into their calendar. And for younger students, it all starts with a 10 minute career assessment, and a bilingual career report the family can keep."
-  },
-  {
-   "id": "c09a",
-   "chapter": "c09-care",
-   "text": "Some of the most important work in a school is also the most sensitive. When Daniel is worried about a student, he refers them to the counselor in a few clicks. Sarah picks up the case with its full history."
-  },
-  {
-   "id": "c09b",
-   "chapter": "c09-care",
-   "text": "Her notes are versioned: change one, and the original is kept, so nothing can ever be quietly rewritten. She books a meeting with the family straight from the case, and agrees an action plan that turns into tasks for everyone involved. Her case list shows priorities and service level timers, so nothing urgent waits in a pile."
-  },
-  {
-   "id": "c09c",
-   "chapter": "c09-care",
-   "text": "Wellbeing and safeguarding cases follow stricter rules. When a teacher raises a safeguarding concern, it goes straight to Khalid, the designated safeguarding lead, and to nobody else. The teacher only sees that it was received and is being handled."
-  },
-  {
-   "id": "c09d",
-   "chapter": "c09-care",
-   "text": "These cases never appear in search, dashboards or reports. Every single view is written to the audit log. And parents are never notified automatically. Telling a family is always a recorded staff decision, with a reason."
-  },
-  {
-   "id": "c10a",
-   "chapter": "c10-academics",
-   "text": "Horizon also runs the academic day. The weekly timetable is generated without clashes, and every teacher, student and parent sees their own week. Teachers see their classes and rosters, and any cover lesson appears right on their timetable."
-  },
-  {
-   "id": "c10b",
-   "chapter": "c10-academics",
-   "text": "Daniel enters marks in a gradebook that feels like a spreadsheet: type, tab, or paste a whole column from Excel, and it saves as he goes. Nothing reaches families until he publishes. Then students and parents see averages and trends, and term report cards are produced in both languages."
-  },
-  {
-   "id": "c10c",
-   "chapter": "c10-academics",
-   "text": "Lesson plans are written against the curriculum standards, so the head of department can see what's covered, and what's missing."
-  },
-  {
-   "id": "c10d",
-   "chapter": "c10-academics",
-   "text": "Trips come with consent letters. Parents give or decline consent with one tap, while the trip leader watches a live consent board instead of counting paper slips. And exam timetables are published as a PDF and land on every family's calendar, with invigilation duties on the staff side."
-  },
-  {
-   "id": "c11a",
-   "chapter": "c11-phone",
-   "text": "For parents, Horizon lives on the phone. It installs straight to the home screen like an app, no app store required. Updates arrive as push notifications and, when the school switches it on, on WhatsApp too. Anything sensitive never shows details in a notification: just a short line, and a link that needs a sign in."
-  },
-  {
-   "id": "c11b",
-   "chapter": "c11-phone",
-   "text": "From the sofa, Rania can approve a request, give consent for a trip, book a meeting with a teacher, pay fees through the school's own payment link, and download Adam's bilingual career report. In English, or in Arabic, right to left. Every page works on a phone, with no pinching and zooming."
-  },
-  {
-   "id": "c12a",
-   "chapter": "c12-leaders",
-   "text": "For school leaders, all this daily work becomes a clear picture. Omar sees request volumes, resolution times and service levels, week by week, and sensitive cases are always left out of the numbers. Pilot measures show adoption at a glance: how many staff are active, and how many parents have joined. Leaders can even ask questions in plain words, like which services are slowest this month, and get an answer from the school's own figures."
-  },
-  {
-   "id": "c12b",
-   "chapter": "c12-leaders",
-   "text": "When inspectors come, the inspection evidence pack gathers the records the school already keeps, for any period, as a bilingual PDF."
-  },
-  {
-   "id": "c12c",
-   "chapter": "c12-leaders",
-   "text": "And privacy is built in for the UAE data protection law. Requests to see or delete personal data are tracked with due dates. Everything held about one person can be exported in one step, and erasure always shows a preview first, and asks for a typed confirmation."
-  },
-  {
-   "id": "c13a",
-   "chapter": "c13-start",
-   "text": "Getting started takes days, not months. A school signs up and gets a working setup straight away: services, forms, letters, roles, bell times and the UAE calendar. The setup wizard adds the logo, colors and school year."
-  },
-  {
-   "id": "c13b",
-   "chapter": "c13-start",
-   "text": "The import center brings in staff, students, families and classes from the spreadsheets the school already has, and checks every row before anything is saved. Staff are invited by email, and parents join with a school code. Every letter, form and message the school sends can be edited, in both languages."
-  },
-  {
-   "id": "c13c",
-   "chapter": "c13-start",
-   "text": "And if you run a group of schools, the group dashboard compares every school side by side, and shares services and letters between them."
-  },
-  {
-   "id": "c14a",
-   "chapter": "c14-trust",
-   "text": "Underneath it all is trust. Every school's data is kept apart inside the database itself. Roles decide who sees what, and the principal can check exactly what any person can see, and why. And the school can export all of its own data at any time."
-  },
-  {
-   "id": "c14b",
-   "chapter": "c14-trust",
-   "text": "Every sensitive action is recorded in an audit log that can't be edited. And AI helps with drafts and summaries, but on sensitive matters it only ever writes a draft. A person always decides."
-  },
-  {
-   "id": "c15a",
-   "chapter": "c15-close",
-   "text": "One platform for every school procedure, in Arabic and English, for students, parents and staff. That's Horizon. To see it at your school, contact Nexus AI Assurance. We'd love to show you around."
+   "id": "s12",
+   "text": "Horizon is one platform for school operations and student services, in Arabic and English. To arrange a demonstration for your school, contact Nexus AI Assurance.",
+   "holds": [
+    1
+   ]
   }
  ]
 }
