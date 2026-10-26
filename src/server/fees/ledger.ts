@@ -591,7 +591,7 @@ async function settleSeatBookings(tx: Tx, orgId: string, invoiceIds: string[], a
       await handler(execCtx(tx, orgId, { now: at, effects: effects ?? [], actorId: actor.membershipId }), { applicationId, reference: inv.number });
     } catch (e) {
       // Not found, or no longer waiting for the seat payment: the payment stands and nothing else changes.
-      console.warn("[fees] seat booking hook skipped", inv.number, e instanceof Error ? e.message.slice(0, 80) : "error");
+      console.warn("[fees] seat booking hook skipped", inv.number, e instanceof Error ? e.name : "error");
     }
   }
 }
