@@ -4,7 +4,8 @@ import { canOpenDocument } from "@/server/access/document-access";
 import { audit } from "@/server/audit/audit";
 import { renderLetterPdf, renderSamplePdf } from "@/server/documents/pdf";
 import { letterheadFor } from "@/server/documents/letterhead";
-import { readLocal, signedUrl } from "@/server/documents/storage";
+import { localFileHeaders, readLocal, signedUrl } from "@/server/documents/storage";
+import { contentDisposition } from "@/lib/files/check";
 import type { MergeData } from "@/server/documents/merge";
 import { renderReportCardPdf } from "@/server/grades/report-pdf";
 import type { ReportCardData } from "@/server/grades/report-card";
@@ -40,7 +41,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   });
 
   const inline = url.searchParams.get("inline") === "1";
-  const disposition = `${inline ? "inline" : "attachment"}; filename="${version.fileName}"`;
+  // Rendered letters and report cards are PDFs made here, so they may open inline.
+  const disposition = contentDisposition(inline ? "inline" : "attachment", version.fileName);
   if (version.storageKey.startsWith("render:")) {
     const template = doc.templateId ? await ctx.db.documentTemplate.findUnique({ where: { id: doc.templateId } }) : null;
     if (!template) return NextResponse.json({ error: "template_missing" }, { status: 404 });
@@ -75,9 +77,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     const pdf = await renderSamplePdf({ en: doc.titleEn, ar: doc.titleAr }, { en: version.fileName, ar: version.fileName });
     return new NextResponse(new Uint8Array(pdf), { headers: { "Content-Type": "application/pdf", "Content-Disposition": disposition, "Cache-Control": "private, no-store" } });
   }
-  const signed = await signedUrl(version.storageKey, version.fileName);
+  const signed = await signedUrl(version.storageKey, version.fileName, { inline });
   if (signed) return NextResponse.redirect(signed, 302);
   const local = await readLocal(version.storageKey);
-  if (local) return new NextResponse(new Uint8Array(local), { headers: { "Content-Type": version.mimeType, "Content-Disposition": disposition, "Cache-Control": "private, no-store" } });
+  if (local) return new NextResponse(new Uint8Array(local), { headers: localFileHeaders(version.storageKey, version.fileName, inline) });
   return NextResponse.json({ error: "file_missing" }, { status: 404 });
 }

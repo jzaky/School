@@ -8,6 +8,7 @@ import path from "node:path";
 import { DeleteObjectCommand, DeleteObjectsCommand, GetObjectCommand, ListObjectsV2Command, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { r2Configured, s3 } from "./r2";
+import { dispositionFor, mimeForName } from "../../lib/files/check";
 
 export const localDir = () => process.env.LOCAL_UPLOAD_DIR ?? path.join(process.cwd(), ".uploads");
 
@@ -132,12 +133,22 @@ export async function deleteOrgObjects(orgId: string): Promise<number> {
   return removed;
 }
 
-/** A signed URL (R2 only) valid for `expiresIn` seconds, or null for locally stored files. */
+/**
+ * A signed URL (R2 only) for one object, valid for `expiresIn` seconds (at most 15 minutes), or null for locally
+ * stored files. The content type comes from the stored name (set by the upload check), and only images and PDFs
+ * may open inline; everything else downloads.
+ */
 export async function signedObjectUrl(storageKey: string, fileName: string, expiresIn = 300, disposition: "inline" | "attachment" = "inline") {
   if (!storageKey.startsWith("r2:") || !r2Configured()) return null;
+  const mime = mimeForName(storageKey);
   return getSignedUrl(
     s3(),
-    new GetObjectCommand({ Bucket: process.env.R2_BUCKET!, Key: storageKey.slice(3), ResponseContentDisposition: `${disposition}; filename="${encodeURIComponent(fileName)}"` }),
-    { expiresIn },
+    new GetObjectCommand({
+      Bucket: process.env.R2_BUCKET!,
+      Key: storageKey.slice(3),
+      ResponseContentDisposition: dispositionFor(mime, fileName, disposition === "inline"),
+      ResponseContentType: mime,
+    }),
+    { expiresIn: Math.min(Math.max(1, expiresIn), 900) },
   );
 }

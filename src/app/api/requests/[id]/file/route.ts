@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { getOptionalCtx } from "@/server/context";
 import { threadAccess } from "@/server/requests/conversation";
 import { absencePrivacy, canSeeAbsenceReason } from "@/server/access/absence-access";
-import { readLocal, signedUrl } from "@/server/documents/storage";
+import { localFileHeaders, readLocal, signedUrl } from "@/server/documents/storage";
+import { contentDisposition } from "@/lib/files/check";
 import { renderSamplePdf } from "@/server/documents/pdf";
 import type { FormSchema } from "@/server/forms/schema";
 
@@ -43,16 +44,15 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   await ctx.db.auditEvent.create({
     data: { orgId: ctx.orgId, actorId: ctx.membershipId, actorUserId: ctx.user.id, action: "request.file.view", entityType: "Request", entityId: id, sensitivity: isPrivate ? "MEDICAL" : access.sensitivity, meta: { field } as never },
   });
-  const name = (value.name ?? "attachment").replace(/[^\w.\- ]+/g, "_");
-  const disposition = `inline; filename="${name}"`;
-  const headers = { "Content-Disposition": disposition, "Cache-Control": "private, no-store" };
+  const name = String(value.name ?? "attachment").slice(0, 150);
   if (value.key.startsWith("sample:")) {
     const pdf = await renderSamplePdf({ en: "Attachment", ar: "مرفق" }, { en: name, ar: name });
-    return new NextResponse(new Uint8Array(pdf), { headers: { ...headers, "Content-Type": "application/pdf" } });
+    return new NextResponse(new Uint8Array(pdf), { headers: { "Content-Disposition": contentDisposition("inline", name), "Cache-Control": "private, no-store", "Content-Type": "application/pdf" } });
   }
+  // The content type comes from the stored name (set by the upload check), never from the submitted form data.
   const signed = await signedUrl(value.key, name);
   if (signed) return NextResponse.redirect(signed, 302);
   const local = await readLocal(value.key);
-  if (local) return new NextResponse(new Uint8Array(local), { headers: { ...headers, "Content-Type": value.type || "application/octet-stream" } });
+  if (local) return new NextResponse(new Uint8Array(local), { headers: localFileHeaders(value.key, name, true) });
   return NextResponse.json({ error: "file_missing" }, { status: 404 });
 }
