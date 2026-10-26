@@ -203,3 +203,15 @@
 - Worker: admissions.daily (re-enrollment notices and reminders, activating next-year starters).
 - Demo: prisma/seed/academics/admissions.ts. Hana Saleh (Admissions Officer persona), 50 submitted applications for next year at every stage from KG1 to Grade 11 plus 3 drafts, waiting list for a full Grade 10, Rania applying for her youngest (Lina, offer made), five enrolled (three for next year, two joined this term), registrations in each status, re-enrollment window with answers and planned leavers, two former students with transfer certificates.
 - Guide: docs/guides/admissions.md. Tests: tests/unit/admissions.test.ts, tests/integration/admissions.test.ts, tests/e2e/admissions.spec.ts.
+
+## Government reporting (gov worktree, Oct 2026)
+- /admin/government: returns for the school's authority (admissions setting: SPEA DALEEL, MoE Al Manhal, KHDA, ADEK or custom) with tabs for returns, due dates and the submission log; /admin/government/[id] for one return (checks, tables, files and submissions).
+- Returns: enrollment census, learner registration list, attendance return, staff return, results summary, each for a census date or a period, KG labels throughout. Excel (a sheet per table, English and Arabic header rows, About sheet), CSV (main table, bilingual headers), summary PDF in English or Arabic with the principal's sign-off. API: /api/government/export.
+- Checks before sending with fixes in place (identity fields, registration reference) and links to the record; never shows an Emirates ID. Export with open problems is confirmed, flagged in the file and audited.
+- File log with version, SHA-256 of the file and of the data, submissions with the authority's reference; both append-only and audited.
+- Due date calendar with reminders 14 and 3 days before to holders of government.reports (worker job government.reminders, idempotent JobRun claims).
+- Privacy: full Emirates IDs only in the registration list with people.reveal_ids (audited confidential); no health details; people of determination merged to groups of at least 5; small results groups suppressed.
+- Permissions: government.reports (school_admin, registrar), government.view (principal).
+- Schema: migration 20261026210000_government_reporting (GovReturn, GovReturnExport, GovSubmission, GovDueDate), rls.sql section 10.
+- Demo: prisma/seed/academics/government.ts. KHDA; last term's census submitted (signed off, two files, reference CNS-2026-04127); a draft census with four problems; six due dates, reminders already in the bell. Guide steps for registrar, admin and principal.
+- Guide: docs/guides/government-reporting.md (with what each authority publishes, and what is format to be confirmed). Tests: tests/unit/govreports.test.ts, tests/integration/government.test.ts, tests/e2e/government.spec.ts.
