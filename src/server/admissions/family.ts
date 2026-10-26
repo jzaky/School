@@ -264,6 +264,20 @@ export async function withdrawApplication(orgId: string, fam: Family, id: string
   });
 }
 
+/** Remove a file the family uploaded, while the school has not reviewed it yet. Returns the storage key to delete. */
+export async function removeFamilyDocument(orgId: string, fam: Family, applicationId: string, documentId: string): Promise<string> {
+  return tenantTx(orgId, async (tx) => {
+    const app = await own(tx, orgId, fam.userId, applicationId);
+    const doc = await tx.admissionDocument.findFirst({ where: { id: documentId, orgId, applicationId: app.id, uploadedByUserId: fam.userId } });
+    if (!doc) throw new AdmissionError("NOT_FOUND");
+    if (doc.status !== "RECEIVED" || ["ENROLLED", "DECLINED", "WITHDRAWN"].includes(app.stage)) throw new AdmissionError("LOCKED");
+    await tx.admissionDocument.delete({ where: { id: doc.id } });
+    await recordEvent(tx, orgId, { applicationId: app.id, kind: "document", actorUserId: fam.userId, data: { typeKey: doc.typeKey, status: "REMOVED" } });
+    await audit(tx, orgId, { actorUserId: fam.userId, action: "admission.document_remove", entityType: "AdmissionDocument", entityId: doc.id, meta: { typeKey: doc.typeKey } });
+    return doc.storageKey;
+  });
+}
+
 /** A message from the family. The admissions team is told a reply arrived, never what it says. */
 export async function familyMessage(orgId: string, fam: Family, id: string, body: string) {
   const text = body.trim();

@@ -1,11 +1,13 @@
 // Admissions reports as SQL aggregates: funnel by stage and grade, conversion, capacity against enrolled, and
 // nationality and age-group summaries. Counts only, never individual records; nationalities with fewer than
 // SMALL_GROUP applicants are merged into "Other" so no child can be singled out in a chart.
+import { Prisma } from "@prisma/client";
 import type { Tx } from "@/server/db";
 import { seatCounts } from "./capacity";
 import { seatsAvailable } from "./rules";
 import type { Settings, YearOption } from "./settings";
 import { phaseOf } from "./stages";
+import { rawQuery } from "./sql";
 
 export const SMALL_GROUP = 3;
 
@@ -14,11 +16,11 @@ const n = (v: Big) => Number(v);
 
 /** Applications that reached each stage (from the history), by grade. Drafts are not counted. */
 export async function funnel(tx: Tx, orgId: string, yearId: string) {
-  const rows = await tx.$queryRaw<Array<{ stage: string; grade: number; n: Big }>>`
+  const rows = await rawQuery<Array<{ stage: string; grade: number; n: Big }>>(tx, orgId, Prisma.sql`
     SELECT e."toStage" AS stage, a."gradeLevel" AS grade, count(DISTINCT e."applicationId") AS n
     FROM "AdmissionEvent" e JOIN "AdmissionApplication" a ON a.id = e."applicationId"
     WHERE a."orgId" = ${orgId} AND a."academicYearId" = ${yearId} AND e."toStage" IS NOT NULL AND e."toStage" <> 'DRAFT'
-    GROUP BY 1, 2`;
+    GROUP BY 1, 2`);
   return rows.map((r) => ({ stage: r.stage, grade: r.grade, n: n(r.n) }));
 }
 
@@ -77,12 +79,12 @@ export const AGE_BANDS = [
  */
 export async function ageSummary(tx: Tx, orgId: string, year: YearOption, cutoff: { month: number; day: number }) {
   const cutoffDate = new Date(Date.UTC(year.entryYear, cutoff.month - 1, cutoff.day));
-  const rows = await tx.$queryRaw<Array<{ age: number | null; expected: number; n: Big }>>`
+  const rows = await rawQuery<Array<{ age: number | null; expected: number; n: Big }>>(tx, orgId, Prisma.sql`
     SELECT CASE WHEN "dateOfBirth" IS NULL THEN NULL ELSE date_part('year', age(${cutoffDate}::date, "dateOfBirth"::date))::int END AS age,
            ("gradeLevel" + 5) AS expected, count(*) AS n
     FROM "AdmissionApplication"
     WHERE "orgId" = ${orgId} AND "academicYearId" = ${year.id} AND stage <> 'DRAFT'
-    GROUP BY 1, 2`;
+    GROUP BY 1, 2`);
   const bands = AGE_BANDS.map((b) => ({ key: b.key as string, n: 0 }));
   let under = 0;
   let over = 0;

@@ -5,7 +5,7 @@ export type NavItem = { key: string; href: string; icon: string; badge?: number 
 export type NavSection = { key: string; items: NavItem[] };
 
 /** Role-aware navigation. Only features the member can use appear. */
-export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; notifications: number; joinRequests?: number; group?: boolean }): NavSection[] {
+export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; notifications: number; joinRequests?: number; group?: boolean; reenrollmentOpen?: boolean }): NavSection[] {
   const c = ctx.can;
   if (ctx.isStudent) {
     return [
@@ -40,6 +40,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
         items: [
           { key: "home", href: "/home", icon: "home" },
           { key: "children", href: "/children", icon: "users" },
+          // Next year's re-enrollment, while the school has a window open.
+          ...(counts.reenrollmentOpen ? [{ key: "reenrollment", href: "/reenrollment", icon: "repeat" }] : []),
           ...(c("registration.submit") ? [{ key: "subjects", href: "/subjects", icon: "book-open" }] : []),
           ...(c("grades.view_own") ? [{ key: "grades", href: "/grades", icon: "clipboard-check" }] : []),
           ...(c("pathways.view") ? [{ key: "pathwayPlanning", href: "/career/pathways", icon: "map" }, { key: "universities", href: "/career/universities", icon: "landmark" }] : []),
@@ -75,6 +77,9 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("trips.manage")) work.push({ key: "trips", href: "/trips", icon: "bus" });
   const school: NavItem[] = [];
   if (c("people.view")) school.push({ key: "students", href: "/students", icon: "graduation-cap" });
+  if (c("admissions.view")) school.push({ key: "admissions", href: "/admissions", icon: "door-open" });
+  // The school nurse reviews health and learning support details on applications without seeing the pipeline.
+  else if (c("people.medical")) school.push({ key: "admissionsHealth", href: "/admissions/health", icon: "heart-pulse" });
   if (c("grades.enter") || c("registration.manage")) school.push({ key: "classes", href: "/classes", icon: "school" });
   if (c("grades.enter") || c("grades.view_all")) school.push({ key: "grades", href: "/grades", icon: "clipboard-check" });
   if (c("career.advise")) school.push({ key: "career", href: "/career", icon: "compass" }, { key: "careerEvents", href: "/career/events", icon: "calendar-check" });

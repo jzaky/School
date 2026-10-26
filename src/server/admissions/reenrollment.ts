@@ -13,6 +13,7 @@ import { dateBoth } from "./labels";
 import type { Actor } from "./service";
 import { ensureAdmissionSetup } from "./templates";
 import { cancelWithdrawal, planWithdrawal } from "./withdrawals";
+import { rawQuery } from "./sql";
 
 export const LEDGER_QUEUE = "admissions";
 
@@ -95,25 +96,25 @@ export async function respond(ec: ExecCtx, who: Respondent, input: { windowId: s
 
 /** Guardians (members) of eligible students who have not answered yet. */
 async function nonResponderGuardians(tx: Tx, orgId: string, windowId: string) {
-  const rows = await tx.$queryRaw<Array<{ membershipId: string }>>`
+  const rows = await rawQuery<Array<{ membershipId: string }>>(tx, orgId, Prisma.sql`
     SELECT DISTINCT g."membershipId" AS "membershipId"
     FROM "Student" s
     JOIN "GuardianLink" l ON l."studentId" = s.id AND l."receivesUpdates" = true
     JOIN "Guardian" g ON g.id = l."guardianId" AND g."membershipId" IS NOT NULL
     JOIN "Membership" m ON m.id = g."membershipId" AND m.status = 'ACTIVE'
     WHERE s."orgId" = ${orgId} AND s.status = 'ACTIVE' AND s."gradeLevel" < ${MAX_GRADE_LEVEL}
-      AND NOT EXISTS (SELECT 1 FROM "ReenrollmentResponse" r WHERE r."windowId" = ${windowId} AND r."studentId" = s.id)`;
+      AND NOT EXISTS (SELECT 1 FROM "ReenrollmentResponse" r WHERE r."windowId" = ${windowId} AND r."studentId" = s.id)`);
   return rows.map((r) => r.membershipId);
 }
 
 async function allEligibleGuardians(tx: Tx, orgId: string) {
-  const rows = await tx.$queryRaw<Array<{ membershipId: string }>>`
+  const rows = await rawQuery<Array<{ membershipId: string }>>(tx, orgId, Prisma.sql`
     SELECT DISTINCT g."membershipId" AS "membershipId"
     FROM "Student" s
     JOIN "GuardianLink" l ON l."studentId" = s.id AND l."receivesUpdates" = true
     JOIN "Guardian" g ON g.id = l."guardianId" AND g."membershipId" IS NOT NULL
     JOIN "Membership" m ON m.id = g."membershipId" AND m.status = 'ACTIVE'
-    WHERE s."orgId" = ${orgId} AND s.status = 'ACTIVE' AND s."gradeLevel" < ${MAX_GRADE_LEVEL}`;
+    WHERE s."orgId" = ${orgId} AND s.status = 'ACTIVE' AND s."gradeLevel" < ${MAX_GRADE_LEVEL}`);
   return rows.map((r) => r.membershipId);
 }
 
@@ -156,7 +157,7 @@ export async function sendRemindersNow(ec: ExecCtx, actor: Actor, windowId: stri
 
 /** Per-grade answers for a window, as SQL aggregates (grade is this year's grade). */
 export async function windowSummary(tx: Tx, orgId: string, windowId: string) {
-  const rows = await tx.$queryRaw<Array<{ grade: number; eligible: bigint; returning: bigint; leaving: bigint }>>`
+  const rows = await rawQuery<Array<{ grade: number; eligible: bigint; returning: bigint; leaving: bigint }>>(tx, orgId, Prisma.sql`
     SELECT s."gradeLevel" AS grade,
            count(*) AS eligible,
            count(*) FILTER (WHERE r.intent = 'RETURNING') AS returning,
@@ -164,7 +165,7 @@ export async function windowSummary(tx: Tx, orgId: string, windowId: string) {
     FROM "Student" s
     LEFT JOIN "ReenrollmentResponse" r ON r."studentId" = s.id AND r."windowId" = ${windowId}
     WHERE s."orgId" = ${orgId} AND s.status = 'ACTIVE' AND s."gradeLevel" < ${MAX_GRADE_LEVEL}
-    GROUP BY s."gradeLevel" ORDER BY s."gradeLevel"`;
+    GROUP BY s."gradeLevel" ORDER BY s."gradeLevel"`);
   return rows.map((r) => ({ grade: r.grade, eligible: Number(r.eligible), returning: Number(r.returning), leaving: Number(r.leaving), pending: Number(r.eligible) - Number(r.returning) - Number(r.leaving) }));
 }
 

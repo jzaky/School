@@ -8,6 +8,7 @@ import { z } from "zod";
 import { identityDb, tenantTx } from "@/lib/tenant-db";
 import { execCtx } from "@/server/db";
 import { flushEffects } from "@/server/queue";
+import { deleteObject } from "@/server/documents/storage-core";
 import { audit } from "@/server/audit/audit";
 import { resolveAccount, JoinError } from "@/server/access/join";
 import { clientIp, hit } from "@/server/access/rate-limit";
@@ -15,7 +16,7 @@ import { isLocale } from "@/i18n/routing";
 import { AdmissionError } from "./access";
 import { clearApplicantSession, confirmEmailCode, currentApplicant, issueEmailCode, setApplicantSession } from "./applicant";
 import { mailFamily } from "./email";
-import { familyMessage, parseStep, respondToOffer, saveStep, startApplication, submitApplication, withdrawApplication, type Family } from "./family";
+import { familyMessage, parseStep, removeFamilyDocument, respondToOffer, saveStep, startApplication, submitApplication, withdrawApplication, type Family } from "./family";
 import { applySchoolBySlug, type ApplySchool } from "./public-school";
 import { loadSettings } from "./settings";
 
@@ -187,6 +188,18 @@ export async function withdrawApplicationAction(input: { slug: string; locale: s
     const school = await schoolOpen(input.slug);
     const fam = await family(school, input.locale);
     await withdrawApplication(school.id, fam, String(input.applicationId), input.reason ? String(input.reason) : null);
+    return { ok: true };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
+export async function removeDocumentAction(input: { slug: string; locale: string; applicationId: string; documentId: string }): Promise<Res> {
+  try {
+    const school = await schoolOpen(input.slug);
+    const fam = await family(school, input.locale);
+    const key = await removeFamilyDocument(school.id, fam, String(input.applicationId), String(input.documentId));
+    await deleteObject(key);
     return { ok: true };
   } catch (e) {
     return fail(e);

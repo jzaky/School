@@ -298,6 +298,8 @@ describe("staff pipeline", () => {
     // Accepted seats now count as enrolled for next year.
     const year = (await admissionYears(tenantDb(orgId) as never, orgId)).find((y) => y.id === nextYearId)!;
     expect(await tenantTx(orgId, (tx) => gradeSeats(tx, orgId, year, KG1))).toMatchObject({ enrolled: 1, offered: 1, holding: 0 });
+    // Pages pass the request client (tenantDb): the SQL aggregates must still run under the school's RLS context.
+    expect(await gradeSeats(tenantDb(orgId) as never, orgId, year, KG1)).toMatchObject({ enrolled: 1, offered: 1, holding: 0 });
   });
 });
 

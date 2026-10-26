@@ -6,7 +6,8 @@ import { missingDocs } from "./config";
 import { parseFlags } from "./dup";
 import { ageFlag, priorityScore, type AgeFlag } from "./rules";
 import { admissionYears, asTx, loadSettings, type Settings, type YearOption } from "./settings";
-import { boardStages, type StageDef } from "./stages";
+import { boardStages, phaseOf, seatFeeRequired, type StageDef } from "./stages";
+import { awaitingApproval } from "./registration";
 
 export const COLUMN_PAGE = 25;
 export const LIST_PAGE = 50;
@@ -65,6 +66,7 @@ const CARD_SELECT = {
   seatPaidAt: true,
   assessmentOutcome: true,
   academicYearId: true,
+  studentId: true,
 } satisfies Prisma.AdmissionApplicationSelect;
 
 type CardRow = Prisma.AdmissionApplicationGetPayload<{ select: typeof CARD_SELECT }>;
@@ -88,10 +90,16 @@ export type Card = {
   offerDeadline: string | null;
   offerExpired: boolean;
   outcome: string | null;
+  /** A seat booking payment is due before enrollment. */
+  feeDue: boolean;
+  /** Enrolled, but the education authority has not approved the registration yet. */
+  awaitingAuthority: boolean;
 };
 
 async function toCards(ctx: Ctx, rows: CardRow[], s: Settings, year: YearOption | undefined, now: Date): Promise<Card[]> {
   const docs = rows.length ? await ctx.db.admissionDocument.findMany({ where: { orgId: ctx.orgId, applicationId: { in: rows.map((r) => r.id) } }, select: { applicationId: true, typeKey: true, status: true } }) : [];
+  const caps = year ? await ctx.db.admissionCapacity.findMany({ where: { orgId: ctx.orgId, academicYearId: year.id }, select: { gradeLevel: true, seatFeeFils: true } }) : [];
+  const awaiting = await awaitingApproval(asTx(ctx.db), ctx.orgId, rows.map((r) => r.studentId).filter((x): x is string => Boolean(x)));
   return rows.map((r) => ({
     id: r.id,
     number: r.number,
@@ -106,11 +114,14 @@ async function toCards(ctx: Ctx, rows: CardRow[], s: Settings, year: YearOption 
     sibling: r.siblingStudentIds.length > 0,
     staffChild: r.staffChild,
     support: r.hasSupport,
-    missing: missingDocs(s.docTypes, r.gradeLevel, r.nationality, docs.filter((d) => d.applicationId === r.id)).length,
+    // Closed and enrolled applications no longer ask for documents.
+    missing: ["closed", "enrolled"].includes(phaseOf(r.stage, s.stages)) ? 0 : missingDocs(s.docTypes, r.gradeLevel, r.nationality, docs.filter((d) => d.applicationId === r.id)).length,
     priority: priorityScore(r),
     offerDeadline: r.offerDeadline?.toISOString() ?? null,
     offerExpired: r.stage === "OFFER_MADE" && !!r.offerDeadline && r.offerDeadline.getTime() < now.getTime(),
     outcome: r.assessmentOutcome,
+    feeDue: seatFeeRequired(s.stages, caps.find((c) => c.gradeLevel === r.gradeLevel)?.seatFeeFils ?? 0),
+    awaitingAuthority: Boolean(r.studentId && awaiting.has(r.studentId)),
   }));
 }
 

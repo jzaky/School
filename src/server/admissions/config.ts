@@ -82,8 +82,8 @@ export type Relationship = (typeof RELATIONSHIPS)[number];
 export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 export const MAX_FILES_PER_APPLICATION = 30;
 
-/** Common home languages offered in the form (ISO 639-1). Names come from Intl.DisplayNames. */
-export const LANGUAGES = ["ar", "en", "ur", "hi", "ml", "ta", "tl", "fr", "fa", "ru", "bn", "es", "de", "zh", "tr", "so", "am", "other"] as const;
+/** Common home languages offered in the form (ISO 639 codes; Malayalam as "mal"). Names come from Intl.DisplayNames. */
+export const LANGUAGES = ["ar", "en", "ur", "hi", "mal", "ta", "tl", "fr", "fa", "ru", "bn", "es", "de", "zh", "tr", "so", "am", "other"] as const;
 
 /** Nationalities shown first in the picker (the rest follow alphabetically). */
 export const COMMON_NATIONALITIES = ["AE", "SA", "EG", "JO", "SY", "LB", "PS", "IQ", "SD", "YE", "OM", "BH", "KW", "QA", "MA", "DZ", "TN", "LY", "IN", "PK", "BD", "PH", "LK", "NP", "IR", "GB", "US", "CA", "AU", "FR", "DE", "RU", "CN", "NG", "KE", "ZA"];

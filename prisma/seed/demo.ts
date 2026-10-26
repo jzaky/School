@@ -32,6 +32,7 @@ import { seedAccess } from "./access";
 import { seedGroupDemo } from "./groups";
 import { seedIntegrations } from "./integrations";
 import { seedConversations } from "./conversations";
+import { seedAdmissions } from "./academics/admissions";
 import { academicStartYear, installStarterTemplate } from "./starter";
 
 export const DEMO_SLUG = "horizon";
@@ -750,6 +751,8 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   await seedIntegrations(world);
   // Request conversations, private sick leave and cover notes (after the timetable, so cover can be arranged).
   await seedConversations(world);
+  // Admissions: next year's applications, enrollments, re-enrollment and leavers (after subject levels create next year).
+  await seedAdmissions(world);
   // Requirement pipeline examples (after the global catalog seed; programs are looked up at runtime).
   // The catalog review and change monitor show real data only: changes found between archived and
   // current official pages (see prisma/seed/catalog/official.ts). No example drafts or changes are seeded.

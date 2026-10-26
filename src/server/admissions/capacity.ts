@@ -9,6 +9,7 @@ import { Prisma } from "@prisma/client";
 import type { Tx } from "@/server/db";
 import { capacityOf, orderWaitlist, type SeatCounts } from "./rules";
 import type { YearOption } from "./settings";
+import { rawQuery } from "./sql";
 
 type Row = { grade: number; n: bigint | number };
 const num = (v: bigint | number) => Number(v);
@@ -32,11 +33,11 @@ export async function seatCounts(tx: Tx, orgId: string, year: YearOption): Promi
   }
 
   if (year.isCurrent) {
-    const rows = await tx.$queryRaw<Row[]>`SELECT "gradeLevel" AS grade, count(*) AS n FROM "Student" WHERE "orgId" = ${orgId} AND status = 'ACTIVE' GROUP BY "gradeLevel"`;
+    const rows = await rawQuery<Row[]>(tx, orgId, Prisma.sql`SELECT "gradeLevel" AS grade, count(*) AS n FROM "Student" WHERE "orgId" = ${orgId} AND status = 'ACTIVE' GROUP BY "gradeLevel"`);
     for (const r of rows) get(r.grade).enrolled += num(r.n);
   } else {
     // Continuing students move up one grade; leavers for this year are left out.
-    const rows = await tx.$queryRaw<Row[]>`
+    const rows = await rawQuery<Row[]>(tx, orgId, Prisma.sql`
       SELECT s."gradeLevel" + 1 AS grade, count(*) AS n
       FROM "Student" s
       WHERE s."orgId" = ${orgId} AND s.status = 'ACTIVE' AND s."gradeLevel" < 12
@@ -46,13 +47,13 @@ export async function seatCounts(tx: Tx, orgId: string, year: YearOption): Promi
         AND NOT EXISTS (
           SELECT 1 FROM "StudentWithdrawal" d
           WHERE d."studentId" = s.id AND d.status = 'PLANNED' AND d."leavingDate" <= ${year.startsOn})
-      GROUP BY 1`;
+      GROUP BY 1`);
     for (const r of rows) get(r.grade).enrolled += num(r.n);
     // Students admitted for this year (not started yet).
-    const starters = await tx.$queryRaw<Row[]>`
+    const starters = await rawQuery<Row[]>(tx, orgId, Prisma.sql`
       SELECT "gradeLevel" AS grade, count(*) AS n FROM "Student"
       WHERE "orgId" = ${orgId} AND status = 'INACTIVE' AND "enrolledOn" >= ${year.startsOn} AND "enrolledOn" <= ${year.endsOn}
-      GROUP BY "gradeLevel"`;
+      GROUP BY "gradeLevel"`);
     for (const r of starters) get(r.grade).enrolled += num(r.n);
   }
   return out;
@@ -69,7 +70,7 @@ export async function sectionCounts(tx: Tx, orgId: string, year: YearOption, gra
   const where = year.isCurrent
     ? Prisma.sql`"orgId" = ${orgId} AND status = 'ACTIVE' AND "gradeLevel" = ${gradeLevel}`
     : Prisma.sql`"orgId" = ${orgId} AND status = 'INACTIVE' AND "gradeLevel" = ${gradeLevel} AND "enrolledOn" >= ${year.startsOn} AND "enrolledOn" <= ${year.endsOn}`;
-  const rows = await tx.$queryRaw<Array<{ section: string | null; n: bigint }>>`SELECT section, count(*) AS n FROM "Student" WHERE ${where} GROUP BY section`;
+  const rows = await rawQuery<Array<{ section: string | null; n: bigint }>>(tx, orgId, Prisma.sql`SELECT section, count(*) AS n FROM "Student" WHERE ${where} GROUP BY section`);
   const offers = await tx.admissionApplication.groupBy({ by: ["offerSection"], where: { orgId, academicYearId: year.id, gradeLevel, stage: { in: ["OFFER_MADE", "OFFER_ACCEPTED", "SEAT_PAID"] }, offerSection: { not: null } }, _count: { _all: true } });
   const m = new Map<string, number>();
   for (const r of rows) if (r.section) m.set(r.section, (m.get(r.section) ?? 0) + Number(r.n));

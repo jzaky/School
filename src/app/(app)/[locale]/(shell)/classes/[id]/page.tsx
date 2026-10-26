@@ -12,6 +12,7 @@ import { Pill } from "@/components/app/badges";
 import { Button } from "@/components/ui/button";
 import { ClassRegister } from "@/components/attendance/class-register";
 import { formatPrefs } from "@/server/format";
+import { awaitingAuthority } from "@/server/admissions/page-data";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -42,6 +43,8 @@ export default async function ClassRosterPage({ params, searchParams }: { params
   const students = [...cls.enrollments].sort((a, b) => (a.student.section ?? "").localeCompare(b.student.section ?? "") || personName(a.student, locale).localeCompare(personName(b.student, locale), locale));
   const cap = cls.capacity ?? DEFAULT_CAPACITY;
   const canOpenStudent = ctx.can("people.view");
+  // New students the education authority has not approved yet (for example SPEA DALEEL in Sharjah).
+  const awaiting = await awaitingAuthority(ctx, students.map((e) => e.studentId));
 
   return (
     <PageBody>
@@ -108,6 +111,11 @@ export default async function ClassRosterPage({ params, searchParams }: { params
                       </Link>
                     ) : (
                       <span className="block truncate font-medium">{personName(e.student, locale)}</span>
+                    )}
+                    {awaiting.ids.has(e.studentId) && (
+                      <Pill tone="warning" className="mt-0.5 text-[10px]">
+                        {awaiting.label}
+                      </Pill>
                     )}
                   </div>
                   <span className="col-start-2 text-xs text-muted-foreground md:col-start-auto md:text-sm">

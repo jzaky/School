@@ -1,0 +1,2840 @@
+{
+  "admissions": {
+    "tabs": {
+      "label": [
+        "Admissions",
+        "القبول والتسجيل"
+      ],
+      "board": [
+        "Board",
+        "اللوحة"
+      ],
+      "applications": [
+        "Applications",
+        "الطلبات"
+      ],
+      "waitlist": [
+        "Waiting list",
+        "قائمة الانتظار"
+      ],
+      "capacity": [
+        "Places",
+        "المقاعد"
+      ],
+      "registration": [
+        "Government registration",
+        "التسجيل الحكومي"
+      ],
+      "reenrollment": [
+        "Re-enrollment",
+        "إعادة التسجيل"
+      ],
+      "withdrawals": [
+        "Leavers",
+        "المغادرون"
+      ],
+      "reports": [
+        "Reports",
+        "التقارير"
+      ],
+      "health": [
+        "Health review",
+        "المراجعة الصحية"
+      ],
+      "settings": [
+        "Settings",
+        "الإعدادات"
+      ]
+    },
+    "board": {
+      "title": [
+        "Admissions",
+        "القبول والتسجيل"
+      ],
+      "subtitle": [
+        "Applications for {year}, by stage.",
+        "طلبات الالتحاق للعام {year} حسب المرحلة."
+      ],
+      "copyLink": [
+        "Copy application link",
+        "نسخ رابط التقديم"
+      ],
+      "copied": [
+        "Link copied",
+        "تم نسخ الرابط"
+      ],
+      "openOnline": [
+        "Open online applications",
+        "فتح التقديم الإلكتروني"
+      ],
+      "listView": [
+        "List view",
+        "عرض القائمة"
+      ],
+      "statTotal": [
+        "Applications",
+        "الطلبات"
+      ],
+      "statDrafts": [
+        "{n, plural, one {plus # draft not submitted} other {plus # drafts not submitted}}",
+        "{n, plural, zero {ولا توجد مسودات غير مقدمة} one {إضافة إلى مسودة واحدة غير مقدمة} two {إضافة إلى مسودتين غير مقدمتين} few {إضافة إلى # مسودات غير مقدمة} many {إضافة إلى # مسودة غير مقدمة} other {إضافة إلى # مسودة غير مقدمة}}"
+      ],
+      "statNew": [
+        "To review",
+        "بانتظار المراجعة"
+      ],
+      "statNewHint": [
+        "New and waiting for documents",
+        "جديدة أو بانتظار المستندات"
+      ],
+      "statOffers": [
+        "Offers open",
+        "عروض بانتظار الرد"
+      ],
+      "statAccepted": [
+        "{n} accepted",
+        "{n} مقبولة"
+      ],
+      "statWaitlist": [
+        "Waiting list",
+        "قائمة الانتظار"
+      ],
+      "statEnrolled": [
+        "{n} enrolled",
+        "{n} مقيّدون"
+      ],
+      "emptyTitle": [
+        "No applications for this year yet",
+        "لا توجد طلبات لهذا العام بعد"
+      ],
+      "emptyBodyOpen": [
+        "Share the application link on the school website. New applications appear here.",
+        "شاركوا رابط التقديم على موقع المدرسة، وستظهر الطلبات الجديدة هنا."
+      ],
+      "emptyBodyClosed": [
+        "Open online applications in Settings, then share the link with families.",
+        "افتحوا التقديم الإلكتروني من الإعدادات ثم شاركوا الرابط مع الأسر."
+      ],
+      "noYearTitle": [
+        "Set up an academic year first",
+        "أعدّوا العام الدراسي أولًا"
+      ],
+      "noYearBody": [
+        "Admissions work per academic year. Add the current year and next year on the school calendar.",
+        "يعمل القبول لكل عام دراسي. أضيفوا العام الحالي والعام القادم في تقويم المدرسة."
+      ],
+      "noYearAction": [
+        "Open the school calendar",
+        "فتح تقويم المدرسة"
+      ],
+      "cannotMove": [
+        "An application cannot move from {from} to {to}.",
+        "لا يمكن نقل الطلب من {from} إلى {to}."
+      ],
+      "moveFailed": [
+        "That did not work. Please try again.",
+        "لم تنجح العملية. يُرجى المحاولة مرة أخرى."
+      ],
+      "moved": [
+        "Moved to {stage}",
+        "تم النقل إلى {stage}"
+      ],
+      "columnEmpty": [
+        "Nothing here",
+        "لا شيء هنا"
+      ],
+      "showMore": [
+        "Show more ({shown} of {total})",
+        "عرض المزيد ({shown} من {total})"
+      ],
+      "drag": [
+        "Drag to another stage",
+        "اسحب إلى مرحلة أخرى"
+      ],
+      "moveTo": [
+        "Move to",
+        "نقل إلى"
+      ],
+      "needs": {
+        "offer": [
+          "offer",
+          "عرض"
+        ],
+        "paid": [
+          "payment",
+          "سداد"
+        ],
+        "enroll": [
+          "enroll",
+          "قيد"
+        ],
+        "reason": [
+          "reason",
+          "سبب"
+        ]
+      }
+    },
+    "flags": {
+      "duplicates": [
+        "Possible duplicates",
+        "طلبات مكررة محتملة"
+      ],
+      "siblings": [
+        "Siblings at school",
+        "إخوة في المدرسة"
+      ],
+      "staff": [
+        "Staff children",
+        "أبناء الموظفين"
+      ],
+      "support": [
+        "Support needs",
+        "احتياجات الدعم"
+      ],
+      "expired": [
+        "Offer expired",
+        "انتهى العرض"
+      ],
+      "under": [
+        "Under age",
+        "دون السن"
+      ],
+      "over": [
+        "Above usual age",
+        "فوق السن المعتاد"
+      ],
+      "duplicate": [
+        "Possible duplicate",
+        "مكرر محتمل"
+      ],
+      "sibling": [
+        "Sibling",
+        "شقيق في المدرسة"
+      ],
+      "staffChild": [
+        "Staff child",
+        "ابن موظف"
+      ],
+      "missing": [
+        "{n} documents missing",
+        "{n} مستندات ناقصة"
+      ],
+      "due": [
+        "Answer by {date}",
+        "الرد قبل {date}"
+      ],
+      "awaiting": [
+        "Awaiting {authority} approval",
+        "بانتظار موافقة {authority}"
+      ],
+      "outcome": {
+        "RECOMMENDED": [
+          "Recommended",
+          "موصى به"
+        ],
+        "CONDITIONAL": [
+          "Conditional",
+          "مشروط"
+        ],
+        "NOT_RECOMMENDED": [
+          "Not recommended",
+          "غير موصى به"
+        ]
+      }
+    },
+    "filters": {
+      "year": [
+        "Year",
+        "العام"
+      ],
+      "grade": [
+        "Grade",
+        "الصف"
+      ],
+      "allGrades": [
+        "All grades",
+        "جميع الصفوف"
+      ],
+      "stage": [
+        "Stage",
+        "المرحلة"
+      ],
+      "allStages": [
+        "All stages",
+        "جميع المراحل"
+      ],
+      "allFlags": [
+        "Everything",
+        "الكل"
+      ],
+      "search": [
+        "Search by name or number",
+        "البحث بالاسم أو الرقم"
+      ],
+      "previous": [
+        "Previous",
+        "السابق"
+      ],
+      "next": [
+        "Next",
+        "التالي"
+      ],
+      "pageOf": [
+        "Page {page} of {pages} ({total})",
+        "الصفحة {page} من {pages} ({total})"
+      ]
+    },
+    "list": {
+      "title": [
+        "Applications",
+        "الطلبات"
+      ],
+      "subtitle": [
+        "{n, plural, one {# application} other {# applications}}",
+        "{n, plural, zero {لا توجد طلبات} one {طلب واحد} two {طلبان} few {# طلبات} many {# طلبًا} other {# طلب}}"
+      ],
+      "exportCsv": [
+        "CSV",
+        "CSV"
+      ],
+      "exportXlsx": [
+        "Excel",
+        "إكسل"
+      ],
+      "empty": [
+        "No applications match",
+        "لا توجد طلبات مطابقة"
+      ],
+      "emptyBody": [
+        "Try another year, grade or filter.",
+        "جرّبوا عامًا أو صفًا أو تصفية مختلفة."
+      ],
+      "colChild": [
+        "Child",
+        "الطفل"
+      ],
+      "colGrade": [
+        "Grade",
+        "الصف"
+      ],
+      "colStage": [
+        "Stage",
+        "المرحلة"
+      ],
+      "colSubmitted": [
+        "Submitted",
+        "تاريخ التقديم"
+      ],
+      "colFlags": [
+        "Notes",
+        "ملاحظات"
+      ]
+    },
+    "detail": {
+      "metaTitle": [
+        "Application",
+        "طلب الالتحاق"
+      ],
+      "back": [
+        "Admissions board",
+        "لوحة القبول"
+      ],
+      "submitted": [
+        "submitted {date}",
+        "قُدِّم في {date}"
+      ],
+      "ageUnder": [
+        "Under age: {age} on {date}, usual for {grade} is {expected}",
+        "دون السن: {age} في {date}، والمعتاد في {grade} هو {expected}"
+      ],
+      "ageOver": [
+        "Above usual age: {age} on {date}, usual for {grade} is {expected}",
+        "فوق السن المعتاد: {age} في {date}، والمعتاد في {grade} هو {expected}"
+      ],
+      "ageOnCutoff": [
+        "age {age} on {date}",
+        "العمر {age} في {date}"
+      ],
+      "offerExpired": [
+        "Offer expired",
+        "انتهى العرض"
+      ],
+      "offerDue": [
+        "Answer by {date}",
+        "الرد قبل {date}"
+      ],
+      "offerLetter": [
+        "Offer letter",
+        "خطاب العرض"
+      ],
+      "studentRecord": [
+        "Student record",
+        "سجل الطالب"
+      ],
+      "duplicatesTitle": [
+        "Possible duplicate. Check before you continue.",
+        "طلب مكرر محتمل. تحققوا قبل المتابعة."
+      ],
+      "sameEid": [
+        "same Emirates ID",
+        "الهوية الإماراتية نفسها"
+      ],
+      "sameNameDob": [
+        "same name and date of birth",
+        "الاسم وتاريخ الميلاد نفسهما"
+      ],
+      "studentStatus": {
+        "ACTIVE": [
+          "current student",
+          "طالب حالي"
+        ],
+        "INACTIVE": [
+          "starts later",
+          "يبدأ لاحقًا"
+        ],
+        "GRADUATED": [
+          "graduated",
+          "متخرج"
+        ],
+        "WITHDRAWN": [
+          "former student",
+          "طالب سابق"
+        ]
+      },
+      "moveTo": [
+        "Move to:",
+        "نقل إلى:"
+      ],
+      "movedTo": [
+        "Moved to {stage}",
+        "تم النقل إلى {stage}"
+      ],
+      "bookAssessment": [
+        "Book assessment",
+        "حجز التقييم"
+      ],
+      "recordOutcome": [
+        "Record outcome",
+        "تسجيل النتيجة"
+      ],
+      "makeOffer": [
+        "Make an offer",
+        "تقديم عرض"
+      ],
+      "extend": [
+        "Extend deadline",
+        "تمديد الموعد"
+      ],
+      "markPaid": [
+        "Mark seat booking paid",
+        "تسجيل سداد حجز المقعد"
+      ],
+      "enroll": [
+        "Enroll",
+        "قيد الطالب"
+      ],
+      "enrollNoPermission": [
+        "Enrolling needs the admissions.enroll permission.",
+        "يتطلب القيد صلاحية قيد الطلاب."
+      ],
+      "child": [
+        "Child",
+        "الطفل"
+      ],
+      "notGiven": [
+        "Not given",
+        "غير مُدخل"
+      ],
+      "schooling": [
+        "Previous school",
+        "المدرسة السابقة"
+      ],
+      "firstSchool": [
+        "First time at school or nursery.",
+        "أول التحاق بمدرسة أو حضانة."
+      ],
+      "years": [
+        "Years",
+        "الأعوام"
+      ],
+      "family": [
+        "Family",
+        "الأسرة"
+      ],
+      "primary": [
+        "Main contact",
+        "جهة الاتصال الرئيسية"
+      ],
+      "priorityTitle": [
+        "Siblings and priority",
+        "الإخوة والأولوية"
+      ],
+      "declaredSiblings": [
+        "The family listed: {list}",
+        "ذكرت الأسرة: {list}"
+      ],
+      "siblingIs": [
+        "Sibling: {name}",
+        "شقيق: {name}"
+      ],
+      "noSiblings": [
+        "No siblings at the school confirmed.",
+        "لا يوجد إخوة مؤكدون في المدرسة."
+      ],
+      "staffChildVerified": [
+        "Staff child, verified",
+        "ابن موظف، تم التحقق"
+      ],
+      "staffChildClaimed": [
+        "Staff child, not verified yet",
+        "ابن موظف، لم يتم التحقق بعد"
+      ],
+      "boostIs": [
+        "Priority adjustment {n}",
+        "تعديل الأولوية {n}"
+      ],
+      "editPriority": [
+        "Edit priority",
+        "تعديل الأولوية"
+      ],
+      "findSibling": [
+        "Find a current student",
+        "البحث عن طالب حالي"
+      ],
+      "verifyStaffChild": [
+        "A parent is a verified member of staff",
+        "أحد الوالدين موظف تم التحقق منه"
+      ],
+      "boost": [
+        "Adjustment",
+        "التعديل"
+      ],
+      "boostReason": [
+        "Reason for the adjustment",
+        "سبب التعديل"
+      ],
+      "prioritySaved": [
+        "Priority updated",
+        "تم تحديث الأولوية"
+      ],
+      "save": [
+        "Save",
+        "حفظ"
+      ],
+      "cancel": [
+        "Cancel",
+        "إلغاء"
+      ],
+      "remove": [
+        "Remove",
+        "إزالة"
+      ],
+      "documents": [
+        "Documents",
+        "المستندات"
+      ],
+      "documentsHint": [
+        "Accept each document or ask the family for a new one.",
+        "اقبلوا كل مستند أو اطلبوا من الأسرة مستندًا جديدًا."
+      ],
+      "missingDocs": [
+        "Still missing: {list}",
+        "ما زال ناقصًا: {list}"
+      ],
+      "noDocs": [
+        "No documents uploaded yet.",
+        "لم تُرفع مستندات بعد."
+      ],
+      "noDocTypes": [
+        "No document types apply to this application.",
+        "لا تنطبق أي أنواع مستندات على هذا الطلب."
+      ],
+      "open": [
+        "Open",
+        "فتح"
+      ],
+      "accept": [
+        "Accept",
+        "قبول"
+      ],
+      "reject": [
+        "Ask for a new one",
+        "طلب مستند جديد"
+      ],
+      "rejectPrompt": [
+        "What should the family change? They see this note.",
+        "ما الذي يجب على الأسرة تغييره؟ ستظهر لها هذه الملاحظة."
+      ],
+      "medicalOnly": [
+        "Health documents open only for staff with medical access.",
+        "تُفتح المستندات الصحية فقط للموظفين المصرح لهم بالاطلاع على البيانات الطبية."
+      ],
+      "medicalOnlyShort": [
+        "Health staff only",
+        "للطاقم الصحي فقط"
+      ],
+      "conversation": [
+        "Conversation",
+        "المحادثة"
+      ],
+      "conversationHint": [
+        "Family messages and staff-only notes. Families never see staff notes.",
+        "رسائل الأسرة وملاحظات الموظفين الداخلية، ولا ترى الأسرة ملاحظات الموظفين أبدًا."
+      ],
+      "noMessages": [
+        "No messages yet.",
+        "لا توجد رسائل بعد."
+      ],
+      "staffOnly": [
+        "Staff only",
+        "للموظفين فقط"
+      ],
+      "toFamily": [
+        "Message to the family",
+        "رسالة إلى الأسرة"
+      ],
+      "staffNote": [
+        "Staff note",
+        "ملاحظة للموظفين"
+      ],
+      "draftNoFamily": [
+        "The family has not submitted yet.",
+        "لم تقدّم الأسرة الطلب بعد."
+      ],
+      "familyPlaceholder": [
+        "Write to the family",
+        "اكتبوا إلى الأسرة"
+      ],
+      "notePlaceholder": [
+        "Add a note for the admissions team",
+        "أضيفوا ملاحظة لفريق القبول"
+      ],
+      "familyHint": [
+        "The family gets an email that a message is waiting, without the text.",
+        "تتلقى الأسرة بريدًا بوجود رسالة دون نصها."
+      ],
+      "noteHint": [
+        "Visible to staff with admissions access only.",
+        "تظهر فقط للموظفين المصرح لهم بالقبول."
+      ],
+      "send": [
+        "Send",
+        "إرسال"
+      ],
+      "saveNote": [
+        "Save note",
+        "حفظ الملاحظة"
+      ],
+      "messageSent": [
+        "Message sent",
+        "تم إرسال الرسالة"
+      ],
+      "noteSaved": [
+        "Note saved",
+        "تم حفظ الملاحظة"
+      ],
+      "theFamily": [
+        "The family",
+        "الأسرة"
+      ],
+      "seatsTitle": [
+        "Places in {grade}",
+        "المقاعد في {grade}"
+      ],
+      "seatsUnset": [
+        "Places are not set for this grade yet.",
+        "لم تُحدَّد مقاعد هذا الصف بعد."
+      ],
+      "seatsLine": [
+        "{capacity} places: {enrolled} enrolled or continuing, {holding} accepted, {offered} offered, {free} free.",
+        "{capacity} مقعدًا: {enrolled} مقيّدون أو مستمرون، {holding} مقبولون، {offered} عروض مقدمة، {free} متاحة."
+      ],
+      "capacity": [
+        "Places",
+        "المقاعد"
+      ],
+      "enrolledSeats": [
+        "Enrolled",
+        "المقيّدون"
+      ],
+      "holdingSeats": [
+        "Accepted",
+        "المقبولون"
+      ],
+      "offeredSeats": [
+        "Offered",
+        "العروض"
+      ],
+      "freeSeats": [
+        "Free",
+        "المتاحة"
+      ],
+      "waitlisted": [
+        "Waiting",
+        "الانتظار"
+      ],
+      "seatFee": [
+        "Seat booking AED {amount}",
+        "حجز المقعد {amount} درهم"
+      ],
+      "paidOn": [
+        "paid {date}",
+        "سُدِّد في {date}"
+      ],
+      "assessment": [
+        "Assessment",
+        "التقييم"
+      ],
+      "openMeeting": [
+        "Open the meeting",
+        "فتح الموعد"
+      ],
+      "health": [
+        "Health and support",
+        "الصحة والدعم"
+      ],
+      "noHealth": [
+        "No health or learning support details given.",
+        "لم تُذكر تفاصيل صحية أو احتياجات دعم."
+      ],
+      "healthGiven": [
+        "Health details given",
+        "تم تقديم تفاصيل صحية"
+      ],
+      "supportGiven": [
+        "Learning support needs",
+        "احتياجات دعم التعلم"
+      ],
+      "healthLocked": [
+        "Only the school nurse and staff with health access can open these details. They review them in Health review.",
+        "لا يطّلع على هذه التفاصيل إلا ممرض المدرسة والمصرح لهم، ويراجعونها في المراجعة الصحية."
+      ],
+      "revealHealth": [
+        "Show details (recorded)",
+        "عرض التفاصيل (يُسجَّل)"
+      ],
+      "allergies": [
+        "Allergies",
+        "الحساسية"
+      ],
+      "conditions": [
+        "Medical conditions",
+        "الحالات الصحية"
+      ],
+      "medications": [
+        "Medication",
+        "الأدوية"
+      ],
+      "support": [
+        "Learning support",
+        "دعم التعلم"
+      ],
+      "supportNoDetails": [
+        "Support needed, no details given.",
+        "يحتاج إلى دعم دون تفاصيل."
+      ],
+      "previousAssessment": [
+        "Previous assessment",
+        "تقييم سابق"
+      ],
+      "yes": [
+        "Yes",
+        "نعم"
+      ],
+      "reveal": [
+        "Show",
+        "إظهار"
+      ],
+      "history": [
+        "History",
+        "السجل"
+      ],
+      "eventStage": [
+        "Moved to {stage}",
+        "نُقل إلى {stage}"
+      ],
+      "event": {
+        "created": [
+          "Application started",
+          "بدء الطلب"
+        ],
+        "stage": [
+          "Stage changed",
+          "تغيير المرحلة"
+        ],
+        "document": [
+          "Documents updated",
+          "تحديث المستندات"
+        ],
+        "offer": [
+          "Offer updated",
+          "تحديث العرض"
+        ],
+        "payment": [
+          "Seat booking payment",
+          "دفعة حجز المقعد"
+        ],
+        "assessment": [
+          "Assessment updated",
+          "تحديث التقييم"
+        ],
+        "priority": [
+          "Priority updated",
+          "تحديث الأولوية"
+        ],
+        "enrolled": [
+          "Enrolled",
+          "تم القيد"
+        ],
+        "message": [
+          "Message",
+          "رسالة"
+        ],
+        "edit": [
+          "Details updated",
+          "تحديث البيانات"
+        ]
+      },
+      "outcome": {
+        "RECOMMENDED": [
+          "Recommended",
+          "موصى به"
+        ],
+        "CONDITIONAL": [
+          "Conditional",
+          "مشروط"
+        ],
+        "NOT_RECOMMENDED": [
+          "Not recommended",
+          "غير موصى به"
+        ]
+      },
+      "closeReason": {
+        "no_seat": [
+          "No place available",
+          "لا يوجد مقعد متاح"
+        ],
+        "assessment": [
+          "Assessment outcome",
+          "نتيجة التقييم"
+        ],
+        "incomplete": [
+          "Incomplete application",
+          "طلب غير مكتمل"
+        ],
+        "age": [
+          "Age does not fit the grade",
+          "العمر لا يناسب الصف"
+        ],
+        "family_choice": [
+          "Family's choice",
+          "اختيار الأسرة"
+        ],
+        "other_school": [
+          "Chose another school",
+          "اختارت مدرسة أخرى"
+        ],
+        "relocation": [
+          "Moving away",
+          "الانتقال إلى مكان آخر"
+        ],
+        "no_response": [
+          "No response from the family",
+          "لم ترد الأسرة"
+        ],
+        "other": [
+          "Other",
+          "سبب آخر"
+        ]
+      },
+      "offerTitle": [
+        "Make an offer",
+        "تقديم عرض"
+      ],
+      "offerBody": [
+        "The family gets an email and can accept or decline on their application page. The offer letter is generated from your template.",
+        "تتلقى الأسرة بريدًا ويمكنها القبول أو الاعتذار من صفحة الطلب، ويُنشأ خطاب العرض من القالب الخاص بكم."
+      ],
+      "deadline": [
+        "Answer by",
+        "الرد قبل"
+      ],
+      "section": [
+        "Section",
+        "الشعبة"
+      ],
+      "sectionLater": [
+        "Decide later",
+        "تحديدها لاحقًا"
+      ],
+      "sectionSeats": [
+        "Section {name} ({n} places)",
+        "الشعبة {name} ({n} مقعدًا)"
+      ],
+      "gradeFull": [
+        "This grade has no free places.",
+        "لا توجد مقاعد متاحة في هذا الصف."
+      ],
+      "overrideLabel": [
+        "Make the offer anyway",
+        "تقديم العرض رغم ذلك"
+      ],
+      "overrideReason": [
+        "Reason (recorded)",
+        "السبب (يُسجَّل)"
+      ],
+      "offerSend": [
+        "Send offer",
+        "إرسال العرض"
+      ],
+      "offerMade": [
+        "Offer sent",
+        "تم إرسال العرض"
+      ],
+      "extendTitle": [
+        "Extend the deadline",
+        "تمديد موعد الرد"
+      ],
+      "extendBody": [
+        "The family is told the new date.",
+        "سيُبلَّغ ولي الأمر بالموعد الجديد."
+      ],
+      "extended": [
+        "Deadline extended",
+        "تم تمديد الموعد"
+      ],
+      "paidTitle": [
+        "Record the seat booking payment",
+        "تسجيل دفعة حجز المقعد"
+      ],
+      "paidBody": [
+        "Confirm that the family paid {amount}.",
+        "أكدوا أن الأسرة سددت {amount}."
+      ],
+      "paymentRef": [
+        "Receipt or payment reference",
+        "رقم الإيصال أو مرجع الدفع"
+      ],
+      "paymentRefHint": [
+        "From the finance office or the payment portal.",
+        "من المكتب المالي أو بوابة الدفع."
+      ],
+      "paidDone": [
+        "Payment recorded",
+        "تم تسجيل الدفعة"
+      ],
+      "closeTitle": [
+        "Move to {stage}",
+        "النقل إلى {stage}"
+      ],
+      "declineBody": [
+        "The family is told there is an update. They never see internal reasons.",
+        "تُبلَّغ الأسرة بوجود مستجدات، ولا ترى الأسباب الداخلية أبدًا."
+      ],
+      "withdrawBody": [
+        "Use this when the family no longer wants the place.",
+        "استخدموا هذا عندما لا تعود الأسرة راغبة في المقعد."
+      ],
+      "decidedBy": [
+        "Who decided",
+        "صاحب القرار"
+      ],
+      "bySchool": [
+        "The school",
+        "المدرسة"
+      ],
+      "byFamily": [
+        "The family",
+        "الأسرة"
+      ],
+      "reason": [
+        "Reason",
+        "السبب"
+      ],
+      "chooseReason": [
+        "Choose a reason",
+        "اختاروا السبب"
+      ],
+      "note": [
+        "Note",
+        "ملاحظة"
+      ],
+      "assessTitle": [
+        "Book the assessment",
+        "حجز التقييم"
+      ],
+      "assessBody": [
+        "Choose who assesses and when. It goes into their meetings, and the family gets an email.",
+        "اختاروا المقيِّم والموعد، ويُضاف إلى مواعيده، وتتلقى الأسرة بريدًا بذلك."
+      ],
+      "noHosts": [
+        "No staff can host assessments yet. Give the Admissions Officer role to a member of staff on Roles.",
+        "لا يوجد موظفون يمكنهم إجراء التقييم بعد. امنحوا دور مسؤول القبول والتسجيل لأحد الموظفين من صفحة الأدوار."
+      ],
+      "assessor": [
+        "Assessor",
+        "المقيِّم"
+      ],
+      "date": [
+        "Date",
+        "التاريخ"
+      ],
+      "time": [
+        "Time",
+        "الوقت"
+      ],
+      "duration": [
+        "Length",
+        "المدة"
+      ],
+      "minutes": [
+        "{n} minutes",
+        "{n} دقيقة"
+      ],
+      "location": [
+        "Place",
+        "المكان"
+      ],
+      "locationHint": [
+        "Leave empty for the admissions office.",
+        "اتركوه فارغًا لمكتب القبول."
+      ],
+      "book": [
+        "Book",
+        "حجز"
+      ],
+      "assessBooked": [
+        "Assessment booked",
+        "تم حجز التقييم"
+      ],
+      "outcomeTitle": [
+        "Assessment outcome",
+        "نتيجة التقييم"
+      ],
+      "outcomeBody": [
+        "The family does not see the outcome or the notes.",
+        "لا ترى الأسرة النتيجة أو الملاحظات."
+      ],
+      "outcomeNotes": [
+        "Notes",
+        "ملاحظات"
+      ],
+      "outcomeNotesHint": [
+        "Staff only.",
+        "للموظفين فقط."
+      ],
+      "saveOutcome": [
+        "Save outcome",
+        "حفظ النتيجة"
+      ],
+      "outcomeSaved": [
+        "Outcome saved",
+        "تم حفظ النتيجة"
+      ],
+      "enrollTitle": [
+        "Enroll this child",
+        "قيد هذا الطفل"
+      ],
+      "enrollBody": [
+        "Creates the student record with an admission number, links the family, copies the documents and invites the parents to the family portal.",
+        "يُنشئ سجل الطالب برقم قيد، ويربط الأسرة، وينسخ المستندات، ويدعو أولياء الأمور إلى بوابة الأسرة."
+      ],
+      "enrollBodyLater": [
+        "The student record is created now and becomes active on the first day of the year. The family is linked and invited to the portal.",
+        "يُنشأ سجل الطالب الآن ويصبح فعّالًا في أول يوم من العام، وتُربط الأسرة وتُدعى إلى البوابة."
+      ],
+      "readmit": [
+        "Former student found",
+        "تم العثور على طالب سابق"
+      ],
+      "readmitHint": [
+        "Re-admit into the existing record to keep the history and admission number.",
+        "أعيدوا قبوله في السجل نفسه للاحتفاظ بالسجل السابق ورقم القيد."
+      ],
+      "newRecord": [
+        "Create a new record",
+        "إنشاء سجل جديد"
+      ],
+      "homeroom": [
+        "Homeroom",
+        "الفصل"
+      ],
+      "homeroomLater": [
+        "Assign later",
+        "التعيين لاحقًا"
+      ],
+      "noHomerooms": [
+        "Homerooms for this year are not set up yet. You can choose a section now.",
+        "لم تُنشأ فصول هذا العام بعد، ويمكنكم اختيار الشعبة الآن."
+      ],
+      "sendInvites": [
+        "Invite the parents to the family portal",
+        "دعوة أولياء الأمور إلى بوابة الأسرة"
+      ],
+      "sendInvitesHint": [
+        "Parents who already use the portal see the new child straight away.",
+        "يرى أولياء الأمور الذين يستخدمون البوابة الطفل الجديد مباشرة."
+      ],
+      "enrolled": [
+        "Enrolled",
+        "تم القيد"
+      ],
+      "enrolledTitle": [
+        "Enrolled",
+        "تم القيد"
+      ],
+      "enrolledBody": [
+        "Admission number {no}.",
+        "رقم القيد {no}."
+      ],
+      "resultStudent": [
+        "Student record {no} created",
+        "تم إنشاء سجل الطالب {no}"
+      ],
+      "resultGuardians": [
+        "{created} new and {reused} existing guardians linked",
+        "تم ربط {created} من أولياء الأمور الجدد و{reused} من الحاليين"
+      ],
+      "resultDocs": [
+        "{n} documents filed in the student record",
+        "تم حفظ {n} مستندات في سجل الطالب"
+      ],
+      "invitesSkipped": [
+        "Invitations wait until the school's email address is confirmed.",
+        "تنتظر الدعوات تأكيد البريد الإلكتروني للمدرسة."
+      ],
+      "invitesTitle": [
+        "Family portal invitations",
+        "دعوات بوابة الأسرة"
+      ],
+      "invitesBody": [
+        "Sent by email. You can also copy a link to share it another way.",
+        "أُرسلت بالبريد الإلكتروني، ويمكنكم أيضًا نسخ الرابط لمشاركته بطريقة أخرى."
+      ],
+      "copyInvite": [
+        "Copy link",
+        "نسخ الرابط"
+      ],
+      "linkCopied": [
+        "Invitation link copied",
+        "تم نسخ رابط الدعوة"
+      ],
+      "openStudent": [
+        "Open the student record",
+        "فتح سجل الطالب"
+      ],
+      "errors": {
+        "FORBIDDEN": [
+          "You do not have permission for this.",
+          "ليست لديكم صلاحية لذلك."
+        ],
+        "INVALID": [
+          "That move is not allowed at this stage.",
+          "هذا الإجراء غير مسموح في هذه المرحلة."
+        ],
+        "HIDDEN": [
+          "That stage is switched off in admissions settings.",
+          "هذه المرحلة معطلة في إعدادات القبول."
+        ],
+        "SAME": [
+          "The application is already there.",
+          "الطلب موجود في هذه المرحلة بالفعل."
+        ],
+        "NEEDS_PAYMENT": [
+          "Record the seat booking payment first.",
+          "سجّلوا دفعة حجز المقعد أولًا."
+        ],
+        "NEEDS_OFFER": [
+          "Use Make an offer.",
+          "استخدموا تقديم عرض."
+        ],
+        "NEEDS_PAID": [
+          "Use Mark seat booking paid.",
+          "استخدموا تسجيل سداد حجز المقعد."
+        ],
+        "NEEDS_ENROLL": [
+          "Use Enroll.",
+          "استخدموا قيد الطالب."
+        ],
+        "REASON": [
+          "Please give a reason.",
+          "يُرجى ذكر السبب."
+        ],
+        "FULL": [
+          "This grade has no free places.",
+          "لا توجد مقاعد متاحة في هذا الصف."
+        ],
+        "DEADLINE": [
+          "Choose a deadline within the next 120 days.",
+          "اختاروا موعدًا خلال 120 يومًا القادمة."
+        ],
+        "YEAR": [
+          "This academic year is not set up.",
+          "هذا العام الدراسي غير مُعدّ."
+        ],
+        "HOST": [
+          "Choose a member of staff.",
+          "اختاروا أحد الموظفين."
+        ],
+        "HOST_BUSY": [
+          "The assessor already has a meeting at that time.",
+          "لدى المقيِّم موعد آخر في هذا الوقت."
+        ],
+        "DURATION": [
+          "Choose a length between 15 minutes and 4 hours.",
+          "اختاروا مدة بين 15 دقيقة و4 ساعات."
+        ],
+        "WHEN": [
+          "Choose a time in the coming year.",
+          "اختاروا وقتًا خلال العام القادم."
+        ],
+        "TYPE": [
+          "The assessment meeting type is missing.",
+          "نوع موعد التقييم غير موجود."
+        ],
+        "OUTCOME": [
+          "Choose an outcome.",
+          "اختاروا النتيجة."
+        ],
+        "MESSAGE": [
+          "Write a message of up to 4,000 characters.",
+          "اكتبوا رسالة لا تتجاوز 4000 حرف."
+        ],
+        "VISIBILITY": [
+          "Choose who sees the message.",
+          "اختاروا من يرى الرسالة."
+        ],
+        "DRAFT": [
+          "The family has not submitted the application yet.",
+          "لم تقدّم الأسرة الطلب بعد."
+        ],
+        "SIBLING": [
+          "One of the siblings could not be found.",
+          "تعذّر العثور على أحد الإخوة."
+        ],
+        "BOOST": [
+          "The adjustment must be between -3 and +3.",
+          "يجب أن يكون التعديل بين -3 و+3."
+        ],
+        "HOMEROOM": [
+          "That homeroom is not for this year and grade.",
+          "هذا الفصل لا يخص هذا العام والصف."
+        ],
+        "LINK_STUDENT": [
+          "That student record cannot be used.",
+          "لا يمكن استخدام سجل الطالب هذا."
+        ],
+        "STUDENT_ACTIVE": [
+          "That student is still enrolled.",
+          "هذا الطالب ما زال مقيّدًا."
+        ],
+        "ALREADY_ENROLLED": [
+          "This application is already enrolled.",
+          "تم قيد هذا الطلب بالفعل."
+        ],
+        "INVALID_STAGE": [
+          "The family has not accepted the offer yet.",
+          "لم تقبل الأسرة العرض بعد."
+        ],
+        "NOT_FOUND": [
+          "This application no longer exists.",
+          "لم يعد هذا الطلب موجودًا."
+        ],
+        "generic": [
+          "Something went wrong. Please try again.",
+          "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
+        ]
+      }
+    },
+    "registration": {
+      "title": [
+        "Government registration",
+        "التسجيل الحكومي"
+      ],
+      "subtitle": [
+        "Register new students and leavers with {authority}, and record each decision.",
+        "سجّلوا الطلاب الجدد والمغادرين لدى {authority} ودوّنوا كل قرار."
+      ],
+      "explain": {
+        "SPEA_DALEEL": [
+          "In Sharjah every learner must be registered in SPEA's DALEEL system, and may not attend until SPEA approves. Transfers and withdrawals go through DALEEL too. Type the details from the registration sheet into DALEEL, then record the reference and decision here.",
+          "في الشارقة يجب تسجيل كل متعلم في نظام دليل التابع لهيئة الشارقة للتعليم الخاص، ولا يحضر قبل موافقة الهيئة. وتمر عمليات النقل والانسحاب عبر دليل أيضًا. أدخلوا البيانات من ورقة التسجيل في دليل ثم دوّنوا الرقم المرجعي والقرار هنا."
+        ],
+        "MOE_MANHAL": [
+          "Register each learner in the Ministry of Education's Al Manhal system, then record the reference and decision here.",
+          "سجّلوا كل متعلم في نظام المنهل التابع لوزارة التربية والتعليم ثم دوّنوا الرقم المرجعي والقرار هنا."
+        ],
+        "KHDA": [
+          "Register each learner with KHDA in the way it requires, then record the reference and decision here.",
+          "سجّلوا كل متعلم لدى هيئة المعرفة والتنمية البشرية وفق متطلباتها ثم دوّنوا الرقم المرجعي والقرار هنا."
+        ],
+        "ADEK": [
+          "Register each learner with ADEK in the way it requires, then record the reference and decision here.",
+          "سجّلوا كل متعلم لدى دائرة التعليم والمعرفة وفق متطلباتها ثم دوّنوا الرقم المرجعي والقرار هنا."
+        ],
+        "OTHER": [
+          "Register each learner with your education authority, then record the reference and decision here.",
+          "سجّلوا كل متعلم لدى الجهة التعليمية المختصة ثم دوّنوا الرقم المرجعي والقرار هنا."
+        ]
+      },
+      "kindEnrollment": [
+        "New students",
+        "الطلاب الجدد"
+      ],
+      "kindWithdrawal": [
+        "Leavers",
+        "المغادرون"
+      ],
+      "open": [
+        "Not approved yet",
+        "لم تتم الموافقة بعد"
+      ],
+      "status": {
+        "label": [
+          "Status",
+          "الحالة"
+        ],
+        "NOT_SUBMITTED": [
+          "Not submitted",
+          "لم يُقدَّم"
+        ],
+        "SUBMITTED": [
+          "Submitted",
+          "تم التقديم"
+        ],
+        "APPROVED": [
+          "Approved",
+          "تمت الموافقة"
+        ],
+        "REJECTED": [
+          "Rejected",
+          "مرفوض"
+        ]
+      },
+      "badge": {
+        "NOT_SUBMITTED": [
+          "Awaiting {authority} approval",
+          "بانتظار موافقة {authority}"
+        ],
+        "SUBMITTED": [
+          "Submitted to {authority}",
+          "قُدِّم إلى {authority}"
+        ],
+        "APPROVED": [
+          "Approved by {authority}",
+          "وافقت عليه {authority}"
+        ],
+        "REJECTED": [
+          "Returned by {authority}",
+          "أعادته {authority}"
+        ]
+      },
+      "empty": [
+        "Nothing waiting",
+        "لا شيء بالانتظار"
+      ],
+      "emptyBody": [
+        "New students appear here when they are enrolled, and leavers when a withdrawal is completed.",
+        "يظهر الطلاب الجدد هنا عند قيدهم، والمغادرون عند إتمام انسحابهم."
+      ],
+      "exportCsv": [
+        "Registration list (CSV)",
+        "قائمة التسجيل (CSV)"
+      ],
+      "exportXlsx": [
+        "Registration list (Excel)",
+        "قائمة التسجيل (إكسل)"
+      ],
+      "refShort": [
+        "ref {ref}",
+        "المرجع {ref}"
+      ],
+      "submittedShort": [
+        "submitted {date}",
+        "قُدِّم في {date}"
+      ],
+      "decidedShort": [
+        "decided {date}",
+        "صدر القرار في {date}"
+      ],
+      "sheet": [
+        "Registration sheet",
+        "ورقة التسجيل"
+      ],
+      "update": [
+        "Update",
+        "تحديث"
+      ],
+      "correct": [
+        "Correct",
+        "تصحيح"
+      ],
+      "dialogTitle": [
+        "Registration of {name}",
+        "تسجيل {name}"
+      ],
+      "dialogBody": [
+        "Record what happened in {authority}'s system.",
+        "دوّنوا ما تم في نظام {authority}."
+      ],
+      "reference": [
+        "{authority} reference number",
+        "الرقم المرجعي لدى {authority}"
+      ],
+      "submittedOn": [
+        "Submitted on",
+        "تاريخ التقديم"
+      ],
+      "approvedOn": [
+        "Approved on",
+        "تاريخ الموافقة"
+      ],
+      "decidedOn": [
+        "Date of decision",
+        "تاريخ القرار"
+      ],
+      "note": [
+        "Note",
+        "ملاحظة"
+      ],
+      "save": [
+        "Save",
+        "حفظ"
+      ],
+      "saved": [
+        "Registration updated",
+        "تم تحديث التسجيل"
+      ],
+      "errors": {
+        "INVALID": [
+          "That status change is not allowed.",
+          "تغيير الحالة هذا غير مسموح."
+        ],
+        "REFERENCE": [
+          "Approval needs the reference number and the date.",
+          "تتطلب الموافقة الرقم المرجعي والتاريخ."
+        ],
+        "NOTE": [
+          "Please note why it was rejected.",
+          "يُرجى توضيح سبب الرفض."
+        ],
+        "DATE": [
+          "The date cannot be in the future.",
+          "لا يمكن أن يكون التاريخ في المستقبل."
+        ],
+        "FORBIDDEN": [
+          "You do not have permission for this.",
+          "ليست لديكم صلاحية لذلك."
+        ],
+        "generic": [
+          "Something went wrong. Please try again.",
+          "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
+        ]
+      }
+    },
+    "sheet": {
+      "title": [
+        "Registration sheet",
+        "ورقة التسجيل"
+      ],
+      "titleEnrollment": [
+        "Learner registration details",
+        "بيانات تسجيل المتعلم"
+      ],
+      "titleWithdrawal": [
+        "Learner withdrawal details",
+        "بيانات انسحاب المتعلم"
+      ],
+      "printHint": [
+        "Type these details into {authority}'s system, then record the reference on the Government registration page.",
+        "أدخلوا هذه البيانات في نظام {authority} ثم دوّنوا الرقم المرجعي في صفحة التسجيل الحكومي."
+      ],
+      "print": [
+        "Print",
+        "طباعة"
+      ],
+      "guardians": [
+        "Parents and guardians",
+        "أولياء الأمور"
+      ],
+      "maskedNote": [
+        "Identity numbers are masked. Staff who may reveal ID numbers see them in full.",
+        "أرقام الهوية مخفية جزئيًا، ويراها كاملة الموظفون المصرح لهم بإظهار أرقام الهوية."
+      ],
+      "footer": [
+        "Printed {date}. Confidential: personal data of a learner.",
+        "طُبعت في {date}. سري: بيانات شخصية لمتعلم."
+      ],
+      "female": [
+        "Female",
+        "أنثى"
+      ],
+      "male": [
+        "Male",
+        "ذكر"
+      ],
+      "field": {
+        "studentNo": [
+          "Admission number",
+          "رقم القيد"
+        ],
+        "nameEn": [
+          "Name (English)",
+          "الاسم (بالإنجليزية)"
+        ],
+        "nameAr": [
+          "Name (Arabic)",
+          "الاسم (بالعربية)"
+        ],
+        "dob": [
+          "Date of birth",
+          "تاريخ الميلاد"
+        ],
+        "gender": [
+          "Gender",
+          "الجنس"
+        ],
+        "nationality": [
+          "Nationality",
+          "الجنسية"
+        ],
+        "emiratesId": [
+          "Emirates ID",
+          "الهوية الإماراتية"
+        ],
+        "passport": [
+          "Passport",
+          "جواز السفر"
+        ],
+        "grade": [
+          "Grade and section",
+          "الصف والشعبة"
+        ],
+        "curriculum": [
+          "Curriculum",
+          "المنهج"
+        ],
+        "enrolledOn": [
+          "Start date",
+          "تاريخ الالتحاق"
+        ],
+        "homeLanguage": [
+          "Home language",
+          "لغة المنزل"
+        ],
+        "previousSchool": [
+          "Previous school",
+          "المدرسة السابقة"
+        ],
+        "leavingDate": [
+          "Leaving date",
+          "تاريخ المغادرة"
+        ],
+        "destination": [
+          "Destination",
+          "الوجهة"
+        ]
+      }
+    },
+    "waitlist": {
+      "title": [
+        "Waiting list",
+        "قائمة الانتظار"
+      ],
+      "subtitle": [
+        "In order of priority, then the date each child joined the list.",
+        "مرتبة حسب الأولوية ثم تاريخ انضمام كل طفل إلى القائمة."
+      ],
+      "empty": [
+        "Nobody is waiting",
+        "لا يوجد أحد في الانتظار"
+      ],
+      "emptyBody": [
+        "Applications moved to Waitlisted appear here, per grade.",
+        "تظهر هنا الطلبات المنقولة إلى قائمة الانتظار حسب الصف."
+      ],
+      "noCapacity": [
+        "Places not set",
+        "لم تُحدد المقاعد"
+      ],
+      "freeSeats": [
+        "{n} free places",
+        "{n} مقاعد متاحة"
+      ],
+      "since": [
+        "waiting since {date}",
+        "في الانتظار منذ {date}"
+      ],
+      "sibling": [
+        "Sibling",
+        "شقيق"
+      ],
+      "staffChild": [
+        "Staff child",
+        "ابن موظف"
+      ],
+      "boost": [
+        "Adjusted {n}",
+        "معدّل {n}"
+      ],
+      "orderNote": [
+        "Priority: a sibling at the school and a verified staff child each add one point, plus any adjustment staff record with a reason. Equal priority keeps the earlier date first.",
+        "الأولوية: يضيف وجود شقيق في المدرسة وكون أحد الوالدين موظفًا تم التحقق منه نقطة لكل منهما، إضافة إلى أي تعديل يسجله الموظفون مع السبب. وعند التساوي يتقدم التاريخ الأقدم."
+      ]
+    },
+    "capacity": {
+      "title": [
+        "Places",
+        "المقاعد"
+      ],
+      "subtitle": [
+        "Places per grade and section for {year}, and the seat booking amount.",
+        "المقاعد لكل صف وشعبة للعام {year}، ومبلغ حجز المقعد."
+      ],
+      "noYear": [
+        "Set up an academic year first.",
+        "أعدّوا العام الدراسي أولًا."
+      ],
+      "enrolledCurrent": [
+        "Enrolled counts this year's active students in each grade.",
+        "يحتسب المقيّدون طلاب هذا العام الفعّالين في كل صف."
+      ],
+      "enrolledNext": [
+        "Enrolled counts students moving up into each grade (leavers left out) plus children already enrolled for this year.",
+        "يحتسب المقيّدون الطلاب المنتقلين إلى كل صف (دون المغادرين) إضافة إلى الأطفال المقيّدين لهذا العام."
+      ],
+      "grade": [
+        "Grade",
+        "الصف"
+      ],
+      "sections": [
+        "Sections and places",
+        "الشعب والمقاعد"
+      ],
+      "capacity": [
+        "Places",
+        "المقاعد"
+      ],
+      "enrolled": [
+        "Enrolled",
+        "المقيّدون"
+      ],
+      "holding": [
+        "Accepted",
+        "المقبولون"
+      ],
+      "offered": [
+        "Offered",
+        "العروض"
+      ],
+      "free": [
+        "Free",
+        "المتاحة"
+      ],
+      "waitlisted": [
+        "Waiting",
+        "الانتظار"
+      ],
+      "seatFee": [
+        "Seat booking",
+        "حجز المقعد"
+      ],
+      "seatsIn": [
+        "Places in section {section}",
+        "المقاعد في الشعبة {section}"
+      ],
+      "addSection": [
+        "Add a section",
+        "إضافة شعبة"
+      ],
+      "removeSection": [
+        "Remove the last section",
+        "حذف آخر شعبة"
+      ],
+      "notOffered": [
+        "Not taking applications",
+        "لا يستقبل طلبات"
+      ],
+      "totalPlaces": [
+        "{n} places in total",
+        "{n} مقعدًا إجمالًا"
+      ],
+      "save": [
+        "Save places",
+        "حفظ المقاعد"
+      ],
+      "saved": [
+        "Places saved",
+        "تم حفظ المقاعد"
+      ],
+      "feeNote": [
+        "The seat booking amount is shown to families when they accept an offer. Payments are recorded by the admissions office, or by the fees module once it is connected.",
+        "يظهر مبلغ حجز المقعد للأسر عند قبول العرض، ويسجل مكتب القبول الدفعات، أو وحدة الرسوم بعد ربطها."
+      ],
+      "errors": {
+        "AMOUNT": [
+          "Check the seat booking amounts (for example 2500 or 2500.50).",
+          "تحققوا من مبالغ حجز المقاعد (مثل 2500 أو 2500.50)."
+        ],
+        "YEAR": [
+          "This academic year is not set up.",
+          "هذا العام الدراسي غير مُعدّ."
+        ],
+        "generic": [
+          "Something went wrong. Please try again.",
+          "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
+        ]
+      },
+      "currency": [
+        "AED",
+        "درهم"
+      ]
+    },
+    "export": {
+      "stage": [
+        "Stage",
+        "المرحلة"
+      ],
+      "measure": [
+        "Measure",
+        "المقياس"
+      ],
+      "reached": [
+        "Reached this stage",
+        "وصلت إلى المرحلة"
+      ],
+      "now": [
+        "In this stage now",
+        "في المرحلة حاليًا"
+      ],
+      "total": [
+        "Total",
+        "الإجمالي"
+      ],
+      "grade": [
+        "Grade",
+        "الصف"
+      ],
+      "capacity": [
+        "Places",
+        "المقاعد"
+      ],
+      "enrolled": [
+        "Enrolled",
+        "المقيّدون"
+      ],
+      "holding": [
+        "Accepted",
+        "المقبولون"
+      ],
+      "offered": [
+        "Offered",
+        "العروض"
+      ],
+      "free": [
+        "Free",
+        "المتاحة"
+      ],
+      "waitlisted": [
+        "Waiting",
+        "الانتظار"
+      ],
+      "eligible": [
+        "Students",
+        "الطلاب"
+      ],
+      "returning": [
+        "Returning",
+        "عائدون"
+      ],
+      "leaving": [
+        "Leaving",
+        "مغادرون"
+      ],
+      "pending": [
+        "No answer yet",
+        "لم يردوا بعد"
+      ],
+      "number": [
+        "Application",
+        "الطلب"
+      ],
+      "studentNo": [
+        "Admission number",
+        "رقم القيد"
+      ],
+      "firstNameEn": [
+        "First name (English)",
+        "الاسم الأول (بالإنجليزية)"
+      ],
+      "lastNameEn": [
+        "Family name (English)",
+        "اسم العائلة (بالإنجليزية)"
+      ],
+      "firstNameAr": [
+        "First name (Arabic)",
+        "الاسم الأول (بالعربية)"
+      ],
+      "lastNameAr": [
+        "Family name (Arabic)",
+        "اسم العائلة (بالعربية)"
+      ],
+      "submitted": [
+        "Submitted",
+        "تاريخ التقديم"
+      ],
+      "dateOfBirth": [
+        "Date of birth",
+        "تاريخ الميلاد"
+      ],
+      "gender": [
+        "Gender",
+        "الجنس"
+      ],
+      "nationality": [
+        "Nationality",
+        "الجنسية"
+      ],
+      "guardian": [
+        "Main contact",
+        "جهة الاتصال الرئيسية"
+      ],
+      "email": [
+        "Email",
+        "البريد الإلكتروني"
+      ],
+      "phone": [
+        "Phone",
+        "الهاتف"
+      ],
+      "sibling": [
+        "Sibling at school",
+        "شقيق في المدرسة"
+      ],
+      "staffChild": [
+        "Staff child",
+        "ابن موظف"
+      ],
+      "possibleDuplicate": [
+        "Possible duplicate",
+        "مكرر محتمل"
+      ],
+      "offerDeadline": [
+        "Offer deadline",
+        "موعد الرد على العرض"
+      ],
+      "emiratesId": [
+        "Emirates ID",
+        "الهوية الإماراتية"
+      ],
+      "passport": [
+        "Passport",
+        "جواز السفر"
+      ],
+      "section": [
+        "Section",
+        "الشعبة"
+      ],
+      "curriculum": [
+        "Curriculum",
+        "المنهج"
+      ],
+      "enrolledOn": [
+        "Start date",
+        "تاريخ الالتحاق"
+      ],
+      "yes": [
+        "Yes",
+        "نعم"
+      ]
+    },
+    "reports": {
+      "title": [
+        "Admissions reports",
+        "تقارير القبول"
+      ],
+      "subtitle": [
+        "Counts only, for {year}. No individual records appear in charts.",
+        "أعداد فقط للعام {year}، ولا تظهر سجلات فردية في الرسوم البيانية."
+      ],
+      "noYear": [
+        "Set up an academic year first.",
+        "أعدّوا العام الدراسي أولًا."
+      ],
+      "exportFunnel": [
+        "Funnel (Excel)",
+        "مراحل القبول (إكسل)"
+      ],
+      "exportCapacity": [
+        "Places (CSV)",
+        "المقاعد (CSV)"
+      ],
+      "submitted": [
+        "Applications submitted",
+        "الطلبات المقدمة"
+      ],
+      "offerRate": [
+        "Offered",
+        "نسبة العروض"
+      ],
+      "offered": [
+        "{n} offers",
+        "{n} عروض"
+      ],
+      "acceptRate": [
+        "Offers accepted",
+        "نسبة قبول العروض"
+      ],
+      "accepted": [
+        "{n} accepted",
+        "{n} مقبولة"
+      ],
+      "enrollRate": [
+        "Enrolled",
+        "نسبة القيد"
+      ],
+      "enrolled": [
+        "{n} enrolled",
+        "{n} مقيّدون"
+      ],
+      "funnel": [
+        "Funnel",
+        "مراحل القبول"
+      ],
+      "funnelHint": [
+        "Applications that reached each stage.",
+        "الطلبات التي وصلت إلى كل مرحلة."
+      ],
+      "capacity": [
+        "Places against enrolled",
+        "المقاعد مقابل المقيّدين"
+      ],
+      "capacityHint": [
+        "Per grade: enrolled, accepted and offered places.",
+        "لكل صف: المقاعد المشغولة والمقبولة والمعروضة."
+      ],
+      "legend": [
+        "Legend",
+        "مفتاح الألوان"
+      ],
+      "legendEnrolled": [
+        "Enrolled",
+        "مقيّدون"
+      ],
+      "legendAccepted": [
+        "Accepted",
+        "مقبولون"
+      ],
+      "legendOffered": [
+        "Offered",
+        "عروض"
+      ],
+      "legendFree": [
+        "Free",
+        "متاحة"
+      ],
+      "capacityTip": [
+        "{grade}: {enrolled} enrolled, {holding} accepted, {offered} offered, of {capacity} places",
+        "{grade}: {enrolled} مقيّدون، {holding} مقبولون، {offered} عروض، من أصل {capacity} مقعدًا"
+      ],
+      "ofCapacity": [
+        "{n} of {capacity}",
+        "{n} من {capacity}"
+      ],
+      "asTable": [
+        "See as a table",
+        "عرض كجدول"
+      ],
+      "noCapacity": [
+        "Places are not set for this year.",
+        "لم تُحدد المقاعد لهذا العام."
+      ],
+      "setCapacity": [
+        "Set places",
+        "تحديد المقاعد"
+      ],
+      "nationalities": [
+        "Applicants by nationality",
+        "المتقدمون حسب الجنسية"
+      ],
+      "nationalitiesHint": [
+        "Groups smaller than {n} are counted under Other.",
+        "تُحتسب المجموعات الأقل من {n} ضمن أخرى."
+      ],
+      "otherNationalities": [
+        "Other",
+        "أخرى"
+      ],
+      "ages": [
+        "Applicants by age",
+        "المتقدمون حسب العمر"
+      ],
+      "agesHint": [
+        "Age on the school's cut-off date in the year of entry.",
+        "العمر في تاريخ الاحتساب المعتمد في المدرسة في عام الالتحاق."
+      ],
+      "band": {
+        "kg": [
+          "Kindergarten age (up to 5)",
+          "سن الروضة (حتى 5)"
+        ],
+        "lower": [
+          "6 to 10",
+          "من 6 إلى 10"
+        ],
+        "middle": [
+          "11 to 13",
+          "من 11 إلى 13"
+        ],
+        "upper": [
+          "14 to 18",
+          "من 14 إلى 18"
+        ]
+      },
+      "ageFlags": [
+        "Outside the usual age for the grade: {under} younger, {over} older.",
+        "خارج السن المعتاد للصف: {under} أصغر و{over} أكبر."
+      ],
+      "noData": [
+        "No applications yet.",
+        "لا توجد طلبات بعد."
+      ]
+    },
+    "settings": {
+      "title": [
+        "Admissions settings",
+        "إعدادات القبول"
+      ],
+      "subtitle": [
+        "Online applications, age rules, numbers, stages and documents.",
+        "التقديم الإلكتروني وقواعد العمر والأرقام والمراحل والمستندات."
+      ],
+      "online": [
+        "Online applications",
+        "التقديم الإلكتروني"
+      ],
+      "onlineHint": [
+        "Families apply on your school's own page. No account at the school is needed to start.",
+        "تقدّم الأسر عبر صفحة المدرسة الخاصة، ولا يلزم حساب في المدرسة للبدء."
+      ],
+      "acceptOnline": [
+        "Accept applications online",
+        "استقبال الطلبات إلكترونيًا"
+      ],
+      "copy": [
+        "Copy link",
+        "نسخ الرابط"
+      ],
+      "years": [
+        "Years open for applications",
+        "الأعوام المتاحة للتقديم"
+      ],
+      "yearsHint": [
+        "None ticked means this year and next year.",
+        "إذا لم يُحدد شيء فالمقصود هذا العام والعام القادم."
+      ],
+      "currentYear": [
+        "this year",
+        "العام الحالي"
+      ],
+      "introEn": [
+        "Welcome text (English)",
+        "نص الترحيب (بالإنجليزية)"
+      ],
+      "introAr": [
+        "Welcome text (Arabic)",
+        "نص الترحيب (بالعربية)"
+      ],
+      "ageTitle": [
+        "Age cut-off",
+        "تاريخ احتساب العمر"
+      ],
+      "ageHint": [
+        "Children join KG1 at age 4, KG2 at 5 and Grade 1 at 6 on this date in the year they start. Applications outside the range are flagged, never blocked.",
+        "يلتحق الأطفال بالروضة الأولى في سن 4 والروضة الثانية في سن 5 والصف الأول في سن 6 في هذا التاريخ من عام الالتحاق. وتُميَّز الطلبات خارج النطاق دون منعها."
+      ],
+      "cutoff": [
+        "Cut-off date",
+        "تاريخ الاحتساب"
+      ],
+      "preset": {
+        "dec31": [
+          "31 December (UAE Ministry of Education, admissions from 2026-27)",
+          "31 ديسمبر (وزارة التربية والتعليم، للقبول من العام 2026-2027)"
+        ],
+        "mar31": [
+          "31 March (schools whose year starts in April)",
+          "31 مارس (المدارس التي يبدأ عامها في أبريل)"
+        ],
+        "custom": [
+          "Another date",
+          "تاريخ آخر"
+        ]
+      },
+      "month": [
+        "Month",
+        "الشهر"
+      ],
+      "day": [
+        "Day",
+        "اليوم"
+      ],
+      "ageRule": [
+        "Confirm the date with your regulator (for example SPEA in Sharjah) before you open applications.",
+        "أكدوا التاريخ مع الجهة التنظيمية (مثل هيئة الشارقة للتعليم الخاص) قبل فتح التقديم."
+      ],
+      "numbersTitle": [
+        "Admission numbers and offers",
+        "أرقام القيد والعروض"
+      ],
+      "pattern": [
+        "Admission number pattern",
+        "نمط رقم القيد"
+      ],
+      "patternPreview": [
+        "Next year's 42nd student would be {example}.",
+        "سيكون رقم الطالب الثاني والأربعين في العام القادم {example}."
+      ],
+      "patternTokens": [
+        "Use '{YYYY}' or '{YY}' for the year of entry, '{SHORT}' for the school's short name, and '{SEQ:4}' for a running number (3 to 6 digits).",
+        "استخدموا '{YYYY}' أو '{YY}' لعام الالتحاق، و'{SHORT}' لاسم المدرسة المختصر، و'{SEQ:4}' لرقم تسلسلي (من 3 إلى 6 أرقام)."
+      ],
+      "patternError": {
+        "EMPTY": [
+          "Enter a pattern.",
+          "أدخلوا نمطًا."
+        ],
+        "NO_SEQ": [
+          "Include exactly one running number, for example '{SEQ:4}'.",
+          "أضيفوا رقمًا تسلسليًا واحدًا فقط، مثل '{SEQ:4}'."
+        ],
+        "CHARS": [
+          "Use letters, digits, dashes, slashes and dots only.",
+          "استخدموا الحروف والأرقام والشرطات والخطوط المائلة والنقاط فقط."
+        ],
+        "LENGTH": [
+          "Keep the pattern under 40 characters.",
+          "يجب ألا يتجاوز النمط 40 حرفًا."
+        ]
+      },
+      "offerDays": [
+        "Days to answer an offer",
+        "أيام الرد على العرض"
+      ],
+      "offerDaysHint": [
+        "The default deadline when you make an offer.",
+        "الموعد الافتراضي عند تقديم عرض."
+      ],
+      "authorityTitle": [
+        "Government registration",
+        "التسجيل الحكومي"
+      ],
+      "authorityHint": [
+        "Where new students and leavers are registered. In Sharjah this is SPEA's DALEEL system.",
+        "الجهة التي يُسجَّل لديها الطلاب الجدد والمغادرون، وفي الشارقة هي نظام دليل التابع لهيئة الشارقة للتعليم الخاص."
+      ],
+      "authority": [
+        "Authority",
+        "الجهة"
+      ],
+      "authorityOption": {
+        "SPEA_DALEEL": [
+          "SPEA DALEEL (Sharjah)",
+          "هيئة الشارقة للتعليم الخاص، نظام دليل"
+        ],
+        "MOE_MANHAL": [
+          "Ministry of Education Al Manhal (MoE curriculum)",
+          "وزارة التربية والتعليم، نظام المنهل (منهج الوزارة)"
+        ],
+        "KHDA": [
+          "KHDA (Dubai)",
+          "هيئة المعرفة والتنمية البشرية (دبي)"
+        ],
+        "ADEK": [
+          "ADEK (Abu Dhabi)",
+          "دائرة التعليم والمعرفة (أبوظبي)"
+        ],
+        "OTHER": [
+          "Other education authority",
+          "جهة تعليمية أخرى"
+        ]
+      },
+      "authorityLabelEn": [
+        "Name shown (English)",
+        "الاسم المعروض (بالإنجليزية)"
+      ],
+      "authorityLabelAr": [
+        "Name shown (Arabic)",
+        "الاسم المعروض (بالعربية)"
+      ],
+      "stagesTitle": [
+        "Stages",
+        "المراحل"
+      ],
+      "stagesHint": [
+        "Rename stages, switch off the ones you do not use, and add your own review stages before an offer.",
+        "أعيدوا تسمية المراحل، وعطّلوا ما لا تستخدمونه، وأضيفوا مراحل مراجعة خاصة بكم قبل العرض."
+      ],
+      "customStage": [
+        "Your stage",
+        "مرحلة خاصة"
+      ],
+      "labelEn": [
+        "Name (English)",
+        "الاسم (بالإنجليزية)"
+      ],
+      "labelEnRequired": [
+        "Name (English), required",
+        "الاسم (بالإنجليزية)، مطلوب"
+      ],
+      "labelAr": [
+        "Name (Arabic)",
+        "الاسم (بالعربية)"
+      ],
+      "moveUp": [
+        "Move up",
+        "تحريك لأعلى"
+      ],
+      "moveDown": [
+        "Move down",
+        "تحريك لأسفل"
+      ],
+      "used": [
+        "In use",
+        "مستخدمة"
+      ],
+      "remove": [
+        "Remove",
+        "إزالة"
+      ],
+      "addStage": [
+        "Add a review stage",
+        "إضافة مرحلة مراجعة"
+      ],
+      "docsTitle": [
+        "Documents families upload",
+        "المستندات التي ترفعها الأسر"
+      ],
+      "docsHint": [
+        "Defaults follow UAE registration. Mark what is required, from which grade, and which go in the medical record.",
+        "تتبع الإعدادات الافتراضية متطلبات التسجيل في الدولة. حددوا المطلوب ومن أي صف وما يُحفظ في السجل الطبي."
+      ],
+      "category": [
+        "Filed under",
+        "يُحفظ ضمن"
+      ],
+      "category_identity": [
+        "Identity",
+        "الهوية"
+      ],
+      "category_medical": [
+        "Medical",
+        "السجلات الطبية"
+      ],
+      "category_reports": [
+        "Reports",
+        "التقارير"
+      ],
+      "category_official_letters": [
+        "Letters",
+        "الخطابات"
+      ],
+      "fromGrade": [
+        "From grade",
+        "ابتداءً من الصف"
+      ],
+      "fromGradeN": [
+        "From {grade}",
+        "ابتداءً من {grade}"
+      ],
+      "allGrades": [
+        "All grades",
+        "جميع الصفوف"
+      ],
+      "required": [
+        "Required",
+        "مطلوب"
+      ],
+      "notForUae": [
+        "Not for UAE nationals",
+        "لا يُطلب من المواطنين"
+      ],
+      "notForUaeHint": [
+        "For example a residence visa.",
+        "مثل تأشيرة الإقامة."
+      ],
+      "addDoc": [
+        "Add a document type",
+        "إضافة نوع مستند"
+      ],
+      "save": [
+        "Save settings",
+        "حفظ الإعدادات"
+      ],
+      "saved": [
+        "Settings saved",
+        "تم حفظ الإعدادات"
+      ],
+      "errors": {
+        "CUTOFF": [
+          "Check the cut-off date.",
+          "تحققوا من تاريخ الاحتساب."
+        ],
+        "PATTERN_EMPTY": [
+          "Enter an admission number pattern.",
+          "أدخلوا نمط رقم القيد."
+        ],
+        "PATTERN_NO_SEQ": [
+          "The pattern needs exactly one running number.",
+          "يحتاج النمط إلى رقم تسلسلي واحد فقط."
+        ],
+        "PATTERN_CHARS": [
+          "The pattern has characters that cannot be used.",
+          "يحتوي النمط على رموز غير مسموحة."
+        ],
+        "PATTERN_LENGTH": [
+          "The pattern is too long.",
+          "النمط طويل جدًا."
+        ],
+        "DOC_DUPLICATE": [
+          "Two document types have the same key.",
+          "يوجد نوعان من المستندات بالمفتاح نفسه."
+        ],
+        "STAGE": [
+          "One of the stages is not valid.",
+          "إحدى المراحل غير صالحة."
+        ],
+        "STAGE_LABEL": [
+          "Give each of your own stages an English name.",
+          "أعطوا كل مرحلة خاصة اسمًا بالإنجليزية."
+        ],
+        "STAGE_REQUIRED": [
+          "That stage is needed and cannot be switched off.",
+          "هذه المرحلة ضرورية ولا يمكن تعطيلها."
+        ],
+        "STAGE_IN_USE": [
+          "A stage you removed still has applications. Move them first.",
+          "ما زالت هناك طلبات في مرحلة حذفتموها. انقلوها أولًا."
+        ],
+        "YEAR": [
+          "One of the years no longer exists.",
+          "أحد الأعوام لم يعد موجودًا."
+        ],
+        "INVALID": [
+          "Some settings need attention. Check the names and document types.",
+          "بعض الإعدادات تحتاج إلى مراجعة. تحققوا من الأسماء وأنواع المستندات."
+        ],
+        "generic": [
+          "Something went wrong. Please try again.",
+          "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
+        ]
+      }
+    },
+    "health": {
+      "title": [
+        "Health review for applications",
+        "المراجعة الصحية للطلبات"
+      ],
+      "subtitle": [
+        "Health and learning support details on open applications. Each time you open details it is recorded.",
+        "تفاصيل الصحة ودعم التعلم في الطلبات المفتوحة، ويُسجَّل كل اطلاع عليها."
+      ],
+      "empty": [
+        "No open applications with health or support details.",
+        "لا توجد طلبات مفتوحة فيها تفاصيل صحية أو احتياجات دعم."
+      ]
+    },
+    "reenroll": {
+      "title": [
+        "Re-enrollment",
+        "إعادة التسجيل"
+      ],
+      "subtitle": [
+        "Families confirm, for each child, whether they return next year.",
+        "تؤكد الأسر لكل طفل ما إذا كان سيعود في العام القادم."
+      ],
+      "emptyTitle": [
+        "No re-enrollment yet",
+        "لا توجد إعادة تسجيل بعد"
+      ],
+      "emptyBody": [
+        "Open a window for next year. Families answer in the family portal and get reminders until they do.",
+        "افتحوا فترة للعام القادم، وتجيب الأسر عبر بوابة الأسرة وتصلها تذكيرات حتى ترد."
+      ],
+      "noNextYear": [
+        "Add next year to the school calendar first.",
+        "أضيفوا العام القادم إلى تقويم المدرسة أولًا."
+      ],
+      "addYear": [
+        "Open the school calendar",
+        "فتح تقويم المدرسة"
+      ],
+      "windowLine": [
+        "For {year}: open {opens} to {closes}.",
+        "للعام {year}: من {opens} إلى {closes}."
+      ],
+      "state": {
+        "scheduled": [
+          "Not open yet",
+          "لم تُفتح بعد"
+        ],
+        "open": [
+          "Open",
+          "مفتوحة"
+        ],
+        "closed": [
+          "Closed",
+          "مغلقة"
+        ]
+      },
+      "export": [
+        "Export",
+        "تصدير"
+      ],
+      "statResponded": [
+        "Answered",
+        "نسبة الرد"
+      ],
+      "statOf": [
+        "{n} of {total} students",
+        "{n} من {total} طالبًا"
+      ],
+      "statReturning": [
+        "Returning",
+        "عائدون"
+      ],
+      "statLeaving": [
+        "Leaving",
+        "مغادرون"
+      ],
+      "statPending": [
+        "No answer yet",
+        "لم يردوا بعد"
+      ],
+      "byGrade": [
+        "By grade (this year)",
+        "حسب الصف (العام الحالي)"
+      ],
+      "grade": [
+        "Grade",
+        "الصف"
+      ],
+      "eligible": [
+        "Students",
+        "الطلاب"
+      ],
+      "returning": [
+        "Returning",
+        "عائدون"
+      ],
+      "leaving": [
+        "Leaving",
+        "مغادرون"
+      ],
+      "pending": [
+        "No answer",
+        "لم يردوا"
+      ],
+      "all": [
+        "All",
+        "الكل"
+      ],
+      "progress": [
+        "Answers",
+        "الردود"
+      ],
+      "reasons": [
+        "Why families are leaving",
+        "أسباب مغادرة الأسر"
+      ],
+      "reasonsHint": [
+        "Counts only.",
+        "أعداد فقط."
+      ],
+      "noLeavers": [
+        "No leavers so far.",
+        "لا يوجد مغادرون حتى الآن."
+      ],
+      "students": [
+        "Students",
+        "الطلاب"
+      ],
+      "allGrades": [
+        "All grades",
+        "جميع الصفوف"
+      ],
+      "search": [
+        "Search students",
+        "البحث عن طالب"
+      ],
+      "answerReturning": [
+        "Returning",
+        "عائد"
+      ],
+      "answerLeaving": [
+        "Leaving",
+        "مغادر"
+      ],
+      "noAnswer": [
+        "No answer",
+        "لم يرد"
+      ],
+      "noStudents": [
+        "No students here.",
+        "لا يوجد طلاب هنا."
+      ],
+      "record": [
+        "Record answer",
+        "تسجيل الرد"
+      ],
+      "change": [
+        "Change",
+        "تغيير"
+      ],
+      "recordTitle": [
+        "Record the family's answer",
+        "تسجيل رد الأسرة"
+      ],
+      "recordBody": [
+        "For answers given by phone or at the office. It is recorded with your name.",
+        "للردود الواردة هاتفيًا أو في المكتب، ويُسجَّل باسمكم."
+      ],
+      "returningAnswer": [
+        "Returning",
+        "سيعود"
+      ],
+      "leavingAnswer": [
+        "Leaving",
+        "سيغادر"
+      ],
+      "reason": [
+        "Reason",
+        "السبب"
+      ],
+      "chooseReason": [
+        "Choose a reason",
+        "اختاروا السبب"
+      ],
+      "leavingDate": [
+        "Last day",
+        "آخر يوم"
+      ],
+      "leavingDateHint": [
+        "Leave empty for the end of this school year.",
+        "اتركوه فارغًا لنهاية هذا العام الدراسي."
+      ],
+      "note": [
+        "Note",
+        "ملاحظة"
+      ],
+      "save": [
+        "Save",
+        "حفظ"
+      ],
+      "saved": [
+        "Answer saved",
+        "تم حفظ الرد"
+      ],
+      "thanks": [
+        "Thank you, your answer is saved.",
+        "شكرًا لكم، تم حفظ ردكم."
+      ],
+      "familyReturning": [
+        "Returning next year",
+        "سيعود في العام القادم"
+      ],
+      "familyLeaving": [
+        "Leaving",
+        "سيغادر"
+      ],
+      "sendReminders": [
+        "Send reminders now",
+        "إرسال التذكيرات الآن"
+      ],
+      "remindersSent": [
+        "{n, plural, =0 {Everyone was already reminded today.} one {# family reminded} other {# families reminded}}",
+        "{n, plural, =0 {تم تذكير الجميع اليوم بالفعل.} one {تم تذكير أسرة واحدة} two {تم تذكير أسرتين} few {تم تذكير # أسر} many {تم تذكير # أسرة} other {تم تذكير # أسرة}}"
+      ],
+      "remindersNote": [
+        "Families who have not answered also get automatic reminders on the days you chose. Each family is reminded once per round.",
+        "تصل أيضًا تذكيرات تلقائية إلى الأسر التي لم ترد في الأيام التي اخترتموها، وتُذكَّر كل أسرة مرة واحدة في كل جولة."
+      ],
+      "notOpenYet": [
+        "The window has not opened yet.",
+        "لم تُفتح الفترة بعد."
+      ],
+      "allAnswered": [
+        "Every family has answered.",
+        "ردت جميع الأسر."
+      ],
+      "changeDate": [
+        "Change closing date",
+        "تغيير تاريخ الإغلاق"
+      ],
+      "extended": [
+        "Closing date changed",
+        "تم تغيير تاريخ الإغلاق"
+      ],
+      "closeNow": [
+        "Close now",
+        "إغلاق الآن"
+      ],
+      "closed": [
+        "Re-enrollment closed",
+        "تم إغلاق إعادة التسجيل"
+      ],
+      "openTitle": [
+        "Open re-enrollment",
+        "فتح إعادة التسجيل"
+      ],
+      "openBody": [
+        "Families of every student below Grade 12 are asked to confirm for each child.",
+        "يُطلب من أسر جميع الطلاب دون الصف الثاني عشر التأكيد لكل طفل."
+      ],
+      "forYear": [
+        "For the year",
+        "للعام"
+      ],
+      "opensOn": [
+        "Opens on",
+        "تاريخ الفتح"
+      ],
+      "closesOn": [
+        "Closes on",
+        "تاريخ الإغلاق"
+      ],
+      "messageEn": [
+        "Message to families (English)",
+        "رسالة إلى الأسر (بالإنجليزية)"
+      ],
+      "messageAr": [
+        "Message to families (Arabic)",
+        "رسالة إلى الأسر (بالعربية)"
+      ],
+      "autoReminders": [
+        "Automatic reminders",
+        "التذكيرات التلقائية"
+      ],
+      "daysBefore": [
+        "{n} days before closing",
+        "قبل الإغلاق بـ{n} أيام"
+      ],
+      "open": [
+        "Open re-enrollment",
+        "فتح إعادة التسجيل"
+      ],
+      "opened": [
+        "Re-enrollment is open",
+        "تم فتح إعادة التسجيل"
+      ],
+      "errors": {
+        "YEAR": [
+          "Choose a year after the current one.",
+          "اختاروا عامًا بعد العام الحالي."
+        ],
+        "DATES": [
+          "The closing date must be after the opening date and in the future.",
+          "يجب أن يكون تاريخ الإغلاق بعد تاريخ الفتح وفي المستقبل."
+        ],
+        "WINDOW_EXISTS": [
+          "Re-enrollment for that year is already open.",
+          "إعادة التسجيل لذلك العام مفتوحة بالفعل."
+        ],
+        "WINDOW_CLOSED": [
+          "Re-enrollment is closed.",
+          "إعادة التسجيل مغلقة."
+        ],
+        "NOT_ELIGIBLE": [
+          "This student is not part of re-enrollment.",
+          "هذا الطالب غير مشمول بإعادة التسجيل."
+        ],
+        "REASON": [
+          "Please choose a reason.",
+          "يُرجى اختيار السبب."
+        ],
+        "FORBIDDEN": [
+          "You can only answer for your own children.",
+          "يمكنكم الرد عن أطفالكم فقط."
+        ],
+        "CLOSED": [
+          "Re-enrollment is closed.",
+          "إعادة التسجيل مغلقة."
+        ],
+        "ALREADY_PLANNED": [
+          "A withdrawal is already recorded for this student.",
+          "تم تسجيل انسحاب لهذا الطالب بالفعل."
+        ],
+        "generic": [
+          "Something went wrong. Please try again.",
+          "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
+        ]
+      }
+    },
+    "family": {
+      "title": [
+        "Next year's places",
+        "مقاعد العام القادم"
+      ],
+      "heading": [
+        "Confirm places for {year}",
+        "تأكيد المقاعد للعام {year}"
+      ],
+      "deadline": [
+        "Please answer for each child by {date}.",
+        "يُرجى الرد لكل طفل قبل {date}."
+      ],
+      "goingInto": [
+        "Now in {now}, moving up to {next}",
+        "حاليًا في {now}، وينتقل إلى {next}"
+      ],
+      "noChildren": [
+        "No children to confirm.",
+        "لا يوجد أطفال للتأكيد."
+      ],
+      "privacy": [
+        "Only the school's admissions team sees your answers and reasons.",
+        "لا يطّلع على ردودكم وأسبابكم إلا فريق القبول في المدرسة."
+      ],
+      "closedTitle": [
+        "Re-enrollment is not open",
+        "إعادة التسجيل غير مفتوحة"
+      ],
+      "closedBody": [
+        "The school will let you know when it is time to confirm next year's places.",
+        "ستبلغكم المدرسة عندما يحين موعد تأكيد مقاعد العام القادم."
+      ]
+    },
+    "leavers": {
+      "title": [
+        "Leavers",
+        "المغادرون"
+      ],
+      "subtitle": [
+        "Students leaving the school: leaving date, reason and the transfer certificate.",
+        "الطلاب المغادرون للمدرسة: تاريخ المغادرة والسبب وشهادة النقل."
+      ],
+      "planned": [
+        "Planned",
+        "مخطط لها"
+      ],
+      "completed": [
+        "Completed",
+        "مكتملة"
+      ],
+      "cancelled": [
+        "Cancelled",
+        "ملغاة"
+      ],
+      "empty": [
+        "No leavers here",
+        "لا يوجد مغادرون هنا"
+      ],
+      "emptyBody": [
+        "Record a leaver here, or families tell you in re-enrollment.",
+        "سجّلوا الطالب المغادر هنا، أو تخبركم الأسر بذلك في إعادة التسجيل."
+      ],
+      "leavingOn": [
+        "Leaves {date}",
+        "يغادر في {date}"
+      ],
+      "fromReenrollment": [
+        "From re-enrollment",
+        "من إعادة التسجيل"
+      ],
+      "tc": [
+        "Transfer certificate",
+        "شهادة النقل"
+      ],
+      "add": [
+        "Record a leaver",
+        "تسجيل طالب مغادر"
+      ],
+      "addTitle": [
+        "Record a leaver",
+        "تسجيل طالب مغادر"
+      ],
+      "addBody": [
+        "The student stays enrolled until you complete the withdrawal.",
+        "يبقى الطالب مقيّدًا حتى تكملوا إجراءات الانسحاب."
+      ],
+      "findStudent": [
+        "Find a student by name or number",
+        "البحث عن طالب بالاسم أو الرقم"
+      ],
+      "changeStudent": [
+        "Change",
+        "تغيير"
+      ],
+      "leavingDate": [
+        "Leaving date",
+        "تاريخ المغادرة"
+      ],
+      "reason": [
+        "Reason",
+        "السبب"
+      ],
+      "chooseReason": [
+        "Choose a reason",
+        "اختاروا السبب"
+      ],
+      "destination": [
+        "Next school or country",
+        "المدرسة أو الدولة التالية"
+      ],
+      "note": [
+        "Note",
+        "ملاحظة"
+      ],
+      "save": [
+        "Save",
+        "حفظ"
+      ],
+      "planned_ok": [
+        "Leaver recorded",
+        "تم تسجيل الطالب المغادر"
+      ],
+      "complete": [
+        "Complete and issue certificate",
+        "إتمام الانسحاب وإصدار الشهادة"
+      ],
+      "completeConfirm": [
+        "The student will be marked as withdrawn and a transfer certificate issued. Continue?",
+        "سيُسجَّل الطالب منسحبًا وتصدر له شهادة نقل. هل تريدون المتابعة؟"
+      ],
+      "completed_ok": [
+        "Withdrawal completed. Certificate {tc} issued.",
+        "تم إتمام الانسحاب وإصدار الشهادة {tc}."
+      ],
+      "cancel": [
+        "Cancel",
+        "إلغاء"
+      ],
+      "errors": {
+        "REASON": [
+          "Please choose a reason.",
+          "يُرجى اختيار السبب."
+        ],
+        "ALREADY_LEFT": [
+          "This student has already left.",
+          "غادر هذا الطالب بالفعل."
+        ],
+        "ALREADY_PLANNED": [
+          "A withdrawal is already recorded for this student.",
+          "تم تسجيل انسحاب لهذا الطالب بالفعل."
+        ],
+        "NOT_FOUND": [
+          "We could not find this student.",
+          "تعذّر العثور على هذا الطالب."
+        ],
+        "generic": [
+          "Something went wrong. Please try again.",
+          "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
+        ]
+      }
+    },
+    "money": [
+      "AED {amount}",
+      "{amount} درهم"
+    ]
+  }
+}

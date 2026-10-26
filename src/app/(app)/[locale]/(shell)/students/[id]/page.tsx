@@ -17,6 +17,7 @@ import { listableCaseWhere } from "@/server/access/case-access";
 import { requestWhere, isRestrictedForViewer } from "@/server/access/request-access";
 import { audit } from "@/server/audit/audit";
 import { excusedLabelKey, seesStudentAbsenceReasons } from "@/server/access/absence-access";
+import { awaitingAuthority } from "@/server/admissions/page-data";
 
 export default async function StudentPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -51,6 +52,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
   const pct = attendance.length ? Math.round((present / attendance.length) * 100) : 100;
   const chosen = s.careerProf?.chosenCareerId ? recs.find((r) => r.careerId === s.careerProf!.chosenCareerId) : null;
   const canReveal = ctx.can("people.reveal_ids");
+  const awaiting = await awaitingAuthority(ctx, [s.id]);
 
   return (
     <PageBody>
@@ -71,6 +73,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
               {homeroom && <Pill>{t("tutor", { name: nameOf(homeroom.class.teacherMembershipId) })}</Pill>}
               {s.houseEn && <Pill tone="gold" >{t("house", { house: pick(locale, s.houseEn, s.houseAr) })}</Pill>}
               {s.hasSen && <Pill tone="info">{t("sen")}</Pill>}
+              {awaiting.ids.has(s.id) && <Pill tone="warning">{awaiting.label}</Pill>}
             </div>
           </div>
           <div className="flex gap-2">
