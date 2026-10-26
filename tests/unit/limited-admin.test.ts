@@ -230,7 +230,7 @@ describe("safeguarding access alerts", () => {
     expect(text.ar).toContain("الاطلاع على ملفات الحماية");
     const role = describeAccessChange([], new Map(), school, [{ name: { en: "Teacher", ar: "معلم" }, before: ["grades.enter"], after: ["grades.enter", "cases.wellbeing"], holders: 41 }], NOW);
     expect(role.en).toBe("The role Teacher now gives: see wellbeing cases (people with this role: 41).");
-    expect(`${text.en}${role.en}`).not.toMatch(/—/);
+    expect(`${text.en}${role.en}`).not.toMatch(/\u2014/);
   });
 });
 
