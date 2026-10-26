@@ -26,6 +26,7 @@ export const PERMISSION_GROUPS: Array<{ key: string; permissions: Permission[] }
   },
   { key: "teaching", permissions: ["curriculum.plan", "curriculum.review", "curriculum.manage", "trips.manage", "trips.consent", "comms.send"] },
   { key: "insights", permissions: ["analytics.view", "inspection.view", "ai.use", "ai.admin_insights"] },
+  { key: "finance", permissions: ["fees.view", "fees.manage", "fees.collect", "fees.refund.approve", "fees.reports"] },
   { key: "admin", permissions: ["admin.access", "school.manage", "roles.manage", "compliance.manage", "audit.view", "demo.reset", "integrations.manage"] },
   { key: "portals", permissions: ["family.portal", "student.portal"] },
 ];
@@ -45,6 +46,7 @@ export const SENSITIVE_PERMISSIONS: Permission[] = [
   "audit.view",
   "roles.manage",
   "integrations.manage",
+  "fees.refund.approve",
 ];
 
 export function isSensitivePermission(p: string): boolean {

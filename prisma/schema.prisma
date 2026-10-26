@@ -3625,3 +3625,593 @@ model UptimeSample {
   worker    Boolean
   createdAt DateTime @default(now())
 }
+
+// ---------------------------------------------------------------------------
+// Fees and invoicing (src/server/fees, src/server/payments).
+// Money is always an integer number of fils (1 AED = 100 fils). Issued invoices, credit notes, payments and
+// allocations are never edited or deleted by the app (see prisma/rls.sql): corrections are credit notes.
+// ---------------------------------------------------------------------------
+
+enum FeeItemKind {
+  TUITION
+  REGISTRATION
+  REENROLLMENT
+  SEAT_DEPOSIT
+  TRANSPORT
+  UNIFORM
+  BOOKS
+  TRIP
+  EXAM
+  OTHER
+}
+
+enum VatTreatment {
+  ZERO_RATED
+  STANDARD
+  EXEMPT
+  OUT_OF_SCOPE
+}
+
+enum InstalmentPlanKind {
+  ANNUAL
+  TERMLY
+  MONTHLY
+  CUSTOM
+}
+
+enum FeeDiscountKind {
+  SIBLING
+  STAFF_CHILD
+  SCHOLARSHIP
+  BURSARY
+  EARLY_PAYMENT
+  OTHER
+}
+
+enum DiscountMethod {
+  PERCENT
+  FIXED
+}
+
+enum DiscountStacking {
+  STACK
+  BEST_ONLY
+}
+
+enum FeeAwardStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  REVOKED
+}
+
+enum FeePayerType {
+  GUARDIAN
+  SPONSOR
+}
+
+enum InvoiceKind {
+  PROFORMA
+  TAX
+}
+
+enum InvoiceStatus {
+  OPEN
+  PARTIAL
+  PAID
+  CREDITED
+  CANCELLED
+  CONVERTED
+}
+
+enum FeePaymentMethod {
+  CASH
+  CHEQUE
+  BANK_TRANSFER
+  CARD
+  ONLINE
+}
+
+enum FeePaymentStatus {
+  HELD
+  CLEARED
+  BOUNCED
+}
+
+enum RefundStatus {
+  REQUESTED
+  APPROVED
+  REJECTED
+  PAID
+}
+
+enum PaymentLinkStatus {
+  OPEN
+  PAID
+  EXPIRED
+  CANCELLED
+}
+
+enum BillingRunStatus {
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum ProRataBasis {
+  MONTH
+  DAY
+  TERM
+  NONE
+}
+
+/// One row per school: legal identity for tax invoices, numbering, discounts, pro rata, reminders, finance hold.
+model FinanceSettings {
+  id                 String           @id @default(cuid())
+  orgId              String           @unique
+  legalNameEn        String?
+  legalNameAr        String?
+  addressEn          String?
+  addressAr          String?
+  /// UAE Tax Registration Number (15 digits). Required before tax invoices are issued while VAT registered.
+  trn                String?
+  vatRegistered      Boolean          @default(true)
+  /// Standard VAT rate in basis points (500 = 5%).
+  standardVatBp      Int              @default(500)
+  invoicePrefix      String           @default("INV")
+  proformaPrefix     String           @default("PF")
+  creditNotePrefix   String           @default("CN")
+  receiptPrefix      String           @default("RCT")
+  refundPrefix       String           @default("RF")
+  paymentTermsDays   Int              @default(14)
+  siblingSecondBp    Int              @default(500)
+  siblingThirdBp     Int              @default(1000)
+  siblingFourthBp    Int              @default(1000)
+  discountStacking   DiscountStacking @default(STACK)
+  earlyPaymentBp     Int              @default(0)
+  earlyPaymentDays   Int              @default(0)
+  proRataBasis       ProRataBasis     @default(MONTH)
+  proRataCutoffDay   Int              @default(15)
+  remindersEnabled   Boolean          @default(true)
+  reminderDaysBefore Int              @default(7)
+  reminderDaysAfter  Int[]            @default([7, 21, 45])
+  /// Finance hold: report card downloads wait until overdue fees are settled. Off by default.
+  holdReportCards    Boolean          @default(false)
+  holdAfterDays      Int              @default(30)
+  /// The school switched online payment on (the platform must also have a payment provider configured).
+  onlinePayments     Boolean          @default(false)
+  bankDetailsEn      String?
+  bankDetailsAr      String?
+  updatedAt          DateTime         @updatedAt
+}
+
+/// A fee in one academic year: tuition for a grade, transport for a zone, or a one-off item.
+model FeeItem {
+  id             String       @id @default(cuid())
+  orgId          String
+  academicYearId String
+  code           String
+  kind           FeeItemKind
+  nameEn         String
+  nameAr         String
+  /// Annual amount for recurring items, unit price for one-off items.
+  amountFils     Int
+  /// Grades this item applies to (empty means every grade). Tuition has one grade per item.
+  gradeLevels    Int[]
+  /// Transport zone code (transport items only).
+  zone           String?
+  /// Split across the instalment plan (tuition, transport).
+  recurring      Boolean      @default(false)
+  proRata        Boolean      @default(false)
+  /// Sibling, staff and award discounts apply.
+  discountable   Boolean      @default(false)
+  /// Billed automatically in a billing run (tuition by grade, transport by zone).
+  autoBill       Boolean      @default(false)
+  vatTreatment   VatTreatment
+  active         Boolean      @default(true)
+  sortOrder      Int          @default(0)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([orgId, academicYearId, code])
+  @@index([orgId, academicYearId, kind])
+}
+
+model InstalmentPlan {
+  id             String             @id @default(cuid())
+  orgId          String
+  academicYearId String
+  key            String
+  nameEn         String
+  nameAr         String
+  kind           InstalmentPlanKind
+  isDefault      Boolean            @default(false)
+  active         Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+
+  parts InstalmentPart[]
+
+  @@unique([orgId, academicYearId, key])
+}
+
+model InstalmentPart {
+  id          String   @id @default(cuid())
+  orgId       String
+  planId      String
+  seq         Int
+  labelEn     String
+  labelAr     String
+  dueDate     DateTime
+  periodStart DateTime
+  periodEnd   DateTime
+  /// Share of the annual amount in basis points (all parts of a plan add up to 10000).
+  shareBp     Int
+
+  plan InstalmentPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@unique([planId, seq])
+  @@index([orgId])
+}
+
+model FeeDiscount {
+  id               String          @id @default(cuid())
+  orgId            String
+  code             String
+  kind             FeeDiscountKind
+  nameEn           String
+  nameAr           String
+  method           DiscountMethod
+  percentBp        Int?
+  /// Fixed discounts are an annual amount, shared across instalments like the fee itself.
+  amountFils       Int?
+  requiresApproval Boolean         @default(true)
+  active           Boolean         @default(true)
+  createdAt        DateTime        @default(now())
+
+  awards FeeAward[]
+
+  @@unique([orgId, code])
+}
+
+/// A discount granted to one student for one academic year (staff child, scholarship, bursary).
+model FeeAward {
+  id             String         @id @default(cuid())
+  orgId          String
+  studentId      String
+  discountId     String
+  academicYearId String
+  status         FeeAwardStatus @default(PENDING)
+  reason         String?
+  requestedById  String?
+  decidedById    String?
+  decidedAt      DateTime?
+  decisionNote   String?
+  createdAt      DateTime       @default(now())
+
+  discount FeeDiscount @relation(fields: [discountId], references: [id], onDelete: Restrict)
+
+  @@index([orgId, studentId, academicYearId])
+  @@index([orgId, status])
+}
+
+/// A family account: the bill payer (a guardian or a company sponsor) and the children billed together.
+model FeeAccount {
+  id              String       @id @default(cuid())
+  orgId           String
+  code            String
+  nameEn          String
+  nameAr          String
+  payerType       FeePayerType @default(GUARDIAN)
+  payerGuardianId String?
+  sponsorName     String?
+  sponsorTrn      String?
+  /// Billing address and email (the sponsor's for a company, otherwise the payer's own).
+  billingAddress  String?
+  billingEmail    String?
+  /// Instalment plan key chosen by the family (null means the school's default plan).
+  planKey         String?
+  remindersPaused Boolean      @default(false)
+  pausedReason    String?
+  /// Admissions applicant (seat booking) accounts have no enrolled children yet.
+  applicationRef  String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  students StudentFeeProfile[]
+
+  @@unique([orgId, code])
+  @@index([orgId, payerGuardianId])
+  @@index([orgId, applicationRef])
+  @@index([orgId, nameEn])
+}
+
+model StudentFeeProfile {
+  id            String   @id @default(cuid())
+  orgId         String
+  studentId     String   @unique
+  accountId     String
+  transportZone String?
+  createdAt     DateTime @default(now())
+
+  account FeeAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, accountId])
+}
+
+/// A one-off charge (uniform, books, trip, exam fee) waiting to be invoiced, or already on an invoice.
+model FeeCharge {
+  id            String   @id @default(cuid())
+  orgId         String
+  accountId     String
+  studentId     String?
+  feeItemId     String
+  quantity      Int      @default(1)
+  unitFils      Int
+  descriptionEn String?
+  descriptionAr String?
+  invoiceId     String?
+  createdById   String?
+  createdAt     DateTime @default(now())
+
+  @@index([orgId, accountId, invoiceId])
+}
+
+/// A proforma (request for payment, not a tax document) or a tax invoice. Never edited once issued.
+model Invoice {
+  id             String        @id @default(cuid())
+  orgId          String
+  kind           InvoiceKind
+  number         String
+  accountId      String
+  academicYearId String?
+  billingRunId   String?
+  planPartId     String?
+  status         InvoiceStatus @default(OPEN)
+  issueDate      DateTime
+  dueDate        DateTime
+  periodStart    DateTime?
+  periodEnd      DateTime?
+  periodLabelEn  String?
+  periodLabelAr  String?
+  billToName     String
+  billToNameAr   String?
+  billToAddress  String?
+  billToTrn      String?
+  billToEmail    String?
+  /// The school's legal name, address and TRN at the time of issue.
+  seller         Json
+  subtotalFils   Int
+  discountFils   Int
+  netFils        Int
+  vatFils        Int
+  totalFils      Int
+  paidFils       Int           @default(0)
+  creditedFils   Int           @default(0)
+  /// A proforma converted to a tax invoice points to it.
+  convertedToId  String?
+  sourceRef      String?
+  remindersSent  Int           @default(0)
+  lastReminderAt DateTime?
+  createdById    String?
+  createdAt      DateTime      @default(now())
+
+  lines InvoiceLine[]
+
+  @@unique([orgId, number])
+  @@unique([billingRunId, accountId])
+  @@index([orgId, accountId, issueDate])
+  @@index([orgId, status, dueDate])
+  @@index([orgId, issueDate])
+  @@index([orgId, sourceRef])
+}
+
+model InvoiceLine {
+  id            String       @id @default(cuid())
+  orgId         String
+  invoiceId     String
+  seq           Int
+  studentId     String?
+  feeItemId     String?
+  kind          FeeItemKind
+  descriptionEn String
+  descriptionAr String
+  quantity      Int
+  unitFils      Int
+  grossFils     Int
+  discountFils  Int
+  netFils       Int
+  vatTreatment  VatTreatment
+  vatRateBp     Int
+  vatFils       Int
+  totalFils     Int
+  /// Pro rata units billed out of the period's units (1 of 1 when not pro rata).
+  prorataNum    Int          @default(1)
+  prorataDen    Int          @default(1)
+  /// Discount breakdown: [{ kind, labelEn, labelAr, amountFils }].
+  discounts     Json?
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Restrict)
+
+  @@index([orgId, invoiceId])
+  @@index([orgId, studentId])
+}
+
+model CreditNote {
+  id          String   @id @default(cuid())
+  orgId       String
+  number      String
+  invoiceId   String
+  accountId   String
+  issueDate   DateTime
+  reasonKind  String
+  reasonEn    String
+  reasonAr    String?
+  netFils     Int
+  vatFils     Int
+  totalFils   Int
+  createdById String?
+  createdAt   DateTime @default(now())
+
+  lines CreditNoteLine[]
+
+  @@unique([orgId, number])
+  @@index([orgId, accountId])
+  @@index([orgId, invoiceId])
+  @@index([orgId, issueDate])
+}
+
+model CreditNoteLine {
+  id            String       @id @default(cuid())
+  orgId         String
+  creditNoteId  String
+  invoiceLineId String?
+  descriptionEn String
+  descriptionAr String
+  netFils       Int
+  vatTreatment  VatTreatment
+  vatRateBp     Int
+  vatFils       Int
+  totalFils     Int
+
+  creditNote CreditNote @relation(fields: [creditNoteId], references: [id], onDelete: Restrict)
+
+  @@index([orgId, creditNoteId])
+}
+
+/// Money received. A post-dated cheque is HELD until it clears; the receipt number is given on clearing.
+model FeePayment {
+  id             String           @id @default(cuid())
+  orgId          String
+  accountId      String
+  number         String?
+  method         FeePaymentMethod
+  provider       String           @default("manual")
+  status         FeePaymentStatus
+  amountFils     Int
+  allocatedFils  Int              @default(0)
+  /// Refunds requested, approved or paid from this payment.
+  refundedFils   Int              @default(0)
+  receivedAt     DateTime
+  clearedAt      DateTime?
+  bouncedAt      DateTime?
+  reference      String?
+  chequeNumber   String?
+  chequeBank     String?
+  chequeDate     DateTime?
+  payerName      String?
+  notes          String?
+  externalId     String?
+  idempotencyKey String
+  recordedById   String?
+  createdAt      DateTime         @default(now())
+
+  @@unique([orgId, number])
+  @@unique([orgId, idempotencyKey])
+  @@index([orgId, accountId])
+  @@index([orgId, status, chequeDate])
+  @@index([orgId, receivedAt])
+}
+
+/// Money (a payment or a credit note) applied to an invoice. Append only: a release is a negative row.
+model FeeAllocation {
+  id           String   @id @default(cuid())
+  orgId        String
+  invoiceId    String
+  paymentId    String?
+  creditNoteId String?
+  amountFils   Int
+  createdAt    DateTime @default(now())
+
+  @@index([orgId, invoiceId])
+  @@index([orgId, paymentId])
+}
+
+model FeeRefund {
+  id            String            @id @default(cuid())
+  orgId         String
+  number        String?
+  accountId     String
+  paymentId     String
+  amountFils    Int
+  reason        String
+  status        RefundStatus      @default(REQUESTED)
+  requestedById String?
+  requestedAt   DateTime          @default(now())
+  decidedById   String?
+  decidedAt     DateTime?
+  decisionNote  String?
+  paidAt        DateTime?
+  method        FeePaymentMethod?
+  reference     String?
+
+  @@unique([orgId, number])
+  @@index([orgId, status])
+  @@index([orgId, accountId])
+}
+
+/// An online payment request sent to a payment provider (or the built-in test checkout).
+model PaymentLink {
+  id          String            @id @default(cuid())
+  orgId       String
+  accountId   String
+  invoiceId   String?
+  amountFils  Int
+  currency    String            @default("AED")
+  provider    String
+  status      PaymentLinkStatus @default(OPEN)
+  externalId  String?
+  url         String?
+  expiresAt   DateTime
+  paymentId   String?
+  createdById String?
+  createdAt   DateTime          @default(now())
+  paidAt      DateTime?
+
+  @@index([orgId, invoiceId])
+  @@index([orgId, accountId])
+}
+
+/// Provider webhook events already handled (idempotency).
+model PaymentEvent {
+  id        String   @id @default(cuid())
+  orgId     String
+  provider  String
+  eventId   String
+  type      String
+  linkId    String?
+  outcome   String
+  createdAt DateTime @default(now())
+
+  @@unique([orgId, provider, eventId])
+}
+
+/// Bulk invoicing for one instalment: processed by the worker in batches of family accounts.
+model BillingRun {
+  id              String           @id @default(cuid())
+  orgId           String
+  academicYearId  String
+  planId          String
+  partId          String
+  status          BillingRunStatus @default(QUEUED)
+  issueDate       DateTime
+  dueDate         DateTime
+  includeCharges  Boolean          @default(true)
+  totalAccounts   Int              @default(0)
+  processed       Int              @default(0)
+  invoicesCreated Int              @default(0)
+  skipped         Int              @default(0)
+  totalFils       Int              @default(0)
+  /// Last account id processed, so a run resumes where it stopped.
+  cursor          String?
+  error           String?
+  createdById     String?
+  createdAt       DateTime         @default(now())
+  startedAt       DateTime?
+  finishedAt      DateTime?
+  updatedAt       DateTime         @updatedAt
+
+  @@index([orgId, createdAt])
+  @@index([status, updatedAt])
+}

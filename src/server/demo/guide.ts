@@ -33,6 +33,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "childApplications", href: "/career/applications" },
     { key: "universityFairsParent", href: "/career/events" },
     { key: "pathwayChild", href: "/career/pathways" },
+    { key: "parentFees", href: "/fees" },
     { key: "childSubjectLevels", href: "/career/pathways#levels" },
   ],
   teacher: [
@@ -89,6 +90,8 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "curriculumGaps", href: "/curriculum" },
     { key: "rolesAccess", href: "/admin/roles" },
     { key: "inspectionPack", href: "/admin/inspection" },
+    { key: "financeReports", href: "/finance/reports" },
+    { key: "financeApprovals", href: "/finance/approvals" },
   ],
   admin: [
     { key: "requestThreads", href: "/requests?tab=all" },
@@ -116,6 +119,16 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "documents", href: "/documents" },
     { key: "templates", href: "/admin/templates" },
     { key: "timetableSetup", href: "/admin/timetable" },
+  ],
+  finance: [
+    { key: "finOverview", href: "/finance" },
+    { key: "finSchedule", href: "/finance/setup" },
+    { key: "finPlans", href: "/finance/setup?tab=plans" },
+    { key: "finBilling", href: "/finance/billing" },
+    { key: "finAccount", href: "/finance/accounts" },
+    { key: "finPayment", href: "/finance/accounts?filter=overdue" },
+    { key: "finCheques", href: "/finance/payments?tab=held" },
+    { key: "finReports", href: "/finance/reports" },
   ],
   hod_computing: [
     { key: "gradesOverview", href: "/grades?view=overview" },

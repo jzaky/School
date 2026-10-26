@@ -8,6 +8,8 @@ import { readLocal, signedUrl } from "@/server/documents/storage";
 import type { MergeData } from "@/server/documents/merge";
 import { renderReportCardPdf } from "@/server/grades/report-pdf";
 import type { ReportCardData } from "@/server/grades/report-card";
+import { reportCardOnHold } from "@/server/fees/hold";
+import { financeHoldResponse } from "@/server/fees/hold-response";
 
 export const runtime = "nodejs";
 
@@ -22,6 +24,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const versionNo = Number(url.searchParams.get("v") ?? 0);
   const version = (versionNo ? doc.versions.find((v) => v.version === versionNo) : doc.versions.find((v) => v.id === doc.currentVersionId)) ?? doc.versions[0];
   if (!version) return NextResponse.json({ error: "not_found" }, { status: 404 });
+  // Finance hold (off unless the school switches it on): families wait for the report card until fees are settled.
+  if (version.storageKey.startsWith("reportcard:") && !ctx.isStaff && doc.studentId && (await reportCardOnHold(ctx.db, ctx.orgId, doc.studentId))) {
+    return financeHoldResponse(ctx.locale, ctx.isParent);
+  }
 
   await audit(ctx.db, ctx.orgId, {
     actorId: ctx.membershipId,

@@ -31,7 +31,8 @@ export default async function SettingsPage() {
   const jar = await cookies();
   const numerals = (jar.get("numerals")?.value as "WESTERN" | "ARABIC_INDIC" | undefined) ?? ctx.org.numerals;
   const hijri = jar.get("hijri")?.value === "1";
-  const kinds = ctx.isStaff ? STAFF_KINDS : FAMILY_KINDS;
+  // Students never see fees, so fee notices are only offered to parents.
+  const kinds = ctx.isStaff ? STAFF_KINDS : ctx.isParent ? FAMILY_KINDS : FAMILY_KINDS.filter((k) => !k.startsWith("fee_"));
   const push = pushConfig();
   // WhatsApp: parents only, when a provider is configured and the school sends at least one kind on it.
   const waKinds = ctx.isParent && whatsappConfig() ? ctx.org.whatsappKinds.filter((k) => FAMILY_KINDS.includes(k)) : [];

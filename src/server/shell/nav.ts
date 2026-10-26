@@ -5,7 +5,7 @@ export type NavItem = { key: string; href: string; icon: string; badge?: number 
 export type NavSection = { key: string; items: NavItem[] };
 
 /** Role-aware navigation. Only features the member can use appear. */
-export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; notifications: number; joinRequests?: number; group?: boolean }): NavSection[] {
+export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; notifications: number; joinRequests?: number; group?: boolean; fees?: boolean }): NavSection[] {
   const c = ctx.can;
   if (ctx.isStudent) {
     return [
@@ -55,8 +55,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
           { key: "exams", href: "/exams", icon: "graduation-cap" },
           { key: "trips", href: "/trips", icon: "bus" },
           { key: "documents", href: "/documents", icon: "file-text" },
-          // The school's own payment portal; hidden until the school sets a link.
-          ...(ctx.org.feePaymentUrl ? [{ key: "fees", href: "/fees", icon: "credit-card" }] : []),
+          // Fees: statements when the school bills in Horizon, otherwise the school's own payment portal link.
+          ...(ctx.org.feePaymentUrl || counts.fees ? [{ key: "fees", href: "/fees", icon: "credit-card" }] : []),
         ],
       },
     ];
@@ -88,6 +88,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   school.push({ key: "documents", href: "/documents", icon: "file-text" });
   if (c("curriculum.plan") || c("curriculum.review") || c("curriculum.manage")) school.push({ key: "curriculum", href: "/curriculum", icon: "book-open" });
   if (c("analytics.view")) school.push({ key: "analytics", href: "/analytics", icon: "bar-chart-3" });
+  if (c("fees.view")) school.push({ key: "finance", href: "/finance", icon: "wallet" });
   // School group people (see src/server/groups): a way into the group area.
   if (counts.group) school.push({ key: "groupDashboard", href: "/group", icon: "network" });
   const admin: NavItem[] = [];

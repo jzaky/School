@@ -96,6 +96,11 @@ async function main() {
           throw new Error(`unknown job ${job.name}`);
       }
     },
+    // Fees: billing runs in batches (each batch queues the next; see src/server/fees/billing.ts).
+    fees: async (job: Job) => {
+      if (job.name !== "billing.batch") throw new Error(`unknown job ${job.name}`);
+      return (await import("@/server/fees/jobs")).runBillingBatchJob(job.data as { orgId: string; runId: string; n: number });
+    },
     privacy: async (job: Job) => {
       if (job.name !== schoolExport.SCHOOL_EXPORT_JOB) throw new Error(`unknown job ${job.name}`);
       return schoolExport.runSchoolExport(job.data as SchoolExportJob);
@@ -136,6 +141,10 @@ async function main() {
           return forEachOrg("applications.reminders", async (orgId) => (await import("@/server/applications/reminders")).runApplicationReminders(orgId));
         case "careerEvents.reminders":
           return forEachOrg("careerEvents.reminders", async (orgId) => (await import("@/server/career-events/reminders")).runCareerEventReminders(orgId));
+        case "fees.reminders":
+          return forEachOrg("fees.reminders", async (orgId) => (await import("@/server/fees/jobs")).runFeeReminders(orgId));
+        case "fees.resume":
+          return forEachOrg("fees.resume", async (orgId) => (await import("@/server/fees/jobs")).resumeStaleBillingRuns(orgId));
         case "test.idempotent":
           return handlers.testIdempotent(job.data as TestIdempotentJob);
         default:
@@ -166,6 +175,10 @@ async function main() {
     await maintenance.upsertJobScheduler("applications.reminders", { pattern: "45 3 * * *", tz: "UTC" }, { name: "applications.reminders", opts: { attempts: 3 } });
     // Hourly: university fair and visit reminders about a day before the event (each sent once).
     await maintenance.upsertJobScheduler("careerEvents.reminders", { pattern: "20 * * * *", tz: "UTC" }, { name: "careerEvents.reminders", opts: { attempts: 3 } });
+    // 04:10 UTC is 08:10 in Dubai: fee reminders before and after due dates (each stage sent once per invoice).
+    await maintenance.upsertJobScheduler("fees.reminders", { pattern: "10 4 * * *", tz: "UTC" }, { name: "fees.reminders", opts: { attempts: 3 } });
+    // Every 5 minutes: billing runs with no progress for a while continue from their cursor.
+    await maintenance.upsertJobScheduler("fees.resume", { every: 5 * 60_000 }, { name: "fees.resume", opts: { attempts: 1, removeOnComplete: 100, removeOnFail: 100 } });
     if (demoMode) {
       // 22:00 UTC is 02:00 in Dubai.
       await maintenance.upsertJobScheduler("demo-reset", { pattern: "0 22 * * *", tz: "UTC" }, { name: "demo-reset", opts: { attempts: 2 } });

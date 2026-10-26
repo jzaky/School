@@ -69,6 +69,11 @@ export const PERMISSIONS = [
   "inspection.view",
   "career.partners",
   "integrations.manage",
+  "fees.view",
+  "fees.manage",
+  "fees.collect",
+  "fees.refund.approve",
+  "fees.reports",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
@@ -145,6 +150,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "inspection.view",
       "career.partners",
       "integrations.manage",
+      "fees.view",
     ],
   },
   {
@@ -183,6 +189,9 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "ai.admin_insights",
       "demo.reset",
       "inspection.view",
+      "fees.view",
+      "fees.reports",
+      "fees.refund.approve",
     ],
   },
   {
@@ -353,6 +362,14 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
     descEn: "Resolves IT requests.",
     descAr: "يعالج طلبات الدعم التقني.",
     permissions: [...STAFF_BASE, "requests.process"],
+  },
+  {
+    key: "finance_officer",
+    nameEn: "Finance Officer",
+    nameAr: "مسؤول الشؤون المالية",
+    descEn: "Sets up fees, bills families, records payments and runs finance reports.",
+    descAr: "يعدّ الرسوم ويصدر فواتير الأسر ويسجّل المدفوعات ويستخرج التقارير المالية.",
+    permissions: [...STAFF_BASE, "fees.view", "fees.manage", "fees.collect", "fees.reports"],
   },
   {
     key: "student",

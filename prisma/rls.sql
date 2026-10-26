@@ -162,3 +162,16 @@ REVOKE ALL ON TABLE "PlatformAuditEvent" FROM app_user;
 REVOKE ALL ON TABLE "MarketingLead" FROM app_user;
 REVOKE ALL ON TABLE "PlatformSetting" FROM app_user;
 REVOKE INSERT, UPDATE, DELETE ON TABLE "UptimeSample" FROM app_user;
+
+-- 7. Fees and invoicing. Tenant isolation comes from section 2 (every table has orgId). Financial records are
+-- append only for the app role: issued invoices, credit notes, their lines, payments and allocations are never
+-- deleted, and lines and allocations are never changed (a release of an allocation is a negative row).
+-- The Invoice_immutable trigger (migration 20261026090000_fees_invoicing) blocks changes to an issued invoice.
+REVOKE DELETE ON TABLE "Invoice" FROM app_user;
+REVOKE UPDATE, DELETE ON TABLE "InvoiceLine" FROM app_user;
+REVOKE UPDATE, DELETE ON TABLE "CreditNote" FROM app_user;
+REVOKE UPDATE, DELETE ON TABLE "CreditNoteLine" FROM app_user;
+REVOKE DELETE ON TABLE "FeePayment" FROM app_user;
+REVOKE UPDATE, DELETE ON TABLE "FeeAllocation" FROM app_user;
+REVOKE DELETE ON TABLE "FeeRefund" FROM app_user;
+REVOKE DELETE ON TABLE "PaymentEvent" FROM app_user;
