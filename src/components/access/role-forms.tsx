@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { AlertTriangle, Loader2, Pencil, Plus, RotateCcw, ShieldAlert, Trash2, UserMinus, UserPlus } from "lucide-react";
+import { AlertTriangle, CalendarClock, Info, Loader2, Lock, Pencil, Plus, RotateCcw, ShieldAlert, Trash2, UserMinus, UserPlus } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,7 @@ import {
   deleteRoleAction,
   removeRoleMemberAction,
   restoreRoleDefaultAction,
+  setAssignmentEndAction,
   setMemberRolesAction,
   setRolePermissionAction,
   updateRoleDetailsAction,
@@ -172,7 +173,22 @@ export function RoleDetailsDialog({ role }: { role: { id: string; nameEn: string
   );
 }
 
-export function RestoreDefaultButton({ roleId }: { roleId: string }) {
+/** Wraps a disabled control in a tooltip that says why it cannot be used. */
+function Locked({ reason, children }: { reason: string | null | undefined; children: React.ReactElement }) {
+  if (!reason) return children;
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span tabIndex={0} className="inline-flex" data-testid="locked-control">
+          {children}
+        </span>
+      </TooltipTrigger>
+      <TooltipContent className="max-w-xs">{reason}</TooltipContent>
+    </Tooltip>
+  );
+}
+
+export function RestoreDefaultButton({ roleId, blocked }: { roleId: string; blocked?: string | null }) {
   const t = useTranslations("adminRoles");
   const err = useAccessError();
   const router = useRouter();
@@ -188,10 +204,12 @@ export function RestoreDefaultButton({ roleId }: { roleId: string }) {
     });
   return (
     <>
-      <Button variant="outline" size="sm" onClick={() => setOpen(true)} data-testid="restore-default">
-        <RotateCcw className="size-4" />
-        {t("restoreDefault")}
-      </Button>
+      <Locked reason={blocked}>
+        <Button variant="outline" size="sm" onClick={() => setOpen(true)} disabled={!!blocked} data-testid="restore-default">
+          {blocked ? <Lock className="size-4" /> : <RotateCcw className="size-4" />}
+          {t("restoreDefault")}
+        </Button>
+      </Locked>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
@@ -213,7 +231,7 @@ export function RestoreDefaultButton({ roleId }: { roleId: string }) {
   );
 }
 
-export function DeleteRoleDialog({ roleId, memberCount, targets }: { roleId: string; memberCount: number; targets: RoleOption[] }) {
+export function DeleteRoleDialog({ roleId, memberCount, targets, hiddenNote }: { roleId: string; memberCount: number; targets: RoleOption[]; hiddenNote?: string | null }) {
   const t = useTranslations("adminRoles");
   const err = useAccessError();
   const router = useRouter();
@@ -259,6 +277,7 @@ export function DeleteRoleDialog({ roleId, memberCount, targets }: { roleId: str
                   ))}
                 </SelectContent>
               </Select>
+              {hiddenNote && <p className="text-xs text-muted-foreground">{hiddenNote}</p>}
             </div>
           )}
           <DialogFooter>
@@ -287,6 +306,7 @@ export function PermissionSwitch({
   label,
   granted,
   sensitive,
+  selfBlocked,
 }: {
   roleId: string;
   roleName: string;
@@ -294,6 +314,8 @@ export function PermissionSwitch({
   label: string;
   granted: boolean;
   sensitive: boolean;
+  /** Why the viewer cannot switch this on (they hold the role and would gain sensitive access). */
+  selfBlocked?: string | null;
 }) {
   const t = useTranslations("adminRoles");
   const err = useAccessError();
@@ -319,21 +341,25 @@ export function PermissionSwitch({
       setOptimistic(null);
     });
 
+  const blocked = !value && selfBlocked ? selfBlocked : null;
   return (
     <>
-      <Switch
-        checked={value}
-        disabled={pending}
-        aria-label={label}
-        data-testid={`perm-${permission}`}
-        onCheckedChange={(next) => {
-          if (next && sensitive) {
-            setConfirmOpen(true);
-            return;
-          }
-          save(next);
-        }}
-      />
+      <Locked reason={blocked}>
+        <Switch
+          checked={value}
+          disabled={pending || !!blocked}
+          aria-label={label}
+          data-testid={`perm-${permission}`}
+          data-self-blocked={blocked ? "yes" : undefined}
+          onCheckedChange={(next) => {
+            if (next && sensitive) {
+              setConfirmOpen(true);
+              return;
+            }
+            save(next);
+          }}
+        />
+      </Locked>
       <Dialog open={confirmOpen} onOpenChange={(o) => { setConfirmOpen(o); if (!o) setTyped(""); }}>
         <DialogContent>
           <DialogHeader>
@@ -366,44 +392,168 @@ export function PermissionSwitch({
 // Role members
 // ---------------------------------------------------------------------------
 
-export function AddRoleMember({ roleId, candidates, sensitive }: { roleId: string; candidates: PickerOption[]; sensitive: boolean }) {
+export function AddRoleMember({
+  roleId,
+  candidates,
+  sensitive,
+  today,
+  maxDay,
+  selfNote,
+}: {
+  roleId: string;
+  candidates: PickerOption[];
+  sensitive: boolean;
+  /** Earliest and latest "until" day (YYYY-MM-DD, school time zone). */
+  today: string;
+  maxDay: string;
+  /** Shown when the viewer is left out of the picker because the role would raise their own access. */
+  selfNote?: string | null;
+}) {
   const t = useTranslations("adminRoles");
   const err = useAccessError();
   const router = useRouter();
   const [value, setValue] = useState("");
+  const [until, setUntil] = useState("");
   const [ack, setAck] = useState(false);
   const [pending, start] = useTransition();
   const add = () =>
     start(async () => {
-      const res = await addRoleMemberAction({ roleId, membershipId: value, confirmSensitive: ack });
+      const res = await addRoleMemberAction({ roleId, membershipId: value, confirmSensitive: ack, until: until || null });
       if (!res.ok) return void toast.error(err(res.error));
-      toast.success(t("memberAdded"));
+      toast.success(until ? t("memberAddedUntil") : t("memberAdded"));
       setValue("");
+      setUntil("");
       setAck(false);
       router.refresh();
     });
   return (
     <div className="space-y-2">
-      <div className="flex flex-col gap-2 sm:flex-row">
-        <div className="min-w-0 flex-1">
-          <PickerCombobox options={candidates} value={value} onChange={setValue} placeholder={t("searchStaff")} testId="add-member-picker" />
+      <div className="min-w-0">
+        <PickerCombobox options={candidates} value={value} onChange={setValue} placeholder={t("searchStaff")} testId="add-member-picker" />
+      </div>
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+        <div className="min-w-0 flex-1 space-y-1">
+          <Label htmlFor={`until-${roleId}`} className="text-xs">
+            {t("untilLabel")}
+          </Label>
+          <Input id={`until-${roleId}`} type="date" min={today} max={maxDay} value={until} onChange={(e) => setUntil(e.target.value)} className="w-full" dir="ltr" data-testid="add-member-until" />
         </div>
         <Button onClick={add} disabled={pending || !value || (sensitive && !ack)} data-testid="add-member">
           {pending ? <Loader2 className="size-4 animate-spin" /> : <UserPlus className="size-4" />}
           {t("addMember")}
         </Button>
       </div>
+      <p className="text-xs text-muted-foreground">{t("untilHelp")}</p>
       {sensitive && value && (
         <label className="flex items-start gap-2 rounded-lg border border-warning/40 bg-warning-soft/50 p-3 text-sm">
           <Checkbox checked={ack} onCheckedChange={(c) => setAck(!!c)} className="mt-0.5" data-testid="add-member-ack" />
           <span>{t("sensitiveMemberAck")}</span>
         </label>
       )}
+      {selfNote && (
+        <p className="flex items-start gap-2 rounded-lg border bg-muted/40 p-3 text-xs text-muted-foreground" data-testid="self-note">
+          <Lock className="mt-0.5 size-3.5 shrink-0" />
+          <span>{selfNote}</span>
+        </p>
+      )}
     </div>
   );
 }
 
-export function RemoveRoleMember({ roleId, membershipId, name, lock }: { roleId: string; membershipId: string; name: string; lock: string | null }) {
+/**
+ * Change when someone's role ends: extend it, end it earlier, or remove the end date. `maxDay` limits how
+ * far it can go (the viewer's own sensitive access can only be shortened); `allowNoEnd` offers "no end date".
+ */
+export function AssignmentEndButton({
+  roleId,
+  membershipId,
+  name,
+  roleName,
+  until,
+  today,
+  maxDay,
+  allowNoEnd,
+  lock,
+  note,
+}: {
+  roleId: string;
+  membershipId: string;
+  name: string;
+  roleName: string;
+  until: string | null;
+  today: string;
+  maxDay: string;
+  allowNoEnd: boolean;
+  lock?: string | null;
+  note?: string | null;
+}) {
+  const t = useTranslations("adminRoles");
+  const err = useAccessError();
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [day, setDay] = useState(until ?? "");
+  const [pending, start] = useTransition();
+  const save = (next: string | null) =>
+    start(async () => {
+      const res = await setAssignmentEndAction({ roleId, membershipId, until: next });
+      if (!res.ok) return void toast.error(err(res.error));
+      toast.success(next ? t("endDateSaved") : t("endDateRemoved"));
+      setOpen(false);
+      router.refresh();
+    });
+  return (
+    <>
+      <Locked reason={lock}>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            setDay(until ?? "");
+            setOpen(true);
+          }}
+          disabled={!!lock}
+          aria-label={until ? t("changeEndFor", { name }) : t("setEndFor", { name })}
+          data-testid="assignment-end"
+        >
+          <CalendarClock className="size-4" />
+          <span>{until ? t("changeEnd") : t("setEnd")}</span>
+        </Button>
+      </Locked>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("endDateTitle", { name })}</DialogTitle>
+            <DialogDescription>{t("endDateBody", { name, role: roleName })}</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-1.5">
+            <Label htmlFor={`end-${roleId}-${membershipId}`}>{t("endDateField")}</Label>
+            <Input id={`end-${roleId}-${membershipId}`} type="date" min={today} max={maxDay} value={day} onChange={(e) => setDay(e.target.value)} dir="ltr" data-testid="assignment-end-date" />
+            <p className="text-xs text-muted-foreground">{t("untilHelp")}</p>
+          </div>
+          {note && (
+            <p className="flex items-start gap-2 rounded-lg border bg-muted/40 p-3 text-xs text-muted-foreground" data-testid="assignment-end-note">
+              <Info className="mt-0.5 size-3.5 shrink-0" />
+              <span>{note}</span>
+            </p>
+          )}
+          <DialogFooter className="gap-2">
+            {allowNoEnd && until && (
+              <Button variant="outline" onClick={() => save(null)} disabled={pending} data-testid="assignment-end-clear">
+                {t("removeEndDate")}
+              </Button>
+            )}
+            <Button onClick={() => save(day)} disabled={pending || !day || day === until || day < today || day > maxDay} data-testid="assignment-end-save">
+              {pending && <Loader2 className="size-4 animate-spin" />}
+              {t("save")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
+export function RemoveRoleMember({ roleId, membershipId, name, lock, timeLimited }: { roleId: string; membershipId: string; name: string; lock: string | null; timeLimited?: boolean }) {
   const t = useTranslations("adminRoles");
   const err = useAccessError();
   const router = useRouter();
@@ -412,13 +562,13 @@ export function RemoveRoleMember({ roleId, membershipId, name, lock }: { roleId:
     start(async () => {
       const res = await removeRoleMemberAction({ roleId, membershipId });
       if (!res.ok) return void toast.error(err(res.error));
-      toast.success(t("memberRemoved", { name }));
+      toast.success(timeLimited ? t("accessEnded", { name }) : t("memberRemoved", { name }));
       router.refresh();
     });
   const btn = (
-    <Button variant="ghost" size="sm" onClick={remove} disabled={pending || !!lock} aria-label={t("removeMember", { name })} data-testid="remove-member">
+    <Button variant="ghost" size="sm" onClick={remove} disabled={pending || !!lock} aria-label={timeLimited ? t("endNowFor", { name }) : t("removeMember", { name })} data-testid="remove-member">
       {pending ? <Loader2 className="size-4 animate-spin" /> : <UserMinus className="size-4" />}
-      <span className="hidden sm:inline">{t("remove")}</span>
+      <span>{timeLimited ? t("endNow") : t("remove")}</span>
     </Button>
   );
   if (!lock) return btn;
@@ -436,9 +586,9 @@ export function RemoveRoleMember({ roleId, membershipId, name, lock }: { roleId:
 // Roles control on the people page
 // ---------------------------------------------------------------------------
 
-export type MemberRoleOption = { id: string; label: string; description: string; sensitive: boolean };
+export type MemberRoleOption = { id: string; label: string; description: string; sensitive: boolean; until?: string | null };
 
-export function MemberRolesDialog({ membershipId, name, roles, current }: { membershipId: string; name: string; roles: MemberRoleOption[]; current: string[] }) {
+export function MemberRolesDialog({ membershipId, name, roles, current, selfBlocked = [] }: { membershipId: string; name: string; roles: MemberRoleOption[]; current: string[]; selfBlocked?: string[] }) {
   const t = useTranslations("adminRoles");
   const err = useAccessError();
   const router = useRouter();
@@ -468,19 +618,39 @@ export function MemberRolesDialog({ membershipId, name, roles, current }: { memb
             <DialogDescription>{t("memberRolesBody")}</DialogDescription>
           </DialogHeader>
           <div className="grid max-h-80 gap-1 overflow-y-auto rounded-lg border p-2 sm:grid-cols-2">
-            {roles.map((r) => (
-              <label key={r.id} className="flex cursor-pointer items-start gap-2 rounded-md p-1.5 hover:bg-muted/50" data-testid={`member-role-${r.id}`}>
-                <Checkbox className="mt-0.5" checked={value.includes(r.id)} onCheckedChange={(c) => setValue((v) => (c ? [...v, r.id] : v.filter((x) => x !== r.id)))} />
-                <span className="min-w-0">
-                  <span className="flex items-center gap-1.5 text-sm font-medium">
-                    {r.label}
-                    {r.sensitive && <ShieldAlert className="size-3.5 text-danger" aria-label={t("sensitiveBadge")} />}
+            {roles.map((r) => {
+              const blocked = selfBlocked.includes(r.id) && !current.includes(r.id);
+              const row = (
+                <label key={r.id} className="flex cursor-pointer items-start gap-2 rounded-md p-1.5 hover:bg-muted/50 has-disabled:cursor-not-allowed has-disabled:opacity-60" data-testid={`member-role-${r.id}`}>
+                  <Checkbox className="mt-0.5" disabled={blocked} checked={value.includes(r.id)} onCheckedChange={(c) => setValue((v) => (c ? [...v, r.id] : v.filter((x) => x !== r.id)))} />
+                  <span className="min-w-0">
+                    <span className="flex flex-wrap items-center gap-1.5 text-sm font-medium">
+                      {r.label}
+                      {r.sensitive && <ShieldAlert className="size-3.5 text-danger" aria-label={t("sensitiveBadge")} />}
+                      {blocked && <Lock className="size-3.5 text-muted-foreground" aria-label={t("selfBlockedRole")} />}
+                      {r.until && current.includes(r.id) && <span className="text-xs font-normal text-muted-foreground">{t("untilShort", { date: r.until })}</span>}
+                    </span>
+                    <span className="block text-xs text-muted-foreground">{r.description}</span>
                   </span>
-                  <span className="block text-xs text-muted-foreground">{r.description}</span>
-                </span>
-              </label>
-            ))}
+                </label>
+              );
+              if (!blocked) return row;
+              return (
+                <Tooltip key={r.id}>
+                  <TooltipTrigger asChild>
+                    <div>{row}</div>
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">{t("selfBlockedRole")}</TooltipContent>
+                </Tooltip>
+              );
+            })}
           </div>
+          {selfBlocked.some((id) => !current.includes(id)) && (
+            <p className="flex items-start gap-2 text-xs text-muted-foreground" data-testid="member-roles-self-note">
+              <Lock className="mt-0.5 size-3.5 shrink-0" />
+              <span>{t("selfBlockedRolesNote")}</span>
+            </p>
+          )}
           {value.length === 0 && (
             <Alert>
               <AlertTriangle className="size-4" />

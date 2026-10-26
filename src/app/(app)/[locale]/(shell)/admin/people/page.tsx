@@ -1,10 +1,11 @@
 import type { MembershipStatus, PersonStatus, Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { Contact, FileSpreadsheet, GraduationCap, Mail, Phone, UserX, Users } from "lucide-react";
+import { CalendarClock, Contact, FileSpreadsheet, GraduationCap, Mail, Phone, UserX, Users } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
-import { fmtDateTime, fmtNumber } from "@/lib/format";
+import { fmtDate, fmtDateTime, fmtNumber } from "@/lib/format";
+import { tenantTx } from "@/lib/tenant-db";
 import { personName, pick, userName } from "@/lib/i18n-data";
 import { Link } from "@/i18n/navigation";
 import { STAFF_ROLE_KEYS } from "@/server/identity/permissions";
@@ -20,6 +21,9 @@ import { GuardianLinkDialog } from "@/components/admin/people/guardian-forms";
 import { CsvImporter, ImportErrors } from "@/components/admin/people/csv-import";
 import { MemberRolesDialog } from "@/components/access/role-forms";
 import { audienceOfRole, opensSensitiveRecords } from "@/server/access/permission-catalog";
+import { rolesBlockedForSelf } from "@/server/access/guardrails";
+import { loadSnapshot } from "@/server/access/snapshot";
+import { assignmentActive } from "@/server/access/until";
 
 export async function generateMetadata() {
   const t = await getTranslations("adminPeople");
@@ -70,6 +74,10 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
   const memberRoleOptions = roles
     .filter((r) => audienceOfRole(r.key) === "staff")
     .map((r) => ({ id: r.id, label: pick(locale, r.nameEn, r.nameAr), description: pick(locale, r.descEn, r.descAr), sensitive: opensSensitiveRecords(r.permissions) }));
+  // Roles the viewer cannot give themselves (they would raise their own sensitive access): disabled on their own row.
+  const now = new Date();
+  const selfBlockedIds = tab === "staff" ? rolesBlockedForSelf(await tenantTx(ctx.orgId, (tx) => loadSnapshot(tx, [ctx.membershipId])), ctx.membershipId, memberRoleOptions.map((r) => r.id), now) : [];
+  const selfBlockedKeys = roles.filter((r) => selfBlockedIds.includes(r.id)).map((r) => r.key);
 
   const statusFilter = tab === "staff" ? (MEMBER_STATUSES.includes(sp.status as MembershipStatus) ? (sp.status as MembershipStatus) : null) : STUDENT_STATUSES.includes(sp.status as PersonStatus) ? (sp.status as PersonStatus) : null;
 
@@ -186,11 +194,21 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
                 <div className="truncate text-xs text-muted-foreground">{m.staffProfile?.department ? pick(locale, m.staffProfile.department.nameEn, m.staffProfile.department.nameAr) : t("noDepartment")}</div>
               </div>
               <div className="flex flex-wrap gap-1">
-                {m.roles.map((r) => (
-                  <Pill key={r.id} tone={r.role.key === "school_admin" ? "brand" : "neutral"}>
-                    {pick(locale, r.role.nameEn, r.role.nameAr)}
-                  </Pill>
-                ))}
+                {m.roles.map((r) =>
+                  r.expiresAt ? (
+                    <Pill key={r.id} tone={assignmentActive(r.expiresAt, now) ? "warning" : "neutral"} className="max-w-full flex-wrap whitespace-normal">
+                      <CalendarClock className="size-3" />
+                      {pick(locale, r.role.nameEn, r.role.nameAr)}
+                      <span className="font-normal">
+                        {assignmentActive(r.expiresAt, now) ? t("roleUntil", { date: fmtDate(prefs, r.expiresAt, "medium") }) : t("roleEnded", { date: fmtDate(prefs, r.expiresAt, "medium") })}
+                      </span>
+                    </Pill>
+                  ) : (
+                    <Pill key={r.id} tone={r.role.key === "school_admin" ? "brand" : "neutral"}>
+                      {pick(locale, r.role.nameEn, r.role.nameAr)}
+                    </Pill>
+                  ),
+                )}
               </div>
               <div>
                 <Pill tone={MEMBER_TONE[m.status]} dot>
@@ -202,8 +220,12 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
                   <MemberRolesDialog
                     membershipId={m.id}
                     name={name}
-                    roles={memberRoleOptions}
+                    roles={memberRoleOptions.map((o) => {
+                      const held = m.roles.find((r) => r.roleId === o.id);
+                      return held?.expiresAt ? { ...o, until: fmtDate(prefs, held.expiresAt, "medium") } : o;
+                    })}
                     current={m.roles.filter((r) => audienceOfRole(r.role.key) === "staff").map((r) => r.roleId)}
+                    selfBlocked={m.id === ctx.membershipId ? selfBlockedIds : []}
                   />
                 )}
                 <EditStaffDialog
@@ -211,6 +233,7 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
                   roles={roleOptions}
                   departments={deptOptions}
                   adminLock={isAdmin && m.id === ctx.membershipId ? "self" : isAdmin && m.id === lastAdminId ? "last" : !canAdminRole ? "permission" : null}
+                  selfBlocked={m.id === ctx.membershipId ? selfBlockedKeys.filter((k) => !keys.includes(k)) : []}
                 />
                 <MemberStatusButton
                   membershipId={m.id}

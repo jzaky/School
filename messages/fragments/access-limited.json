@@ -1,0 +1,546 @@
+{
+  "adminRoles": {
+    "tabReport": [
+      "Who can see what",
+      "من يطّلع على ماذا"
+    ],
+    "error": {
+      "SELF_ESCALATION": [
+        "You cannot give yourself access to sensitive records. Another person who manages roles has to make this change.",
+        "لا يمكنك منح نفسك صلاحية الاطلاع على السجلات الحساسة. يجب أن يجري هذا التغيير شخص آخر ممن يديرون الأدوار."
+      ],
+      "NEEDS_PERMANENT_ROLE": [
+        "Everyone needs at least one role without an end date. Give them another role first.",
+        "يحتاج كل شخص إلى دور واحد على الأقل دون تاريخ انتهاء. امنحه دورًا آخر أولًا."
+      ],
+      "PAST_DATE": [
+        "Choose today or a later date.",
+        "اختر تاريخ اليوم أو تاريخًا لاحقًا."
+      ],
+      "INVALID_DATE": [
+        "Choose a valid date.",
+        "اختر تاريخًا صحيحًا."
+      ],
+      "TOO_FAR": [
+        "Time-limited access can last up to 400 days. For longer, leave the end date empty.",
+        "يمكن أن يستمر الوصول المحدد المدة حتى 400 يوم. لمدة أطول اترك تاريخ الانتهاء فارغًا."
+      ]
+    },
+    "selfBlockedPermission": [
+      "You hold this role, so switching this on would give you sensitive access. Another person who manages roles has to do it.",
+      "أنت تحمل هذا الدور، لذا فإن تفعيل هذه الصلاحية سيمنحك وصولًا حساسًا. يجب أن يقوم بذلك شخص آخر ممن يديرون الأدوار."
+    ],
+    "selfBlockedRestore": [
+      "Restoring the default would give you sensitive access through a role you hold. Another person who manages roles has to do it.",
+      "استعادة الإعدادات الافتراضية ستمنحك وصولًا حساسًا عبر دور تحمله. يجب أن يقوم بذلك شخص آخر ممن يديرون الأدوار."
+    ],
+    "selfNotListed": [
+      "You are not in this list because this role would give you sensitive access. Another person who manages roles can add you.",
+      "لست ضمن هذه القائمة لأن هذا الدور سيمنحك وصولًا حساسًا. يمكن لشخص آخر ممن يديرون الأدوار إضافتك."
+    ],
+    "selfBlockedRole": [
+      "This role would give you sensitive access. Another person who manages roles has to give it to you.",
+      "هذا الدور سيمنحك وصولًا حساسًا. يجب أن يمنحك إياه شخص آخر ممن يديرون الأدوار."
+    ],
+    "selfBlockedRolesNote": [
+      "Roles with a lock would give you sensitive access, so another person who manages roles has to give them to you.",
+      "الأدوار التي تحمل قفلًا ستمنحك وصولًا حساسًا، لذا يجب أن يمنحك إياها شخص آخر ممن يديرون الأدوار."
+    ],
+    "selfBlockedChange": [
+      "This would give you sensitive access. Another person who manages roles has to do it.",
+      "هذا سيمنحك وصولًا حساسًا. يجب أن يقوم بذلك شخص آخر ممن يديرون الأدوار."
+    ],
+    "selfExtendBlocked": [
+      "You can end your own access to sensitive records earlier, but not extend it. Another person who manages roles has to extend it.",
+      "يمكنك إنهاء وصولك إلى السجلات الحساسة في وقت أبكر، لكن لا يمكنك تمديده. يجب أن يمدده شخص آخر ممن يديرون الأدوار."
+    ],
+    "needsPermanentForEnd": [
+      "{name} needs another role without an end date before this one can have one.",
+      "يحتاج {name} إلى دور آخر دون تاريخ انتهاء قبل تحديد تاريخ انتهاء لهذا الدور."
+    ],
+    "deleteTargetsHidden": [
+      "Roles that would give you sensitive access are not offered, because you hold this role.",
+      "لا تظهر الأدوار التي ستمنحك وصولًا حساسًا لأنك تحمل هذا الدور."
+    ],
+    "untilLabel": [
+      "Until (optional)",
+      "حتى (اختياري)"
+    ],
+    "untilHelp": [
+      "Access ends after this day. Leave it empty for access that does not expire.",
+      "ينتهي الوصول بعد هذا اليوم. اتركه فارغًا لوصول لا ينتهي."
+    ],
+    "untilPill": [
+      "until {date}",
+      "حتى {date}"
+    ],
+    "untilShort": [
+      "until {date}",
+      "حتى {date}"
+    ],
+    "endedPill": [
+      "ended {date}",
+      "انتهى في {date}"
+    ],
+    "daysLeft": [
+      "{count, plural, =0 {last day} one {# day left} other {# days left}}",
+      "{count, plural, =0 {اليوم الأخير} one {يوم واحد متبقٍ} two {يومان متبقيان} few {# أيام متبقية} many {# يومًا متبقيًا} other {# يوم متبقٍ}}"
+    ],
+    "timeLimitedCount": [
+      "{count, plural, one {# time-limited} other {# time-limited}}",
+      "{count, plural, zero {لا يوجد وصول محدد المدة} one {وصول واحد محدد المدة} two {وصولان محددا المدة} few {# وصول محدد المدة} many {# وصولًا محدد المدة} other {# وصول محدد المدة}}"
+    ],
+    "memberAddedUntil": [
+      "Added until the chosen date",
+      "تمت الإضافة حتى التاريخ المحدد"
+    ],
+    "changeEnd": [
+      "Change end",
+      "تغيير الانتهاء"
+    ],
+    "setEnd": [
+      "Set end",
+      "تحديد الانتهاء"
+    ],
+    "changeEndFor": [
+      "Change when access ends for {name}",
+      "تغيير موعد انتهاء وصول {name}"
+    ],
+    "setEndFor": [
+      "Set an end date for {name}",
+      "تحديد تاريخ انتهاء لوصول {name}"
+    ],
+    "endDateTitle": [
+      "Access for {name}",
+      "وصول {name}"
+    ],
+    "endDateBody": [
+      "Pick the last day {name} keeps the role {role}. Access stops on their next request after that day.",
+      "اختر آخر يوم يحتفظ فيه {name} بالدور «{role}». يتوقف الوصول عند أول طلب بعد ذلك اليوم."
+    ],
+    "endDateField": [
+      "Last day",
+      "آخر يوم"
+    ],
+    "removeEndDate": [
+      "No end date",
+      "دون تاريخ انتهاء"
+    ],
+    "endDateSaved": [
+      "End date saved",
+      "تم حفظ تاريخ الانتهاء"
+    ],
+    "endDateRemoved": [
+      "End date removed",
+      "تمت إزالة تاريخ الانتهاء"
+    ],
+    "endNow": [
+      "End now",
+      "إنهاء الآن"
+    ],
+    "endNowFor": [
+      "End access for {name} now",
+      "إنهاء وصول {name} الآن"
+    ],
+    "accessEnded": [
+      "Access ended for {name}",
+      "انتهى وصول {name}"
+    ],
+    "selfRoleNote": [
+      "You hold this role, so you cannot switch on its {count, plural, one {locked sensitive permission} other {# locked sensitive permissions}} yourself. Another person who manages roles has to do it, and the safeguarding lead is told.",
+      "أنت تحمل هذا الدور، لذا لا يمكنك تفعيل {count, plural, zero {الصلاحيات الحساسة المقفلة} one {الصلاحية الحساسة المقفلة} two {الصلاحيتين الحساستين المقفلتين} few {الصلاحيات الحساسة المقفلة وعددها #} many {الصلاحيات الحساسة المقفلة وعددها #} other {الصلاحيات الحساسة المقفلة وعددها #}} بنفسك. يجب أن يقوم بذلك شخص آخر ممن يديرون الأدوار، ويُبلَّغ مسؤول الحماية."
+    ]
+  },
+  "adminPeople": {
+    "roleUntil": [
+      "until {date}",
+      "حتى {date}"
+    ],
+    "roleEnded": [
+      "ended {date}",
+      "انتهى في {date}"
+    ],
+    "selfBlockedRole": [
+      "This role would give you sensitive access. Another person who manages roles has to give it to you.",
+      "هذا الدور سيمنحك وصولًا حساسًا. يجب أن يمنحك إياه شخص آخر ممن يديرون الأدوار."
+    ],
+    "selfBlockedRolesNote": [
+      "Roles you cannot tick would give you sensitive access, so another person who manages roles has to give them to you.",
+      "الأدوار التي لا يمكنك تحديدها ستمنحك وصولًا حساسًا، لذا يجب أن يمنحك إياها شخص آخر ممن يديرون الأدوار."
+    ],
+    "error": {
+      "SELF_ESCALATION": [
+        "You cannot give yourself access to sensitive records. Another person who manages roles has to make this change.",
+        "لا يمكنك منح نفسك صلاحية الاطلاع على السجلات الحساسة. يجب أن يجري هذا التغيير شخص آخر ممن يديرون الأدوار."
+      ],
+      "NEEDS_PERMANENT_ROLE": [
+        "Everyone needs at least one role without an end date.",
+        "يحتاج كل شخص إلى دور واحد على الأقل دون تاريخ انتهاء."
+      ]
+    }
+  },
+  "accessReport": {
+    "title": [
+      "Who can see what",
+      "من يطّلع على ماذا"
+    ],
+    "subtitle": [
+      "Everyone who can see sensitive records or change access, the role that gives it, whether it ends, and when they were last active.",
+      "كل من يمكنه الاطلاع على السجلات الحساسة أو تغيير الصلاحيات، والدور الذي يمنحه ذلك، وهل ينتهي، ومتى كان نشطًا آخر مرة."
+    ],
+    "export": [
+      "Export CSV",
+      "تصدير CSV"
+    ],
+    "peopleOnly": [
+      "People and roles only: nothing on this page opens a record. {people} people hold sensitive access; {limited} of them have access that ends on a set date. Exports are recorded in the audit log.",
+      "الأشخاص والأدوار فقط: لا شيء في هذه الصفحة يفتح أي سجل. عدد من يملكون وصولًا حساسًا: {people}، منهم {limited} بوصول ينتهي في تاريخ محدد. يُسجَّل كل تصدير في سجل التدقيق."
+    ],
+    "jumpTo": [
+      "Jump to an area",
+      "الانتقال إلى مجال"
+    ],
+    "people": [
+      "{count, plural, one {# person} other {# people}}",
+      "{count, plural, zero {لا أحد} one {شخص واحد} two {شخصان} few {# أشخاص} many {# شخصًا} other {# شخص}}"
+    ],
+    "timeLimited": [
+      "{count, plural, one {# time-limited} other {# time-limited}}",
+      "{count, plural, zero {لا وصول محدد المدة} one {واحد محدد المدة} two {اثنان محددا المدة} few {# محددة المدة} many {# محددًا المدة} other {# محدد المدة}}"
+    ],
+    "nobody": [
+      "Nobody has this access.",
+      "لا أحد يملك هذا الوصول."
+    ],
+    "colPerson": [
+      "Person",
+      "الشخص"
+    ],
+    "colAccess": [
+      "Access",
+      "الوصول"
+    ],
+    "colRole": [
+      "Given by role",
+      "يمنحه الدور"
+    ],
+    "colEnds": [
+      "Ends",
+      "ينتهي"
+    ],
+    "colLastActive": [
+      "Last active",
+      "آخر نشاط"
+    ],
+    "noEnd": [
+      "No end date",
+      "دون تاريخ انتهاء"
+    ],
+    "neverActive": [
+      "Not yet",
+      "لم ينشط بعد"
+    ],
+    "areas": {
+      "safeguarding": {
+        "title": [
+          "Safeguarding records",
+          "سجلات الحماية"
+        ],
+        "help": [
+          "Child protection cases, their export, and emergency access.",
+          "ملفات حماية الطفل وتصديرها والوصول الطارئ إليها."
+        ]
+      },
+      "wellbeing": {
+        "title": [
+          "Wellbeing cases",
+          "حالات الرفاه"
+        ],
+        "help": [
+          "Confidential counselling and wellbeing cases.",
+          "حالات الإرشاد والرفاه السرية."
+        ]
+      },
+      "medical": {
+        "title": [
+          "Medical records",
+          "السجلات الطبية"
+        ],
+        "help": [
+          "Student medical information.",
+          "المعلومات الطبية للطلاب."
+        ]
+      },
+      "reasons": {
+        "title": [
+          "Absence reasons",
+          "أسباب الغياب"
+        ],
+        "help": [
+          "Why students or staff were absent, including doctor's notes and private leave reasons.",
+          "أسباب غياب الطلاب أو الموظفين، بما في ذلك التقارير الطبية وأسباب الإجازات الخاصة."
+        ]
+      },
+      "identity": {
+        "title": [
+          "Identity numbers",
+          "أرقام الهوية"
+        ],
+        "help": [
+          "Full Emirates ID and passport numbers.",
+          "أرقام الهوية الإماراتية وجوازات السفر كاملة."
+        ]
+      },
+      "audit": {
+        "title": [
+          "Audit log",
+          "سجل التدقيق"
+        ],
+        "help": [
+          "Who did what, including views of sensitive records.",
+          "من فعل ماذا، بما في ذلك الاطلاع على السجلات الحساسة."
+        ]
+      },
+      "roles": {
+        "title": [
+          "Roles and sign-in",
+          "الأدوار وتسجيل الدخول"
+        ],
+        "help": [
+          "Change what each role can do, who has it, and how people sign in and join.",
+          "تغيير ما يمكن لكل دور فعله ومن يحمله وكيفية تسجيل الدخول والانضمام."
+        ]
+      },
+      "integrations": {
+        "title": [
+          "Integrations",
+          "التكاملات"
+        ],
+        "help": [
+          "API keys and scheduled sync with the school's own systems.",
+          "مفاتيح الواجهة البرمجية والمزامنة المجدولة مع أنظمة المدرسة."
+        ]
+      },
+      "other": {
+        "title": [
+          "Other sensitive access",
+          "وصول حساس آخر"
+        ],
+        "help": [
+          "Other permissions marked sensitive in the roles screen.",
+          "صلاحيات أخرى مصنفة حساسة في شاشة الأدوار."
+        ]
+      }
+    },
+    "peopleLabel": [
+      "with access",
+      "لديهم هذا الوصول"
+    ]
+  },
+  "adminAudit": {
+    "allActivity": [
+      "All activity",
+      "كل النشاط"
+    ],
+    "presetAccess": [
+      "Access changes",
+      "تغييرات الصلاحيات"
+    ],
+    "presetAccessHelp": [
+      "Role and permission changes, who holds which role and until when, ended access, access exports, refused self-grants and emergency access.",
+      "تغييرات الأدوار والصلاحيات، ومن يحمل أي دور وحتى متى، والوصول المنتهي، وتصدير الصلاحيات، ومحاولات منح الذات المرفوضة، والوصول الطارئ."
+    ],
+    "entities": {
+      "Role": [
+        "Role",
+        "دور"
+      ],
+      "Invitation": [
+        "Invitation",
+        "دعوة"
+      ],
+      "JoinRequest": [
+        "Join request",
+        "طلب انضمام"
+      ]
+    },
+    "actions": {
+      "roles_permission_grant": [
+        "Permission given to a role",
+        "منح صلاحية لدور"
+      ],
+      "roles_permission_revoke": [
+        "Permission removed from a role",
+        "إزالة صلاحية من دور"
+      ],
+      "roles_restore_default": [
+        "Role restored to default",
+        "استعادة الدور إلى الإعدادات الافتراضية"
+      ],
+      "roles_create": [
+        "Role created",
+        "إنشاء دور"
+      ],
+      "roles_rename": [
+        "Role renamed",
+        "إعادة تسمية دور"
+      ],
+      "roles_delete": [
+        "Role deleted",
+        "حذف دور"
+      ],
+      "people_roles_change": [
+        "Roles changed for a person",
+        "تغيير أدوار شخص"
+      ],
+      "people_role_end_change": [
+        "End date changed",
+        "تغيير تاريخ الانتهاء"
+      ],
+      "people_role_expired": [
+        "Time-limited access ended",
+        "انتهاء وصول محدد المدة"
+      ],
+      "people_staff_add": [
+        "Staff member added",
+        "إضافة موظف"
+      ],
+      "people_staff_update": [
+        "Staff member updated",
+        "تحديث بيانات موظف"
+      ],
+      "people_staff_import": [
+        "Staff member imported",
+        "استيراد موظف"
+      ],
+      "people_member_suspend": [
+        "Member suspended",
+        "إيقاف عضو"
+      ],
+      "people_member_activate": [
+        "Member reactivated",
+        "إعادة تفعيل عضو"
+      ],
+      "access_report_export": [
+        "Access report exported",
+        "تصدير تقرير الصلاحيات"
+      ],
+      "access_self_grant_blocked": [
+        "Self-grant refused",
+        "رفض منح الذات صلاحية"
+      ],
+      "invite_link_create": [
+        "Staff join link created",
+        "إنشاء رابط انضمام للموظفين"
+      ],
+      "join_invite_accept": [
+        "Invitation accepted",
+        "قبول دعوة"
+      ],
+      "join_approve": [
+        "Join request approved",
+        "الموافقة على طلب انضمام"
+      ]
+    },
+    "detail": {
+      "permission": [
+        "{role}: {permission}",
+        "{role}: {permission}"
+      ],
+      "roles": [
+        "{before} to {after}",
+        "من {before} إلى {after}"
+      ],
+      "until": [
+        "{role} until {date}",
+        "{role} حتى {date}"
+      ],
+      "endedEarly": [
+        "ended early",
+        "أُنهي مبكرًا"
+      ],
+      "endChange": [
+        "{role}: {before} to {after}",
+        "{role}: من {before} إلى {after}"
+      ],
+      "noEnd": [
+        "no end date",
+        "دون تاريخ انتهاء"
+      ],
+      "expired": [
+        "Ended: {roles}",
+        "انتهى: {roles}"
+      ],
+      "blocked": [
+        "Would have given: {permissions}",
+        "كان سيمنح: {permissions}"
+      ]
+    }
+  },
+  "nav": {
+    "accessReport": [
+      "Who can see what",
+      "من يطّلع على ماذا"
+    ]
+  },
+  "imports": {
+    "error": {
+      "selfEscalation": [
+        "this row would give you sensitive access; another person who manages roles has to do that",
+        "هذا الصف سيمنحك وصولًا حساسًا؛ يجب أن يقوم بذلك شخص آخر ممن يديرون الأدوار"
+      ]
+    }
+  },
+  "settings": {
+    "kinds": {
+      "safeguarding_access_changed": [
+        "Changes to who can see safeguarding records",
+        "تغييرات من يطّلع على سجلات الحماية"
+      ]
+    }
+  },
+  "guide": {
+    "steps": {
+      "accessReport": {
+        "title": [
+          "See who can see what",
+          "اعرف من يطّلع على ماذا"
+        ],
+        "body": [
+          "One page lists everyone with safeguarding, wellbeing, medical or identity access, the role that gives it and when cover ends. Export it for the inspection file.",
+          "صفحة واحدة تعرض كل من لديه وصول إلى الحماية أو الرفاه أو السجلات الطبية أو أرقام الهوية، والدور الذي يمنحه ذلك، وموعد انتهاء التغطية. صدّرها لملف التفتيش."
+        ]
+      },
+      "selfGrant": {
+        "title": [
+          "Try to give yourself safeguarding access",
+          "جرّب منح نفسك صلاحية الحماية"
+        ],
+        "body": [
+          "Open your own role: safeguarding switches are locked, and the server refuses any route around it. Another person who manages roles has to do it, and the DSL is told.",
+          "افتح دورك: مفاتيح الحماية مقفلة، والخادم يرفض أي طريق التفافي. يجب أن يقوم بذلك شخص آخر ممن يديرون الأدوار، ويُبلَّغ مسؤول الحماية."
+        ]
+      },
+      "timeLimitedCover": {
+        "title": [
+          "Give cover until a date",
+          "امنح تغطية حتى تاريخ محدد"
+        ],
+        "body": [
+          "Add someone to a role with an end date, for example Deputy DSL cover during leave. Access stops by itself and the DSL is told.",
+          "أضف شخصًا إلى دور بتاريخ انتهاء، مثل تغطية نائب مسؤول الحماية أثناء الإجازة. يتوقف الوصول تلقائيًا ويُبلَّغ مسؤول الحماية."
+        ]
+      },
+      "accessAlerts": {
+        "title": [
+          "Review safeguarding access",
+          "راجع صلاحيات الحماية"
+        ],
+        "body": [
+          "You are told whenever someone gains or loses safeguarding or wellbeing access. Check who has it and until when.",
+          "تُبلَّغ كلما حصل شخص على صلاحية الحماية أو الرفاه أو فقدها. تحقق ممن يملكها وحتى متى."
+        ]
+      }
+    }
+  }
+}

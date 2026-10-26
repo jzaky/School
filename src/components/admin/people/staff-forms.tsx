@@ -27,11 +27,30 @@ export function usePeopleError() {
   return (code?: string) => (code && t.has(`error.${code}`) ? t(`error.${code}`) : t("error.generic"));
 }
 
-function RoleChecklist({ roles, value, onChange, lockedKey, lockReason }: { roles: RoleOption[]; value: string[]; onChange: (v: string[]) => void; lockedKey?: string; lockReason?: string }) {
+function RoleChecklist({
+  roles,
+  value,
+  onChange,
+  lockedKey,
+  lockReason,
+  selfBlocked = [],
+  selfBlockedReason,
+}: {
+  roles: RoleOption[];
+  value: string[];
+  onChange: (v: string[]) => void;
+  lockedKey?: string;
+  lockReason?: string;
+  /** Roles the editor cannot give themselves (they would raise their own sensitive access). */
+  selfBlocked?: string[];
+  selfBlockedReason?: string;
+}) {
   return (
     <div className="grid max-h-64 gap-1 overflow-y-auto rounded-lg border p-2 sm:grid-cols-2">
       {roles.map((r) => {
-        const locked = r.key === lockedKey;
+        const self = selfBlocked.includes(r.key) && !value.includes(r.key);
+        const locked = r.key === lockedKey || self;
+        const reason = self ? selfBlockedReason : lockReason;
         const checked = value.includes(r.key);
         const row = (
           <label className="flex cursor-pointer items-start gap-2 rounded-md p-1.5 hover:bg-muted/50 has-disabled:cursor-not-allowed has-disabled:opacity-60" data-testid={`role-${r.key}`}>
@@ -47,13 +66,13 @@ function RoleChecklist({ roles, value, onChange, lockedKey, lockReason }: { role
             </span>
           </label>
         );
-        if (!locked || !lockReason) return <div key={r.key}>{row}</div>;
+        if (!locked || !reason) return <div key={r.key}>{row}</div>;
         return (
           <Tooltip key={r.key}>
             <TooltipTrigger asChild>
               <div>{row}</div>
             </TooltipTrigger>
-            <TooltipContent>{lockReason}</TooltipContent>
+            <TooltipContent className="max-w-xs">{reason}</TooltipContent>
           </Tooltip>
         );
       })}
@@ -207,11 +226,14 @@ export function EditStaffDialog({
   roles,
   departments,
   adminLock,
+  selfBlocked = [],
 }: {
   member: { id: string; name: string; roleKeys: string[]; departmentId: string | null; titleEn: string; titleAr: string };
   roles: RoleOption[];
   departments: DeptOption[];
   adminLock: AdminLock;
+  /** On the editor's own row: roles that would raise their own sensitive access. */
+  selfBlocked?: string[];
 }) {
   const t = useTranslations("adminPeople");
   const err = usePeopleError();
@@ -262,7 +284,16 @@ export function EditStaffDialog({
             </div>
             <div className="space-y-1.5">
               <Label>{t("fieldRoles")}</Label>
-              <RoleChecklist roles={roles} value={roleKeys} onChange={setRoleKeys} lockedKey={adminLock ? ADMIN : undefined} lockReason={lockReason} />
+              <RoleChecklist
+                roles={roles}
+                value={roleKeys}
+                onChange={setRoleKeys}
+                lockedKey={adminLock ? ADMIN : undefined}
+                lockReason={lockReason}
+                selfBlocked={selfBlocked}
+                selfBlockedReason={t("selfBlockedRole")}
+              />
+              {selfBlocked.length > 0 && <p className="text-xs text-muted-foreground">{t("selfBlockedRolesNote")}</p>}
               {roleKeys.length === 0 && <p className="text-xs text-danger">{t("rolesRequired")}</p>}
             </div>
           </div>

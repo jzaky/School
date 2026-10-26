@@ -29,6 +29,7 @@ import { seedTranscripts } from "./academics/transcripts";
 import { seedSubjectLevels } from "./academics/subject-levels";
 import { seedGlobalCatalog } from "./catalog";
 import { seedAccess } from "./access";
+import { seedAccessLimits } from "./access-limits";
 import { seedGroupDemo } from "./groups";
 import { seedIntegrations } from "./integrations";
 import { seedConversations } from "./conversations";
@@ -745,6 +746,7 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   await seedSubjectLevels(world);
   await seedCurriculum(world);
   await seedAccess(world);
+  await seedAccessLimits(world);
   // School group: Horizon Education Group with two small extra schools (demo tenant only).
   if (isDemoTenant) await seedGroupDemo(world);
   await seedIntegrations(world);

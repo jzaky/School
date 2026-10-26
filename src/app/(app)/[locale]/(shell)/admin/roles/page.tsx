@@ -1,12 +1,15 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { ChevronRight, KeyRound, ShieldAlert, ShieldCheck, Users } from "lucide-react";
+import { CalendarClock, ChevronRight, KeyRound, ShieldAlert, ShieldCheck, Users } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { pick, userName } from "@/lib/i18n-data";
 import { Link } from "@/i18n/navigation";
 import { SYSTEM_ROLES } from "@/server/identity/permissions";
 import { PERMISSION_GROUPS, audienceOfRole, opensSensitiveRecords } from "@/server/access/permission-catalog";
 import { explainAccess } from "@/server/access/roles";
+import { assignmentActive } from "@/server/access/until";
+import { formatPrefs } from "@/server/format";
+import { fmtDate } from "@/lib/format";
 import { PageBody, PageHeader } from "@/components/app/page-header";
 import { Panel } from "@/components/app/panel";
 import { Pill } from "@/components/app/badges";
@@ -30,9 +33,13 @@ export default async function RolesPage({ searchParams }: { searchParams: Promis
   const { db, locale } = ctx;
   const tab = sp.tab === "check" ? "check" : "roles";
 
+  const now = new Date();
+  const prefs = await formatPrefs(ctx);
   const roles = await db.role.findMany({
     include: { _count: { select: { members: { where: { membership: { status: "ACTIVE" } } } } } },
   });
+  const timeLimited = await db.membershipRole.groupBy({ by: ["roleId"], where: { expiresAt: { gt: now }, membership: { status: "ACTIVE" } }, _count: { _all: true } });
+  const limitedCount = new Map(timeLimited.map((r) => [r.roleId, r._count._all]));
   roles.sort((a, b) => {
     const ia = ORDER.indexOf(a.key);
     const ib = ORDER.indexOf(b.key);
@@ -54,6 +61,7 @@ export default async function RolesPage({ searchParams }: { searchParams: Promis
         tabs={[
           { value: "roles", label: t("tabRoles"), href: "/admin/roles" },
           { value: "check", label: t("tabCheck"), href: "/admin/roles?tab=check" },
+          { value: "report", label: t("tabReport"), href: "/admin/roles/report" },
         ]}
       />
       {tab === "roles" ? (
@@ -92,6 +100,12 @@ export default async function RolesPage({ searchParams }: { searchParams: Promis
                     {t("memberCount", { count: r._count.members })}
                   </Pill>
                   <Pill tone="info">{t("permissionCount", { count: r.permissions.length })}</Pill>
+                  {(limitedCount.get(r.id) ?? 0) > 0 && (
+                    <Pill tone="warning">
+                      <CalendarClock className="size-3" />
+                      {t("timeLimitedCount", { count: limitedCount.get(r.id) ?? 0 })}
+                    </Pill>
+                  )}
                   {!r.isSystem ? <Pill tone="violet">{t("badgeCustom")}</Pill> : r.customized ? <Pill tone="warning">{t("badgeCustomized")}</Pill> : <Pill tone="neutral">{t("badgeBuiltIn")}</Pill>}
                   {sensitive && (
                     <Pill tone="danger">
@@ -111,7 +125,7 @@ export default async function RolesPage({ searchParams }: { searchParams: Promis
   async function accessCheck() {
     const members = await db.membership.findMany({
       where: { status: { in: ["ACTIVE", "SUSPENDED", "INVITED"] }, roles: { some: {} } },
-      include: { user: { select: { nameEn: true, nameAr: true, email: true } }, roles: { include: { role: { select: { key: true, nameEn: true, nameAr: true } } } } },
+      include: { user: { select: { nameEn: true, nameAr: true, email: true } }, roles: { where: { OR: [{ expiresAt: null }, { expiresAt: { gt: now } }] }, include: { role: { select: { key: true, nameEn: true, nameAr: true } } } } },
       orderBy: { user: { nameEn: "asc" } },
       take: 2000,
     });
@@ -157,11 +171,17 @@ export default async function RolesPage({ searchParams }: { searchParams: Promis
               </Pill>
             </div>
             <div className="mt-2 flex flex-wrap gap-1.5">
-              {person.roles.map((r) => (
-                <Link key={r.id} href={`/admin/roles/${r.role.id}`}>
-                  <Pill tone="brand">{pick(locale, r.role.nameEn, r.role.nameAr)}</Pill>
-                </Link>
-              ))}
+              {person.roles
+                .filter((r) => assignmentActive(r.expiresAt, now))
+                .map((r) => (
+                  <Link key={r.id} href={`/admin/roles/${r.role.id}`}>
+                    <Pill tone={r.expiresAt ? "warning" : "brand"}>
+                      {r.expiresAt && <CalendarClock className="size-3" />}
+                      {pick(locale, r.role.nameEn, r.role.nameAr)}
+                      {r.expiresAt && <span className="font-normal">{t("untilShort", { date: fmtDate(prefs, r.expiresAt, "medium") })}</span>}
+                    </Pill>
+                  </Link>
+                ))}
             </div>
             {person.status !== "ACTIVE" && <p className="mt-3 rounded-lg bg-warning-soft px-3 py-2 text-sm">{t("checkInactive")}</p>}
             <div className="mt-5 grid gap-5 md:grid-cols-2">

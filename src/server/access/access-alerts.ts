@@ -18,8 +18,8 @@ export const ACCESS_ALERT_TEMPLATE_SEED = {
   key: ACCESS_ALERT_TEMPLATE,
   subject: { en: "Safeguarding access changed by {{who}}", ar: "تغيير في صلاحيات الحماية بواسطة {{who}}" },
   body: {
-    en: "{{who}} made a change to who can see safeguarding or wellbeing records.\n\n{{changes}}\n\nOpen the access report in Horizon to review it. This message never includes case details.",
-    ar: "أجرى {{who}} تغييرًا على من يمكنه الاطلاع على سجلات الحماية أو الرفاه.\n\n{{changes}}\n\nافتح تقرير الصلاحيات في هورايزن لمراجعته. لا تتضمن هذه الرسالة أي تفاصيل عن الحالات.",
+    en: "{{changes}}\n\nThis change to who can see safeguarding or wellbeing records was made by {{who}}. Open the access report in Horizon to review it. This message never includes case details.",
+    ar: "{{changes}}\n\nأجرى {{who}} هذا التغيير على من يمكنه الاطلاع على سجلات الحماية أو الرفاه. افتح تقرير الصلاحيات في هورايزن لمراجعته. لا تتضمن هذه الرسالة أي تفاصيل عن الحالات.",
   },
 };
 

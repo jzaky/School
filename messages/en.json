@@ -160,7 +160,8 @@
     "sectionPlatform": "Platform",
     "platformLeads": "Marketing leads",
     "platformReferrals": "Referrals",
-    "platformSettings": "Platform settings"
+    "platformSettings": "Platform settings",
+    "accessReport": "Who can see what"
   },
   "shell": {
     "openMenu": "Open menu",
@@ -1264,7 +1265,8 @@
       "safeguarding_immediate": "Immediate danger alert",
       "break_glass": "Emergency access used",
       "request_message": "A new message on a request",
-      "absence_excused": "A student in my homeroom is reported absent"
+      "absence_excused": "A student in my homeroom is reported absent",
+      "safeguarding_access_changed": "Changes to who can see safeguarding records"
     }
   },
   "adminAudit": {
@@ -1305,7 +1307,10 @@
       "AuditEvent": "Audit log",
       "CareerProfile": "Career profile",
       "DocumentTemplate": "Document template",
-      "RetentionPolicy": "Retention policy"
+      "RetentionPolicy": "Retention policy",
+      "Role": "Role",
+      "Invitation": "Invitation",
+      "JoinRequest": "Join request"
     },
     "actions": {
       "appointment_cancel": "Meeting cancelled",
@@ -1357,7 +1362,39 @@
       "request_messages_view": "Opened a protected request conversation",
       "request_family_notify": "Decided to notify the family",
       "request_file_view": "Opened a request attachment",
-      "request_file_denied": "Was refused a private attachment"
+      "request_file_denied": "Was refused a private attachment",
+      "roles_permission_grant": "Permission given to a role",
+      "roles_permission_revoke": "Permission removed from a role",
+      "roles_restore_default": "Role restored to default",
+      "roles_create": "Role created",
+      "roles_rename": "Role renamed",
+      "roles_delete": "Role deleted",
+      "people_roles_change": "Roles changed for a person",
+      "people_role_end_change": "End date changed",
+      "people_role_expired": "Time-limited access ended",
+      "people_staff_add": "Staff member added",
+      "people_staff_update": "Staff member updated",
+      "people_staff_import": "Staff member imported",
+      "people_member_suspend": "Member suspended",
+      "people_member_activate": "Member reactivated",
+      "access_report_export": "Access report exported",
+      "access_self_grant_blocked": "Self-grant refused",
+      "invite_link_create": "Staff join link created",
+      "join_invite_accept": "Invitation accepted",
+      "join_approve": "Join request approved"
+    },
+    "allActivity": "All activity",
+    "presetAccess": "Access changes",
+    "presetAccessHelp": "Role and permission changes, who holds which role and until when, ended access, access exports, refused self-grants and emergency access.",
+    "detail": {
+      "permission": "{role}: {permission}",
+      "roles": "{before} to {after}",
+      "until": "{role} until {date}",
+      "endedEarly": "ended early",
+      "endChange": "{role}: {before} to {after}",
+      "noEnd": "no end date",
+      "expired": "Ended: {roles}",
+      "blocked": "Would have given: {permissions}"
     }
   },
   "adminCompliance": {
@@ -2030,10 +2067,16 @@
       "EMPTY": "The file has no rows to import.",
       "TOO_MANY_ROWS": "Files are limited to 2,000 rows.",
       "LAST_ROLES_MANAGER": "At least one active person must be able to manage roles.",
-      "SELF_LOCKOUT": "You cannot remove your own ability to manage roles. Ask another administrator."
+      "SELF_LOCKOUT": "You cannot remove your own ability to manage roles. Ask another administrator.",
+      "SELF_ESCALATION": "You cannot give yourself access to sensitive records. Another person who manages roles has to make this change.",
+      "NEEDS_PERMANENT_ROLE": "Everyone needs at least one role without an end date."
     },
     "importCenter": "Import center",
-    "importCenterBody": "Import staff, classes and enrollments too, in the recommended order, from the import center."
+    "importCenterBody": "Import staff, classes and enrollments too, in the recommended order, from the import center.",
+    "roleUntil": "until {date}",
+    "roleEnded": "ended {date}",
+    "selfBlockedRole": "This role would give you sensitive access. Another person who manages roles has to give it to you.",
+    "selfBlockedRolesNote": "Roles you cannot tick would give you sensitive access, so another person who manages roles has to give them to you."
   },
   "guide": {
     "title": "Try this next",
@@ -2395,6 +2438,22 @@
       "courseSelection": {
         "title": "Run next year's course selection",
         "body": "AP and regular electives for the American track, demand per course and how many students' university targets need each one."
+      },
+      "accessReport": {
+        "title": "See who can see what",
+        "body": "One page lists everyone with safeguarding, wellbeing, medical or identity access, the role that gives it and when cover ends. Export it for the inspection file."
+      },
+      "selfGrant": {
+        "title": "Try to give yourself safeguarding access",
+        "body": "Open your own role: safeguarding switches are locked, and the server refuses any route around it. Another person who manages roles has to do it, and the DSL is told."
+      },
+      "timeLimitedCover": {
+        "title": "Give cover until a date",
+        "body": "Add someone to a role with an end date, for example Deputy DSL cover during leave. Access stops by itself and the DSL is told."
+      },
+      "accessAlerts": {
+        "title": "Review safeguarding access",
+        "body": "You are told whenever someone gains or loses safeguarding or wellbeing access. Check who has it and until when."
       }
     }
   },
@@ -6876,7 +6935,12 @@
       "HAS_MEMBERS": "Move the people in this role to another role first.",
       "NOT_STAFF": "Roles for families are managed through invitations.",
       "FAMILY_ROLE": "Parent and student roles cannot be given to staff here.",
-      "NAME_TAKEN": "Another role already has this name."
+      "NAME_TAKEN": "Another role already has this name.",
+      "SELF_ESCALATION": "You cannot give yourself access to sensitive records. Another person who manages roles has to make this change.",
+      "NEEDS_PERMANENT_ROLE": "Everyone needs at least one role without an end date. Give them another role first.",
+      "PAST_DATE": "Choose today or a later date.",
+      "INVALID_DATE": "Choose a valid date.",
+      "TOO_FAR": "Time-limited access can last up to 400 days. For longer, leave the end date empty."
     },
     "fieldNameEn": "Name in English",
     "fieldNameAr": "Name in Arabic",
@@ -6924,7 +6988,39 @@
     "memberRolesBody": "Pick every role this person should have. Changes apply on their next click.",
     "atLeastOneRole": "Choose at least one role.",
     "rolesSaved": "Roles updated for {name}",
-    "pickPerson": "Search for a person"
+    "pickPerson": "Search for a person",
+    "tabReport": "Who can see what",
+    "selfBlockedPermission": "You hold this role, so switching this on would give you sensitive access. Another person who manages roles has to do it.",
+    "selfBlockedRestore": "Restoring the default would give you sensitive access through a role you hold. Another person who manages roles has to do it.",
+    "selfNotListed": "You are not in this list because this role would give you sensitive access. Another person who manages roles can add you.",
+    "selfBlockedRole": "This role would give you sensitive access. Another person who manages roles has to give it to you.",
+    "selfBlockedRolesNote": "Roles with a lock would give you sensitive access, so another person who manages roles has to give them to you.",
+    "selfBlockedChange": "This would give you sensitive access. Another person who manages roles has to do it.",
+    "selfExtendBlocked": "You can end your own access to sensitive records earlier, but not extend it. Another person who manages roles has to extend it.",
+    "needsPermanentForEnd": "{name} needs another role without an end date before this one can have one.",
+    "deleteTargetsHidden": "Roles that would give you sensitive access are not offered, because you hold this role.",
+    "untilLabel": "Until (optional)",
+    "untilHelp": "Access ends after this day. Leave it empty for access that does not expire.",
+    "untilPill": "until {date}",
+    "untilShort": "until {date}",
+    "endedPill": "ended {date}",
+    "daysLeft": "{count, plural, =0 {last day} one {# day left} other {# days left}}",
+    "timeLimitedCount": "{count, plural, one {# time-limited} other {# time-limited}}",
+    "memberAddedUntil": "Added until the chosen date",
+    "changeEnd": "Change end",
+    "setEnd": "Set end",
+    "changeEndFor": "Change when access ends for {name}",
+    "setEndFor": "Set an end date for {name}",
+    "endDateTitle": "Access for {name}",
+    "endDateBody": "Pick the last day {name} keeps the role {role}. Access stops on their next request after that day.",
+    "endDateField": "Last day",
+    "removeEndDate": "No end date",
+    "endDateSaved": "End date saved",
+    "endDateRemoved": "End date removed",
+    "endNow": "End now",
+    "endNowFor": "End access for {name} now",
+    "accessEnded": "Access ended for {name}",
+    "selfRoleNote": "You hold this role, so you cannot switch on its {count, plural, one {locked sensitive permission} other {# locked sensitive permissions}} yourself. Another person who manages roles has to do it, and the safeguarding lead is told."
   },
   "adminInvites": {
     "title": "Invitations",
@@ -7969,7 +8065,8 @@
       "sameBlock": "two subjects chosen from the same option block",
       "missingBlock": "no subject chosen from this option block",
       "prerequisite": "a prerequisite subject is missing",
-      "noOfferings": "no subjects are set up for this grade yet"
+      "noOfferings": "no subjects are set up for this grade yet",
+      "selfEscalation": "this row would give you sensitive access; another person who manages roles has to do that"
     },
     "warn": {
       "gradeMismatch": "student is in a different grade (still added)",
@@ -9637,5 +9734,61 @@
     "openRegister": "Open register",
     "presentN": "{n} present",
     "awayN": "{n} away"
+  },
+  "accessReport": {
+    "title": "Who can see what",
+    "subtitle": "Everyone who can see sensitive records or change access, the role that gives it, whether it ends, and when they were last active.",
+    "export": "Export CSV",
+    "peopleOnly": "People and roles only: nothing on this page opens a record. {people} people hold sensitive access; {limited} of them have access that ends on a set date. Exports are recorded in the audit log.",
+    "jumpTo": "Jump to an area",
+    "people": "{count, plural, one {# person} other {# people}}",
+    "timeLimited": "{count, plural, one {# time-limited} other {# time-limited}}",
+    "nobody": "Nobody has this access.",
+    "colPerson": "Person",
+    "colAccess": "Access",
+    "colRole": "Given by role",
+    "colEnds": "Ends",
+    "colLastActive": "Last active",
+    "noEnd": "No end date",
+    "neverActive": "Not yet",
+    "areas": {
+      "safeguarding": {
+        "title": "Safeguarding records",
+        "help": "Child protection cases, their export, and emergency access."
+      },
+      "wellbeing": {
+        "title": "Wellbeing cases",
+        "help": "Confidential counselling and wellbeing cases."
+      },
+      "medical": {
+        "title": "Medical records",
+        "help": "Student medical information."
+      },
+      "reasons": {
+        "title": "Absence reasons",
+        "help": "Why students or staff were absent, including doctor's notes and private leave reasons."
+      },
+      "identity": {
+        "title": "Identity numbers",
+        "help": "Full Emirates ID and passport numbers."
+      },
+      "audit": {
+        "title": "Audit log",
+        "help": "Who did what, including views of sensitive records."
+      },
+      "roles": {
+        "title": "Roles and sign-in",
+        "help": "Change what each role can do, who has it, and how people sign in and join."
+      },
+      "integrations": {
+        "title": "Integrations",
+        "help": "API keys and scheduled sync with the school's own systems."
+      },
+      "other": {
+        "title": "Other sensitive access",
+        "help": "Other permissions marked sensitive in the roles screen."
+      }
+    },
+    "peopleLabel": "with access"
   }
 }

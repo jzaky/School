@@ -97,6 +97,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("admin.access") && c("people.manage")) admin.push({ key: "import", href: "/admin/import", icon: "file-spreadsheet" });
   if (c("integrations.manage")) admin.push({ key: "integrations", href: "/admin/integrations", icon: "plug" });
   if (c("roles.manage")) admin.push({ key: "roles", href: "/admin/roles", icon: "lock" });
+  // The safeguarding lead reviews who can see what (people and roles only), without managing roles.
+  else if (c("safeguarding.manage")) admin.push({ key: "accessReport", href: "/admin/roles/report", icon: "lock" });
   if (c("people.invite")) admin.push({ key: "invitations", href: "/admin/invitations", icon: "mail" });
   if (c("people.manage") || c("people.invite")) admin.push({ key: "joinRequests", href: "/admin/join-requests", icon: "users", badge: counts.joinRequests });
   if (c("registration.manage")) admin.push({ key: "registration", href: "/admin/registration", icon: "clipboard-check" });

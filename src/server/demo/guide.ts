@@ -78,6 +78,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "sgQueue", href: "/safeguarding" },
     { key: "caseload", href: "/cases" },
     { key: "audit", href: "/admin/audit" },
+    { key: "accessAlerts", href: "/admin/roles/report#area-safeguarding" },
   ],
   deputy_dsl: [{ key: "sgQueue", href: "/safeguarding" }],
   principal: [
@@ -91,6 +92,9 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "inspectionPack", href: "/admin/inspection" },
   ],
   admin: [
+    { key: "accessReport", href: "/admin/roles/report" },
+    { key: "selfGrant", href: "/admin/roles/school_admin" },
+    { key: "timeLimitedCover", href: "/admin/roles/deputy_dsl" },
     { key: "requestThreads", href: "/requests?tab=all" },
     { key: "schoolSetupWizard", href: "/setup?step=done" },
     { key: "importCenter", href: "/admin/import" },
