@@ -6,7 +6,7 @@ import type { BillingRun, FeeAward, FeeDiscount, FeeItem, InstalmentPart, Instal
 import type { Effect, ExecCtx, Tx } from "@/server/db";
 import { loadFinanceConfig, taxInvoiceBlockers, type FinanceConfig } from "./config";
 import { FeeError, issueInvoice, type Actor } from "./ledger";
-import { instalmentAmount, prorataFraction, siblingBp, siblingOrder, type DiscountRule, type LineInput } from "./money";
+import { computeLine, instalmentAmount, prorataFraction, siblingBp, siblingOrder, totalsOf, type DiscountRule, type LineInput } from "./money";
 import { notifyInvoiceIssued } from "./notices";
 
 export const BILLING_BATCH = 25;
@@ -169,12 +169,11 @@ async function studentsOf(tx: Tx, orgId: string, accountIds: string[]) {
   return byAccount;
 }
 
-/** Bill one family for one instalment (also used outside runs, for a single family). Returns null when nothing is owed. */
-export async function billAccount(
+/** The lines one family would be billed for one instalment, and the charges they would use up. */
+async function accountBillLines(
   tx: Tx,
   orgId: string,
-  input: { accountId: string; part: PartWithShare; issueDate: Date; dueDate: Date; includeCharges: boolean; billingRunId?: string | null; academicYearId: string },
-  actor: Actor,
+  input: { accountId: string; part: PartWithShare; includeCharges: boolean; academicYearId: string },
   cache?: { cfg: FinanceConfig; items: FeeItem[] },
 ) {
   const cfg = cache?.cfg ?? (await loadFinanceConfig(tx, orgId));
@@ -186,6 +185,24 @@ export async function billAccount(
   const charges = input.includeCharges ? await tx.feeCharge.findMany({ where: { orgId, accountId: input.accountId, invoiceId: null }, orderBy: { createdAt: "asc" } }) : [];
   const chargeItems = charges.length ? await tx.feeItem.findMany({ where: { orgId, id: { in: charges.map((c) => c.feeItemId) } } }) : [];
   const lines = [...buildAccountLines(students, { cfg, items, part: input.part, awards }), ...chargeLines(charges, chargeItems, students)];
+  return { cfg, lines, charges };
+}
+
+/** What one family would be billed for an instalment, without issuing anything (same maths as the invoice). */
+export async function previewAccountBill(tx: Tx, orgId: string, input: { accountId: string; part: PartWithShare; includeCharges: boolean; academicYearId: string }) {
+  const { cfg, lines } = await accountBillLines(tx, orgId, input);
+  return totalsOf(lines.map((l, i) => computeLine(l, i + 1, cfg)));
+}
+
+/** Bill one family for one instalment (also used outside runs, for a single family). Returns null when nothing is owed. */
+export async function billAccount(
+  tx: Tx,
+  orgId: string,
+  input: { accountId: string; part: PartWithShare; issueDate: Date; dueDate: Date; includeCharges: boolean; billingRunId?: string | null; academicYearId: string },
+  actor: Actor,
+  cache?: { cfg: FinanceConfig; items: FeeItem[] },
+) {
+  const { cfg, lines, charges } = await accountBillLines(tx, orgId, input, cache);
   if (!lines.length) return null;
   try {
     return await issueInvoice(

@@ -179,7 +179,7 @@ export default async function FeesPage({ searchParams }: { searchParams: Promise
 
       <Panel>
         <PanelHeader title={tf("parent.childrenTitle")} description={tf("parent.childrenBody")} />
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid gap-3 md:grid-cols-2 [&>*]:min-w-0">
           {st.perChild.map((c) => (
             <div key={c.student.id} className="rounded-lg border p-4" data-testid="child-statement">
               <div className="font-medium">{personName(c.student, L)}</div>
@@ -190,7 +190,7 @@ export default async function FeesPage({ searchParams }: { searchParams: Promise
                 {c.discounts > 0 && (
                   <>
                     <dt className="text-muted-foreground">{tf("parent.discounts")}</dt>
-                    <dd className="text-end text-success">-<Money fils={c.discounts} locale={L} /></dd>
+                    <dd className="text-end text-success">{c.discounts ? "-" : ""}<Money fils={c.discounts} locale={L} /></dd>
                   </>
                 )}
                 <dt className="font-medium">{tf("parent.outstanding")}</dt>
@@ -200,10 +200,11 @@ export default async function FeesPage({ searchParams }: { searchParams: Promise
                 <ul className="mt-3 space-y-1 border-t pt-3 text-xs text-muted-foreground">
                   {c.lines.slice(0, 6).map((l) => (
                     <li key={l.id} className="flex justify-between gap-2">
-                      <span className="truncate">{pick(L, l.descriptionEn, l.descriptionAr).split(":")[0]}</span>
-                      <Money fils={l.totalFils} locale={L} />
+                      <span className="min-w-0">{pick(L, l.descriptionEn, l.descriptionAr).split(":")[0]}</span>
+                      <Money fils={l.totalFils} locale={L} className="shrink-0" />
                     </li>
                   ))}
+                  {c.lines.length > 6 && <li className="pt-1">{tf("parent.moreLines", { n: c.lines.length - 6 })}</li>}
                 </ul>
               )}
             </div>

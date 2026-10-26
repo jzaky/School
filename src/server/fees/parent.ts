@@ -21,7 +21,7 @@ export async function parentStatement(ctx: Ctx, accountId?: string | null) {
   const studentIds = account.students.map((s) => s.studentId);
   const [students, invoices, payments, creditNotes] = await Promise.all([
     ctx.db.student.findMany({ where: { id: { in: studentIds } }, select: { id: true, firstNameEn: true, lastNameEn: true, firstNameAr: true, lastNameAr: true, gradeLevel: true, section: true } }),
-    ctx.db.invoice.findMany({ where: { accountId: account.id, status: { notIn: ["CANCELLED", "CONVERTED"] } }, include: { lines: true }, orderBy: [{ issueDate: "desc" }, { number: "desc" }] }),
+    ctx.db.invoice.findMany({ where: { accountId: account.id, status: { notIn: ["CANCELLED", "CONVERTED"] } }, include: { lines: { orderBy: { seq: "asc" } } }, orderBy: [{ issueDate: "desc" }, { number: "desc" }] }),
     ctx.db.feePayment.findMany({ where: { accountId: account.id }, orderBy: { receivedAt: "desc" } }),
     ctx.db.creditNote.findMany({ where: { accountId: account.id }, orderBy: { issueDate: "desc" } }),
   ]);

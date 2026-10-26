@@ -888,6 +888,7 @@
       "cheque": ["Cheque {no} dated {date}", "شيك رقم {no} بتاريخ {date}"],
       "childrenTitle": ["Statement per child", "كشف لكل طالب"],
       "childrenBody": ["What was billed for each child this year and what is still open.", "ما فُوتر لكل طالب هذا العام وما زال مستحقًا."],
+      "moreLines": ["{n, plural, one {# more line} other {# more lines}} in the invoices below", "{n, plural, one {بند آخر} two {بندان آخران} few {# بنود أخرى} many {# بندًا آخر} other {# بند آخر}} في الفواتير أدناه"],
       "billed": ["Billed", "المفوتر"],
       "discounts": ["Discounts", "الخصومات"],
       "outstanding": ["Still to pay", "المتبقي"],

@@ -18,7 +18,7 @@ import { AccountEditDialog, AddChargeDialog, ApplyCreditButton, AwardDialog, Bil
 import { BounceDialog, ClearChequeDialog } from "@/components/fees/payment-actions";
 import { accountDetail, canFinance, todayKey, yearContext } from "@/server/fees/queries";
 import { balanceOf, unallocatedOf } from "@/server/fees/ledger";
-import { dayInput } from "@/components/fees/form-bits";
+import { dayInput } from "@/server/fees/money";
 
 export async function generateMetadata() {
   const t = await getTranslations("finance");

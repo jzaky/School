@@ -209,12 +209,19 @@ export async function cashBook(tx: Tx, orgId: string, p: Period, opts: { limit: 
 // Headline numbers for the overview
 // ---------------------------------------------------------------------------------------------
 
-export async function headline(tx: Tx, orgId: string, p: Period) {
+/**
+ * Headline figures for one academic year: tax invoices issued for that year (whenever issued, so Term 1 invoices sent
+ * in August count), credit notes against them, and payments allocated to them (net of released allocations), so the
+ * collection rate compares like with like.
+ */
+export async function headline(tx: Tx, orgId: string, yearId: string | null) {
   const rows = await tx.$queryRaw<Array<Record<string, unknown>>>`
     SELECT
-      (SELECT COALESCE(SUM("totalFils"), 0) FROM "Invoice" WHERE "orgId" = ${orgId} AND "kind" = 'TAX' AND ${DUBAI_DAY(`"issueDate"`)} BETWEEN ${p.from}::date AND ${p.to}::date) AS billed,
-      (SELECT COALESCE(SUM("totalFils"), 0) FROM "CreditNote" WHERE "orgId" = ${orgId} AND ${DUBAI_DAY(`"issueDate"`)} BETWEEN ${p.from}::date AND ${p.to}::date) AS credited,
-      (SELECT COALESCE(SUM("amountFils"), 0) FROM "FeePayment" WHERE "orgId" = ${orgId} AND "status" = 'CLEARED' AND ${DUBAI_DAY(`"clearedAt"`)} BETWEEN ${p.from}::date AND ${p.to}::date) AS collected,
+      (SELECT COALESCE(SUM("totalFils"), 0) FROM "Invoice" WHERE "orgId" = ${orgId} AND "kind" = 'TAX' AND "academicYearId" = ${yearId}) AS billed,
+      (SELECT COALESCE(SUM(c."totalFils"), 0) FROM "CreditNote" c JOIN "Invoice" i ON i."id" = c."invoiceId"
+        WHERE c."orgId" = ${orgId} AND i."orgId" = ${orgId} AND i."academicYearId" = ${yearId}) AS credited,
+      (SELECT COALESCE(SUM(a."amountFils"), 0) FROM "FeeAllocation" a JOIN "Invoice" i ON i."id" = a."invoiceId"
+        WHERE a."orgId" = ${orgId} AND i."orgId" = ${orgId} AND i."kind" = 'TAX' AND i."academicYearId" = ${yearId} AND a."paymentId" IS NOT NULL) AS collected,
       (SELECT COALESCE(SUM("amountFils"), 0) FROM "FeePayment" WHERE "orgId" = ${orgId} AND "status" = 'HELD') AS held,
       (SELECT COUNT(*) FROM "FeePayment" WHERE "orgId" = ${orgId} AND "status" = 'HELD') AS held_count,
       (SELECT COUNT(*) FROM "FeeRefund" WHERE "orgId" = ${orgId} AND "status" = 'REQUESTED') + (SELECT COUNT(*) FROM "FeeAward" WHERE "orgId" = ${orgId} AND "status" = 'PENDING') AS approvals`;

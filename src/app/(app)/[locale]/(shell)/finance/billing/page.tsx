@@ -12,7 +12,7 @@ import { fmtDate, fmtDateTime } from "@/lib/format";
 import { formatPrefs } from "@/server/format";
 import { FinanceTabs, Money, Pager, RunStatus } from "@/components/fees/shared";
 import { CancelRunButton, NewRunDialog, RunAutoRefresh } from "@/components/fees/payment-actions";
-import { dayInput } from "@/components/fees/form-bits";
+import { dayInput } from "@/server/fees/money";
 import { canFinance, PAGE_SIZE, yearContext } from "@/server/fees/queries";
 import { loadFinanceConfig, taxInvoiceBlockers } from "@/server/fees/config";
 import { accountsForPlanWhere } from "@/server/fees/billing";

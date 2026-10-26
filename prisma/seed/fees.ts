@@ -8,7 +8,7 @@ import type { FeePaymentMethod, FeeItemKind, VatTreatment } from "@prisma/client
 import { execCtx, type Tx } from "@/server/db";
 import type { Actor } from "@/server/fees/ledger";
 import { accountBalance, bouncePayment, clearCheque, decideRefund, earlyPaymentOffer, issueCreditNote, issueInvoice, markRefundPaid, recordPayment, requestRefund, balanceOf } from "@/server/fees/ledger";
-import { billAccount, createBillingRun, partWithShare, processBillingBatch } from "@/server/fees/billing";
+import { billAccount, createBillingRun, partWithShare, previewAccountBill, processBillingBatch } from "@/server/fees/billing";
 import { decideAward, requestAward, saveDiscount, saveFeeItem, savePlan, suggestParts, DEFAULT_BEHAVIOUR } from "@/server/fees/schedule";
 import { syncFamilyAccounts } from "@/server/fees/accounts";
 import { ensureFeeTemplates, sendDueFeeReminders } from "@/server/fees/notices";
@@ -249,7 +249,9 @@ export async function seedFees(w: SeedWorld) {
     const { run: br } = await createBillingRun(tx, orgId, { partId: run.partId, issueDate: run.issue, dueDate: run.due, includeCharges: true }, fo);
     const ec = execCtx(tx, orgId, { now: run.issue, quiet: true });
     for (let i = 0; i < 100; i++) if ((await processBillingBatch(ec, br.id, { batchSize: 25 })).done) break;
-    await db.billingRun.update({ where: { id: br.id }, data: { createdAt: run.issue, startedAt: run.issue, finishedAt: new Date(run.issue.getTime() + 4 * 60_000) } });
+    // Runs started by the finance office mid-morning Dubai time (issue dates are midnight UTC).
+    const startedAt = new Date(run.issue.getTime() + (5 * 60 + 12) * 60_000);
+    await db.billingRun.update({ where: { id: br.id }, data: { createdAt: startedAt, startedAt, finishedAt: new Date(startedAt.getTime() + 4 * 60_000) } });
   }
 
   // The joiner: billed pro rata for Term 1 on the day they joined.
@@ -371,8 +373,9 @@ export async function seedFees(w: SeedWorld) {
   for (const [i, a] of pdcFamilies.entries()) {
     const handed = clamp(new Date(now.getTime() - (5 + i * 4) * DAY));
     if (!handed || !t2) continue;
-    const t1 = termOne.find((x) => x.accountId === a.id);
-    const amount = t1 ? Math.round((t1.totalFils * 3) / 4) : aed(8_000);
+    // Parents write the cheque for the Term 2 amount the school announced, so it settles the Term 2 invoice exactly.
+    const { part: t2Part } = await partWithShare(tx, orgId, t2.id);
+    const amount = (await previewAccountBill(tx, orgId, { accountId: a.id, part: t2Part, includeCharges: true, academicYearId: year.id })).totalFils || aed(8_000);
     await recordPayment(tx, orgId, { accountId: a.id, method: "CHEQUE", amountFils: amount, receivedAt: handed, chequeNumber: String(200000 + i * 137), chequeBank: BANKS[i % BANKS.length], chequeDate: new Date(t2.dueDate.getTime() - 3 * DAY), payerName: null, notes: "Post-dated cheque for Term 2", idempotencyKey: `seed:pdc:${i}` }, fo);
   }
   // A post-dated cheque from September that has since cleared.

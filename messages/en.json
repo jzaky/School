@@ -10671,7 +10671,8 @@
       "testPayButton": "Complete test payment",
       "testCancelButton": "Cancel",
       "testPaid": "Test payment completed.",
-      "testClosed": "This payment link is no longer open."
+      "testClosed": "This payment link is no longer open.",
+      "moreLines": "{n, plural, one {# more line} other {# more lines}} in the invoices below"
     },
     "hold": {
       "title": "Report card on hold",

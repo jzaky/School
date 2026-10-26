@@ -85,6 +85,10 @@ export type ProRataRule = { basis: ProRataBasis; cutoffDay: number };
 export type Fraction = { num: number; den: number };
 
 /** Calendar day number (days since epoch) of a date in Dubai (UTC+4, no daylight saving). */
+/** A date as YYYY-MM-DD in Dubai time, for date inputs and links (pure, safe on server and client). */
+export const dayInput = (d: Date | string | null | undefined) => (d ? new Date(new Date(d).getTime() + 4 * 3_600_000).toISOString().slice(0, 10) : "");
+export const todayInput = () => dayInput(new Date());
+
 export function dubaiDayNumber(d: Date): number {
   return Math.floor((d.getTime() + 4 * 3_600_000) / DAY);
 }

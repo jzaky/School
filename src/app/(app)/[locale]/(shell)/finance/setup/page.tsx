@@ -16,7 +16,7 @@ import { formatPrefs } from "@/server/format";
 import { FinanceTabs, Money } from "@/components/fees/shared";
 import { CopyScheduleDialog, DeleteItemButton, DiscountDialog, FeeItemDialog, PlanDialog } from "@/components/fees/setup-dialogs";
 import { SettingsForm } from "@/components/fees/settings-form";
-import { dayInput } from "@/components/fees/form-bits";
+import { dayInput } from "@/server/fees/money";
 import { canFinance, yearContext } from "@/server/fees/queries";
 import { loadFinanceConfig } from "@/server/fees/config";
 import { previewInstalments } from "@/server/fees/schedule";

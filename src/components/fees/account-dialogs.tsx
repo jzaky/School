@@ -77,7 +77,9 @@ export function RecordPaymentDialog({
   const [method, setMethod] = useState<FeePaymentMethod>("BANK_TRANSFER");
   const [invoiceId, setInvoiceId] = useState<string>(defaultInvoiceId ?? "auto");
   const target = invoices.find((i) => i.id === invoiceId);
-  const [amount, setAmount] = useState(filsToInput(target?.balanceFils ?? invoices[0]?.balanceFils ?? null));
+  const owedFils = invoices.reduce((sum, i) => sum + i.balanceFils, 0);
+  // One invoice: its balance. Oldest due first: everything the family owes.
+  const [amount, setAmount] = useState(filsToInput(target ? target.balanceFils : invoices.length ? owedFils : null));
   const [receivedOn, setReceivedOn] = useState(todayInput());
   const [reference, setReference] = useState("");
   const [cheque, setCheque] = useState({ number: "", bank: "", date: todayInput() });
@@ -153,7 +155,7 @@ export function RecordPaymentDialog({
                 onValueChange={(v) => {
                   setInvoiceId(v);
                   const i = invoices.find((x) => x.id === v);
-                  if (i) setAmount(filsToInput(i.balanceFils));
+                  setAmount(filsToInput(i ? i.balanceFils : invoices.length ? owedFils : null));
                 }}
               >
                 <SelectTrigger id="pm-inv" data-testid="pm-invoice">

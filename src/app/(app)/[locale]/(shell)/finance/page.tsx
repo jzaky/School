@@ -33,15 +33,19 @@ export default async function FinanceOverview() {
   const L = ctx.locale;
   const { year } = await yearContext(ctx);
   const today = todayKey();
-  const from = year ? new Date(year.startsOn.getTime() + 4 * 3_600_000).toISOString().slice(0, 10) : today;
-  const sixAgo = new Date(Date.now() - 150 * 86_400_000 + 4 * 3_600_000).toISOString().slice(0, 10);
+  // Whole months: the first day of the month five months before this one, so no month is cut in half.
+  const sixAgo = (() => {
+    const [yy, mm] = today.split("-").map(Number);
+    const d = new Date(Date.UTC(yy, mm - 1 - 5, 1));
+    return d.toISOString().slice(0, 10);
+  })();
   const [cfg, accounts, items, h, aging, months, recent, runs] = await Promise.all([
     loadFinanceConfig(ctx.db, ctx.orgId),
     ctx.db.feeAccount.count(),
     year ? ctx.db.feeItem.count({ where: { academicYearId: year.id } }) : Promise.resolve(0),
-    tenantTx(ctx.orgId, (tx) => headline(tx, ctx.orgId, { from, to: today })),
+    tenantTx(ctx.orgId, (tx) => headline(tx, ctx.orgId, year?.id ?? null)),
     tenantTx(ctx.orgId, (tx) => agingTotals(tx, ctx.orgId, today)),
-    tenantTx(ctx.orgId, (tx) => billedVsCollected(tx, ctx.orgId, { from: sixAgo < from ? from : sixAgo, to: today })),
+    tenantTx(ctx.orgId, (tx) => billedVsCollected(tx, ctx.orgId, { from: sixAgo, to: today })),
     ctx.db.feePayment.findMany({ orderBy: [{ createdAt: "desc" }], take: 6 }),
     ctx.db.billingRun.findMany({ orderBy: { createdAt: "desc" }, take: 3 }),
   ]);

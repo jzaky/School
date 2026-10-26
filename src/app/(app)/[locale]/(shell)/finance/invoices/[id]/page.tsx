@@ -163,7 +163,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
             <dt className="text-muted-foreground">{t("invoice.subtotal")}</dt>
             <dd className="text-end"><Money fils={inv.subtotalFils} locale={L} /></dd>
             <dt className="text-muted-foreground">{t("invoice.discounts")}</dt>
-            <dd className="text-end">-<Money fils={inv.discountFils} locale={L} /></dd>
+            <dd className="text-end">{inv.discountFils ? "-" : ""}<Money fils={inv.discountFils} locale={L} /></dd>
             <dt className="text-muted-foreground">{t("invoice.taxableTotal")}</dt>
             <dd className="text-end"><Money fils={inv.netFils} locale={L} /></dd>
             <dt className="text-muted-foreground">{t("invoice.vatTotal")}</dt>
@@ -173,9 +173,9 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
             {inv.kind === "TAX" && (
               <>
                 <dt className="text-muted-foreground">{t("invoice.paid")}</dt>
-                <dd className="text-end">-<Money fils={inv.paidFils} locale={L} /></dd>
+                <dd className="text-end">{inv.paidFils ? "-" : ""}<Money fils={inv.paidFils} locale={L} /></dd>
                 <dt className="text-muted-foreground">{t("invoice.credited")}</dt>
-                <dd className="text-end">-<Money fils={inv.creditedFils} locale={L} /></dd>
+                <dd className="text-end">{inv.creditedFils ? "-" : ""}<Money fils={inv.creditedFils} locale={L} /></dd>
                 <dt className="font-semibold">{t("invoice.balance")}</dt>
                 <dd className="text-end font-semibold" data-testid="invoice-balance"><Money fils={d.balanceFils} locale={L} /></dd>
               </>

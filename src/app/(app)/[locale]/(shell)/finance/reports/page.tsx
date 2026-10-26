@@ -67,7 +67,11 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
   const tab: Tab = (TABS as readonly string[]).includes(sp.tab ?? "") ? (sp.tab as Tab) : "summary";
   const today = todayKey();
   const { year } = await yearContext(ctx);
-  const yearFrom = year ? new Date(year.startsOn.getTime() + 4 * 3_600_000).toISOString().slice(0, 10) : today.slice(0, 8) + "01";
+  // The academic year's finance period starts with its first invoice (re-enrollment and Term 1 are billed before
+  // the first school day), from the first of that month.
+  const firstInvoice = year ? await ctx.db.invoice.findFirst({ where: { academicYearId: year.id }, orderBy: { issueDate: "asc" }, select: { issueDate: true } }) : null;
+  const yearStart = year ? (firstInvoice && firstInvoice.issueDate < year.startsOn ? firstInvoice.issueDate : year.startsOn) : null;
+  const yearFrom = yearStart ? new Date(yearStart.getTime() + 4 * 3_600_000).toISOString().slice(0, 8) + "01" : today.slice(0, 8) + "01";
   const from = KEY_RE.test(sp.from ?? "") ? sp.from! : yearFrom;
   const to = KEY_RE.test(sp.to ?? "") && sp.to! >= from ? sp.to! : today;
   const page = Math.max(1, Number(sp.page ?? 1) || 1);

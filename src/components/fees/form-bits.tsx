@@ -86,8 +86,7 @@ export function GradeChips({ value, onChange, single, testId }: { value: number[
   );
 }
 
-export const todayInput = () => new Date(Date.now() + 4 * 3_600_000).toISOString().slice(0, 10);
-export const dayInput = (d: Date | string | null | undefined) => (d ? new Date(new Date(d).getTime() + 4 * 3_600_000).toISOString().slice(0, 10) : "");
+export { dayInput, todayInput } from "@/server/fees/money";
 
 /** A stable random key for one form submission (idempotent recording of a payment). */
 export function newKey() {

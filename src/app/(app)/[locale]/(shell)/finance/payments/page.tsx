@@ -12,7 +12,7 @@ import { fmtDate } from "@/lib/format";
 import { formatPrefs } from "@/server/format";
 import { FinanceTabs, Money, Pager, PaymentStatus, qs, RefundStatus } from "@/components/fees/shared";
 import { BounceDialog, ClearChequeDialog, RefundPaidDialog } from "@/components/fees/payment-actions";
-import { dayInput } from "@/components/fees/form-bits";
+import { dayInput } from "@/server/fees/money";
 import { canFinance, listPayments, PAGE_SIZE, todayKey } from "@/server/fees/queries";
 
 export async function generateMetadata() {
