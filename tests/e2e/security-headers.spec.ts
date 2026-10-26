@@ -80,6 +80,17 @@ test("product pages with rich client code log no policy violations (en and ar)",
   }
 });
 
+test("uploads are checked by content, not by name or declared type", async ({ browser }) => {
+  const s = await loginAs(browser, "parent", "en");
+  const post = (name: string, mimeType: string, body: string) => s.context.request.post("/api/uploads", { multipart: { file: { name, mimeType, buffer: Buffer.from(body, "latin1") } } });
+  expect((await post("note.pdf", "application/pdf", "<html><script>alert(1)</script></html>")).status()).toBe(415);
+  expect((await post("photo.png", "image/png", '<svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)"/>')).status()).toBe(415);
+  const ok = await post("note.pdf", "text/html", "%PDF-1.4\n1 0 obj << >> endobj\n%%EOF");
+  expect(ok.status()).toBe(200);
+  expect(((await ok.json()) as { type: string }).type).toBe("application/pdf");
+  await s.context.close();
+});
+
 test("error responses do not reveal stack traces or internals", async ({ request }) => {
   for (const path of ["/api/documents/does-not-exist/download", "/api/fees/invoices/x/pdf", "/en/cases/not-a-real-id", "/api/v1/students"]) {
     const res = await request.get(path, { maxRedirects: 0 });

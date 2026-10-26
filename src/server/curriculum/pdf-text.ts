@@ -4,24 +4,35 @@
 import { inflateSync } from "node:zlib";
 
 type Obj = { dict: string; stream?: Buffer };
+
+/** Largest size one compressed stream, and all of them together, may expand to (a small crafted file must not
+ * exhaust memory). */
+const MAX_STREAM_BYTES = 16 * 1024 * 1024;
+const MAX_TOTAL_BYTES = 64 * 1024 * 1024;
 type CMap = { bytes: number; map: Map<number, string> };
 
-function decodeStream(dict: string, raw: Buffer): Buffer | undefined {
+function decodeStream(dict: string, raw: Buffer, budget: { left: number }): Buffer | undefined {
   if (!/\/FlateDecode/.test(dict)) return /\/Filter/.test(dict) ? undefined : raw;
+  const maxOutputLength = Math.min(MAX_STREAM_BYTES, budget.left);
+  if (maxOutputLength <= 0) return undefined;
+  let out: Buffer | undefined;
   try {
-    return inflateSync(raw);
+    out = inflateSync(raw, { maxOutputLength });
   } catch {
     try {
-      return inflateSync(raw, { finishFlush: 2 });
+      out = inflateSync(raw, { finishFlush: 2, maxOutputLength });
     } catch {
-      return undefined;
+      out = undefined;
     }
   }
+  if (out) budget.left -= out.length;
+  return out;
 }
 
 function parseObjects(buf: Buffer): Map<number, Obj> {
   const s = buf.toString("latin1");
   const objs = new Map<number, Obj>();
+  const budget = { left: MAX_TOTAL_BYTES };
   const re = /(\d+)\s+\d+\s+obj\b/g;
   let m: RegExpExecArray | null;
   while ((m = re.exec(s))) {
@@ -37,7 +48,7 @@ function parseObjects(buf: Buffer): Map<number, Obj> {
       const lenMatch = dict.match(/\/Length\s+(\d+)(?!\s+\d+\s+R)/);
       let dataEnd = lenMatch ? dataStart + Number(lenMatch[1]) : s.indexOf("endstream", dataStart);
       if (dataEnd > end || dataEnd < dataStart) dataEnd = s.indexOf("endstream", dataStart);
-      objs.set(num, { dict, stream: decodeStream(dict, buf.subarray(dataStart, dataEnd)) });
+      objs.set(num, { dict, stream: decodeStream(dict, buf.subarray(dataStart, dataEnd), budget) });
     } else objs.set(num, { dict: body });
     re.lastIndex = end;
   }

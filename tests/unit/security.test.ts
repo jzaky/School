@@ -16,6 +16,7 @@ import { absoluteSessionMs, sessionTooOld } from "@/server/sso/session-revocatio
 import { scanBytes, scanRefuses } from "@/server/files/scan";
 import { createZip } from "@/lib/zip";
 import { ownsStoredKey } from "@/server/documents/storage-core";
+import { extractPdfText } from "@/server/curriculum/pdf-text";
 import { isBlockedAddress } from "@/server/integrations/fetch-export";
 import { checkOutboundUrl } from "@/server/sso/http";
 import { BlockedAddressError, guardedFetch } from "@/server/integrations/guarded-fetch";
@@ -140,6 +141,15 @@ describe("upload checks by content", () => {
     expect(safeFileName('a"b<c>\r\n.pdf', "pdf")).toBe("a-b-c.pdf");
     expect(safeFileName("شهادة طبية.pdf", "pdf")).toBe("شهادة-طبية.pdf");
     expect(sniffFile(bytes("plain"))?.kind).toBe("csv");
+  });
+});
+
+describe("decompression limits", () => {
+  it("a PDF whose stream expands far beyond the limit is read without exhausting memory", async () => {
+    const { deflateSync } = await import("node:zlib");
+    const bomb = deflateSync(Buffer.alloc(40 * 1024 * 1024));
+    const pdf = Buffer.concat([Buffer.from(`%PDF-1.4\n1 0 obj << /Length ${bomb.length} /Filter /FlateDecode >>\nstream\n`, "latin1"), bomb, Buffer.from("\nendstream\nendobj\n%%EOF", "latin1")]);
+    expect(extractPdfText(pdf)).toBe("");
   });
 });
 

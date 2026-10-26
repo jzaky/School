@@ -1,4 +1,5 @@
 // School sign-up rules shared by the form (client) and the server action. Pure: no database access.
+import "./zod-setup";
 import { z } from "zod";
 
 export const EMIRATES = ["Abu Dhabi", "Dubai", "Sharjah", "Ajman", "Umm Al Quwain", "Ras Al Khaimah", "Fujairah"] as const;

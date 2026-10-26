@@ -1,5 +1,6 @@
 "use client";
 
+import "@/lib/zod-setup";
 import { MotionConfig } from "framer-motion";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
