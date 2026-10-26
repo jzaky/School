@@ -2,6 +2,7 @@ import NextAuth, { CredentialsSignin, type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
+import { randomUUID } from "node:crypto";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { headers } from "next/headers";
@@ -19,6 +20,8 @@ import { redeemMagicLink } from "@/server/sso/magic-link";
 import { schoolById } from "@/server/platform/sso-lookup";
 import { loginPath } from "@/server/sso/web";
 import { clientIp } from "@/server/access/rate-limit";
+import { claimByVerifiedProvider } from "@/server/identity/unproven-account";
+import { revokeSessionId, sessionIdRevoked, sessionRevoked, sessionTooOld } from "@/server/sso/session-revocation";
 
 declare module "next-auth" {
   interface Session {
@@ -52,6 +55,8 @@ declare module "@auth/core/jwt" {
     persona?: string | null;
     lockOrg?: string | null;
     sat?: number;
+    /** Session id, recorded as ended on sign-out. */
+    sid?: string;
   }
 }
 
@@ -188,6 +193,13 @@ export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
   session: { strategy: "jwt", maxAge: 60 * 60 * 12 },
   pages: { signIn: "/login", error: "/login" },
   providers,
+  events: {
+    // A copied session cookie stops working once its owner signs out.
+    async signOut(message) {
+      const sid = "token" in message ? message.token?.sid : undefined;
+      if (sid) await revokeSessionId(sid).catch(() => undefined);
+    },
+  },
   callbacks: {
     async signIn({ user, account, profile }) {
       if (!account || account.type === "credentials") return true;
@@ -200,14 +212,18 @@ export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
           update: {},
         });
       // A school sign-up in progress (see /signup) may create the account; /signup/complete then creates the school.
+      const g = oauthIdentity(account.provider, account.providerAccountId, user, profile);
+      if (!g) return "/login?error=SSO_UNKNOWN";
       const pending = await pendingSignup();
       if (pending) {
-        const existing = (await identityDb.user.findUnique({ where: { email } })) ?? (await identityDb.user.create({ data: { email, nameEn: pending.adminName ?? user.name ?? email, emailVerified: new Date() } }));
+        // Only an address the provider itself verified may create an account or be linked to an existing one.
+        if (!globallyVerified(g)) return "/login?error=EMAIL_UNVERIFIED";
+        const found = await identityDb.user.findUnique({ where: { email } });
+        if (found) await claimByVerifiedProvider(found.id);
+        const existing = found ?? (await identityDb.user.create({ data: { email, nameEn: pending.adminName ?? user.name ?? email, emailVerified: new Date() } }));
         await linkAccount(existing.id);
         return true;
       }
-      const g = oauthIdentity(account.provider, account.providerAccountId, user, profile);
-      if (!g) return "/login?error=SSO_UNKNOWN";
       const existing = await identityDb.user.findUnique({ where: { email } });
       const hint = await schoolHintOrgId();
       const membership = existing ? await resolveActiveMembership(existing.id, hint ?? existing.lastActiveOrgId, { includePending: true }) : null;
@@ -220,6 +236,8 @@ export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
         if (decision !== true) return decision;
         const created = await identityDb.user.findUnique({ where: { email } });
         if (!created) return "/login?error=NotProvisioned";
+        // The provider proved the address: a password set before it was proven no longer opens this account.
+        await claimByVerifiedProvider(created.id);
         await linkAccount(created.id);
         return true;
       }
@@ -234,8 +252,9 @@ export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
     },
     async jwt({ token, user, account, trigger, session }) {
       if (user && account) {
-        // Every sign-in issues a new token with its own start time (a password reset ends older ones).
+        // Every sign-in issues a new token with its own start time (a password reset ends older ones) and id.
         token.sat = Date.now();
+        token.sid = randomUUID();
         if (account.type === "credentials") {
           token.uid = user.id;
           token.activeOrgId = user.activeOrgId;
@@ -283,6 +302,14 @@ export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
             await identityDb.user.update({ where: { id: token.uid }, data: { lastActiveOrgId: m.orgId } });
           }
         }
+      }
+      // Every read of the session checks that it is still valid (src/server/sso/session-revocation.ts).
+      if (token.uid) {
+        token.sat ??= Date.now();
+        if (sessionTooOld(token.sat)) return null;
+        if (await sessionIdRevoked(token.sid)) return null;
+        const u = await identityDb.user.findUnique({ where: { id: token.uid }, select: { sessionsValidFrom: true } });
+        if (!u || sessionRevoked(u.sessionsValidFrom, token.sat)) return null;
       }
       return token;
     },

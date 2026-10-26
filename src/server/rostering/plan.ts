@@ -27,6 +27,7 @@ import { identityDb, tenantDb, tenantTx, type TenantTx } from "@/lib/tenant-db";
 import { gradeLevelFor, readOptions, removalBlocked, type RosterOptions } from "@/lib/rostering/options";
 import { recordHash, relationshipLabel, type RClass, type RCourse, type RDemographic, type REnrollment, type RSession, type RUser } from "@/lib/rostering/records";
 import { matchByName } from "@/lib/imports/staff";
+import { releaseUnprovenPassword } from "@/server/identity/unproven-account";
 
 export const PHASES = ["staff", "students", "guardians", "classes", "enrollments", "removals", "done"] as const;
 export type Phase = (typeof PHASES)[number];
@@ -262,6 +263,8 @@ async function planStaff(ctx: Ctx, batch: Array<{ externalId: string; data: unkn
       }
       let membershipId = "new";
       if (ctx.apply) {
+        // An existing account whose address was never proven keeps no password it set itself (unproven-account.ts).
+        if (accountId) await releaseUnprovenPassword(accountId);
         const userId = accountId ?? (await identityDb.user.create({ data: { email: u.email, nameEn: name.slice(0, 120) } })).id;
         const m = await tx.membership.create({ data: { orgId: ctx.orgId, userId, status: "INVITED" } });
         await tx.staffProfile.create({ data: { orgId: ctx.orgId, membershipId: m.id, employeeNo: u.identifier } });

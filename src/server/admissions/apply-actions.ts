@@ -42,7 +42,7 @@ async function schoolOpen(slug: string): Promise<ApplySchool> {
 
 /** The signed-in, verified family for an action. */
 async function family(school: ApplySchool, locale: string): Promise<Family> {
-  const a = await currentApplicant();
+  const a = await currentApplicant(school.id);
   if (!a) throw new AdmissionError("SIGNED_OUT");
   if (!a.verified) throw new AdmissionError("UNVERIFIED");
   // The demo school's families are fictional: nothing is emailed.
@@ -89,7 +89,7 @@ export async function applicantAccountAction(input: { slug: string; locale: stri
 export async function resendCodeAction(input: { slug: string; locale: string }): Promise<Res<{ demoCode: string | null }>> {
   try {
     const school = await schoolOpen(input.slug);
-    const a = await currentApplicant();
+    const a = await currentApplicant(school.id);
     if (!a) return { ok: false, error: "SIGNED_OUT" };
     if (a.verified) return { ok: true, demoCode: null };
     return { ok: true, demoCode: await sendCode(school, a.userId, a.email, isLocale(input.locale) ? input.locale : "en") };
@@ -100,13 +100,14 @@ export async function resendCodeAction(input: { slug: string; locale: string }):
 
 export async function verifyCodeAction(input: { slug: string; code: string }): Promise<Res> {
   try {
-    await schoolOpen(input.slug);
-    const a = await currentApplicant();
+    const school = await schoolOpen(input.slug);
+    const a = await currentApplicant(school.id);
     if (!a) return { ok: false, error: "SIGNED_OUT" };
     const limit = await hit(`apply-verify:${a.userId}`, 10, 15 * 60);
     if (!limit.ok) return { ok: false, error: "RATE_LIMITED" };
-    if (!(await confirmEmailCode(a.userId, String(input.code ?? "")))) return { ok: false, error: "CODE" };
-    await setApplicantSession(a.userId);
+    // The demonstration school shows the code on screen, so confirming it there proves nothing about the address.
+    if (!(await confirmEmailCode(a.userId, String(input.code ?? "").slice(0, 20), new Date(), { markVerified: !school.isDemo }))) return { ok: false, error: "CODE" };
+    await setApplicantSession(a.userId, { demoSchoolId: school.isDemo ? school.id : null });
     return { ok: true };
   } catch (e) {
     return fail(e);

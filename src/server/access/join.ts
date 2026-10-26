@@ -69,6 +69,13 @@ export async function resolveAccount(input: AccountInput, opts: { ip: string; pr
     if (existing.passwordHash) {
       // Someone who already has an account and typed their own password: treat it as signing in.
       if (await bcrypt.compare(input.password, existing.passwordHash)) return { userId: existing.id, email, nameEn: existing.nameEn, nameAr: existing.nameAr, created: false };
+      // A personal invitation proves the address. A password set before the address was ever proven gives way to
+      // the invited person's own, and every older session ends.
+      if (!existing.emailVerified && opts.provenEmail === email) {
+        const now = new Date();
+        const u = await identityDb.user.update({ where: { id: existing.id }, data: { passwordHash: await bcrypt.hash(input.password, 10), emailVerified: now, sessionsValidFrom: now } });
+        return { userId: u.id, email, nameEn: u.nameEn, nameAr: u.nameAr, created: false };
+      }
       throw new JoinError("CREDENTIALS");
     }
     // An account the school created (staff invite, directory import) with no password yet.

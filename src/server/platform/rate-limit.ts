@@ -4,7 +4,7 @@
 import { createHash } from "node:crypto";
 import IORedis from "ioredis";
 
-const g = globalThis as unknown as { __rlRedis?: IORedis | null; __rlMem?: Map<string, { count: number; resetAt: number }> };
+const g = globalThis as unknown as { __rlRedis?: IORedis | null; __rlPlatformMem?: Map<string, { count: number; resetAt: number }> };
 
 function redis(): IORedis | null {
   if (g.__rlRedis !== undefined) return g.__rlRedis;
@@ -20,11 +20,11 @@ const hashKey = (key: string) => `rl:${createHash("sha256").update(key).digest("
 export type RateResult = { ok: boolean; remaining: number; retryAfterSec: number };
 
 function memoryHit(k: string, limit: number, windowMs: number, now: number): RateResult {
-  g.__rlMem ??= new Map();
-  const cur = g.__rlMem.get(k);
+  g.__rlPlatformMem ??= new Map();
+  const cur = g.__rlPlatformMem.get(k);
   if (!cur || cur.resetAt <= now) {
-    g.__rlMem.set(k, { count: 1, resetAt: now + windowMs });
-    if (g.__rlMem.size > 10_000) for (const [key, v] of g.__rlMem) if (v.resetAt <= now) g.__rlMem.delete(key);
+    g.__rlPlatformMem.set(k, { count: 1, resetAt: now + windowMs });
+    if (g.__rlPlatformMem.size > 10_000) for (const [key, v] of g.__rlPlatformMem) if (v.resetAt <= now) g.__rlPlatformMem.delete(key);
     return { ok: true, remaining: limit - 1, retryAfterSec: 0 };
   }
   cur.count++;
@@ -51,5 +51,5 @@ export async function rateLimit(key: string, limit: number, windowMs: number, op
 
 /** Reset counters (tests). */
 export function resetMemoryLimits() {
-  g.__rlMem?.clear();
+  g.__rlPlatformMem?.clear();
 }

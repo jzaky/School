@@ -7,6 +7,7 @@ import { identityDb } from "@/lib/tenant-db";
 import { isLocale } from "@/i18n/routing";
 import { parseSignup, signupEnabled, type PasswordIssue, type SignupFieldError, type SignupInput } from "@/lib/signup";
 import { rateLimit } from "@/server/platform/rate-limit";
+import { clientIp } from "@/server/access/rate-limit";
 import { provisionSchool, removeOrphanUser, resolvePasswordUser, SignupError } from "@/server/platform/signup";
 import { sendVerificationEmail } from "@/server/onboarding/verification";
 import { getCtx } from "@/server/context";
@@ -22,9 +23,6 @@ export type SignupState = {
 
 const HOUR = 3600_000;
 
-function clientIp(h: Headers) {
-  return (h.get("x-forwarded-for")?.split(",")[0] ?? h.get("x-real-ip") ?? "local").trim();
-}
 
 function formToRaw(formData: FormData) {
   const locale = String(formData.get("locale") ?? "en");

@@ -4,6 +4,7 @@ import { cookies, headers } from "next/headers";
 import { identityDb, tenantDb } from "@/lib/tenant-db";
 import { resolveActiveMembership } from "@/server/identity/session-org";
 import { clientIp, hit } from "./rate-limit";
+import { audit } from "@/server/audit/audit";
 
 export const JOIN_INTENT_COOKIE = "join_intent";
 
@@ -18,7 +19,16 @@ async function ip(): Promise<string> {
 /** At most 10 password attempts per email and 50 per IP address in 15 minutes. */
 export async function passwordSignInAllowed(email: string): Promise<boolean> {
   const [byEmail, byIp] = await Promise.all([hit(`signin:${email.toLowerCase()}`, 10, 15 * 60), hit(`signin-ip:${await ip()}`, 50, 15 * 60)]);
+  // The first refused attempt for an address is written to the person's school audit log (no address or password).
+  if (!byEmail.ok && byEmail.count === 11) await auditSignInLimited(email).catch(() => undefined);
   return byEmail.ok && byIp.ok;
+}
+
+async function auditSignInLimited(email: string) {
+  const user = await identityDb.user.findUnique({ where: { email: email.toLowerCase() }, select: { id: true, lastActiveOrgId: true } });
+  const m = user ? await resolveActiveMembership(user.id, user.lastActiveOrgId, { includePending: true }) : null;
+  if (!user || !m) return;
+  await audit(tenantDb(m.orgId), m.orgId, { actorId: m.id, actorUserId: user.id, action: "auth.sign_in_refused", entityType: "Membership", entityId: m.id, meta: { method: "password", code: "RATE_LIMITED" } });
 }
 
 /** A join page path the person was on before leaving for Google or Microsoft. */

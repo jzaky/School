@@ -29,12 +29,17 @@ function stamp(passwordHash: string | null) {
   return createHash("sha256").update(passwordHash ?? "none").digest("base64url").slice(0, 12);
 }
 
-export function makeApplicantToken(userId: string, passwordHash: string | null, now = Date.now()): string {
-  const payload = b64(JSON.stringify({ u: userId, x: Math.floor(now / 1000) + TTL_SEC, s: stamp(passwordHash) }));
+/**
+ * `demoSchoolId`: the demonstration school shows the code on screen instead of emailing it, so a code confirmed
+ * there proves nothing about the address. It only counts for that one school, in this session, and never marks
+ * the account's email as verified.
+ */
+export function makeApplicantToken(userId: string, passwordHash: string | null, now = Date.now(), demoSchoolId: string | null = null): string {
+  const payload = b64(JSON.stringify({ u: userId, x: Math.floor(now / 1000) + TTL_SEC, s: stamp(passwordHash), ...(demoSchoolId ? { d: demoSchoolId } : {}) }));
   return `${payload}.${sign(payload)}`;
 }
 
-export function readApplicantToken(token: string | undefined | null, now = Date.now()): { userId: string; stamp: string } | null {
+export function readApplicantToken(token: string | undefined | null, now = Date.now()): { userId: string; stamp: string; demoSchoolId: string | null } | null {
   if (!token || token.length > 400) return null;
   const [payload, sig] = token.split(".");
   if (!payload || !sig) return null;
@@ -42,9 +47,9 @@ export function readApplicantToken(token: string | undefined | null, now = Date.
   const got = Buffer.from(sig);
   if (want.length !== got.length || !timingSafeEqual(want, got)) return null;
   try {
-    const p = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as { u?: string; x?: number; s?: string };
+    const p = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as { u?: string; x?: number; s?: string; d?: string };
     if (!p.u || !p.x || !p.s || p.x * 1000 < now) return null;
-    return { userId: p.u, stamp: p.s };
+    return { userId: p.u, stamp: p.s, demoSchoolId: typeof p.d === "string" ? p.d : null };
   } catch {
     return null;
   }
@@ -52,19 +57,20 @@ export function readApplicantToken(token: string | undefined | null, now = Date.
 
 export type Applicant = { userId: string; email: string; name: string; verified: boolean };
 
-/** The family signed in on the application pages, or null. */
-export async function currentApplicant(): Promise<Applicant | null> {
+/** The family signed in on the application pages, or null. `schoolId`: the school whose pages are open. */
+export async function currentApplicant(schoolId?: string | null): Promise<Applicant | null> {
   const jar = await cookies();
   const t = readApplicantToken(jar.get(APPLICANT_COOKIE)?.value);
   if (!t) return null;
   const u = await identityDb.user.findUnique({ where: { id: t.userId }, select: { id: true, email: true, nameEn: true, emailVerified: true, passwordHash: true } });
   if (!u || stamp(u.passwordHash) !== t.stamp) return null;
-  return { userId: u.id, email: u.email, name: u.nameEn, verified: Boolean(u.emailVerified) };
+  const demoVerified = Boolean(t.demoSchoolId && schoolId && t.demoSchoolId === schoolId);
+  return { userId: u.id, email: u.email, name: u.nameEn, verified: Boolean(u.emailVerified) || demoVerified };
 }
 
-export async function setApplicantSession(userId: string) {
+export async function setApplicantSession(userId: string, opts: { demoSchoolId?: string | null } = {}) {
   const u = await identityDb.user.findUnique({ where: { id: userId }, select: { passwordHash: true } });
-  (await cookies()).set(APPLICANT_COOKIE, makeApplicantToken(userId, u?.passwordHash ?? null), {
+  (await cookies()).set(APPLICANT_COOKIE, makeApplicantToken(userId, u?.passwordHash ?? null, Date.now(), opts.demoSchoolId ?? null), {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
@@ -92,14 +98,14 @@ export async function issueEmailCode(userId: string, now = new Date()): Promise<
   return code;
 }
 
-/** Check a code. On success the email counts as verified and the code is used up. */
-export async function confirmEmailCode(userId: string, code: string, now = new Date()): Promise<boolean> {
+/** Check a code. On success the code is used up and (unless markVerified is false) the email counts as verified. */
+export async function confirmEmailCode(userId: string, code: string, now = new Date(), opts: { markVerified?: boolean } = {}): Promise<boolean> {
   const clean = code.replace(/\D/g, "");
   if (clean.length !== 6) return false;
   const identifier = codeIdentifier(userId);
   const row = await identityDb.verificationToken.findFirst({ where: { identifier, token: hashCode(userId, clean) } });
   if (!row || row.expires.getTime() < now.getTime()) return false;
   await identityDb.verificationToken.deleteMany({ where: { identifier } });
-  await identityDb.user.update({ where: { id: userId }, data: { emailVerified: now } });
+  if (opts.markVerified !== false) await identityDb.user.update({ where: { id: userId }, data: { emailVerified: now } });
   return true;
 }

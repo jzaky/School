@@ -19,7 +19,7 @@ export default async function ApplyLayout({ children, params }: { children: Reac
   const { slug, locale } = await params;
   const school = await applySchoolBySlug(slug);
   if (!school) notFound();
-  const applicant = await currentApplicant();
+  const applicant = await currentApplicant(school?.id);
   const name = pick(locale, school.nameEn, school.nameAr);
   const color = /^#[0-9a-f]{6}$/i.test(school.primaryColor) ? school.primaryColor : "#0F4C81";
   return (

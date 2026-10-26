@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import { contactFromForm, parseLeadContact, type LeadField } from "@/lib/leads";
 import { parseOfferInputs } from "@/lib/roi";
 import { rateLimit } from "@/server/platform/rate-limit";
+import { clientIp } from "@/server/access/rate-limit";
 import { catalogDb } from "@/server/platform/catalog-db";
 import { queue } from "@/server/queue-core";
 import { cleanAnswers, scoreTaster, teaser, type Teaser } from "./taster";
@@ -16,9 +17,6 @@ import { deliverLeadEmail, LEAD_EMAIL_JOB } from "./lead-email";
 
 const HOUR = 3600_000;
 
-function clientIp(h: Headers) {
-  return (h.get("x-forwarded-for")?.split(",")[0] ?? h.get("x-real-ip") ?? "local").trim();
-}
 
 export type LeadState = { error: null | "rate" | "invalid" | "failed" | "answers"; field?: LeadField; ok?: boolean };
 

@@ -72,7 +72,18 @@ export async function clear(key: string) {
   mem().delete(k);
 }
 
-/** Client IP from proxy headers (Railway sets x-forwarded-for). */
-export function clientIp(h: Headers): string {
-  return (h.get("x-forwarded-for")?.split(",")[0] ?? h.get("x-real-ip") ?? "local").trim();
+/**
+ * Client IP from proxy headers, for rate limits. Proxies append the address they saw to X-Forwarded-For, so only
+ * the entries added by our own proxies can be trusted: the client's address is TRUSTED_PROXY_HOPS entries from the
+ * right (default 1, one hosting proxy). Anything to the left of it was sent by the client and is ignored.
+ */
+export function clientIp(h: Headers, env: NodeJS.ProcessEnv | { TRUSTED_PROXY_HOPS?: string } = process.env): string {
+  const hops = Math.min(10, Math.max(1, Number.parseInt(env.TRUSTED_PROXY_HOPS ?? "1", 10) || 1));
+  const chain = (h.get("x-forwarded-for") ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const fromChain = chain.length ? chain[Math.max(0, chain.length - hops)] : null;
+  const ip = fromChain ?? h.get("x-real-ip")?.trim() ?? "local";
+  return ip.slice(0, 64) || "local";
 }
