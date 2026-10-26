@@ -46,7 +46,8 @@ function Row({ id, title, body, checked, onChange, disabled, lock, testId }: { i
   );
 }
 
-export function SignInSettings({ initial, providers, canEdit }: { initial: SignInSettingsValue; providers: { google: boolean; microsoft: boolean }; canEdit: boolean }) {
+// Sign-in options (password, Google, Microsoft, ClassLink and the rest) live on Administration > Sign-in.
+export function SignInSettings({ initial, canEdit }: { initial: SignInSettingsValue; canEdit: boolean }) {
   const t = useTranslations("adminInvites");
   const router = useRouter();
   const [v, setV] = useState(initial);
@@ -64,35 +65,6 @@ export function SignInSettings({ initial, providers, canEdit }: { initial: SignI
     });
   return (
     <div className="space-y-4">
-      <section className="overflow-hidden rounded-xl border bg-card shadow-xs">
-        <div className="border-b px-5 py-3">
-          <h2 className="text-sm font-semibold">{t("methodsTitle")}</h2>
-          <p className="text-xs text-muted-foreground">{t("methodsBody")}</p>
-        </div>
-        <div className="divide-y">
-          <Row id="m-password" title={t("methodPassword")} body={t("methodPasswordBody")} checked disabled lock={t("methodPasswordLock")} testId="setting-password" />
-          <Row
-            id="m-google"
-            title={t("methodGoogle")}
-            body={t("methodGoogleBody")}
-            checked={providers.google && v.googleSignIn}
-            onChange={(c) => set({ googleSignIn: c })}
-            disabled={!providers.google || !canEdit}
-            lock={!providers.google ? t("providerMissing") : readOnly}
-            testId="setting-google"
-          />
-          <Row
-            id="m-microsoft"
-            title={t("methodMicrosoft")}
-            body={t("methodMicrosoftBody")}
-            checked={providers.microsoft && v.microsoftSignIn}
-            onChange={(c) => set({ microsoftSignIn: c })}
-            disabled={!providers.microsoft || !canEdit}
-            lock={!providers.microsoft ? t("providerMissing") : readOnly}
-            testId="setting-microsoft"
-          />
-        </div>
-      </section>
       <section className="overflow-hidden rounded-xl border bg-card shadow-xs">
         <div className="border-b px-5 py-3">
           <h2 className="text-sm font-semibold">{t("joinTitle")}</h2>

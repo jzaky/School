@@ -33,6 +33,7 @@ import { seedAccess } from "./access";
 import { seedAccessLimits } from "./access-limits";
 import { seedGroupDemo } from "./groups";
 import { seedIntegrations } from "./integrations";
+import { seedRostering } from "./rostering";
 import { seedConversations } from "./conversations";
 import { seedAttendance } from "./academics/attendance";
 import { seedAdmissions } from "./academics/admissions";
@@ -756,6 +757,8 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   // School group: Horizon Education Group with two small extra schools (demo tenant only).
   if (isDemoTenant) await seedGroupDemo(world);
   await seedIntegrations(world);
+  // Sign-in options, the ClassLink roster connection (built-in demo feed) and sign-in history.
+  await seedRostering(world);
   // Request conversations, private sick leave and cover notes (after the timetable, so cover can be arranged).
   await seedConversations(world);
   // Attendance registers, marks and follow-up, and grade publishing (after the timetable, cover and absence reports).

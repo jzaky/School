@@ -30,7 +30,7 @@ for (const k of E.keys()) if (!A.has(k)) problems.push(`missing in ar: ${k}`);
 for (const k of A.keys()) if (!E.has(k)) problems.push(`missing in en: ${k}`);
 
 // Values that are fine without Arabic letters: digits, codes, brand-neutral symbols, language names shown in their own script.
-const ALLOW = /^([\d\s.,:%+\-/()#|·]*|[A-Z]{2,6}(-\d)?|English|Google|Microsoft|123|CSV|PDF|me-central-1|horizon\.school\/home|SUB-2026-0041)$/;
+const ALLOW = /^([\d\s.,:%+\-/()#|·]*|[A-Z]{2,6}(-\d)?|English|Google|Microsoft|ClassLink|Clever|123|CSV|PDF|me-central-1|horizon\.school\/home|SUB-2026-0041)$/;
 // ICU argument names only: the branch texts of select and plural ({kg1 {KG1} other {...}}) are message text, not arguments.
 function placeholders(s: string): string {
   const names = new Set<string>();

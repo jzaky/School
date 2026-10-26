@@ -104,6 +104,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("people.manage")) admin.push({ key: "people", href: "/admin/people", icon: "contact" });
   if (c("admin.access") && c("people.manage")) admin.push({ key: "import", href: "/admin/import", icon: "file-spreadsheet" });
   if (c("integrations.manage")) admin.push({ key: "integrations", href: "/admin/integrations", icon: "plug" });
+  if (c("signin.manage")) admin.push({ key: "signInSettings", href: "/admin/sign-in", icon: "key-round" });
+  if (c("integrations.manage")) admin.push({ key: "rostering", href: "/admin/rostering", icon: "refresh-cw" });
   if (c("roles.manage")) admin.push({ key: "roles", href: "/admin/roles", icon: "lock" });
   // The safeguarding lead reviews who can see what (people and roles only), without managing roles.
   else if (c("safeguarding.manage")) admin.push({ key: "accessReport", href: "/admin/roles/report", icon: "lock" });

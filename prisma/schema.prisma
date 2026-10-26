@@ -362,18 +362,20 @@ enum ImportStatus {
 // ---------------------------------------------------------------------------
 
 model User {
-  id              String    @id @default(cuid())
-  email           String    @unique
-  emailVerified   DateTime?
-  passwordHash    String?
-  nameEn          String
-  nameAr          String?
-  image           String?
-  locale          Locale?
-  lastActiveOrgId String?
-  isPlatformAdmin Boolean   @default(false)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id                String    @id @default(cuid())
+  email             String    @unique
+  emailVerified     DateTime?
+  passwordHash      String?
+  nameEn            String
+  nameAr            String?
+  image             String?
+  locale            Locale?
+  lastActiveOrgId   String?
+  isPlatformAdmin   Boolean   @default(false)
+  /// Sessions opened before this moment are no longer valid (set when the password is reset).
+  sessionsValidFrom DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   accounts    Account[]
   memberships Membership[]
@@ -4310,4 +4312,175 @@ model GovRegistration {
 
   @@index([orgId, kind, status])
   @@index([orgId, studentId])
+}
+
+// ---------------------------------------------------------------------------
+// Sign-in options and rostering (src/server/sso, src/server/rostering)
+// ---------------------------------------------------------------------------
+
+/// How people sign in to one school. Provider credentials live in environment variables; the only secret kept
+/// here is the school's own identity provider client secret, encrypted with FIELD_ENCRYPTION_KEY.
+model SignInPolicy {
+  id                String   @id @default(cuid())
+  orgId             String   @unique
+  /// Options on the school's sign-in page: password, magic_link, google, microsoft, classlink, clever, oidc, uaepass.
+  methods           String[]
+  /// Staff must use single sign-on. School administrators keep password sign-in so the school cannot lock itself out.
+  staffSsoRequired  Boolean  @default(false)
+  /// Staff and student single sign-on is accepted only for these email domains (empty: any domain).
+  allowedDomains    String[]
+  /// EMAIL, EXTERNAL_ID or EMAIL_OR_EXTERNAL_ID: how a first single sign-on finds the existing member.
+  matchBy           String   @default("EMAIL_OR_EXTERNAL_ID")
+  /// Unknown people with a verified address on these domains may join through single sign-on.
+  selfJoinDomains   String[]
+  selfJoinApproval  Boolean  @default(true)
+  classlinkTenantId String?
+  cleverDistrictId  String?
+  microsoftTenantId String?
+  oidcName          String?
+  oidcIssuer        String?
+  oidcClientId      String?
+  oidcSecretEnc     String?
+  oidcScopes        String   @default("openid email profile")
+  oidcEmailClaim    String   @default("email")
+  oidcIdClaim       String   @default("sub")
+  oidcNameClaim     String   @default("name")
+  /// The school's own directory issues these addresses, so they count as verified even without email_verified.
+  oidcTrustEmail    Boolean  @default(false)
+  /// UAE PASS: match a first sign-in by the Emirates ID on the student record (compared by hash, never stored).
+  uaePassEidMatch   Boolean  @default(true)
+  updatedById       String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([classlinkTenantId])
+  @@unique([cleverDistrictId])
+}
+
+/// A single sign-on identity linked to a member of one school. Never shared across schools.
+model SsoIdentity {
+  id           String    @id @default(cuid())
+  orgId        String
+  membershipId String
+  /// classlink, clever, google, microsoft, oidc or uaepass
+  provider     String
+  /// The provider's stable subject for the person (for UAE PASS the uuid).
+  subject      String
+  /// How the first sign-in found the member: email, external_id, emirates_id, self_join or admin.
+  linkedVia    String
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@unique([orgId, provider, subject])
+  @@index([orgId, membershipId])
+}
+
+/// A rostering source: ClassLink Roster Server, Clever or another OneRoster server.
+model RosterConnection {
+  id                  String    @id @default(cuid())
+  orgId               String
+  /// classlink, clever or oneroster
+  provider            String
+  name                String
+  /// OneRoster base URL (ending in /ims/oneroster/v1p1 or /ims/oneroster/rostering/v1p2). Clever uses its own API.
+  baseUrl             String?
+  /// OAUTH1 (OneRoster 1.1), OAUTH2 (client credentials, OneRoster 1.2) or BEARER (Clever district token, proxies).
+  authMode            String    @default("OAUTH1")
+  tokenUrl            String?
+  /// Encrypted JSON with the key and secret or token. Never sent to the browser.
+  credentialsEnc      String?
+  /// School sourcedIds (or Clever school ids) to import. Empty: every school in the feed.
+  schoolIds           String[]
+  /// Import options, grade code map and role map (see src/lib/rostering/options.ts).
+  options             Json?
+  /// OFF, DAILY or HOURLY
+  schedule            String    @default("OFF")
+  hour                Int       @default(3)
+  enabled             Boolean   @default(true)
+  lastSlot            String?
+  lastRunAt           DateTime?
+  lastStatus          String?
+  /// High-water mark for incremental OneRoster pulls (start time of the last applied run).
+  lastDeltaAt         DateTime?
+  consecutiveFailures Int       @default(0)
+  createdById         String
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  runs RosterRun[]
+
+  @@index([orgId])
+}
+
+/// One roster preview or sync. Resumable: the cursor says which page or batch comes next.
+model RosterRun {
+  id              String    @id @default(cuid())
+  orgId           String
+  connectionId    String?
+  provider        String
+  /// API or CSV
+  source          String    @default("API")
+  /// MANUAL, SCHEDULE or UPLOAD
+  trigger         String
+  /// FULL or DELTA
+  mode            String    @default("FULL")
+  dryRun          Boolean   @default(true)
+  /// QUEUED, FETCHING, PLANNING, PREVIEWED, APPLYING, SUCCEEDED, PARTIAL, FAILED, BLOCKED or EXPIRED
+  status          String    @default("QUEUED")
+  phase           String?
+  slot            String?
+  cursor          Json?
+  counts          Json?
+  issues          Json?
+  changes         Json?
+  progressDone    Int       @default(0)
+  progressTotal   Int       @default(0)
+  allowMassDelete Boolean   @default(false)
+  errorCode       String?
+  actorId         String?
+  heartbeatAt     DateTime?
+  startedAt       DateTime  @default(now())
+  finishedAt      DateTime?
+  appliedAt       DateTime?
+
+  connection RosterConnection? @relation(fields: [connectionId], references: [id], onDelete: SetNull)
+
+  @@unique([connectionId, slot])
+  @@index([orgId, startedAt])
+  @@index([status, heartbeatAt])
+}
+
+/// Staged source records of one run. Deleted when the run is applied or expires.
+model RosterRecord {
+  id         String @id @default(cuid())
+  orgId      String
+  runId      String
+  /// org, session, user, class, enrollment or demographics
+  kind       String
+  externalId String
+  data       Json
+  hash       String
+
+  @@unique([runId, kind, externalId])
+  @@index([orgId, runId, kind])
+}
+
+/// Which local record a roster source record became. Later syncs update it, and only remove what they added.
+model RosterLink {
+  id            String    @id @default(cuid())
+  orgId         String
+  provider      String
+  /// student, staff, guardian, class, enrollment or guardianLink
+  kind          String
+  externalId    String
+  localId       String
+  /// Hash of the source fields last applied, so unchanged records are skipped.
+  hash          String
+  lastSeenRunId String?
+  deactivatedAt DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([orgId, provider, kind, externalId])
+  @@index([orgId, kind, localId])
 }

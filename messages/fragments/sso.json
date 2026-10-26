@@ -1,0 +1,1138 @@
+{
+  "nav": {
+    "signInSettings": [
+      "Sign-in",
+      "تسجيل الدخول"
+    ],
+    "rostering": [
+      "Rostering",
+      "مزامنة القوائم"
+    ]
+  },
+  "adminInvites": {
+    "signInMoved": [
+      "Sign-in options (password, email links, ClassLink, Clever, Google, Microsoft, UAE PASS and your own identity provider) are set on the Sign-in page. Joining rules for staff and families stay here.",
+      "تُضبط خيارات تسجيل الدخول (كلمة المرور وروابط البريد الإلكتروني وClassLink وClever وGoogle وMicrosoft والهوية الرقمية UAE PASS ومزوّد الهوية الخاص بالمدرسة) من صفحة تسجيل الدخول. أما قواعد انضمام الكادر والعائلات فتبقى هنا."
+    ],
+    "signInMovedLink": [
+      "Open sign-in settings",
+      "فتح إعدادات تسجيل الدخول"
+    ]
+  },
+  "access": {
+    "perms": {
+      "signin": {
+        "manage": {
+          "label": [
+            "Manage sign-in",
+            "إدارة تسجيل الدخول"
+          ],
+          "help": [
+            "Choose the school's sign-in options, single sign-on rules and identity provider settings.",
+            "اختيار خيارات تسجيل الدخول للمدرسة وقواعد الدخول الموحد وإعدادات مزوّد الهوية."
+          ]
+        }
+      }
+    }
+  },
+  "sso": {
+    "email": {
+      "subject": [
+        "Your sign-in link for {school}",
+        "رابط تسجيل الدخول إلى {school}"
+      ],
+      "body": [
+        "Use the button below to sign in to {school}. The link works once and expires in {minutes} minutes. If you did not ask for it, you can ignore this email: nobody can sign in without opening it.",
+        "استخدم الزر أدناه لتسجيل الدخول إلى {school}. يعمل الرابط مرة واحدة وتنتهي صلاحيته خلال {minutes} دقيقة. إن لم تطلبه فيمكنك تجاهل هذه الرسالة، فلا يمكن لأحد تسجيل الدخول دون فتحها."
+      ]
+    },
+    "reset": {
+      "email": {
+        "subject": [
+          "Reset your password for {school}",
+          "إعادة تعيين كلمة المرور في {school}"
+        ],
+        "body": [
+          "Someone asked to reset the password for this address. Use the button below to choose a new password. The link works once and expires in {minutes} minutes. If you did not ask, ignore this email: your password stays the same.",
+          "طلب أحدهم إعادة تعيين كلمة المرور لهذا العنوان. استخدم الزر أدناه لاختيار كلمة مرور جديدة. يعمل الرابط مرة واحدة وتنتهي صلاحيته خلال {minutes} دقيقة. إن لم تطلب ذلك فتجاهل هذه الرسالة، وستبقى كلمة المرور كما هي."
+        ],
+        "ssoSubject": [
+          "How to sign in to {school}",
+          "طريقة تسجيل الدخول إلى {school}"
+        ],
+        "ssoBody": [
+          "Someone asked to reset the password for this address. {school} asks staff to sign in with the school's single sign-on, so there is no password to reset. Open the school's sign-in page and choose your school account. If you did not ask, you can ignore this email.",
+          "طلب أحدهم إعادة تعيين كلمة المرور لهذا العنوان. تطلب {school} من الكادر تسجيل الدخول عبر الدخول الموحد للمدرسة، لذلك لا توجد كلمة مرور لإعادة تعيينها. افتح صفحة تسجيل الدخول الخاصة بالمدرسة واختر حساب المدرسة. إن لم تطلب ذلك فيمكنك تجاهل هذه الرسالة."
+        ],
+        "doneSubject": [
+          "Your password for {school} was changed",
+          "تم تغيير كلمة المرور في {school}"
+        ],
+        "doneBody": [
+          "Your password was just changed, and you were signed out everywhere else. If this was not you, contact the school office straight away.",
+          "تم تغيير كلمة المرور الآن، وتم تسجيل خروجك من جميع الأجهزة الأخرى. إن لم تكن أنت من قام بذلك فتواصل مع إدارة المدرسة فورًا."
+        ]
+      },
+      "title": [
+        "Choose a new password",
+        "اختر كلمة مرور جديدة"
+      ],
+      "subtitle": [
+        "Use at least 10 characters with letters and numbers. You will be signed out on your other devices.",
+        "استخدم 10 أحرف على الأقل تتضمن حروفًا وأرقامًا. سيتم تسجيل خروجك من أجهزتك الأخرى."
+      ],
+      "newPassword": [
+        "New password",
+        "كلمة المرور الجديدة"
+      ],
+      "confirm": [
+        "Type it again",
+        "أعد كتابتها"
+      ],
+      "save": [
+        "Save new password",
+        "حفظ كلمة المرور الجديدة"
+      ],
+      "doneTitle": [
+        "Password changed",
+        "تم تغيير كلمة المرور"
+      ],
+      "doneBody": [
+        "You can sign in with your new password now. Any other devices were signed out.",
+        "يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة. تم تسجيل الخروج من الأجهزة الأخرى."
+      ],
+      "signIn": [
+        "Sign in",
+        "تسجيل الدخول"
+      ],
+      "invalidTitle": [
+        "This link cannot be used",
+        "لا يمكن استخدام هذا الرابط"
+      ],
+      "invalidBody": [
+        "Reset links work once and expire after 45 minutes. Ask for a new one.",
+        "تعمل روابط إعادة التعيين مرة واحدة وتنتهي صلاحيتها بعد 45 دقيقة. اطلب رابطًا جديدًا."
+      ],
+      "again": [
+        "Ask for a new link",
+        "طلب رابط جديد"
+      ],
+      "otherLanguage": [
+        "العربية",
+        "English"
+      ],
+      "errors": {
+        "INVALID": [
+          "This link was already used or has expired. Ask for a new one.",
+          "استُخدم هذا الرابط من قبل أو انتهت صلاحيته. اطلب رابطًا جديدًا."
+        ],
+        "RATE_LIMITED": [
+          "Too many attempts. Wait a few minutes and try again.",
+          "محاولات كثيرة. انتظر بضع دقائق ثم أعد المحاولة."
+        ],
+        "SSO_ONLY": [
+          "Your school asks staff to sign in with single sign-on, so your password was not changed.",
+          "تطلب مدرستك من الكادر تسجيل الدخول عبر الدخول الموحد، لذلك لم تتغير كلمة المرور."
+        ],
+        "mismatch": [
+          "The two passwords are different.",
+          "كلمتا المرور غير متطابقتين."
+        ]
+      }
+    },
+    "forgot": {
+      "title": [
+        "Forgot your password?",
+        "هل نسيت كلمة المرور؟"
+      ],
+      "subtitle": [
+        "Enter the email you use for the school. If it has an account, we will send a link to choose a new password.",
+        "أدخل البريد الإلكتروني الذي تستخدمه مع المدرسة. إن كان له حساب فسنرسل رابطًا لاختيار كلمة مرور جديدة."
+      ],
+      "email": [
+        "Email",
+        "البريد الإلكتروني"
+      ],
+      "invalidEmail": [
+        "Enter a valid email address.",
+        "أدخل عنوان بريد إلكتروني صحيحًا."
+      ],
+      "send": [
+        "Send reset link",
+        "إرسال رابط إعادة التعيين"
+      ],
+      "sentTitle": [
+        "Check your email",
+        "تحقق من بريدك الإلكتروني"
+      ],
+      "sentBody": [
+        "If that address has an account, a reset link is on its way. It works once and expires in 45 minutes. Staff whose school uses single sign-on get instructions instead.",
+        "إن كان لهذا العنوان حساب فرابط إعادة التعيين في الطريق إليك. يعمل مرة واحدة وتنتهي صلاحيته خلال 45 دقيقة. ويتلقى الكادر في المدارس التي تعتمد الدخول الموحد تعليمات بدلًا منه."
+      ],
+      "backToSignIn": [
+        "Back to sign in",
+        "العودة إلى تسجيل الدخول"
+      ]
+    },
+    "magic": {
+      "title": [
+        "Sign in with your email link",
+        "تسجيل الدخول برابط البريد الإلكتروني"
+      ],
+      "body": [
+        "Press continue to sign in. The link works once.",
+        "اضغط متابعة لتسجيل الدخول. يعمل الرابط مرة واحدة."
+      ],
+      "continue": [
+        "Continue",
+        "متابعة"
+      ],
+      "invalidTitle": [
+        "This link cannot be used",
+        "لا يمكن استخدام هذا الرابط"
+      ],
+      "invalidBody": [
+        "Sign-in links work once and expire after 15 minutes. Ask for a new one on the sign-in page.",
+        "تعمل روابط تسجيل الدخول مرة واحدة وتنتهي صلاحيتها بعد 15 دقيقة. اطلب رابطًا جديدًا من صفحة تسجيل الدخول."
+      ],
+      "again": [
+        "Go to sign in",
+        "الانتقال إلى تسجيل الدخول"
+      ]
+    },
+    "signin": {
+      "metaTitle": [
+        "Sign in to {school}",
+        "تسجيل الدخول إلى {school}"
+      ],
+      "metaTitleGeneric": [
+        "Sign in",
+        "تسجيل الدخول"
+      ],
+      "eyebrow": [
+        "Sign in to",
+        "تسجيل الدخول إلى"
+      ],
+      "asideTitle": [
+        "{school} signs you in with the accounts you already use.",
+        "تتيح لك {school} تسجيل الدخول بالحسابات التي تستخدمها بالفعل."
+      ],
+      "asideBody": [
+        "Single sign-on, email links and passwords are protected the same way: verified addresses only, links that work once, and every sign-in recorded in the school's audit log.",
+        "يحظى الدخول الموحد وروابط البريد الإلكتروني وكلمات المرور بالحماية نفسها: عناوين موثقة فقط، وروابط تعمل مرة واحدة، وتسجيل كل دخول في سجل التدقيق الخاص بالمدرسة."
+      ],
+      "noOptions": [
+        "This school has not switched on any sign-in option yet. Ask the school office.",
+        "لم تفعّل هذه المدرسة أي خيار لتسجيل الدخول بعد. تواصل مع إدارة المدرسة."
+      ],
+      "adminBreakGlass": [
+        "School administrator?",
+        "مسؤول المدرسة؟"
+      ],
+      "adminBreakGlassLink": [
+        "Sign in with your password",
+        "سجّل الدخول بكلمة المرور"
+      ],
+      "otherSchool": [
+        "A different school",
+        "مدرسة أخرى"
+      ],
+      "continueToSchool": [
+        "Continue to your school's sign-in page",
+        "المتابعة إلى صفحة تسجيل الدخول الخاصة بمدرستك"
+      ],
+      "continueWith": {
+        "classlink": [
+          "Sign in with ClassLink",
+          "تسجيل الدخول عبر ClassLink"
+        ],
+        "clever": [
+          "Log in with Clever",
+          "تسجيل الدخول عبر Clever"
+        ],
+        "uaepass": [
+          "Sign in with UAE PASS",
+          "تسجيل الدخول عبر الهوية الرقمية UAE PASS"
+        ],
+        "google": [
+          "Continue with Google",
+          "المتابعة عبر Google"
+        ],
+        "microsoft": [
+          "Continue with Microsoft",
+          "المتابعة عبر Microsoft"
+        ]
+      },
+      "continueWithSchool": [
+        "Sign in with {name}",
+        "تسجيل الدخول عبر {name}"
+      ],
+      "schoolAccount": [
+        "your school account",
+        "حساب المدرسة"
+      ],
+      "orEmail": [
+        "or use your email",
+        "أو استخدم بريدك الإلكتروني"
+      ],
+      "emailOptions": [
+        "Email sign-in options",
+        "خيارات تسجيل الدخول بالبريد الإلكتروني"
+      ],
+      "usePassword": [
+        "Password",
+        "كلمة المرور"
+      ],
+      "useLink": [
+        "Email me a link",
+        "أرسل لي رابطًا"
+      ],
+      "email": [
+        "Email",
+        "البريد الإلكتروني"
+      ],
+      "password": [
+        "Password",
+        "كلمة المرور"
+      ],
+      "forgot": [
+        "Forgot password?",
+        "نسيت كلمة المرور؟"
+      ],
+      "signIn": [
+        "Sign in",
+        "تسجيل الدخول"
+      ],
+      "signingIn": [
+        "Signing in...",
+        "جارٍ تسجيل الدخول..."
+      ],
+      "sendLink": [
+        "Email me a sign-in link",
+        "أرسل لي رابط تسجيل الدخول"
+      ],
+      "linkHelp": [
+        "We will email a link that signs you in once. No password needed.",
+        "سنرسل إليك رابطًا يسجّل دخولك مرة واحدة دون الحاجة إلى كلمة مرور."
+      ],
+      "linkSentTitle": [
+        "Check your email",
+        "تحقق من بريدك الإلكتروني"
+      ],
+      "linkSentBody": [
+        "If that address belongs to an account at the school, a sign-in link is on its way. It works once and expires in 15 minutes.",
+        "إن كان هذا العنوان مرتبطًا بحساب في المدرسة فرابط تسجيل الدخول في الطريق إليك. يعمل مرة واحدة وتنتهي صلاحيته خلال 15 دقيقة."
+      ],
+      "findSchool": [
+        "Use your school's sign-in page",
+        "استخدم صفحة تسجيل الدخول الخاصة بمدرستك"
+      ],
+      "findSchoolHelp": [
+        "Enter your school's address in Horizon to see its sign-in options, such as ClassLink or UAE PASS.",
+        "أدخل عنوان مدرستك في Horizon لعرض خيارات تسجيل الدخول الخاصة بها، مثل ClassLink أو UAE PASS."
+      ],
+      "findSchoolPlaceholder": [
+        "for example horizon",
+        "مثال: horizon"
+      ],
+      "findSchoolGo": [
+        "Find",
+        "بحث"
+      ],
+      "findSchoolNotFound": [
+        "No school uses that address. Check it with the school office.",
+        "لا توجد مدرسة بهذا العنوان. تحقق منه لدى إدارة المدرسة."
+      ],
+      "errors": {
+        "invalid": [
+          "That email and password do not match an active account.",
+          "البريد الإلكتروني وكلمة المرور لا يطابقان حسابًا نشطًا."
+        ],
+        "email": [
+          "Enter a valid email address.",
+          "أدخل عنوان بريد إلكتروني صحيحًا."
+        ],
+        "SSO_REQUIRED": [
+          "Your school asks staff to sign in with single sign-on. Use your school's sign-in page.",
+          "تطلب مدرستك من الكادر تسجيل الدخول عبر الدخول الموحد. استخدم صفحة تسجيل الدخول الخاصة بمدرستك."
+        ],
+        "NotProvisioned": [
+          "This account has not been set up by your school yet.",
+          "لم تُعدّ مدرستك هذا الحساب بعد."
+        ],
+        "NOT_PROVISIONED": [
+          "Your school has not set up an account for this sign-in yet. Ask the school office to add you.",
+          "لم تُعدّ مدرستك حسابًا لهذا الدخول بعد. اطلب من إدارة المدرسة إضافتك."
+        ],
+        "NoMembership": [
+          "Your account is not linked to an active school.",
+          "حسابك غير مرتبط بمدرسة نشطة."
+        ],
+        "ProviderDisabled": [
+          "Your school has not switched on this sign-in option.",
+          "لم تفعّل مدرستك خيار تسجيل الدخول هذا."
+        ],
+        "METHOD_OFF": [
+          "Your school has not switched on this sign-in option.",
+          "لم تفعّل مدرستك خيار تسجيل الدخول هذا."
+        ],
+        "WRONG_TENANT": [
+          "That account belongs to another organisation's directory, not your school's.",
+          "ينتمي هذا الحساب إلى دليل جهة أخرى وليس إلى دليل مدرستك."
+        ],
+        "NO_EMAIL": [
+          "The sign-in did not share an email address, so the school cannot find your account.",
+          "لم يشارك الدخول عنوان بريد إلكتروني، لذلك تعذّر على المدرسة العثور على حسابك."
+        ],
+        "EMAIL_UNVERIFIED": [
+          "That account's email address is not verified, so it cannot be linked. Use another option or ask the school office.",
+          "عنوان البريد الإلكتروني لهذا الحساب غير موثّق، لذلك لا يمكن ربطه. استخدم خيارًا آخر أو تواصل مع إدارة المدرسة."
+        ],
+        "LOW_ASSURANCE": [
+          "Your UAE PASS account is not verified yet. Upgrade it in the UAE PASS app, then try again.",
+          "حساب الهوية الرقمية UAE PASS لديك غير موثّق بعد. قم بترقيته من تطبيق UAE PASS ثم أعد المحاولة."
+        ],
+        "DOMAIN_NOT_ALLOWED": [
+          "Your school accepts single sign-on only from its own email domains.",
+          "تقبل مدرستك الدخول الموحد من نطاقات بريدها الإلكتروني فقط."
+        ],
+        "SUSPENDED": [
+          "This account is suspended at the school. Contact the school office.",
+          "هذا الحساب موقوف في المدرسة. تواصل مع إدارة المدرسة."
+        ],
+        "IDENTITY_TAKEN": [
+          "Your Horizon account is already linked to a different account of this provider. Ask the school office to unlink it first.",
+          "حسابك في Horizon مرتبط بالفعل بحساب آخر لدى هذا المزوّد. اطلب من إدارة المدرسة إلغاء الربط أولًا."
+        ],
+        "LINK_CONFLICT": [
+          "This sign-in matches two different people at the school, so it was stopped. Ask the school office to check your account.",
+          "يطابق هذا الدخول شخصين مختلفين في المدرسة، لذلك تم إيقافه. اطلب من إدارة المدرسة مراجعة حسابك."
+        ],
+        "NO_SCHOOL": [
+          "We could not tell which school you are signing in to. Use your school's sign-in page.",
+          "تعذّر تحديد المدرسة التي تسجّل الدخول إليها. استخدم صفحة تسجيل الدخول الخاصة بمدرستك."
+        ],
+        "SSO_NO_SCHOOL": [
+          "Open your school's sign-in page first, then choose this option.",
+          "افتح صفحة تسجيل الدخول الخاصة بمدرستك أولًا، ثم اختر هذا الخيار."
+        ],
+        "RATE_LIMITED": [
+          "Too many attempts. Wait a few minutes and try again.",
+          "محاولات كثيرة. انتظر بضع دقائق ثم أعد المحاولة."
+        ],
+        "SSO_STATE_MISSING": [
+          "The sign-in took too long or was opened in another browser. Start again.",
+          "استغرق تسجيل الدخول وقتًا طويلًا أو فُتح في متصفح آخر. ابدأ من جديد."
+        ],
+        "SSO_STATE_MISMATCH": [
+          "The sign-in could not be verified. Start again from this page.",
+          "تعذّر التحقق من تسجيل الدخول. ابدأ من جديد من هذه الصفحة."
+        ],
+        "SSO_PROVIDER_DENIED": [
+          "The sign-in was cancelled.",
+          "تم إلغاء تسجيل الدخول."
+        ],
+        "SSO_NOT_CONFIGURED": [
+          "This sign-in option is not available right now. Use another option.",
+          "خيار تسجيل الدخول هذا غير متاح حاليًا. استخدم خيارًا آخر."
+        ],
+        "SSO_GENERIC": [
+          "The sign-in could not be completed. Try again or use another option.",
+          "تعذّر إكمال تسجيل الدخول. أعد المحاولة أو استخدم خيارًا آخر."
+        ],
+        "generic": [
+          "Something went wrong while signing in. Try again.",
+          "حدث خطأ أثناء تسجيل الدخول. أعد المحاولة."
+        ]
+      }
+    },
+    "admin": {
+      "title": [
+        "Sign-in",
+        "تسجيل الدخول"
+      ],
+      "subtitle": [
+        "Choose how staff, students and families sign in, and connect the school's identity providers.",
+        "اختر طريقة دخول الكادر والطلاب والعائلات، واربط مزوّدي الهوية الخاصين بالمدرسة."
+      ],
+      "tabs": {
+        "options": [
+          "Options and rules",
+          "الخيارات والقواعد"
+        ],
+        "providers": [
+          "Providers",
+          "المزوّدون"
+        ],
+        "activity": [
+          "Activity",
+          "النشاط"
+        ]
+      },
+      "pageAddress": [
+        "Your school's sign-in page",
+        "صفحة تسجيل الدخول الخاصة بمدرستك"
+      ],
+      "pageAddressBody": [
+        "Share this address with staff and families. It shows only the options switched on below.",
+        "شارك هذا العنوان مع الكادر والعائلات. يعرض فقط الخيارات المفعّلة أدناه."
+      ],
+      "optionsTitle": [
+        "Sign-in options",
+        "خيارات تسجيل الدخول"
+      ],
+      "optionsBody": [
+        "An option appears on the school's sign-in page when it is switched on here and the server has its credentials.",
+        "يظهر الخيار في صفحة تسجيل الدخول عند تفعيله هنا وتوفّر بيانات اعتماده على الخادم."
+      ],
+      "methods": {
+        "password": {
+          "name": [
+            "Email and password",
+            "البريد الإلكتروني وكلمة المرور"
+          ],
+          "body": [
+            "Families and staff without single sign-on. School administrators can always use a password, so the school can never be locked out.",
+            "للعائلات والكادر الذين لا يستخدمون الدخول الموحد. يمكن لمسؤولي المدرسة دائمًا استخدام كلمة المرور حتى لا تُغلق المدرسة على نفسها."
+          ]
+        },
+        "magic_link": {
+          "name": [
+            "Email sign-in link",
+            "رابط تسجيل الدخول بالبريد الإلكتروني"
+          ],
+          "body": [
+            "A link that signs the person in once, valid for 15 minutes. Useful for parents who forget passwords.",
+            "رابط يسجّل الدخول مرة واحدة ويصلح لمدة 15 دقيقة. مفيد لأولياء الأمور الذين ينسون كلمات المرور."
+          ]
+        },
+        "google": {
+          "name": [
+            "Google",
+            "Google"
+          ],
+          "body": [
+            "Google Workspace or personal Google accounts with a verified address.",
+            "حسابات Google Workspace أو حسابات Google الشخصية ذات العنوان الموثّق."
+          ]
+        },
+        "microsoft": {
+          "name": [
+            "Microsoft",
+            "Microsoft"
+          ],
+          "body": [
+            "Microsoft 365 accounts from the school's tenant, verified domains or personal Microsoft accounts.",
+            "حسابات Microsoft 365 من مستأجر المدرسة أو النطاقات الموثقة أو حسابات Microsoft الشخصية."
+          ]
+        },
+        "classlink": {
+          "name": [
+            "ClassLink",
+            "ClassLink"
+          ],
+          "body": [
+            "Single sign-on through ClassLink LaunchPad, including the Horizon tile in LaunchPad.",
+            "الدخول الموحد عبر ClassLink LaunchPad، بما في ذلك أيقونة Horizon في LaunchPad."
+          ]
+        },
+        "clever": {
+          "name": [
+            "Clever",
+            "Clever"
+          ],
+          "body": [
+            "Log in with Clever and Clever Instant Login for the school's district.",
+            "تسجيل الدخول عبر Clever والدخول الفوري من Clever لمنطقة المدرسة التعليمية."
+          ]
+        },
+        "uaepass": {
+          "name": [
+            "UAE PASS",
+            "الهوية الرقمية UAE PASS"
+          ],
+          "body": [
+            "The UAE national digital identity. Verified accounts only; first sign-ins can match the Emirates ID on student records.",
+            "الهوية الرقمية الوطنية لدولة الإمارات. الحسابات الموثقة فقط، ويمكن مطابقة أول دخول برقم الهوية الإماراتية في سجلات الطلاب."
+          ]
+        },
+        "oidc": {
+          "name": [
+            "School identity provider",
+            "مزوّد الهوية الخاص بالمدرسة"
+          ],
+          "body": [
+            "Any OpenID Connect provider the school runs, such as Okta, Microsoft AD FS or Keycloak.",
+            "أي مزوّد OpenID Connect تديره المدرسة، مثل Okta أو Microsoft AD FS أو Keycloak."
+          ]
+        }
+      },
+      "status": {
+        "ready": [
+          "Ready",
+          "جاهز"
+        ],
+        "server": [
+          "Needs server setup",
+          "يحتاج إلى إعداد الخادم"
+        ],
+        "tenant": [
+          "Needs your ID",
+          "يحتاج إلى معرّف المدرسة"
+        ],
+        "provider": [
+          "Needs provider details",
+          "يحتاج إلى بيانات المزوّد"
+        ]
+      },
+      "lockServer": [
+        "Not configured on this server yet. Your hosting team sets {names} (see docs/deploy.md).",
+        "لم يُضبط على هذا الخادم بعد. يضبط فريق الاستضافة {names} (راجع docs/deploy.md)."
+      ],
+      "lockTenant": [
+        "Add your tenant or district ID on the Providers tab first.",
+        "أضف معرّف المستأجر أو المنطقة التعليمية في تبويب المزوّدين أولًا."
+      ],
+      "lockProvider": [
+        "Add your identity provider's address, client ID and secret on the Providers tab first.",
+        "أضف عنوان مزوّد الهوية ومعرّف العميل والسر في تبويب المزوّدين أولًا."
+      ],
+      "rulesTitle": [
+        "Rules",
+        "القواعد"
+      ],
+      "rulesBody": [
+        "These rules apply to every single sign-on option.",
+        "تنطبق هذه القواعد على جميع خيارات الدخول الموحد."
+      ],
+      "staffSso": [
+        "Staff must use single sign-on",
+        "يجب على الكادر استخدام الدخول الموحد"
+      ],
+      "staffSsoBody": [
+        "Staff cannot sign in with a password or an email link. School administrators keep password sign-in as a safety net. Families are not affected.",
+        "لا يستطيع الكادر تسجيل الدخول بكلمة مرور أو رابط بريد إلكتروني. يحتفظ مسؤولو المدرسة بالدخول بكلمة المرور احتياطًا. ولا يتأثر أولياء الأمور."
+      ],
+      "allowedDomains": [
+        "Allowed email domains",
+        "نطاقات البريد الإلكتروني المسموح بها"
+      ],
+      "allowedDomainsBody": [
+        "Staff and students may use single sign-on only with addresses on these domains. Leave empty to allow any domain. Parents are not limited.",
+        "يمكن للكادر والطلاب استخدام الدخول الموحد فقط بعناوين على هذه النطاقات. اتركه فارغًا للسماح بأي نطاق. لا يُقيَّد أولياء الأمور."
+      ],
+      "domainsPlaceholder": [
+        "aldurrah.ae, students.aldurrah.ae",
+        "مثال: aldurrah.ae, students.aldurrah.ae"
+      ],
+      "matchBy": [
+        "Match a first sign-in by",
+        "مطابقة أول دخول بواسطة"
+      ],
+      "matchByBody": [
+        "How the first single sign-on finds the person's existing account. The roster ID comes from ClassLink, Clever or the school's directory.",
+        "طريقة عثور أول دخول موحد على الحساب الحالي للشخص. يأتي معرّف القائمة من ClassLink أو Clever أو دليل المدرسة."
+      ],
+      "match": {
+        "EMAIL_OR_EXTERNAL_ID": [
+          "Roster ID, then verified email",
+          "معرّف القائمة ثم البريد الموثّق"
+        ],
+        "EMAIL": [
+          "Verified email only",
+          "البريد الموثّق فقط"
+        ],
+        "EXTERNAL_ID": [
+          "Roster ID only",
+          "معرّف القائمة فقط"
+        ]
+      },
+      "selfJoin": [
+        "Self-join domains for staff",
+        "نطاقات الانضمام الذاتي للكادر"
+      ],
+      "selfJoinBody": [
+        "Unknown people with a verified address on these domains may join as staff through single sign-on. Nobody else gets an account without an invitation. Must be inside the allowed domains.",
+        "يمكن للأشخاص غير المعروفين ذوي العناوين الموثقة على هذه النطاقات الانضمام ككادر عبر الدخول الموحد. لا يحصل أي شخص آخر على حساب دون دعوة. يجب أن تكون ضمن النطاقات المسموح بها."
+      ],
+      "selfJoinApproval": [
+        "Self-joined staff wait for approval",
+        "ينتظر الكادر المنضم ذاتيًا الموافقة"
+      ],
+      "selfJoinApprovalBody": [
+        "They appear on Join requests until an administrator approves them and chooses their roles.",
+        "يظهرون في طلبات الانضمام حتى يوافق عليهم أحد المسؤولين ويحدد أدوارهم."
+      ],
+      "redirectUri": [
+        "Redirect URI to register",
+        "عنوان إعادة التوجيه للتسجيل"
+      ],
+      "serverMissing": [
+        "Server settings missing: {names}",
+        "إعدادات الخادم الناقصة: {names}"
+      ],
+      "classlink": {
+        "title": [
+          "ClassLink",
+          "ClassLink"
+        ],
+        "body": [
+          "Single sign-on through ClassLink LaunchPad with OpenID Connect. Rosters come from ClassLink Roster Server on the Rostering page.",
+          "الدخول الموحد عبر ClassLink LaunchPad باستخدام OpenID Connect. تأتي القوائم من ClassLink Roster Server عبر صفحة مزامنة القوائم."
+        ],
+        "tenant": [
+          "ClassLink tenant ID",
+          "معرّف المستأجر في ClassLink"
+        ],
+        "tenantHelp": [
+          "Your district's tenant ID from the ClassLink Management Console. Sign-ins from any other tenant are refused.",
+          "معرّف المستأجر الخاص بمنطقتك التعليمية من وحدة إدارة ClassLink. يُرفض الدخول من أي مستأجر آخر."
+        ],
+        "launch": [
+          "LaunchPad app link",
+          "رابط التطبيق في LaunchPad"
+        ],
+        "ready": [
+          "Credentials are set on this server.",
+          "بيانات الاعتماد مضبوطة على هذا الخادم."
+        ],
+        "rosters": [
+          "Set up rostering",
+          "إعداد مزامنة القوائم"
+        ]
+      },
+      "clever": {
+        "title": [
+          "Clever",
+          "Clever"
+        ],
+        "body": [
+          "Log in with Clever and Clever Instant Login. Instant Login is restarted from Horizon so every sign-in carries a verified state.",
+          "تسجيل الدخول عبر Clever والدخول الفوري. يُعاد بدء الدخول الفوري من Horizon ليحمل كل دخول حالة موثقة."
+        ],
+        "district": [
+          "Clever district ID",
+          "معرّف المنطقة التعليمية في Clever"
+        ],
+        "districtHelp": [
+          "From the Clever district dashboard. Sign-ins from other districts are refused.",
+          "من لوحة المنطقة التعليمية في Clever. يُرفض الدخول من المناطق الأخرى."
+        ]
+      },
+      "microsoft": {
+        "title": [
+          "Microsoft",
+          "Microsoft"
+        ],
+        "body": [
+          "Microsoft Entra ID. Add the school's tenant ID so school accounts are trusted; other organisations' addresses count only when Microsoft verified the domain.",
+          "Microsoft Entra ID. أضف معرّف مستأجر المدرسة ليُعتمد حساب المدرسة؛ ولا تُعتمد عناوين الجهات الأخرى إلا إذا وثّقت Microsoft النطاق."
+        ],
+        "tenant": [
+          "Microsoft tenant ID",
+          "معرّف المستأجر في Microsoft"
+        ],
+        "tenantHelp": [
+          "The Directory (tenant) ID from the Microsoft Entra admin center.",
+          "معرّف الدليل (المستأجر) من مركز إدارة Microsoft Entra."
+        ]
+      },
+      "google": {
+        "title": [
+          "Google",
+          "Google"
+        ],
+        "body": [
+          "Google sign-in accepts only addresses Google has verified.",
+          "يقبل الدخول عبر Google العناوين التي وثّقتها Google فقط."
+        ],
+        "origin": [
+          "Authorised JavaScript origin",
+          "مصدر JavaScript المعتمد"
+        ]
+      },
+      "uaepass": {
+        "title": [
+          "UAE PASS",
+          "الهوية الرقمية UAE PASS"
+        ],
+        "body": [
+          "The UAE national digital identity, for parents and staff. Unverified (SOP1) accounts cannot link a first sign-in.",
+          "الهوية الرقمية الوطنية لدولة الإمارات لأولياء الأمور والكادر. لا يمكن للحسابات غير الموثقة (SOP1) ربط أول دخول."
+        ],
+        "environment": [
+          "Environment",
+          "البيئة"
+        ],
+        "env": {
+          "staging": [
+            "Staging",
+            "تجريبية"
+          ],
+          "production": [
+            "Production",
+            "الإنتاج"
+          ]
+        },
+        "eid": [
+          "Match by Emirates ID on student records",
+          "المطابقة برقم الهوية الإماراتية في سجلات الطلاب"
+        ],
+        "eidBody": [
+          "A first sign-in can find the student whose stored Emirates ID equals the one UAE PASS verified. Compared after decryption, never stored or logged.",
+          "يمكن لأول دخول العثور على الطالب الذي يطابق رقم هويته المخزن الرقم الذي وثّقته UAE PASS. تتم المقارنة بعد فك التشفير دون تخزين الرقم أو تسجيله."
+        ]
+      },
+      "oidc": {
+        "title": [
+          "School identity provider (OpenID Connect)",
+          "مزوّد الهوية الخاص بالمدرسة (OpenID Connect)"
+        ],
+        "body": [
+          "Connect Okta, Microsoft AD FS, Keycloak or any OpenID Connect provider. Horizon uses discovery, PKCE, state and nonce, and checks every ID token's signature.",
+          "اربط Okta أو Microsoft AD FS أو Keycloak أو أي مزوّد OpenID Connect. يستخدم Horizon الاكتشاف التلقائي وPKCE والحالة والرمز الفريد، ويتحقق من توقيع كل رمز هوية."
+        ],
+        "name": [
+          "Button name",
+          "اسم الزر"
+        ],
+        "nameHelp": [
+          "Shown as Sign in with ...",
+          "يظهر بصيغة تسجيل الدخول عبر ..."
+        ],
+        "namePlaceholder": [
+          "Al Durrah account",
+          "حساب الدرة"
+        ],
+        "issuer": [
+          "Issuer URL",
+          "عنوان المُصدِر"
+        ],
+        "issuerHelp": [
+          "The address before /.well-known/openid-configuration.",
+          "العنوان الذي يسبق /.well-known/openid-configuration."
+        ],
+        "test": [
+          "Test",
+          "اختبار"
+        ],
+        "testOk": [
+          "Discovery works for {issuer}.",
+          "يعمل الاكتشاف التلقائي لـ {issuer}."
+        ],
+        "testPkce": [
+          "PKCE is supported.",
+          "PKCE مدعوم."
+        ],
+        "clientId": [
+          "Client ID",
+          "معرّف العميل"
+        ],
+        "secret": [
+          "Client secret",
+          "سر العميل"
+        ],
+        "secretSaved": [
+          "A secret is saved (encrypted). Leave empty to keep it.",
+          "يوجد سر محفوظ (مشفّر). اتركه فارغًا للإبقاء عليه."
+        ],
+        "secretHelp": [
+          "Stored encrypted. It is never shown again.",
+          "يُخزَّن مشفّرًا ولا يُعرض مرة أخرى."
+        ],
+        "scopes": [
+          "Scopes",
+          "النطاقات"
+        ],
+        "claims": [
+          "Claims",
+          "المطالبات"
+        ],
+        "claimsHelp": [
+          "Which claims hold the email, the roster ID (student or staff number) and the name.",
+          "المطالبات التي تحمل البريد الإلكتروني ومعرّف القائمة (رقم الطالب أو الموظف) والاسم."
+        ],
+        "emailClaim": [
+          "Email",
+          "البريد"
+        ],
+        "idClaim": [
+          "Roster ID",
+          "معرّف القائمة"
+        ],
+        "nameClaim": [
+          "Name",
+          "الاسم"
+        ],
+        "trust": [
+          "This directory issues our school addresses",
+          "هذا الدليل يصدر عناوين مدرستنا"
+        ],
+        "trustBody": [
+          "Turn on only if the provider is the school's own directory: its addresses then count as verified for this school.",
+          "فعّله فقط إذا كان المزوّد هو دليل المدرسة نفسه، فتُعد عناوينه موثقة لهذه المدرسة."
+        ]
+      },
+      "magic": {
+        "title": [
+          "Email sign-in links",
+          "روابط تسجيل الدخول بالبريد الإلكتروني"
+        ],
+        "body": [
+          "Sent through the school's email provider. Links work once, expire after 15 minutes, and asking never reveals whether an account exists.",
+          "تُرسل عبر مزوّد البريد الإلكتروني للمدرسة. تعمل الروابط مرة واحدة وتنتهي صلاحيتها بعد 15 دقيقة، ولا يكشف الطلب عن وجود الحساب من عدمه."
+        ],
+        "ready": [
+          "Email delivery is configured.",
+          "تم إعداد إرسال البريد الإلكتروني."
+        ]
+      },
+      "saveHint": [
+        "Changes apply to new sign-ins on /login/{slug}.",
+        "تنطبق التغييرات على عمليات الدخول الجديدة في /login/{slug}."
+      ],
+      "save": [
+        "Save",
+        "حفظ"
+      ],
+      "saved": [
+        "Sign-in settings saved",
+        "تم حفظ إعدادات تسجيل الدخول"
+      ],
+      "errors": {
+        "FORBIDDEN": [
+          "You do not have permission to change sign-in settings.",
+          "ليست لديك صلاحية تغيير إعدادات تسجيل الدخول."
+        ],
+        "INVALID": [
+          "Some values are not valid.",
+          "بعض القيم غير صالحة."
+        ],
+        "DOMAIN": [
+          "One of the domains is not valid (use a form like aldurrah.ae).",
+          "أحد النطاقات غير صالح (استخدم صيغة مثل aldurrah.ae)."
+        ],
+        "SELF_JOIN_DOMAIN": [
+          "Self-join domains must also be allowed domains.",
+          "يجب أن تكون نطاقات الانضمام الذاتي ضمن النطاقات المسموح بها."
+        ],
+        "TENANT": [
+          "That ID has characters a tenant or district ID does not use.",
+          "يحتوي هذا المعرّف على رموز لا تُستخدم في معرّفات المستأجر أو المنطقة التعليمية."
+        ],
+        "MS_TENANT": [
+          "A Microsoft tenant ID looks like 00000000-0000-0000-0000-000000000000.",
+          "يكون معرّف مستأجر Microsoft بصيغة 00000000-0000-0000-0000-000000000000."
+        ],
+        "TENANT_TAKEN": [
+          "Another school already uses this ID. Contact support if it belongs to you.",
+          "تستخدم مدرسة أخرى هذا المعرّف بالفعل. تواصل مع الدعم إن كان يخصك."
+        ],
+        "CLAIM": [
+          "Claim names can use letters, numbers, dots and underscores.",
+          "يمكن أن تحتوي أسماء المطالبات على حروف وأرقام ونقاط وشرطات سفلية."
+        ],
+        "ISSUER": [
+          "The issuer must be an https address.",
+          "يجب أن يكون عنوان المُصدِر عنوان https."
+        ],
+        "NO_SSO_METHOD": [
+          "Switch on a working single sign-on option before requiring it for staff.",
+          "فعّل خيار دخول موحد يعمل قبل اشتراطه على الكادر."
+        ],
+        "DISCOVERY": [
+          "Could not read the provider's discovery document.",
+          "تعذّرت قراءة مستند الاكتشاف الخاص بالمزوّد."
+        ],
+        "ISSUER_MISMATCH": [
+          "The discovery document names a different issuer.",
+          "يذكر مستند الاكتشاف مُصدِرًا مختلفًا."
+        ],
+        "NOT_CONFIGURED": [
+          "This provider is not configured yet.",
+          "لم يُضبط هذا المزوّد بعد."
+        ],
+        "NOT_FOUND": [
+          "Not found.",
+          "غير موجود."
+        ],
+        "generic": [
+          "Something went wrong. Try again.",
+          "حدث خطأ. أعد المحاولة."
+        ]
+      },
+      "activity": {
+        "title": [
+          "Recent sign-in activity",
+          "نشاط تسجيل الدخول الأخير"
+        ],
+        "body": [
+          "Sign-ins, refusals, new links and password resets. Addresses and identity numbers are never recorded.",
+          "عمليات الدخول والرفض والروابط الجديدة وإعادة تعيين كلمات المرور. لا تُسجَّل العناوين أو أرقام الهوية أبدًا."
+        ],
+        "empty": [
+          "No sign-in activity yet",
+          "لا يوجد نشاط لتسجيل الدخول بعد"
+        ],
+        "emptyBody": [
+          "Sign-ins appear here as people start using the school's sign-in page.",
+          "تظهر عمليات الدخول هنا عندما يبدأ الأشخاص باستخدام صفحة تسجيل الدخول الخاصة بالمدرسة."
+        ],
+        "unknown": [
+          "Unknown person",
+          "شخص غير معروف"
+        ],
+        "unknownMethod": [
+          "Other",
+          "أخرى"
+        ],
+        "pageOf": [
+          "Page {page} of {pages}",
+          "الصفحة {page} من {pages}"
+        ],
+        "newer": [
+          "Newer",
+          "الأحدث"
+        ],
+        "older": [
+          "Older",
+          "الأقدم"
+        ],
+        "actions": {
+          "auth_sign_in": [
+            "Signed in",
+            "سجّل الدخول"
+          ],
+          "auth_sign_in_refused": [
+            "Refused",
+            "مرفوض"
+          ],
+          "auth_sso_linked": [
+            "Account linked",
+            "تم ربط الحساب"
+          ],
+          "auth_sso_unlinked": [
+            "Link removed",
+            "أُزيل الربط"
+          ],
+          "auth_magic_link_sent": [
+            "Email link sent",
+            "أُرسل رابط بالبريد"
+          ],
+          "auth_password_reset": [
+            "Password reset",
+            "أُعيد تعيين كلمة المرور"
+          ],
+          "join_sso_self_join": [
+            "Joined through sign-on",
+            "انضم عبر الدخول الموحد"
+          ]
+        },
+        "codes": {
+          "WRONG_PASSWORD": [
+            "wrong password",
+            "كلمة مرور خاطئة"
+          ],
+          "SSO_REQUIRED": [
+            "single sign-on required",
+            "الدخول الموحد مطلوب"
+          ],
+          "METHOD_OFF": [
+            "option switched off",
+            "الخيار غير مفعّل"
+          ],
+          "WRONG_TENANT": [
+            "another tenant",
+            "مستأجر آخر"
+          ],
+          "NO_EMAIL": [
+            "no email shared",
+            "لم يُشارك البريد"
+          ],
+          "EMAIL_UNVERIFIED": [
+            "unverified email",
+            "بريد غير موثّق"
+          ],
+          "LOW_ASSURANCE": [
+            "unverified UAE PASS",
+            "حساب UAE PASS غير موثّق"
+          ],
+          "DOMAIN_NOT_ALLOWED": [
+            "domain not allowed",
+            "النطاق غير مسموح"
+          ],
+          "NOT_PROVISIONED": [
+            "no account",
+            "لا يوجد حساب"
+          ],
+          "SUSPENDED": [
+            "suspended",
+            "موقوف"
+          ],
+          "IDENTITY_TAKEN": [
+            "linked to another account",
+            "مرتبط بحساب آخر"
+          ],
+          "LINK_CONFLICT": [
+            "matches two people",
+            "يطابق شخصين"
+          ]
+        }
+      },
+      "linked": {
+        "title": [
+          "Linked accounts",
+          "الحسابات المرتبطة"
+        ],
+        "body": [
+          "Single sign-on accounts linked to people at this school. Links never carry over to another school.",
+          "حسابات الدخول الموحد المرتبطة بأشخاص في هذه المدرسة. لا تنتقل الروابط إلى مدرسة أخرى أبدًا."
+        ],
+        "none": [
+          "No single sign-on accounts are linked yet.",
+          "لا توجد حسابات دخول موحد مرتبطة بعد."
+        ],
+        "recent": [
+          "Recently linked",
+          "المرتبطة مؤخرًا"
+        ],
+        "unlink": [
+          "Remove the link for {name}",
+          "إزالة الربط لـ {name}"
+        ],
+        "confirm": [
+          "Remove this sign-in link for {name}? Their next single sign-on links again by roster ID or verified email.",
+          "هل تريد إزالة رابط تسجيل الدخول هذا لـ {name}؟ سيُربط دخولهم الموحد التالي مجددًا بمعرّف القائمة أو البريد الموثّق."
+        ],
+        "done": [
+          "Link removed",
+          "تمت إزالة الربط"
+        ]
+      }
+    }
+  },
+  "guide": {
+    "steps": {
+      "classlinkRoster": {
+        "title": [
+          "Preview a ClassLink roster sync",
+          "معاينة مزامنة القوائم من ClassLink"
+        ],
+        "body": [
+          "Press Preview changes on the ClassLink connection: three new students (KG1, KG2 and Grade 9), a renamed student, a leaver and an unmapped grade code appear before anything changes. Apply when it looks right.",
+          "اضغط معاينة التغييرات على اتصال ClassLink: يظهر ثلاثة طلاب جدد (الروضة الأولى والروضة الثانية والصف التاسع) وطالب تغيّر اسمه وطالب غادر ورمز صف غير مطابق قبل أي تغيير. طبّق عندما يبدو كل شيء صحيحًا."
+        ]
+      },
+      "signInOptions": {
+        "title": [
+          "Choose how people sign in",
+          "اختر طريقة تسجيل الدخول"
+        ],
+        "body": [
+          "Switch sign-in options on or off, see which need server credentials, copy the redirect addresses for ClassLink, Microsoft, Google and UAE PASS, and read the sign-in activity.",
+          "فعّل خيارات تسجيل الدخول أو أوقفها، واعرف ما يحتاج منها إلى بيانات اعتماد على الخادم، وانسخ عناوين إعادة التوجيه لـ ClassLink وMicrosoft وGoogle وUAE PASS، واطلع على نشاط تسجيل الدخول."
+        ]
+      }
+    }
+  }
+}

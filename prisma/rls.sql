@@ -174,3 +174,11 @@ REVOKE DELETE ON TABLE "CourseSelectionHelper" FROM app_user;
 -- tenant_isolation policy. Applicants are not members yet: public pages resolve the school id first and then use
 -- tenantDb(orgId), always filtering on the applicant's own user id. Application history is append-only.
 REVOKE UPDATE, DELETE ON TABLE "AdmissionEvent" FROM app_user;
+
+-- 9. Sign-in and rostering (src/server/sso, src/server/rostering). SignInPolicy, SsoIdentity, RosterConnection,
+-- RosterRun, RosterRecord and RosterLink carry orgId, so section 2 already isolates them per school. Linked
+-- sign-in identities are never edited in place by the app: a link is created once and removed when unlinked.
+REVOKE UPDATE ON TABLE "SsoIdentity" FROM app_user;
+GRANT UPDATE ("lastLoginAt") ON TABLE "SsoIdentity" TO app_user;
+REVOKE UPDATE ON TABLE "RosterLink" FROM app_user;
+GRANT UPDATE ("localId", "hash", "lastSeenRunId", "deactivatedAt", "updatedAt") ON TABLE "RosterLink" TO app_user;
