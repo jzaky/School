@@ -15,6 +15,19 @@ export const localDir = () => process.env.LOCAL_UPLOAD_DIR ?? path.join(process.
 /** Keys of stored files (as opposed to documents rendered on demand: render:, reportcard:, sample:). */
 export const isStoredKey = (key: string) => key.startsWith("r2:") || key.startsWith("local:");
 
+/**
+ * True when `key` is a stored file of this school: the right backend prefix, the school's own folder, and a plain
+ * path (no "." or ".." segments, backslashes or control characters). Use it for every key that arrives from a form.
+ */
+export function ownsStoredKey(orgId: string, key: unknown): key is string {
+  if (typeof key !== "string" || !orgId || !isStoredKey(key) || key.length > 600) return false;
+  const rest = key.slice(key.indexOf(":") + 1);
+  if (/[\\\u0000-\u001f\u007f]/.test(rest)) return false;
+  const segments = rest.split("/");
+  if (segments.some((s) => s === "" || s === "." || s === "..")) return false;
+  return segments[0] === orgId && segments.length > 1;
+}
+
 function localPath(rel: string) {
   if (!rel || rel.includes("..")) return null;
   return path.join(localDir(), rel);

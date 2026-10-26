@@ -15,6 +15,7 @@ import { redirectTo } from "@/lib/redirect";
 import { absoluteSessionMs, sessionTooOld } from "@/server/sso/session-revocation";
 import { scanBytes, scanRefuses } from "@/server/files/scan";
 import { createZip } from "@/lib/zip";
+import { ownsStoredKey } from "@/server/documents/storage-core";
 import { isBlockedAddress } from "@/server/integrations/fetch-export";
 import { checkOutboundUrl } from "@/server/sso/http";
 import { BlockedAddressError, guardedFetch } from "@/server/integrations/guarded-fetch";
@@ -139,6 +140,17 @@ describe("upload checks by content", () => {
     expect(safeFileName('a"b<c>\r\n.pdf', "pdf")).toBe("a-b-c.pdf");
     expect(safeFileName("شهادة طبية.pdf", "pdf")).toBe("شهادة-طبية.pdf");
     expect(sniffFile(bytes("plain"))?.kind).toBe("csv");
+  });
+});
+
+describe("stored file keys from forms", () => {
+  it("accept only plain paths inside the school's own folder", () => {
+    expect(ownsStoredKey("orgA", "r2:orgA/2026-10/abc-note.pdf")).toBe(true);
+    expect(ownsStoredKey("orgA", "local:orgA/admissions/app/x-شهادة.pdf")).toBe(true);
+    for (const bad of ["r2:orgB/2026-10/x.pdf", "r2:orgA/../orgB/x.pdf", "local:orgA/./x", "r2:orgA//x", "r2:orgA\\..\\orgB", "r2:orgA", "sample:x", "https://x/orgA/a", "r2:orgAB/x"]) {
+      expect(ownsStoredKey("orgA", bad), bad).toBe(false);
+    }
+    expect(ownsStoredKey("orgA", 42)).toBe(false);
   });
 });
 

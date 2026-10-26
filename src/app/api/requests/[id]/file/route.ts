@@ -3,6 +3,7 @@ import { getOptionalCtx } from "@/server/context";
 import { threadAccess } from "@/server/requests/conversation";
 import { absencePrivacy, canSeeAbsenceReason } from "@/server/access/absence-access";
 import { localFileHeaders, readLocal, signedUrl } from "@/server/documents/storage";
+import { ownsStoredKey } from "@/server/documents/storage-core";
 import { contentDisposition } from "@/lib/files/check";
 import { renderSamplePdf } from "@/server/documents/pdf";
 import type { FormSchema } from "@/server/forms/schema";
@@ -29,8 +30,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const value = data[field] as { key?: string; name?: string; type?: string } | undefined;
   if (!def || def.type !== "file" || !value?.key) return NextResponse.json({ error: "not_found" }, { status: 404 });
   // The key arrives with the form, so only files stored under this school's prefix are served.
-  const stored = value.key.startsWith("r2:") || value.key.startsWith("local:");
-  if (!value.key.startsWith("sample:") && !(stored && value.key.replace(/^(r2:|local:)/, "").startsWith(`${ctx.orgId}/`))) return NextResponse.json({ error: "not_found" }, { status: 404 });
+  if (!value.key.startsWith("sample:") && !ownsStoredKey(ctx.orgId, value.key)) return NextResponse.json({ error: "not_found" }, { status: 404 });
 
   const privacy = absencePrivacy(access.request.service.key);
   const isPrivate = Boolean(privacy?.privateFields.includes(field));

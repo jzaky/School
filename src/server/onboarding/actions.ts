@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import type { Ctx } from "@/server/context";
 import { setupCtx } from "@/server/onboarding/access";
+import { ownsStoredKey } from "@/server/documents/storage-core";
 import { audit } from "@/server/audit/audit";
 import { tenantTx } from "@/lib/tenant-db";
 import { CURRICULA } from "@/lib/signup";
@@ -83,7 +84,7 @@ export async function setLogoAction(input: { key: string | null }): Promise<Resu
   const ctx = await setupCtx();
   if (!ctx) return fail("FORBIDDEN");
   const key = input.key;
-  if (key !== null && !(typeof key === "string" && /^(r2|local):[\w./-]+$/.test(key) && key.split(":")[1].startsWith(`${ctx.orgId}/`) && !key.includes(".."))) return fail("INVALID");
+  if (key !== null && !(ownsStoredKey(ctx.orgId, key) && /^(r2|local):[\w./-]+$/.test(key))) return fail("INVALID");
   if (key && !/\.(png|jpe?g|webp)$/i.test(key)) return fail("TYPE");
   await ctx.db.organization.update({ where: { id: ctx.orgId }, data: { logoUrl: key } });
   await audit(ctx.db, ctx.orgId, { ...actor(ctx), action: "org.logo", entityType: "Organization", entityId: ctx.orgId, meta: { removed: key === null } });
