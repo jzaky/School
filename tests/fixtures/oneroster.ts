@@ -3,7 +3,7 @@
 import type http from "node:http";
 import { createHmac } from "node:crypto";
 import { pct } from "@/server/rostering/client";
-import type { MockIdp } from "./mock-idp";
+import type { MockIdp } from "../../scripts/lib/mock-idp";
 
 type Row = Record<string, unknown>;
 export type Feed = { orgs: Row[]; academicSessions: Row[]; courses: Row[]; users: Row[]; classes: Row[]; enrollments: Row[]; demographics: Row[] };
