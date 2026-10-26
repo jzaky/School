@@ -2,8 +2,7 @@
 // Arabic is shaped and laid out right to left by the shared helpers in documents/pdf.ts. A tax invoice carries the
 // school's legal name, address and TRN, the invoice number and issue date, the customer, each line with its
 // quantity, unit price, discount, taxable amount, VAT rate and VAT, and the totals in AED.
-import PDFDocument from "pdfkit";
-import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY, type Letterhead } from "@/server/documents/pdf";
+import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY, newPdf, type Letterhead } from "@/server/documents/pdf";
 import { formatAed } from "./money";
 import type { Seller } from "./config";
 
@@ -34,7 +33,7 @@ function day(d: Date) {
 }
 
 function open(title: string, author: string) {
-  const doc = new PDFDocument({ size: "A4", margin: 0, bufferPages: true, info: { Title: title, Author: author } });
+  const doc = newPdf({ size: "A4", margin: 0, bufferPages: true, info: { Title: title, Author: author } });
   const chunks: Buffer[] = [];
   doc.on("data", (c: Buffer) => chunks.push(c));
   const done = new Promise<Buffer>((resolve) => doc.on("end", () => resolve(Buffer.concat(chunks))));

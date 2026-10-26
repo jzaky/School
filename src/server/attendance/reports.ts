@@ -132,9 +132,12 @@ export async function buildReport(db: TenantDb, scope: Scope, range: Range, opts
   const lessons = opts.source === "lessons" && scope.kind === "class";
   const { byStudent } = lessons ? await lessonTallies(db, scope.classId, range) : await dailyTallies(db, scope, range);
   const ids = [...byStudent.keys()];
+  // Homerooms: for a large report read this year's homeroom enrollments (one row per student, served by the
+  // Enrollment classId index) instead of sending every student id as a query parameter.
+  const homeroomWhere = { status: "ACTIVE" as const, class: { isHomeroom: true, academicYear: { isCurrent: true } } };
   const [students, homerooms] = await Promise.all([
     ids.length ? db.student.findMany({ where: { id: { in: ids } }, select: { id: true, firstNameEn: true, lastNameEn: true, firstNameAr: true, lastNameAr: true, studentNo: true, gradeLevel: true, section: true } }) : [],
-    ids.length ? db.enrollment.findMany({ where: { studentId: { in: ids }, status: "ACTIVE", class: { isHomeroom: true, academicYear: { isCurrent: true } } }, select: { studentId: true, class: { select: { id: true, nameEn: true, nameAr: true, gradeLevel: true } } } }) : [],
+    ids.length ? db.enrollment.findMany({ where: ids.length > 300 ? homeroomWhere : { studentId: { in: ids }, ...homeroomWhere }, select: { studentId: true, class: { select: { id: true, nameEn: true, nameAr: true, gradeLevel: true } } } }) : [],
   ]);
   const hr = new Map(homerooms.map((h) => [h.studentId, h.class]));
   const rows: StudentRow[] = students.map((s) => {

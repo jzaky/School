@@ -1,7 +1,6 @@
 // Bilingual summary PDF for a data subject export: who the export is about, what the school holds
 // per area, and what was withheld and why. English on the left, Arabic on the right.
-import PDFDocument from "pdfkit";
-import { FONTS, GOLD, MUTED, NAVY, drawLtr, drawRtl } from "@/server/documents/pdf";
+import { drawLtr, drawRtl, FONTS, GOLD, MUTED, NAVY, newPdf } from "@/server/documents/pdf";
 import { areaLabel, exportLabel } from "./labels";
 
 export type SummaryInput = {
@@ -22,7 +21,7 @@ function fmt(d: Date, locale: "en" | "ar") {
 }
 
 export async function renderSubjectSummaryPdf(input: SummaryInput): Promise<Buffer> {
-  const doc = new PDFDocument({ size: "A4", margin: 0, bufferPages: true, info: { Title: `${exportLabel("en", "pdfTitle")} ${input.reference}` } });
+  const doc = newPdf({ size: "A4", margin: 0, bufferPages: true, info: { Title: `${exportLabel("en", "pdfTitle")} ${input.reference}` } });
   const chunks: Buffer[] = [];
   doc.on("data", (c: Buffer) => chunks.push(c));
   const done = new Promise<Buffer>((resolve) => doc.on("end", () => resolve(Buffer.concat(chunks))));

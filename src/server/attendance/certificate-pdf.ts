@@ -1,7 +1,6 @@
 // Student attendance certificate (English or Arabic), drawn with the shared PDF helpers so Arabic is shaped and laid
 // out right to left. Shows counts and the percentage only, never reasons for absence.
-import PDFDocument from "pdfkit";
-import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY, type Letterhead } from "@/server/documents/pdf";
+import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY, newPdf, type Letterhead } from "@/server/documents/pdf";
 import type { Tally } from "./maths";
 import { attendancePct, round1 } from "./maths";
 
@@ -21,7 +20,7 @@ const fmt = (iso: string | Date, lang: "en" | "ar") =>
 
 export async function renderCertificatePdf(d: CertificateData, letterhead: Letterhead): Promise<Buffer> {
   const ar = d.lang === "ar";
-  const doc = new PDFDocument({ size: "A4", margin: 0, info: { Title: ar ? "شهادة حضور" : `Attendance certificate ${d.student.en}`, Author: letterhead.school.en } });
+  const doc = newPdf({ size: "A4", margin: 0, info: { Title: ar ? "شهادة حضور" : `Attendance certificate ${d.student.en}`, Author: letterhead.school.en } });
   const chunks: Buffer[] = [];
   doc.on("data", (c: Buffer) => chunks.push(c));
   const done = new Promise<Buffer>((resolve) => doc.on("end", () => resolve(Buffer.concat(chunks))));

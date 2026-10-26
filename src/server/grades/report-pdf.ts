@@ -1,6 +1,5 @@
 // Bilingual term report card PDF. Uses the shared drawing helpers in documents/pdf.ts for Arabic shaping.
-import PDFDocument from "pdfkit";
-import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY, type Letterhead } from "@/server/documents/pdf";
+import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY, newPdf, type Letterhead } from "@/server/documents/pdf";
 import type { ReportCardData } from "./report-card";
 import { gradeTextIn } from "@/server/common/grade-text";
 
@@ -17,7 +16,7 @@ const pctAr = (n: number | null) => (n === null ? "-" : `%${n.toFixed(1)}`);
 
 /** `letterhead` adds the school's logo; the names printed are the ones stored when the card was issued. */
 export async function renderReportCardPdf(data: ReportCardData, letterhead?: Letterhead | null): Promise<Buffer> {
-  const doc = new PDFDocument({ size: "A4", margin: 0, bufferPages: true, info: { Title: `Term report card ${data.student.en} ${data.term.en}`, Author: data.school.en } });
+  const doc = newPdf({ size: "A4", margin: 0, bufferPages: true, info: { Title: `Term report card ${data.student.en} ${data.term.en}`, Author: data.school.en } });
   const chunks: Buffer[] = [];
   doc.on("data", (c: Buffer) => chunks.push(c));
   const done = new Promise<Buffer>((resolve) => doc.on("end", () => resolve(Buffer.concat(chunks))));

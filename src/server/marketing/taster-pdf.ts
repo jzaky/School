@@ -1,8 +1,7 @@
 // Career taster result as a bilingual PDF: page one in English, page two in Arabic (right to left).
 // Uses the shared PDF helpers, which shape Arabic glyphs and order mixed-direction runs correctly.
-import PDFDocument from "pdfkit";
 import { DIMENSIONS } from "@/server/career/dimensions";
-import { drawLtr, drawRtl, FONTS, GOLD, MUTED, NAVY } from "@/server/documents/pdf";
+import { drawLtr, drawRtl, FONTS, GOLD, MUTED, NAVY, newPdf } from "@/server/documents/pdf";
 import { areaExplanation, dimensionLabel, type TasterResult } from "./taster";
 
 const COPY = {
@@ -77,7 +76,7 @@ function page(doc: Doc, locale: "en" | "ar", name: string, result: TasterResult,
 
 export async function renderTasterPdf(input: { name: string; result: TasterResult; now?: Date }): Promise<Buffer> {
   const now = input.now ?? new Date();
-  const doc = new PDFDocument({ size: "A4", margin: 0, info: { Title: "Career taster result" } });
+  const doc = newPdf({ size: "A4", margin: 0, info: { Title: "Career taster result" } });
   const chunks: Buffer[] = [];
   doc.on("data", (b: Buffer) => chunks.push(b));
   const done = new Promise<Buffer>((resolve) => doc.on("end", () => resolve(Buffer.concat(chunks))));
