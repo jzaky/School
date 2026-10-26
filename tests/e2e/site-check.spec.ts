@@ -4,12 +4,15 @@ import { LOCALES, loginAs, type Persona } from "./helpers";
 // Every sidebar link for every demo persona, in English and Arabic, on desktop and phone width.
 // Fails on any page that errors, any 4xx/5xx page load, or horizontal scrolling on a phone.
 // Run against production with: E2E_BASE_URL=https://<your domain> npx playwright test site-check
-const PERSONAS: Persona[] = ["admin", "principal", "teacher", "counselor", "career_advisor", "dsl", "student", "parent", "registrar", "hod_computing", "deputy_dsl"];
+const PERSONAS: Persona[] = ["admin", "principal", "teacher", "counselor", "career_advisor", "dsl", "student", "parent", "registrar", "hod_computing", "deputy_dsl", "head_of_it", "admissions", "finance"];
 
 for (const persona of PERSONAS) {
   for (const locale of LOCALES) {
-    test(`site check: ${persona} (${locale})`, async ({ browser }) => {
+    test(`site check: ${persona} (${locale})`, async ({ browser, request }) => {
       test.setTimeout(600_000);
+      // Personas added later exist on a deployed site only after its demo school is reset.
+      const demo = await (await request.get("/demo")).text();
+      test.skip(!demo.includes(`enter-${persona}"`), `persona ${persona} is not in this demo school yet (reset the demo)`);
       const s = await loginAs(browser, persona, locale);
       const { page } = s;
       const links = await page.$$eval("aside a[href], nav a[href]", (as) =>

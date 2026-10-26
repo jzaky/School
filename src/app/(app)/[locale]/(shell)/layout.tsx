@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 import { getTranslations } from "next-intl/server";
 import { getCtx } from "@/server/context";
 import { buildNav } from "@/server/shell/nav";
+import { attendanceAccess } from "@/components/attendance/attendance-tabs";
 import { AppShell } from "@/components/shell/app-shell";
 import { initials, pick, userName } from "@/lib/i18n-data";
 import { demoModeEnabled } from "@/auth";
@@ -41,7 +42,11 @@ export default async function ShellLayout({ children }: { children: React.ReactN
   const name = userName(ctx.user, locale);
   const primaryRole = ctx.roles[0];
   // Switched-off modules disappear from the navigation and the guide.
-  const nav = filterNav(ctx.org, buildNav(ctx, { approvals, tasks, notifications: unread, joinRequests, group: groupRoles.length > 0, reenrollmentOpen, fees }));
+  // Link straight to the attendance page this member can use: /attendance redirects otherwise, and that redirect
+  // happens after the page starts streaming, so the browser would load one page and then jump to another.
+  const att = ctx.isStaff ? attendanceAccess(ctx) : null;
+  const attendanceHref = !att || att.today ? "/attendance" : att.office ? "/attendance/office" : att.reports ? "/attendance/reports" : "/attendance";
+  const nav = filterNav(ctx.org, buildNav(ctx, { approvals, tasks, notifications: unread, joinRequests, group: groupRoles.length > 0, reenrollmentOpen, fees, attendanceHref }));
   const tGuide = await getTranslations("guide");
   const guideSteps = personas.length && ctx.persona ? (GUIDE_STEPS[ctx.persona] ?? []).filter((s) => pathEnabled(ctx.org, s.href)) : [];
   // New schools: administrators see a banner until the founding administrator confirms their email.

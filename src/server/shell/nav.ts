@@ -5,7 +5,7 @@ export type NavItem = { key: string; href: string; icon: string; badge?: number 
 export type NavSection = { key: string; items: NavItem[] };
 
 /** Role-aware navigation. Only features the member can use appear. */
-export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; notifications: number; joinRequests?: number; group?: boolean; reenrollmentOpen?: boolean; fees?: boolean }): NavSection[] {
+export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; notifications: number; joinRequests?: number; group?: boolean; reenrollmentOpen?: boolean; fees?: boolean; attendanceHref?: string }): NavSection[] {
   const c = ctx.can;
   if (ctx.isStudent) {
     return [
@@ -82,7 +82,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   else if (c("people.medical")) school.push({ key: "admissionsHealth", href: "/admissions/health", icon: "heart-pulse" });
   if (c("grades.enter") || c("registration.manage")) school.push({ key: "classes", href: "/classes", icon: "school" });
   if (c("registration.assist")) school.push({ key: "helpChoose", href: "/subjects/help", icon: "heart-handshake" });
-  if (c("attendance.take") || c("attendance.manage") || c("attendance.view_all")) school.push({ key: "attendance", href: "/attendance", icon: "calendar-check" });
+  if (c("attendance.take") || c("attendance.manage") || c("attendance.view_all")) school.push({ key: "attendance", href: counts.attendanceHref ?? "/attendance", icon: "calendar-check" });
   if (c("grades.enter") || c("grades.view_all")) school.push({ key: "grades", href: "/grades", icon: "clipboard-check" });
   if (c("grades.publish") || c("school.manage")) school.push({ key: "gradePublishing", href: "/grades/publish", icon: "send" });
   if (c("career.advise")) school.push({ key: "career", href: "/career", icon: "compass" }, { key: "careerEvents", href: "/career/events", icon: "calendar-check" });
