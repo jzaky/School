@@ -6,7 +6,7 @@
 //   CLEVER_API_BASE=http://127.0.0.1:3145/clever-api UAEPASS_CLIENT_ID=uaepass-client UAEPASS_CLIENT_SECRET=uaepass-secret
 //   UAEPASS_BASE=http://127.0.0.1:3145/uaepass/idshub INTEGRATIONS_ALLOW_PRIVATE_URLS=true
 // The signed-in user per provider is set with POST /_mock/users/<oidc|classlink|clever|uaepass> (JSON claims).
-import { startMockIdp } from "../tests/fixtures/mock-idp";
+import { startMockIdp } from "./lib/mock-idp";
 
 const port = Number(process.argv[2] ?? 3145);
 startMockIdp(port).then((idp) => console.log(`[mock-idp] listening on ${idp.base}`));

@@ -14,7 +14,7 @@ import { issueTicket, redeemTicket } from "@/server/sso/ticket";
 import { requestMagicLink, redeemMagicLink } from "@/server/sso/magic-link";
 import { requestPasswordReset, resetPassword, resetLinkValid } from "@/server/sso/password-reset";
 import { sessionRevoked } from "@/server/sso/session-revocation";
-import { approve, startMockIdp, type MockIdp } from "../fixtures/mock-idp";
+import { approve, startMockIdp, type MockIdp } from "../../scripts/lib/mock-idp";
 import { ownerClient, uid } from "./helpers";
 
 const owner = ownerClient();

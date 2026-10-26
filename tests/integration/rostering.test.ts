@@ -10,7 +10,7 @@ import { encryptCredentials } from "@/server/rostering/connections";
 import { applyRun, createRun, dueRosterRuns, processRun, stageRecords } from "@/server/rostering/run";
 import { parseOneRosterZip } from "@/server/rostering/csv";
 import type { Counts, Issue } from "@/server/rostering/plan";
-import { startMockIdp, type MockIdp } from "../fixtures/mock-idp";
+import { startMockIdp, type MockIdp } from "../../scripts/lib/mock-idp";
 import { serveClever, serveOneRoster, smallFeed, type FeedServer } from "../fixtures/oneroster";
 import { ownerClient, uid } from "./helpers";
 
