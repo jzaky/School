@@ -96,8 +96,10 @@ export async function seedCourseSelectionFor(db: PrismaClient, orgId: string, no
     await db.auditEvent.updateMany({ where: { orgId, entityId: row.id }, data: { createdAt } });
     return row;
   };
-  // Deadline-only windows carried over from before rounds existed are replaced by the ones below.
-  await db.courseSelectionWindow.deleteMany({ where: { orgId, roundEn: null } });
+  // Deadline-only windows carried over by the migration (ids "csw" plus 22 hex characters, no round name)
+  // are replaced by the ones below. Windows staff created are kept.
+  const carried = (await db.courseSelectionWindow.findMany({ where: { orgId, roundEn: null }, select: { id: true } })).filter((x) => /^csw[0-9a-f]{22}$/.test(x.id));
+  if (carried.length) await db.courseSelectionWindow.deleteMany({ where: { orgId, id: { in: carried.map((x) => x.id) } } });
   await window(current.id, [6, 7, 8, 9, 10, 11], "Spring registration", "تسجيل الربيع", at(-165, 8, 0, now), at(-120, 15, 0, now), at(-172, 11, 0, now));
   const g12 = await window(current.id, [12], "Grade 12 add and drop", "الإضافة والحذف للصف 12", at(-30, 8, 0, now), at(-14, 15, 0, now), at(-33, 9, 15, now));
   const round1 = next ? await window(next.id, [9, 10, 11], "Round 1", "الجولة الأولى", at(-18, 8, 0, now), at(5, 15, 0, now), at(-25, 10, 30, now)) : null;
