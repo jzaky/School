@@ -12,6 +12,7 @@ import { decryptField } from "@/lib/crypto";
 import { collectSubjectRows, resolveSubject, scrubRow, type Subject, type SubjectRef } from "./subject";
 import { renderSubjectSummaryPdf } from "./summary-pdf";
 import { exportLabel } from "./labels";
+import { openText } from "@/lib/sealed-text";
 
 type Row = Record<string, unknown>;
 
@@ -121,7 +122,7 @@ export async function buildSubjectExport(ctx: Ctx, ref: SubjectRef, opts: { dsrI
   const released = (data.Case ?? []).map((c) => c.id as string);
   if (released.length) {
     const notes = await db.caseNote.findMany({ where: { orgId, caseId: { in: released } }, include: { versions: { orderBy: { version: "desc" }, take: 1 } }, orderBy: { occurredAt: "asc" } });
-    data.CaseNote = notes.map((n) => scrubRow({ id: n.id, caseId: n.caseId, kind: n.kind, occurredAt: n.occurredAt, version: n.currentVersion, body: n.versions[0]?.body ?? "" }));
+    data.CaseNote = notes.map((n) => scrubRow({ id: n.id, caseId: n.caseId, kind: n.kind, occurredAt: n.occurredAt, version: n.currentVersion, body: openText(n.versions[0]?.body) }));
   }
   // Child rows of exported parents.
   const docIds = (data.Document ?? []).map((d) => d.id as string);

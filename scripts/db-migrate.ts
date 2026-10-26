@@ -3,6 +3,7 @@ import { execSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import pg from "pg";
 import { syncSystemRoles } from "../src/server/identity/role-sync";
+import { sealLegacyCaseNotes } from "../src/server/cases/note-encryption";
 
 const ownerUrl = process.env.MIGRATION_DATABASE_URL;
 const appPassword = process.env.APP_USER_PASSWORD;
@@ -31,7 +32,10 @@ async function main() {
     // Keep built-in roles in step with the code, so new permissions reach existing schools on deploy.
     // Roles a school has customized are left alone.
     const synced = await syncSystemRoles((sql, params) => client.query(sql, params));
-    console.log(`db:migrate complete: migrations applied, app_user ready, RLS applied, ${synced} system roles synced`);
+    // Case notes written before field-level encryption are sealed once (idempotent; counts only in the log).
+    const sealed = await sealLegacyCaseNotes((sql, params) => client.query(sql, params as unknown[]));
+    if (sealed === null) console.warn("db:migrate: FIELD_ENCRYPTION_KEY is not set, case notes were not checked for encryption");
+    console.log(`db:migrate complete: migrations applied, app_user ready, RLS applied, ${synced} system roles synced, ${sealed ?? 0} case note versions encrypted`);
   } finally {
     await client.end();
   }

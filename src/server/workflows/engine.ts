@@ -4,6 +4,7 @@
 import type { CaseType, Priority, RequestStatus, Sensitivity } from "@prisma/client";
 import type { ExecCtx } from "@/server/db";
 import { nextNumber } from "@/server/common/sequence";
+import { sealText } from "@/lib/sealed-text";
 import { notify } from "@/server/notify/notify";
 import { buildMergeData } from "@/server/documents/merge";
 import { evaluateCondition } from "./conditions";
@@ -180,7 +181,7 @@ async function runCreateCase(ec: ExecCtx, run: LoadedRun, node: WorkflowNode, ct
       orgId: ec.orgId,
       noteId: note.id,
       version: 1,
-      body: summaryEn ?? `Opened from request ${r.number}.`,
+      body: sealText(summaryEn ?? `Opened from request ${r.number}.`),
       editedById: ctx.request.requesterId,
       createdAt: ec.now,
     },
