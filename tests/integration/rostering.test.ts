@@ -162,6 +162,37 @@ describe("OneRoster preview and sync", () => {
     expect(await owner.enrollment.count({ where: { orgId: A.orgId } })).toBe(before);
   });
 
+  it("links what Horizon already has, ignores parent-only moves and quietly closes links to records deleted in Horizon", async () => {
+    const feed = srv.feed;
+    // Zaid's own fields are unchanged; only his list of parents moved (Rami becomes his parent too).
+    feed.users.find((u) => u.sourcedId === "s-3")!.agents = [{ sourcedId: "p-3", type: "user", href: "/users/p-3" }];
+    // Omar's Mathematics enrollment exists in Horizon but its link is gone (as after an import made outside the feed).
+    await owner.rosterLink.deleteMany({ where: { orgId: A.orgId, kind: "enrollment", externalId: "e-1" } });
+    // Omar's homeroom enrollment was deleted in Horizon, and the feed has dropped it too.
+    const omar = await owner.student.findFirst({ where: { orgId: A.orgId, studentNo: "S-1001" } });
+    await owner.enrollment.deleteMany({ where: { orgId: A.orgId, studentId: omar!.id, class: { nameEn: "Homeroom 9A" } } });
+    feed.enrollments = feed.enrollments.filter((e) => e.sourcedId !== "e-2");
+
+    const preview = await run(A, { dryRun: true });
+    const c = counts(preview);
+    expect(c.students).toMatchObject({ create: 0, update: 0, unchanged: 4 });
+    expect(c.guardians.update).toBe(1);
+    expect(c.enrollments).toMatchObject({ create: 0, update: 1, remove: 0 });
+    const changes = preview.changes as Array<{ kind: string; action: string; ext: string; fields?: string[] }>;
+    expect(changes.find((x) => x.ext === "e-1")).toMatchObject({ action: "update", fields: ["linked"] });
+    expect(changes.some((x) => x.ext === "e-2")).toBe(false);
+
+    const before = await owner.enrollment.count({ where: { orgId: A.orgId } });
+    const r = await run(A, { dryRun: false });
+    expect(counts(r).enrollments).toMatchObject({ create: 0, remove: 0 });
+    expect(await owner.enrollment.count({ where: { orgId: A.orgId } })).toBe(before);
+    expect(await owner.rosterLink.findFirst({ where: { orgId: A.orgId, kind: "enrollment", externalId: "e-1", deactivatedAt: null } })).not.toBeNull();
+    expect((await owner.rosterLink.findFirst({ where: { orgId: A.orgId, kind: "enrollment", externalId: "e-2" } }))?.deactivatedAt).not.toBeNull();
+    // Converged: the next preview has nothing to change.
+    const again = counts(await run(A, { dryRun: true }));
+    expect(again.students.update + again.guardians.update + again.enrollments.update + again.enrollments.create + again.enrollments.remove).toBe(0);
+  });
+
   it("applies updates and removals: a renamed student, a deleted student and an enrollment the feed dropped", async () => {
     const feed = srv.feed;
     const omar = feed.users.find((u) => u.sourcedId === "s-1")!;

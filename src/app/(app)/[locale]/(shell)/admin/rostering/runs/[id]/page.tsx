@@ -153,7 +153,7 @@ export default async function RosterRunPage({ params }: { params: Promise<{ id: 
                       <li key={i.ext} className="rounded-md bg-muted px-2 py-0.5 text-xs">
                         {i.label}
                         {i.detail ? (
-                          <span className="ms-1 font-mono text-muted-foreground" dir="ltr">
+                          <span className="ms-1.5 font-mono text-muted-foreground" dir="ltr">
                             {i.detail}
                           </span>
                         ) : null}

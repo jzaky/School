@@ -57,7 +57,9 @@ export async function fetchPage(conn: RosterConnection, cursor: FetchCursor, sin
     const db = tenantDb(conn.orgId);
     const org = await db.organization.findUnique({ where: { id: conn.orgId }, select: { isDemo: true } });
     if (!org?.isDemo) throw new ConnectionError("URL");
-    const feed = await buildDemoFeed(db as unknown as Parameters<typeof buildDemoFeed>[0], conn.orgId);
+    // Records the feed already knows; with none (a new demo connection) it lists the whole school.
+    const links = await db.rosterLink.findMany({ where: { orgId: conn.orgId, provider: conn.provider, deactivatedAt: null, kind: { in: ["staff", "student", "guardian", "class", "enrollment"] } }, select: { externalId: true } });
+    const feed = await buildDemoFeed(db as unknown as Parameters<typeof buildDemoFeed>[0], conn.orgId, links.length ? new Set(links.map((l) => l.externalId)) : undefined);
     return { records: feed.records, cursor: { step: 1, offset: 0, next: null }, done: true, total: feed.records.length, step: "demo" };
   }
   const auth = authFor(conn);

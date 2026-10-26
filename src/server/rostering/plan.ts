@@ -8,7 +8,11 @@
 // - The feed wins for the fields it sends: English names, grade, staff number, class title, room, homeroom flag,
 //   class teacher and the enrollments it created. Everything else is Horizon's: Arabic names, Emirates ID and
 //   passport, medical notes, sections, curriculum, roles after creation, enrollments made in Horizon.
-// - An unchanged record (same hash) is not touched. A changed one is updated only in the fields above.
+// - An unchanged record (same hash) is not touched. A changed one is updated only in the fields above; one whose
+//   feed fields Horizon already has (for example only its parent list moved) counts as unchanged.
+// - A record that already exists in Horizon is linked, not created again (enrollments too).
+// - A feed record whose Horizon record is already gone (deleted or replaced in Horizon) is not reported as a
+//   removal: its link is simply closed.
 // - A record already in Horizon is matched once (staff by email, students by student number, parents by email)
 //   and linked; Horizon records the feed did not create are never removed by it.
 // - A sign-in address never changes through the feed (that could hand an account to someone else): a changed
@@ -218,6 +222,13 @@ async function planStaff(ctx: Ctx, batch: Array<{ externalId: string; data: unkn
         }
         if (link?.deactivatedAt && linked.status === "SUSPENDED") fields.push("status");
         if ((linked.staffProfile?.employeeNo ?? null) !== u.identifier) fields.push("staffNumber");
+        if (!fields.length && link && !link.deactivatedAt) {
+          // The feed record changed in fields Horizon does not take from it (for example the name or role).
+          if (ctx.apply) await saveLink(tx, ctx, "staff", u.id, linked.id, rec.hash, link);
+          ctx.state.counts.staff.unchanged++;
+          ctx.planned.staff.set(u.id, linked.id);
+          continue;
+        }
         if (ctx.apply) {
           if (link?.deactivatedAt && linked.status === "SUSPENDED") await tx.membership.update({ where: { id: linked.id }, data: { status: "ACTIVE" } });
           await tx.staffProfile.upsert({ where: { membershipId: linked.id }, create: { orgId: ctx.orgId, membershipId: linked.id, employeeNo: u.identifier }, update: { employeeNo: u.identifier } });
@@ -337,9 +348,16 @@ async function planStudents(ctx: Ctx, batch: Array<{ externalId: string; data: u
       if (demo?.sex) fields.gender = demo.sex;
       const targetId = current?.id ?? byNumber.get(number) ?? null;
       if (targetId) {
-        const prev = current ?? (await tx.student.findUnique({ where: { id: targetId }, select: { firstNameEn: true, lastNameEn: true, gradeLevel: true, status: true } }));
+        const prev = current ?? (await tx.student.findUnique({ where: { id: targetId }, select: { firstNameEn: true, lastNameEn: true, gradeLevel: true, status: true, dateOfBirth: true } }));
         const changed = prev ? (["firstNameEn", "lastNameEn", "gradeLevel", "status"] as const).filter((k) => String((prev as Record<string, unknown>)[k]) !== String((fields as Record<string, unknown>)[k])) : [];
-        if (demo?.birthDate) changed.push("dateOfBirth" as never);
+        if (demo?.birthDate && String((prev as { dateOfBirth?: Date | null } | null)?.dateOfBirth?.toISOString().slice(0, 10)) !== demo.birthDate) changed.push("dateOfBirth" as never);
+        if (link && current && !link.deactivatedAt && !changed.length) {
+          // Only fields Horizon does not take from the feed moved (for example the list of parents).
+          if (ctx.apply) await saveLink(tx, ctx, "student", u.id, targetId, hash, link);
+          ctx.state.counts.students.unchanged++;
+          ctx.planned.students.set(u.id, targetId);
+          continue;
+        }
         if (ctx.apply) {
           await tx.student.update({ where: { id: targetId }, data: fields });
           await saveLink(tx, ctx, "student", u.id, targetId, hash, link ?? null);
@@ -596,6 +614,13 @@ async function planEnrollments(ctx: Ctx, batch: Array<{ externalId: string; data
     const teachers = new Map((await tx.schoolClass.findMany({ where: { id: { in: classIds } }, select: { id: true, teacherMembershipId: true } })).map((c) => [c.id, c.teacherMembershipId]));
     const names = await stagedLabels(tx, ctx, [...new Set(rows.flatMap((e) => [e.userId, e.classId]))]);
     const label = (e: REnrollment) => `${names.get(e.userId) ?? e.userId} · ${names.get(e.classId) ?? e.classId}`;
+    // Enrollments Horizon already has (made in Horizon or by an earlier import) are linked, not added again.
+    const studentIds = [...studentLinks.values()].map((l) => l.localId);
+    const existing = new Set(
+      studentIds.length && classIds.length
+        ? (await tx.enrollment.findMany({ where: { studentId: { in: studentIds }, classId: { in: classIds }, status: "ACTIVE" }, select: { studentId: true, classId: true } })).map((x) => `${x.studentId}:${x.classId}`)
+        : [],
+    );
     for (const rec of batch) {
       const e = rec.data as REnrollment;
       if (!ctx.opts.importClasses) continue;
@@ -655,7 +680,8 @@ async function planEnrollments(ctx: Ctx, batch: Array<{ externalId: string; data
         const en = await tx.enrollment.upsert({ where: { studentId_classId: { studentId, classId } }, create: { orgId: ctx.orgId, studentId, classId, status: "ACTIVE" }, update: { status: "ACTIVE" }, select: { id: true } });
         await saveLink(tx, ctx, "enrollment", e.id, en.id, rec.hash, link ?? null);
       }
-      change(ctx, { kind: "enrollments", action: link ? "update" : "create", ext: e.id, label: label(e) });
+      const known = !link && existing.has(`${studentId}:${classId}`);
+      change(ctx, { kind: "enrollments", action: link || known ? "update" : "create", ext: e.id, label: label(e), ...(known ? { fields: ["linked"] } : {}) });
     }
   });
 }
@@ -683,21 +709,32 @@ async function missingLinks(ctx: Ctx, link: string, staged: string) {
 async function planRemovals(ctx: Ctx) {
   if (ctx.mode !== "FULL") return;
   const db = tenantDb(ctx.orgId);
-  const todo: Array<{ kind: PlanKind; rows: Array<{ id: string; externalId: string; localId: string }> }> = [];
-  const blocked: PlanKind[] = [];
+  const missing: Array<{ kind: PlanKind; rows: Array<{ id: string; externalId: string; localId: string }> }> = [];
   for (const k of REMOVAL_KINDS) {
     if (!k.enabled(ctx.opts)) continue;
     const rows = await missingLinks(ctx, k.link, k.staged);
-    if (!rows.length) continue;
+    if (rows.length) missing.push({ kind: k.kind, rows });
+  }
+  // Labels come from Horizon's own records, so a link without one points at a record that is already gone.
+  const labels = await localLabels(ctx, missing);
+  const gone = missing.flatMap((t) => t.rows.filter((r) => !labels.has(r.localId)));
+  const todo = missing.map((t) => ({ kind: t.kind, rows: t.rows.filter((r) => labels.has(r.localId)) })).filter((t) => t.rows.length);
+  const blocked: PlanKind[] = [];
+  for (const t of todo) {
+    const k = REMOVAL_KINDS.find((x) => x.kind === t.kind)!;
     const linked = await db.rosterLink.count({ where: { orgId: ctx.orgId, provider: ctx.provider, kind: k.link, deactivatedAt: null } });
-    if (removalBlocked(rows.length, linked, ctx.opts.removalLimitPercent)) blocked.push(k.kind);
-    todo.push({ kind: k.kind, rows });
+    if (removalBlocked(t.rows.length, linked, ctx.opts.removalLimitPercent)) blocked.push(t.kind);
   }
   ctx.state.counts.removalBlocked = blocked;
-  const labels = await localLabels(ctx, todo);
   const labelOf = (r: { externalId: string; localId: string }) => labels.get(r.localId) ?? r.externalId;
   const stop = blocked.length > 0 && !ctx.allowMassDelete;
   if (stop) ctx.state.blocked = true;
+  if (ctx.apply && !stop && gone.length) {
+    for (let i = 0; i < gone.length; i += 500) {
+      const ids = gone.slice(i, i + 500).map((r) => r.id);
+      await tenantTx(ctx.orgId, (tx) => tx.rosterLink.updateMany({ where: { id: { in: ids } }, data: { deactivatedAt: ctx.now } }));
+    }
+  }
   for (const t of todo) {
     if (!ctx.apply || stop) {
       for (const r of t.rows) change(ctx, { kind: t.kind, action: "remove", ext: r.externalId, label: labelOf(r) });
@@ -748,6 +785,17 @@ async function localLabels(ctx: Ctx, todo: Array<{ kind: PlanKind; rows: Array<{
     for (const m of await tx.membership.findMany({ where: { id: { in: ids("staff") } }, select: { id: true, user: { select: { nameEn: true } } } })) out.set(m.id, m.user.nameEn);
     const enr = ids("enrollments").filter((x) => !x.startsWith("teacher:"));
     for (const e of await tx.enrollment.findMany({ where: { id: { in: enr } }, select: { id: true, student: { select: { firstNameEn: true, lastNameEn: true } }, class: { select: { nameEn: true } } } })) out.set(e.id, `${e.student.firstNameEn} ${e.student.lastNameEn} · ${e.class.nameEn}`);
+    // Class teachers ("teacher:<class>:<membership>"): only while the class still has that teacher.
+    const teach = ids("enrollments").filter((x) => x.startsWith("teacher:")).map((x) => ({ key: x, classId: x.split(":")[1], membershipId: x.split(":")[2] }));
+    if (teach.length) {
+      const classes = await tx.schoolClass.findMany({ where: { id: { in: teach.map((t) => t.classId) } }, select: { id: true, nameEn: true, teacherMembershipId: true } });
+      const byId = new Map(classes.map((c) => [c.id, c]));
+      const people = new Map((await tx.membership.findMany({ where: { id: { in: teach.map((t) => t.membershipId) } }, select: { id: true, user: { select: { nameEn: true } } } })).map((m) => [m.id, m.user.nameEn]));
+      for (const t of teach) {
+        const c = byId.get(t.classId);
+        if (c && c.teacherMembershipId === t.membershipId) out.set(t.key, `${people.get(t.membershipId) ?? ""} · ${c.nameEn}`);
+      }
+    }
   });
   return out;
 }

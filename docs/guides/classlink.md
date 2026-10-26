@@ -197,8 +197,9 @@ To confirm with Partner Services (each is isolated in `src/server/sso/providers.
   class teacher, and the enrollments it created.
 - **Horizon keeps what the feed does not send**: Arabic names, Emirates ID and passport numbers, medical notes,
   sections, curriculum, roles after the first import, and enrollments made in Horizon.
-- **Matching once**: staff by email, students by student number, parents by email. After that the feed's IDs
-  are used, so a renamed person is updated, not duplicated.
+- **Matching once**: staff by email, students by student number, parents by email, and enrollments by student and
+  class. After that the feed's IDs are used, so a renamed person is updated, not duplicated. On the first sync of
+  a school that already imported its people, existing records show as **linked to existing record**, not as new.
 - **Sign-in addresses never change through a sync.** A changed staff email is listed as a problem for an
   administrator to check.
 - **Duplicates are refused**: two people with the same email or student number in the feed are both listed as
@@ -210,7 +211,10 @@ To confirm with Partner Services (each is isolated in `src/server/sso/providers.
   more than five records) stops with **Stopped for review**. Nothing is removed until someone ticks the
   confirmation and applies.
 - **Unchanged records are skipped** (each record's content is fingerprinted), so a nightly sync of a whole school
-  only writes what changed.
+  only writes what changed. A record whose only change is in something Horizon does not take from the feed (for
+  example a student's list of parents, which is handled on the parent's side) counts as unchanged.
+- **Already gone in Horizon**: when the feed drops a record whose Horizon record was already deleted (for example
+  an enrollment removed by a subject change), it is not listed as a removal; Horizon just forgets the link.
 
 Every sign-in, refusal, link, preview and sync is in the audit log. Audit entries carry codes and counts, never
 an email address, a name or an identity number.

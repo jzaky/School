@@ -4,6 +4,9 @@
 // changed, a student who left, a Transitional Kindergarten code the school has not mapped, and a teacher whose
 // email changed in the source system. Only demo schools can use it (checked in connections.ts).
 // The seed (prisma/seed/rostering.ts) links the unchanged records, so applying the preview converges.
+// After the seed, the feed lists only records it already knows (its links) plus those differences: people, classes
+// and enrollments made in Horizon during a demo (an invited teacher, a parent who joined, a subject change) are
+// Horizon's own and never show up as feed changes.
 // No "server-only" marker: the seed imports it.
 import { oneRosterClass, oneRosterEnrollment, oneRosterOrg, oneRosterUser, type Staged } from "@/lib/rostering/records";
 
@@ -41,7 +44,8 @@ export type DemoFeed = {
   local: Map<string, { kind: string; localId: string }>;
 };
 
-export async function buildDemoFeed(db: Db, orgId: string): Promise<DemoFeed> {
+export async function buildDemoFeed(db: Db, orgId: string, known?: Set<string>): Promise<DemoFeed> {
+  const isKnown = (ext: string) => !known || known.has(ext);
   const year = await db.academicYear.findFirst({ where: { orgId, isCurrent: true }, select: { id: true } });
   const [students, guardians, staff, classes] = await Promise.all([
     db.student.findMany({ where: { orgId, status: "ACTIVE", anonymisedAt: null }, orderBy: { studentNo: "asc" }, select: { id: true, studentNo: true, firstNameEn: true, lastNameEn: true, gradeLevel: true, guardians: { select: { guardianId: true } } } }),
@@ -52,7 +56,7 @@ export async function buildDemoFeed(db: Db, orgId: string): Promise<DemoFeed> {
   // Records the feed itself added earlier (after an applied preview) are represented by its own records below.
   const FRESH_NUMBERS = ["HIS-26011", "HIS-26012", "HIS-26013", "HIS-26014"];
   const FRESH_EMAILS = ["huda.darwish@family.horizon.example"];
-  const kept = students.filter((s) => !FRESH_NUMBERS.includes(s.studentNo));
+  const kept = students.filter((s) => !FRESH_NUMBERS.includes(s.studentNo) && isKnown(extOf.student(s.id)));
   const studentIds = new Set(kept.map((s) => s.id));
   // Two students the seed adds for this story only (prisma/seed/rostering.ts), so no other demo flow changes:
   // one whose family name changed in the source system, and one who left the school (active or not by now).
@@ -62,38 +66,43 @@ export async function buildDemoFeed(db: Db, orgId: string): Promise<DemoFeed> {
   const baseline: Staged[] = [];
   const push = (list: Staged[], s: Staged | null) => s && list.push(s);
 
+  // Parents the feed lists: linked to at least one listed student (the new family is added below).
+  const listedGuardians = guardians.filter((g) => !(g.email && FRESH_EMAILS.includes(g.email.toLowerCase())) && isKnown(extOf.guardian(g.id)) && g.links.some((l) => studentIds.has(l.studentId)));
+  const guardianIds = new Set(listedGuardians.map((g) => g.id));
+
   push(baseline, oneRosterOrg({ sourcedId: DEMO_SCHOOL_SOURCED_ID, status: "active", name: "Horizon International School Dubai", type: "school", identifier: "HIS" }));
   for (const m of staff) {
     const keys = m.roles.map((r) => r.role.key);
     const [given, ...rest] = m.user.nameEn.split(" ");
     const ext = extOf.staff(m.id);
+    if (!isKnown(ext)) continue;
     local.set(ext, { kind: "staff", localId: m.id });
     push(baseline, oneRosterUser({ sourcedId: ext, status: "active", role: keys.includes("teacher") ? "teacher" : "administrator", givenName: given, familyName: rest.join(" "), email: m.user.email, identifier: m.staffProfile?.employeeNo ?? null, orgs: org, agents: [] }));
   }
   for (const s of kept) {
     const ext = extOf.student(s.id);
     local.set(ext, { kind: "student", localId: s.id });
-    push(baseline, oneRosterUser({ sourcedId: ext, status: "active", role: "student", givenName: s.firstNameEn, familyName: s.lastNameEn, identifier: s.studentNo, grades: [code(s.gradeLevel)], orgs: org, agents: s.guardians.map((g) => ref(extOf.guardian(g.guardianId))) }));
+    push(baseline, oneRosterUser({ sourcedId: ext, status: "active", role: "student", givenName: s.firstNameEn, familyName: s.lastNameEn, identifier: s.studentNo, grades: [code(s.gradeLevel)], orgs: org, agents: s.guardians.filter((g) => guardianIds.has(g.guardianId)).map((g) => ref(extOf.guardian(g.guardianId))) }));
   }
-  for (const g of guardians) {
-    if (g.email && FRESH_EMAILS.includes(g.email.toLowerCase())) continue;
+  for (const g of listedGuardians) {
     const kids = g.links.map((l) => l.studentId).filter((id) => studentIds.has(id));
-    if (!kids.length) continue;
     const ext = extOf.guardian(g.id);
     local.set(ext, { kind: "guardian", localId: g.id });
     push(baseline, oneRosterUser({ sourcedId: ext, status: "active", role: "parent", givenName: g.firstNameEn, familyName: g.lastNameEn, email: g.email, phone: g.phone, orgs: org, agents: kids.map((k) => ref(extOf.student(k))) }));
   }
   for (const c of classes) {
     const ext = extOf.class(c.id);
+    if (!isKnown(ext)) continue;
     local.set(ext, { kind: "class", localId: c.id });
     push(baseline, oneRosterClass({ sourcedId: ext, status: "active", title: c.nameEn, classType: c.isHomeroom ? "homeroom" : "scheduled", grades: [code(c.gradeLevel)], subjects: c.subject ? [c.subject.nameEn] : [], subjectCodes: c.subject ? [c.subject.code] : [], location: c.room, school: ref(DEMO_SCHOOL_SOURCED_ID) }));
     for (const e of c.enrollments) {
       if (!studentIds.has(e.studentId)) continue;
       const eext = extOf.enrollment(e.id);
+      if (!isKnown(eext)) continue;
       local.set(eext, { kind: "enrollment", localId: e.id });
       push(baseline, oneRosterEnrollment({ sourcedId: eext, status: "active", user: ref(extOf.student(e.studentId)), class: ref(ext), role: "student" }));
     }
-    if (c.teacherMembershipId && staff.some((m) => m.id === c.teacherMembershipId)) {
+    if (c.teacherMembershipId && staff.some((m) => m.id === c.teacherMembershipId) && isKnown(extOf.staff(c.teacherMembershipId)) && isKnown(extOf.teacher(c.id))) {
       const text = extOf.teacher(c.id);
       local.set(text, { kind: "enrollment", localId: `teacher:${c.id}:${c.teacherMembershipId}` });
       push(baseline, oneRosterEnrollment({ sourcedId: text, status: "active", user: ref(extOf.staff(c.teacherMembershipId)), class: ref(ext), role: "teacher", primary: true }));
