@@ -1169,11 +1169,14 @@
       "generic": "Something went wrong. Please try again.",
       "FORBIDDEN": "You do not have permission to do that.",
       "too_large": "The file is larger than 10 MB.",
-      "type": "This file type is not supported.",
+      "type": "This file type is not supported. Upload a PDF, a photo, a Word document or a CSV file whose name matches its content.",
       "TITLE": "Add a title.",
       "SENSITIVE": "Sensitive documents cannot be shared with families.",
       "NOT_FOUND": "Document not found.",
-      "BAD_FILE": "The upload could not be verified. Try again."
+      "BAD_FILE": "The upload could not be verified. Try again.",
+      "active_content": "This file contains active content, such as scripts or macros, and cannot be uploaded. Save it as a PDF and try again.",
+      "scan": "The file did not pass the security check and was not uploaded.",
+      "rate": "Too many uploads in a short time. Please wait a few minutes and try again."
     }
   },
   "analytics": {

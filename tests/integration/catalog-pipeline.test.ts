@@ -33,6 +33,8 @@ const actor = (orgId: string, orgIsDemo: boolean, userId: string | null = null):
 const deps = (orgId: string, orgIsDemo: boolean) => ({ catalog: owner, tenant: tenantDb(orgId), actor: actor(orgId, orgIsDemo), writable: true });
 
 beforeAll(async () => {
+  // The fixture server listens on 127.0.0.1, which the outbound address guard refuses outside tests.
+  process.env.INTEGRATIONS_ALLOW_PRIVATE_URLS = "true";
   server = createServer((req, res) => {
     if (req.url === "/robots.txt") return void res.writeHead(200, { "content-type": "text/plain" }).end("User-agent: *\nDisallow: /private\n");
     if (req.url === "/old") return void res.writeHead(301, { location: "/page" }).end();
