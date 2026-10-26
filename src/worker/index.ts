@@ -136,6 +136,8 @@ async function main() {
           return forEachOrg("applications.reminders", async (orgId) => (await import("@/server/applications/reminders")).runApplicationReminders(orgId));
         case "careerEvents.reminders":
           return forEachOrg("careerEvents.reminders", async (orgId) => (await import("@/server/career-events/reminders")).runCareerEventReminders(orgId));
+        case "admissions.daily":
+          return forEachOrg("admissions.daily", async (orgId) => (await import("@/server/admissions/jobs")).runAdmissionsDaily(orgId));
         case "test.idempotent":
           return handlers.testIdempotent(job.data as TestIdempotentJob);
         default:
@@ -164,6 +166,8 @@ async function main() {
     await maintenance.upsertJobScheduler("retention", { pattern: "30 23 * * *", tz: "UTC" }, { name: "retention", opts: { attempts: 3 } });
     // 03:45 UTC is 07:45 in Dubai: application reminders arrive before school starts.
     await maintenance.upsertJobScheduler("applications.reminders", { pattern: "45 3 * * *", tz: "UTC" }, { name: "applications.reminders", opts: { attempts: 3 } });
+    // 04:05 UTC is 08:05 in Dubai: re-enrollment notices and reminders, and students admitted for a year that started.
+    await maintenance.upsertJobScheduler("admissions.daily", { pattern: "5 4 * * *", tz: "UTC" }, { name: "admissions.daily", opts: { attempts: 3 } });
     // Hourly: university fair and visit reminders about a day before the event (each sent once).
     await maintenance.upsertJobScheduler("careerEvents.reminders", { pattern: "20 * * * *", tz: "UTC" }, { name: "careerEvents.reminders", opts: { attempts: 3 } });
     if (demoMode) {

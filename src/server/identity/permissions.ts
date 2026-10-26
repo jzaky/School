@@ -69,6 +69,9 @@ export const PERMISSIONS = [
   "inspection.view",
   "career.partners",
   "integrations.manage",
+  "admissions.view",
+  "admissions.manage",
+  "admissions.enroll",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
@@ -145,6 +148,9 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "inspection.view",
       "career.partners",
       "integrations.manage",
+      "admissions.view",
+      "admissions.manage",
+      "admissions.enroll",
     ],
   },
   {
@@ -183,6 +189,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "ai.admin_insights",
       "demo.reset",
       "inspection.view",
+      "admissions.view",
     ],
   },
   {
@@ -207,6 +214,26 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "approvals.decide",
       "documents.manage",
       "documents.templates",
+      "admissions.view",
+      "admissions.manage",
+      "admissions.enroll",
+    ],
+  },
+  {
+    key: "admissions_officer",
+    nameEn: "Admissions Officer",
+    nameAr: "مسؤول القبول والتسجيل",
+    descEn: "Runs admissions: applications, assessments, offers, enrollment, re-enrollment and leavers.",
+    descAr: "يدير القبول: الطلبات والتقييمات وعروض القبول والتسجيل وإعادة التسجيل والمغادرين.",
+    permissions: [
+      ...STAFF_BASE,
+      "admissions.view",
+      "admissions.manage",
+      "admissions.enroll",
+      "appointments.host",
+      "documents.manage",
+      // Government registration (for example SPEA DALEEL) needs the full Emirates ID and passport numbers.
+      "people.reveal_ids",
     ],
   },
   {

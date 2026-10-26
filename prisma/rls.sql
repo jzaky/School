@@ -162,3 +162,8 @@ REVOKE ALL ON TABLE "PlatformAuditEvent" FROM app_user;
 REVOKE ALL ON TABLE "MarketingLead" FROM app_user;
 REVOKE ALL ON TABLE "PlatformSetting" FROM app_user;
 REVOKE INSERT, UPDATE, DELETE ON TABLE "UptimeSample" FROM app_user;
+
+-- 7. Admissions (src/server/admissions). Every admissions table has a non-null orgId, so section 2 gives it the
+-- tenant_isolation policy. Applicants are not members yet: public pages resolve the school id first and then use
+-- tenantDb(orgId), always filtering on the applicant's own user id. Application history is append-only.
+REVOKE UPDATE, DELETE ON TABLE "AdmissionEvent" FROM app_user;

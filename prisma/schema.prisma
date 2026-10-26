@@ -3625,3 +3625,300 @@ model UptimeSample {
   worker    Boolean
   createdAt DateTime @default(now())
 }
+
+// ---------------------------------------------------------------------------
+// Admissions, enrollment, re-enrollment and withdrawals (src/server/admissions).
+// Families apply before they belong to the school: an application is owned by a global User
+// (applicantUserId) and families only ever read their own. Staff access is permission-checked
+// (admissions.view, admissions.manage, admissions.enroll). Health and support details are encrypted
+// and follow the medical access rules (people.medical), with an audit event on every view.
+// ---------------------------------------------------------------------------
+
+/// One row per school, created on first use.
+model AdmissionSettings {
+  id                 String   @id @default(cuid())
+  orgId              String   @unique
+  /// Families can start an application at /apply/<school slug>.
+  publicOpen         Boolean  @default(false)
+  /// Academic years open for applications. Empty means the current year and the next one.
+  openYearIds        String[]
+  /// Age cut-off (month and day). KG1 is age 4, KG2 age 5 and Grade 1 age 6 on this date in the year of entry.
+  cutoffMonth        Int      @default(12)
+  cutoffDay          Int      @default(31)
+  /// Admission number pattern, for example "{YY}{SEQ:4}". See src/server/admissions/numbers.ts.
+  admissionNoPattern String   @default("{YYYY}-{SEQ:4}")
+  /// Days a family has to accept an offer.
+  offerDays          Int      @default(14)
+  /// Document types families upload (src/server/admissions/config.ts). Null means the defaults.
+  documentTypes      Json?
+  /// Stage labels, hidden optional stages and custom review stages. Null means the defaults.
+  stages             Json?
+  introEn            String?
+  introAr            String?
+  /// Government registration authority (src/server/admissions/registration.ts): SPEA_DALEEL, MOE_MANHAL, KHDA, ADEK
+  /// or OTHER. Null means the default for the school's regulator. The labels override the shown name.
+  authority          String?
+  authorityLabelEn   String?
+  authorityLabelAr   String?
+  updatedById        String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+/// Places per grade for one academic year, by section, and the seat booking amount in fils (AED x 100).
+model AdmissionCapacity {
+  id             String   @id @default(cuid())
+  orgId          String
+  academicYearId String
+  gradeLevel     Int
+  /// Seats per section in section order (A, B, C ...).
+  sectionSeats   Int[]
+  /// Seat booking amount in fils. 0 means no seat booking fee for this grade.
+  seatFeeFils    Int      @default(0)
+  updatedAt      DateTime @updatedAt
+
+  @@unique([orgId, academicYearId, gradeLevel])
+}
+
+/// One application for one child, a draft until the family submits it.
+model AdmissionApplication {
+  id                      String            @id @default(cuid())
+  orgId                   String
+  number                  String
+  /// The family account (global User) that applies. Families only ever read their own applications.
+  applicantUserId         String
+  academicYearId          String
+  gradeLevel              Int
+  curriculum              SchoolCurriculum?
+  /// Stage key (src/server/admissions/stages.ts), or a school's own review stage.
+  stage                   String            @default("DRAFT")
+  stageChangedAt          DateTime          @default(now())
+  submittedAt             DateTime?
+  /// ONLINE (family) or STAFF (entered by the admissions office).
+  source                  String            @default("ONLINE")
+  /// Last wizard step the family saved.
+  step                    String?
+  firstNameEn             String            @default("")
+  lastNameEn              String            @default("")
+  firstNameAr             String?
+  lastNameAr              String?
+  dateOfBirth             DateTime?
+  gender                  String?
+  /// ISO 3166 country code.
+  nationality             String?
+  homeLanguage            String?
+  emiratesIdEnc           String?
+  emiratesIdLast4         String?
+  /// Keyed hash of the Emirates ID digits, only for duplicate detection.
+  emiratesIdHash          String?
+  passportEnc             String?
+  passportLast4           String?
+  /// Normalised English name and date of birth, only for duplicate detection.
+  nameDobKey              String?
+  /// Previous schooling, guardians and siblings as the family entered them (validated in src/server/admissions/form.ts).
+  schooling               Json?
+  guardians               Json?
+  siblings                Json?
+  /// Current students the school matched as siblings.
+  siblingStudentIds       String[]
+  /// A parent works at the school: declared by the family, verified by staff.
+  staffChild              Boolean           @default(false)
+  staffChildVerified      Boolean           @default(false)
+  /// Extra waitlist priority set by staff (the reason is in the application history).
+  priorityBoost           Int               @default(0)
+  /// Health and learning support details: encrypted JSON (people.medical only, every view audited).
+  medicalEnc              String?
+  supportEnc              String?
+  hasMedical              Boolean           @default(false)
+  hasSupport              Boolean           @default(false)
+  consentAt               DateTime?
+  assessmentAppointmentId String?
+  /// RECOMMENDED, CONDITIONAL or NOT_RECOMMENDED.
+  assessmentOutcome       String?
+  assessmentNotes         String?
+  offerSection            String?
+  offerMadeAt             DateTime?
+  offerDeadline           DateTime?
+  offerRespondedAt        DateTime?
+  seatFeeFils             Int?
+  /// Reference of a seat booking charge created by the fees module (src/server/admissions/seat-booking.ts).
+  seatChargeRef           String?
+  seatPayUrl              String?
+  seatPaidAt              DateTime?
+  seatPaymentRef          String?
+  /// SCHOOL or FAMILY, for declined and withdrawn applications.
+  closedBy                String?
+  closeReason             String?
+  waitlistedAt            DateTime?
+  /// Possible duplicates found on submit, for example "eid:application:<id>" or "namedob:student:<id>".
+  duplicateFlags          String[]
+  studentId               String?
+  enrolledAt              DateTime?
+  createdAt               DateTime          @default(now())
+  updatedAt               DateTime          @updatedAt
+
+  documents AdmissionDocument[]
+  messages  AdmissionMessage[]
+  events    AdmissionEvent[]
+
+  @@unique([orgId, number])
+  @@index([orgId, academicYearId, gradeLevel, stage])
+  @@index([orgId, stage, stageChangedAt])
+  @@index([orgId, applicantUserId])
+  @@index([orgId, emiratesIdHash])
+  @@index([orgId, nameDobKey])
+  @@index([orgId, studentId])
+}
+
+/// A file a family uploaded for an application. Stored under the school's prefix, served only after an access check.
+model AdmissionDocument {
+  id                     String   @id @default(cuid())
+  orgId                  String
+  applicationId          String
+  typeKey                String
+  fileName               String
+  mimeType               String
+  sizeBytes              Int
+  storageKey             String
+  checksum               String
+  /// RECEIVED, ACCEPTED or REJECTED (staff review).
+  status                 String   @default("RECEIVED")
+  reviewNote             String?
+  uploadedByUserId       String?
+  uploadedByMembershipId String?
+  createdAt              DateTime @default(now())
+
+  application AdmissionApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, applicationId])
+}
+
+/// Conversation on an application. SHARED messages reach the family; STAFF notes never do.
+model AdmissionMessage {
+  id                 String            @id @default(cuid())
+  orgId              String
+  applicationId      String
+  /// Staff author, or null when the family wrote it (authorUserId).
+  authorMembershipId String?
+  authorUserId       String?
+  visibility         MessageVisibility @default(SHARED)
+  body               String
+  createdAt          DateTime          @default(now())
+
+  application AdmissionApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, applicationId, createdAt])
+}
+
+/// Application history: stage changes, offers, payments, document reviews. Feeds the funnel report.
+model AdmissionEvent {
+  id                String   @id @default(cuid())
+  orgId             String
+  applicationId     String
+  kind              String
+  fromStage         String?
+  toStage           String?
+  actorMembershipId String?
+  actorUserId       String?
+  data              Json?
+  createdAt         DateTime @default(now())
+
+  application AdmissionApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, applicationId, createdAt])
+  @@index([orgId, toStage])
+}
+
+/// A re-enrollment window: families confirm, per child, whether they return next year.
+model ReenrollmentWindow {
+  id             String    @id @default(cuid())
+  orgId          String
+  /// The year families confirm for (normally next year).
+  academicYearId String
+  opensAt        DateTime
+  closesAt       DateTime
+  closedAt       DateTime?
+  messageEn      String?
+  messageAr      String?
+  /// Automatic reminders to non-responders this many days before the window closes.
+  reminderDays   Int[]
+  createdById    String
+  createdAt      DateTime  @default(now())
+
+  responses ReenrollmentResponse[]
+
+  @@index([orgId, academicYearId])
+}
+
+model ReenrollmentResponse {
+  id            String    @id @default(cuid())
+  orgId         String
+  windowId      String
+  studentId     String
+  /// RETURNING or LEAVING.
+  intent        String
+  reasonKey     String?
+  reasonNote    String?
+  leavingDate   DateTime?
+  respondedById String
+  respondedAt   DateTime
+  withdrawalId  String?
+
+  window ReenrollmentWindow @relation(fields: [windowId], references: [id], onDelete: Cascade)
+
+  @@unique([windowId, studentId])
+  @@index([orgId, windowId, intent])
+}
+
+/// A student leaving the school: leaving date, reason and the transfer certificate.
+model StudentWithdrawal {
+  id            String    @id @default(cuid())
+  orgId         String
+  studentId     String
+  leavingDate   DateTime
+  reasonKey     String
+  reasonNote    String?
+  destination   String?
+  /// PLANNED, COMPLETED or CANCELLED.
+  status        String    @default("PLANNED")
+  /// STAFF or REENROLLMENT.
+  source        String    @default("STAFF")
+  tcNumber      String?
+  tcIssuedAt    DateTime?
+  tcDocumentId  String?
+  createdById   String
+  completedById String?
+  completedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([orgId, status, leavingDate])
+  @@index([orgId, studentId])
+}
+
+/// Registration of a learner with the education authority (for example SPEA DALEEL in Sharjah): one row when a
+/// student is enrolled (ENROLLMENT) and one when a student leaves (WITHDRAWAL). There is no public API, so staff
+/// record the status, the authority's reference number and the decision date by hand.
+model GovRegistration {
+  id            String    @id @default(cuid())
+  orgId         String
+  studentId     String
+  /// ENROLLMENT or WITHDRAWAL.
+  kind          String
+  /// NOT_SUBMITTED, SUBMITTED, APPROVED or REJECTED.
+  status        String    @default("NOT_SUBMITTED")
+  /// Authority key at the time the row was created.
+  authority     String
+  reference     String?
+  submittedAt   DateTime?
+  decidedAt     DateTime?
+  note          String?
+  applicationId String?
+  withdrawalId  String?
+  updatedById   String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([orgId, kind, status])
+  @@index([orgId, studentId])
+}
