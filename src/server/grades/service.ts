@@ -7,6 +7,7 @@ import { notify } from "@/server/notify/notify";
 import { audit } from "@/server/audit/audit";
 import { validateBands, type Band } from "./calc";
 import { classScope, type GradeViewer } from "./queries";
+import { publishModeOf } from "./publish-mode";
 
 export type Result<T = object> = ({ ok: true } & T) | { ok: false; error: string };
 
@@ -40,7 +41,7 @@ async function editableClass(v: GradeViewer, classId: string) {
   return ok ? cls : null;
 }
 
-async function editableAssessment(v: GradeViewer, assessmentId: string) {
+export async function editableAssessment(v: GradeViewer, assessmentId: string) {
   const a = await v.db.assessment.findUnique({ where: { id: assessmentId } });
   if (!a) return null;
   const cls = await editableClass(v, a.classId);
@@ -173,50 +174,67 @@ export async function saveGrades(v: GradeViewer, classId: string, cells: CellInp
   return { ok: true, saved: valid.length, rejected };
 }
 
+/** Notify each enrolled student and their guardians of a newly published assessment, once per assessment and student. */
+export async function notifyPublished(
+  tx: TenantTx,
+  orgId: string,
+  a: { id: string; classId: string; titleEn: string; titleAr: string },
+  cls: { nameEn: string; nameAr: string; subject: { nameEn: string; nameAr: string } | null },
+  opts: { effects: Effect[]; now: Date; actorId: string },
+) {
+  await ensureGradeTemplate(tx, orgId);
+  const enrollments = await tx.enrollment.findMany({
+    where: { classId: a.classId, status: "ACTIVE", student: { status: "ACTIVE" } },
+    include: { student: { include: { guardians: { where: { receivesUpdates: true }, include: { guardian: { select: { membershipId: true } } } } } } },
+  });
+  const hrefFor = (sid: string) => `/grades?student=${sid}&assessment=${a.id}`;
+  const already = await tx.notification.findMany({ where: { orgId, kind: GRADE_TEMPLATE.key, href: { in: enrollments.map((e) => hrefFor(e.studentId)) } }, select: { recipientId: true, href: true } });
+  const sent = new Set(already.map((n) => `${n.href}|${n.recipientId}`));
+  const ec = execCtx(tx, orgId, { effects: opts.effects, now: opts.now, actorId: opts.actorId });
+  let notified = 0;
+  for (const e of enrollments) {
+    const s = e.student;
+    const href = hrefFor(s.id);
+    const recipients = [s.membershipId, ...s.guardians.map((g) => g.guardian.membershipId)].filter((m): m is string => !!m && !sent.has(`${href}|${m}`));
+    if (!recipients.length) continue;
+    const res = await notify(ec, {
+      recipients,
+      templateKey: GRADE_TEMPLATE.key,
+      vars: {
+        assessment: { en: a.titleEn, ar: a.titleAr },
+        subject: { en: cls.subject?.nameEn ?? cls.nameEn, ar: cls.subject?.nameAr ?? cls.nameAr },
+        student: { en: s.firstNameEn, ar: s.firstNameAr || s.firstNameEn },
+      },
+      href,
+      kind: GRADE_TEMPLATE.key,
+      idempotencyBase: `grade:${a.id}:${s.id}`,
+    });
+    notified += res.inApp;
+  }
+  return notified;
+}
+
 /**
- * Publish or unpublish an assessment. Publishing notifies each enrolled student and their guardians once:
- * the idempotency key is per assessment and student, so publishing again never notifies twice.
+ * Publish or unpublish an assessment from the gradebook. Publishing notifies each enrolled student and their
+ * guardians once: the idempotency key is per assessment and student, so publishing again never notifies twice.
+ * When the school uses a publisher ("Teachers submit, a publisher releases"), only holders of grades.publish may
+ * publish or unpublish; teachers mark work ready instead (src/server/grades/publishing.ts).
  */
 export async function setPublished(v: GradeViewer, assessmentId: string, publish: boolean, now = new Date()): Promise<Result<{ notified: number; effects: Effect[] }>> {
   const found = await editableAssessment(v, assessmentId);
   if (!found) return { ok: false, error: "forbidden" };
+  const mode = await publishModeOf(v.db);
+  if (mode === "PUBLISHER" && !v.can("grades.publish")) return { ok: false, error: "publisherMode" };
   const { a, cls } = found;
   const effects: Effect[] = [];
   let notified = 0;
   await tenantTx(
     v.orgId,
     async (tx) => {
-      await tx.assessment.update({ where: { id: a.id }, data: { publishedAt: publish ? (a.publishedAt ?? now) : null } });
-      await audit(tx, v.orgId, { actorId: v.membershipId, action: publish ? "grades.publish" : "grades.unpublish", entityType: "Assessment", entityId: a.id, meta: { classId: a.classId } });
+      await tx.assessment.update({ where: { id: a.id }, data: publish ? { publishedAt: a.publishedAt ?? now, publishedById: a.publishedAt ? a.publishedById : v.membershipId } : { publishedAt: null, publishedById: null } });
+      await audit(tx, v.orgId, { actorId: v.membershipId, action: publish ? "grades.publish" : "grades.unpublish", entityType: "Assessment", entityId: a.id, meta: { classId: a.classId, mode } });
       if (!publish) return;
-      await ensureGradeTemplate(tx, v.orgId);
-      const enrollments = await tx.enrollment.findMany({
-        where: { classId: a.classId, status: "ACTIVE", student: { status: "ACTIVE" } },
-        include: { student: { include: { guardians: { where: { receivesUpdates: true }, include: { guardian: { select: { membershipId: true } } } } } } },
-      });
-      const hrefFor = (sid: string) => `/grades?student=${sid}&assessment=${a.id}`;
-      const already = await tx.notification.findMany({ where: { orgId: v.orgId, kind: GRADE_TEMPLATE.key, href: { in: enrollments.map((e) => hrefFor(e.studentId)) } }, select: { recipientId: true, href: true } });
-      const sent = new Set(already.map((n) => `${n.href}|${n.recipientId}`));
-      const ec = execCtx(tx, v.orgId, { effects, now, actorId: v.membershipId });
-      for (const e of enrollments) {
-        const s = e.student;
-        const href = hrefFor(s.id);
-        const recipients = [s.membershipId, ...s.guardians.map((g) => g.guardian.membershipId)].filter((m): m is string => !!m && !sent.has(`${href}|${m}`));
-        if (!recipients.length) continue;
-        const res = await notify(ec, {
-          recipients,
-          templateKey: GRADE_TEMPLATE.key,
-          vars: {
-            assessment: { en: a.titleEn, ar: a.titleAr },
-            subject: { en: cls.subject?.nameEn ?? cls.nameEn, ar: cls.subject?.nameAr ?? cls.nameAr },
-            student: { en: s.firstNameEn, ar: s.firstNameAr || s.firstNameEn },
-          },
-          href,
-          kind: GRADE_TEMPLATE.key,
-          idempotencyBase: `grade:${a.id}:${s.id}`,
-        });
-        notified += res.inApp;
-      }
+      notified = await notifyPublished(tx, v.orgId, a, cls, { effects, now, actorId: v.membershipId });
     },
     { timeout: 60000 },
   );

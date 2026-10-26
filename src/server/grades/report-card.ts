@@ -5,6 +5,7 @@ import { tenantTx } from "@/lib/tenant-db";
 import { audit } from "@/server/audit/audit";
 import { round1 } from "./calc";
 import { canUseGradebook, classScope, publishedGradesFor, termHasPublished, type GradeViewer } from "./queries";
+import { publishModeOf } from "./publish-mode";
 
 export type ReportCardRow = {
   subjectEn: string;
@@ -42,10 +43,15 @@ export function bandComment(avg: number | null): { en: string; ar: string } {
   return { en: "Needs support to meet expectations. Please speak with the subject teacher.", ar: "يحتاج إلى دعم لبلوغ المستوى المتوقع. يُرجى التواصل مع معلم المادة." };
 }
 
-/** Whether this member may create a report card for this student and term. Staff any time; families once the term has published grades. */
+/**
+ * Whether this member may create a report card for this student and term. Staff any time; families once the term
+ * has published grades, unless the school releases report cards through a publisher (then families read the
+ * released card in Documents).
+ */
 export async function canCreateReportCard(v: GradeViewer, studentId: string, termId: string) {
   if (v.isStudent || v.isParent) {
     if (!v.can("grades.view_own") || !v.familyStudentIds.includes(studentId)) return false;
+    if ((await publishModeOf(v.db)) === "PUBLISHER") return false;
     return termHasPublished(v.db, studentId, termId);
   }
   if (!canUseGradebook(v)) return false;
@@ -89,13 +95,15 @@ export async function buildReportCard(db: TenantDb, studentId: string, termId: s
 }
 
 /** Create (or add a new version to) the student's report card document for a term. */
-export async function generateReportCard(v: GradeViewer, studentId: string, termId: string): Promise<{ ok: true; documentId: string } | { ok: false; error: string }> {
+export async function generateReportCard(v: GradeViewer, studentId: string, termId: string): Promise<{ ok: true; documentId: string; held: boolean } | { ok: false; error: string }> {
   if (!(await canCreateReportCard(v, studentId, termId))) return { ok: false, error: "forbidden" };
   const data = await buildReportCard(v.db, studentId, termId);
   if (!data) return { ok: false, error: "notFound" };
   const storageKey = `${REPORT_KEY_PREFIX}${termId}:${studentId}`;
   const category = await v.db.documentCategory.findFirst({ where: { key: "reports" }, select: { id: true } });
   const fileName = `report-card-${data.student.studentNo}-${data.term.en.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.pdf`;
+  // With a publisher, a card made by staff stays hidden from the family until it is released (src/server/grades/publishing.ts).
+  const held = !(v.isStudent || v.isParent) && (await publishModeOf(v.db)) === "PUBLISHER";
   const documentId = await tenantTx(v.orgId, async (tx) => {
     const existing = await tx.document.findFirst({ where: { studentId, source: "GENERATED", versions: { some: { storageKey } } }, include: { versions: { orderBy: { version: "desc" }, take: 1 } } });
     const doc =
@@ -110,9 +118,10 @@ export async function generateReportCard(v: GradeViewer, studentId: string, term
           sensitivity: "STANDARD",
           source: "GENERATED",
           uploadedById: v.membershipId,
-          visibleToFamily: true,
+          visibleToFamily: !held,
         },
       }));
+    if (existing && held && existing.visibleToFamily) await tx.document.update({ where: { id: existing.id }, data: { visibleToFamily: false } });
     const version = await tx.documentVersion.create({
       data: {
         orgId: v.orgId,
@@ -128,8 +137,8 @@ export async function generateReportCard(v: GradeViewer, studentId: string, term
       },
     });
     await tx.document.update({ where: { id: doc.id }, data: { currentVersionId: version.id } });
-    await audit(tx, v.orgId, { actorId: v.membershipId, action: "grades.report_card", entityType: "Document", entityId: doc.id, meta: { termId, version: version.version } });
+    await audit(tx, v.orgId, { actorId: v.membershipId, action: "grades.report_card", entityType: "Document", entityId: doc.id, meta: { termId, version: version.version, held } });
     return doc.id;
   });
-  return { ok: true, documentId };
+  return { ok: true, documentId, held };
 }

@@ -77,7 +77,9 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("people.view")) school.push({ key: "students", href: "/students", icon: "graduation-cap" });
   if (c("grades.enter") || c("registration.manage")) school.push({ key: "classes", href: "/classes", icon: "school" });
   if (c("registration.assist")) school.push({ key: "helpChoose", href: "/subjects/help", icon: "heart-handshake" });
+  if (c("attendance.take") || c("attendance.manage") || c("attendance.view_all")) school.push({ key: "attendance", href: "/attendance", icon: "calendar-check" });
   if (c("grades.enter") || c("grades.view_all")) school.push({ key: "grades", href: "/grades", icon: "clipboard-check" });
+  if (c("grades.publish") || c("school.manage")) school.push({ key: "gradePublishing", href: "/grades/publish", icon: "send" });
   if (c("career.advise")) school.push({ key: "career", href: "/career", icon: "compass" }, { key: "careerEvents", href: "/career/events", icon: "calendar-check" });
   if (c("career.partners") || c("career.advise")) school.push({ key: "partnerResources", href: "/career/resources", icon: "handshake" });
   if (c("pathways.view") && c("people.view")) school.push({ key: "pathwayPlanning", href: "/career/pathways", icon: "map" });
@@ -101,6 +103,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   // The safeguarding lead reviews who can see what (people and roles only), without managing roles.
   else if (c("safeguarding.manage")) admin.push({ key: "accessReport", href: "/admin/roles/report", icon: "lock" });
   if (c("people.invite")) admin.push({ key: "invitations", href: "/admin/invitations", icon: "mail" });
+  else if (c("signin.manage")) admin.push({ key: "signInSettings", href: "/admin/invitations?tab=signin", icon: "lock" });
   if (c("people.manage") || c("people.invite")) admin.push({ key: "joinRequests", href: "/admin/join-requests", icon: "users", badge: counts.joinRequests });
   if (c("registration.manage")) admin.push({ key: "registration", href: "/admin/registration", icon: "clipboard-check" });
   if (c("timetable.manage")) admin.push({ key: "timetableAdmin", href: "/admin/timetable", icon: "clock" });

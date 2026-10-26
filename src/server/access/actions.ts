@@ -302,7 +302,8 @@ const settingsSchema = z.object({
 });
 
 export async function updateJoinSettingsAction(input: z.input<typeof settingsSchema>) {
-  const a = await actorWith("roles.manage");
+  // Sign-in settings: role managers, or the Head of IT (signin.manage), who cannot change roles.
+  const a = await actorWith("roles.manage", "signin.manage");
   if (!a) return fail("FORBIDDEN");
   const d = settingsSchema.safeParse(input);
   if (!d.success) return fail("INVALID");

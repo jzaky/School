@@ -16,7 +16,7 @@ const NAMED_AREAS: ReportArea[] = [
   { key: "reasons", permissions: ["attendance.reasons", "absence.reasons"] },
   { key: "identity", permissions: ["people.reveal_ids"] },
   { key: "audit", permissions: ["audit.view"] },
-  { key: "roles", permissions: ["roles.manage"] },
+  { key: "roles", permissions: ["roles.manage", "signin.manage"] },
   { key: "integrations", permissions: ["integrations.manage"] },
 ];
 

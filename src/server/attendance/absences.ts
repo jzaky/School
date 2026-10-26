@@ -11,6 +11,7 @@ import type { ExecCtx, Tx } from "@/server/db";
 import { notify } from "@/server/notify/notify";
 import { dubaiDateKey } from "@/server/appointments/slots";
 import { AbsenceError, addDays, daysBetween, keyToDate, reportAbsence, weekdayOfKey } from "@/server/timetable/cover";
+import { loadCodes } from "./settings";
 
 const MAX_DAYS = 31;
 
@@ -67,11 +68,19 @@ export async function applyExcusedAbsence(ec: ExecCtx, request: { id: string; st
   const days = absenceDays(form, org?.weekDays?.length ? org.weekDays : [1, 2, 3, 4, 5]);
   if (!days.length) return { days: 0 };
   const source = await sourceOf(tx, orgId, request.requesterId);
+  // The school's plain "excused" code: the reason stays on the request, never in the code.
+  const { codes } = await loadCodes(tx);
+  const excused = codes.find((c) => c.quick === "excused")?.code ?? "E";
   for (const d of days) {
     const date = keyToDate(d);
     const existing = await tx.attendanceRecord.findFirst({ where: { orgId, studentId: request.studentId, date } });
-    if (existing) await tx.attendanceRecord.update({ where: { id: existing.id }, data: { status: "EXCUSED", minutesLate: null, source, requestId: request.id } });
-    else await tx.attendanceRecord.create({ data: { orgId, studentId: request.studentId, date, status: "EXCUSED", source, requestId: request.id } });
+    // A day the register already shows as attended (the student came in after all) is left as it is.
+    if (existing && (existing.status === "PRESENT" || existing.status === "LATE") && existing.source === "REGISTER" && !existing.requestId) continue;
+    if (existing) await tx.attendanceRecord.update({ where: { id: existing.id }, data: { status: "EXCUSED", code: excused, minutesLate: null, source, requestId: request.id } });
+    else await tx.attendanceRecord.create({ data: { orgId, studentId: request.studentId, date, status: "EXCUSED", code: excused, source, requestId: request.id } });
+    // Lessons already marked absent that day become excused too; the attendance office no longer chases the day.
+    await tx.attendanceLessonMark.updateMany({ where: { orgId, studentId: request.studentId, date, status: "ABSENT" }, data: { status: "EXCUSED", code: excused, source, requestId: request.id } });
+    await tx.attendanceFollowUp.updateMany({ where: { orgId, studentId: request.studentId, date, status: { not: "EXPLAINED" } }, data: { status: "EXPLAINED", explainedCode: excused, explainedAt: ec.now, explainedById: ec.actorId ?? null } });
   }
   const n = days.length;
   await tx.timelineEvent.create({

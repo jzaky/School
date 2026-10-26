@@ -20,6 +20,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
   ],
   parent: [
     { key: "children", href: "/children" },
+    { key: "childAttendance", href: "/children" },
     { key: "requestConversation", href: "/requests" },
     { key: "childSubjects", href: "/subjects" },
     { key: "helpChildChoose", href: "/subjects" },
@@ -40,6 +41,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
   teacher: [
     { key: "classSession", href: "/subjects/session" },
     { key: "helpChoose", href: "/subjects/help" },
+    { key: "takeRegister", href: "/attendance" },
     { key: "homeroomRegister", href: "/classes" },
     { key: "gradebook", href: "/grades" },
     { key: "refer", href: "/services/academic_concern" },
@@ -89,6 +91,7 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "kpis", href: "/home" },
     { key: "analytics", href: "/analytics" },
     { key: "gradesOverview", href: "/grades?view=overview" },
+    { key: "attendanceReports", href: "/attendance/reports" },
     { key: "approvals", href: "/approvals" },
     { key: "coverBoard", href: "/admin/cover" },
     { key: "curriculumGaps", href: "/curriculum" },
@@ -112,12 +115,15 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "selectionWindows", href: "/admin/registration/windows" },
     { key: "gradeBands", href: "/grades?view=bands" },
     { key: "timetableSetup", href: "/admin/timetable" },
+    { key: "attendanceSettings", href: "/attendance/settings" },
     { key: "calendarAdmin", href: "/admin/calendar" },
     { key: "examsAdmin", href: "/admin/exams" },
     { key: "invitePeople", href: "/admin/invitations" },
     { key: "joinRequests", href: "/admin/join-requests" },
   ],
   registrar: [
+    { key: "attendanceOffice", href: "/attendance/office" },
+    { key: "attendanceReports", href: "/attendance/reports" },
     { key: "absenceReports", href: "/requests?tab=all" },
     { key: "approvals", href: "/approvals" },
     { key: "registration", href: "/admin/registration?tab=rosters" },
@@ -125,6 +131,12 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "documents", href: "/documents" },
     { key: "templates", href: "/admin/templates" },
     { key: "timetableSetup", href: "/admin/timetable" },
+  ],
+  head_of_it: [
+    { key: "publishQueue", href: "/grades/publish" },
+    { key: "releaseReportCards", href: "/grades/publish?tab=cards" },
+    { key: "integrationsIt", href: "/admin/integrations" },
+    { key: "signInSettings", href: "/admin/invitations?tab=signin" },
   ],
   hod_computing: [
     { key: "gradesOverview", href: "/grades?view=overview" },

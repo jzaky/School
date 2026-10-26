@@ -7,7 +7,9 @@ import type { AttendanceSource, AttendanceStatus } from "@prisma/client";
 import type { Ctx } from "@/server/context";
 import type { FormatPrefs } from "@/lib/format";
 import { fmtDate, fmtWeekday } from "@/lib/format";
-import { personName } from "@/lib/i18n-data";
+import { personName, pick } from "@/lib/i18n-data";
+import { loadCodes } from "@/server/attendance/settings";
+import { resolveCode, visibleCode } from "@/server/attendance/codes";
 import { cn } from "@/lib/utils";
 import { Link } from "@/i18n/navigation";
 import { Panel, PanelHeader } from "@/components/app/panel";
@@ -51,6 +53,12 @@ export async function ClassRegister({ ctx, prefs, classId, students, anchor }: {
     .filter((x) => x.s);
   const label = (status: AttendanceStatus, source: AttendanceSource) => (status === "EXCUSED" ? t(excusedLabelKey(source)) : t(`status.${status}`));
   const short = (status: AttendanceStatus) => t(`short.${status}`);
+  // The school's code for each mark; codes that carry a reason show as the plain excused code to everyone else.
+  const { codes } = await loadCodes(db);
+  const codeOf = (code: string | null, status: AttendanceStatus) => {
+    const c = resolveCode(codes, code, status);
+    return c ? visibleCode(codes, c, reasons) : null;
+  };
   const qs = (k: string) => `/classes/${classId}?date=${k}#register`;
 
   return (
@@ -95,18 +103,20 @@ export async function ClassRegister({ ctx, prefs, classId, students, anchor }: {
                 {days.map((d) => {
                   const r = byKey.get(key(s.id, d));
                   if (!r) return <td key={d} className="py-1.5 text-center text-muted-foreground/50">·</td>;
-                  const text = label(r.status, r.source);
+                  const vis = codeOf(r.code, r.status);
+                  const text = r.status === "EXCUSED" && r.source !== "REGISTER" ? label(r.status, r.source) : vis ? pick(locale, vis.labelEn, vis.labelAr) : label(r.status, r.source);
                   return (
                     <td key={d} className="py-1.5 text-center">
                       <span
                         title={`${personName(s, locale)}, ${fmtDate(prefs, keyToDate(d))}: ${text}${r.minutesLate ? ` (${t("minutesLate", { n: r.minutesLate })})` : ""}`}
                         aria-label={text}
-                        className={cn("relative inline-grid size-7 place-items-center rounded-md text-[11px] font-semibold", CELL[r.status])}
+                        className={cn("relative inline-grid h-7 min-w-7 place-items-center rounded-md px-0.5 text-[11px] font-semibold", CELL[r.status])}
                         data-testid="register-cell"
                         data-status={r.status}
                         data-source={r.source}
+                        dir="ltr"
                       >
-                        {short(r.status)}
+                        {vis?.code ?? short(r.status)}
                         {r.status === "EXCUSED" && r.source !== "REGISTER" && <span className="absolute -end-0.5 -top-0.5 size-2 rounded-full bg-info ring-2 ring-card" />}
                       </span>
                     </td>
@@ -213,7 +223,7 @@ export async function HomeroomToday({ ctx, prefs }: { ctx: Ctx; prefs: FormatPre
         icon={<ClipboardList className="size-4" />}
         action={
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/classes/${homeroom.id}?date=${day}#register`} data-testid="open-register">
+            <Link href={`/attendance/take?class=${homeroom.id}&date=${day}&period=0`} data-testid="open-register">
               {t("openRegister")}
             </Link>
           </Button>

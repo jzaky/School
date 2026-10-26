@@ -6,7 +6,7 @@ import type { Prisma, PrismaClient } from "@prisma/client";
 import { encryptField } from "@/lib/crypto";
 import type { FormSchema } from "@/server/forms/schema";
 import { execCtx } from "@/server/db";
-import { at, dateOnly, emailFor, id, isSchoolDay, rng, schoolDay, stableId, wipeTenant } from "./lib";
+import { at, dateOnly, emailFor, id, rng, schoolDay, stableId, wipeTenant } from "./lib";
 import { FAMILIES, STAFF, type Bi } from "./data/people";
 import { ANNOUNCEMENTS, CALENDAR_EVENTS } from "./data/content";
 import { SERVICES } from "./data/services";
@@ -34,6 +34,7 @@ import { seedAccessLimits } from "./access-limits";
 import { seedGroupDemo } from "./groups";
 import { seedIntegrations } from "./integrations";
 import { seedConversations } from "./conversations";
+import { seedAttendance } from "./academics/attendance";
 import { academicStartYear, installStarterTemplate } from "./starter";
 
 export const DEMO_SLUG = "horizon";
@@ -173,6 +174,18 @@ const PERSONA_STAFF: Array<{
     department: "science",
     subjects: ["PHYS"],
     gradeLevels: [9],
+  },
+  {
+    key: "rami_haddad",
+    persona: "head_of_it",
+    first: bi("Rami", "رامي"),
+    last: bi("Haddad", "حداد"),
+    gender: "M",
+    roles: ["head_of_it"],
+    jobTitle: bi("Head of IT", "رئيس قسم تقنية المعلومات"),
+    department: "administration",
+    subjects: [],
+    gradeLevels: [],
   },
   {
     key: "khalid_yousef",
@@ -663,19 +676,8 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
     }),
   });
 
-  // Attendance for the last 30 school days
-  const attendanceRows: Prisma.AttendanceRecordCreateManyInput[] = [];
-  for (let back = 1; back <= 45; back++) {
-    if (!isSchoolDay(-back, now)) continue;
-    const date = dateOnly(-back, now);
-    for (const s of students) {
-      const roll = r.next();
-      const status = roll < 0.035 ? "ABSENT" : roll < 0.065 ? "LATE" : roll < 0.075 ? "EXCUSED" : "PRESENT";
-      attendanceRows.push({ orgId, studentId: s.id, date, status, minutesLate: status === "LATE" ? r.int(5, 25) : null });
-    }
-  }
-  await db.attendanceRecord.createMany({ data: attendanceRows });
-  log("catalogs, calendar and attendance ready");
+  // Attendance marks, registers and follow-up are seeded by seedAttendance (after the timetable), below.
+  log("catalogs and calendar ready");
 
   const studentById = new Map(students.map((s) => [s.id, s]));
   const nasserGuardians = guardians.filter((g) => g.familyIndex === 0);
@@ -721,6 +723,7 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
     { key: "registrar", label: bi("Registrar", "المسجلة"), blurb: bi("Approves documents and timetable changes.", "تعتمد المستندات وتغييرات الجدول."), home: "/home" },
     { key: "hod_computing", label: bi("Head of Computing", "رئيس قسم الحوسبة"), blurb: bi("Approves students joining Computer Science.", "يعتمد انضمام الطلاب إلى علوم الحاسوب."), home: "/home" },
     { key: "deputy_dsl", label: bi("Deputy Safeguarding Lead", "نائب مسؤول الحماية"), blurb: bi("Covers child protection with the DSL.", "يساند مسؤول الحماية في ملفات حماية الطفل."), home: "/home" },
+    { key: "head_of_it", label: bi("Head of IT", "رئيس قسم تقنية المعلومات"), blurb: bi("Releases grades and report cards, and runs integrations and sign-in.", "يعتمد نشر الدرجات وبطاقات التقارير، ويدير التكاملات وتسجيل الدخول."), home: "/home" },
   ];
   await db.demoPersona.createMany({
     data: personaDefs
@@ -754,6 +757,8 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   await seedIntegrations(world);
   // Request conversations, private sick leave and cover notes (after the timetable, so cover can be arranged).
   await seedConversations(world);
+  // Attendance registers, marks and follow-up, and grade publishing (after the timetable, cover and absence reports).
+  await seedAttendance(world);
   // Requirement pipeline examples (after the global catalog seed; programs are looked up at runtime).
   // The catalog review and change monitor show real data only: changes found between archived and
   // current official pages (see prisma/seed/catalog/official.ts). No example drafts or changes are seeded.
