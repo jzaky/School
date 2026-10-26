@@ -275,6 +275,26 @@ describe("reports and alerts", () => {
     expect(again.persistent.created).toBe(0);
     expect(await owner.notification.count({ where: { orgId, kind: "attendance_persistent", recipientId: ids.tutor } })).toBe(first.persistent.created);
   });
+
+  it("alerts the office once on reaching the regulator absence limit, counting school days only", async () => {
+    // S3 was absent today; add the previous school day, so S3 has two unexcused school days in a row.
+    let prev = new Date(D.getTime() - 86400000);
+    while (prev.getUTCDay() === 0 || prev.getUTCDay() === 6) prev = new Date(prev.getTime() - 86400000);
+    await owner.attendanceRecord.create({ data: { orgId, studentId: ids.s3, date: prev, status: "ABSENT", code: "U" } });
+    await owner.attendanceSettings.update({ where: { orgId }, data: { limitEnabled: true, limitConsecutive: 2, limitTotal: 3, limitWarnPct: 50 } });
+    const first = await runAttendanceAlerts(orgId, { now: at("13:00"), flush: async () => undefined });
+    expect(first.limits.reached).toBe(1);
+    const alerts = await owner.attendanceAlert.findMany({ where: { orgId, studentId: ids.s3, kind: { startsWith: "LIMIT" } } });
+    expect(alerts.map((a) => a.kind).sort()).toEqual(["LIMIT_REACHED", "LIMIT_WARNING"]);
+    expect(alerts.find((a) => a.kind === "LIMIT_REACHED")).toMatchObject({ consecutive: 2, total: 2 });
+    const again = await runAttendanceAlerts(orgId, { now: at("14:00"), flush: async () => undefined });
+    expect(again.limits).toEqual({ warned: 0, reached: 0 });
+    const sent = await owner.notification.findMany({ where: { orgId, kind: "attendance_limit" } });
+    expect(sent.map((n) => n.recipientId)).toEqual([ids.office]);
+    // Counts only: the message never carries a reason.
+    expect(sent[0].bodyEn).not.toMatch(/illness|medical|safeguard/i);
+    await owner.attendanceSettings.update({ where: { orgId }, data: { limitEnabled: false } });
+  });
 });
 
 describe("API and the register mode", () => {

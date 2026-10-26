@@ -721,7 +721,7 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
     { key: "registrar", label: bi("Registrar", "المسجلة"), blurb: bi("Approves documents and timetable changes.", "تعتمد المستندات وتغييرات الجدول."), home: "/home" },
     { key: "hod_computing", label: bi("Head of Computing", "رئيس قسم الحوسبة"), blurb: bi("Approves students joining Computer Science.", "يعتمد انضمام الطلاب إلى علوم الحاسوب."), home: "/home" },
     { key: "deputy_dsl", label: bi("Deputy Safeguarding Lead", "نائب مسؤول الحماية"), blurb: bi("Covers child protection with the DSL.", "يساند مسؤول الحماية في ملفات حماية الطفل."), home: "/home" },
-    { key: "head_of_it", label: bi("Head of IT", "رئيس قسم تقنية المعلومات"), blurb: bi("Releases grades and report cards, and runs integrations and sign-in.", "يعتمد نشر الدرجات وبطاقات التقارير، ويدير التكاملات وتسجيل الدخول."), home: "/grades/publish" },
+    { key: "head_of_it", label: bi("Head of IT", "رئيس قسم تقنية المعلومات"), blurb: bi("Releases grades and report cards, and runs integrations and sign-in.", "يعتمد نشر الدرجات وبطاقات التقارير، ويدير التكاملات وتسجيل الدخول."), home: "/home" },
   ];
   await db.demoPersona.createMany({
     data: personaDefs

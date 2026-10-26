@@ -12,7 +12,8 @@ export type Persona =
   | "parent"
   | "registrar"
   | "hod_computing"
-  | "deputy_dsl";
+  | "deputy_dsl"
+  | "head_of_it";
 
 export const LOCALES: Locale[] = ["en", "ar"];
 

@@ -240,6 +240,7 @@
       "period": ["Period", "الفترة"],
       "customRange": ["Date range", "نطاق تاريخ"],
       "scope": ["Show", "عرض"],
+      "scopePlaceholder": ["Choose a group", "اختر مجموعة"],
       "from": ["From", "من"],
       "to": ["To", "إلى"],
       "apply": ["Apply", "تطبيق"],

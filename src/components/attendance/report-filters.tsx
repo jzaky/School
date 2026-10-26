@@ -79,7 +79,7 @@ export function ReportFilters({
         <div className="flex items-center gap-2">
           <Select value={scopeValue} onValueChange={(v) => push({ scope: v === "school" ? null : v, student: null })}>
             <SelectTrigger className="w-full sm:w-72" aria-label={t("scope")} data-testid="scope-picker">
-              <SelectValue />
+              <SelectValue placeholder={t("scopePlaceholder")} />
             </SelectTrigger>
             <SelectContent>
               {scopeGroups.map((g) => (

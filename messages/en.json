@@ -10087,7 +10087,8 @@
       "minutesLateN": "{n} minutes late",
       "noClassesTitle": "No classes to report on",
       "noClassesBody": "Reports show the classes you teach this year.",
-      "statStudentDays": "{attended} of {possible} student days attended"
+      "statStudentDays": "{attended} of {possible} student days attended",
+      "scopePlaceholder": "Choose a group"
     },
     "settings": {
       "title": "Attendance settings",

@@ -30,7 +30,8 @@ export async function renderCertificatePdf(d: CertificateData, letterhead: Lette
   const M = 56;
   const inner = W - M * 2;
   const text = (s: string, x: number, y: number, w: number, o: { size: number; font?: string; color?: string; align?: "center" }) =>
-    ar ? drawRtl(doc, s, x, y, w, { ...o, align: o.align === "center" ? "center" : "right" }) : drawLtr(doc, s, x, y, w, { ...o, align: o.align ?? "left" });
+    // Without an alignment, Arabic lines sit at the trailing edge and English lines at the leading edge.
+    ar ? drawRtl(doc, s, x, y, w, o) : drawLtr(doc, s, x, y, w, o);
 
   // Frame and header
   doc.rect(0, 0, W, 10).fill(NAVY);
@@ -48,7 +49,7 @@ export async function renderCertificatePdf(d: CertificateData, letterhead: Lette
   const homeroom = d.student.homeroom ? (ar ? d.student.homeroom.ar : d.student.homeroom.en) : null;
   const school = ar ? letterhead.school.ar : letterhead.school.en;
   const statement = ar
-    ? `تشهد ${school} بأن الطالب/ة ${name}، رقم الطالب ${d.student.studentNo}، ${grade}${homeroom ? ` (${homeroom})` : ""}، مسجّل/ة لديها، وأن سجل حضوره/ا في الفترة من ${fmt(d.from, "ar")} إلى ${fmt(d.to, "ar")} كما يلي.`
+    ? `تشهد ${school} بأن الطالب/ة ${name}، رقم الطالب ${d.student.studentNo}، ${grade}${homeroom ? `، ${homeroom}` : ""}، مسجّل/ة لديها، وأن سجل حضوره/ا في الفترة من ${fmt(d.from, "ar")} إلى ${fmt(d.to, "ar")} كما يلي.`
     : `${school} certifies that ${name}, student number ${d.student.studentNo}, ${grade}${homeroom ? ` (${homeroom})` : ""}, is enrolled at the school, and that their attendance from ${fmt(d.from, "en")} to ${fmt(d.to, "en")} is as follows.`;
   let y = text(statement, M, 262, inner, { size: 11.5, color: "#1F2937" }) + 18;
 
@@ -82,17 +83,20 @@ export async function renderCertificatePdf(d: CertificateData, letterhead: Lette
     const big = i === 0;
     if (ar) {
       drawRtl(doc, label, M + inner / 2, ry + 6, inner / 2 - 16, { size: big ? 12 : 10.5, font: big ? FONTS.semibold : FONTS.regular, color: NAVY });
-      drawLtr(doc, value, M + 16, ry + (big ? 6 : 8), inner / 2 - 16, { size: big ? 13 : 10.5, font: FONTS.bold, color: NAVY, align: "left" });
+      drawLtr(doc, value, M + 16, ry + (big ? 6 : 8), inner / 2 - 16, { size: big ? 13 : 10.5, font: FONTS.bold, color: NAVY });
     } else {
       drawLtr(doc, label, M + 16, ry + 8, inner / 2, { size: big ? 12 : 10.5, font: big ? FONTS.semibold : FONTS.regular, color: NAVY });
-      drawLtr(doc, value, M + inner / 2, ry + (big ? 7 : 8), inner / 2 - 16, { size: big ? 13 : 10.5, font: FONTS.bold, color: NAVY, align: "right" });
+      // The value sits at the row's trailing edge: measure it and start it there.
+      const size = big ? 13 : 10.5;
+      const width = doc.font(FONTS.bold).fontSize(size).widthOfString(value) + 1;
+      drawLtr(doc, value, M + inner - 16 - width, ry + (big ? 7 : 8), width, { size, font: FONTS.bold, color: NAVY });
     }
   });
   y += rowH * rows.length + 22;
   y = text(
     ar
-      ? "أُعدّت هذه الشهادة من سجل الحضور اليومي للمدرسة. لا تتضمن أسباب الغياب. الأيام غير المحتسبة (مثل أيام عدم الإلزام بالحضور) مستبعدة من النسبة."
-      : "This certificate is prepared from the school's daily attendance register. It does not include reasons for absence. Days the student was not required to attend are left out of the percentage.",
+      ? "أُعدّت هذه الشهادة من سجل الحضور اليومي للمدرسة. لا تتضمن أسباب الغياب. لا تُحتسب في النسبة الأيام التي لا يُلزم فيها الطالب بالحضور."
+      : "This certificate is prepared from the school's daily attendance register. It does not include reasons for absence. Days the student was not required to attend do not count towards the percentage.",
     M,
     y,
     inner,

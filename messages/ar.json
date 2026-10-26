@@ -10087,7 +10087,8 @@
       "minutesLateN": "تأخر {n} دقيقة",
       "noClassesTitle": "لا توجد فصول لعرض تقاريرها",
       "noClassesBody": "تعرض التقارير الفصول التي تدرّسها هذا العام.",
-      "statStudentDays": "حضور {attended} من {possible} يوم طالب"
+      "statStudentDays": "حضور {attended} من {possible} يوم طالب",
+      "scopePlaceholder": "اختر مجموعة"
     },
     "settings": {
       "title": "إعدادات الحضور",
