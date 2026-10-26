@@ -9,6 +9,7 @@ import type { Permission } from "@/server/identity/permissions";
 import { lastActiveIsStale, touchLastActive } from "@/server/identity/last-active";
 import { isLocale, type AppLocale } from "@/i18n/routing";
 import { groupRolesForUser } from "@/server/groups/access";
+import { activeRolesInclude } from "@/server/access/until";
 
 async function loadContext() {
   const session = await auth();
@@ -21,7 +22,8 @@ async function loadContext() {
     db.membership.findUnique({
       where: { id: membershipId },
       include: {
-        roles: { include: { role: true } },
+        // Time-limited role assignments stop granting anything once they end, on the very next request.
+        roles: activeRolesInclude(),
         staffProfile: true,
         student: true,
         guardian: { include: { links: { include: { student: true } } } },

@@ -12,6 +12,7 @@ import { hit } from "@/server/access/rate-limit";
 import { findApiKey } from "@/server/platform/api-key-lookup";
 import type { ImportActor } from "@/server/imports/access";
 import { generateApiKey } from "./key-format";
+import { activeAssignmentWhere } from "@/server/access/until";
 
 export const MAX_ACTIVE_KEYS = 25;
 /** Requests per key per minute. */
@@ -72,7 +73,7 @@ export async function authenticateApiKey(key: string | null, now = new Date()): 
   const row = await db.apiKey.findUnique({ where: { id: found.keyId } });
   if (!row) return { ok: false, status: 401, code: "UNAUTHORIZED" };
   if (row.revokedAt) return { ok: false, status: 401, code: "KEY_REVOKED" };
-  const owner = await db.membership.findUnique({ where: { id: row.createdById }, select: { id: true, userId: true, status: true, roles: { select: { role: { select: { key: true, permissions: true } } } } } });
+  const owner = await db.membership.findUnique({ where: { id: row.createdById }, select: { id: true, userId: true, status: true, roles: { where: activeAssignmentWhere(), select: { role: { select: { key: true, permissions: true } } } } } });
   const perms = permissionsOf(owner);
   if (!owner || !perms.has("integrations.manage")) return { ok: false, status: 403, code: "KEY_OWNER_INACTIVE" };
   const rate = await hit(`apikey:${row.id}`, RATE_LIMIT_PER_MINUTE, 60);

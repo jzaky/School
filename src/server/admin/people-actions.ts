@@ -9,7 +9,11 @@ import { encryptField } from "@/lib/crypto";
 import { STAFF_ROLE_KEYS } from "@/server/identity/permissions";
 import { RELATIONSHIPS, emiratesIdLast4, isEmail, parseDate, parseEmiratesId } from "@/lib/people-csv";
 import { ImportTooLargeError, importStudentRows } from "@/server/admin/people-import";
-import { AccessError, assertMemberRolesChangeAllowed } from "@/server/access/roles";
+import { AccessError, alertMemberAccessChange, assertMemberRolesChangeAllowed } from "@/server/access/roles";
+import { loadSnapshot } from "@/server/access/snapshot";
+import { withMemberRoles, withMemberStatus } from "@/server/access/guardrails";
+import { flushEffects } from "@/server/queue";
+import type { Effect } from "@/server/db";
 
 type Fail = { ok: false; error: string };
 const fail = (error: string): Fail => ({ ok: false, error });
@@ -21,6 +25,7 @@ async function manager(): Promise<Ctx | null> {
 }
 
 const actorOf = (ctx: Ctx) => ({ actorId: ctx.membershipId, actorUserId: ctx.user.id });
+const actorFor = (ctx: Ctx) => ({ orgId: ctx.orgId, membershipId: ctx.membershipId, userId: ctx.user.id });
 
 function done() {
   revalidatePath("/[locale]/admin/people", "page");
@@ -70,6 +75,7 @@ export async function addStaffAction(input: z.input<typeof addStaffSchema>) {
     user = await identityDb.user.create({ data: { email: d.email, nameEn: d.nameEn, nameAr: d.nameAr || null } });
   }
   const userId = user.id;
+  const effects: Effect[] = [];
   const membershipId = await tenantTx(ctx.orgId, async (tx) => {
     const m = await tx.membership.create({
       data: { orgId: ctx.orgId, userId, status: d.status, titleEn: d.titleEn || null, titleAr: d.titleAr || d.titleEn || null },
@@ -80,8 +86,12 @@ export async function addStaffAction(input: z.input<typeof addStaffSchema>) {
     const roles = await roleIds(tx, d.roleKeys);
     await tx.membershipRole.createMany({ data: roles.map((r) => ({ orgId: ctx.orgId, membershipId: m.id, roleId: r.id })) });
     await audit(tx, ctx.orgId, { ...actorOf(ctx), action: "people.staff_add", entityType: "Membership", entityId: m.id, meta: { roles: d.roleKeys, status: d.status, newUser } });
+    // Safeguarding alert when the new person can see safeguarding or wellbeing records straight away.
+    const after = await loadSnapshot(tx, [m.id]);
+    effects.push(...(await alertMemberAccessChange(tx, actorFor(ctx), { before: withMemberRoles(after, m.id, []), after, memberIds: [m.id] })));
     return m.id;
   });
+  await flushEffects(effects);
   done();
   return { ok: true as const, membershipId };
 }
@@ -102,6 +112,8 @@ export async function updateStaffAction(input: z.input<typeof updateStaffSchema>
   if (!parsed.success) return fail("INVALID");
   const d = parsed.data;
   if (d.departmentId && !(await ctx.db.department.findUnique({ where: { id: d.departmentId }, select: { id: true } }))) return fail("INVALID");
+  const effects: Effect[] = [];
+  let blocked = null as AccessError | null;
   const result = await tenantTx(ctx.orgId, async (tx): Promise<Fail | { ok: true }> => {
     const m = await tx.membership.findUnique({ where: { id: d.membershipId }, include: { roles: { include: { role: true } }, student: { select: { id: true } }, guardian: { select: { id: true } } } });
     if (!m || m.student || m.guardian) return fail("NOT_FOUND");
@@ -116,10 +128,14 @@ export async function updateStaffAction(input: z.input<typeof updateStaffSchema>
     const wanted = await roleIds(tx, d.roleKeys);
     const wantedIds = new Set(wanted.map((r) => r.id));
     const keep = m.roles.filter((r) => wantedIds.has(r.roleId) || !STAFF_ROLE_KEYS.includes(r.role.key));
+    let check: Awaited<ReturnType<typeof assertMemberRolesChangeAllowed>>;
     try {
-      await assertMemberRolesChangeAllowed(tx, { orgId: ctx.orgId, membershipId: ctx.membershipId, userId: ctx.user.id }, m.id, [...new Set([...keep.map((r) => r.roleId), ...wanted.map((r) => r.id)])]);
+      check = await assertMemberRolesChangeAllowed(tx, actorFor(ctx), m.id, [...new Set([...keep.map((r) => r.roleId), ...wanted.map((r) => r.id)])]);
     } catch (e) {
-      if (e instanceof AccessError) return fail(e.code);
+      if (e instanceof AccessError) {
+        blocked = e;
+        return fail(e.code);
+      }
       throw e;
     }
     await tx.membershipRole.deleteMany({ where: { membershipId: m.id, id: { notIn: keep.map((r) => r.id) } } });
@@ -142,10 +158,22 @@ export async function updateStaffAction(input: z.input<typeof updateStaffSchema>
       entityId: m.id,
       meta: { rolesBefore: [...before].sort(), rolesAfter: after, departmentId: d.departmentId || null },
     });
+    effects.push(...(await alertMemberAccessChange(tx, actorFor(ctx), { before: check.before, after: check.after, memberIds: [m.id] })));
     return { ok: true };
   });
-  if (result.ok) done();
+  if (blocked?.code === "SELF_ESCALATION") await recordBlockedSelfGrant(ctx, d.membershipId, blocked.permissions);
+  if (result.ok) {
+    await flushEffects(effects);
+    done();
+  }
   return result;
+}
+
+/** A refused attempt to raise one's own sensitive access is kept in the audit log. */
+async function recordBlockedSelfGrant(ctx: Ctx, membershipId: string, permissions: string[]) {
+  await tenantTx(ctx.orgId, (tx) =>
+    audit(tx, ctx.orgId, { ...actorOf(ctx), action: "access.self_grant_blocked", entityType: "Membership", entityId: membershipId, sensitivity: "CONFIDENTIAL", meta: { path: "staff_edit", permissions } }),
+  ).catch(() => undefined);
 }
 
 const statusSchema = z.object({ membershipId: z.string().min(1), status: z.enum(["ACTIVE", "SUSPENDED"]) });
@@ -158,6 +186,7 @@ export async function setMemberStatusAction(input: z.input<typeof statusSchema>)
   if (!parsed.success) return fail("INVALID");
   const d = parsed.data;
   if (d.membershipId === ctx.membershipId) return fail("SELF_STATUS");
+  const effects: Effect[] = [];
   const result = await tenantTx(ctx.orgId, async (tx): Promise<Fail | { ok: true }> => {
     const m = await tx.membership.findUnique({ where: { id: d.membershipId }, include: { roles: { include: { role: true } } } });
     if (!m) return fail("NOT_FOUND");
@@ -165,7 +194,9 @@ export async function setMemberStatusAction(input: z.input<typeof statusSchema>)
     const isAdmin = m.roles.some((r) => r.role.key === ADMIN_ROLE);
     if (isAdmin && !ctx.can("school.manage")) return fail("ADMIN_ROLE_ONLY");
     if (d.status === "SUSPENDED" && isAdmin && m.status === "ACTIVE" && (await otherActiveAdmins(tx, m.id)) === 0) return fail("LAST_ADMIN");
+    const before = await loadSnapshot(tx, [m.id]);
     await tx.membership.update({ where: { id: m.id }, data: { status: d.status } });
+    effects.push(...(await alertMemberAccessChange(tx, actorFor(ctx), { before, after: withMemberStatus(before, m.id, d.status), memberIds: [m.id] })));
     await audit(tx, ctx.orgId, {
       ...actorOf(ctx),
       action: d.status === "SUSPENDED" ? "people.member_suspend" : "people.member_activate",
@@ -175,7 +206,10 @@ export async function setMemberStatusAction(input: z.input<typeof statusSchema>)
     });
     return { ok: true };
   });
-  if (result.ok) done();
+  if (result.ok) {
+    await flushEffects(effects);
+    done();
+  }
   return result;
 }
 

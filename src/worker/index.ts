@@ -136,6 +136,8 @@ async function main() {
           return forEachOrg("applications.reminders", async (orgId) => (await import("@/server/applications/reminders")).runApplicationReminders(orgId));
         case "careerEvents.reminders":
           return forEachOrg("careerEvents.reminders", async (orgId) => (await import("@/server/career-events/reminders")).runCareerEventReminders(orgId));
+        case "access.expiry":
+          return forEachOrg("access.expiry", async (orgId) => (await import("@/server/access/expiry")).expireRoleAssignments(orgId));
         case "test.idempotent":
           return handlers.testIdempotent(job.data as TestIdempotentJob);
         default:
@@ -164,6 +166,8 @@ async function main() {
     await maintenance.upsertJobScheduler("retention", { pattern: "30 23 * * *", tz: "UTC" }, { name: "retention", opts: { attempts: 3 } });
     // 03:45 UTC is 07:45 in Dubai: application reminders arrive before school starts.
     await maintenance.upsertJobScheduler("applications.reminders", { pattern: "45 3 * * *", tz: "UTC" }, { name: "applications.reminders", opts: { attempts: 3 } });
+    // 20:05 UTC is 00:05 in Dubai: time-limited role assignments that ended yesterday are removed and audited.
+    await maintenance.upsertJobScheduler("access.expiry", { pattern: "5 20 * * *", tz: "UTC" }, { name: "access.expiry", opts: { attempts: 3 } });
     // Hourly: university fair and visit reminders about a day before the event (each sent once).
     await maintenance.upsertJobScheduler("careerEvents.reminders", { pattern: "20 * * * *", tz: "UTC" }, { name: "careerEvents.reminders", opts: { attempts: 3 } });
     if (demoMode) {

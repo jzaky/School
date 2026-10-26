@@ -8,6 +8,10 @@ import { isEmail, parseDate } from "@/lib/people-csv";
 import { audit } from "@/server/audit/audit";
 import { findInvitationByToken, findSchoolByJoinCode, schoolById, type PublicSchool } from "@/server/platform/join-lookup";
 import { hit, peek } from "./rate-limit";
+import { flushEffects } from "@/server/queue-core";
+import type { Effect } from "@/server/db";
+import { loadSnapshot } from "./snapshot";
+import { alertMemberAccessChange } from "./roles";
 import { inviteState, isUsable } from "./tokens";
 import {
   JoinError,
@@ -128,6 +132,7 @@ export async function acceptInvite(token: string, account: AccountInput, opts: {
   const acc = await resolveAccount(account, { ip: opts.ip, provenEmail: inv.email });
   if (inv.email && inv.email.toLowerCase() !== acc.email) throw new JoinError("WRONG_EMAIL");
 
+  const effects: Effect[] = [];
   const membershipId = await tenantTx(orgId, async (tx) => {
     // Claim one use atomically so a link can never be used more than maxUses times.
     const claimed = await tx.invitation.updateMany({
@@ -141,6 +146,10 @@ export async function acceptInvite(token: string, account: AccountInput, opts: {
     // it is activated, never duplicated. Its current roles are what the school decided, so a role removed
     // after the invitation was sent is not granted again by accepting it.
     const before = await findMembership(tx, acc.userId);
+    // An active staff member never gains roles by accepting a staff invitation or link (for example one they
+    // made themselves): roles change on the Roles page, where nobody can raise their own sensitive access.
+    if (inv.kind === "STAFF" && before?.status === "ACTIVE") throw new JoinError("ALREADY_MEMBER");
+    const watch = inv.kind === "STAFF" ? await loadSnapshot(tx, before ? [before.id] : []) : null;
     const m = await ensureMembership(tx, orgId, acc.userId, audience, "ACTIVE");
     await tx.membership.update({ where: { id: m.id }, data: { status: "ACTIVE" } });
     const keepSchoolRoles = before?.status === "INVITED" && before.roles.length > 0;
@@ -160,8 +169,14 @@ export async function acceptInvite(token: string, account: AccountInput, opts: {
       entityId: inv.id,
       meta: { kind: inv.kind, roles: inv.roleKeys, link: !inv.email, newMember: m.created, children: inv.studentIds.length },
     });
+    // Joining with a role that opens safeguarding or wellbeing records tells the safeguarding team, naming who invited them.
+    if (watch && inv.createdById) {
+      const inviter = { orgId, membershipId: inv.createdById, userId: acc.userId };
+      effects.push(...(await alertMemberAccessChange(tx, inviter, { before: watch, after: await loadSnapshot(tx, [m.id]), memberIds: [m.id] }, now)));
+    }
     return m.id;
   });
+  await flushEffects(effects);
   await identityDb.user.update({ where: { id: acc.userId }, data: { lastActiveOrgId: orgId } });
   return { orgId, userId: acc.userId, email: acc.email, membershipId, status: "ACTIVE" };
 }

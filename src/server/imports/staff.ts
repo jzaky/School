@@ -14,6 +14,9 @@ import type { Effect } from "@/server/db";
 import { inviteStaff, MAX_BULK } from "@/server/access/invitations";
 import { audienceOfRole, opensSensitiveRecords } from "@/server/access/permission-catalog";
 import { importAccess, ImportError, type ImportActor } from "./access";
+import { loadSnapshot } from "@/server/access/snapshot";
+import { selfEscalation, withMemberRoles } from "@/server/access/guardrails";
+import { alertMemberAccessChange } from "@/server/access/roles";
 import { finishRecord, startRecord } from "./record";
 
 const ALL_GRADES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -24,6 +27,9 @@ type Ctx = {
   /** Grades each subject is taught in this year (classes and offerings), used when the file gives none. */
   subjectGrades: Map<string, number[]>;
   schoolGrades: number[];
+  /** The person running the import, and whether giving them these roles would raise their own sensitive access. */
+  actorId?: string;
+  selfBlocked?: (roleIds: string[]) => boolean;
 };
 
 async function loadContext(tx: TenantTx, orgId: string): Promise<Ctx> {
@@ -136,6 +142,8 @@ function planRow(r: StaffRow, user: UserInfo | undefined, m: Existing | undefine
   } else if (!user) plan.names = { nameEn: r.nameEn, nameAr: r.nameAr };
 
   plan.addRoleIds = r.roleIds.filter((id) => !m?.roleIds.has(id));
+  // Nobody raises their own sensitive access with a spreadsheet: another person who manages roles does that.
+  if (m && m.membershipId === ctx.actorId && plan.addRoleIds.length && ctx.selfBlocked?.(plan.addRoleIds)) return { ...plan, error: "selfEscalation" };
   if (m && plan.addRoleIds.length) plan.changes.push("roles");
 
   const p = m?.profile;
@@ -176,6 +184,10 @@ async function prepare(actor: ImportActor, records: SheetRecord[]) {
   const access = importAccess(actor.perms);
   if (!access.center) throw new ImportError("FORBIDDEN");
   const ctx = await tenantTx(actor.orgId, (tx) => loadContext(tx, actor.orgId));
+  const snap = await tenantTx(actor.orgId, (tx) => loadSnapshot(tx, [actor.membershipId]));
+  const me = snap.members.find((m) => m.id === actor.membershipId);
+  ctx.actorId = actor.membershipId;
+  ctx.selfBlocked = (roleIds) => !!me && selfEscalation(snap, withMemberRoles(snap, me.id, [...new Set([...me.roleIds, ...roleIds])]), me.id).length > 0;
   const parsed = parseStaffRecords(records, ctx.lookups, { sensitiveRoles: access.sensitiveRoles, adminRole: access.adminRole });
   const people = await loadPeople(actor.orgId, parsed.rows.map((r) => r.email));
   return { ctx, parsed, people };
@@ -224,6 +236,7 @@ export async function importStaff(actor: ImportActor, fileName: string, records:
   const errors: RowIssue[] = [...parsed.errors];
   const failedRows = new Set(errors.map((e) => e.row));
   const counts = { created: 0, updated: 0, unchanged: 0 };
+  const alertEffects: Effect[] = [];
   const done: Array<{ row: StaffRow; membershipId: string }> = [];
 
   for (const r of parsed.rows) {
@@ -257,7 +270,10 @@ export async function importStaff(actor: ImportActor, fileName: string, records:
           create: { orgId: actor.orgId, membershipId: id, departmentId: plan.profile.departmentId ?? null, jobTitleEn: plan.profile.jobTitleEn ?? null, jobTitleAr: plan.profile.jobTitleAr ?? null, gradeLevels: plan.profile.gradeLevels ?? [] },
           update: plan.profile,
         });
+        const watch = plan.addRoleIds.length && member?.status === "ACTIVE" ? await loadSnapshot(tx, [id]) : null;
         if (plan.addRoleIds.length) await tx.membershipRole.createMany({ data: plan.addRoleIds.map((roleId) => ({ orgId: actor.orgId, membershipId: id!, roleId })), skipDuplicates: true });
+        // People who are already active and gain safeguarding or wellbeing access: tell the safeguarding team.
+        if (watch) alertEffects.push(...(await alertMemberAccessChange(tx, actor, { before: watch, after: await loadSnapshot(tx, [id]), memberIds: [id] }, now)));
         for (const q of plan.quals) {
           await tx.teacherSubject.upsert({
             where: { membershipId_subjectId: { membershipId: id, subjectId: q.subjectId } },
@@ -286,7 +302,7 @@ export async function importStaff(actor: ImportActor, fileName: string, records:
   }
 
   // Invitations: people still waiting to join who have no open invitation yet. Re-importing never re-sends.
-  const effects: Effect[] = [];
+  const effects: Effect[] = [...alertEffects];
   const extra: Record<string, number> = { invited: 0, alreadyInvited: 0 };
   if (invite && done.length) {
     const db = tenantDb(actor.orgId);

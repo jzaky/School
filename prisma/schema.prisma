@@ -520,16 +520,20 @@ model Role {
 }
 
 model MembershipRole {
-  id           String @id @default(cuid())
+  id           String    @id @default(cuid())
   orgId        String
   membershipId String
   roleId       String
+  /// End of a time-limited assignment (for example cover for the DSL during leave). Permission checks ignore
+  /// it once passed and a daily worker job removes it (src/server/access/expiry.ts). Null: does not expire.
+  expiresAt    DateTime?
 
   membership Membership @relation(fields: [membershipId], references: [id], onDelete: Cascade)
   role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
 
   @@unique([membershipId, roleId])
   @@index([orgId])
+  @@index([orgId, expiresAt])
 }
 
 // ---------------------------------------------------------------------------

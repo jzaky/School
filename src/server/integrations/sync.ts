@@ -13,6 +13,7 @@ import { MAX_ROWS, type ImportSummary } from "@/lib/imports/types";
 import { applyMapping, cleanMapping, type ColumnMapping } from "@/lib/integrations/mapping";
 import { dueSlot, FAILURE_ALERT_AFTER, runStatus } from "@/lib/integrations/schedule";
 import { permissionsOf } from "@/server/identity/can";
+import { activeAssignmentWhere } from "@/server/access/until";
 import { audit } from "@/server/audit/audit";
 import { execCtx, type Effect, type Tx } from "@/server/db";
 import { notify } from "@/server/notify/notify";
@@ -100,7 +101,7 @@ export type RunOptions = {
 };
 
 async function actorFor(orgId: string, membershipId: string): Promise<ImportActor | null> {
-  const m = await tenantDb(orgId).membership.findUnique({ where: { id: membershipId }, select: { id: true, userId: true, status: true, roles: { select: { role: { select: { key: true, permissions: true } } } } } });
+  const m = await tenantDb(orgId).membership.findUnique({ where: { id: membershipId }, select: { id: true, userId: true, status: true, roles: { where: activeAssignmentWhere(), select: { role: { select: { key: true, permissions: true } } } } } });
   const perms = permissionsOf(m);
   if (!m || !perms.has("integrations.manage") || !importAccess(perms).center) return null;
   return { orgId, membershipId: m.id, userId: m.userId, perms };
