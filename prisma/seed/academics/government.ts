@@ -8,7 +8,7 @@
 // tenant is wiped before the demo seed.
 import { createHash } from "node:crypto";
 import type { SeedWorld } from "../demo";
-import { dateOnly, at } from "../lib";
+import { at, dateOnly, isSchoolDay } from "../lib";
 import { encryptField } from "@/lib/crypto";
 import { tenantDb } from "@/lib/tenant-db";
 import { renderExport } from "@/server/govreports/export";
@@ -77,10 +77,16 @@ export async function seedGovReporting(w: SeedWorld) {
   if (unregistered[1]) await db.student.update({ where: { id: unregistered[1] }, data: { nationalityEn: null, nationalityAr: null } });
 
   // --- Due dates ---------------------------------------------------------------------------------------------
+  // Due dates and census dates fall on a working day (Monday to Friday): moved later in the future, earlier in the past.
+  const workday = (days: number) => {
+    let d = days;
+    while (!isSchoolDay(d, now)) d += days >= 0 ? 1 : -1;
+    return d;
+  };
   const due = async (titleEn: string, titleAr: string, kind: string, days: number, notes: string | null, done?: number) =>
-    db.govDueDate.create({ data: { orgId, titleEn, titleAr, kind, dueOn: dateOnly(days, now), notes, doneAt: done !== undefined ? at(done, 11, 0, now) : null, createdById: registrar, createdAt: at(-160, 9, 0, now) } });
+    db.govDueDate.create({ data: { orgId, titleEn, titleAr, kind, dueOn: dateOnly(workday(days), now), notes, doneAt: done !== undefined ? at(done, 11, 0, now) : null, createdById: registrar, createdAt: at(-160, 9, 0, now) } });
   const pastCensusDue = await due("End of year census", "إحصاء نهاية العام", "CENSUS", -146, null, -146);
-  const censusDue = await due("Autumn student census", "إحصاء الطلبة لفصل الخريف", "CENSUS", 12, null);
+  const censusDue = await due("Autumn student census", "إحصاء الطلبة لفصل الخريف", "CENSUS", 10, null);
   await due("Learner registration update", "تحديث تسجيل المتعلمين", "REGISTRATION", 3, null);
   await due("Autumn term attendance return", "تقرير الحضور لفصل الخريف", "ATTENDANCE", 52, null);
   await due("Internal assessment results, autumn term", "نتائج التقييمات الداخلية لفصل الخريف", "RESULTS", 58, null);
@@ -95,7 +101,7 @@ export async function seedGovReporting(w: SeedWorld) {
   };
   const mona = await names(registrar);
   const omar = await names(principal);
-  const censusDay = dateOnly(-148, now);
+  const censusDay = dateOnly(workday(-148), now);
   const past = await db.govReturn.create({ data: { orgId, kind: "CENSUS", authority: "KHDA", asOf: censusDay, periodFrom: dateOnly(-148 - 273, now), label: null, dueDateId: pastCensusDue.id, createdById: registrar, createdAt: at(-153, 10, 0, now) } });
   const pastData = await buildReturn(tdb, orgId, specOf(past));
   const pastHash = dataHash(metaOf(past), pastData.tables);

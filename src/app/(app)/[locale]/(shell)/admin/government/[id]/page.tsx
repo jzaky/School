@@ -73,8 +73,8 @@ export default async function GovernmentReturnPage({ params }: { params: Promise
         actions={
           <>
             <ExportMenu returnId={ret.id} problems={problems.length} canPrepare={prepare} canIds={canExportIds(ctx)} idsPossible={canCarryIds(page.kind)} />
-            {signer && <SignOffButton returnId={ret.id} signer={signer.title ? `${loc === "ar" ? signer.name.ar : signer.name.en}, ${loc === "ar" ? signer.title.ar : signer.title.en}` : loc === "ar" ? signer.name.ar : signer.name.en} problems={problems.length} signed={Boolean(ret.signedOffAt) && !page.signedStale} />}
-            {prepare && <SubmissionButton returnId={ret.id} files={page.exports.map((e) => ({ id: e.id, label: fileLabel(e) }))} authority={authority.short} signed={Boolean(ret.signedOffAt) && !page.signedStale} />}
+            {signer && ret.status !== "SUBMITTED" && <SignOffButton returnId={ret.id} signer={signer.title ? `${loc === "ar" ? signer.name.ar : signer.name.en}, ${loc === "ar" ? signer.title.ar : signer.title.en}` : loc === "ar" ? signer.name.ar : signer.name.en} problems={problems.length} signed={Boolean(ret.signedOffAt) && !page.signedStale} />}
+            {prepare && <SubmissionButton returnId={ret.id} files={page.exports.map((e) => ({ id: e.id, label: fileLabel(e), sheet: e.format !== "PDF" }))} authority={authority.short} signed={Boolean(ret.signedOffAt) && !page.signedStale} />}
           </>
         }
       />

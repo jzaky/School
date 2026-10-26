@@ -210,11 +210,11 @@ export function SignOffButton({ returnId, signer, problems, signed }: { returnId
   );
 }
 
-export function SubmissionButton({ returnId, files, authority, signed }: { returnId: string; files: Array<{ id: string; label: string }>; authority: string; signed: boolean }) {
+export function SubmissionButton({ returnId, files, authority, signed }: { returnId: string; files: Array<{ id: string; label: string; sheet: boolean }>; authority: string; signed: boolean }) {
   const t = useTranslations("govReports");
   const { pending, run } = useRun();
   const [open, setOpen] = useState(false);
-  const [file, setFile] = useState(files[0]?.id ?? "");
+  const [file, setFile] = useState((files.find((f) => f.sheet) ?? files[0])?.id ?? "");
   const [on, setOn] = useState(today());
   const [ref, setRef] = useState("");
   const [note, setNote] = useState("");
