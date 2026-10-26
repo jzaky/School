@@ -11,6 +11,20 @@ type Doc = PDFKit.PDFDocument;
 
 const num = (fils: number) => formatAed(fils, "en", { currency: false });
 const pctText = (bp: number) => `${(bp / 100).toFixed(bp % 100 === 0 ? 0 : 2)}%`;
+/** The shared RTL helper does not mirror brackets, so Arabic text in fee PDFs drops parentheses for a comma. */
+const ar = (s: string) => s.replace(/\s*\(([^()]*)\)/g, "، $1").trim();
+/** A compact left-to-right block for table cells (tighter line spacing than the shared drawLtr). Returns the y after it. */
+function cell(doc: Doc, text: string, x: number, y: number, width: number, opts: { size: number; color?: string; font?: string; align?: "left" | "right" }) {
+  doc.font(opts.font ?? FONTS.regular).fontSize(opts.size).fillColor(opts.color ?? "#111827");
+  doc.text(text, x, y, { width, align: opts.align ?? "left", lineGap: -1 });
+  return doc.y;
+}
+/** Rough height of an Arabic block drawn by drawRtl (line height is 1.75 times the font size). */
+function rtlHeight(doc: Doc, text: string, width: number, size: number) {
+  doc.font(FONTS.regular).fontSize(size);
+  const lines = Math.max(1, Math.ceil((doc.widthOfString(text) * 1.08) / width));
+  return lines * size * 1.75;
+}
 
 function day(d: Date) {
   return {
@@ -52,20 +66,22 @@ function header(doc: Doc, seller: Seller, lh: Letterhead | null, title: { en: st
 }
 
 /** A label/value pair printed in both languages on one row: English on the left, Arabic on the right. */
-function pair(doc: Doc, y: number, en: string, ar: string, value: string, valueAr?: string) {
-  drawLtr(doc, `${en}: ${value}`, M, y, HALF, { size: 8.5, color: "#1F2937" });
-  drawRtl(doc, `${ar}: ${valueAr ?? value}`, W / 2 + 8, y - 3, HALF, { size: 8.5, color: "#1F2937" });
-  return y + 15;
+function pair(doc: Doc, y: number, en: string, arLabel: string, value: string, valueAr?: string) {
+  const endEn = drawLtr(doc, `${en}: ${value}`, M, y, HALF, { size: 8.5, color: "#1F2937" });
+  const endAr = drawRtl(doc, `${arLabel}: ${ar(valueAr ?? value)}`, W / 2 + 8, y - 3, HALF, { size: 8.5, color: "#1F2937" });
+  return Math.max(y + 15, endEn + 3, endAr);
 }
 
-function footer(doc: Doc, en: string, ar: string) {
+function footer(doc: Doc, en: string, arText: string) {
   const range = doc.bufferedPageRange();
   for (let i = range.start; i < range.start + range.count; i++) {
     doc.switchToPage(i);
     const fy = H - 46;
     doc.moveTo(M, fy).lineTo(W - M, fy).lineWidth(0.5).strokeColor("#E5E7EB").stroke();
-    drawLtr(doc, `${en}  ·  Page ${i - range.start + 1} of ${range.count}`, M, fy + 8, HALF, { size: 6.5, color: MUTED });
-    drawRtl(doc, `${ar}  ·  صفحة ${i - range.start + 1} من ${range.count}`, W / 2 + 8, fy + 5, HALF, { size: 6.5, color: MUTED });
+    const endEn = cell(doc, en, M, fy + 8, HALF, { size: 6.5, color: MUTED });
+    cell(doc, `Page ${i - range.start + 1} of ${range.count}`, M, endEn + 1, HALF, { size: 6.5, color: MUTED });
+    const endAr = drawRtl(doc, arText, W / 2 + 8, fy + 5, HALF, { size: 6.5, color: MUTED });
+    drawRtl(doc, `صفحة ${i - range.start + 1} من ${range.count}`, W / 2 + 8, endAr - 3, HALF, { size: 6.5, color: MUTED });
     doc.rect(0, H - 5, W, 5).fill(NAVY);
   }
 }
@@ -135,21 +151,25 @@ export async function renderInvoicePdf(input: InvoicePdfInput, lh: Letterhead | 
   const extra = [input.billTo.address, input.billTo.trn ? `TRN: ${input.billTo.trn}` : null].filter(Boolean).join("  ·  ");
   if (extra) drawLtr(doc, extra, M + 10, y + 30, HALF - 10, { size: 7, color: MUTED });
   drawRtl(doc, "إلى السيد / السادة", W / 2, y + 3, HALF - 2, { size: 7, color: MUTED });
-  drawRtl(doc, input.billTo.nameAr || input.billTo.name, W / 2, y + 13, HALF - 2, { size: 9.5, font: FONTS.semibold, color: NAVY });
+  drawRtl(doc, ar(input.billTo.nameAr || input.billTo.name), W / 2, y + 13, HALF - 2, { size: 9.5, font: FONTS.semibold, color: NAVY });
   if (input.billTo.trn) drawRtl(doc, `رقم التسجيل الضريبي: ${input.billTo.trn}`, W / 2, y + 27, HALF - 2, { size: 7, color: MUTED });
   y += 54;
 
   y = tableHeader(doc, y);
+  const dw = COLS[1].w - 6;
   input.lines.forEach((l, i) => {
     doc.font(FONTS.regular).fontSize(7.4);
-    const descH = Math.max(doc.heightOfString(l.descriptionEn, { width: COLS[1].w - 6 }), 9);
-    const rowH = descH + 13 + (l.discountNote ? 10 : 0) + 4;
-    if (y + rowH > H - 190) {
+    const estimate =
+      doc.heightOfString(l.descriptionEn, { width: dw, lineGap: -1 }) +
+      rtlHeight(doc, ar(l.descriptionAr), dw, 7.2) +
+      (l.discountNote ? (doc.font(FONTS.regular).fontSize(6.4), doc.heightOfString(l.discountNote.en, { width: dw, lineGap: -1 })) : 0) +
+      8;
+    if (y + estimate > H - 70) {
       doc.addPage({ size: "A4", margin: 0 });
       y = tableHeader(doc, 30);
     }
-    if (i % 2 === 1) doc.rect(M, y - 2, INNER, rowH).fill("#F8FAFC");
     let x = M;
+    let rowEnd = y;
     const cells: Record<string, string> = {
       n: String(i + 1),
       qty: String(l.quantity),
@@ -162,21 +182,23 @@ export async function renderInvoicePdf(input: InvoicePdfInput, lh: Letterhead | 
     };
     for (const c of COLS) {
       if (c.key === "desc") {
-        drawLtr(doc, l.descriptionEn, x + 3, y, c.w - 6, { size: 7.4, color: "#111827" });
-        drawRtl(doc, l.descriptionAr, x + 3, y + descH - 1, c.w - 6, { size: 7.2, color: "#374151" });
-        if (l.discountNote) drawLtr(doc, l.discountNote.en, x + 3, y + descH + 12, c.w - 6, { size: 6.4, color: MUTED });
+        // English first, Arabic below it, then the discount note; each starts where the one before ended.
+        const afterEn = cell(doc, l.descriptionEn, x + 3, y, dw, { size: 7.4 });
+        const afterAr = drawRtl(doc, ar(l.descriptionAr), x + 3, afterEn, dw, { size: 7.2, color: "#374151" });
+        rowEnd = Math.max(rowEnd, l.discountNote ? cell(doc, l.discountNote.en, x + 3, afterAr - 2, dw, { size: 6.4, color: MUTED }) : afterAr - 2);
       } else {
-        drawLtr(doc, cells[c.key], x + 3, y, c.w - 6, { size: 7.4, color: "#111827", align: c.key === "n" ? "left" : "right", font: c.key === "total" ? FONTS.semibold : FONTS.regular });
+        rowEnd = Math.max(rowEnd, cell(doc, cells[c.key], x + 3, y, c.w - 6, { size: 7.4, align: c.key === "n" ? "left" : "right", font: c.key === "total" ? FONTS.semibold : FONTS.regular }));
       }
       x += c.w;
     }
-    y += rowH;
+    y = rowEnd + 4;
     doc.moveTo(M, y - 2).lineTo(W - M, y - 2).lineWidth(0.3).strokeColor("#E5E7EB").stroke();
+    y += 3;
   });
 
   // VAT summary per rate and totals
   y += 6;
-  if (y > H - 200) {
+  if (y > H - 230) {
     doc.addPage({ size: "A4", margin: 0 });
     y = 40;
   }
@@ -191,7 +213,7 @@ export async function renderInvoicePdf(input: InvoicePdfInput, lh: Letterhead | 
   vy += 14;
   for (const [rate, v] of [...byRate.entries()].sort((a, b) => b[0] - a[0])) {
     drawLtr(doc, `${rate ? `Standard rated ${pctText(rate)}` : "Zero rated, exempt or out of scope"}: taxable ${num(v.net)}, VAT ${num(v.vat)}`, M, vy, 220, { size: 7, color: "#374151" });
-    drawRtl(doc, `${rate ? `خاضع بنسبة ${pctText(rate)}` : "نسبة صفرية أو معفى أو خارج النطاق"}: ${num(v.net)}، الضريبة ${num(v.vat)}`, M, vy + 9, 220, { size: 6.8, color: "#374151" });
+    drawRtl(doc, `${rate ? `خاضع بنسبة ${pctText(rate)}` : "نسبة صفرية أو معفى أو خارج النطاق"}، المبلغ الخاضع ${num(v.net)}، الضريبة ${num(v.vat)}`, M, vy + 9, 220, { size: 6.8, color: "#374151" });
     vy += 24;
   }
 
@@ -201,12 +223,12 @@ export async function renderInvoicePdf(input: InvoicePdfInput, lh: Letterhead | 
     { en: "Discounts", ar: "الخصومات", v: input.totals.discountFils, neg: true },
     { en: "Total taxable amount", ar: "إجمالي المبلغ الخاضع", v: input.totals.netFils },
     { en: "Total VAT", ar: "إجمالي الضريبة", v: input.totals.vatFils },
-    { en: "Total (AED)", ar: "الإجمالي (درهم)", v: input.totals.totalFils, bold: true },
+    { en: "Total (AED)", ar: "الإجمالي بالدرهم", v: input.totals.totalFils, bold: true },
   ];
   if (input.kind === "TAX" && (input.totals.paidFils || input.totals.creditedFils)) {
     rows.push({ en: "Paid", ar: "المدفوع", v: input.totals.paidFils, neg: true });
     if (input.totals.creditedFils) rows.push({ en: "Credited", ar: "المبالغ الدائنة", v: input.totals.creditedFils, neg: true });
-    rows.push({ en: "Balance due (AED)", ar: "الرصيد المستحق (درهم)", v: input.totals.totalFils - input.totals.paidFils - input.totals.creditedFils, bold: true });
+    rows.push({ en: "Balance due (AED)", ar: "الرصيد المستحق بالدرهم", v: input.totals.totalFils - input.totals.paidFils - input.totals.creditedFils, bold: true });
   }
   let ty = y;
   for (const r of rows) {
@@ -220,7 +242,7 @@ export async function renderInvoicePdf(input: InvoicePdfInput, lh: Letterhead | 
 
   if (input.status) {
     drawLtr(doc, input.status.en, M, y, HALF, { size: 8, font: FONTS.semibold, color: NAVY });
-    drawRtl(doc, input.status.ar, W / 2 + 8, y - 3, HALF, { size: 8, font: FONTS.semibold, color: NAVY });
+    drawRtl(doc, ar(input.status.ar), W / 2 + 8, y - 3, HALF, { size: 8, font: FONTS.semibold, color: NAVY });
     y += 16;
   }
   if (input.bank.en || input.bank.ar) {
@@ -231,7 +253,7 @@ export async function renderInvoicePdf(input: InvoicePdfInput, lh: Letterhead | 
     drawLtr(doc, "Payment details", M, y, HALF, { size: 7.5, font: FONTS.semibold, color: NAVY });
     drawRtl(doc, "بيانات الدفع", W / 2 + 8, y - 3, HALF, { size: 7.5, font: FONTS.semibold, color: NAVY });
     drawLtr(doc, input.bank.en ?? "", M, y + 11, HALF, { size: 7, color: "#374151" });
-    drawRtl(doc, input.bank.ar ?? input.bank.en ?? "", W / 2 + 8, y + 8, HALF, { size: 7, color: "#374151" });
+    drawRtl(doc, ar(input.bank.ar ?? input.bank.en ?? ""), W / 2 + 8, y + 8, HALF, { size: 7, color: "#374151" });
   }
   const note =
     input.kind === "PROFORMA"
@@ -264,7 +286,7 @@ export async function renderCreditNotePdf(input: CreditNotePdfInput, lh: Letterh
   const inv = day(input.invoiceDate);
   y = pair(doc, y, "Credit note no.", "رقم الإشعار", input.number);
   y = pair(doc, y, "Issue date", "تاريخ الإصدار", iss.en, iss.ar);
-  y = pair(doc, y, "Original invoice", "الفاتورة الأصلية", `${input.invoiceNumber} (${inv.en})`, `${input.invoiceNumber} (${inv.ar})`);
+  y = pair(doc, y, "Original invoice", "الفاتورة الأصلية", `${input.invoiceNumber} of ${inv.en}`, `${input.invoiceNumber} بتاريخ ${inv.ar}`);
   y = pair(doc, y, "Account", "رقم الحساب", input.accountCode);
   y = pair(doc, y, "Customer", "العميل", input.billTo.name, input.billTo.nameAr || input.billTo.name);
   if (input.billTo.trn) y = pair(doc, y, "Customer TRN", "الرقم الضريبي للعميل", input.billTo.trn);
@@ -287,28 +309,31 @@ export async function renderCreditNotePdf(input: CreditNotePdfInput, lh: Letterh
   });
   y += 28;
   for (const l of input.lines) {
-    if (y > H - 150) {
+    doc.font(FONTS.regular).fontSize(7.4);
+    const estimate = doc.heightOfString(l.descriptionEn, { width: cw[0] - 8, lineGap: -1 }) + rtlHeight(doc, ar(l.descriptionAr), cw[0] - 8, 7.2) + 10;
+    if (y + estimate > H - 130) {
       doc.addPage({ size: "A4", margin: 0 });
       y = 40;
     }
     x = M;
-    drawLtr(doc, l.descriptionEn, x + 4, y, cw[0] - 8, { size: 7.4 });
-    drawRtl(doc, l.descriptionAr, x + 4, y + 10, cw[0] - 8, { size: 7.2, color: "#374151" });
+    const afterEn = cell(doc, l.descriptionEn, x + 4, y, cw[0] - 8, { size: 7.4 });
+    let rowEnd = drawRtl(doc, ar(l.descriptionAr), x + 4, afterEn, cw[0] - 8, { size: 7.2, color: "#374151" }) - 2;
     const vals = [num(l.netFils), pctText(l.vatRateBp), num(l.vatFils), num(l.totalFils)];
     x += cw[0];
     vals.forEach((v, i) => {
-      drawLtr(doc, v, x + 4, y, cw[i + 1] - 8, { size: 7.4, align: "right" });
+      rowEnd = Math.max(rowEnd, cell(doc, v, x + 4, y, cw[i + 1] - 8, { size: 7.4, align: "right" }));
       x += cw[i + 1];
     });
-    y += 30;
-    doc.moveTo(M, y - 4).lineTo(W - M, y - 4).lineWidth(0.3).strokeColor("#E5E7EB").stroke();
+    y = rowEnd + 4;
+    doc.moveTo(M, y - 2).lineTo(W - M, y - 2).lineWidth(0.3).strokeColor("#E5E7EB").stroke();
+    y += 5;
   }
   y += 6;
   const tx = M + INNER - 250;
   for (const r of [
     { en: "Total taxable credited", ar: "إجمالي المبلغ الخاضع الدائن", v: input.totals.netFils },
     { en: "VAT credited", ar: "الضريبة الدائنة", v: input.totals.vatFils },
-    { en: "Total credited (AED)", ar: "إجمالي المبلغ الدائن (درهم)", v: input.totals.totalFils, bold: true },
+    { en: "Total credited (AED)", ar: "إجمالي المبلغ الدائن بالدرهم", v: input.totals.totalFils, bold: true },
   ]) {
     if (r.bold) doc.rect(tx, y - 3, 250, 17).fill("#F1F4F8");
     drawLtr(doc, r.en, tx + 6, y, 110, { size: 8, font: r.bold ? FONTS.bold : FONTS.regular, color: NAVY });
