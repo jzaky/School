@@ -39,13 +39,42 @@ export function isBlockedAddress(address: string): boolean {
     );
   }
   if (v === 6) {
-    const s = address.toLowerCase();
-    if (s === "::" || s === "::1") return true;
-    const mapped = /^::ffff:(\d+\.\d+\.\d+\.\d+)$/.exec(s);
-    if (mapped) return isBlockedAddress(mapped[1]);
-    return /^(fc|fd|fe8|fe9|fea|feb|ff)/.test(s);
+    const h = ipv6Hextets(address);
+    if (!h) return true;
+    const embedded = (hi: number, lo: number) => isBlockedAddress(`${hi >> 8}.${hi & 255}.${lo >> 8}.${lo & 255}`);
+    const zeros = (from: number, to: number) => h.slice(from, to).every((x) => x === 0);
+    // Unspecified, loopback, and IPv4 written as IPv6 (mapped ::ffff:a.b.c.d in any notation, or compatible ::a.b.c.d).
+    if (zeros(0, 8) || (zeros(0, 7) && h[7] === 1)) return true;
+    if (zeros(0, 5) && (h[5] === 0xffff || h[5] === 0)) return embedded(h[6], h[7]);
+    // NAT64 (64:ff9b::/96 and 64:ff9b:1::/48) and 6to4 (2002::/16) carry an IPv4 address too.
+    if (h[0] === 0x64 && h[1] === 0xff9b) return h[2] === 0 ? embedded(h[6], h[7]) : true;
+    if (h[0] === 0x2002) return embedded(h[1], h[2]);
+    // Teredo, documentation, discard, unique local, link-local, site-local and multicast ranges.
+    if (h[0] === 0x2001 && (h[1] === 0 || h[1] === 0xdb8)) return true;
+    if (h[0] === 0x100 && zeros(1, 4)) return true;
+    return (h[0] & 0xfe00) === 0xfc00 || (h[0] & 0xffc0) === 0xfe80 || (h[0] & 0xffc0) === 0xfec0 || (h[0] & 0xff00) === 0xff00;
   }
   return true;
+}
+
+/** The eight 16-bit groups of an IPv6 address (any textual form, including an embedded dotted IPv4 tail). */
+function ipv6Hextets(address: string): number[] | null {
+  let s = address.toLowerCase().replace(/^\[|\]$/g, "").split("%")[0];
+  const v4 = /(\d+)\.(\d+)\.(\d+)\.(\d+)$/.exec(s);
+  if (v4) {
+    const [a, b, c, d] = v4.slice(1).map(Number);
+    if ([a, b, c, d].some((x) => x > 255)) return null;
+    s = `${s.slice(0, v4.index)}${((a << 8) | b).toString(16)}:${((c << 8) | d).toString(16)}`;
+  }
+  const halves = s.split("::");
+  if (halves.length > 2) return null;
+  const head = halves[0] ? halves[0].split(":") : [];
+  const tail = halves.length === 2 && halves[1] ? halves[1].split(":") : [];
+  const missing = 8 - head.length - tail.length;
+  if (halves.length === 1 ? head.length !== 8 : missing < 1) return null;
+  const parts = [...head, ...Array(halves.length === 2 ? missing : 0).fill("0"), ...tail];
+  const out = parts.map((p) => (/^[0-9a-f]{1,4}$/.test(p) ? parseInt(p, 16) : NaN));
+  return out.length === 8 && out.every((n) => Number.isInteger(n)) ? out : null;
 }
 
 /** Checks the address shape of a source URL. Returns an error code or null. */

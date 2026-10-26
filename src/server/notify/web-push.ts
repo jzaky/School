@@ -1,6 +1,7 @@
 // Web push sender (RFC 8030) with VAPID authentication (RFC 8292) and aes128gcm payload encryption
 // (RFC 8188 and RFC 8291), on Node's built-in crypto. No third-party library is needed.
 import crypto from "node:crypto";
+import { guardedFetch } from "@/server/integrations/guarded-fetch";
 
 export type PushTarget = { endpoint: string; p256dh: string; auth: string };
 export type VapidKeys = { publicKey: string; privateKey: string; subject: string };
@@ -91,7 +92,7 @@ export type PushOutcome = { endpoint: string; ok: boolean; gone: boolean; status
 
 /** Send to every device of one member. Expired subscriptions (404, 410) are reported as gone. */
 export async function sendPush(targets: PushTarget[], payload: PushPayload, keys: VapidKeys, opts: { urgent?: boolean; fetchImpl?: typeof fetch } = {}): Promise<PushOutcome[]> {
-  const f = opts.fetchImpl ?? fetch;
+  const f = opts.fetchImpl ?? guardedFetch;
   const out: PushOutcome[] = [];
   for (const t of targets) {
     const req = buildPushRequest(t, payload, keys, opts);
