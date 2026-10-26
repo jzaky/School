@@ -50,7 +50,7 @@ export default async function ClassSessionPage({ params }: { params: Promise<{ i
       <div>
         <Link href="/subjects/session" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
           <ChevronLeft className="size-4 rtl:rotate-180" />
-          {t("back")}
+          {t("backSessions")}
         </Link>
       </div>
       <PageHeader title={t("liveHeading", { name: className })} description={data.year ? t("liveSubtitle", { year: `⁦${pick(locale, data.year.nameEn, data.year.nameAr)}⁩` }) : undefined} />

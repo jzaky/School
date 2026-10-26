@@ -65,7 +65,7 @@ export default async function ClassSessionsPage() {
                     <h2 className="text-base font-semibold">{pick(locale, c.nameEn, c.nameAr)}</h2>
                     <p className="text-xs text-muted-foreground">
                       {tg("label", gradeLevelValues(c.gradeLevel))} · {t("studentsN", { count: data.counts.get(c.id) ?? 0 })}
-                      {year ? ` · ${t("forYear", { year: `⁦${pick(locale, year.nameEn, year.nameAr)}⁩` })}` : ""}
+                      {year ? ` · ${t("forYear", { year: `⁦${pick(locale, year.nameEn, year.nameAr).replace(/-/g, "‑")}⁩` })}` : ""}
                     </p>
                   </div>
                   {live && (

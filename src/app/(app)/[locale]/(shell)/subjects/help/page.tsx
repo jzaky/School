@@ -80,15 +80,15 @@ export default async function HelpStudentsChoosePage({ searchParams }: { searchP
     const status = statusOf(s.id);
     const grant = grantOf(s.id);
     return (
-      <li key={s.id} className="flex flex-wrap items-center gap-x-3 gap-y-1.5 py-2.5" data-testid={highlight ? "asked-row" : "help-student"}>
+      <li key={s.id} className="flex flex-col gap-2 py-3 sm:flex-row sm:items-center sm:gap-3" data-testid={highlight ? "asked-row" : "help-student"}>
         <div className="min-w-0 flex-1">
           <div className="truncate text-sm font-medium">{personName(s, locale)}</div>
-          <div className="truncate text-xs text-muted-foreground">
+          <div className="text-xs text-muted-foreground">
             {[room.get(s.id) ?? tg("label", gradeLevelValues(s.gradeLevel)), grant ? t("canHelpUntil", { date: fmtDateTime(prefs, grant.until) }) : null].filter(Boolean).join(" · ")}
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          {status && <StatusPill status={status} />}
+        <div className="flex items-center justify-between gap-2 sm:justify-end">
+          {status ? <StatusPill status={status} /> : <span />}
           <Button asChild size="sm" variant={grant || ctx.can("registration.manage") ? "default" : "outline"}>
             <Link href={`/subjects?student=${s.id}&year=${yearOf(s.id)}`} data-testid="help-open">
               {grant || ctx.can("registration.manage") ? t("helpChoose") : t("open")}

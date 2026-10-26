@@ -162,3 +162,13 @@
 - Narration: media/voiceover/tour/script.json and media/voiceover/it/script.json. Pipeline scripts and subtitle files live in the session scratchpad (tour/).
 - Every on-screen number was counted from the demo or catalog data after a reset. The status page was not filmed (a local run is not representative of production).
 - Fixed from the film review: the counselor note on the plan uses dir="auto" (English note in the Arabic view), and the plan summary no longer calls official requirements "example data" or calls goal-matching programmes "targets".
+
+## Course selection windows, exceptions, class sessions and assisted choosing (reg worktree)
+- Windows per year and grade with opening and closing times in Dubai time, rounds, calendar deadlines and server-side enforcement in one write path (submitChoices). Students and parents see "Opens ...", an open countdown, or a closed screen with who to ask. Staff edits after closing are labelled and audited.
+- Late-change exceptions for one student (reason required, student and parents told), class choosing sessions for a homeroom with a QR code, short link and live progress, assisted choosing by teachers, counselors, advisors and (when the school allows it) parents, per-choice attribution, parent sign-off.
+- School rules: parents choose always, only when allowed, or never (sign-off only); sign-off on or off; a parent's own choice counts as sign-off or not.
+- Pages: /subjects (banner, helpers, exceptions, status and sign-off), /subjects/help, /subjects/session, /subjects/session/[id], /subjects/join/[code] and the short link /choose/[code], /admin/registration/windows and /admin/registration/windows/[id] with CSV export at /api/registration/windows/[id]/export.
+- Notices through notify() with ledger idempotency (open, 3 days, 1 day, closing summary, staff reminder), worker job courseSelection.notices every 15 minutes, ten bilingual message templates created on first use.
+- Schema: migrations 20261026143000_course_selection_windows (six tables, SubjectRegistration.chosenAt, data migration of deadline-only windows) and 20261026150000_offering_track_unique. New permission registration.assist (teacher, counselor, career advisor, school administrator).
+- Seed: prisma/seed/academics/course-selection.ts. Guide: docs/guides/course-selection.md.
+- Tests: tests/unit/selection-window.test.ts, tests/integration/course-selection.test.ts, tests/e2e/course-selection.spec.ts.

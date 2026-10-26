@@ -264,7 +264,7 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
         <div className="space-y-4">
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-sm font-semibold">{isNext ? t("next.offeringsFor", { grade, year: `\u2066${pick(locale, year!.nameEn, year!.nameAr)}\u2069` }) : t("offeringsFor", { grade })}</h2>
-            <OfferingDialog grade={grade} yearId={isNext ? year!.id : null} subjects={subjectOptions} courses={courseOptions} takenSubjectIds={offerings.map((o) => o.subjectId)} />
+            <OfferingDialog grade={grade} yearId={isNext ? year!.id : null} subjects={subjectOptions} courses={courseOptions} takenSubjectIds={offerings.map((o) => o.subjectId)} taken={offerings.map((o) => ({ subjectId: o.subjectId, curriculum: o.curriculum }))} />
           </div>
           {offerings.length === 0 ? (
             <EmptyState icon={<BookOpen className="size-5" />} title={t("noOfferings")} body={t("noOfferingsBody")} />

@@ -234,7 +234,7 @@ export function SelectionSettingsForm({ value }: { value: Settings }) {
     <div className="space-y-4" data-testid="selection-settings">
       <div className="space-y-2">
         <div className="text-sm font-medium">{t("parentChoice")}</div>
-        <div className="grid gap-2 sm:grid-cols-3" role="radiogroup" aria-label={t("parentChoice")}>
+        <div className="grid gap-2" role="radiogroup" aria-label={t("parentChoice")}>
           {(["ALWAYS", "WHEN_ALLOWED", "NEVER"] as const).map((m) => (
             <button
               key={m}

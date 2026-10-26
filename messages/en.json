@@ -9994,7 +9994,8 @@
       "waitingParent": "Waiting for parent",
       "blocks": "{chosen} of {total} blocks",
       "screenTitle": "{name}: choose your courses",
-      "closeScreen": "Close"
+      "closeScreen": "Close",
+      "backSessions": "Class choosing sessions"
     },
     "join": {
       "title": "Class session",

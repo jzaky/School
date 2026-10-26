@@ -73,7 +73,10 @@ export default async function SelectionWindowsPage() {
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
           <div className="space-y-6">
             {data.years.map((y) => {
-              const ws = data.windows.filter((w) => w.academicYearId === y.id).sort((a, b) => b.opensAt.getTime() - a.opensAt.getTime());
+              const rank = { open: 0, upcoming: 1, closed: 2 } as const;
+              const ws = data.windows
+                .filter((w) => w.academicYearId === y.id)
+                .sort((a, b) => rank[windowState(a, now)] - rank[windowState(b, now)] || b.opensAt.getTime() - a.opensAt.getTime());
               return (
                 <section key={y.id} className="space-y-3" data-testid={`windows-${y.id === data.next?.id ? "next" : "current"}`}>
                   <h2 className="text-sm font-semibold">{y.id === data.next?.id ? t("yearNext", { year: yearLabel(y) }) : t("yearCurrent", { year: yearLabel(y) })}</h2>

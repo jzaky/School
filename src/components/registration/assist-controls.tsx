@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import { BadgeCheck, CalendarClock, HandHelping, Loader2, ShieldCheck, Sparkles, UserMinus, UserPlus } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { fmtDateTime, type FormatPrefs } from "@/lib/format";
 import { dubaiParts } from "@/lib/selection-window";
 import { initials } from "@/lib/i18n-data";
 import { Button } from "@/components/ui/button";
@@ -23,7 +22,7 @@ export function useSelError() {
 }
 
 export type HelperCandidate = { membershipId: string; name: string; role: string; kind: "STAFF" | "GUARDIAN" };
-export type ActiveHelper = { id: string; name: string; role: string; until: string; byStudent: boolean; grantedBy: string; kind: "STAFF" | "GUARDIAN" };
+export type ActiveHelper = { id: string; name: string; role: string; until: string; untilText: string; byStudent: boolean; grantedBy: string; kind: "STAFF" | "GUARDIAN" };
 
 /** Date and time inputs in Dubai time, side by side (they fit a 390px phone). */
 function DubaiDateTime({ id, date, time, onDate, onTime, min }: { id: string; date: string; time: string; onDate: (v: string) => void; onTime: (v: string) => void; min?: string }) {
@@ -164,7 +163,6 @@ export function HelpersCard({
   canGrant,
   canRevoke,
   asStaff = false,
-  prefs,
 }: {
   studentId: string;
   studentName: string;
@@ -174,7 +172,6 @@ export function HelpersCard({
   canGrant: boolean;
   canRevoke: boolean;
   asStaff?: boolean;
-  prefs: FormatPrefs;
 }) {
   const t = useTranslations("selection.help");
   const [open, setOpen] = useState(false);
@@ -202,8 +199,8 @@ export function HelpersCard({
               <span className="grid size-8 shrink-0 place-items-center rounded-full bg-brand-soft text-xs font-semibold text-brand">{initials(h.name)}</span>
               <div className="min-w-0 flex-1">
                 <div className="truncate text-sm font-medium">{h.name}</div>
-                <div className="truncate text-xs text-muted-foreground">
-                  {h.role} · {t("untilShort", { date: fmtDateTime(prefs, h.until) })}
+                <div className="text-xs text-muted-foreground">
+                  {h.role} · {t("untilShort", { date: h.untilText })}
                 </div>
                 {!h.byStudent && <div className="truncate text-xs text-muted-foreground">{t("allowedBy", { name: h.grantedBy })}</div>}
               </div>

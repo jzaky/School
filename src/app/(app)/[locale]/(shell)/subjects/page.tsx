@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { BookOpen, Eye, HandHelping, Info, ShieldCheck, Sparkles } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
-import { fmtDate, fmtDateTime } from "@/lib/format";
+import { fmtDate, fmtDateTime, fmtTime } from "@/lib/format";
 import { personName, pick, userName } from "@/lib/i18n-data";
 import { cn } from "@/lib/utils";
 import { tenantTx } from "@/lib/tenant-db";
@@ -202,13 +202,16 @@ export default async function SubjectsPage({ params, searchParams }: { params: P
           closesAt={w?.closesAt.toISOString() ?? null}
           until={access.until?.toISOString() ?? null}
           serverNow={new Date().toISOString()}
+          opensText={w ? fmtDateTime(prefs, w.opensAt) : ""}
+          closesText={w ? fmtDateTime(prefs, w.closesAt) : ""}
+          untilText={access.until ? fmtDateTime(prefs, access.until) : ""}
+          untilTimeText={access.until ? fmtTime(prefs, access.until) : ""}
           round={w ? pick(locale, w.roundEn, w.roundAr) || null : null}
           year={yearName}
           sessionClass={access.session ? pick(locale, access.session.className.en, access.session.className.ar) : null}
           contacts={view.contacts.map((c) => ts("contact", { name: c.name, role: roleLabel(c.role) }))}
           staffCanEdit={staffEdit}
           requestChangeHref={!ctx.isStaff && which === "current" ? "/services/subject_change" : null}
-          prefs={prefs}
           self={ctx.isStudent}
           studentFirst={first}
         />
@@ -273,13 +276,12 @@ export default async function SubjectsPage({ params, searchParams }: { params: P
         <HelpersCard
           studentId={student.id}
           studentName={first}
-          helpers={view.helpers.map((h) => ({ ...h, role: roleLabel(h.role) }))}
+          helpers={view.helpers.map((h) => ({ ...h, role: roleLabel(h.role), untilText: fmtDateTime(prefs, h.until) }))}
           candidates={view.candidates.map((c) => ({ ...c, role: roleLabel(c.role) }))}
           defaultUntil={view.defaultUntil}
           canGrant={(ctx.isStudent && studentCanAsk) || (ctx.isStaff && view.assist)}
           canRevoke={ctx.isStudent || (ctx.isStaff && view.assist)}
-          asStaff={ctx.isStaff}
-          prefs={prefs}
+          asStaff={!ctx.isStudent}
         />
       )}
 

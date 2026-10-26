@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { CalendarClock, CalendarPlus, Lock, Sparkles, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { fmtDateTime, fmtTime, type FormatPrefs } from "@/lib/format";
 import { timeLeft } from "@/lib/selection-window";
 import { Link } from "@/i18n/navigation";
 
@@ -37,6 +36,11 @@ export type BannerProps = {
   closesAt: string | null;
   until: string | null;
   serverNow: string;
+  /** Dates are formatted on the server (Dubai time) so the page hydrates with the same text. */
+  opensText: string;
+  closesText: string;
+  untilText: string;
+  untilTimeText: string;
   round: string | null;
   year: string;
   sessionClass: string | null;
@@ -45,7 +49,6 @@ export type BannerProps = {
   /** Staff with registration.manage can still change choices. */
   staffCanEdit: boolean;
   requestChangeHref: string | null;
-  prefs: FormatPrefs;
   self: boolean;
   studentFirst: string;
 };
@@ -69,22 +72,22 @@ export function SelectionBanner(p: BannerProps) {
   let detail: React.ReactNode = null;
   if (p.via === "session" && p.until) {
     title = t("sessionTitle", { name: p.sessionClass ?? "" });
-    detail = t("sessionDetail", { time: fmtTime(p.prefs, p.until) });
+    detail = t("sessionDetail", { time: p.untilTimeText });
   } else if (p.via === "exception" && p.until) {
     title = t(`exceptionTitle.${who}`, { name: p.studentFirst });
-    detail = t("exceptionDetail", { date: fmtDateTime(p.prefs, p.until) });
+    detail = t("exceptionDetail", { date: p.untilText });
   } else if (p.state === "open" && p.closesAt) {
     title = (
       <>
         {t("openTitle", { year: p.year })} <span className="whitespace-nowrap">{t("closesIn")} <Countdown until={p.closesAt} serverNow={p.serverNow} /></span>
       </>
     );
-    detail = t("openDetail", { date: fmtDateTime(p.prefs, p.closesAt) });
+    detail = t("openDetail", { date: p.closesText });
   } else if (p.state === "upcoming" && p.opensAt) {
-    title = t("upcomingTitle", { year: p.year, date: fmtDateTime(p.prefs, p.opensAt) });
-    detail = p.closesAt ? t("upcomingDetail", { date: fmtDateTime(p.prefs, p.closesAt) }) : null;
+    title = t("upcomingTitle", { year: p.year, date: p.opensText });
+    detail = p.closesAt ? t("upcomingDetail", { date: p.closesText }) : null;
   } else if (p.state === "closed" && p.closesAt) {
-    title = t("closedTitle", { year: p.year, date: fmtDateTime(p.prefs, p.closesAt) });
+    title = t("closedTitle", { year: p.year, date: p.closesText });
     detail = p.contacts.length ? t(`closedAsk.${who}`, { names: p.contacts.join(t("listSep")) }) : t(`closedAskSchool.${who}`);
   } else {
     title = t("noneTitle", { year: p.year });

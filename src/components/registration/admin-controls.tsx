@@ -70,6 +70,7 @@ export function OfferingDialog({
   subjects,
   value,
   takenSubjectIds,
+  taken,
   courses = [],
   yearId = null,
 }: {
@@ -77,6 +78,8 @@ export function OfferingDialog({
   subjects: SubjectOption[];
   value?: OfferingValue;
   takenSubjectIds: string[];
+  /** Subjects already offered to the grade, with their track (null: every track). Overrides takenSubjectIds. */
+  taken?: Array<{ subjectId: string; curriculum: string | null }>;
   /** The school's catalog courses, to say what the offering counts as for universities. */
   courses?: CourseOption[];
   /** Next year's course selection (null: the current year). */
@@ -88,13 +91,17 @@ export function OfferingDialog({
   const editing = Boolean(value?.id);
   const [open, setOpen] = useState(false);
   const [pending, start] = useTransition();
-  const available = editing ? subjects : subjects.filter((s) => !takenSubjectIds.includes(s.id));
   const [subjectId, setSubjectId] = useState(value?.subjectId ?? "");
   const [kind, setKind] = useState<"CORE" | "OPTION">(value?.kind ?? "OPTION");
   const [block, setBlock] = useState(value?.optionBlock ?? "A");
   const [prereq, setPrereq] = useState<string[]>(value?.prerequisites ?? []);
   const [periods, setPeriods] = useState(String(value?.periodsPerWeek ?? 4));
   const [track, setTrack] = useState<Track | null>(value?.curriculum ?? null);
+  // A subject can be offered once per track; an "every track" offering blocks every track.
+  const offered = taken ?? takenSubjectIds.map((subjectId) => ({ subjectId, curriculum: null }));
+  const clashes = (sid: string, tr: Track | null) => offered.some((x) => x.subjectId === sid && (tr === null || x.curriculum === null || x.curriculum === tr));
+  const available = editing ? subjects : subjects.filter((s) => !clashes(s.id, track));
+  const anyFree = editing || subjects.some((s) => !offered.some((x) => x.subjectId === s.id && x.curriculum === null));
   const [courseId, setCourseId] = useState<string | null>(value?.courseId ?? null);
   const [isAP, setIsAP] = useState(value?.isAP ?? false);
   const courseChoices = courses.filter((c) => !track || c.curriculum === track);
@@ -111,7 +118,7 @@ export function OfferingDialog({
       router.refresh();
     });
 
-  if (!editing && available.length === 0) {
+  if (!anyFree) {
     return (
       <Tooltip>
         <TooltipTrigger asChild>

@@ -565,6 +565,8 @@ export async function progressFor(tx: Tx, orgId: string, yearId: string, student
     const mine = offerings.filter((o) => o.gradeLevel === grade && (o.curriculum === null || o.curriculum === s.curriculum));
     if (!mine.length) continue;
     const blocks = blocksOf(mine.map((o) => ({ subjectId: o.subjectId, code: o.subjectId, kind: o.kind, optionBlock: o.optionBlock, prerequisites: [] })));
+    // Core subjects only: registered automatically, so there is nothing to choose.
+    if (!blocks.length) continue;
     const have = regsBy.get(s.id) ?? new Set<string>();
     const chosen = blocks.filter((b) => b.options.some((o) => have.has(o.subjectId))).length;
     const sub = subBy.get(s.id) ?? null;

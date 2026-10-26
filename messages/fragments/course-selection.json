@@ -1170,6 +1170,10 @@
       "closeScreen": [
         "Close",
         "إغلاق"
+      ],
+      "backSessions": [
+        "Class choosing sessions",
+        "جلسات الاختيار الصفية"
       ]
     },
     "join": {

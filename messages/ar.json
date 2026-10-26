@@ -9994,7 +9994,8 @@
       "waitingParent": "بانتظار ولي الأمر",
       "blocks": "{chosen} من {total} مجموعات",
       "screenTitle": "{name}: اختر موادك",
-      "closeScreen": "إغلاق"
+      "closeScreen": "إغلاق",
+      "backSessions": "جلسات الاختيار الصفية"
     },
     "join": {
       "title": "جلسة صفية",
