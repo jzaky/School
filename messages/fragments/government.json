@@ -1,0 +1,1778 @@
+{
+  "nav": {
+    "government": [
+      "Government reporting",
+      "التقارير الحكومية"
+    ]
+  },
+  "settings": {
+    "kinds": {
+      "gov_due_reminder": [
+        "A government return is due soon",
+        "اقتراب موعد تقرير حكومي"
+      ]
+    }
+  },
+  "access": {
+    "groups": {
+      "government": [
+        "Government reporting",
+        "التقارير الحكومية"
+      ]
+    },
+    "groupHelp": {
+      "government": [
+        "Returns to the education authority: census, registration, attendance, staff and results.",
+        "التقارير المقدّمة إلى الجهة التعليمية: الإحصاء والتسجيل والحضور والكادر والنتائج."
+      ]
+    },
+    "perms": {
+      "government": {
+        "reports": {
+          "label": [
+            "Prepare government returns",
+            "إعداد التقارير الحكومية"
+          ],
+          "help": [
+            "Create returns, fix the problems they find, export Excel, CSV and PDF files, record submissions and keep the due date calendar.",
+            "إنشاء التقارير ومعالجة ما تكشفه من مشكلات وتصدير ملفات Excel وCSV وPDF وتسجيل الإرسال وإدارة تقويم المواعيد."
+          ]
+        },
+        "view": {
+          "label": [
+            "View and sign off government returns",
+            "عرض التقارير الحكومية واعتمادها"
+          ],
+          "help": [
+            "See returns, the submission log and due dates, download the summary PDF and sign off a return as principal.",
+            "الاطلاع على التقارير وسجل الإرسال والمواعيد، وتنزيل ملخص PDF، واعتماد التقرير بصفة مدير المدرسة."
+          ]
+        }
+      }
+    }
+  },
+  "guide": {
+    "steps": {
+      "govCensus": {
+        "title": [
+          "Open the draft census",
+          "افتح مسودة الإحصاء"
+        ],
+        "body": [
+          "See the draft census for KHDA, built from today's student records.",
+          "اطّلع على مسودة الإحصاء المقدّم إلى هيئة المعرفة، المبني من سجلات الطلاب الحالية."
+        ]
+      },
+      "govFix": {
+        "title": [
+          "Fix a problem before sending",
+          "عالج مشكلة قبل الإرسال"
+        ],
+        "body": [
+          "Fill in a missing nationality or record a registration reference, and watch the check list shrink.",
+          "أكمل جنسية ناقصة أو سجّل رقم تسجيل، وراقب قائمة الفحص وهي تتقلّص."
+        ]
+      },
+      "govExport": {
+        "title": [
+          "Export Excel, CSV and PDF",
+          "صدّر ملفات Excel وCSV وPDF"
+        ],
+        "body": [
+          "Each file is logged with a version and a checksum.",
+          "يُسجَّل كل ملف برقم إصدار وبصمة تحقق."
+        ]
+      },
+      "govSubmit": {
+        "title": [
+          "Record the submission",
+          "سجّل الإرسال"
+        ],
+        "body": [
+          "Enter the reference KHDA gave you, against the file you sent.",
+          "أدخل الرقم المرجعي الذي منحته الهيئة، مقابل الملف الذي أرسلته."
+        ]
+      },
+      "govDueDates": {
+        "title": [
+          "Keep the due date calendar",
+          "أدِر تقويم المواعيد"
+        ],
+        "body": [
+          "Add the authority's dates; the team is reminded 14 and 3 days before.",
+          "أضف مواعيد الجهة التعليمية، ويُذكَّر الفريق قبل 14 يومًا و3 أيام."
+        ]
+      },
+      "govLog": {
+        "title": [
+          "Review the submission log",
+          "راجع سجل الإرسال"
+        ],
+        "body": [
+          "Who sent which return, when, and the authority's reference.",
+          "من أرسل أي تقرير ومتى، والرقم المرجعي لدى الجهة."
+        ]
+      },
+      "govSignOff": {
+        "title": [
+          "Sign off the census",
+          "اعتمد الإحصاء"
+        ],
+        "body": [
+          "Review the figures and sign off as principal; your name and the date go on the PDF.",
+          "راجع الأرقام واعتمدها بصفتك مدير المدرسة، ويظهر اسمك والتاريخ في ملف PDF."
+        ]
+      }
+    }
+  },
+  "govReports": {
+    "title": [
+      "Government reporting",
+      "التقارير الحكومية"
+    ],
+    "subtitle": [
+      "Returns for {authority}, built from the data already in Horizon. Check them, export them and keep a record of what was sent.",
+      "تقارير {authority} مبنية من البيانات الموجودة في Horizon. افحصها وصدّرها واحتفظ بسجل لما أُرسل."
+    ],
+    "span": [
+      "{from} to {to}",
+      "من {from} إلى {to}"
+    ],
+    "fewer": [
+      "Fewer than {n}",
+      "أقل من {n}"
+    ],
+    "notRecorded": [
+      "Not recorded",
+      "غير مسجّل"
+    ],
+    "notRecordedInHorizon": [
+      "Not recorded in Horizon",
+      "غير مسجّل في Horizon"
+    ],
+    "noSection": [
+      "No section",
+      "بدون شعبة"
+    ],
+    "totalRow": [
+      "Total",
+      "الإجمالي"
+    ],
+    "present": [
+      "On file",
+      "مسجّل"
+    ],
+    "missing": [
+      "Missing",
+      "غير موجود"
+    ],
+    "limitOffShort": [
+      "Limit not switched on",
+      "الحد غير مفعّل"
+    ],
+    "gender": {
+      "M": [
+        "Male",
+        "ذكر"
+      ],
+      "F": [
+        "Female",
+        "أنثى"
+      ]
+    },
+    "kind": {
+      "CENSUS": [
+        "Enrollment census",
+        "إحصاء الطلبة المسجلين"
+      ],
+      "REGISTRATION": [
+        "Learner registration list",
+        "قائمة تسجيل المتعلمين"
+      ],
+      "ATTENDANCE": [
+        "Attendance return",
+        "تقرير الحضور"
+      ],
+      "STAFF": [
+        "Staff return",
+        "تقرير الكادر"
+      ],
+      "RESULTS": [
+        "Results summary",
+        "ملخص النتائج"
+      ],
+      "OTHER": [
+        "Other",
+        "أخرى"
+      ]
+    },
+    "kindHelp": {
+      "CENSUS": [
+        "Students on roll on the census date by grade, section, gender and nationality, people of determination, admissions and leavers, and age against grade.",
+        "الطلبة المسجلون في تاريخ الإحصاء حسب الصف والشعبة والجنس والجنسية، وأصحاب الهمم، والمقبولون والمغادرون، والعمر مقارنة بالصف."
+      ],
+      "REGISTRATION": [
+        "New admissions, transfers in, re-enrollments and withdrawals in the period, with each learner's registration status and reference.",
+        "المقبولون الجدد والمنقولون والعائدون والمنسحبون خلال الفترة، مع حالة تسجيل كل متعلم ورقمه المرجعي."
+      ],
+      "ATTENDANCE": [
+        "Attendance rate by grade, unauthorised absence, and students at or over the regulator's absence limit.",
+        "نسبة الحضور حسب الصف، والغياب بدون عذر، والطلبة الذين بلغوا حد الغياب المعتمد لدى الجهة التنظيمية أو تجاوزوه."
+      ],
+      "STAFF": [
+        "Teachers and staff by role, from staff records, with the fields Horizon does not hold marked as not recorded.",
+        "المعلمون والموظفون حسب الدور من سجلات الكادر، مع توضيح الحقول التي لا يحتفظ بها Horizon."
+      ],
+      "RESULTS": [
+        "Internal assessment results by grade and subject from the gradebook, and AP entries.",
+        "نتائج التقييمات الداخلية حسب الصف والمادة من سجل الدرجات، ومشاركات AP."
+      ]
+    },
+    "titleOn": [
+      "{kind}, {date}",
+      "{kind}، {date}"
+    ],
+    "asAt": [
+      "As at {date}",
+      "كما في {date}"
+    ],
+    "censusPeriod": [
+      "Census date {date}. Admissions and leavers from {from} to {to}.",
+      "تاريخ الإحصاء {date}. المقبولون والمغادرون من {from} إلى {to}."
+    ],
+    "period": [
+      "{from} to {to}",
+      "من {from} إلى {to}"
+    ],
+    "movement": {
+      "ADMISSION": [
+        "New admission",
+        "قبول جديد"
+      ],
+      "TRANSFER_IN": [
+        "Transfer in (UAE school)",
+        "انتقال من مدرسة في الدولة"
+      ],
+      "FROM_ABROAD": [
+        "Transfer in (from abroad)",
+        "انتقال من خارج الدولة"
+      ],
+      "READMISSION": [
+        "Re-enrollment of a former student",
+        "إعادة تسجيل طالب سابق"
+      ],
+      "WITHDRAWAL": [
+        "Withdrawal",
+        "انسحاب"
+      ]
+    },
+    "regStatus": {
+      "NONE": [
+        "No registration record",
+        "لا يوجد سجل تسجيل"
+      ],
+      "NOT_SUBMITTED": [
+        "Not submitted",
+        "لم يُرسل"
+      ],
+      "SUBMITTED": [
+        "Submitted",
+        "أُرسل"
+      ],
+      "APPROVED": [
+        "Approved",
+        "معتمد"
+      ],
+      "REJECTED": [
+        "Rejected",
+        "مرفوض"
+      ]
+    },
+    "col": {
+      "measure": [
+        "Measure",
+        "البند"
+      ],
+      "value": [
+        "Value",
+        "القيمة"
+      ],
+      "grade": [
+        "Grade",
+        "الصف"
+      ],
+      "sections": [
+        "Sections",
+        "الشعب"
+      ],
+      "male": [
+        "Male",
+        "ذكور"
+      ],
+      "female": [
+        "Female",
+        "إناث"
+      ],
+      "total": [
+        "Total",
+        "الإجمالي"
+      ],
+      "emirati": [
+        "Emirati",
+        "مواطنون"
+      ],
+      "otherNationalities": [
+        "Other nationalities",
+        "جنسيات أخرى"
+      ],
+      "joined": [
+        "New admissions",
+        "المقبولون الجدد"
+      ],
+      "section": [
+        "Section",
+        "الشعبة"
+      ],
+      "genderUnknown": [
+        "Gender not recorded",
+        "الجنس غير مسجّل"
+      ],
+      "nationalityUnknown": [
+        "Nationality not recorded",
+        "الجنسية غير مسجّلة"
+      ],
+      "nationality": [
+        "Nationality",
+        "الجنسية"
+      ],
+      "students": [
+        "Students",
+        "الطلبة"
+      ],
+      "percent": [
+        "Percent",
+        "النسبة المئوية"
+      ],
+      "expectedAge": [
+        "Usual age",
+        "العمر المعتاد"
+      ],
+      "atExpectedAge": [
+        "At usual age",
+        "في العمر المعتاد"
+      ],
+      "younger": [
+        "Younger",
+        "أصغر"
+      ],
+      "older": [
+        "Older",
+        "أكبر"
+      ],
+      "noDob": [
+        "No date of birth",
+        "بدون تاريخ ميلاد"
+      ],
+      "grades": [
+        "Grades",
+        "الصفوف"
+      ],
+      "sen": [
+        "People of determination",
+        "أصحاب الهمم"
+      ],
+      "movement": [
+        "Movement",
+        "نوع الحركة"
+      ],
+      "date": [
+        "Date",
+        "التاريخ"
+      ],
+      "studentNo": [
+        "Student number",
+        "رقم الطالب"
+      ],
+      "firstNameEn": [
+        "First name (English)",
+        "الاسم الأول (بالإنجليزية)"
+      ],
+      "lastNameEn": [
+        "Last name (English)",
+        "اسم العائلة (بالإنجليزية)"
+      ],
+      "firstNameAr": [
+        "First name (Arabic)",
+        "الاسم الأول (بالعربية)"
+      ],
+      "lastNameAr": [
+        "Last name (Arabic)",
+        "اسم العائلة (بالعربية)"
+      ],
+      "dateOfBirth": [
+        "Date of birth",
+        "تاريخ الميلاد"
+      ],
+      "gender": [
+        "Gender",
+        "الجنس"
+      ],
+      "emiratesId": [
+        "Emirates ID",
+        "الهوية الإماراتية"
+      ],
+      "curriculum": [
+        "Curriculum",
+        "المنهج"
+      ],
+      "otherSchool": [
+        "Previous school or destination",
+        "المدرسة السابقة أو الوجهة"
+      ],
+      "tcNumber": [
+        "Transfer certificate",
+        "شهادة النقل"
+      ],
+      "regStatus": [
+        "Registration status",
+        "حالة التسجيل"
+      ],
+      "reference": [
+        "Authority reference",
+        "الرقم المرجعي لدى الجهة"
+      ],
+      "submittedOn": [
+        "Submitted on",
+        "تاريخ الإرسال"
+      ],
+      "decidedOn": [
+        "Decided on",
+        "تاريخ القرار"
+      ],
+      "possible": [
+        "Possible sessions",
+        "الجلسات المقررة"
+      ],
+      "attended": [
+        "Attended",
+        "الحضور"
+      ],
+      "attendancePct": [
+        "Attendance %",
+        "نسبة الحضور %"
+      ],
+      "authorised": [
+        "Authorised absences",
+        "غياب بعذر"
+      ],
+      "unauthorised": [
+        "Unauthorised absences",
+        "غياب بدون عذر"
+      ],
+      "unexplained": [
+        "Still unexplained",
+        "غياب لم يُبرَّر بعد"
+      ],
+      "late": [
+        "Late",
+        "التأخر"
+      ],
+      "name": [
+        "Name",
+        "الاسم"
+      ],
+      "consecutiveDays": [
+        "Longest run of unexcused days",
+        "أطول فترة غياب متتالية بدون عذر"
+      ],
+      "totalDays": [
+        "Unexcused days in the year",
+        "أيام الغياب بدون عذر في العام"
+      ],
+      "role": [
+        "Role",
+        "الدور"
+      ],
+      "staff": [
+        "Staff",
+        "الكادر"
+      ],
+      "employeeNo": [
+        "Employee number",
+        "الرقم الوظيفي"
+      ],
+      "jobTitle": [
+        "Job title",
+        "المسمى الوظيفي"
+      ],
+      "department": [
+        "Department",
+        "القسم"
+      ],
+      "roles": [
+        "Roles in Horizon",
+        "الأدوار في Horizon"
+      ],
+      "qualification": [
+        "Qualification",
+        "المؤهل"
+      ],
+      "licence": [
+        "Teaching licence or permit number",
+        "رقم الترخيص أو تصريح مزاولة المهنة"
+      ],
+      "field": [
+        "Field",
+        "الحقل"
+      ],
+      "status": [
+        "Status",
+        "الحالة"
+      ],
+      "subject": [
+        "Subject",
+        "المادة"
+      ],
+      "studentsWithResults": [
+        "Students with results",
+        "الطلبة الذين لديهم نتائج"
+      ],
+      "averagePct": [
+        "Average %",
+        "المتوسط %"
+      ],
+      "entries": [
+        "Entries",
+        "المشاركات"
+      ],
+      "averageScore": [
+        "Average score",
+        "متوسط الدرجة"
+      ],
+      "leavers": [
+        "Leavers",
+        "المغادرون"
+      ]
+    },
+    "tables": {
+      "summary": [
+        "Summary",
+        "الملخص"
+      ],
+      "grades": [
+        "Students by grade",
+        "الطلبة حسب الصف"
+      ],
+      "sections": [
+        "Students by grade and section",
+        "الطلبة حسب الصف والشعبة"
+      ],
+      "nationality": [
+        "Students by nationality",
+        "الطلبة حسب الجنسية"
+      ],
+      "age": [
+        "Age against grade",
+        "العمر مقارنة بالصف"
+      ],
+      "ageNote": [
+        "Age on {date}, the admissions cut-off date. The usual age is 4 in KG1, 5 in KG2, 6 in Grade 1, and so on.",
+        "العمر في {date}، وهو تاريخ احتساب العمر في القبول. العمر المعتاد 4 سنوات في الروضة الأولى و5 في الروضة الثانية و6 في الصف الأول وهكذا."
+      ],
+      "sen": [
+        "People of determination",
+        "أصحاب الهمم"
+      ],
+      "senNote": [
+        "Counts only. Neighbouring grades are merged so that no group shown has fewer than {n} students; a smaller total is shown as fewer than {n}.",
+        "أعداد فقط. تُدمج الصفوف المتجاورة حتى لا تقل أي مجموعة معروضة عن {n} طلاب، ويظهر المجموع الأصغر بعبارة أقل من {n}."
+      ],
+      "learners": [
+        "Learners",
+        "المتعلمون"
+      ],
+      "movements": [
+        "Movements by registration status",
+        "الحركات حسب حالة التسجيل"
+      ],
+      "attendanceGrades": [
+        "Attendance by grade",
+        "الحضور حسب الصف"
+      ],
+      "attendanceNote": [
+        "From the daily register. Unauthorised absences include absences not yet explained.",
+        "من سجل الحضور اليومي. يشمل الغياب بدون عذر حالات الغياب التي لم تُبرَّر بعد."
+      ],
+      "limit": [
+        "Students at or over the absence limit",
+        "الطلبة الذين بلغوا حد الغياب أو تجاوزوه"
+      ],
+      "limitNote": [
+        "The school's limit: {consecutive} consecutive or {total} total school days of unexcused absence in the school year to date.",
+        "حد المدرسة: {consecutive} أيام دراسية متتالية أو {total} يومًا إجمالًا من الغياب بدون عذر في العام الدراسي حتى تاريخه."
+      ],
+      "limitOff": [
+        "The regulator absence limit is not switched on in attendance settings, so no student is listed.",
+        "حد الغياب المعتمد غير مفعّل في إعدادات الحضور، لذلك لا يظهر أي طالب."
+      ],
+      "roles": [
+        "Staff by role",
+        "الكادر حسب الدور"
+      ],
+      "rolesNote": [
+        "A member of staff with two roles is counted under both. Teaching staff are teachers and heads of department.",
+        "يُحتسب الموظف الذي له دوران ضمن كليهما. الكادر التعليمي هم المعلمون ورؤساء الأقسام."
+      ],
+      "staffNationality": [
+        "Staff by nationality",
+        "الكادر حسب الجنسية"
+      ],
+      "staffNationalityNote": [
+        "Horizon does not hold staff nationality. Add it from your HR records before sending.",
+        "لا يحتفظ Horizon بجنسية الموظفين. أضفها من سجلات الموارد البشرية قبل الإرسال."
+      ],
+      "gaps": [
+        "Fields Horizon does not hold",
+        "حقول لا يحتفظ بها Horizon"
+      ],
+      "gapsNote": [
+        "Authorities usually ask for these. They are left blank rather than guessed: complete them from HR records.",
+        "تطلب الجهات هذه الحقول عادة. تُترك فارغة ولا تُخمَّن، فأكملها من سجلات الموارد البشرية."
+      ],
+      "staffList": [
+        "Staff list",
+        "قائمة الكادر"
+      ],
+      "results": [
+        "Results by grade and subject",
+        "النتائج حسب الصف والمادة"
+      ],
+      "resultsNote": [
+        "Published internal assessments in the period, each student's weighted average per subject. Groups with fewer than {n} students show no average, and band counts below {n} show as fewer than {n}.",
+        "التقييمات الداخلية المنشورة خلال الفترة، بالمتوسط الموزون لكل طالب في كل مادة. لا يظهر متوسط للمجموعات التي يقل عدد طلابها عن {n}، وتظهر أعداد الفئات الأقل من {n} بعبارة أقل من {n}."
+      ],
+      "ap": [
+        "Advanced Placement entries",
+        "مشاركات المستوى المتقدم AP"
+      ],
+      "apNone": [
+        "No AP results are recorded in Horizon. The exams timetable lists sittings, not entries per student.",
+        "لا توجد نتائج AP مسجّلة في Horizon. يعرض جدول الامتحانات المواعيد وليس مشاركات كل طالب."
+      ],
+      "apFew": [
+        "Fewer than {n} AP results are recorded, so they are not broken down.",
+        "النتائج المسجّلة لـ AP أقل من {n}، لذلك لا تُعرض تفاصيلها."
+      ],
+      "apNote": [
+        "From AP results recorded on student records.",
+        "من نتائج AP المسجّلة في سجلات الطلبة."
+      ]
+    },
+    "measure": {
+      "onRoll": [
+        "Students on roll",
+        "الطلبة المسجلون"
+      ],
+      "male": [
+        "Male",
+        "ذكور"
+      ],
+      "female": [
+        "Female",
+        "إناث"
+      ],
+      "genderUnknown": [
+        "Gender not recorded",
+        "الجنس غير مسجّل"
+      ],
+      "emirati": [
+        "Emirati",
+        "مواطنون"
+      ],
+      "otherNationalities": [
+        "Other nationalities",
+        "جنسيات أخرى"
+      ],
+      "nationalityUnknown": [
+        "Nationality not recorded",
+        "الجنسية غير مسجّلة"
+      ],
+      "nationalityCount": [
+        "Nationalities",
+        "عدد الجنسيات"
+      ],
+      "sen": [
+        "People of determination",
+        "أصحاب الهمم"
+      ],
+      "joined": [
+        "New admissions in the period",
+        "المقبولون الجدد خلال الفترة"
+      ],
+      "sections": [
+        "Sections",
+        "الشعب"
+      ],
+      "attendancePct": [
+        "Attendance %",
+        "نسبة الحضور %"
+      ],
+      "possible": [
+        "Possible sessions",
+        "الجلسات المقررة"
+      ],
+      "unauthorised": [
+        "Unauthorised absences",
+        "الغياب بدون عذر"
+      ],
+      "unexplained": [
+        "Absences still unexplained",
+        "غياب لم يُبرَّر بعد"
+      ],
+      "limitReached": [
+        "Students at or over the absence limit",
+        "الطلبة الذين بلغوا حد الغياب أو تجاوزوه"
+      ],
+      "limitWarning": [
+        "Students near the absence limit",
+        "الطلبة القريبون من حد الغياب"
+      ],
+      "teachingStaff": [
+        "Teaching staff",
+        "الكادر التعليمي"
+      ],
+      "allStaff": [
+        "All staff",
+        "جميع الموظفين"
+      ],
+      "leavers": [
+        "Leavers in the period",
+        "المغادرون خلال الفترة"
+      ]
+    },
+    "gap": {
+      "nationality": [
+        "Staff nationality",
+        "جنسية الموظف"
+      ],
+      "gender": [
+        "Staff gender",
+        "جنس الموظف"
+      ],
+      "qualification": [
+        "Qualifications",
+        "المؤهلات"
+      ],
+      "licence": [
+        "Teaching licence or permit to practise number",
+        "رقم ترخيص التدريس أو تصريح مزاولة المهنة"
+      ]
+    },
+    "pdf": {
+      "footer": [
+        "Page {page}. Version {version}. Generated by Horizon from the school's records.",
+        "الصفحة {page}. الإصدار {version}. أعدّه Horizon من سجلات المدرسة."
+      ],
+      "authority": [
+        "Authority",
+        "الجهة"
+      ],
+      "period": [
+        "Period",
+        "الفترة"
+      ],
+      "version": [
+        "Version",
+        "الإصدار"
+      ],
+      "checksum": [
+        "Data checksum",
+        "بصمة البيانات"
+      ],
+      "generated": [
+        "Generated by",
+        "أعدّه"
+      ],
+      "formatNotice": [
+        "Horizon standard format. {authority} does not publish a file format for this return: format to be confirmed with {authority}. Copy the figures into the authority's portal.",
+        "تنسيق Horizon القياسي. لا تنشر {authority} تنسيق ملف لهذا التقرير، لذا يلزم تأكيد التنسيق مع {authority}. انسخ الأرقام إلى بوابة الجهة."
+      ],
+      "problemsWarning": [
+        "{n, plural, one {# problem} other {# problems}} open in the checks when this file was generated. Review them before sending.",
+        "عند إعداد هذا الملف كان في الفحص {n, plural, one {مشكلة واحدة} two {مشكلتان} few {# مشكلات} many {# مشكلة} other {# مشكلة}} مفتوحة. راجعها قبل الإرسال."
+      ],
+      "signOff": [
+        "Principal sign-off",
+        "اعتماد مدير المدرسة"
+      ],
+      "signedBy": [
+        "Signed off by {who} on {date}.",
+        "اعتمده {who} بتاريخ {date}."
+      ],
+      "signOffStale": [
+        "The data has changed since this sign-off. Ask the principal to sign off again before sending.",
+        "تغيّرت البيانات بعد هذا الاعتماد. اطلب من مدير المدرسة اعتماده مجددًا قبل الإرسال."
+      ],
+      "notSigned": [
+        "Not signed off yet.",
+        "لم يُعتمد بعد."
+      ],
+      "name": [
+        "Name",
+        "الاسم"
+      ],
+      "signature": [
+        "Signature",
+        "التوقيع"
+      ],
+      "date": [
+        "Date",
+        "التاريخ"
+      ],
+      "noRows": [
+        "Nothing to show for this period.",
+        "لا توجد بيانات لهذه الفترة."
+      ]
+    },
+    "sheet": {
+      "about": [
+        "About",
+        "معلومات"
+      ],
+      "field": [
+        "Field",
+        "الحقل"
+      ],
+      "value": [
+        "Value",
+        "القيمة"
+      ],
+      "warning": [
+        "Warning",
+        "تنبيه"
+      ],
+      "school": [
+        "School",
+        "المدرسة"
+      ],
+      "return": [
+        "Return",
+        "التقرير"
+      ],
+      "generatedBy": [
+        "Generated by",
+        "أعدّه"
+      ],
+      "generatedAt": [
+        "Generated at (UTC)",
+        "وقت الإعداد (التوقيت العالمي)"
+      ],
+      "format": [
+        "Format",
+        "التنسيق"
+      ],
+      "ids": [
+        "Identity numbers",
+        "أرقام الهوية"
+      ],
+      "idsNotice": [
+        "This file contains full Emirates ID numbers. Store and send it securely, and delete local copies after submission.",
+        "يحتوي هذا الملف على أرقام الهوية الإماراتية كاملة. احفظه وأرسله بطريقة آمنة واحذف النسخ المحلية بعد الإرسال."
+      ],
+      "gap": [
+        "Not held in Horizon",
+        "غير موجود في Horizon"
+      ]
+    },
+    "reminder": {
+      "today": [
+        "today",
+        "اليوم"
+      ],
+      "tomorrow": [
+        "tomorrow",
+        "غدًا"
+      ],
+      "inDays": [
+        "in {n, plural, one {# day} other {# days}}",
+        "بعد {n, plural, one {يوم واحد} two {يومين} few {# أيام} many {# يومًا} other {# يوم}}"
+      ]
+    },
+    "status": {
+      "DRAFT": [
+        "Draft",
+        "مسودة"
+      ],
+      "SIGNED_OFF": [
+        "Signed off",
+        "معتمد"
+      ],
+      "SUBMITTED": [
+        "Submitted",
+        "أُرسل"
+      ]
+    },
+    "tabs": {
+      "returns": [
+        "Returns",
+        "التقارير"
+      ],
+      "due": [
+        "Due dates",
+        "المواعيد"
+      ],
+      "log": [
+        "Submission log",
+        "سجل الإرسال"
+      ]
+    },
+    "authorityCard": {
+      "title": [
+        "Your authority: {authority}",
+        "الجهة التعليمية: {authority}"
+      ],
+      "body": [
+        "None of the UAE education authorities publishes a file format or an API for these returns. Horizon builds each one in its own standard layout, marked format to be confirmed with {authority}, for you to copy into the authority's portal.",
+        "لا تنشر أي جهة تعليمية في الدولة تنسيق ملف أو واجهة ربط لهذه التقارير. يعدّ Horizon كل تقرير بتنسيقه القياسي، مع ملاحظة بضرورة تأكيد التنسيق مع {authority}، لتنسخه إلى بوابة الجهة."
+      ],
+      "change": [
+        "Change in admissions settings",
+        "غيّرها من إعدادات القبول"
+      ],
+      "guide": [
+        "What each authority publishes",
+        "ما تنشره كل جهة"
+      ]
+    },
+    "stats": {
+      "nextDue": [
+        "Next due date",
+        "الموعد القادم"
+      ],
+      "noneDue": [
+        "None scheduled",
+        "لا مواعيد مجدولة"
+      ],
+      "drafts": [
+        "Returns in progress",
+        "تقارير قيد الإعداد"
+      ],
+      "submitted": [
+        "Sent in the last 12 months",
+        "أُرسلت خلال آخر 12 شهرًا"
+      ],
+      "dueIn": [
+        "{date}, in {n, plural, one {# day} other {# days}}",
+        "{date}، بعد {n, plural, one {يوم واحد} two {يومين} few {# أيام} many {# يومًا} other {# يوم}}"
+      ],
+      "dueToday": [
+        "{date}, today",
+        "{date}، اليوم"
+      ],
+      "overdue": [
+        "{date}, {n, plural, one {# day} other {# days}} ago",
+        "{date}، قبل {n, plural, one {يوم واحد} two {يومين} few {# أيام} many {# يومًا} other {# يوم}}"
+      ]
+    },
+    "list": {
+      "empty": [
+        "No returns yet",
+        "لا توجد تقارير بعد"
+      ],
+      "emptyBody": [
+        "Create a return for a census date or a period. Horizon builds it from your student, attendance, staff and gradebook records.",
+        "أنشئ تقريرًا لتاريخ إحصاء أو لفترة. يبنيه Horizon من سجلات الطلبة والحضور والكادر والدرجات."
+      ],
+      "emptyView": [
+        "The registrar or the school administrator prepares returns. They appear here for you to review and sign off.",
+        "يعدّ المسجل أو مسؤول المدرسة التقارير، وتظهر هنا لتراجعها وتعتمدها."
+      ],
+      "lastFile": [
+        "Latest file: version {version}, {when}",
+        "آخر ملف: الإصدار {version}، {when}"
+      ],
+      "noFile": [
+        "No file generated yet",
+        "لم يُعدّ أي ملف بعد"
+      ],
+      "reference": [
+        "Reference {ref}",
+        "المرجع {ref}"
+      ],
+      "open": [
+        "Open",
+        "فتح"
+      ]
+    },
+    "new": {
+      "button": [
+        "New return",
+        "تقرير جديد"
+      ],
+      "title": [
+        "New return",
+        "تقرير جديد"
+      ],
+      "body": [
+        "Choose what to report and the date. You can check and export it straight away.",
+        "اختر نوع التقرير والتاريخ، ويمكنك فحصه وتصديره فورًا."
+      ],
+      "kind": [
+        "Return",
+        "التقرير"
+      ],
+      "asOfCensus": [
+        "Census date",
+        "تاريخ الإحصاء"
+      ],
+      "asOfStaff": [
+        "As at",
+        "كما في"
+      ],
+      "asOfPeriod": [
+        "Last day of the period",
+        "آخر يوم في الفترة"
+      ],
+      "from": [
+        "First day of the period",
+        "أول يوم في الفترة"
+      ],
+      "fromHelp": [
+        "Leave empty to start at the beginning of the school year.",
+        "اتركه فارغًا ليبدأ من بداية العام الدراسي."
+      ],
+      "label": [
+        "Name (optional)",
+        "الاسم (اختياري)"
+      ],
+      "labelPlaceholder": [
+        "For example: October census",
+        "مثال: إحصاء أكتوبر"
+      ],
+      "due": [
+        "For due date (optional)",
+        "للموعد (اختياري)"
+      ],
+      "noDue": [
+        "Not linked to a due date",
+        "غير مرتبط بموعد"
+      ],
+      "create": [
+        "Create return",
+        "إنشاء التقرير"
+      ],
+      "created": [
+        "Return created",
+        "أُنشئ التقرير"
+      ]
+    },
+    "detail": {
+      "back": [
+        "Government reporting",
+        "التقارير الحكومية"
+      ],
+      "checks": [
+        "Checks before sending",
+        "الفحص قبل الإرسال"
+      ],
+      "checksBody": [
+        "Fix what you can here; each problem links to the record. Identity numbers are never shown, only whether one is on file.",
+        "عالج ما يمكنك هنا، وكل مشكلة مرتبطة بسجلها. لا تُعرض أرقام الهوية أبدًا، بل يظهر فقط إن كان الرقم مسجّلًا."
+      ],
+      "noProblems": [
+        "No problems found. This return is ready to send.",
+        "لم تُكتشف أي مشكلات. هذا التقرير جاهز للإرسال."
+      ],
+      "problemCount": [
+        "{count, plural, one {# problem to review} other {# problems to review}}",
+        "{count, plural, zero {لا مشكلات للمراجعة} one {مشكلة واحدة للمراجعة} two {مشكلتان للمراجعة} few {# مشكلات للمراجعة} many {# مشكلة للمراجعة} other {# مشكلة للمراجعة}}"
+      ],
+      "notes": [
+        "Notes",
+        "ملاحظات"
+      ],
+      "more": [
+        "And {n} more",
+        "و{n} غيرها"
+      ],
+      "data": [
+        "The return",
+        "بيانات التقرير"
+      ],
+      "dataBody": [
+        "Built from current records. Files carry both English and Arabic headers.",
+        "مبني من السجلات الحالية. تحمل الملفات عناوين بالإنجليزية والعربية."
+      ],
+      "files": [
+        "Files and submissions",
+        "الملفات والإرسال"
+      ],
+      "filesBody": [
+        "Every file generated from this return, with its version and checksum, and every submission to the authority.",
+        "كل ملف أُعدّ من هذا التقرير برقم إصداره وبصمته، وكل إرسال إلى الجهة."
+      ],
+      "noFiles": [
+        "No file has been generated from this return yet.",
+        "لم يُعدّ أي ملف من هذا التقرير بعد."
+      ],
+      "version": [
+        "Version {version}",
+        "الإصدار {version}"
+      ],
+      "nextVersion": [
+        "Files now: version {version}",
+        "الملفات الآن: الإصدار {version}"
+      ],
+      "file": [
+        "{format} ({lang})",
+        "{format} ({lang})"
+      ],
+      "withIds": [
+        "Full Emirates IDs",
+        "أرقام الهوية كاملة"
+      ],
+      "withProblems": [
+        "{n, plural, one {# problem} other {# problems}} open",
+        "{n, plural, one {مشكلة واحدة} two {مشكلتان} few {# مشكلات} many {# مشكلة} other {# مشكلة}} مفتوحة"
+      ],
+      "by": [
+        "{name}, {when}",
+        "{name}، {when}"
+      ],
+      "checksum": [
+        "Checksum {sum}",
+        "البصمة {sum}"
+      ],
+      "submission": [
+        "Sent on {date}, reference {ref}",
+        "أُرسل بتاريخ {date}، المرجع {ref}"
+      ],
+      "submissionBy": [
+        "Recorded by {name}. File version {version}.",
+        "سجّله {name}. إصدار الملف {version}."
+      ],
+      "signedOff": [
+        "Signed off by {name} on {date}",
+        "اعتمده {name} بتاريخ {date}"
+      ],
+      "signedStale": [
+        "The data has changed since the sign-off",
+        "تغيّرت البيانات بعد الاعتماد"
+      ],
+      "notSigned": [
+        "Not signed off yet",
+        "لم يُعتمد بعد"
+      ],
+      "submittedChanged": [
+        "The data has changed since this return was sent. A new file would be version {version}.",
+        "تغيّرت البيانات منذ إرسال هذا التقرير، وسيكون أي ملف جديد الإصدار {version}."
+      ],
+      "delete": [
+        "Delete draft",
+        "حذف المسودة"
+      ],
+      "deleteConfirm": [
+        "Delete this draft? No file has been generated from it.",
+        "حذف هذه المسودة؟ لم يُعدّ منها أي ملف."
+      ],
+      "deleted": [
+        "Draft deleted",
+        "حُذفت المسودة"
+      ],
+      "openRecord": [
+        "Open record",
+        "فتح السجل"
+      ],
+      "lang": {
+        "en": [
+          "English",
+          "الإنجليزية"
+        ],
+        "ar": [
+          "Arabic",
+          "العربية"
+        ]
+      }
+    },
+    "rule": {
+      "missing_eid": [
+        "Emirates ID missing",
+        "الهوية الإماراتية غير موجودة"
+      ],
+      "missing_nationality": [
+        "Nationality missing",
+        "الجنسية غير موجودة"
+      ],
+      "missing_dob": [
+        "Date of birth missing",
+        "تاريخ الميلاد غير موجود"
+      ],
+      "missing_gender": [
+        "Gender missing",
+        "الجنس غير موجود"
+      ],
+      "age_grade": [
+        "Age outside the grade's range",
+        "العمر خارج نطاق الصف"
+      ],
+      "no_reference": [
+        "No registration reference",
+        "لا يوجد رقم تسجيل"
+      ],
+      "duplicate_eid": [
+        "Same Emirates ID on two records",
+        "الهوية الإماراتية نفسها في سجلين"
+      ],
+      "duplicate_name_dob": [
+        "Same name and date of birth on two records",
+        "الاسم وتاريخ الميلاد نفسهما في سجلين"
+      ],
+      "staff_missing_title": [
+        "Job title missing",
+        "المسمى الوظيفي غير موجود"
+      ],
+      "staff_missing_employee_no": [
+        "Employee number missing",
+        "الرقم الوظيفي غير موجود"
+      ],
+      "staff_missing_department": [
+        "No department",
+        "بدون قسم"
+      ],
+      "unexplained_absences": [
+        "Absences still unexplained",
+        "حالات غياب لم تُبرَّر بعد"
+      ],
+      "limit_off": [
+        "Regulator absence limit is off",
+        "حد الغياب المعتمد غير مفعّل"
+      ],
+      "unpublished_results": [
+        "Assessments not yet published",
+        "تقييمات لم تُنشر بعد"
+      ]
+    },
+    "ruleDetail": {
+      "age_grade_under": [
+        "Age {age} on the cut-off date; usually {expected} in this grade",
+        "العمر {age} في تاريخ الاحتساب، والمعتاد {expected} في هذا الصف"
+      ],
+      "age_grade_over": [
+        "Age {age} on the cut-off date; usually {expected} in this grade",
+        "العمر {age} في تاريخ الاحتساب، والمعتاد {expected} في هذا الصف"
+      ],
+      "duplicate": [
+        "Also: {other}",
+        "وأيضًا: {other}"
+      ],
+      "unexplained_absences": [
+        "{n, plural, one {# absence session} other {# absence sessions}} in the period not explained yet; they count as unauthorised.",
+        "{n, plural, one {جلسة غياب واحدة} two {جلستا غياب} few {# جلسات غياب} many {# جلسة غياب} other {# جلسة غياب}} خلال الفترة لم تُبرَّر بعد، وتُحتسب غيابًا بدون عذر."
+      ],
+      "limit_off": [
+        "Switch it on in attendance settings to list students at or over the limit.",
+        "فعّله من إعدادات الحضور لإظهار الطلبة الذين بلغوا الحد أو تجاوزوه."
+      ],
+      "unpublished_results": [
+        "{n, plural, one {# assessment} other {# assessments}} in the period not published yet and left out.",
+        "{n, plural, one {تقييم واحد} two {تقييمان} few {# تقييمات} many {# تقييمًا} other {# تقييم}} خلال الفترة لم تُنشر بعد ولا تدخل في التقرير."
+      ],
+      "staff": [
+        "Update it in People.",
+        "حدّثه من صفحة الأشخاص."
+      ]
+    },
+    "fix": {
+      "button": [
+        "Fix",
+        "معالجة"
+      ],
+      "title": [
+        "Complete details for {name}",
+        "أكمل بيانات {name}"
+      ],
+      "body": [
+        "Saved to the student's record and recorded in the audit log. Only the fields you fill in change.",
+        "تُحفظ في سجل الطالب وتُسجَّل في سجل التدقيق، ولا يتغير إلا ما تملؤه."
+      ],
+      "dob": [
+        "Date of birth",
+        "تاريخ الميلاد"
+      ],
+      "gender": [
+        "Gender",
+        "الجنس"
+      ],
+      "choose": [
+        "Choose",
+        "اختر"
+      ],
+      "nationality": [
+        "Nationality",
+        "الجنسية"
+      ],
+      "eid": [
+        "Emirates ID",
+        "الهوية الإماراتية"
+      ],
+      "eidHelp": [
+        "15 digits starting 784. Stored encrypted.",
+        "15 رقمًا تبدأ بـ 784، وتُحفظ مشفّرة."
+      ],
+      "save": [
+        "Save",
+        "حفظ"
+      ],
+      "saved": [
+        "Saved. The checks are updated.",
+        "حُفظ، وتم تحديث الفحص."
+      ],
+      "noPermission": [
+        "Only staff who can manage people can change student records.",
+        "لا يعدّل سجلات الطلبة إلا من يملك صلاحية إدارة الأشخاص."
+      ]
+    },
+    "reference": {
+      "button": [
+        "Record reference",
+        "تسجيل المرجع"
+      ],
+      "title": [
+        "Registration reference for {name}",
+        "رقم تسجيل {name}"
+      ],
+      "body": [
+        "The reference {authority} gave for this learner's registration. It is saved on the admissions registration record.",
+        "الرقم المرجعي الذي منحته {authority} لتسجيل هذا المتعلم، ويُحفظ في سجل التسجيل لدى القبول."
+      ],
+      "status": [
+        "Status",
+        "الحالة"
+      ],
+      "submitted": [
+        "Submitted, reference received",
+        "أُرسل وتم استلام الرقم المرجعي"
+      ],
+      "approved": [
+        "Approved",
+        "معتمد"
+      ],
+      "ref": [
+        "Reference",
+        "الرقم المرجعي"
+      ],
+      "date": [
+        "Date",
+        "التاريخ"
+      ],
+      "save": [
+        "Save",
+        "حفظ"
+      ],
+      "saved": [
+        "Reference saved",
+        "حُفظ الرقم المرجعي"
+      ],
+      "noPermission": [
+        "Recording registration needs the enroll permission in admissions.",
+        "يتطلب تسجيل الرقم المرجعي صلاحية التسجيل في القبول."
+      ]
+    },
+    "export": {
+      "excel": [
+        "Excel",
+        "ملف Excel"
+      ],
+      "csv": [
+        "CSV",
+        "CSV"
+      ],
+      "pdf": [
+        "Summary PDF",
+        "ملخص PDF"
+      ],
+      "pdfEn": [
+        "Summary PDF (English)",
+        "ملخص PDF (بالإنجليزية)"
+      ],
+      "pdfAr": [
+        "Summary PDF (Arabic)",
+        "ملخص PDF (بالعربية)"
+      ],
+      "menu": [
+        "Export",
+        "تصدير"
+      ],
+      "warnTitle": [
+        "Export with open problems?",
+        "التصدير مع وجود مشكلات مفتوحة؟"
+      ],
+      "warnBody": [
+        "{n, plural, one {# problem} other {# problems}} still open. The file will say so, and this export is recorded in the audit log.",
+        "لا يزال في الفحص {n, plural, one {مشكلة واحدة} two {مشكلتان} few {# مشكلات} many {# مشكلة} other {# مشكلة}} مفتوحة. سيُذكر ذلك في الملف، ويُسجَّل هذا التصدير في سجل التدقيق."
+      ],
+      "continue": [
+        "Export anyway",
+        "صدّر على أي حال"
+      ],
+      "cancel": [
+        "Cancel",
+        "إلغاء"
+      ],
+      "withIds": [
+        "Include full Emirates ID numbers",
+        "تضمين أرقام الهوية الإماراتية كاملة"
+      ],
+      "withIdsHelp": [
+        "For typing into the authority's portal. The download is recorded in the audit log.",
+        "لإدخالها في بوابة الجهة، ويُسجَّل التنزيل في سجل التدقيق."
+      ],
+      "idsNeedPermission": [
+        "Full Emirates ID numbers need the permission to reveal identity numbers.",
+        "تتطلب أرقام الهوية الكاملة صلاحية كشف أرقام الهوية."
+      ],
+      "started": [
+        "Your download has started",
+        "بدأ التنزيل"
+      ],
+      "csvHint": [
+        "The CSV holds the main table; Excel holds every table.",
+        "يحتوي ملف CSV على الجدول الرئيسي، ويحتوي ملف Excel على جميع الجداول."
+      ]
+    },
+    "signOff": {
+      "button": [
+        "Sign off",
+        "اعتماد"
+      ],
+      "again": [
+        "Sign off again",
+        "اعتماد مجددًا"
+      ],
+      "title": [
+        "Sign off this return",
+        "اعتماد هذا التقرير"
+      ],
+      "body": [
+        "You sign off the figures as they stand now. Your name, title and today's date go on the summary PDF. If the data changes, the sign-off shows as out of date.",
+        "تعتمد الأرقام كما هي الآن، ويظهر اسمك ومسماك وتاريخ اليوم في ملخص PDF. وإذا تغيّرت البيانات يظهر الاعتماد على أنه قديم."
+      ],
+      "as": [
+        "Signing as {name}",
+        "الاعتماد باسم {name}"
+      ],
+      "problems": [
+        "{n, plural, one {# problem} other {# problems}} still open in the checks.",
+        "لا يزال في الفحص {n, plural, one {مشكلة واحدة} two {مشكلتان} few {# مشكلات} many {# مشكلة} other {# مشكلة}} مفتوحة."
+      ],
+      "confirm": [
+        "I have reviewed this return",
+        "راجعت هذا التقرير"
+      ],
+      "save": [
+        "Sign off",
+        "اعتماد"
+      ],
+      "saved": [
+        "Signed off",
+        "تم الاعتماد"
+      ],
+      "onlyPrincipal": [
+        "Signed off by the principal",
+        "يعتمده مدير المدرسة"
+      ]
+    },
+    "submit": {
+      "button": [
+        "Record submission",
+        "تسجيل الإرسال"
+      ],
+      "title": [
+        "Record a submission",
+        "تسجيل إرسال"
+      ],
+      "body": [
+        "Choose the file you sent to {authority} and enter the reference it gave you.",
+        "اختر الملف الذي أرسلته إلى {authority} وأدخل الرقم المرجعي الذي منحته."
+      ],
+      "file": [
+        "File sent",
+        "الملف المرسل"
+      ],
+      "fileOption": [
+        "Version {version}, {format}, {when}",
+        "الإصدار {version}، {format}، {when}"
+      ],
+      "date": [
+        "Date sent",
+        "تاريخ الإرسال"
+      ],
+      "ref": [
+        "Authority reference",
+        "الرقم المرجعي لدى الجهة"
+      ],
+      "note": [
+        "Note (optional)",
+        "ملاحظة (اختياري)"
+      ],
+      "save": [
+        "Record submission",
+        "تسجيل الإرسال"
+      ],
+      "saved": [
+        "Submission recorded",
+        "سُجّل الإرسال"
+      ],
+      "needFile": [
+        "Export a file first; the submission records which file was sent.",
+        "صدّر ملفًا أولًا، فسجل الإرسال يحدد الملف الذي أُرسل."
+      ],
+      "notSigned": [
+        "This return is not signed off by the principal yet.",
+        "لم يعتمد مدير المدرسة هذا التقرير بعد."
+      ]
+    },
+    "due": {
+      "add": [
+        "Add due date",
+        "إضافة موعد"
+      ],
+      "edit": [
+        "Edit",
+        "تعديل"
+      ],
+      "title": [
+        "Due date",
+        "موعد التسليم"
+      ],
+      "body": [
+        "Holders of the permission to prepare government returns are reminded 14 days and 3 days before.",
+        "يُذكَّر من يملك صلاحية إعداد التقارير الحكومية قبل 14 يومًا و3 أيام."
+      ],
+      "titleEn": [
+        "Title (English)",
+        "العنوان (بالإنجليزية)"
+      ],
+      "titleAr": [
+        "Title (Arabic)",
+        "العنوان (بالعربية)"
+      ],
+      "kind": [
+        "Return",
+        "التقرير"
+      ],
+      "dueOn": [
+        "Due on",
+        "تاريخ الاستحقاق"
+      ],
+      "notes": [
+        "Notes (optional)",
+        "ملاحظات (اختياري)"
+      ],
+      "save": [
+        "Save",
+        "حفظ"
+      ],
+      "saved": [
+        "Due date saved",
+        "حُفظ الموعد"
+      ],
+      "done": [
+        "Mark done",
+        "تحديد كمنجز"
+      ],
+      "reopen": [
+        "Reopen",
+        "إعادة فتح"
+      ],
+      "delete": [
+        "Delete",
+        "حذف"
+      ],
+      "deleteConfirm": [
+        "Delete this due date? Its reminders stop.",
+        "حذف هذا الموعد؟ ستتوقف تذكيراته."
+      ],
+      "deleted": [
+        "Due date deleted",
+        "حُذف الموعد"
+      ],
+      "start": [
+        "Start return",
+        "بدء التقرير"
+      ],
+      "openReturn": [
+        "Open return",
+        "فتح التقرير"
+      ],
+      "empty": [
+        "No due dates yet",
+        "لا توجد مواعيد بعد"
+      ],
+      "emptyBody": [
+        "Add the dates your authority sets, for example the census date. Horizon reminds the team 14 and 3 days before.",
+        "أضف المواعيد التي تحددها الجهة، مثل تاريخ الإحصاء، وسيذكّر Horizon الفريق قبل 14 يومًا و3 أيام."
+      ],
+      "inDays": [
+        "In {n, plural, one {# day} other {# days}}",
+        "بعد {n, plural, one {يوم واحد} two {يومين} few {# أيام} many {# يومًا} other {# يوم}}"
+      ],
+      "today": [
+        "Today",
+        "اليوم"
+      ],
+      "overdue": [
+        "{n, plural, one {# day} other {# days}} overdue",
+        "متأخر {n, plural, one {يوم واحد} two {يومان} few {# أيام} many {# يومًا} other {# يوم}}"
+      ],
+      "doneOn": [
+        "Done {date}",
+        "أُنجز في {date}"
+      ],
+      "upcoming": [
+        "Upcoming",
+        "القادمة"
+      ],
+      "past": [
+        "Done and past",
+        "المنجزة والسابقة"
+      ],
+      "reminders": [
+        "Reminders 14 and 3 days before",
+        "تذكير قبل 14 يومًا و3 أيام"
+      ]
+    },
+    "log": {
+      "empty": [
+        "Nothing sent yet",
+        "لم يُرسل شيء بعد"
+      ],
+      "emptyBody": [
+        "When a return is sent, record the authority's reference on the return. It appears here.",
+        "عند إرسال تقرير، سجّل الرقم المرجعي على التقرير ليظهر هنا."
+      ],
+      "sentOn": [
+        "Sent on",
+        "تاريخ الإرسال"
+      ],
+      "return": [
+        "Return",
+        "التقرير"
+      ],
+      "file": [
+        "File",
+        "الملف"
+      ],
+      "reference": [
+        "Reference",
+        "المرجع"
+      ],
+      "recordedBy": [
+        "Recorded by",
+        "سجّله"
+      ]
+    },
+    "errors": {
+      "generic": [
+        "Something went wrong. Please try again.",
+        "حدث خطأ ما. يرجى المحاولة مجددًا."
+      ],
+      "FORBIDDEN": [
+        "You do not have permission to do this.",
+        "ليست لديك صلاحية للقيام بذلك."
+      ],
+      "INVALID": [
+        "Please check the details and try again.",
+        "يرجى مراجعة البيانات والمحاولة مجددًا."
+      ],
+      "KIND": [
+        "Choose a return.",
+        "اختر التقرير."
+      ],
+      "DATE": [
+        "Enter a valid date.",
+        "أدخل تاريخًا صحيحًا."
+      ],
+      "DATE_FUTURE": [
+        "That date is too far ahead.",
+        "هذا التاريخ بعيد جدًا."
+      ],
+      "PERIOD": [
+        "The period must start on or before its last day.",
+        "يجب أن تبدأ الفترة في يومها الأخير أو قبله."
+      ],
+      "PERIOD_LONG": [
+        "A period can be at most 400 days.",
+        "لا تتجاوز الفترة 400 يوم."
+      ],
+      "NOT_FOUND": [
+        "Not found. It may have been removed.",
+        "غير موجود، وربما حُذف."
+      ],
+      "HAS_FILES": [
+        "Files were generated from this return, so it is kept.",
+        "أُعدّت ملفات من هذا التقرير، لذا يُحتفظ به."
+      ],
+      "EXPORT": [
+        "Choose the file you sent.",
+        "اختر الملف الذي أرسلته."
+      ],
+      "REFERENCE": [
+        "Enter the authority's reference.",
+        "أدخل الرقم المرجعي لدى الجهة."
+      ],
+      "TITLE": [
+        "Enter a title.",
+        "أدخل عنوانًا."
+      ],
+      "DOB": [
+        "Enter a date of birth between 2 and 25 years ago.",
+        "أدخل تاريخ ميلاد قبل 2 إلى 25 سنة."
+      ],
+      "GENDER": [
+        "Choose a gender.",
+        "اختر الجنس."
+      ],
+      "NATIONALITY": [
+        "Choose a nationality.",
+        "اختر الجنسية."
+      ],
+      "EID": [
+        "Enter a 15-digit Emirates ID starting 784.",
+        "أدخل رقم هوية من 15 رقمًا يبدأ بـ 784."
+      ],
+      "NOTHING": [
+        "Fill in at least one field.",
+        "املأ حقلًا واحدًا على الأقل."
+      ],
+      "FORBIDDEN_IDS": [
+        "Full Emirates ID numbers need the permission to reveal identity numbers.",
+        "تتطلب أرقام الهوية الكاملة صلاحية كشف أرقام الهوية."
+      ],
+      "NO_IDS_HERE": [
+        "Only the learner registration list can include Emirates ID numbers.",
+        "قائمة تسجيل المتعلمين وحدها يمكن أن تتضمن أرقام الهوية."
+      ]
+    },
+    "loading": [
+      "Building the return",
+      "جارٍ إعداد التقرير"
+    ],
+    "errorTitle": [
+      "This page could not be loaded",
+      "تعذّر تحميل هذه الصفحة"
+    ],
+    "errorBody": [
+      "Please try again. If it keeps happening, tell your school administrator.",
+      "يرجى المحاولة مجددًا، وإذا تكرر ذلك فأبلغ مسؤول المدرسة."
+    ],
+    "retry": [
+      "Try again",
+      "إعادة المحاولة"
+    ],
+    "fewerShort": [
+      "<{n}",
+      "أقل من {n}"
+    ]
+  }
+}

@@ -36,6 +36,7 @@ import { seedIntegrations } from "./integrations";
 import { seedConversations } from "./conversations";
 import { seedAttendance } from "./academics/attendance";
 import { seedAdmissions } from "./academics/admissions";
+import { seedGovReporting } from "./academics/government";
 import { academicStartYear, installStarterTemplate } from "./starter";
 
 export const DEMO_SLUG = "horizon";
@@ -762,6 +763,8 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   await seedAttendance(world);
   // Admissions: next year's applications, enrollments, re-enrollment and leavers (after subject levels create next year).
   await seedAdmissions(world);
+  // Government reporting: KHDA as the authority, a submitted census, a draft with problems and due dates (after admissions).
+  await seedGovReporting(world);
   // Requirement pipeline examples (after the global catalog seed; programs are looked up at runtime).
   // The catalog review and change monitor show real data only: changes found between archived and
   // current official pages (see prisma/seed/catalog/official.ts). No example drafts or changes are seeded.

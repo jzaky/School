@@ -78,6 +78,8 @@ export const PERMISSIONS = [
   "admissions.view",
   "admissions.manage",
   "admissions.enroll",
+  "government.reports",
+  "government.view",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
@@ -161,6 +163,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "admissions.view",
       "admissions.manage",
       "admissions.enroll",
+      "government.reports",
     ],
   },
   {
@@ -201,6 +204,8 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "demo.reset",
       "inspection.view",
       "admissions.view",
+      // Sees government returns and signs them off; preparing and sending them is government.reports.
+      "government.view",
     ],
   },
   {
@@ -230,6 +235,7 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
       "admissions.view",
       "admissions.manage",
       "admissions.enroll",
+      "government.reports",
     ],
   },
   {

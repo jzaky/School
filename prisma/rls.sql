@@ -174,3 +174,9 @@ REVOKE DELETE ON TABLE "CourseSelectionHelper" FROM app_user;
 -- tenant_isolation policy. Applicants are not members yet: public pages resolve the school id first and then use
 -- tenantDb(orgId), always filtering on the applicant's own user id. Application history is append-only.
 REVOKE UPDATE, DELETE ON TABLE "AdmissionEvent" FROM app_user;
+
+-- 10. Government reporting (src/server/govreports). Tenant isolation comes from section 2. The log of files
+-- generated from a return and the log of submissions to the authority are append-only: the app can add to them
+-- but never change or remove a row.
+REVOKE UPDATE, DELETE ON TABLE "GovReturnExport" FROM app_user;
+REVOKE UPDATE, DELETE ON TABLE "GovSubmission" FROM app_user;

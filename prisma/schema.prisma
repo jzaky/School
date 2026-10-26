@@ -4311,3 +4311,113 @@ model GovRegistration {
   @@index([orgId, kind, status])
   @@index([orgId, studentId])
 }
+
+// ---------------------------------------------------------------------------
+// Government reporting (src/server/govreports). Returns built from Horizon data for the school's education
+// authority (SPEA, KHDA, ADEK or the Ministry of Education): an enrollment census, a learner registration list,
+// attendance, staff and results returns. None of the authorities publishes an API or a public file format, so
+// files use a "Horizon standard" layout that staff copy into the authority's portal. Every file generated is
+// logged with a version and checksums, submissions record the authority's reference, and staff keep a calendar
+// of due dates with reminders. Exports and submissions are append-only.
+// ---------------------------------------------------------------------------
+
+/// One return for a census date or a period.
+model GovReturn {
+  id             String    @id @default(cuid())
+  orgId          String
+  /// CENSUS, REGISTRATION, ATTENDANCE, STAFF or RESULTS (src/server/govreports/kinds.ts).
+  kind           String
+  /// Authority key when the return was created (SPEA_DALEEL, MOE_MANHAL, KHDA, ADEK or OTHER).
+  authority      String
+  /// Census date, or the last day of the period. A calendar date.
+  asOf           DateTime  @db.Date
+  /// First day of the period (movements, attendance, results, and admissions and leavers on a census).
+  periodFrom     DateTime? @db.Date
+  /// Optional name the school gives the return, for example "October census".
+  label          String?
+  /// DRAFT, SIGNED_OFF or SUBMITTED.
+  status         String    @default("DRAFT")
+  dueDateId      String?
+  /// Principal sign-off: who, their title, when, and the data version they signed.
+  signedOffById  String?
+  signedOffName  String?
+  signedOffTitle String?
+  signedOffAt    DateTime?
+  signedDataHash String?
+  signedVersion  Int?
+  createdById    String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  exports     GovReturnExport[]
+  submissions GovSubmission[]
+
+  @@index([orgId, kind, asOf])
+  @@index([orgId, status])
+}
+
+/// A file generated from a return (Excel, CSV or PDF). The version goes up when the return's data changes.
+model GovReturnExport {
+  id            String   @id @default(cuid())
+  orgId         String
+  returnId      String
+  version       Int
+  /// XLSX, CSV or PDF.
+  format        String
+  locale        String
+  /// SHA-256 (hex) of the file as downloaded, and of the return's data.
+  fileSha256    String
+  dataSha256    String
+  sizeBytes     Int
+  rowCount      Int
+  /// Validation problems open when the file was generated (the file then carries a warning).
+  problemCount  Int      @default(0)
+  /// Full Emirates ID numbers were included (needs people.reveal_ids).
+  withIds       Boolean  @default(false)
+  /// Aggregate totals when the file was generated. Never names or identifiers.
+  summary       Json?
+  generatedById String
+  createdAt     DateTime @default(now())
+
+  return GovReturn @relation(fields: [returnId], references: [id], onDelete: Restrict)
+
+  @@index([orgId, returnId, createdAt])
+}
+
+/// A return sent to the authority: which file, when, who recorded it, and the authority's reference.
+model GovSubmission {
+  id           String   @id @default(cuid())
+  orgId        String
+  returnId     String
+  exportId     String
+  submittedOn  DateTime @db.Date
+  reference    String
+  note         String?
+  recordedById String
+  createdAt    DateTime @default(now())
+
+  return GovReturn @relation(fields: [returnId], references: [id], onDelete: Restrict)
+
+  @@index([orgId, returnId])
+  @@index([orgId, createdAt])
+}
+
+/// A due date the school enters for a return (for example the census date). Holders of government.reports are
+/// reminded 14 and 3 days before (src/server/govreports/reminders.ts).
+model GovDueDate {
+  id          String    @id @default(cuid())
+  orgId       String
+  titleEn     String
+  titleAr     String
+  /// Return kind it is for (src/server/govreports/kinds.ts), or OTHER.
+  kind        String
+  dueOn       DateTime  @db.Date
+  notes       String?
+  /// Set when staff mark it done or a return linked to it is submitted.
+  doneAt      DateTime?
+  createdById String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([orgId, dueOn])
+}
