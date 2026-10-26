@@ -272,7 +272,7 @@ export default async function SubjectsPage({ params, searchParams }: { params: P
         </section>
       )}
 
-      {view && (ctx.isStudent || (ctx.isStaff && view.assist) || ctx.isParent) && (ctx.isStudent || view.helpers.length > 0 || view.assist) && (
+      {view && (ctx.isStudent || (ctx.isStaff && view.assist) || ctx.isParent) && ((ctx.isStudent && studentCanAsk) || view.helpers.length > 0 || (ctx.isStaff && view.assist)) && (
         <HelpersCard
           studentId={student.id}
           studentName={first}

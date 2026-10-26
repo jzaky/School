@@ -106,7 +106,7 @@ export function WindowDialog({ years, grades, value, trigger = "new" }: { years:
             </div>
             <p className="text-xs text-muted-foreground">{year?.next ? t("gradesHintNext") : t("gradesHint")}</p>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-3">
             <div className="space-y-1.5">
               <Label htmlFor="window-opens">{t("opensLabel")}</Label>
               <div className="grid grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] gap-2">

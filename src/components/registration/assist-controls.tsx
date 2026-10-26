@@ -29,7 +29,7 @@ function DubaiDateTime({ id, date, time, onDate, onTime, min }: { id: string; da
   const t = useTranslations("selection");
   return (
     <div className="space-y-1.5">
-      <div className="grid grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] gap-2">
+      <div className="grid grid-cols-2 gap-2">
         <Input id={id} type="date" value={date} min={min} onChange={(e) => onDate(e.target.value)} dir="ltr" data-testid={`${id}-date`} />
         <Input type="time" value={time} onChange={(e) => onTime(e.target.value)} dir="ltr" step={300} aria-label={t("timeLabel")} data-testid={`${id}-time`} />
       </div>
