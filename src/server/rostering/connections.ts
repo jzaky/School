@@ -6,6 +6,8 @@ import { decryptField, encryptField } from "@/lib/crypto";
 import { cleverApiBase } from "@/server/sso/providers";
 import { cleverPage, oneRosterPage, type FetchCursor, type FetchPage, type RosterAuth } from "./client";
 import { readOptions } from "@/lib/rostering/options";
+import { tenantDb } from "@/lib/tenant-db";
+import { buildDemoFeed, isDemoFeed } from "./demo-feed";
 
 export const ROSTER_PROVIDERS = ["classlink", "clever", "oneroster"] as const;
 export type RosterProvider = (typeof ROSTER_PROVIDERS)[number];
@@ -50,6 +52,14 @@ export function authFor(conn: Pick<RosterConnection, "authMode" | "credentialsEn
 /** One page of the connection's feed. `since` asks OneRoster servers for changed records only. */
 export async function fetchPage(conn: RosterConnection, cursor: FetchCursor, since: Date | null): Promise<FetchPage> {
   const opts = readOptions(conn.options);
+  if (isDemoFeed(conn.baseUrl)) {
+    // The demo school's built-in feed (src/server/rostering/demo-feed.ts). Never available to a real school.
+    const db = tenantDb(conn.orgId);
+    const org = await db.organization.findUnique({ where: { id: conn.orgId }, select: { isDemo: true } });
+    if (!org?.isDemo) throw new ConnectionError("URL");
+    const feed = await buildDemoFeed(db as unknown as Parameters<typeof buildDemoFeed>[0], conn.orgId);
+    return { records: feed.records, cursor: { step: 1, offset: 0, next: null }, done: true, total: feed.records.length, step: "demo" };
+  }
   const auth = authFor(conn);
   if (conn.provider === "clever") {
     if (auth.mode !== "BEARER") throw new ConnectionError("CREDENTIALS");

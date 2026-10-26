@@ -1,0 +1,1086 @@
+{
+  "roster": {
+    "title": [
+      "Rostering",
+      "مزامنة القوائم"
+    ],
+    "subtitle": [
+      "Keep staff, students, parents, classes and enrollments in step with ClassLink, Clever or any OneRoster source. Every change is previewed first.",
+      "حافظ على تطابق الكادر والطلاب وأولياء الأمور والفصول والتسجيلات مع ClassLink أو Clever أو أي مصدر OneRoster. تُعاين كل التغييرات أولًا."
+    ],
+    "runTitle": [
+      "Roster run",
+      "تشغيل المزامنة"
+    ],
+    "tabs": {
+      "connections": [
+        "Connections",
+        "الاتصالات"
+      ],
+      "log": [
+        "Sync log",
+        "سجل المزامنة"
+      ]
+    },
+    "addConnection": [
+      "Add connection",
+      "إضافة اتصال"
+    ],
+    "edit": [
+      "Edit",
+      "تعديل"
+    ],
+    "delete": [
+      "Delete",
+      "حذف"
+    ],
+    "deleted": [
+      "Connection deleted",
+      "تم حذف الاتصال"
+    ],
+    "deleteConfirm": [
+      "Delete the connection {name}? Records it created stay, and so does the sync log.",
+      "هل تريد حذف الاتصال {name}؟ تبقى السجلات التي أنشأها ويبقى سجل المزامنة."
+    ],
+    "tooMany": [
+      "A school can have up to {max} connections.",
+      "يمكن أن يكون للمدرسة {max} اتصالات كحد أقصى."
+    ],
+    "activePreview": [
+      "Preview in progress",
+      "المعاينة قيد التنفيذ"
+    ],
+    "activeSync": [
+      "Sync in progress",
+      "المزامنة قيد التنفيذ"
+    ],
+    "upload": [
+      "Uploaded files",
+      "ملفات مرفوعة"
+    ],
+    "openRun": [
+      "Open",
+      "فتح"
+    ],
+    "empty": [
+      "No roster connection yet",
+      "لا يوجد اتصال للقوائم بعد"
+    ],
+    "emptyBody": [
+      "Connect ClassLink Roster Server, Clever or another OneRoster server, or upload OneRoster CSV files below. Nothing changes until you apply a preview.",
+      "اربط ClassLink Roster Server أو Clever أو خادم OneRoster آخر، أو ارفع ملفات OneRoster بصيغة CSV أدناه. لا يتغير شيء حتى تطبّق المعاينة."
+    ],
+    "providers": {
+      "classlink": [
+        "ClassLink Roster Server",
+        "خادم القوائم ClassLink Roster Server"
+      ],
+      "clever": [
+        "Clever",
+        "منصة Clever"
+      ],
+      "oneroster": [
+        "Other OneRoster server",
+        "خادم OneRoster آخر"
+      ]
+    },
+    "paused": [
+      "Paused",
+      "متوقف مؤقتًا"
+    ],
+    "status": {
+      "QUEUED": [
+        "Queued",
+        "في الانتظار"
+      ],
+      "FETCHING": [
+        "Reading the feed",
+        "قراءة البيانات"
+      ],
+      "PLANNING": [
+        "Preparing preview",
+        "إعداد المعاينة"
+      ],
+      "APPLYING": [
+        "Applying",
+        "جارٍ التطبيق"
+      ],
+      "PREVIEWED": [
+        "Preview ready",
+        "المعاينة جاهزة"
+      ],
+      "SUCCEEDED": [
+        "Synced",
+        "تمت المزامنة"
+      ],
+      "PARTIAL": [
+        "Synced with problems",
+        "تمت المزامنة مع مشكلات"
+      ],
+      "FAILED": [
+        "Failed",
+        "فشل"
+      ],
+      "BLOCKED": [
+        "Stopped for review",
+        "متوقف للمراجعة"
+      ],
+      "EXPIRED": [
+        "Expired",
+        "منتهي الصلاحية"
+      ]
+    },
+    "scheduleOff": [
+      "Manual only",
+      "يدوي فقط"
+    ],
+    "scheduleDaily": [
+      "Daily at {time}",
+      "يوميًا عند {time}"
+    ],
+    "scheduleHourly": [
+      "Hourly (full pull at {time})",
+      "كل ساعة (سحب كامل عند {time})"
+    ],
+    "schoolsChosen": [
+      "{count, plural, one {# school} other {# schools}}",
+      "{count, plural, zero {لا مدارس} one {مدرسة واحدة} two {مدرستان} few {# مدارس} many {# مدرسة} other {# مدرسة}}"
+    ],
+    "allSchools": [
+      "All schools in the feed",
+      "جميع مدارس المصدر"
+    ],
+    "lastRun": [
+      "Last run {when}",
+      "آخر تشغيل {when}"
+    ],
+    "neverRun": [
+      "Not run yet",
+      "لم يُشغَّل بعد"
+    ],
+    "failing": [
+      "The last {count} runs failed. Check the address and credentials.",
+      "فشلت آخر {count} عمليات تشغيل. تحقق من العنوان وبيانات الاعتماد."
+    ],
+    "openPreview": [
+      "Open the latest preview",
+      "فتح أحدث معاينة"
+    ],
+    "preview": [
+      "Preview changes",
+      "معاينة التغييرات"
+    ],
+    "busy": [
+      "A run is already in progress for this connection.",
+      "يوجد تشغيل قيد التنفيذ لهذا الاتصال بالفعل."
+    ],
+    "csvTitle": [
+      "Upload OneRoster CSV files",
+      "رفع ملفات OneRoster بصيغة CSV"
+    ],
+    "csvBody": [
+      "For schools that export a OneRoster zip (users.csv, classes.csv, enrollments.csv and the rest, version 1.1 or 1.2). It is previewed before anything changes.",
+      "للمدارس التي تصدّر ملفًا مضغوطًا بصيغة OneRoster (users.csv وclasses.csv وenrollments.csv وغيرها، الإصدار 1.1 أو 1.2). تتم معاينته قبل أي تغيير."
+    ],
+    "csvPick": [
+      "Choose a .zip file (up to 10 MB)",
+      "اختر ملفًا بصيغة zip (حتى 10 ميغابايت)"
+    ],
+    "csvConnection": [
+      "Same IDs as this connection",
+      "المعرّفات نفسها لهذا الاتصال"
+    ],
+    "csvNoConnection": [
+      "None (a separate feed)",
+      "لا شيء (مصدر مستقل)"
+    ],
+    "csvPreview": [
+      "Upload and preview",
+      "رفع ومعاينة"
+    ],
+    "logEmpty": [
+      "No runs yet",
+      "لا توجد عمليات تشغيل بعد"
+    ],
+    "logEmptyBody": [
+      "Previews and syncs appear here with what they changed.",
+      "تظهر المعاينات والمزامنات هنا مع ما غيّرته."
+    ],
+    "kind": {
+      "preview": [
+        "Preview",
+        "معاينة"
+      ],
+      "sync": [
+        "Sync",
+        "مزامنة"
+      ]
+    },
+    "source": {
+      "API": [
+        "Live feed",
+        "مصدر مباشر"
+      ],
+      "CSV": [
+        "CSV files",
+        "ملفات CSV"
+      ]
+    },
+    "mode": {
+      "FULL": [
+        "Full",
+        "كامل"
+      ],
+      "DELTA": [
+        "Changes only",
+        "التغييرات فقط"
+      ]
+    },
+    "trigger": {
+      "SCHEDULE": [
+        "Scheduled",
+        "مجدول"
+      ],
+      "byPerson": [
+        "By {name}",
+        "بواسطة {name}"
+      ]
+    },
+    "someone": [
+      "Someone",
+      "شخص ما"
+    ],
+    "logCounts": [
+      "{created} added · {updated} updated · {removed} removed · {issues} problems",
+      "{created} إضافة · {updated} تحديث · {removed} إزالة · {issues} مشكلة"
+    ],
+    "pageOf": [
+      "Page {page} of {pages}",
+      "الصفحة {page} من {pages}"
+    ],
+    "newer": [
+      "Newer",
+      "الأحدث"
+    ],
+    "older": [
+      "Older",
+      "الأقدم"
+    ],
+    "newTitle": [
+      "Add a roster connection",
+      "إضافة اتصال للقوائم"
+    ],
+    "editTitle": [
+      "Edit roster connection",
+      "تعديل اتصال القوائم"
+    ],
+    "dialogBody": [
+      "Credentials are stored encrypted and never shown again. Saving does not import anything: run a preview first.",
+      "تُخزَّن بيانات الاعتماد مشفّرة ولا تُعرض مرة أخرى. الحفظ لا يستورد شيئًا، فابدأ بالمعاينة."
+    ],
+    "name": [
+      "Name",
+      "الاسم"
+    ],
+    "authMode": [
+      "Authentication",
+      "المصادقة"
+    ],
+    "authModes": {
+      "OAUTH1": [
+        "OneRoster 1.1 (OAuth 1.0a, HMAC-SHA256)",
+        "OneRoster 1.1 (OAuth 1.0a وHMAC-SHA256)"
+      ],
+      "OAUTH2": [
+        "OneRoster 1.2 (OAuth 2.0 client credentials)",
+        "OneRoster 1.2 (بيانات اعتماد عميل OAuth 2.0)"
+      ],
+      "BEARER": [
+        "Bearer token",
+        "رمز وصول"
+      ]
+    },
+    "baseUrl": [
+      "OneRoster address",
+      "عنوان OneRoster"
+    ],
+    "baseUrlPlaceholder": [
+      "https://example.oneroster.com/ims/oneroster/v1p1",
+      "مثال: https://example.oneroster.com/ims/oneroster/v1p1"
+    ],
+    "baseUrlHelp": {
+      "classlink": [
+        "The server URL shown with your app's credentials in the ClassLink Roster Server console, ending in /ims/oneroster/v1p1.",
+        "عنوان الخادم الظاهر مع بيانات اعتماد التطبيق في وحدة ClassLink Roster Server، وينتهي بـ /ims/oneroster/v1p1."
+      ],
+      "oneroster": [
+        "The OneRoster base address from your provider, ending in /ims/oneroster/v1p1 or /ims/oneroster/rostering/v1p2.",
+        "عنوان OneRoster الأساسي من المزوّد، وينتهي بـ /ims/oneroster/v1p1 أو /ims/oneroster/rostering/v1p2."
+      ]
+    },
+    "cleverApi": [
+      "Clever API address",
+      "عنوان واجهة Clever"
+    ],
+    "cleverApiHelp": [
+      "Leave empty to use https://api.clever.com.",
+      "اتركه فارغًا لاستخدام https://api.clever.com."
+    ],
+    "tokenUrl": [
+      "Token URL",
+      "عنوان الرمز"
+    ],
+    "districtToken": [
+      "Clever district token",
+      "رمز المنطقة التعليمية في Clever"
+    ],
+    "token": [
+      "Token",
+      "الرمز"
+    ],
+    "clientId": [
+      "Client ID (key)",
+      "معرّف العميل (المفتاح)"
+    ],
+    "clientSecret": [
+      "Client secret",
+      "سر العميل"
+    ],
+    "savedSecret": [
+      "Saved, leave empty to keep",
+      "محفوظ، اتركه فارغًا للإبقاء عليه"
+    ],
+    "credentialsNote": [
+      "Horizon only reads rosters. It never writes back to ClassLink, Clever or your information system.",
+      "يقرأ Horizon القوائم فقط ولا يكتب أبدًا في ClassLink أو Clever أو نظام معلومات الطلاب لديك."
+    ],
+    "schools": [
+      "Schools to import",
+      "المدارس المراد استيرادها"
+    ],
+    "schoolsHelp": [
+      "A district feed can hold several schools. Test the connection to list them and tick yours; leave empty to import every school.",
+      "قد يحتوي مصدر المنطقة التعليمية على عدة مدارس. اختبر الاتصال لعرضها واختر مدرستك، أو اتركه فارغًا لاستيراد جميع المدارس."
+    ],
+    "schoolsPlaceholder": [
+      "School sourcedIds, separated by commas",
+      "معرّفات sourcedId للمدارس مفصولة بفواصل"
+    ],
+    "test": [
+      "Save and test",
+      "حفظ واختبار"
+    ],
+    "testOk": [
+      "Connected. The feed lists {count, plural, one {# school} other {# schools}}.",
+      "تم الاتصال. يعرض المصدر {count, plural, zero {لا مدارس} one {مدرسة واحدة} two {مدرستين} few {# مدارس} many {# مدرسة} other {# مدرسة}}."
+    ],
+    "importTitle": [
+      "What to import",
+      "ما الذي يُستورد"
+    ],
+    "imports": {
+      "importStaff": [
+        "Staff",
+        "الكادر"
+      ],
+      "importStaffHelp": [
+        "Teachers and other mapped roles, invited without a password.",
+        "المعلمون والأدوار المطابقة الأخرى، تتم دعوتهم دون كلمة مرور."
+      ],
+      "importStudents": [
+        "Students",
+        "الطلاب"
+      ],
+      "importStudentsHelp": [
+        "Names, student numbers and grades. Arabic names and IDs stay as entered in Horizon.",
+        "الأسماء وأرقام الطلاب والصفوف. تبقى الأسماء العربية وأرقام الهوية كما أُدخلت في Horizon."
+      ],
+      "importGuardians": [
+        "Parents and guardians",
+        "أولياء الأمور"
+      ],
+      "importGuardiansHelp": [
+        "Linked to their children from either side of the feed.",
+        "يُربطون بأبنائهم من أي جانب في المصدر."
+      ],
+      "importClasses": [
+        "Classes and enrollments",
+        "الفصول والتسجيلات"
+      ],
+      "importClassesHelp": [
+        "Into the current academic year, with the class teacher.",
+        "في العام الدراسي الحالي مع معلم الفصل."
+      ],
+      "importDemographics": [
+        "Date of birth and sex",
+        "تاريخ الميلاد والجنس"
+      ],
+      "importDemographicsHelp": [
+        "Only if the school's data agreement allows it. Off by default.",
+        "فقط إذا سمحت اتفاقية بيانات المدرسة بذلك. غير مفعّل افتراضيًا."
+      ]
+    },
+    "gradesTitle": [
+      "Grade codes",
+      "رموز الصفوف"
+    ],
+    "gradesHelp": [
+      "How the feed's grade codes become Horizon grades. By default PK is KG1, KG is KG2 and 01 to 12 are Grades 1 to 12. Codes left as not imported are reported in the preview, never guessed.",
+      "كيف تتحول رموز الصفوف في المصدر إلى صفوف Horizon. افتراضيًا PK هو الروضة الأولى وKG هو الروضة الثانية ومن 01 إلى 12 هي الصفوف من 1 إلى 12. الرموز غير المستوردة تُذكر في المعاينة ولا يتم تخمينها."
+    ],
+    "notImported": [
+      "Not imported",
+      "لا يُستورد"
+    ],
+    "rolesTitle": [
+      "Staff roles",
+      "أدوار الكادر"
+    ],
+    "rolesHelp": [
+      "The Horizon role new staff get. Roles that open safeguarding, wellbeing, medical or identity records are never given by a feed.",
+      "الدور الذي يحصل عليه الكادر الجديد في Horizon. لا يمنح المصدر أبدًا الأدوار التي تفتح سجلات الحماية أو الرفاه أو السجلات الطبية أو الهوية."
+    ],
+    "feedRoles": {
+      "teacher": [
+        "Teacher",
+        "معلم"
+      ],
+      "aide": [
+        "Aide",
+        "مساعد"
+      ],
+      "administrator": [
+        "Administrator",
+        "إداري"
+      ],
+      "principal": [
+        "Principal",
+        "مدير"
+      ],
+      "counselor": [
+        "Counselor",
+        "مرشد"
+      ],
+      "proctor": [
+        "Proctor",
+        "مراقب"
+      ],
+      "staff": [
+        "Other staff",
+        "كادر آخر"
+      ]
+    },
+    "schedule": [
+      "Automatic sync",
+      "المزامنة التلقائية"
+    ],
+    "schedules": {
+      "OFF": [
+        "Off (manual)",
+        "متوقفة (يدويًا)"
+      ],
+      "DAILY": [
+        "Daily",
+        "يوميًا"
+      ],
+      "HOURLY": [
+        "Hourly",
+        "كل ساعة"
+      ]
+    },
+    "hour": [
+      "At",
+      "عند"
+    ],
+    "fullHour": [
+      "Full pull at",
+      "السحب الكامل عند"
+    ],
+    "removalLimit": [
+      "Removal limit (%)",
+      "حد الإزالة (%)"
+    ],
+    "removalLimitHelp": [
+      "A sync that would remove more than this share of a kind (and more than 5 records) stops for review instead of applying.",
+      "تتوقف المزامنة للمراجعة بدلًا من التطبيق إذا كانت ستزيل أكثر من هذه النسبة من أي نوع (وأكثر من 5 سجلات)."
+    ],
+    "cancel": [
+      "Cancel",
+      "إلغاء"
+    ],
+    "save": [
+      "Save",
+      "حفظ"
+    ],
+    "saved": [
+      "Connection saved",
+      "تم حفظ الاتصال"
+    ],
+    "phase": {
+      "queued": [
+        "Waiting to start",
+        "في انتظار البدء"
+      ],
+      "fetch": [
+        "Reading the feed page by page",
+        "قراءة المصدر صفحة بصفحة"
+      ],
+      "staff": [
+        "Checking staff",
+        "مراجعة الكادر"
+      ],
+      "students": [
+        "Checking students",
+        "مراجعة الطلاب"
+      ],
+      "guardians": [
+        "Checking parents",
+        "مراجعة أولياء الأمور"
+      ],
+      "classes": [
+        "Checking classes",
+        "مراجعة الفصول"
+      ],
+      "enrollments": [
+        "Checking enrollments",
+        "مراجعة التسجيلات"
+      ],
+      "removals": [
+        "Checking removals",
+        "مراجعة الإزالات"
+      ],
+      "done": [
+        "Finishing",
+        "جارٍ الإنهاء"
+      ]
+    },
+    "recordsRead": [
+      "{count} records read",
+      "تمت قراءة {count} سجل"
+    ],
+    "progressNote": [
+      "You can leave this page: the run continues in the background and resumes after interruptions.",
+      "يمكنك مغادرة هذه الصفحة، فالتشغيل يستمر في الخلفية ويُستأنف بعد أي انقطاع."
+    ],
+    "confirmRemovals": [
+      "I have checked the list: remove or deactivate {count} records.",
+      "راجعت القائمة: إزالة أو إيقاف {count} سجلًا."
+    ],
+    "applyStarted": [
+      "Applying the changes",
+      "جارٍ تطبيق التغييرات"
+    ],
+    "apply": [
+      "Apply these changes",
+      "تطبيق هذه التغييرات"
+    ],
+    "applyWithRemovals": [
+      "Apply, including removals",
+      "التطبيق مع الإزالات"
+    ],
+    "back": [
+      "Rostering",
+      "مزامنة القوائم"
+    ],
+    "blockedBody": [
+      "This run would remove more records than the connection's limit allows ({kinds}). Nothing was removed. Check the list, then confirm to apply.",
+      "سيزيل هذا التشغيل سجلات أكثر مما يسمح به حد الاتصال ({kinds}). لم يُزل أي شيء. راجع القائمة ثم أكّد للتطبيق."
+    ],
+    "kinds": {
+      "staff": [
+        "Staff",
+        "الكادر"
+      ],
+      "students": [
+        "Students",
+        "الطلاب"
+      ],
+      "guardians": [
+        "Parents",
+        "أولياء الأمور"
+      ],
+      "classes": [
+        "Classes",
+        "الفصول"
+      ],
+      "enrollments": [
+        "Enrollments",
+        "التسجيلات"
+      ]
+    },
+    "wouldChange": [
+      "What would change",
+      "ما الذي سيتغير"
+    ],
+    "wouldChangeBody": [
+      "Nothing has changed yet. Apply to make these changes.",
+      "لم يتغير شيء بعد. طبّق لإجراء هذه التغييرات."
+    ],
+    "changed": [
+      "What changed",
+      "ما الذي تغيّر"
+    ],
+    "changedBody": [
+      "These changes were applied. Each is in the audit log.",
+      "تم تطبيق هذه التغييرات، وكل منها مسجّل في سجل التدقيق."
+    ],
+    "kindCol": [
+      "Records",
+      "السجلات"
+    ],
+    "cols": {
+      "create": [
+        "Add",
+        "إضافة"
+      ],
+      "update": [
+        "Update",
+        "تحديث"
+      ],
+      "unchanged": [
+        "Unchanged",
+        "دون تغيير"
+      ],
+      "remove": [
+        "Remove",
+        "إزالة"
+      ],
+      "skipped": [
+        "Skipped",
+        "متجاوز"
+      ]
+    },
+    "nothingToApply": [
+      "Everything already matches the feed.",
+      "كل شيء مطابق للمصدر بالفعل."
+    ],
+    "applyNote": [
+      "Applying uses exactly this preview. Records with problems are skipped and reported again.",
+      "يستخدم التطبيق هذه المعاينة بعينها. تُتجاوز السجلات التي بها مشكلات وتُذكر مرة أخرى."
+    ],
+    "expiredNote": [
+      "Previews can be applied for 24 hours. Run a new preview.",
+      "يمكن تطبيق المعاينات خلال 24 ساعة. شغّل معاينة جديدة."
+    ],
+    "issuesTitle": [
+      "{count, plural, one {# problem to look at} other {# problems to look at}}",
+      "{count, plural, zero {لا مشكلات} one {مشكلة واحدة للمراجعة} two {مشكلتان للمراجعة} few {# مشكلات للمراجعة} many {# مشكلة للمراجعة} other {# مشكلة للمراجعة}}"
+    ],
+    "issuesBody": [
+      "These records were not applied. Fix them in the source system or in the connection settings; the next sync picks them up.",
+      "لم تُطبَّق هذه السجلات. أصلحها في النظام المصدر أو في إعدادات الاتصال، وستلتقطها المزامنة التالية."
+    ],
+    "andMore": [
+      "and {count} more",
+      "و{count} أخرى"
+    ],
+    "sampleTitle": [
+      "Changes",
+      "التغييرات"
+    ],
+    "sampleBody": [
+      "The first {shown} changes, in feed order.",
+      "أول {shown} تغيير بترتيب المصدر."
+    ],
+    "actions": {
+      "create": [
+        "Add",
+        "إضافة"
+      ],
+      "update": [
+        "Update",
+        "تحديث"
+      ],
+      "remove": [
+        "Remove",
+        "إزالة"
+      ]
+    },
+    "fields": {
+      "status": [
+        "status",
+        "الحالة"
+      ],
+      "emailNotChanged": [
+        "new email reported, not applied",
+        "بريد جديد مُبلغ عنه دون تطبيق"
+      ],
+      "staffNumber": [
+        "staff number",
+        "رقم الموظف"
+      ],
+      "linked": [
+        "linked to existing record",
+        "مرتبط بسجل موجود"
+      ],
+      "firstNameEn": [
+        "first name",
+        "الاسم الأول"
+      ],
+      "lastNameEn": [
+        "last name",
+        "اسم العائلة"
+      ],
+      "gradeLevel": [
+        "grade",
+        "الصف"
+      ],
+      "dateOfBirth": [
+        "date of birth",
+        "تاريخ الميلاد"
+      ],
+      "children": [
+        "children",
+        "الأبناء"
+      ],
+      "nameEn": [
+        "title",
+        "العنوان"
+      ],
+      "isHomeroom": [
+        "homeroom",
+        "فصل الرعاية"
+      ],
+      "room": [
+        "room",
+        "القاعة"
+      ],
+      "subjectId": [
+        "subject",
+        "المادة"
+      ],
+      "teacher": [
+        "teacher",
+        "المعلم"
+      ]
+    },
+    "issues": {
+      "NO_EMAIL": {
+        "title": [
+          "Staff without an email address",
+          "كادر دون عنوان بريد إلكتروني"
+        ],
+        "fix": [
+          "Staff sign in by email, so add one in the source system.",
+          "يسجّل الكادر الدخول بالبريد الإلكتروني، لذا أضف عنوانًا في النظام المصدر."
+        ]
+      },
+      "DUPLICATE_EMAIL": {
+        "title": [
+          "The same email on two people",
+          "البريد نفسه لشخصين"
+        ],
+        "fix": [
+          "Neither record was applied. Give each person their own address in the source system.",
+          "لم يُطبَّق أي من السجلين. خصّص لكل شخص عنوانه في النظام المصدر."
+        ]
+      },
+      "EMAIL_CHANGED": {
+        "title": [
+          "A staff email changed in the feed",
+          "تغيّر بريد أحد أفراد الكادر في المصدر"
+        ],
+        "fix": [
+          "Sign-in addresses never change through a sync. Update the address in Administration > People if the change is right.",
+          "لا تتغير عناوين تسجيل الدخول عبر المزامنة. حدّث العنوان من الإدارة > الأشخاص إن كان التغيير صحيحًا."
+        ]
+      },
+      "FAMILY_ACCOUNT": {
+        "title": [
+          "Staff email belongs to a family account",
+          "بريد الكادر يخص حساب عائلة"
+        ],
+        "fix": [
+          "The address already belongs to a parent or student here. Use a separate staff address.",
+          "العنوان يخص وليّ أمر أو طالبًا هنا بالفعل. استخدم عنوانًا مستقلًا للكادر."
+        ]
+      },
+      "ROLE_NOT_MAPPED": {
+        "title": [
+          "Staff role without a Horizon role",
+          "دور كادر دون دور مطابق في Horizon"
+        ],
+        "fix": [
+          "Choose a Horizon role for this feed role in the connection settings, or leave them out.",
+          "اختر دورًا في Horizon لهذا الدور في إعدادات الاتصال، أو اتركهم دون استيراد."
+        ]
+      },
+      "ADMIN_KEPT": {
+        "title": [
+          "School administrators kept",
+          "الإبقاء على مسؤولي المدرسة"
+        ],
+        "fix": [
+          "A sync never suspends a school administrator. Suspend them by hand if needed.",
+          "لا توقف المزامنة مسؤولي المدرسة أبدًا. أوقفهم يدويًا عند الحاجة."
+        ]
+      },
+      "UNKNOWN_GRADE": {
+        "title": [
+          "Grade code without a mapping",
+          "رمز صف دون مطابقة"
+        ],
+        "fix": [
+          "Map this grade code to a Horizon grade in the connection settings.",
+          "طابق رمز الصف هذا مع صف في Horizon من إعدادات الاتصال."
+        ]
+      },
+      "DUPLICATE_NUMBER": {
+        "title": [
+          "The same student number twice",
+          "رقم الطالب نفسه مرتين"
+        ],
+        "fix": [
+          "Neither record was applied. Fix the student numbers in the source system.",
+          "لم يُطبَّق أي من السجلين. صحّح أرقام الطلاب في النظام المصدر."
+        ]
+      },
+      "NO_CHILDREN": {
+        "title": [
+          "Parents without a child in this school",
+          "أولياء أمور دون أبناء في هذه المدرسة"
+        ],
+        "fix": [
+          "The feed links them to no student this sync imports.",
+          "لا يربطهم المصدر بأي طالب تستورده هذه المزامنة."
+        ]
+      },
+      "PAST_TERM": {
+        "title": [
+          "Classes from a past term",
+          "فصول من فصل دراسي سابق"
+        ],
+        "fix": [
+          "Only classes of the current academic year are imported.",
+          "تُستورد فصول العام الدراسي الحالي فقط."
+        ]
+      },
+      "SUBJECT_NOT_MATCHED": {
+        "title": [
+          "Classes imported without a subject",
+          "فصول مستوردة دون مادة"
+        ],
+        "fix": [
+          "Imported anyway. Add a subject with the same code or name in Administration > School to match them next time.",
+          "تم استيرادها. أضف مادة بالرمز أو الاسم نفسه من الإدارة > المدرسة لمطابقتها في المرة القادمة."
+        ]
+      },
+      "NO_YEAR": {
+        "title": [
+          "No current academic year",
+          "لا يوجد عام دراسي حالي"
+        ],
+        "fix": [
+          "Set up the current academic year before importing classes.",
+          "أعدّ العام الدراسي الحالي قبل استيراد الفصول."
+        ]
+      },
+      "UNKNOWN_CLASS": {
+        "title": [
+          "Enrollments in classes that were not imported",
+          "تسجيلات في فصول لم تُستورد"
+        ],
+        "fix": [
+          "Usually follows a class problem above.",
+          "تنتج عادةً عن مشكلة في الفصول أعلاه."
+        ]
+      },
+      "UNKNOWN_TEACHER": {
+        "title": [
+          "Teachers who were not imported",
+          "معلمون لم يُستوردوا"
+        ],
+        "fix": [
+          "Usually follows a staff problem above.",
+          "تنتج عادةً عن مشكلة في الكادر أعلاه."
+        ]
+      },
+      "UNKNOWN_STUDENT": {
+        "title": [
+          "Enrollments of students who were not imported",
+          "تسجيلات لطلاب لم يُستوردوا"
+        ],
+        "fix": [
+          "Usually follows a student problem above.",
+          "تنتج عادةً عن مشكلة في الطلاب أعلاه."
+        ]
+      }
+    },
+    "errors": {
+      "FORBIDDEN": [
+        "You do not have permission to manage rostering.",
+        "ليست لديك صلاحية إدارة مزامنة القوائم."
+      ],
+      "INVALID": [
+        "Some values are not valid.",
+        "بعض القيم غير صالحة."
+      ],
+      "CLEVER_TOKEN": [
+        "Clever uses a district token.",
+        "تستخدم Clever رمز المنطقة التعليمية."
+      ],
+      "URL": [
+        "Enter the https address of the OneRoster server.",
+        "أدخل عنوان https لخادم OneRoster."
+      ],
+      "TOKEN_URL": [
+        "Enter the https token URL.",
+        "أدخل عنوان https للرمز."
+      ],
+      "ROLE": [
+        "Choose staff roles that open no sensitive records.",
+        "اختر أدوار كادر لا تفتح سجلات حساسة."
+      ],
+      "GRADE": [
+        "A grade mapping is not valid.",
+        "إحدى مطابقات الصفوف غير صالحة."
+      ],
+      "NOT_FOUND": [
+        "Not found.",
+        "غير موجود."
+      ],
+      "TOO_MANY": [
+        "This school has the most connections allowed.",
+        "وصلت هذه المدرسة إلى الحد الأقصى للاتصالات."
+      ],
+      "CREDENTIALS": [
+        "Enter the credentials.",
+        "أدخل بيانات الاعتماد."
+      ],
+      "BUSY": [
+        "A run is already in progress for this connection.",
+        "يوجد تشغيل قيد التنفيذ لهذا الاتصال بالفعل."
+      ],
+      "FILE": [
+        "Choose a OneRoster .zip file.",
+        "اختر ملف OneRoster بصيغة zip."
+      ],
+      "TOO_LARGE": [
+        "The file is larger than 10 MB.",
+        "حجم الملف أكبر من 10 ميغابايت."
+      ],
+      "CSV_NOT_ZIP": [
+        "That is not a zip file.",
+        "هذا ليس ملفًا مضغوطًا بصيغة zip."
+      ],
+      "CSV_TOO_LARGE": [
+        "The files are too large once unzipped.",
+        "الملفات كبيرة جدًا بعد فك الضغط."
+      ],
+      "CSV_NO_USERS": [
+        "The zip has no users.csv with rows.",
+        "لا يحتوي الملف المضغوط على users.csv به صفوف."
+      ],
+      "CSV_UNREADABLE": [
+        "The zip could not be read.",
+        "تعذّرت قراءة الملف المضغوط."
+      ],
+      "CSV_BAD_HEADER": [
+        "A CSV file does not have OneRoster headers (sourcedId first).",
+        "أحد ملفات CSV لا يحتوي على ترويسات OneRoster (sourcedId أولًا)."
+      ],
+      "FETCH_AUTH": [
+        "The server refused the credentials.",
+        "رفض الخادم بيانات الاعتماد."
+      ],
+      "FETCH_HTTP": [
+        "The server answered with an error. Try again later.",
+        "أجاب الخادم بخطأ. أعد المحاولة لاحقًا."
+      ],
+      "FETCH_FORMAT": [
+        "The server's answer is not OneRoster data. Check the address.",
+        "رد الخادم ليس بيانات OneRoster. تحقق من العنوان."
+      ],
+      "FETCH_URL": [
+        "That address cannot be used (https and a public server only).",
+        "لا يمكن استخدام هذا العنوان (https وخادم عام فقط)."
+      ],
+      "FETCH_TOO_LARGE": [
+        "A page from the server was too large.",
+        "كانت إحدى صفحات الخادم كبيرة جدًا."
+      ],
+      "FETCH_TIMEOUT": [
+        "The server took too long to answer.",
+        "استغرق الخادم وقتًا طويلًا للرد."
+      ],
+      "FETCH_NETWORK": [
+        "The server could not be reached.",
+        "تعذّر الوصول إلى الخادم."
+      ],
+      "CONNECTION_CREDENTIALS": [
+        "The saved credentials are missing or cannot be read. Enter them again.",
+        "بيانات الاعتماد المحفوظة مفقودة أو غير مقروءة. أدخلها مرة أخرى."
+      ],
+      "CONNECTION_URL": [
+        "The connection has no address.",
+        "لا يوجد عنوان للاتصال."
+      ],
+      "CONNECTION_TOKEN_URL": [
+        "The connection has no token URL.",
+        "لا يوجد عنوان رمز للاتصال."
+      ],
+      "NO_CONNECTION": [
+        "The connection was deleted.",
+        "تم حذف الاتصال."
+      ],
+      "TOO_MANY_PAGES": [
+        "The feed has more pages than one run reads.",
+        "يحتوي المصدر على صفحات أكثر مما يقرؤه تشغيل واحد."
+      ],
+      "EMPTY": [
+        "The feed returned no people, classes or enrollments, so nothing was changed.",
+        "لم يُرجع المصدر أي أشخاص أو فصول أو تسجيلات، لذلك لم يتغير شيء."
+      ],
+      "INTERNAL": [
+        "Something went wrong. The run can be started again.",
+        "حدث خطأ. يمكن بدء التشغيل مرة أخرى."
+      ],
+      "NOT_APPLICABLE": [
+        "This run cannot be applied.",
+        "لا يمكن تطبيق هذا التشغيل."
+      ],
+      "EXPIRED": [
+        "This preview is older than 24 hours. Run a new one.",
+        "هذه المعاينة أقدم من 24 ساعة. شغّل معاينة جديدة."
+      ],
+      "generic": [
+        "Something went wrong. Try again.",
+        "حدث خطأ. أعد المحاولة."
+      ]
+    },
+    "demoFeed": [
+      "Built-in demo feed (OneRoster)",
+      "مصدر تجريبي مدمج (OneRoster)"
+    ],
+    "inSync": [
+      "Kept in step: {list}",
+      "متزامن حاليًا: {list}"
+    ],
+    "linkedKinds": {
+      "student": [
+        "{count} students",
+        "{count} طالب"
+      ],
+      "staff": [
+        "{count} staff",
+        "{count} من الكادر"
+      ],
+      "guardian": [
+        "{count} parents",
+        "{count} ولي أمر"
+      ],
+      "class": [
+        "{count} classes",
+        "{count} فصل"
+      ],
+      "enrollment": [
+        "{count} enrollments",
+        "{count} تسجيل"
+      ]
+    },
+    "demoFeedHelp": [
+      "The demo school reads a built-in OneRoster feed made from its own records, with a few differences to preview.",
+      "تقرأ المدرسة التجريبية مصدر OneRoster مدمجًا مبنيًا من سجلاتها، مع بعض الاختلافات للمعاينة."
+    ]
+  }
+}

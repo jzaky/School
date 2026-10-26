@@ -3,7 +3,6 @@ import { getTranslations } from "next-intl/server";
 import { Clock, Download, KeyRound, Link2, MailCheck, MailX, Send, Users } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
-import { enabledOAuthProviders } from "@/auth";
 import { fmtDate, fmtNumber } from "@/lib/format";
 import { personName, pick, userName } from "@/lib/i18n-data";
 import { Link } from "@/i18n/navigation";
@@ -20,7 +19,6 @@ import { Button } from "@/components/ui/button";
 import { AccessTabs } from "@/components/access/access-tabs";
 import { BulkStaffDialog, FamilyJoinUrl, FamilyQr, InviteDialog, InviteFamiliesButton, InviteRowActions, RegenerateCodeButton, StaffLinkDialog } from "@/components/access/invite-forms";
 import { SignInSettings } from "@/components/access/sign-in-settings";
-import { SignInReadiness } from "@/components/access/sign-in-readiness";
 
 export async function generateMetadata() {
   const t = await getTranslations("adminInvites");
@@ -76,11 +74,22 @@ export default async function InvitationsPage({ searchParams }: { searchParams: 
       />
       {tab === "invites" && (await invitesTab())}
       {tab === "links" && (await linksTab())}
-      {tab === "signin" && <SignInReadiness org={ctx.org} />}
+      {tab === "signin" && (
+        <Panel padded={false}>
+          <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:p-5" data-testid="signin-moved">
+            <KeyRound className="size-5 shrink-0 text-brand" />
+            <p className="min-w-0 flex-1 text-sm text-muted-foreground">{t("signInMoved")}</p>
+            {ctx.can("signin.manage") && (
+              <Button asChild variant="outline" size="sm">
+                <Link href="/admin/sign-in">{t("signInMovedLink")}</Link>
+              </Button>
+            )}
+          </div>
+        </Panel>
+      )}
       {tab === "signin" && (
         <SignInSettings
           canEdit={ctx.can("roles.manage")}
-          providers={enabledOAuthProviders()}
           initial={{
             googleSignIn: ctx.org.googleSignIn,
             microsoftSignIn: ctx.org.microsoftSignIn,

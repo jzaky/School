@@ -47,10 +47,6 @@ export function defaultPolicy(orgId: string, org: OrgFlags): Policy {
 
 export function toPolicy(row: SignInPolicy): Policy {
   const { id: _id, createdAt: _c, updatedAt: _u, updatedById: _b, ...rest } = row;
-  void _id;
-  void _c;
-  void _u;
-  void _b;
   return {
     ...rest,
     methods: SIGN_IN_METHODS.filter((m) => row.methods.includes(m)),

@@ -31,6 +31,7 @@ import { seedGlobalCatalog } from "./catalog";
 import { seedAccess } from "./access";
 import { seedGroupDemo } from "./groups";
 import { seedIntegrations } from "./integrations";
+import { seedRostering } from "./rostering";
 import { seedConversations } from "./conversations";
 import { academicStartYear, installStarterTemplate } from "./starter";
 
@@ -748,6 +749,8 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   // School group: Horizon Education Group with two small extra schools (demo tenant only).
   if (isDemoTenant) await seedGroupDemo(world);
   await seedIntegrations(world);
+  // Sign-in options, the ClassLink roster connection (built-in demo feed) and sign-in history.
+  await seedRostering(world);
   // Request conversations, private sick leave and cover notes (after the timetable, so cover can be arranged).
   await seedConversations(world);
   // Requirement pipeline examples (after the global catalog seed; programs are looked up at runtime).

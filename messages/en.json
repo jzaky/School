@@ -160,7 +160,9 @@
     "sectionPlatform": "Platform",
     "platformLeads": "Marketing leads",
     "platformReferrals": "Referrals",
-    "platformSettings": "Platform settings"
+    "platformSettings": "Platform settings",
+    "signInSettings": "Sign-in",
+    "rostering": "Rostering"
   },
   "shell": {
     "openMenu": "Open menu",
@@ -2395,6 +2397,14 @@
       "courseSelection": {
         "title": "Run next year's course selection",
         "body": "AP and regular electives for the American track, demand per course and how many students' university targets need each one."
+      },
+      "classlinkRoster": {
+        "title": "Preview a ClassLink roster sync",
+        "body": "Press Preview changes on the ClassLink connection: three new students (KG1, KG2 and Grade 9), a renamed student, a leaver and an unmapped grade code appear before anything changes. Apply when it looks right."
+      },
+      "signInOptions": {
+        "title": "Choose how people sign in",
+        "body": "Switch sign-in options on or off, see which need server credentials, copy the redirect addresses for ClassLink, Microsoft, Google and UAE PASS, and read the sign-in activity."
       }
     }
   },
@@ -6811,6 +6821,18 @@
           "label": "See why students are absent",
           "help": "Read the reason and doctor's notes on absences reported by families. Teachers see only that an absence is excused."
         }
+      },
+      "signin": {
+        "manage": {
+          "label": "Manage sign-in",
+          "help": "Choose the school's sign-in options, single sign-on rules and identity provider settings."
+        }
+      },
+      "roster": {
+        "manage": {
+          "label": "Manage rostering",
+          "help": "Connect ClassLink, Clever or OneRoster, preview and apply roster changes, and read the sync log."
+        }
       }
     }
   },
@@ -7102,7 +7124,9 @@
       "domainApproval": "Staff who sign in with an address on this domain can ask to join; an administrator approves them.",
       "domainNone": "Staff can use any email address, but only people the school invited or imported can get in. Add a domain below to let staff join with their school address.",
       "noSiteUrl": "The site address is not set on this server (AUTH_URL), so the addresses above come from this request. Set AUTH_URL before registering them."
-    }
+    },
+    "signInMoved": "Sign-in options (password, email links, ClassLink, Clever, Google, Microsoft, UAE PASS and your own identity provider) are set on the Sign-in page. Joining rules for staff and families stay here.",
+    "signInMovedLink": "Open sign-in settings"
   },
   "joinRequests": {
     "title": "Join requests",
@@ -9655,7 +9679,639 @@
         "ssoBody": "Someone asked to reset the password for this address. {school} asks staff to sign in with the school's single sign-on, so there is no password to reset. Open the school's sign-in page and choose your school account. If you did not ask, you can ignore this email.",
         "doneSubject": "Your password for {school} was changed",
         "doneBody": "Your password was just changed, and you were signed out everywhere else. If this was not you, contact the school office straight away."
+      },
+      "title": "Choose a new password",
+      "subtitle": "Use at least 10 characters with letters and numbers. You will be signed out on your other devices.",
+      "newPassword": "New password",
+      "confirm": "Type it again",
+      "save": "Save new password",
+      "doneTitle": "Password changed",
+      "doneBody": "You can sign in with your new password now. Any other devices were signed out.",
+      "signIn": "Sign in",
+      "invalidTitle": "This link cannot be used",
+      "invalidBody": "Reset links work once and expire after 45 minutes. Ask for a new one.",
+      "again": "Ask for a new link",
+      "otherLanguage": "العربية",
+      "errors": {
+        "INVALID": "This link was already used or has expired. Ask for a new one.",
+        "RATE_LIMITED": "Too many attempts. Wait a few minutes and try again.",
+        "SSO_ONLY": "Your school asks staff to sign in with single sign-on, so your password was not changed.",
+        "mismatch": "The two passwords are different."
+      }
+    },
+    "forgot": {
+      "title": "Forgot your password?",
+      "subtitle": "Enter the email you use for the school. If it has an account, we will send a link to choose a new password.",
+      "email": "Email",
+      "invalidEmail": "Enter a valid email address.",
+      "send": "Send reset link",
+      "sentTitle": "Check your email",
+      "sentBody": "If that address has an account, a reset link is on its way. It works once and expires in 45 minutes. Staff whose school uses single sign-on get instructions instead.",
+      "backToSignIn": "Back to sign in"
+    },
+    "magic": {
+      "title": "Sign in with your email link",
+      "body": "Press continue to sign in. The link works once.",
+      "continue": "Continue",
+      "invalidTitle": "This link cannot be used",
+      "invalidBody": "Sign-in links work once and expire after 15 minutes. Ask for a new one on the sign-in page.",
+      "again": "Go to sign in"
+    },
+    "signin": {
+      "metaTitle": "Sign in to {school}",
+      "metaTitleGeneric": "Sign in",
+      "eyebrow": "Sign in to",
+      "asideTitle": "{school} signs you in with the accounts you already use.",
+      "asideBody": "Single sign-on, email links and passwords are protected the same way: verified addresses only, links that work once, and every sign-in recorded in the school's audit log.",
+      "noOptions": "This school has not switched on any sign-in option yet. Ask the school office.",
+      "adminBreakGlass": "School administrator?",
+      "adminBreakGlassLink": "Sign in with your password",
+      "otherSchool": "A different school",
+      "continueToSchool": "Continue to your school's sign-in page",
+      "continueWith": {
+        "classlink": "Sign in with ClassLink",
+        "clever": "Log in with Clever",
+        "uaepass": "Sign in with UAE PASS",
+        "google": "Continue with Google",
+        "microsoft": "Continue with Microsoft"
+      },
+      "continueWithSchool": "Sign in with {name}",
+      "schoolAccount": "your school account",
+      "orEmail": "or use your email",
+      "emailOptions": "Email sign-in options",
+      "usePassword": "Password",
+      "useLink": "Email me a link",
+      "email": "Email",
+      "password": "Password",
+      "forgot": "Forgot password?",
+      "signIn": "Sign in",
+      "signingIn": "Signing in...",
+      "sendLink": "Email me a sign-in link",
+      "linkHelp": "We will email a link that signs you in once. No password needed.",
+      "linkSentTitle": "Check your email",
+      "linkSentBody": "If that address belongs to an account at the school, a sign-in link is on its way. It works once and expires in 15 minutes.",
+      "findSchool": "Use your school's sign-in page",
+      "findSchoolHelp": "Enter your school's address in Horizon to see its sign-in options, such as ClassLink or UAE PASS.",
+      "findSchoolPlaceholder": "for example horizon",
+      "findSchoolGo": "Find",
+      "findSchoolNotFound": "No school uses that address. Check it with the school office.",
+      "errors": {
+        "invalid": "That email and password do not match an active account.",
+        "email": "Enter a valid email address.",
+        "SSO_REQUIRED": "Your school asks staff to sign in with single sign-on. Use your school's sign-in page.",
+        "NotProvisioned": "This account has not been set up by your school yet.",
+        "NOT_PROVISIONED": "Your school has not set up an account for this sign-in yet. Ask the school office to add you.",
+        "NoMembership": "Your account is not linked to an active school.",
+        "ProviderDisabled": "Your school has not switched on this sign-in option.",
+        "METHOD_OFF": "Your school has not switched on this sign-in option.",
+        "WRONG_TENANT": "That account belongs to another organisation's directory, not your school's.",
+        "NO_EMAIL": "The sign-in did not share an email address, so the school cannot find your account.",
+        "EMAIL_UNVERIFIED": "That account's email address is not verified, so it cannot be linked. Use another option or ask the school office.",
+        "LOW_ASSURANCE": "Your UAE PASS account is not verified yet. Upgrade it in the UAE PASS app, then try again.",
+        "DOMAIN_NOT_ALLOWED": "Your school accepts single sign-on only from its own email domains.",
+        "SUSPENDED": "This account is suspended at the school. Contact the school office.",
+        "IDENTITY_TAKEN": "Your Horizon account is already linked to a different account of this provider. Ask the school office to unlink it first.",
+        "LINK_CONFLICT": "This sign-in matches two different people at the school, so it was stopped. Ask the school office to check your account.",
+        "NO_SCHOOL": "We could not tell which school you are signing in to. Use your school's sign-in page.",
+        "SSO_NO_SCHOOL": "Open your school's sign-in page first, then choose this option.",
+        "RATE_LIMITED": "Too many attempts. Wait a few minutes and try again.",
+        "SSO_STATE_MISSING": "The sign-in took too long or was opened in another browser. Start again.",
+        "SSO_STATE_MISMATCH": "The sign-in could not be verified. Start again from this page.",
+        "SSO_PROVIDER_DENIED": "The sign-in was cancelled.",
+        "SSO_NOT_CONFIGURED": "This sign-in option is not available right now. Use another option.",
+        "SSO_GENERIC": "The sign-in could not be completed. Try again or use another option.",
+        "generic": "Something went wrong while signing in. Try again."
+      }
+    },
+    "admin": {
+      "title": "Sign-in",
+      "subtitle": "Choose how staff, students and families sign in, and connect the school's identity providers.",
+      "tabs": {
+        "options": "Options and rules",
+        "providers": "Providers",
+        "activity": "Activity"
+      },
+      "pageAddress": "Your school's sign-in page",
+      "pageAddressBody": "Share this address with staff and families. It shows only the options switched on below.",
+      "optionsTitle": "Sign-in options",
+      "optionsBody": "An option appears on the school's sign-in page when it is switched on here and the server has its credentials.",
+      "methods": {
+        "password": {
+          "name": "Email and password",
+          "body": "Families and staff without single sign-on. School administrators can always use a password, so the school can never be locked out."
+        },
+        "magic_link": {
+          "name": "Email sign-in link",
+          "body": "A link that signs the person in once, valid for 15 minutes. Useful for parents who forget passwords."
+        },
+        "google": {
+          "name": "Google",
+          "body": "Google Workspace or personal Google accounts with a verified address."
+        },
+        "microsoft": {
+          "name": "Microsoft",
+          "body": "Microsoft 365 accounts from the school's tenant, verified domains or personal Microsoft accounts."
+        },
+        "classlink": {
+          "name": "ClassLink",
+          "body": "Single sign-on through ClassLink LaunchPad, including the Horizon tile in LaunchPad."
+        },
+        "clever": {
+          "name": "Clever",
+          "body": "Log in with Clever and Clever Instant Login for the school's district."
+        },
+        "uaepass": {
+          "name": "UAE PASS",
+          "body": "The UAE national digital identity. Verified accounts only; first sign-ins can match the Emirates ID on student records."
+        },
+        "oidc": {
+          "name": "School identity provider",
+          "body": "Any OpenID Connect provider the school runs, such as Okta, Microsoft AD FS or Keycloak."
+        }
+      },
+      "status": {
+        "ready": "Ready",
+        "server": "Needs server setup",
+        "tenant": "Needs your ID",
+        "provider": "Needs provider details"
+      },
+      "lockServer": "Not configured on this server yet. Your hosting team sets {names} (see docs/deploy.md).",
+      "lockTenant": "Add your tenant or district ID on the Providers tab first.",
+      "lockProvider": "Add your identity provider's address, client ID and secret on the Providers tab first.",
+      "rulesTitle": "Rules",
+      "rulesBody": "These rules apply to every single sign-on option.",
+      "staffSso": "Staff must use single sign-on",
+      "staffSsoBody": "Staff cannot sign in with a password or an email link. School administrators keep password sign-in as a safety net. Families are not affected.",
+      "allowedDomains": "Allowed email domains",
+      "allowedDomainsBody": "Staff and students may use single sign-on only with addresses on these domains. Leave empty to allow any domain. Parents are not limited.",
+      "domainsPlaceholder": "aldurrah.ae, students.aldurrah.ae",
+      "matchBy": "Match a first sign-in by",
+      "matchByBody": "How the first single sign-on finds the person's existing account. The roster ID comes from ClassLink, Clever or the school's directory.",
+      "match": {
+        "EMAIL_OR_EXTERNAL_ID": "Roster ID, then verified email",
+        "EMAIL": "Verified email only",
+        "EXTERNAL_ID": "Roster ID only"
+      },
+      "selfJoin": "Self-join domains for staff",
+      "selfJoinBody": "Unknown people with a verified address on these domains may join as staff through single sign-on. Nobody else gets an account without an invitation. Must be inside the allowed domains.",
+      "selfJoinApproval": "Self-joined staff wait for approval",
+      "selfJoinApprovalBody": "They appear on Join requests until an administrator approves them and chooses their roles.",
+      "redirectUri": "Redirect URI to register",
+      "serverMissing": "Server settings missing: {names}",
+      "classlink": {
+        "title": "ClassLink",
+        "body": "Single sign-on through ClassLink LaunchPad with OpenID Connect. Rosters come from ClassLink Roster Server on the Rostering page.",
+        "tenant": "ClassLink tenant ID",
+        "tenantHelp": "Your district's tenant ID from the ClassLink Management Console. Sign-ins from any other tenant are refused.",
+        "launch": "LaunchPad app link",
+        "ready": "Credentials are set on this server.",
+        "rosters": "Set up rostering"
+      },
+      "clever": {
+        "title": "Clever",
+        "body": "Log in with Clever and Clever Instant Login. Instant Login is restarted from Horizon so every sign-in carries a verified state.",
+        "district": "Clever district ID",
+        "districtHelp": "From the Clever district dashboard. Sign-ins from other districts are refused."
+      },
+      "microsoft": {
+        "title": "Microsoft",
+        "body": "Microsoft Entra ID. Add the school's tenant ID so school accounts are trusted; other organisations' addresses count only when Microsoft verified the domain.",
+        "tenant": "Microsoft tenant ID",
+        "tenantHelp": "The Directory (tenant) ID from the Microsoft Entra admin center."
+      },
+      "google": {
+        "title": "Google",
+        "body": "Google sign-in accepts only addresses Google has verified.",
+        "origin": "Authorised JavaScript origin"
+      },
+      "uaepass": {
+        "title": "UAE PASS",
+        "body": "The UAE national digital identity, for parents and staff. Unverified (SOP1) accounts cannot link a first sign-in.",
+        "environment": "Environment",
+        "env": {
+          "staging": "Staging",
+          "production": "Production"
+        },
+        "eid": "Match by Emirates ID on student records",
+        "eidBody": "A first sign-in can find the student whose stored Emirates ID equals the one UAE PASS verified. Compared after decryption, never stored or logged."
+      },
+      "oidc": {
+        "title": "School identity provider (OpenID Connect)",
+        "body": "Connect Okta, Microsoft AD FS, Keycloak or any OpenID Connect provider. Horizon uses discovery, PKCE, state and nonce, and checks every ID token's signature.",
+        "name": "Button name",
+        "nameHelp": "Shown as Sign in with ...",
+        "namePlaceholder": "Al Durrah account",
+        "issuer": "Issuer URL",
+        "issuerHelp": "The address before /.well-known/openid-configuration.",
+        "test": "Test",
+        "testOk": "Discovery works for {issuer}.",
+        "testPkce": "PKCE is supported.",
+        "clientId": "Client ID",
+        "secret": "Client secret",
+        "secretSaved": "A secret is saved (encrypted). Leave empty to keep it.",
+        "secretHelp": "Stored encrypted. It is never shown again.",
+        "scopes": "Scopes",
+        "claims": "Claims",
+        "claimsHelp": "Which claims hold the email, the roster ID (student or staff number) and the name.",
+        "emailClaim": "Email",
+        "idClaim": "Roster ID",
+        "nameClaim": "Name",
+        "trust": "This directory issues our school addresses",
+        "trustBody": "Turn on only if the provider is the school's own directory: its addresses then count as verified for this school."
+      },
+      "magic": {
+        "title": "Email sign-in links",
+        "body": "Sent through the school's email provider. Links work once, expire after 15 minutes, and asking never reveals whether an account exists.",
+        "ready": "Email delivery is configured."
+      },
+      "saveHint": "Changes apply to new sign-ins on /login/{slug}.",
+      "save": "Save",
+      "saved": "Sign-in settings saved",
+      "errors": {
+        "FORBIDDEN": "You do not have permission to change sign-in settings.",
+        "INVALID": "Some values are not valid.",
+        "DOMAIN": "One of the domains is not valid (use a form like aldurrah.ae).",
+        "SELF_JOIN_DOMAIN": "Self-join domains must also be allowed domains.",
+        "TENANT": "That ID has characters a tenant or district ID does not use.",
+        "MS_TENANT": "A Microsoft tenant ID looks like 00000000-0000-0000-0000-000000000000.",
+        "TENANT_TAKEN": "Another school already uses this ID. Contact support if it belongs to you.",
+        "CLAIM": "Claim names can use letters, numbers, dots and underscores.",
+        "ISSUER": "The issuer must be an https address.",
+        "NO_SSO_METHOD": "Switch on a working single sign-on option before requiring it for staff.",
+        "DISCOVERY": "Could not read the provider's discovery document.",
+        "ISSUER_MISMATCH": "The discovery document names a different issuer.",
+        "NOT_CONFIGURED": "This provider is not configured yet.",
+        "NOT_FOUND": "Not found.",
+        "generic": "Something went wrong. Try again."
+      },
+      "activity": {
+        "title": "Recent sign-in activity",
+        "body": "Sign-ins, refusals, new links and password resets. Addresses and identity numbers are never recorded.",
+        "empty": "No sign-in activity yet",
+        "emptyBody": "Sign-ins appear here as people start using the school's sign-in page.",
+        "unknown": "Unknown person",
+        "unknownMethod": "Other",
+        "pageOf": "Page {page} of {pages}",
+        "newer": "Newer",
+        "older": "Older",
+        "actions": {
+          "auth_sign_in": "Signed in",
+          "auth_sign_in_refused": "Refused",
+          "auth_sso_linked": "Account linked",
+          "auth_sso_unlinked": "Link removed",
+          "auth_magic_link_sent": "Email link sent",
+          "auth_password_reset": "Password reset",
+          "join_sso_self_join": "Joined through sign-on"
+        },
+        "codes": {
+          "WRONG_PASSWORD": "wrong password",
+          "SSO_REQUIRED": "single sign-on required",
+          "METHOD_OFF": "option switched off",
+          "WRONG_TENANT": "another tenant",
+          "NO_EMAIL": "no email shared",
+          "EMAIL_UNVERIFIED": "unverified email",
+          "LOW_ASSURANCE": "unverified UAE PASS",
+          "DOMAIN_NOT_ALLOWED": "domain not allowed",
+          "NOT_PROVISIONED": "no account",
+          "SUSPENDED": "suspended",
+          "IDENTITY_TAKEN": "linked to another account",
+          "LINK_CONFLICT": "matches two people"
+        }
+      },
+      "linked": {
+        "title": "Linked accounts",
+        "body": "Single sign-on accounts linked to people at this school. Links never carry over to another school.",
+        "none": "No single sign-on accounts are linked yet.",
+        "recent": "Recently linked",
+        "unlink": "Remove the link for {name}",
+        "confirm": "Remove this sign-in link for {name}? Their next single sign-on links again by roster ID or verified email.",
+        "done": "Link removed"
       }
     }
+  },
+  "roster": {
+    "title": "Rostering",
+    "subtitle": "Keep staff, students, parents, classes and enrollments in step with ClassLink, Clever or any OneRoster source. Every change is previewed first.",
+    "runTitle": "Roster run",
+    "tabs": {
+      "connections": "Connections",
+      "log": "Sync log"
+    },
+    "addConnection": "Add connection",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleted": "Connection deleted",
+    "deleteConfirm": "Delete the connection {name}? Records it created stay, and so does the sync log.",
+    "tooMany": "A school can have up to {max} connections.",
+    "activePreview": "Preview in progress",
+    "activeSync": "Sync in progress",
+    "upload": "Uploaded files",
+    "openRun": "Open",
+    "empty": "No roster connection yet",
+    "emptyBody": "Connect ClassLink Roster Server, Clever or another OneRoster server, or upload OneRoster CSV files below. Nothing changes until you apply a preview.",
+    "providers": {
+      "classlink": "ClassLink Roster Server",
+      "clever": "Clever",
+      "oneroster": "Other OneRoster server"
+    },
+    "paused": "Paused",
+    "status": {
+      "QUEUED": "Queued",
+      "FETCHING": "Reading the feed",
+      "PLANNING": "Preparing preview",
+      "APPLYING": "Applying",
+      "PREVIEWED": "Preview ready",
+      "SUCCEEDED": "Synced",
+      "PARTIAL": "Synced with problems",
+      "FAILED": "Failed",
+      "BLOCKED": "Stopped for review",
+      "EXPIRED": "Expired"
+    },
+    "scheduleOff": "Manual only",
+    "scheduleDaily": "Daily at {time}",
+    "scheduleHourly": "Hourly (full pull at {time})",
+    "schoolsChosen": "{count, plural, one {# school} other {# schools}}",
+    "allSchools": "All schools in the feed",
+    "lastRun": "Last run {when}",
+    "neverRun": "Not run yet",
+    "failing": "The last {count} runs failed. Check the address and credentials.",
+    "openPreview": "Open the latest preview",
+    "preview": "Preview changes",
+    "busy": "A run is already in progress for this connection.",
+    "csvTitle": "Upload OneRoster CSV files",
+    "csvBody": "For schools that export a OneRoster zip (users.csv, classes.csv, enrollments.csv and the rest, version 1.1 or 1.2). It is previewed before anything changes.",
+    "csvPick": "Choose a .zip file (up to 10 MB)",
+    "csvConnection": "Same IDs as this connection",
+    "csvNoConnection": "None (a separate feed)",
+    "csvPreview": "Upload and preview",
+    "logEmpty": "No runs yet",
+    "logEmptyBody": "Previews and syncs appear here with what they changed.",
+    "kind": {
+      "preview": "Preview",
+      "sync": "Sync"
+    },
+    "source": {
+      "API": "Live feed",
+      "CSV": "CSV files"
+    },
+    "mode": {
+      "FULL": "Full",
+      "DELTA": "Changes only"
+    },
+    "trigger": {
+      "SCHEDULE": "Scheduled",
+      "byPerson": "By {name}"
+    },
+    "someone": "Someone",
+    "logCounts": "{created} added · {updated} updated · {removed} removed · {issues} problems",
+    "pageOf": "Page {page} of {pages}",
+    "newer": "Newer",
+    "older": "Older",
+    "newTitle": "Add a roster connection",
+    "editTitle": "Edit roster connection",
+    "dialogBody": "Credentials are stored encrypted and never shown again. Saving does not import anything: run a preview first.",
+    "name": "Name",
+    "authMode": "Authentication",
+    "authModes": {
+      "OAUTH1": "OneRoster 1.1 (OAuth 1.0a, HMAC-SHA256)",
+      "OAUTH2": "OneRoster 1.2 (OAuth 2.0 client credentials)",
+      "BEARER": "Bearer token"
+    },
+    "baseUrl": "OneRoster address",
+    "baseUrlPlaceholder": "https://example.oneroster.com/ims/oneroster/v1p1",
+    "baseUrlHelp": {
+      "classlink": "The server URL shown with your app's credentials in the ClassLink Roster Server console, ending in /ims/oneroster/v1p1.",
+      "oneroster": "The OneRoster base address from your provider, ending in /ims/oneroster/v1p1 or /ims/oneroster/rostering/v1p2."
+    },
+    "cleverApi": "Clever API address",
+    "cleverApiHelp": "Leave empty to use https://api.clever.com.",
+    "tokenUrl": "Token URL",
+    "districtToken": "Clever district token",
+    "token": "Token",
+    "clientId": "Client ID (key)",
+    "clientSecret": "Client secret",
+    "savedSecret": "Saved, leave empty to keep",
+    "credentialsNote": "Horizon only reads rosters. It never writes back to ClassLink, Clever or your information system.",
+    "schools": "Schools to import",
+    "schoolsHelp": "A district feed can hold several schools. Test the connection to list them and tick yours; leave empty to import every school.",
+    "schoolsPlaceholder": "School sourcedIds, separated by commas",
+    "test": "Save and test",
+    "testOk": "Connected. The feed lists {count, plural, one {# school} other {# schools}}.",
+    "importTitle": "What to import",
+    "imports": {
+      "importStaff": "Staff",
+      "importStaffHelp": "Teachers and other mapped roles, invited without a password.",
+      "importStudents": "Students",
+      "importStudentsHelp": "Names, student numbers and grades. Arabic names and IDs stay as entered in Horizon.",
+      "importGuardians": "Parents and guardians",
+      "importGuardiansHelp": "Linked to their children from either side of the feed.",
+      "importClasses": "Classes and enrollments",
+      "importClassesHelp": "Into the current academic year, with the class teacher.",
+      "importDemographics": "Date of birth and sex",
+      "importDemographicsHelp": "Only if the school's data agreement allows it. Off by default."
+    },
+    "gradesTitle": "Grade codes",
+    "gradesHelp": "How the feed's grade codes become Horizon grades. By default PK is KG1, KG is KG2 and 01 to 12 are Grades 1 to 12. Codes left as not imported are reported in the preview, never guessed.",
+    "notImported": "Not imported",
+    "rolesTitle": "Staff roles",
+    "rolesHelp": "The Horizon role new staff get. Roles that open safeguarding, wellbeing, medical or identity records are never given by a feed.",
+    "feedRoles": {
+      "teacher": "Teacher",
+      "aide": "Aide",
+      "administrator": "Administrator",
+      "principal": "Principal",
+      "counselor": "Counselor",
+      "proctor": "Proctor",
+      "staff": "Other staff"
+    },
+    "schedule": "Automatic sync",
+    "schedules": {
+      "OFF": "Off (manual)",
+      "DAILY": "Daily",
+      "HOURLY": "Hourly"
+    },
+    "hour": "At",
+    "fullHour": "Full pull at",
+    "removalLimit": "Removal limit (%)",
+    "removalLimitHelp": "A sync that would remove more than this share of a kind (and more than 5 records) stops for review instead of applying.",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saved": "Connection saved",
+    "phase": {
+      "queued": "Waiting to start",
+      "fetch": "Reading the feed page by page",
+      "staff": "Checking staff",
+      "students": "Checking students",
+      "guardians": "Checking parents",
+      "classes": "Checking classes",
+      "enrollments": "Checking enrollments",
+      "removals": "Checking removals",
+      "done": "Finishing"
+    },
+    "recordsRead": "{count} records read",
+    "progressNote": "You can leave this page: the run continues in the background and resumes after interruptions.",
+    "confirmRemovals": "I have checked the list: remove or deactivate {count} records.",
+    "applyStarted": "Applying the changes",
+    "apply": "Apply these changes",
+    "applyWithRemovals": "Apply, including removals",
+    "back": "Rostering",
+    "blockedBody": "This run would remove more records than the connection's limit allows ({kinds}). Nothing was removed. Check the list, then confirm to apply.",
+    "kinds": {
+      "staff": "Staff",
+      "students": "Students",
+      "guardians": "Parents",
+      "classes": "Classes",
+      "enrollments": "Enrollments"
+    },
+    "wouldChange": "What would change",
+    "wouldChangeBody": "Nothing has changed yet. Apply to make these changes.",
+    "changed": "What changed",
+    "changedBody": "These changes were applied. Each is in the audit log.",
+    "kindCol": "Records",
+    "cols": {
+      "create": "Add",
+      "update": "Update",
+      "unchanged": "Unchanged",
+      "remove": "Remove",
+      "skipped": "Skipped"
+    },
+    "nothingToApply": "Everything already matches the feed.",
+    "applyNote": "Applying uses exactly this preview. Records with problems are skipped and reported again.",
+    "expiredNote": "Previews can be applied for 24 hours. Run a new preview.",
+    "issuesTitle": "{count, plural, one {# problem to look at} other {# problems to look at}}",
+    "issuesBody": "These records were not applied. Fix them in the source system or in the connection settings; the next sync picks them up.",
+    "andMore": "and {count} more",
+    "sampleTitle": "Changes",
+    "sampleBody": "The first {shown} changes, in feed order.",
+    "actions": {
+      "create": "Add",
+      "update": "Update",
+      "remove": "Remove"
+    },
+    "fields": {
+      "status": "status",
+      "staffNumber": "staff number",
+      "linked": "linked to existing record",
+      "firstNameEn": "first name",
+      "lastNameEn": "last name",
+      "gradeLevel": "grade",
+      "dateOfBirth": "date of birth",
+      "children": "children",
+      "nameEn": "title",
+      "isHomeroom": "homeroom",
+      "room": "room",
+      "subjectId": "subject",
+      "teacher": "teacher",
+      "emailNotChanged": "new email reported, not applied"
+    },
+    "issues": {
+      "NO_EMAIL": {
+        "title": "Staff without an email address",
+        "fix": "Staff sign in by email, so add one in the source system."
+      },
+      "DUPLICATE_EMAIL": {
+        "title": "The same email on two people",
+        "fix": "Neither record was applied. Give each person their own address in the source system."
+      },
+      "EMAIL_CHANGED": {
+        "title": "A staff email changed in the feed",
+        "fix": "Sign-in addresses never change through a sync. Update the address in Administration > People if the change is right."
+      },
+      "FAMILY_ACCOUNT": {
+        "title": "Staff email belongs to a family account",
+        "fix": "The address already belongs to a parent or student here. Use a separate staff address."
+      },
+      "ROLE_NOT_MAPPED": {
+        "title": "Staff role without a Horizon role",
+        "fix": "Choose a Horizon role for this feed role in the connection settings, or leave them out."
+      },
+      "ADMIN_KEPT": {
+        "title": "School administrators kept",
+        "fix": "A sync never suspends a school administrator. Suspend them by hand if needed."
+      },
+      "UNKNOWN_GRADE": {
+        "title": "Grade code without a mapping",
+        "fix": "Map this grade code to a Horizon grade in the connection settings."
+      },
+      "DUPLICATE_NUMBER": {
+        "title": "The same student number twice",
+        "fix": "Neither record was applied. Fix the student numbers in the source system."
+      },
+      "NO_CHILDREN": {
+        "title": "Parents without a child in this school",
+        "fix": "The feed links them to no student this sync imports."
+      },
+      "PAST_TERM": {
+        "title": "Classes from a past term",
+        "fix": "Only classes of the current academic year are imported."
+      },
+      "SUBJECT_NOT_MATCHED": {
+        "title": "Classes imported without a subject",
+        "fix": "Imported anyway. Add a subject with the same code or name in Administration > School to match them next time."
+      },
+      "NO_YEAR": {
+        "title": "No current academic year",
+        "fix": "Set up the current academic year before importing classes."
+      },
+      "UNKNOWN_CLASS": {
+        "title": "Enrollments in classes that were not imported",
+        "fix": "Usually follows a class problem above."
+      },
+      "UNKNOWN_TEACHER": {
+        "title": "Teachers who were not imported",
+        "fix": "Usually follows a staff problem above."
+      },
+      "UNKNOWN_STUDENT": {
+        "title": "Enrollments of students who were not imported",
+        "fix": "Usually follows a student problem above."
+      }
+    },
+    "errors": {
+      "FORBIDDEN": "You do not have permission to manage rostering.",
+      "INVALID": "Some values are not valid.",
+      "CLEVER_TOKEN": "Clever uses a district token.",
+      "URL": "Enter the https address of the OneRoster server.",
+      "TOKEN_URL": "Enter the https token URL.",
+      "ROLE": "Choose staff roles that open no sensitive records.",
+      "GRADE": "A grade mapping is not valid.",
+      "NOT_FOUND": "Not found.",
+      "TOO_MANY": "This school has the most connections allowed.",
+      "CREDENTIALS": "Enter the credentials.",
+      "BUSY": "A run is already in progress for this connection.",
+      "FILE": "Choose a OneRoster .zip file.",
+      "TOO_LARGE": "The file is larger than 10 MB.",
+      "CSV_NOT_ZIP": "That is not a zip file.",
+      "CSV_TOO_LARGE": "The files are too large once unzipped.",
+      "CSV_NO_USERS": "The zip has no users.csv with rows.",
+      "CSV_UNREADABLE": "The zip could not be read.",
+      "CSV_BAD_HEADER": "A CSV file does not have OneRoster headers (sourcedId first).",
+      "FETCH_AUTH": "The server refused the credentials.",
+      "FETCH_HTTP": "The server answered with an error. Try again later.",
+      "FETCH_FORMAT": "The server's answer is not OneRoster data. Check the address.",
+      "FETCH_URL": "That address cannot be used (https and a public server only).",
+      "FETCH_TOO_LARGE": "A page from the server was too large.",
+      "FETCH_TIMEOUT": "The server took too long to answer.",
+      "FETCH_NETWORK": "The server could not be reached.",
+      "CONNECTION_CREDENTIALS": "The saved credentials are missing or cannot be read. Enter them again.",
+      "CONNECTION_URL": "The connection has no address.",
+      "CONNECTION_TOKEN_URL": "The connection has no token URL.",
+      "NO_CONNECTION": "The connection was deleted.",
+      "TOO_MANY_PAGES": "The feed has more pages than one run reads.",
+      "EMPTY": "The feed returned no people, classes or enrollments, so nothing was changed.",
+      "INTERNAL": "Something went wrong. The run can be started again.",
+      "NOT_APPLICABLE": "This run cannot be applied.",
+      "EXPIRED": "This preview is older than 24 hours. Run a new one.",
+      "generic": "Something went wrong. Try again."
+    },
+    "demoFeed": "Built-in demo feed (OneRoster)",
+    "inSync": "Kept in step: {list}",
+    "linkedKinds": {
+      "student": "{count} students",
+      "staff": "{count} staff",
+      "guardian": "{count} parents",
+      "class": "{count} classes",
+      "enrollment": "{count} enrollments"
+    },
+    "demoFeedHelp": "The demo school reads a built-in OneRoster feed made from its own records, with a few differences to preview."
   }
 }

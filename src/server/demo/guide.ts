@@ -94,6 +94,8 @@ export const GUIDE_STEPS: Record<string, Array<{ key: string; href: string }>> =
     { key: "requestThreads", href: "/requests?tab=all" },
     { key: "schoolSetupWizard", href: "/setup?step=done" },
     { key: "importCenter", href: "/admin/import" },
+    { key: "classlinkRoster", href: "/admin/rostering" },
+    { key: "signInOptions", href: "/admin/sign-in" },
     { key: "servicesAdmin", href: "/admin/services" },
     { key: "formBuilder", href: "/admin/forms" },
     { key: "workflowBuilder", href: "/admin/workflows" },

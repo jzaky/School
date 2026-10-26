@@ -80,6 +80,16 @@ export async function startMockIdp(port = 0): Promise<MockIdp> {
   const server = http.createServer(async (req, res) => {
     const url = new URL(req.url ?? "/", state.base);
     const body = req.method === "POST" ? await readBody(req) : "";
+    // Control routes for end-to-end runs: POST /_mock/users/<prefix> with the user's claims as JSON.
+    const control = /^\/_mock\/users\/(oidc|classlink|clever|uaepass)$/.exec(url.pathname);
+    if (control && req.method === "POST") {
+      try {
+        state.users[control[1]] = JSON.parse(body) as MockUser;
+        return json(res, 200, { ok: true });
+      } catch {
+        return json(res, 400, { ok: false });
+      }
+    }
     const custom = state.routes.get(url.pathname);
     if (custom) {
       const out = custom(req, url, body);

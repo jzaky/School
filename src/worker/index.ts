@@ -43,6 +43,8 @@ async function main() {
   const catalogJobs = await import("@/server/catalog-pipeline/jobs");
   const schoolExport = await import("@/server/privacy/school-export");
   const sync = await import("@/server/integrations/sync");
+  const roster = await import("@/server/rostering/jobs");
+  const ssoTokens = await import("@/server/sso/ticket");
   const status = await import("@/server/status/status");
   const leadEmail = await import("@/server/marketing/lead-email");
 
@@ -107,7 +109,10 @@ async function main() {
           return sync.runSync(d.orgId, d.sourceId, { slot: d.slot, trigger: "MANUAL" });
         }
         case "schedule":
+          await forEachOrg("integrations.roster", (orgId) => roster.scheduleRosterRuns(orgId));
           return forEachOrg("integrations.schedule", (orgId) => sync.runDueSyncs(orgId));
+        case roster.ROSTER_JOB:
+          return roster.runRosterJob(job.data as { orgId: string; runId: string });
         default:
           throw new Error(`unknown job ${job.name}`);
       }
@@ -116,6 +121,7 @@ async function main() {
       switch (job.name) {
         case "sweep":
           await leadEmail.sweepLeadEmails(platform).catch((err) => console.error(`[worker] lead email sweep failed: ${describeError(err)}`));
+          await ssoTokens.sweepExpiredTokens().catch((err) => console.error(`[worker] sign-in token sweep failed: ${describeError(err)}`));
           return forEachOrg("sweep", (orgId) => handlers.sweepOrg(orgId));
         case "status.sample": {
           // One row per 5-minute slot; the slot is the primary key, so a retry or a second replica writes nothing.

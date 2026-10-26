@@ -6,6 +6,7 @@ import { signIn, signOut } from "@/auth";
 import { getCtx } from "@/server/context";
 import { isLocale } from "@/i18n/routing";
 import { DEMO_SLUG, GROUP_PERSONA } from "@/server/demo/constants";
+import { rememberSchoolAction } from "@/server/sso/actions";
 
 export async function setLocaleAction(locale: string) {
   if (!isLocale(locale)) return { ok: false };
@@ -45,13 +46,16 @@ export async function signInWithPasswordAction(_: unknown, formData: FormData) {
       redirectTo: `/${isLocale(loc) ? loc : "en"}/home`,
     });
   } catch (e) {
-    if (e instanceof AuthError) return { error: "invalid" as const };
+    // A school that requires single sign-on for staff says so, only after the password was right.
+    if (e instanceof AuthError) return { error: (e as { code?: string }).code === "sso_required" ? ("sso_required" as const) : ("invalid" as const) };
     throw e;
   }
   return { error: null };
 }
 
-export async function signInWithProviderAction(provider: "google" | "microsoft-entra-id", locale: string) {
+export async function signInWithProviderAction(provider: "google" | "microsoft-entra-id", locale: string, school?: string | null) {
+  // From a school's sign-in page the school is remembered, so the sign-in lands in that school (a hint only).
+  if (school) await rememberSchoolAction(school);
   await signIn(provider, { redirectTo: `/${isLocale(locale) ? locale : "en"}/home` });
 }
 

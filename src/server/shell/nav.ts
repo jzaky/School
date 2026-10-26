@@ -96,6 +96,8 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   if (c("people.manage")) admin.push({ key: "people", href: "/admin/people", icon: "contact" });
   if (c("admin.access") && c("people.manage")) admin.push({ key: "import", href: "/admin/import", icon: "file-spreadsheet" });
   if (c("integrations.manage")) admin.push({ key: "integrations", href: "/admin/integrations", icon: "plug" });
+  if (c("signin.manage")) admin.push({ key: "signInSettings", href: "/admin/sign-in", icon: "key-round" });
+  if (c("roster.manage")) admin.push({ key: "rostering", href: "/admin/rostering", icon: "refresh-cw" });
   if (c("roles.manage")) admin.push({ key: "roles", href: "/admin/roles", icon: "lock" });
   if (c("people.invite")) admin.push({ key: "invitations", href: "/admin/invitations", icon: "mail" });
   if (c("people.manage") || c("people.invite")) admin.push({ key: "joinRequests", href: "/admin/join-requests", icon: "users", badge: counts.joinRequests });

@@ -45,7 +45,6 @@ const ENROLL_BATCH = 500;
 const STAFF_ROLES = ["teacher", "aide", "administrator", "principal", "counselor", "proctor", "staff"];
 const FAMILY_ROLES = ["parent", "guardian", "relative"];
 const ROLE_SET: Record<"staff" | "students" | "guardians", string[]> = { staff: STAFF_ROLES, students: ["student"], guardians: FAMILY_ROLES };
-const LINK_KIND: Record<PlanKind, string> = { staff: "staff", students: "student", guardians: "guardian", classes: "class", enrollments: "enrollment" };
 
 export type PlanSetup = {
   orgId: string;
@@ -182,7 +181,7 @@ async function planStaff(ctx: Ctx, batch: Array<{ externalId: string; data: unkn
       ? await tx.membership.findMany({ where: { userId: { in: accounts.map((a) => a.id) } }, select: { id: true, userId: true, status: true, student: { select: { id: true } }, guardian: { select: { id: true } }, roles: { select: { role: { select: { key: true } } } } } })
       : [];
     const memberByUser = new Map(members.map((m) => [m.userId, m]));
-    const linkedMembers = await tx.membership.findMany({ where: { id: { in: [...links.values()].map((l) => l.localId) } }, select: { id: true, status: true, user: { select: { email: true } }, roles: { select: { role: { select: { key: true } } } } } });
+    const linkedMembers = await tx.membership.findMany({ where: { id: { in: [...links.values()].map((l) => l.localId) } }, select: { id: true, status: true, user: { select: { email: true } }, staffProfile: { select: { employeeNo: true } }, roles: { select: { role: { select: { key: true } } } } } });
     const linkedBy = new Map(linkedMembers.map((m) => [m.id, m]));
 
     for (const rec of batch) {
@@ -213,9 +212,12 @@ async function planStaff(ctx: Ctx, batch: Array<{ externalId: string; data: unkn
       const linked = link ? linkedBy.get(link.localId) : undefined;
       if (linked) {
         const fields: string[] = [];
-        if (linked.user.email.toLowerCase() !== u.email) issue(ctx, { kind: "staff", code: "EMAIL_CHANGED", ext: u.id, label: name });
+        if (linked.user.email.toLowerCase() !== u.email) {
+          issue(ctx, { kind: "staff", code: "EMAIL_CHANGED", ext: u.id, label: name });
+          fields.push("emailNotChanged");
+        }
         if (link?.deactivatedAt && linked.status === "SUSPENDED") fields.push("status");
-        fields.push("staffNumber");
+        if ((linked.staffProfile?.employeeNo ?? null) !== u.identifier) fields.push("staffNumber");
         if (ctx.apply) {
           if (link?.deactivatedAt && linked.status === "SUSPENDED") await tx.membership.update({ where: { id: linked.id }, data: { status: "ACTIVE" } });
           await tx.staffProfile.upsert({ where: { membershipId: linked.id }, create: { orgId: ctx.orgId, membershipId: linked.id, employeeNo: u.identifier }, update: { employeeNo: u.identifier } });
@@ -592,7 +594,8 @@ async function planEnrollments(ctx: Ctx, batch: Array<{ externalId: string; data
     const classLinks = await linksFor(tx, ctx, "class", rows.map((e) => e.classId));
     const classIds = [...classLinks.values()].map((l) => l.localId);
     const teachers = new Map((await tx.schoolClass.findMany({ where: { id: { in: classIds } }, select: { id: true, teacherMembershipId: true } })).map((c) => [c.id, c.teacherMembershipId]));
-    const label = (e: REnrollment) => `${e.userId} / ${e.classId}`;
+    const names = await stagedLabels(tx, ctx, [...new Set(rows.flatMap((e) => [e.userId, e.classId]))]);
+    const label = (e: REnrollment) => `${names.get(e.userId) ?? e.userId} · ${names.get(e.classId) ?? e.classId}`;
     for (const rec of batch) {
       const e = rec.data as REnrollment;
       if (!ctx.opts.importClasses) continue;
@@ -691,11 +694,13 @@ async function planRemovals(ctx: Ctx) {
     todo.push({ kind: k.kind, rows });
   }
   ctx.state.counts.removalBlocked = blocked;
+  const labels = await localLabels(ctx, todo);
+  const labelOf = (r: { externalId: string; localId: string }) => labels.get(r.localId) ?? r.externalId;
   const stop = blocked.length > 0 && !ctx.allowMassDelete;
   if (stop) ctx.state.blocked = true;
   for (const t of todo) {
     if (!ctx.apply || stop) {
-      for (const r of t.rows) change(ctx, { kind: t.kind, action: "remove", ext: r.externalId, label: r.externalId });
+      for (const r of t.rows) change(ctx, { kind: t.kind, action: "remove", ext: r.externalId, label: labelOf(r) });
       continue;
     }
     for (let i = 0; i < t.rows.length; i += 200) {
@@ -703,7 +708,7 @@ async function planRemovals(ctx: Ctx) {
       await tenantTx(ctx.orgId, async (tx) => {
         for (const r of slice) {
           if (t.kind === "staff") {
-            await removeStaff(tx, ctx, r.externalId, r.externalId, r);
+            await removeStaff(tx, ctx, r.externalId, labelOf(r), r);
             continue;
           }
           if (t.kind === "students") await tx.student.updateMany({ where: { id: r.localId, status: "ACTIVE" }, data: { status: "INACTIVE" } });
@@ -718,11 +723,33 @@ async function planRemovals(ctx: Ctx) {
             } else await tx.enrollment.deleteMany({ where: { id: r.localId } });
           }
           await tx.rosterLink.update({ where: { id: r.id }, data: { deactivatedAt: ctx.now } });
-          change(ctx, { kind: t.kind, action: "remove", ext: r.externalId, label: r.externalId });
+          change(ctx, { kind: t.kind, action: "remove", ext: r.externalId, label: labelOf(r) });
         }
       }, { timeout: 120_000 });
     }
   }
+}
+
+/** Display names for feed ids from this run's staged records (people and class titles). */
+async function stagedLabels(tx: TenantTx, ctx: Ctx, exts: string[]): Promise<Map<string, string>> {
+  if (!exts.length) return new Map();
+  const rows = await tx.rosterRecord.findMany({ where: { runId: ctx.runId, kind: { in: ["user", "class"] }, externalId: { in: exts } }, select: { externalId: true, kind: true, data: true } });
+  return new Map(rows.map((r) => [r.externalId, r.kind === "class" ? (r.data as unknown as RClass).title : label(r.data as unknown as RUser)]));
+}
+
+/** Display names for records about to be removed, from Horizon's own tables (the feed no longer lists them). */
+async function localLabels(ctx: Ctx, todo: Array<{ kind: PlanKind; rows: Array<{ localId: string }> }>): Promise<Map<string, string>> {
+  const out = new Map<string, string>();
+  const ids = (k: PlanKind) => todo.filter((t) => t.kind === k).flatMap((t) => t.rows.map((r) => r.localId));
+  await tenantTx(ctx.orgId, async (tx) => {
+    for (const s of await tx.student.findMany({ where: { id: { in: ids("students") } }, select: { id: true, firstNameEn: true, lastNameEn: true } })) out.set(s.id, `${s.firstNameEn} ${s.lastNameEn}`.trim());
+    for (const g of await tx.guardian.findMany({ where: { id: { in: ids("guardians") } }, select: { id: true, firstNameEn: true, lastNameEn: true } })) out.set(g.id, `${g.firstNameEn} ${g.lastNameEn}`.trim());
+    for (const c of await tx.schoolClass.findMany({ where: { id: { in: ids("classes") } }, select: { id: true, nameEn: true } })) out.set(c.id, c.nameEn);
+    for (const m of await tx.membership.findMany({ where: { id: { in: ids("staff") } }, select: { id: true, user: { select: { nameEn: true } } } })) out.set(m.id, m.user.nameEn);
+    const enr = ids("enrollments").filter((x) => !x.startsWith("teacher:"));
+    for (const e of await tx.enrollment.findMany({ where: { id: { in: enr } }, select: { id: true, student: { select: { firstNameEn: true, lastNameEn: true } }, class: { select: { nameEn: true } } } })) out.set(e.id, `${e.student.firstNameEn} ${e.student.lastNameEn} · ${e.class.nameEn}`);
+  });
+  return out;
 }
 
 // ---------------------------------------------------------------------------

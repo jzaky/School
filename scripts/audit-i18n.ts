@@ -30,7 +30,7 @@ for (const k of E.keys()) if (!A.has(k)) problems.push(`missing in ar: ${k}`);
 for (const k of A.keys()) if (!E.has(k)) problems.push(`missing in en: ${k}`);
 
 // Values that are fine without Arabic letters: digits, codes, brand-neutral symbols, language names shown in their own script.
-const ALLOW = /^([\d\s.,:%+\-/()#|·]*|[A-Z]{2,6}(-\d)?|English|Google|Microsoft|123|CSV|PDF|me-central-1|horizon\.school\/home|SUB-2026-0041)$/;
+const ALLOW = /^([\d\s.,:%+\-/()#|·]*|[A-Z]{2,6}(-\d)?|English|Google|Microsoft|ClassLink|Clever|123|CSV|PDF|me-central-1|horizon\.school\/home|SUB-2026-0041)$/;
 const placeholders = (s: string) => [...s.matchAll(/\{(\w+)[,}]/g)].map((m) => m[1]).sort().join(",");
 for (const [k, v] of A) {
   if (!v.trim()) problems.push(`empty ar: ${k}`);
