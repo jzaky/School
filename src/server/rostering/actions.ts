@@ -1,6 +1,6 @@
 "use server";
 
-// Rostering page actions (roster.manage): connections, a connection test that lists the feed's schools, preview,
+// Rostering page actions (integrations.manage): connections, a connection test that lists the feed's schools, preview,
 // apply, and OneRoster CSV uploads. Thin wrappers: check the permission, validate, call the services (which
 // audit), refresh the page. Credentials are write-only: the page never receives them back.
 import { revalidatePath } from "next/cache";
@@ -24,7 +24,7 @@ const PAGE = "/[locale]/admin/rostering";
 
 async function manager() {
   const ctx = await getCtx();
-  return ctx.can("roster.manage") ? ctx : null;
+  return ctx.can("integrations.manage") ? ctx : null;
 }
 
 const connectionSchema = z.object({

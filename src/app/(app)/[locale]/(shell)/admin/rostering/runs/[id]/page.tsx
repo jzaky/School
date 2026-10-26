@@ -8,6 +8,7 @@ import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { fmtDateTime, fmtNumber } from "@/lib/format";
 import { userName } from "@/lib/i18n-data";
+import { gradeLevelValues } from "@/lib/grade-levels";
 import { Link } from "@/i18n/navigation";
 import { PLAN_KINDS, type Change, type Counts, type Issue } from "@/server/rostering/plan";
 import { PREVIEW_TTL_MS } from "@/server/rostering/run";
@@ -28,7 +29,7 @@ const COLS = ["create", "update", "unchanged", "remove", "skipped"] as const;
 export default async function RosterRunPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const ctx = await getCtx();
-  if (!ctx.can("roster.manage")) notFound();
+  if (!ctx.can("integrations.manage")) notFound();
   const t = await getTranslations("roster");
   const prefs = await formatPrefs(ctx);
   const run = await ctx.db.rosterRun.findUnique({ where: { id } });
@@ -44,6 +45,13 @@ export default async function RosterRunPage({ params }: { params: Promise<{ id: 
   const blocked = run.status === "BLOCKED" || (run.status === "PREVIEWED" && (counts?.removalBlocked?.length ?? 0) > 0);
   const removals = counts ? PLAN_KINDS.reduce((s, k) => s + (counts[k]?.remove ?? 0), 0) : 0;
   const totalChanges = counts ? PLAN_KINDS.reduce((s, k) => s + (counts[k]?.create ?? 0) + (counts[k]?.update ?? 0) + (counts[k]?.remove ?? 0), 0) : 0;
+  const tg = await getTranslations("gradeLevel");
+  // "grade:-1" is a new student's mapped grade (KG1); other fields are message keys or Horizon role keys.
+  const fieldLabel = (f: string) => {
+    const g = /^grade:(-?\d+)$/.exec(f);
+    if (g) return tg("label", gradeLevelValues(Number(g[1])));
+    return t.has(`fields.${f}`) ? t(`fields.${f}`) : f;
+  };
   const byCode = new Map<string, Issue[]>();
   for (const i of issues) byCode.set(`${i.kind}:${i.code}`, [...(byCode.get(`${i.kind}:${i.code}`) ?? []), i]);
 
@@ -171,7 +179,7 @@ export default async function RosterRunPage({ params }: { params: Promise<{ id: 
                 <Pill tone={c.action === "create" ? "success" : c.action === "remove" ? "danger" : "info"}>{t(`actions.${c.action}`)}</Pill>
                 <span className="text-xs text-muted-foreground">{t(`kinds.${c.kind}`)}</span>
                 <span className="min-w-0 flex-1 truncate font-medium">{c.label}</span>
-                {c.fields && c.fields.length > 0 && <span className="text-xs text-muted-foreground">{c.fields.map((f) => (t.has(`fields.${f}`) ? t(`fields.${f}`) : f)).join(ctx.locale === "ar" ? "، " : ", ")}</span>}
+                {c.fields && c.fields.length > 0 && <span className="text-xs text-muted-foreground">{c.fields.map(fieldLabel).join(ctx.locale === "ar" ? "، " : ", ")}</span>}
               </li>
             ))}
           </ul>

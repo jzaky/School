@@ -6827,12 +6827,6 @@
           "label": "Manage sign-in",
           "help": "Choose the school's sign-in options, single sign-on rules and identity provider settings."
         }
-      },
-      "roster": {
-        "manage": {
-          "label": "Manage rostering",
-          "help": "Connect ClassLink, Clever or OneRoster, preview and apply roster changes, and read the sync log."
-        }
       }
     }
   },

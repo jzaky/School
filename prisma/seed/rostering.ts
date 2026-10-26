@@ -165,12 +165,13 @@ export async function seedRosteringData(db: PrismaClient, orgId: string, now: Da
   const students = memberships.filter((m) => m.student);
   const parents = memberships.filter((m) => m.guardian);
   const identities: Prisma.SsoIdentityCreateManyInput[] = [];
-  const add = (m: { id: string } | undefined, provider: string, linkedVia: string, daysAgo: number) => m && !identities.some((x) => x.membershipId === m.id && x.provider === provider) && identities.push({ orgId, membershipId: m.id, provider, subject: `${provider}-${stableId(orgId, provider, m.id).slice(0, 16)}`, linkedVia, lastLoginAt: ago(Math.max(0, daysAgo - 1), 2), createdAt: ago(daysAgo) });
+  const add = (m: { id: string } | undefined, provider: string, linkedVia: string, daysAgo: number, subject?: string) => m?.id && !identities.some((x) => x.membershipId === m.id && x.provider === provider) && identities.push({ orgId, membershipId: m.id, provider, subject: subject ?? `${provider}-${stableId(orgId, provider, m.id).slice(0, 16)}`, linkedVia, lastLoginAt: ago(Math.max(0, daysAgo - 1), 2), createdAt: ago(daysAgo) });
   const personas = w?.personas ?? {};
-  add({ id: personas.teacher }, "classlink", "external_id", 18);
-  add({ id: personas.student }, "classlink", "external_id", 17);
-  add({ id: personas.counselor }, "microsoft", "email", 16);
-  add({ id: personas.parent }, "uaepass", "email", 12);
+  // Persona links have readable subjects, so the local mock provider can sign in as them (tests/e2e/sso.spec.ts).
+  add({ id: personas.teacher }, "classlink", "external_id", 18, "cl-daniel-carter");
+  add({ id: personas.student }, "classlink", "external_id", 17, "cl-adam-nasser");
+  add({ id: personas.counselor }, "microsoft", "email", 16, "ms-sarah-ahmed");
+  add({ id: personas.parent }, "uaepass", "email", 12, "uaepass-rania-nasser");
   staff.slice(0, 26).forEach((m, i) => add(m, "classlink", "external_id", 20 - (i % 14)));
   students.slice(0, 40).forEach((m, i) => add(m, "classlink", "external_id", 19 - (i % 12)));
   parents.slice(0, 9).forEach((m, i) => add(m, i % 3 === 0 ? "google" : "uaepass", "email", 13 - i));

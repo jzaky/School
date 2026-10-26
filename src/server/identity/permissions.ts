@@ -70,7 +70,6 @@ export const PERMISSIONS = [
   "career.partners",
   "integrations.manage",
   "signin.manage",
-  "roster.manage",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
@@ -398,12 +397,12 @@ export const SYSTEM_ROLES: RoleDefinition[] = [
   },
 ];
 
-// Sign-in options and rostering (src/server/sso, src/server/rostering): the school administrator and the Head of
-// IT (role key head_of_it, defined with the attendance module) manage them. Added here so either file can change
-// without touching the other.
+// Sign-in options (src/server/sso, signin.manage) and rostering (src/server/rostering, integrations.manage): the
+// school administrator and the Head of IT (role key head_of_it, defined with the attendance module) manage them.
+// Added here so either file can change without touching the other; grants already present are not repeated.
 const SIGNIN_ROSTER_GRANTS: Record<string, Permission[]> = {
-  school_admin: ["signin.manage", "roster.manage"],
-  head_of_it: ["signin.manage", "roster.manage", "integrations.manage"],
+  school_admin: ["signin.manage", "integrations.manage"],
+  head_of_it: ["signin.manage", "integrations.manage"],
 };
 for (const role of SYSTEM_ROLES) for (const p of SIGNIN_ROSTER_GRANTS[role.key] ?? []) if (!role.permissions.includes(p)) role.permissions.push(p);
 

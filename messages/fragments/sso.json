@@ -32,18 +32,6 @@
             "اختيار خيارات تسجيل الدخول للمدرسة وقواعد الدخول الموحد وإعدادات مزوّد الهوية."
           ]
         }
-      },
-      "roster": {
-        "manage": {
-          "label": [
-            "Manage rostering",
-            "إدارة مزامنة القوائم"
-          ],
-          "help": [
-            "Connect ClassLink, Clever or OneRoster, preview and apply roster changes, and read the sync log.",
-            "ربط ClassLink أو Clever أو OneRoster، ومعاينة تغييرات القوائم وتطبيقها، والاطلاع على سجل المزامنة."
-          ]
-        }
       }
     }
   },

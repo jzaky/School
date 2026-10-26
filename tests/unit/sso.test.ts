@@ -101,7 +101,7 @@ describe("settings helpers", () => {
   });
 
   it("shows only options that are switched on and configured", () => {
-    const env = { AUTH_GOOGLE_ID: "x", AUTH_GOOGLE_SECRET: "y", CLASSLINK_CLIENT_ID: "a" } as NodeJS.ProcessEnv;
+    const env = { AUTH_GOOGLE_ID: "x", AUTH_GOOGLE_SECRET: "y", CLASSLINK_CLIENT_ID: "a" } as unknown as NodeJS.ProcessEnv;
     const p = { ...defaultPolicy("org", { googleSignIn: true, microsoftSignIn: true }), methods: ["password", "google", "microsoft", "classlink", "oidc"] as never };
     expect(visibleMethods(p, env)).toEqual(["password", "google"]);
     expect(missingEnv("classlink", env)).toEqual(["CLASSLINK_CLIENT_SECRET"]);
@@ -130,9 +130,9 @@ describe("which addresses count as verified", () => {
   it("maps Google and Microsoft profiles", () => {
     expect(oauthIdentity("google", "g1", { email: "A@Gmail.com" }, { email_verified: true })?.identity).toMatchObject({ provider: "google", email: "a@gmail.com", emailVerified: true });
     expect(oauthIdentity("google", "g1", { email: "a@gmail.com" }, { email_verified: false })?.identity.emailVerified).toBe(false);
-    const ms = oauthIdentity("microsoft-entra-id", "m1", { email: "a@org.test" }, { tid: "33333333-3333-3333-3333-333333333333", xms_edov: "1" }, { AUTH_MICROSOFT_ENTRA_ID_ISSUER: "https://login.microsoftonline.com/common/v2.0" } as NodeJS.ProcessEnv);
+    const ms = oauthIdentity("microsoft-entra-id", "m1", { email: "a@org.test" }, { tid: "33333333-3333-3333-3333-333333333333", xms_edov: "1" }, { AUTH_MICROSOFT_ENTRA_ID_ISSUER: "https://login.microsoftonline.com/common/v2.0" } as unknown as NodeJS.ProcessEnv);
     expect(ms).toMatchObject({ msTenant: "33333333-3333-3333-3333-333333333333", msVerifiedDomain: true });
-    const single = oauthIdentity("microsoft-entra-id", "m1", { email: "a@org.test" }, { tid: "44444444-4444-4444-4444-444444444444" }, { AUTH_MICROSOFT_ENTRA_ID_ISSUER: "https://login.microsoftonline.com/44444444-4444-4444-4444-444444444444/v2.0" } as NodeJS.ProcessEnv);
+    const single = oauthIdentity("microsoft-entra-id", "m1", { email: "a@org.test" }, { tid: "44444444-4444-4444-4444-444444444444" }, { AUTH_MICROSOFT_ENTRA_ID_ISSUER: "https://login.microsoftonline.com/44444444-4444-4444-4444-444444444444/v2.0" } as unknown as NodeJS.ProcessEnv);
     expect(single?.msVerifiedDomain).toBe(true);
     expect(oauthIdentity("github", "x", {}, {})).toBeNull();
   });

@@ -62,10 +62,18 @@ Put shared values in Project > Settings > Shared Variables and reference them fr
 | `SIGNUP_ENABLED` | web | Default `true`. Set to `false` to close self-serve school sign-up: /signup shows a closed notice and the "Start free pilot" links disappear. Sign-up creates schools with the owner connection (`PLATFORM_DATABASE_URL`, falling back to `MIGRATION_DATABASE_URL`), so one of those must be set on the web service. |
 | `PLATFORM_DATABASE_URL` | web | Optional owner connection for platform writes (school sign-up, global catalog). Falls back to `MIGRATION_DATABASE_URL`. |
 | `SEED_ON_START` | web | Default `true`. Set to `false` to skip the "seed demo if missing" step at start. Seeding only ever runs when `DEMO_MODE=true` and the `horizon` organization does not exist. |
-| `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET` | web | Google sign-in. The button appears only when both are set. Redirect URI: `AUTH_URL/api/auth/callback/google`. |
-| `AUTH_MICROSOFT_ENTRA_ID_ID`, `AUTH_MICROSOFT_ENTRA_ID_SECRET` | web | Microsoft Entra ID sign-in. The button appears only when both are set. Redirect URI: `AUTH_URL/api/auth/callback/microsoft-entra-id`. |
+| `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET` | web | Google sign-in. The button appears only when both are set and the school switches Google on (Administration > Sign-in). Redirect URI: `AUTH_URL/api/auth/callback/google`. |
+| `AUTH_MICROSOFT_ENTRA_ID_ID`, `AUTH_MICROSOFT_ENTRA_ID_SECRET` | web | Microsoft Entra ID sign-in. The button appears only when both are set and the school switches Microsoft on. Redirect URI: `AUTH_URL/api/auth/callback/microsoft-entra-id`. |
 | `AUTH_MICROSOFT_ENTRA_ID_ISSUER` | web | Entra issuer, for example `https://login.microsoftonline.com/<tenant-id>/v2.0`. Leave unset for multi-tenant (common). |
-| `RESEND_API_KEY` | both | Resend API key. The worker sends email through `https://api.resend.com/emails` when set; otherwise it logs `outbound <id> channel=<channel>` only. The web app uses it to show email preferences as enabled. |
+| `RESEND_API_KEY` | both | Resend API key. The worker sends email through `https://api.resend.com/emails` when set; otherwise it logs `outbound <id> channel=<channel>` only. The web app uses it to show email preferences as enabled, and a school can switch on email sign-in links only when it is set. Password reset emails are sent either way (logged only without it). |
+| `CLASSLINK_CLIENT_ID`, `CLASSLINK_CLIENT_SECRET` | web | ClassLink LaunchPad single sign-on (OpenID Connect), from Horizon's ClassLink partner console. One pair for the whole server; each school adds its own ClassLink tenant ID in Administration > Sign-in. See docs/guides/classlink.md. |
+| `CLASSLINK_ISSUER` | web | Default `https://launchpad.classlink.com`. Only for tests against a mock provider. |
+| `CLEVER_CLIENT_ID`, `CLEVER_CLIENT_SECRET` | web | Log in with Clever, from the Clever developer dashboard. Each school adds its Clever district ID. Roster sync with Clever uses a district token entered per school on the Rostering page, not these. |
+| `CLEVER_OAUTH_BASE`, `CLEVER_API_BASE` | web | Sign-in only. Defaults `https://clever.com` and `https://api.clever.com`. Only for tests against a mock provider (a Clever roster connection has its own API address field). |
+| `UAEPASS_CLIENT_ID`, `UAEPASS_CLIENT_SECRET` | web | UAE PASS sign-in, issued by the UAE PASS team after onboarding (docs/guides/sign-in.md). |
+| `UAEPASS_ENV` | web | `staging` (default, `https://stg-id.uaepass.ae/idshub`) or `production` (`https://id.uaepass.ae/idshub`). Staging credentials work only with staging. |
+| `UAEPASS_BASE`, `UAEPASS_SCOPE`, `UAEPASS_ACR_VALUES` | web | Overrides for tests. Defaults: the base for `UAEPASS_ENV`, scope `urn:uae:digitalid:profile:general`, acr_values `urn:safelayer:tws:policies:authentication:level:low`. |
+| `INTEGRATIONS_ALLOW_PRIVATE_URLS` | web, worker | `true` lets roster connections, school identity providers and integration exports reach private addresses and plain http. Only for local development and tests (mock providers on 127.0.0.1). Never set it in production: it turns off the protection against requests to internal addresses. |
 | `EMAIL_FROM` | worker | Sender, for example `Horizon School <no-reply@yourdomain.com>` on a domain verified in Resend. Default `Horizon School <onboarding@resend.dev>` (Resend test sender, delivers only to the Resend account owner). |
 | `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET` | web | Cloudflare R2 (S3 API) for documents. Used only when all four are set. Files are served through signed URLs. |
 | `LOCAL_UPLOAD_DIR` | web | Fallback directory for documents when R2 is not set. Default `/app/.uploads`, which is lost on every redeploy. For a demo without R2, attach a Railway volume and point this at its mount path. |
@@ -83,6 +91,25 @@ Put shared values in Project > Settings > Shared Variables and reference them fr
 | `PLATFORM_ADMIN_EMAILS` | web | Comma-separated emails of platform admins. They see the Platform section (marketing leads with CSV export, referrals per school, platform settings such as pricing) and may publish shared requirements from a non-demo school. Members of the demo school with `catalog.review` may always publish catalog changes. Never list a demo persona: in production, addresses on reserved domains (for example horizon.example) are ignored. |
 
 Set by the image, no action needed: `NODE_ENV=production`, `PORT=3000` (Railway overrides `PORT`, the server follows it), `HOSTNAME=0.0.0.0`.
+
+### Sign-in providers: redirect URIs
+
+Register these with each provider, with `AUTH_URL` replaced by the public address (exactly, https, no trailing slash). Single sign-on works only on the address registered, so register the custom domain too if the school uses one.
+
+| Provider | Redirect URI | Also register |
+| --- | --- | --- |
+| Google | `AUTH_URL/api/auth/callback/google` | Authorised JavaScript origin `AUTH_URL` |
+| Microsoft | `AUTH_URL/api/auth/callback/microsoft-entra-id` | |
+| ClassLink | `AUTH_URL/api/sso/classlink/callback` | LaunchPad launch URL `AUTH_URL/api/sso/classlink/start` |
+| Clever | `AUTH_URL/api/sso/clever/callback` | Instant Login starts at the same callback and is restarted with a fresh state |
+| UAE PASS | `AUTH_URL/api/sso/uaepass/callback` | |
+| A school's own OpenID Connect provider | `AUTH_URL/api/sso/oidc/callback` | Shown to the school on Administration > Sign-in > Providers |
+
+Client ids and secrets for Google, Microsoft, ClassLink, Clever and UAE PASS live only in these variables. A school's own identity provider secret and roster connection credentials are entered by the school and stored encrypted with `FIELD_ENCRYPTION_KEY`. The Administration > Sign-in page shows each option as **Ready** or names the variables still missing on this server.
+
+Roster syncs run in the worker (queue `integrations`), so the worker needs `REDIS_URL`, `DATABASE_URL`, `MIGRATION_DATABASE_URL` and `FIELD_ENCRYPTION_KEY`. Without Redis (local development only) a preview or sync runs inside the request instead.
+
+What each provider needs before these variables can be filled in, and what can be tested without them: docs/guides/sign-in.md and docs/guides/classlink.md.
 
 ### US institutions (College Scorecard)
 

@@ -1,6 +1,6 @@
 // Integrations: the school administrator creates an API key (shown once), uses it against REST API v1,
 // revokes it; adds a sync source with a column mapping read from the sample export and runs it; sees the
-// API guide and the sign-in readiness panel. In English and Arabic, and at phone width.
+// API guide and the sign-in redirect addresses. In English and Arabic, and at phone width.
 import { expect, test } from "@playwright/test";
 import { expectNoErrors, go, LOCALES, loginAs } from "./helpers";
 
@@ -48,7 +48,8 @@ for (const locale of LOCALES) {
     await page.screenshot({ path: `test-results/integrations-docs-${locale}.png`, fullPage: true });
 
     await go(s, "/admin/invitations?tab=signin");
-    await expect(page.locator("[data-testid=signin-readiness]")).toBeVisible();
+    await expect(page.locator("[data-testid=signin-moved]")).toBeVisible();
+    await go(s, "/admin/sign-in?tab=providers");
     await expect(page.locator("[data-testid=redirect-google]")).toHaveValue(/\/api\/auth\/callback\/google$/);
     await page.screenshot({ path: `test-results/integrations-signin-${locale}.png`, fullPage: true });
     expectNoErrors(s);

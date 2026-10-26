@@ -372,7 +372,7 @@ async function planStudents(ctx: Ctx, batch: Array<{ externalId: string; data: u
         id = s.id;
       }
       ctx.planned.students.set(u.id, id);
-      change(ctx, { kind: "students", action: "create", ext: u.id, label: name, fields: [code ?? ""] });
+      change(ctx, { kind: "students", action: "create", ext: u.id, label: name, fields: [`grade:${level}`] });
     }
   });
 }

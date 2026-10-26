@@ -34,7 +34,7 @@ const PAGE = 20;
 export default async function RosteringPage({ searchParams }: { searchParams: Promise<{ tab?: string; page?: string }> }) {
   const sp = await searchParams;
   const ctx = await getCtx();
-  if (!ctx.can("roster.manage")) notFound();
+  if (!ctx.can("integrations.manage")) notFound();
   const t = await getTranslations("roster");
   const prefs = await formatPrefs(ctx);
   const { db, locale } = ctx;

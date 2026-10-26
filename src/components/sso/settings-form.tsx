@@ -225,7 +225,7 @@ export function SignInSettingsForm({ tab, slug, status, urls, uaePassEnv, initia
             <div className="grid gap-3 px-4 py-4 sm:grid-cols-2 sm:px-5">
               <div className="min-w-0 space-y-1">
                 <div className="text-xs text-muted-foreground">{t("redirectUri")}</div>
-                <CopyValue value={urls.googleCallback} />
+                <CopyValue value={urls.googleCallback} testId="redirect-google" />
               </div>
               <div className="min-w-0 space-y-1">
                 <div className="text-xs text-muted-foreground">{t("google.origin")}</div>
