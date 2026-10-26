@@ -510,9 +510,22 @@ async function clearAndAllocate(tx: Tx, orgId: string, paymentId: string, cleare
   await allocate(tx, orgId, payment.id, plan);
   // A converted proforma was covered by this payment together with credit the family already had: take that too.
   for (const invoiceId of converted) await topUpFromCredit(tx, orgId, payment.accountId, invoiceId);
+  await closeSettledLinks(tx, orgId, [...plan.map((a) => a.invoiceId), ...converted]);
   payment = await tx.feePayment.findFirstOrThrow({ where: { id: payment.id, orgId } });
   await settleSeatBookings(tx, orgId, [...plan.map((a) => a.invoiceId), ...converted], clearedAt, actor, effects);
   return { payment, discountFils };
+}
+
+/**
+ * Online payment links for invoices that are now paid (and for proformas turned into tax invoices) are cancelled, so a
+ * family cannot pay twice. A webhook paying a link marks that link PAID right after this.
+ */
+async function closeSettledLinks(tx: Tx, orgId: string, invoiceIds: string[]) {
+  if (!invoiceIds.length) return;
+  const paid = await tx.invoice.findMany({ where: { orgId, id: { in: [...new Set(invoiceIds)] }, status: "PAID" }, select: { id: true } });
+  const proformas = await tx.invoice.findMany({ where: { orgId, convertedToId: { in: [...new Set(invoiceIds)] } }, select: { id: true } });
+  const ids = [...paid, ...proformas].map((i) => i.id);
+  if (ids.length) await tx.paymentLink.updateMany({ where: { orgId, status: "OPEN", invoiceId: { in: ids } }, data: { status: "CANCELLED" } });
 }
 
 /** Allocate the account's unallocated payments (oldest first) to one invoice, up to its balance. */
