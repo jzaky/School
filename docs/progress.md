@@ -163,3 +163,12 @@
 - Narration: media/voiceover/tour/script.json and media/voiceover/it/script.json. Pipeline scripts and subtitle files live in the session scratchpad (tour/).
 - Every on-screen number was counted from the demo or catalog data after a reset. The status page was not filmed (a local run is not representative of production).
 - Fixed from the film review: the counselor note on the plan uses dir="auto" (English note in the Arabic view), and the plan summary no longer calls official requirements "example data" or calls goal-matching programmes "targets".
+
+## Limited admin access (acc worktree)
+- No self-escalation: one pure check (src/server/access/guardrails.ts) on every path that changes roles (role permissions, restore default, member roles on Roles and People, delete role with move, staff import and API staff upserts, staff link acceptance, end dates). AccessError SELF_ESCALATION; refused attempts audited as access.self_grant_blocked. The UI locks what would fail and says why (role page note and locked switches, the viewer left out of member pickers, locked roles in the People dialogs).
+- Safeguarding access alerts (src/server/access/access-alerts.ts): gaining or losing safeguarding.view/manage/export/break_glass or cases.wellbeing notifies the people who manage safeguarding (else the principal), in the app and by email, once per change; template safeguarding_access_changed (en and ar, created by the starter template), kind locked on.
+- Time-limited roles: MembershipRole.expiresAt (migration 20261026090000_time_limited_roles). Ended assignments grant nothing on the next request; daily worker job access.expiry (00:05 Dubai) removes them with audit events and alerts. "Until" date when adding someone, until pills, Change end and End now; everyone keeps a role without an end date.
+- /admin/roles/report "Who can see what" (roles.manage and the DSL): people per sensitive area, the granting role, end date, last active; CSV export audited (access.report_export).
+- Audit log: "Access changes" preset with plain detail lines.
+- Demo: Hannah Morrison is Deputy DSL cover for ten days, an earlier wellbeing cover that ended, the DSL's report export and the alert they received; guide steps for the admin and DSL. Guide for schools: docs/guides/access.md.
+- Tests: tests/unit/limited-admin.test.ts (26), tests/integration/limited-admin.test.ts (15), tests/e2e/limited-admin.spec.ts (5: en and ar, desktop and 390px, DSL alert). Full vitest suite 740 passing.

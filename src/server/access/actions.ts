@@ -18,11 +18,13 @@ import {
   deleteRole,
   removeRoleMember,
   restoreRoleDefault,
+  setAssignmentEnd,
   setMemberRoles,
   setRolePermission,
   updateRoleDetails,
   type Actor,
 } from "./roles";
+import { parseUntil } from "./until";
 import {
   InviteError,
   createStaffLink,
@@ -94,16 +96,20 @@ export async function setRolePermissionAction(input: z.input<typeof permSchema>)
   const d = permSchema.safeParse(input);
   if (!d.success) return fail("INVALID");
   const res = await run(() => setRolePermission(a.actor, d.data));
-  if (res.ok) refreshRoles();
-  return res.ok ? { ok: true as const } : res;
+  if (!res.ok) return res;
+  await flushEffects(res.value.effects);
+  refreshRoles();
+  return { ok: true as const };
 }
 
 export async function restoreRoleDefaultAction(roleId: string) {
   const a = await actorWith("roles.manage");
   if (!a) return fail("FORBIDDEN");
   const res = await run(() => restoreRoleDefault(a.actor, String(roleId)));
-  if (res.ok) refreshRoles();
-  return res.ok ? { ok: true as const } : res;
+  if (!res.ok) return res;
+  await flushEffects(res.value.effects);
+  refreshRoles();
+  return { ok: true as const };
 }
 
 const detailsSchema = z.object({
@@ -120,6 +126,7 @@ export async function createRoleAction(input: z.input<typeof detailsSchema> & { 
   if (!d.success) return fail("INVALID");
   const res = await run(() => createRole(a.actor, { ...d.data, copyFromRoleId: input.copyFromRoleId || null }));
   if (!res.ok) return res;
+  await flushEffects(res.value.effects);
   refreshRoles();
   return { ok: true as const, roleId: res.value.id };
 }
@@ -138,8 +145,10 @@ export async function deleteRoleAction(input: { roleId: string; moveToRoleId?: s
   const a = await actorWith("roles.manage");
   if (!a) return fail("FORBIDDEN");
   const res = await run(() => deleteRole(a.actor, { roleId: String(input.roleId), moveToRoleId: input.moveToRoleId || null }));
-  if (res.ok) refreshRoles();
-  return res.ok ? { ok: true as const } : res;
+  if (!res.ok) return res;
+  await flushEffects(res.value.effects);
+  refreshRoles();
+  return { ok: true as const };
 }
 
 const memberRolesSchema = z.object({ membershipId: z.string().min(1), roleIds: z.array(z.string().min(1)).min(1).max(30), confirmSensitive: z.boolean().optional() });
@@ -150,24 +159,52 @@ export async function setMemberRolesAction(input: z.input<typeof memberRolesSche
   const d = memberRolesSchema.safeParse(input);
   if (!d.success) return fail("INVALID");
   const res = await run(() => setMemberRoles(a.actor, d.data));
-  if (res.ok) refreshRoles();
-  return res.ok ? { ok: true as const } : res;
+  if (!res.ok) return res;
+  await flushEffects(res.value.effects);
+  refreshRoles();
+  return { ok: true as const };
 }
 
-export async function addRoleMemberAction(input: { roleId: string; membershipId: string; confirmSensitive?: boolean }) {
+/** "Until" days come from a date input (YYYY-MM-DD, school time zone). Empty means the assignment does not expire. */
+function untilOf(until: string | null | undefined): { ok: true; expiresAt: Date | null } | Fail {
+  if (!until) return { ok: true, expiresAt: null };
+  const r = parseUntil(String(until));
+  return r.ok ? { ok: true, expiresAt: r.expiresAt } : fail(r.error);
+}
+
+export async function addRoleMemberAction(input: { roleId: string; membershipId: string; confirmSensitive?: boolean; until?: string | null }) {
   const a = await actorWith("roles.manage");
   if (!a) return fail("FORBIDDEN");
-  const res = await run(() => addRoleMember(a.actor, { roleId: String(input.roleId), membershipId: String(input.membershipId), confirmSensitive: !!input.confirmSensitive }));
-  if (res.ok) refreshRoles();
-  return res.ok ? { ok: true as const } : res;
+  const u = untilOf(input.until);
+  if (!u.ok) return u;
+  const res = await run(() => addRoleMember(a.actor, { roleId: String(input.roleId), membershipId: String(input.membershipId), confirmSensitive: !!input.confirmSensitive, expiresAt: u.expiresAt }));
+  if (!res.ok) return res;
+  await flushEffects(res.value.effects);
+  refreshRoles();
+  return { ok: true as const };
 }
 
 export async function removeRoleMemberAction(input: { roleId: string; membershipId: string }) {
   const a = await actorWith("roles.manage");
   if (!a) return fail("FORBIDDEN");
   const res = await run(() => removeRoleMember(a.actor, { roleId: String(input.roleId), membershipId: String(input.membershipId) }));
-  if (res.ok) refreshRoles();
-  return res.ok ? { ok: true as const } : res;
+  if (!res.ok) return res;
+  await flushEffects(res.value.effects);
+  refreshRoles();
+  return { ok: true as const };
+}
+
+/** Extend, shorten or remove the end date of a time-limited role assignment. */
+export async function setAssignmentEndAction(input: { roleId: string; membershipId: string; until: string | null }) {
+  const a = await actorWith("roles.manage");
+  if (!a) return fail("FORBIDDEN");
+  const u = untilOf(input.until);
+  if (!u.ok) return u;
+  const res = await run(() => setAssignmentEnd(a.actor, { roleId: String(input.roleId), membershipId: String(input.membershipId), expiresAt: u.expiresAt }));
+  if (!res.ok) return res;
+  await flushEffects(res.value.effects);
+  refreshRoles();
+  return { ok: true as const };
 }
 
 // ---------------------------------------------------------------------------

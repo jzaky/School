@@ -10,7 +10,9 @@ import { bilingualEmail } from "./email-text";
 import { audienceOfRole } from "./permission-catalog";
 import { cleanClaim, namesOf, type ChildClaim } from "./join";
 import { JoinError, ensureGuardian, ensureStaffProfile, grantRoles, linkChildren, linkStudent } from "./membership-setup";
-import type { Actor } from "./roles";
+import { alertMemberAccessChange, type Actor } from "./roles";
+import { loadSnapshot } from "./snapshot";
+import { withMemberRoles } from "./guardrails";
 
 export type MatchHint = {
   studentId: string;
@@ -132,6 +134,11 @@ export async function approveJoinRequest(actor: Actor, input: { requestId: strin
       entityId: req.id,
       meta: { kind: req.kind, membershipId: m.id, roles: roleKeys, linked, before: { status: "PENDING" }, after: { status: "APPROVED" } },
     });
+    if (req.kind === "STAFF") {
+      // Approving staff with a role that opens safeguarding or wellbeing records tells the safeguarding team.
+      const after = await loadSnapshot(tx, [m.id]);
+      ec.effects.push(...(await alertMemberAccessChange(tx, actor, { before: withMemberRoles(after, m.id, []), after, memberIds: [m.id] }, now)));
+    }
     return { effects: ec.effects };
   });
 }

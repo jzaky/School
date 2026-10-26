@@ -47,6 +47,9 @@ export const SENSITIVE_PERMISSIONS: Permission[] = [
   "integrations.manage",
 ];
 
+/** When a role or person gains or loses one of these, everyone who manages safeguarding is told (access-alerts.ts). */
+export const SAFEGUARDING_WATCHED: Permission[] = ["safeguarding.view", "safeguarding.manage", "safeguarding.export", "safeguarding.break_glass", "cases.wellbeing"];
+
 export function isSensitivePermission(p: string): boolean {
   return (SENSITIVE_PERMISSIONS as string[]).includes(p) || p.startsWith("safeguarding.");
 }
