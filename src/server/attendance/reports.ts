@@ -4,12 +4,32 @@
 // Reports show codes and counts, never reasons: private codes are folded into "authorised" for everyone.
 import type { AttendanceStatus } from "@prisma/client";
 import type { TenantDb } from "@/lib/tenant-db";
+import type { Permission } from "@/server/identity/permissions";
 import { dateKey, keyToDate } from "@/server/timetable/cover";
 import { resolveCode, type Code } from "./codes";
 import { addTo, attendancePct, emptyTally, merge, type Tally } from "./maths";
 import { loadCodes } from "./settings";
 
 export type Range = { from: string; to: string; termId: string | null };
+
+/**
+ * Who may read which attendance reports. attendance.view_all and attendance.manage: the whole school. Teachers
+ * (attendance.take): the classes they teach and the students in them. Nobody else.
+ */
+export async function reportAccess(v: { db: TenantDb; membershipId: string; isStaff: boolean; can: (p: Permission) => boolean }) {
+  if (!v.isStaff) return null;
+  if (v.can("attendance.view_all") || v.can("attendance.manage")) return { all: true as const, classIds: [] as string[] };
+  if (!v.can("attendance.take")) return null;
+  const classes = await v.db.schoolClass.findMany({ where: { teacherMembershipId: v.membershipId, academicYear: { isCurrent: true } }, select: { id: true } });
+  return { all: false as const, classIds: classes.map((c) => c.id) };
+}
+
+export async function scopeAllowed(db: TenantDb, access: NonNullable<Awaited<ReturnType<typeof reportAccess>>>, scope: Scope) {
+  if (access.all) return true;
+  if (scope.kind === "class") return access.classIds.includes(scope.classId);
+  if (scope.kind === "student") return (await db.enrollment.count({ where: { studentId: scope.studentId, classId: { in: access.classIds }, status: "ACTIVE" } })) > 0;
+  return false;
+}
 
 const KEY = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -45,6 +65,18 @@ function tallyGroups(groups: Group[], codes: Code[]) {
 }
 
 export type Scope = { kind: "school" } | { kind: "grade"; grade: number } | { kind: "class"; classId: string } | { kind: "student"; studentId: string };
+
+/** The scope in a report URL: student=<id>, or scope=g:<grade> / c:<classId>, else the school. */
+export function scopeFromQuery(q: { student?: string | null; scope?: string | null }): Scope {
+  if (q.student && /^[a-z0-9]{8,40}$/i.test(q.student)) return { kind: "student", studentId: q.student };
+  const m = /^g:(-?\d{1,2})$/.exec(q.scope ?? "");
+  if (m) return { kind: "grade", grade: Number(m[1]) };
+  const c = /^c:([a-z0-9]{8,40})$/i.exec(q.scope ?? "");
+  if (c) return { kind: "class", classId: c[1] };
+  return { kind: "school" };
+}
+
+export const scopeKey = (s: Scope) => (s.kind === "grade" ? `g:${s.grade}` : s.kind === "class" ? `c:${s.classId}` : s.kind === "student" ? `s:${s.studentId}` : "school");
 
 /** Per-student tallies of daily marks for a scope and range. */
 export async function dailyTallies(db: TenantDb, scope: Scope, range: Range) {

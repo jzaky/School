@@ -26,6 +26,8 @@ export type AssessmentRow = {
   dueLabel: string | null;
   termId: string | null;
   publishedAt: string | null;
+  /** "Teachers submit, a publisher releases": when the teacher marked it ready. */
+  readyAt?: string | null;
 };
 
 export type TermOption = { id: string; label: string; startsOn: string; endsOn: string };

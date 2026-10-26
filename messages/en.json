@@ -160,7 +160,10 @@
     "sectionPlatform": "Platform",
     "platformLeads": "Marketing leads",
     "platformReferrals": "Referrals",
-    "platformSettings": "Platform settings"
+    "platformSettings": "Platform settings",
+    "attendance": "Attendance",
+    "gradePublishing": "Publishing grades",
+    "signInSettings": "Sign-in settings"
   },
   "shell": {
     "openMenu": "Open menu",
@@ -222,7 +225,8 @@
     "nurse": "School Nurse",
     "it_support": "IT Support",
     "student": "Student",
-    "parent": "Parent"
+    "parent": "Parent",
+    "head_of_it": "Head of IT"
   },
   "demo": {
     "title": "Choose who you want to be",
@@ -1264,7 +1268,11 @@
       "safeguarding_immediate": "Immediate danger alert",
       "break_glass": "Emergency access used",
       "request_message": "A new message on a request",
-      "absence_excused": "A student in my homeroom is reported absent"
+      "absence_excused": "A student in my homeroom is reported absent",
+      "attendance_unexplained": "My child is absent without a report",
+      "attendance_persistent": "A student's attendance falls below the threshold",
+      "attendance_contact_by_hand": "A family needs a call from the attendance office",
+      "attendance_limit": "A student nears the regulator's absence limit"
     }
   },
   "adminAudit": {
@@ -2053,7 +2061,8 @@
       "principal": "You are Omar, the principal.",
       "admin": "You are Aisha, who runs the school's systems.",
       "registrar": "You issue letters and keep records.",
-      "hod_computing": "You lead the Computing department."
+      "hod_computing": "You lead the Computing department.",
+      "head_of_it": "You are Rami, the Head of IT. You release grades and run the school's systems."
     },
     "steps": {
       "assessment": {
@@ -2395,6 +2404,42 @@
       "courseSelection": {
         "title": "Run next year's course selection",
         "body": "AP and regular electives for the American track, demand per course and how many students' university targets need each one."
+      },
+      "takeRegister": {
+        "title": "Take a register on your phone",
+        "body": "Open 9A's morning register, tap All present, then mark who is late or absent."
+      },
+      "childAttendance": {
+        "title": "See your child's attendance",
+        "body": "Open Adam's page for this term's attendance, day by day."
+      },
+      "attendanceOffice": {
+        "title": "Follow up today's absences",
+        "body": "Log a call, message a family or explain an absence. One family is held for a staff call."
+      },
+      "attendanceReports": {
+        "title": "Read the attendance reports",
+        "body": "Percentages by grade and class, lateness, and a certificate in English or Arabic."
+      },
+      "attendanceSettings": {
+        "title": "Set attendance rules",
+        "body": "Codes, times, the regulator absence limit and who keeps the register."
+      },
+      "publishQueue": {
+        "title": "Release grades",
+        "body": "Teachers marked assessments ready. Publish one, several or all."
+      },
+      "releaseReportCards": {
+        "title": "Release report cards",
+        "body": "Report cards stay hidden from families until you release them."
+      },
+      "integrationsIt": {
+        "title": "Check integrations",
+        "body": "API keys and scheduled syncs from other systems."
+      },
+      "signInSettings": {
+        "title": "Set up sign-in",
+        "body": "Google and Microsoft sign-in and staff email domains, without access to roles."
       }
     }
   },
@@ -3344,7 +3389,8 @@
       "summaryEmpty": "Choose courses to see their university impact.",
       "explorePick": "Try other choices to see their university impact.",
       "exploreNote": "View only. Choices you try here are not saved; the student, a parent or the registration team can save them."
-    }
+    },
+    "takeRegister": "Take register"
   },
   "grades": {
     "title": "Grades",
@@ -3505,9 +3551,95 @@
       "bandDuplicate": "Labels and minimums must be unique.",
       "bandRange": "Minimums must be between 0 and 100.",
       "bandZero": "One band must start at 0%.",
-      "notFound": "Not found."
+      "notFound": "Not found.",
+      "publisherMode": "Your school releases grades through a publisher.",
+      "teacherMode": "Teachers publish their own grades at this school.",
+      "alreadyPublished": "This assessment is already published."
     },
-    "invalidCells": "{count, plural, one {# value needs fixing and is not saved} other {# values need fixing and are not saved}}"
+    "invalidCells": "{count, plural, one {# value needs fixing and is not saved} other {# values need fixing and are not saved}}",
+    "publisherModeNote": "Your school releases grades through a publisher. When an assessment's marks are complete, choose Mark ready for release in its menu.",
+    "readyBadge": "Ready",
+    "markReady": "Mark ready for release",
+    "notReady": "Not ready yet",
+    "readyToast": "Marked ready. The publisher releases it to families.",
+    "notReadyToast": "Taken back from the publishing queue",
+    "publishedByPublisher": "Released by the school's publisher",
+    "reportHeld": "Report card created. It reaches the family when the publisher releases it.",
+    "reportCardsInDocuments": "Report cards are in Documents",
+    "publishing": {
+      "title": "Publishing grades",
+      "subtitleTeacherMode": "Teachers publish their own grades and report cards.",
+      "subtitlePublisherMode": "Teachers mark assessments ready; you release them to students and families, one, several or all at once.",
+      "modeTitle": "Who publishes grades",
+      "modeBody": "Report cards follow the same rule.",
+      "mode": {
+        "TEACHER": "Teachers publish their own",
+        "PUBLISHER": "Teachers submit, a publisher releases"
+      },
+      "modeHelp": {
+        "TEACHER": "Each teacher publishes an assessment when it is ready. Families are told at once.",
+        "PUBLISHER": "Teachers mark assessments ready. People with the publish permission (the Head of IT by default) release them, and report cards stay hidden until released."
+      },
+      "noPublishers": "Nobody holds the publish permission yet. Give it to a role under Roles and access first.",
+      "saveMode": "Save",
+      "modeSaved": "Publishing rule saved",
+      "notPublisherTitle": "You do not release grades",
+      "notPublisherBody": "People with the publish permission see the publishing queue.",
+      "teacherModeTitle": "Teachers publish their own grades",
+      "teacherModeBody": "The publishing queue is used when the school chooses \"Teachers submit, a publisher releases\".",
+      "statReady": "Ready to release",
+      "statReadyHint": "Marked ready by teachers",
+      "statWaiting": "Still with teachers",
+      "statWaitingHint": "Not marked ready yet",
+      "statCards": "Report cards to release",
+      "statCardsHint": "Hidden from families until released",
+      "tabReady": "Ready",
+      "tabPublished": "Published",
+      "tabWaiting": "With teachers",
+      "tabCards": "Report cards",
+      "filterBy": "Show:",
+      "allReady": "Everything",
+      "noCards": "No report cards waiting",
+      "noCardsBody": "Report cards made by teachers appear here until you release them.",
+      "empty": {
+        "ready": "Nothing is waiting for release",
+        "published": "Nothing published yet",
+        "waiting": "Every assessment is ready or published"
+      },
+      "pageOf": "Page {page} of {pages}",
+      "previousPage": "Previous",
+      "nextPage": "Next",
+      "selectPage": "Select all on this page",
+      "selected": "{count} selected",
+      "publishSelected": "Publish selected ({count})",
+      "publishAll": "Publish all ready ({count})",
+      "selectOne": "Select {title}",
+      "marked": "{marked} of {total} students marked",
+      "publishedOn": "Published {when} by {by}",
+      "readySince": "Ready since {when}, {by}",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "confirmTitle": "{count, plural, one {Publish 1 assessment?} other {Publish # assessments?}}",
+      "confirmBody": "Students and their families see the grades and are told once. This is recorded in the audit log.",
+      "cancel": "Cancel",
+      "publishNow": "Publish",
+      "unpublishTitle": "Unpublish this assessment?",
+      "unpublishBody": "Families no longer see these grades. It goes back to the ready list, and the change is audited.",
+      "publishedToast": "{count, plural, one {1 assessment published} other {# assessments published}}, {notified} notifications",
+      "remaining": "{count} more are ready: publish again to continue",
+      "unpublishedToast": "Assessment unpublished",
+      "releasedToast": "{count, plural, one {1 report card released} other {# report cards released}}",
+      "releaseSelected": "Release selected ({count})",
+      "releaseAll": "Release all ({count})",
+      "withdraw": "Withdraw",
+      "withdrawnToast": "Report card hidden from the family again",
+      "error": {
+        "generic": "Something went wrong. Try again.",
+        "forbidden": "You cannot publish grades.",
+        "teacherMode": "Teachers publish their own grades at this school.",
+        "invalid": "Choose what to publish."
+      }
+    }
   },
   "timetable": {
     "title": "Timetable",
@@ -6446,7 +6578,8 @@
       "teaching": "Teaching and trips",
       "insights": "Insights and AI",
       "admin": "Admin",
-      "portals": "Portals"
+      "portals": "Portals",
+      "attendance": "Attendance"
     },
     "groupHelp": {
       "requests": "Asking for things and getting them done.",
@@ -6461,7 +6594,8 @@
       "teaching": "Lesson plans, curriculum, trips and messages.",
       "insights": "Dashboards and AI help.",
       "admin": "Running the school's setup.",
-      "portals": "Which home screen this person gets."
+      "portals": "Which home screen this person gets.",
+      "attendance": "Registers, follow-up and attendance reports."
     },
     "perms": {
       "services": {
@@ -6582,6 +6716,10 @@
         "view_all": {
           "label": "See all grades",
           "help": "View grades across the school."
+        },
+        "publish": {
+          "label": "Release grades and report cards",
+          "help": "When the school uses a publisher, release assessments and report cards that teachers marked ready."
         }
       },
       "registration": {
@@ -6810,6 +6948,24 @@
         "reasons": {
           "label": "See why students are absent",
           "help": "Read the reason and doctor's notes on absences reported by families. Teachers see only that an absence is excused."
+        },
+        "take": {
+          "label": "Take registers",
+          "help": "Mark attendance for their homeroom, the lessons they teach and the lessons they cover."
+        },
+        "view_all": {
+          "label": "See attendance across the school",
+          "help": "Attendance reports and certificates for every student, without reasons."
+        },
+        "manage": {
+          "label": "Run the attendance office",
+          "help": "Follow up unexplained absences, change closed registers, mark late after the cut-off and set attendance codes. Changes are audited."
+        }
+      },
+      "signin": {
+        "manage": {
+          "label": "Manage sign-in settings",
+          "help": "Google and Microsoft sign-in, staff email domains and family self-join. Does not include changing roles."
         }
       }
     }
@@ -9636,7 +9792,448 @@
     "homeroomTitle": "{name} register",
     "openRegister": "Open register",
     "presentN": "{n} present",
-    "awayN": "{n} away"
+    "awayN": "{n} away",
+    "tabs": {
+      "label": "Attendance",
+      "today": "Today's registers",
+      "office": "Attendance office",
+      "reports": "Reports",
+      "settings": "Settings"
+    },
+    "today": {
+      "title": "Today's registers",
+      "subtitle": "Your homeroom's morning register and the lessons you teach or cover today.",
+      "subtitleExternal": "Your school keeps its register in another system. These are the marks it sends to Horizon.",
+      "previousDay": "Previous school day",
+      "nextDay": "Next school day",
+      "backToToday": "Today",
+      "takenSummary": "{taken} of {total} registers taken",
+      "todayPill": "Today",
+      "externalBanner": "Registers here are read only. Marks arrive from your school's other system through the API.",
+      "weekendTitle": "No school on this day",
+      "weekendBody": "Pick a school day to see its registers.",
+      "holidayTitle": "School holiday",
+      "holidayBody": "The school calendar has a holiday on this day, so there are no registers.",
+      "noneTitle": "No registers for you on this day",
+      "noneBody": "Registers appear here for your homeroom and the lessons on your timetable, including cover.",
+      "noneBodyOffice": "You have no class of your own today. The attendance office shows every register in the school.",
+      "openOffice": "Open the attendance office",
+      "coveredBy": "Covered by {name}",
+      "covered": "Covered",
+      "closed": "Closed",
+      "taken": "Taken",
+      "partial": "{marked} of {total} marked",
+      "notTaken": "Not taken",
+      "upcoming": "Later today",
+      "dailyRegister": "Morning registration",
+      "lessonN": "Lesson {n}",
+      "coverBadge": "Cover",
+      "studentsN": "{n} students",
+      "roomN": "Room {room}",
+      "absentN": "{n} absent",
+      "lateN": "{n} late",
+      "openRegister": "Open register",
+      "takeRegister": "Take register"
+    },
+    "take": {
+      "title": "Take register",
+      "back": "Today's registers",
+      "dailyRegister": "Morning registration",
+      "lesson": "Lesson",
+      "roomN": "Room {room}",
+      "coverBadge": "You are covering this lesson",
+      "takenBy": "Taken by {name} at {time}",
+      "takenAt": "Taken at {time}",
+      "notTakenYet": "Not taken yet",
+      "closedAt": "Closed at {time}",
+      "youSeeReasons": "You can see reasons (attendance team)",
+      "reasonsPrivate": "Reasons are private",
+      "holidayTitle": "School holiday",
+      "holidayBody": "No register is taken on a holiday.",
+      "noStudents": "No students in this class",
+      "noStudentsBody": "Students appear here once they are enrolled in the class.",
+      "done": "Done",
+      "externalBanner": "Your school keeps its register in another system, so this register is read only here.",
+      "viewOnlyBanner": "You can view this register. The class teacher, the cover teacher or the attendance office can change it.",
+      "futureBanner": "This register opens on the day.",
+      "closedBanner": "This register closed at {time}. Ask the attendance office to change a mark.",
+      "closedManagerBanner": "This register is closed. Each change you make is recorded in the audit log with the old and the new mark.",
+      "lateClosedBanner": "The late cut-off passed at {time}. You can still mark present or absent; the attendance office records late arrivals now.",
+      "lateManagerBanner": "The late cut-off passed at {time}. Late marks you add now are recorded in the audit log.",
+      "allPresentDone": "{count, plural, one {1 student marked} other {# students marked}}",
+      "countPresent": "Present {n}",
+      "countLate": "Late {n}",
+      "countAbsent": "Absent {n}",
+      "countUnmarked": "Not marked {n}",
+      "allPresent": "All present",
+      "keyboardHint": "Keyboard: arrow keys move between students; P, L, A, E and S (or 1 to 5) mark the student and move on.",
+      "listLabel": "Students in this register",
+      "prefillReport": "Suggested: {code} (absence report)",
+      "prefillDaily": "Suggested: {code} (morning register)",
+      "reasonPrivate": "Reason private",
+      "fromReport": "Reported by the family",
+      "quick": {
+        "present": "Present",
+        "late": "Late",
+        "absent": "Absent",
+        "excused": "Excused",
+        "activity": "Activity"
+      },
+      "lateClosedTip": "The late cut-off passed at {time}. The attendance office can still mark late.",
+      "moreCodesFor": "More codes for {name}",
+      "moreCodes": "More codes",
+      "minutesLate": "Minutes late",
+      "lessMinutes": "Five minutes less",
+      "moreMinutes": "Five minutes more",
+      "minutesShort": "{n} min",
+      "offline": "Offline: {n, plural, one {1 change waits} other {# changes wait}} on this device and will be sent when you are back online.",
+      "retryNow": "Send now",
+      "saveRefused": "Not saved. The marks were put back.",
+      "saving": "Saving...",
+      "savedAudited": "Saved and recorded in the audit log",
+      "saved": "All changes saved",
+      "autosave": "Each mark saves on its own.",
+      "reopened": "Register reopened",
+      "closedToast": "Register closed",
+      "reopen": "Reopen register",
+      "close": "Close register",
+      "error": {
+        "generic": "Something went wrong. Your marks are kept; try again.",
+        "invalid": "Something in this register is not valid.",
+        "forbidden": "You cannot change this register.",
+        "closed": "This register is closed. Ask the attendance office to change a mark.",
+        "future": "This register opens on the day.",
+        "external": "Your school keeps its register in another system.",
+        "holiday": "No register is taken on a holiday.",
+        "tooMany": "Too many marks at once.",
+        "code": "That code cannot be used here.",
+        "minutes": "Minutes late must be between 1 and 240.",
+        "lateCutoff": "The late cut-off passed at {time}. The attendance office can mark late.",
+        "notInClass": "That student is not in this class.",
+        "notFound": "This register was not found."
+      }
+    },
+    "office": {
+      "title": "Attendance office",
+      "subtitle": "Unexplained absences, calls and messages, and registers still to take. Families of students absent without a report are messaged from {time}.",
+      "previousDay": "Previous school day",
+      "nextDay": "Next school day",
+      "today": "Today",
+      "statOpen": "Not explained yet",
+      "statOpenHintBefore": "Families are messaged from {time}",
+      "statOpenHint": "Nobody has reached the family yet",
+      "statContacted": "Contacted",
+      "statContactedHint": "Still waiting for a reason",
+      "statExplained": "Explained",
+      "statRegisters": "Morning registers taken",
+      "statLessonsHint": "Lessons so far: {taken} of {started} taken",
+      "statRegistersHint": "Homerooms with every student marked",
+      "unexplainedTitle": "Absent without a reason",
+      "filterActive": "To follow up",
+      "filterExplained": "Explained",
+      "filterAll": "All",
+      "noneExplained": "Nothing explained on this day yet",
+      "noneTitle": "No unexplained absences",
+      "noneBody": "Every absence on this day has a reason or an absence report.",
+      "status": {
+        "OPEN": "Not contacted",
+        "CONTACTED": "Contacted",
+        "EXPLAINED": "Explained"
+      },
+      "autoSent": "Family messaged at {time}",
+      "autoHeld": "No automatic message: contact the family yourself",
+      "autoOff": "Automatic messages are off",
+      "autoReportPending": "Absence report waiting for a decision",
+      "autoNoGuardian": "No guardian to message",
+      "autoScheduled": "Family will be messaged at {time}",
+      "heldExplain": "The school asked that this family is contacted by staff, not automatically. A message you send needs a reason, which is recorded.",
+      "log": {
+        "CALL_REACHED": "Call: spoke to the family",
+        "CALL_NO_ANSWER": "Call: no answer",
+        "CALL_VOICEMAIL": "Call: left a voicemail",
+        "CALL": "Call",
+        "NOTE": "Note",
+        "MESSAGE": "Message to the family",
+        "AUTO_MESSAGE": "Automatic message to the family"
+      },
+      "by": "by {name}",
+      "notePrivate": "Note visible to the attendance team",
+      "reasonShown": "Reason for messaging: {reason}",
+      "pageOf": "Page {page} of {pages} ({total} in all)",
+      "previousPage": "Previous",
+      "nextPage": "Next",
+      "registersTitle": "Morning registers not complete",
+      "registersBody": "Homerooms where not every student has a mark yet.",
+      "registersNotYet": "Morning registration has not started yet.",
+      "allTaken": "Every homeroom register is complete.",
+      "noHomerooms": "There are no homeroom classes this year yet.",
+      "noTutor": "No homeroom teacher",
+      "markedOf": "{marked}/{total} marked",
+      "take": "Take",
+      "limitTitle": "Regulator absence limit",
+      "limitBody": "Unexcused school days this year. Limit: {consecutive} in a row or {total} in total. Staff are alerted at {warnConsecutive} in a row or {warnTotal} in total.",
+      "limitNone": "No student is near the limit.",
+      "limitCounts": "Longest run {consecutive} · Total {total}",
+      "limitReached": "Limit reached",
+      "limitWarning": "Near the limit",
+      "limitNoReasons": "Counts only. Reasons for absence are never shown here.",
+      "persistentTitle": "Persistent absence",
+      "persistentBody": "Students below {threshold}% this term ({term}). Homeroom teachers and heads of year are told, without reasons.",
+      "persistentNone": "No student is below the threshold this term.",
+      "persistentMore": "{n} more in the attendance report",
+      "logCall": "Log call",
+      "messageFamily": "Message family",
+      "markExplained": "Mark explained",
+      "logCallTitle": "Call about {name}",
+      "logCallBody": "Record what happened. A note can hold what the family said; only the attendance team reads it.",
+      "outcome": {
+        "REACHED": "Spoke to the family",
+        "NO_ANSWER": "No answer",
+        "VOICEMAIL": "Left a voicemail"
+      },
+      "noteLabel": "Note (optional)",
+      "notePlaceholder": "For example: mother called back, fever since last night.",
+      "notePrivacy": "Do not write medical details beyond what the office needs.",
+      "messageTitle": "Message the family of {name}",
+      "messageBody": "The guardians who receive updates get this message in Horizon and by email.",
+      "messageHeldBody": "The school asked that this family is contacted by staff, not automatically. Write why you are sending this message; the reason is recorded.",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Good morning. Your child is not in school today. Please let us know if everything is all right.",
+      "reasonLabel": "Reason for messaging this family",
+      "reasonPlaceholder": "For example: agreed with the student's support lead.",
+      "explainTitle": "Explain the absence of {name}",
+      "explainBody": "Choose the code for the day. The morning mark and the day's absent lesson marks change to it, and the change is audited.",
+      "codeLabel": "Attendance code",
+      "codePlaceholder": "Choose a code",
+      "cancel": "Cancel",
+      "saveCall": "Save",
+      "send": "Send",
+      "confirmExplain": "Save",
+      "callLogged": "Call logged",
+      "messageSent": "Message sent",
+      "explainedToast": "Absence explained",
+      "noSchoolToday": "There is no school today.",
+      "followUpRan": "{sent, plural, =0 {No new messages} one {1 family messaged} other {# families messaged}}{held, plural, =0 {} one {, 1 held for staff contact} other {, # held for staff contact}}",
+      "runNow": "Send messages now",
+      "error": {
+        "generic": "Something went wrong. Try again.",
+        "code": "Choose a code.",
+        "invalid": "Please check what you entered.",
+        "reasonRequired": "Write a reason for messaging this family.",
+        "noGuardian": "This student has no guardian who receives updates.",
+        "forbidden": "You cannot do this.",
+        "notFound": "This absence was not found."
+      },
+      "autoPending": "Automatic message not sent yet",
+      "autoNotSent": "No automatic message was sent"
+    },
+    "reports": {
+      "title": "Attendance reports",
+      "subtitle": "Attendance, lateness and unauthorised absence by student, class, grade and school. Reasons are never shown.",
+      "period": "Period",
+      "customRange": "Date range",
+      "scope": "Show",
+      "from": "From",
+      "to": "To",
+      "apply": "Apply",
+      "scopeSchool": "School",
+      "wholeSchool": "Whole school",
+      "scopeHomerooms": "Homerooms",
+      "scopeMyClasses": "My classes",
+      "exportCsv": "CSV",
+      "exportXlsx": "Excel",
+      "emptyTitle": "No attendance in this period",
+      "emptyBody": "Marks appear here once registers are taken.",
+      "statAttendance": "Attendance",
+      "statSessions": "{attended} of {possible} school days",
+      "statUnauthorised": "Unauthorised absence",
+      "statUnauthorisedHint": "{n} days, {unexplained} still unexplained",
+      "statLate": "Late arrivals",
+      "statLateHint": "{pct} of days, {minutes} minutes in all",
+      "statBelow": "Below {threshold}%",
+      "statBelowHint": "of {total} students",
+      "trendTitle": "Daily attendance",
+      "trendBody": "Each bar is one school day. The dashed line is the school's {threshold}% threshold.",
+      "viewOverview": "Overview",
+      "viewStudents": "Students",
+      "viewLateness": "Lateness",
+      "viewUnauthorised": "Unauthorised absence",
+      "colAttendance": "Attendance",
+      "colPossible": "School days",
+      "colAuthorised": "Authorised",
+      "colUnauthorised": "Unauthorised",
+      "colLate": "Late",
+      "colGrade": "Grade",
+      "colClass": "Class",
+      "colStudent": "Student",
+      "noHomeroom": "No homeroom",
+      "studentsN": "{n} students",
+      "minutesTotal": "{n} minutes late in all",
+      "noLate": "Nobody was late in this period",
+      "noUnauthorised": "No unauthorised absence in this period",
+      "pageOf": "Page {page} of {pages} ({total} students)",
+      "previousPage": "Previous",
+      "nextPage": "Next",
+      "backToReport": "Back to the report",
+      "certificateEn": "Certificate (English)",
+      "certificateAr": "Certificate (Arabic)",
+      "statAuthorised": "Authorised absences",
+      "statUnauthorisedDays": "Unauthorised absences",
+      "unexplainedN": "{n} still unexplained",
+      "dayByDay": "Day by day",
+      "dayByDayReasons": "Each square is a school day with its code. Hover for the meaning.",
+      "dayByDayPrivate": "Each square is a school day with its code. Codes that give a reason show as an excused absence.",
+      "reasonsPrivate": "Reasons are private",
+      "minutesLateN": "{n} minutes late",
+      "noClassesTitle": "No classes to report on",
+      "noClassesBody": "Reports show the classes you teach this year.",
+      "statStudentDays": "{attended} of {possible} student days attended"
+    },
+    "settings": {
+      "title": "Attendance settings",
+      "subtitle": "How your school takes and follows up attendance.",
+      "registerTitle": "Who keeps the register",
+      "registerBody": "This decides which side wins when Horizon and another system both hold marks for a day.",
+      "mode": {
+        "HORIZON": "Horizon is our register",
+        "EXTERNAL": "Our register is in another system"
+      },
+      "modeHelp": {
+        "HORIZON": "Teachers take registers in Horizon. The API can add days that have no mark, but never changes a mark taken here.",
+        "EXTERNAL": "Marks arrive through the API and registers here are read only. Absences excused by an approved report stay excused."
+      },
+      "timesTitle": "Times",
+      "dailyStart": "Morning registration starts",
+      "dailyStartHelp": "Lessons start at their bell times.",
+      "lateCutoff": "Late cut-off (minutes after the start)",
+      "lateCutoffHelp": "After this, only the attendance office marks late, and it is audited.",
+      "closeTime": "Registers close at",
+      "closeTimeHelp": "After this, changes need the attendance office and are audited.",
+      "followUpTime": "Message families from",
+      "followUpTimeHelp": "Guardians of students absent without a report hear from the school once, at this time.",
+      "autoNotify": "Message families automatically",
+      "autoNotifyHelp": "When off, the attendance office contacts families itself. Families of students with an open wellbeing or safeguarding matter are never messaged automatically.",
+      "dailyOnlyTitle": "Grades with a morning register only",
+      "dailyOnlyBody": "These grades take no per-lesson registers (usual for kindergarten).",
+      "persistentTitle": "Persistent absence",
+      "threshold": "Alert below",
+      "thresholdHelp": "Term-to-date attendance. The homeroom teacher and the head of year are told once per term.",
+      "minDays": "After at least (school days)",
+      "minDaysHelp": "Avoids alerts in the first days of term.",
+      "headsTitle": "Heads of year",
+      "headsBody": "They receive persistent absence and absence limit alerts for their grade, never reasons.",
+      "headFor": "Head of year for {grade}",
+      "noHead": "No head of year",
+      "limitTitle": "Regulator absence limit",
+      "limitBody": "Count school days of unexcused absence in the academic year and alert the attendance office and the head of year before a student reaches your regulator's limit.",
+      "presetSharjah": "Use the Sharjah (SPEA) preset: 10 in a row or 15 in total",
+      "limitConsecutive": "School days in a row",
+      "limitTotal": "School days in total",
+      "limitWarn": "Warn at",
+      "limitWarnHelp": "Staff are warned at this share of either limit, and again on reaching it.",
+      "limitSource": "Weekends and holidays on the school calendar are not counted. Under the SPEA policy on admission of learners to private schools (SPEA-8.1-01.0), a learner is de-registered after 10 consecutive or 15 separate school days of unexcused absence, based on the school's report.",
+      "save": "Save settings",
+      "saved": "Attendance settings saved",
+      "error": {
+        "generic": "Something went wrong. Try again.",
+        "invalid": "Please check the values.",
+        "forbidden": "You cannot change attendance settings.",
+        "mode": "Choose who keeps the register.",
+        "time": "Enter times as hours and minutes.",
+        "closeBeforeStart": "Registers must close after morning registration starts.",
+        "followUpBeforeStart": "Families can only be messaged after morning registration starts.",
+        "cutoff": "The late cut-off must be between 0 and 240 minutes.",
+        "threshold": "The threshold must be between 50% and 100%.",
+        "minDays": "Enter a number of school days between 1 and 200.",
+        "grades": "Choose grades from the list.",
+        "heads": "Choose active staff members as heads of year.",
+        "limit": "Enter limits of at least 2 days, with the total at least as large as the run in a row.",
+        "limitWarn": "The warning level must be between 30% and 95%."
+      }
+    },
+    "codes": {
+      "title": "Attendance codes",
+      "subtitle": "The codes teachers and the office use, and how each one counts. Codes that say why a student is away are shown to everyone else as a plain excused absence.",
+      "custom": "Your school's own list.",
+      "defaults": "Horizon's default set, based on codes common in UAE private schools. Adjust it to your attendance policy and your regulator's reporting categories.",
+      "colCode": "Code",
+      "colLabelEn": "Label (English)",
+      "colLabelAr": "Label (Arabic)",
+      "colCountsAs": "Counts as",
+      "colCategory": "Report category",
+      "colAuthorised": "Authorised",
+      "colLate": "Late",
+      "colPrivate": "Reason private",
+      "colQuick": "Button",
+      "colActive": "In use",
+      "countsAs": {
+        "PRESENT": "Present",
+        "ABSENT": "Absent",
+        "NOT_COUNTED": "Not counted"
+      },
+      "category": {
+        "present": "Present",
+        "late": "Late",
+        "activity": "School activity",
+        "remote": "Remote learning",
+        "unexplained": "Reason not known yet",
+        "authorised": "Authorised absence",
+        "illness": "Illness",
+        "medical": "Medical appointment",
+        "family": "Family",
+        "religious": "Religious observance",
+        "suspension": "Suspension",
+        "unauthorised": "Unauthorised absence",
+        "not_required": "Not required to attend"
+      },
+      "quickNone": "None",
+      "quick": {
+        "present": "Present",
+        "late": "Late",
+        "absent": "Absent",
+        "excused": "Excused",
+        "activity": "Activity"
+      },
+      "help": "Each one-tap button on the register needs exactly one code. Codes are never deleted, only switched off, so earlier marks keep their meaning.",
+      "add": "Add code",
+      "save": "Save codes",
+      "saved": "Attendance codes saved",
+      "error": {
+        "generic": "Something went wrong. Try again.",
+        "invalid": "Please check the codes.",
+        "forbidden": "You cannot change attendance codes.",
+        "count": "Keep between 1 and 40 codes.",
+        "code": "Codes are 1 to 4 letters or digits.",
+        "duplicate": "Each code can be used once.",
+        "label": "Every code needs an English label of up to 80 characters.",
+        "countsAs": "Choose how each code counts.",
+        "category": "Choose a report category for each code.",
+        "quick": "Choose a valid button.",
+        "authorised": "Only absence codes can be authorised.",
+        "late": "Only present codes can be late.",
+        "quickMissing": "Each button (present, late, absent, excused, activity) needs exactly one code.",
+        "quickInactive": "A code behind a button must be in use.",
+        "quickPresent": "The present button needs a present code that is not late.",
+        "quickLate": "The late button needs a present code marked late.",
+        "quickAbsent": "The absent button needs the absence code whose reason is not known yet.",
+        "quickExcused": "The excused button needs an authorised absence code that does not reveal a reason.",
+        "quickActivity": "The activity button needs a code that counts as present."
+      }
+    },
+    "child": {
+      "termToDate": "This term so far: {from} to {to}",
+      "none": "No attendance has been recorded yet this term.",
+      "attendance": "Attendance",
+      "daysOf": "{attended} of {possible} school days",
+      "late": "Late arrivals",
+      "authorised": "Excused absences",
+      "unauthorised": "Unexcused absences",
+      "recent": "Recent school days",
+      "minutesLate": "{n} minutes late",
+      "unexplained": "{count, plural, one {One absence has no reason yet} other {# absences have no reason yet}}, most recently on {date}.",
+      "reportReason": "Report the reason",
+      "title": "Attendance this term"
+    }
   },
   "gradeLevel": {
     "label": "{level, select, kg1 {KG1} kg2 {KG2} other {Grade {grade}}}",

@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { BookOpenCheck, ChevronDown, GraduationCap, LineChart, ListChecks } from "lucide-react";
+import { BookOpenCheck, ChevronDown, FileText, GraduationCap, LineChart, ListChecks } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { fmtDate, fmtNumber, type FormatPrefs } from "@/lib/format";
@@ -32,6 +33,7 @@ export async function FamilyGrades({
   highlight,
   reportAvailable,
   isParent,
+  releasedBySchool = false,
 }: {
   data: Data;
   prefs: FormatPrefs;
@@ -40,6 +42,8 @@ export async function FamilyGrades({
   highlight?: string;
   reportAvailable: boolean;
   isParent: boolean;
+  /** The school releases report cards through a publisher: families read them in Documents. */
+  releasedBySchool?: boolean;
 }) {
   const t = await getTranslations("grades");
   const locale = prefs.locale;
@@ -68,7 +72,16 @@ export async function FamilyGrades({
         {data.terms.length > 0 && (
           <FilterBar chips={data.terms.map((tt) => ({ value: tt.id === defaultTermId ? "" : tt.id, label: pick(locale, tt.nameEn, tt.nameAr) }))} chipParam="term" />
         )}
-        <ReportCardButton studentId={data.student.id} termId={defaultTermId} available={reportAvailable} termLabel={termLabel} />
+        {releasedBySchool ? (
+          <Button variant="outline" asChild>
+            <Link href="/documents" data-testid="report-cards-documents">
+              <FileText className="size-4" />
+              {t("reportCardsInDocuments")}
+            </Link>
+          </Button>
+        ) : (
+          <ReportCardButton studentId={data.student.id} termId={defaultTermId} available={reportAvailable} termLabel={termLabel} />
+        )}
       </div>
 
       <div className="grid gap-3 sm:grid-cols-3">

@@ -35,12 +35,14 @@ const ORDER = SYSTEM_ROLES.map((r) => r.key);
 export default async function InvitationsPage({ searchParams }: { searchParams: Promise<{ tab?: string; state?: string }> }) {
   const sp = await searchParams;
   const ctx = await getCtx();
-  if (!ctx.can("people.invite")) notFound();
+  // The Head of IT (signin.manage without people.invite) sees only the sign-in tab.
+  const signInOnly = !ctx.can("people.invite") && ctx.can("signin.manage");
+  if (!ctx.can("people.invite") && !signInOnly) notFound();
   const t = await getTranslations("adminInvites");
   const prefs = await formatPrefs(ctx);
   const { db, locale } = ctx;
   const now = new Date();
-  const tab: Tab = sp.tab === "links" || sp.tab === "signin" ? sp.tab : "invites";
+  const tab: Tab = signInOnly ? "signin" : sp.tab === "links" || sp.tab === "signin" ? sp.tab : "invites";
   const stateFilter = STATES.includes(sp.state as InviteState) ? (sp.state as InviteState) : null;
 
   const [roles, invitations] = await Promise.all([
@@ -61,25 +63,27 @@ export default async function InvitationsPage({ searchParams }: { searchParams: 
   return (
     <PageBody>
       <PageHeader
-        title={t("title")}
-        description={t("subtitle")}
+        title={signInOnly ? t("tabSignIn") : t("title")}
+        description={signInOnly ? undefined : t("subtitle")}
         actions={tab === "invites" ? await inviteActions() : tab === "links" ? <StaffLinkDialog roles={staffRoles} /> : null}
       />
-      <AccessTabs
-        current={tab}
-        label={t("title")}
-        tabs={[
-          { value: "invites", label: t("tabInvites"), href: "/admin/invitations", count: counts.pending },
-          { value: "links", label: t("tabLinks"), href: "/admin/invitations?tab=links" },
-          { value: "signin", label: t("tabSignIn"), href: "/admin/invitations?tab=signin" },
-        ]}
-      />
+      {!signInOnly && (
+        <AccessTabs
+          current={tab}
+          label={t("title")}
+          tabs={[
+            { value: "invites", label: t("tabInvites"), href: "/admin/invitations", count: counts.pending },
+            { value: "links", label: t("tabLinks"), href: "/admin/invitations?tab=links" },
+            { value: "signin", label: t("tabSignIn"), href: "/admin/invitations?tab=signin" },
+          ]}
+        />
+      )}
       {tab === "invites" && (await invitesTab())}
       {tab === "links" && (await linksTab())}
       {tab === "signin" && <SignInReadiness org={ctx.org} />}
       {tab === "signin" && (
         <SignInSettings
-          canEdit={ctx.can("roles.manage")}
+          canEdit={ctx.can("roles.manage") || ctx.can("signin.manage")}
           providers={enabledOAuthProviders()}
           initial={{
             googleSignIn: ctx.org.googleSignIn,

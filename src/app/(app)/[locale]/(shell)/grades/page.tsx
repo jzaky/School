@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { AlertTriangle, BarChart3, BookOpenCheck, ClipboardList, Eye, Layers, Users } from "lucide-react";
+import { AlertTriangle, BarChart3, BookOpenCheck, ClipboardList, Eye, Layers, Send, Users } from "lucide-react";
+import { publishModeOf } from "@/server/grades/publish-mode";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { fmtDate, fmtNumber } from "@/lib/format";
@@ -53,6 +54,7 @@ export default async function GradesPage({ searchParams }: { searchParams: Promi
             highlight={sp.assessment}
             reportAvailable={!!data.term && (await termHasPublished(ctx.db, data.student.id, data.term.id))}
             isParent={ctx.isParent}
+            releasedBySchool={(await publishModeOf(ctx.db)) === "PUBLISHER"}
           />
         )}
       </PageBody>
@@ -117,7 +119,9 @@ export default async function GradesPage({ searchParams }: { searchParams: Promi
       dueLabel: a.dueAt ? fmtDate(prefs, a.dueAt, "short") : null,
       termId: a.termId,
       publishedAt: a.publishedAt ? a.publishedAt.toISOString() : null,
+      readyAt: a.readyAt ? a.readyAt.toISOString() : null,
     }));
+    const publishMode = await publishModeOf(ctx.db);
     const grades = visible.flatMap((a) => a.grades.map((g) => ({ assessmentId: a.id, studentId: g.studentId, score: g.score, excused: g.excused, comment: (locale === "ar" ? g.commentAr || g.commentEn : g.commentEn || g.commentAr) ?? "" })));
     const drafts = visible.filter((a) => !a.publishedAt).length;
     const termChips = [
@@ -148,6 +152,12 @@ export default async function GradesPage({ searchParams }: { searchParams: Promi
             {t("viewOnlyBody")}
           </div>
         )}
+        {book.canEdit && publishMode === "PUBLISHER" && !ctx.can("grades.publish") && (
+          <div className="flex items-start gap-2 rounded-lg border border-brand/20 bg-brand-soft/40 px-3 py-2 text-sm" data-testid="publisher-mode-note">
+            <Send className="mt-0.5 size-4 shrink-0 text-brand" />
+            {t("publisherModeNote")}
+          </div>
+        )}
         {book.students.length === 0 ? (
           <EmptyState icon={<Users className="size-5" />} title={t("noStudents")} body={t("noStudentsBody")} />
         ) : rows.length === 0 ? (
@@ -165,6 +175,8 @@ export default async function GradesPage({ searchParams }: { searchParams: Promi
             terms={terms}
             defaultTermId={current?.id ?? null}
             termId={termId}
+            publishMode={publishMode}
+            canPublish={ctx.can("grades.publish")}
           />
         )}
       </div>

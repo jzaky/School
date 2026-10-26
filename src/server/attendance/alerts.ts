@@ -26,7 +26,9 @@ async function flushWith(effects: Effect[], flush?: (effects: Effect[]) => Promi
   await f(effects);
 }
 
-export async function runPersistentAlerts(orgId: string, opts: { now?: Date; flush?: (effects: Effect[]) => Promise<void> } = {}) {
+type AlertOpts = { now?: Date; flush?: (effects: Effect[]) => Promise<void>; /** The demo seed: record notifications without sending. */ quiet?: boolean };
+
+export async function runPersistentAlerts(orgId: string, opts: AlertOpts = {}) {
   const now = opts.now ?? new Date();
   const db = tenantDb(orgId);
   const org = await db.organization.findUnique({ where: { id: orgId }, select: { timezone: true } });
@@ -50,7 +52,7 @@ export async function runPersistentAlerts(orgId: string, opts: { now?: Date; flu
       if (recovered.length) await tx.attendanceAlert.updateMany({ where: { id: { in: recovered.map((r) => r.id) } }, data: { resolvedAt: now } });
       if (!fresh.length) return;
       await ensureFollowUpTemplates(tx, orgId);
-      const ec = execCtx(tx, orgId, { now, effects });
+      const ec = execCtx(tx, orgId, { now, effects, quiet: opts.quiet });
       const homerooms = await tx.enrollment.findMany({ where: { orgId, studentId: { in: fresh.map((r) => r.id) }, status: "ACTIVE", class: { isHomeroom: true, academicYearId: year!.id } }, select: { studentId: true, class: { select: { teacherMembershipId: true } } } });
       for (const r of fresh) {
         const claim = await tx.attendanceAlert.createMany({ data: [{ orgId, studentId: r.id, kind: "PERSISTENT", periodId: term.id, percent: round1(r.pct ?? 0), threshold: settings.persistentThreshold, possible: r.tally.possible, createdAt: now }], skipDuplicates: true });
@@ -123,7 +125,7 @@ export async function limitStanding(db: TenantDb, settings: Settings, opts: { ti
 }
 
 /** Alert the attendance office and heads of year at the warning level and on reaching the limit, once each per year. */
-export async function runLimitAlerts(orgId: string, opts: { now?: Date; flush?: (effects: Effect[]) => Promise<void> } = {}) {
+export async function runLimitAlerts(orgId: string, opts: AlertOpts = {}) {
   const now = opts.now ?? new Date();
   const db = tenantDb(orgId);
   const org = await db.organization.findUnique({ where: { id: orgId }, select: { timezone: true, weekDays: true } });
@@ -139,7 +141,7 @@ export async function runLimitAlerts(orgId: string, opts: { now?: Date; flush?: 
     orgId,
     async (tx) => {
       await ensureFollowUpTemplates(tx, orgId);
-      const ec = execCtx(tx, orgId, { now, effects });
+      const ec = execCtx(tx, orgId, { now, effects, quiet: opts.quiet });
       const office = (await tx.membership.findMany({ where: { orgId, status: "ACTIVE", roles: { some: { role: { permissions: { has: "attendance.manage" } } } } }, select: { id: true } })).map((m) => m.id);
       const students = await tx.student.findMany({ where: { orgId, id: { in: rows.map((r) => r.studentId) } }, select: { id: true, gradeLevel: true, firstNameEn: true, lastNameEn: true, firstNameAr: true, lastNameAr: true } });
       for (const r of rows) {
@@ -174,7 +176,7 @@ export async function runLimitAlerts(orgId: string, opts: { now?: Date; flush?: 
 }
 
 /** The hourly worker job: both kinds of alert. */
-export async function runAttendanceAlerts(orgId: string, opts: { now?: Date; flush?: (effects: Effect[]) => Promise<void> } = {}) {
+export async function runAttendanceAlerts(orgId: string, opts: AlertOpts = {}) {
   const persistent = await runPersistentAlerts(orgId, opts);
   const limits = await runLimitAlerts(orgId, opts);
   return { persistent, limits };

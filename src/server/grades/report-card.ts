@@ -95,7 +95,7 @@ export async function buildReportCard(db: TenantDb, studentId: string, termId: s
 }
 
 /** Create (or add a new version to) the student's report card document for a term. */
-export async function generateReportCard(v: GradeViewer, studentId: string, termId: string): Promise<{ ok: true; documentId: string } | { ok: false; error: string }> {
+export async function generateReportCard(v: GradeViewer, studentId: string, termId: string): Promise<{ ok: true; documentId: string; held: boolean } | { ok: false; error: string }> {
   if (!(await canCreateReportCard(v, studentId, termId))) return { ok: false, error: "forbidden" };
   const data = await buildReportCard(v.db, studentId, termId);
   if (!data) return { ok: false, error: "notFound" };
@@ -140,5 +140,5 @@ export async function generateReportCard(v: GradeViewer, studentId: string, term
     await audit(tx, v.orgId, { actorId: v.membershipId, action: "grades.report_card", entityType: "Document", entityId: doc.id, meta: { termId, version: version.version, held } });
     return doc.id;
   });
-  return { ok: true, documentId };
+  return { ok: true, documentId, held };
 }

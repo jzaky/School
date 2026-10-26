@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { bandFor, mean, parsePasted, parseScore, percent, weightedAverage, type Band } from "@/server/grades/calc";
-import { deleteAssessmentAction, generateReportCardAction, saveGradesAction, setPublishedAction } from "@/server/grades/actions";
+import { deleteAssessmentAction, generateReportCardAction, saveGradesAction, setPublishedAction, setReadyAction } from "@/server/grades/actions";
 import { AssessmentDialog, type AssessmentRow, type TermOption } from "./assessment-dialog";
 
 export type GridStudent = { id: string; name: string; studentNo: string };
@@ -41,6 +41,8 @@ export function GradebookGrid({
   terms,
   defaultTermId,
   termId,
+  publishMode = "TEACHER",
+  canPublish = false,
 }: {
   classId: string;
   canEdit: boolean;
@@ -52,7 +54,11 @@ export function GradebookGrid({
   terms: TermOption[];
   defaultTermId: string | null;
   termId: string | null;
+  /** PUBLISHER: teachers mark work ready and a publisher releases it (src/server/grades/publishing.ts). */
+  publishMode?: "TEACHER" | "PUBLISHER";
+  canPublish?: boolean;
 }) {
+  const submitsOnly = publishMode === "PUBLISHER" && !canPublish;
   const t = useTranslations("grades");
   const router = useRouter();
   const rtl = locale === "ar";
@@ -280,6 +286,15 @@ export function GradebookGrid({
       router.refresh();
     });
 
+  const doReady = (a: AssessmentRow, ready: boolean) =>
+    start(async () => {
+      if (dirty.current.size) await flush();
+      const res = await setReadyAction(a.id, ready);
+      if (!res.ok) return void toast.error(t.has(`error.${res.error}`) ? t(`error.${res.error}`) : t("error.generic"));
+      toast.success(ready ? t("readyToast") : t("notReadyToast"));
+      router.refresh();
+    });
+
   const doDelete = () =>
     confirmDelete &&
     start(async () => {
@@ -299,7 +314,7 @@ export function GradebookGrid({
       setReportFor(null);
       if (!res.ok) return void toast.error(t("error.generic"));
       window.open(`/api/documents/${res.documentId}/download?inline=1`, "_blank", "noopener");
-      toast.success(t("reportReady"));
+      toast.success(res.held ? t("reportHeld") : t("reportReady"));
     });
   };
 
@@ -376,6 +391,11 @@ export function GradebookGrid({
                             <Eye className="size-3" />
                             {t("published")}
                           </span>
+                        ) : publishMode === "PUBLISHER" && a.readyAt ? (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-brand-soft px-1.5 py-0.5 text-[10px] font-medium text-brand" data-testid="ready-badge">
+                            <Send className="size-3" />
+                            {t("readyBadge")}
+                          </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
                             <EyeOff className="size-3" />
@@ -396,10 +416,24 @@ export function GradebookGrid({
                             <Pencil className="size-4" />
                             {t("edit")}
                           </DropdownMenuItem>
-                          <DropdownMenuItem onSelect={() => setConfirm({ a, publish: !a.publishedAt })} data-testid={a.publishedAt ? "unpublish" : "publish"}>
-                            {a.publishedAt ? <EyeOff className="size-4" /> : <Send className="size-4" />}
-                            {a.publishedAt ? t("unpublish") : t("publish")}
-                          </DropdownMenuItem>
+                          {submitsOnly ? (
+                            a.publishedAt ? (
+                              <DropdownMenuItem disabled>
+                                <Eye className="size-4" />
+                                {t("publishedByPublisher")}
+                              </DropdownMenuItem>
+                            ) : (
+                              <DropdownMenuItem onSelect={() => doReady(a, !a.readyAt)} data-testid={a.readyAt ? "not-ready" : "mark-ready"}>
+                                <Send className="size-4" />
+                                {a.readyAt ? t("notReady") : t("markReady")}
+                              </DropdownMenuItem>
+                            )
+                          ) : (
+                            <DropdownMenuItem onSelect={() => setConfirm({ a, publish: !a.publishedAt })} data-testid={a.publishedAt ? "unpublish" : "publish"}>
+                              {a.publishedAt ? <EyeOff className="size-4" /> : <Send className="size-4" />}
+                              {a.publishedAt ? t("unpublish") : t("publish")}
+                            </DropdownMenuItem>
+                          )}
                           {!a.publishedAt && (
                             <>
                               <DropdownMenuSeparator />

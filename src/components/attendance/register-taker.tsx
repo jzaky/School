@@ -452,7 +452,7 @@ export function RegisterTaker({
       </div>
 
       {canEdit && (
-        <div className="sticky bottom-3 z-20 rounded-xl border bg-card/95 px-3 py-2.5 shadow-lg backdrop-blur sm:px-4">
+        <div className="sticky bottom-20 z-20 rounded-xl border bg-card/95 px-3 py-2.5 shadow-lg backdrop-blur sm:bottom-3 sm:me-40 sm:px-4">
           <div className="flex min-h-9 items-center justify-between gap-3">
             <SaveStatus state={state} waiting={waiting} onRetry={() => void flush()} auditNotice={auditNotice} />
             {doneHref}

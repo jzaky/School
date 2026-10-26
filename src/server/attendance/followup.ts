@@ -84,6 +84,27 @@ const bilingualDate = (k: string) => ({
 });
 const nameOf = (s: { firstNameEn: string; lastNameEn: string; firstNameAr: string; lastNameAr: string }) => ({ en: `${s.firstNameEn} ${s.lastNameEn}`, ar: `${s.firstNameAr || s.firstNameEn} ${s.lastNameAr || s.lastNameEn}` });
 
+/**
+ * Students with an absence report for the day that is still being decided (submitted, in review or waiting for
+ * approval). Their family has already told the school, so no "we have no report" message goes out.
+ */
+export async function studentsWithReport(tx: TenantTx, orgId: string, studentIds: string[], dayKey: string): Promise<Set<string>> {
+  if (!studentIds.length) return new Set();
+  const since = new Date(keyToDate(dayKey).getTime() - 45 * 86_400_000);
+  const rows = await tx.request.findMany({
+    where: { orgId, studentId: { in: studentIds }, service: { key: "absence_request" }, status: { notIn: ["REJECTED", "CANCELLED", "DRAFT"] }, submittedAt: { gte: since } },
+    select: { studentId: true, submission: { select: { data: true } } },
+  });
+  const out = new Set<string>();
+  for (const r of rows) {
+    const d = (r.submission?.data ?? {}) as Record<string, unknown>;
+    const from = typeof d.startDate === "string" ? d.startDate : null;
+    const to = typeof d.endDate === "string" ? d.endDate : from;
+    if (r.studentId && from && to && from <= dayKey && dayKey <= to) out.add(r.studentId);
+  }
+  return out;
+}
+
 /** Create follow-ups for daily marks that are unexplained absences (no report). Safe to repeat. */
 export async function ensureFollowUps(tx: TenantTx, orgId: string, date: Date, codes: Code[]) {
   const absent = await tx.attendanceRecord.findMany({ where: { orgId, date, status: "ABSENT", requestId: null }, select: { studentId: true, code: true, status: true } });
@@ -133,6 +154,7 @@ export async function runFollowUp(orgId: string, opts: { now?: Date; flush?: (ef
       if (!still.length) return;
       await ensureFollowUpTemplates(tx, orgId);
       const held = await studentsHeldFromAutoContact(tx, orgId, still.map((p) => p.studentId));
+      const reported = await studentsWithReport(tx, orgId, still.map((p) => p.studentId), clock.dateKey);
       const students = await tx.student.findMany({
         where: { orgId, id: { in: still.map((p) => p.studentId) } },
         select: { id: true, firstNameEn: true, lastNameEn: true, firstNameAr: true, lastNameAr: true, guardians: { where: { receivesUpdates: true }, select: { guardian: { select: { membershipId: true } } } } },
@@ -143,7 +165,7 @@ export async function runFollowUp(orgId: string, opts: { now?: Date; flush?: (ef
         const s = students.find((x) => x.id === f.studentId);
         if (!s) continue;
         const guardians = s.guardians.map((g) => g.guardian.membershipId).filter(Boolean) as string[];
-        const reason = held.has(f.studentId) ? "HELD" : !settings.autoNotify ? "OFF" : !guardians.length ? "NO_GUARDIAN" : null;
+        const reason = held.has(f.studentId) ? "HELD" : reported.has(f.studentId) ? "REPORT_PENDING" : !settings.autoNotify ? "OFF" : !guardians.length ? "NO_GUARDIAN" : null;
         if (reason) {
           // Claim the decision once: concurrent runs cannot both route it.
           const claim = await tx.attendanceFollowUp.updateMany({ where: { id: f.id, heldReason: null, notifiedAt: null }, data: { heldReason: reason } });
@@ -160,7 +182,7 @@ export async function runFollowUp(orgId: string, opts: { now?: Date; flush?: (ef
               idempotencyBase: `att-held:${f.studentId}:${clock.dateKey}`,
             });
           } else if (reason === "OFF") out.off++;
-          else out.noGuardian++;
+          else if (reason === "NO_GUARDIAN") out.noGuardian++;
           continue;
         }
         const claim = await tx.attendanceFollowUp.updateMany({ where: { id: f.id, notifiedAt: null, heldReason: null }, data: { notifiedAt: now } });

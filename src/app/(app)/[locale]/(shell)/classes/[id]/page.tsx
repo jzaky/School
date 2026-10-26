@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { moduleEnabled } from "@/lib/modules";
 import { getTranslations } from "next-intl/server";
-import { ArrowLeft, CalendarDays, ClipboardList, Users } from "lucide-react";
+import { ArrowLeft, CalendarDays, ClipboardCheck, ClipboardList, Users } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { personName, pick, userName } from "@/lib/i18n-data";
 import { Link } from "@/i18n/navigation";
@@ -56,6 +56,14 @@ export default async function ClassRosterPage({ params, searchParams }: { params
         description={[cls.isHomeroom ? t("homeroom") : cls.subject ? pick(locale, cls.subject.nameEn, cls.subject.nameAr) : "", t("gradeN", { grade: cls.gradeLevel }), cls.room ? t("roomN", { room: cls.room }) : ""].filter(Boolean).join(" · ")}
         actions={
           <>
+            {(ctx.can("attendance.take") || ctx.can("attendance.manage")) && (cls.teacherMembershipId === ctx.membershipId || ctx.can("attendance.manage")) && (
+              <Button asChild>
+                <Link href={cls.isHomeroom ? `/attendance/take?class=${cls.id}&period=0` : "/attendance"} data-testid="take-register">
+                  <ClipboardCheck className="size-4" />
+                  {t("takeRegister")}
+                </Link>
+              </Button>
+            )}
             {moduleEnabled(ctx.org, "grades") && !cls.isHomeroom && (
               <Button asChild variant="outline">
                 <Link href={`/grades?class=${cls.id}`}>
