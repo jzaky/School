@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { BookOpen, CheckCircle2, ClipboardCheck, FileSpreadsheet, GraduationCap, Layers, Target, UserPlus, Users } from "lucide-react";
+import { BookOpen, CalendarClock, CheckCircle2, ClipboardCheck, FileSpreadsheet, GraduationCap, Layers, Target, UserPlus, Users } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
 import { fmtDateTime, fmtNumber } from "@/lib/format";
@@ -10,7 +10,10 @@ import { tenantTx } from "@/lib/tenant-db";
 import { Link } from "@/i18n/navigation";
 import { blocksOf } from "@/lib/registration";
 import { registrationTemplateCsv } from "@/lib/registration-csv";
-import { currentYear, getWindow, offeringsFor, selectionYear } from "@/server/registration/service";
+import { currentYear, offeringsFor, selectionYear } from "@/server/registration/service";
+import { windowsForYears } from "@/server/registration/selection";
+import { windowState } from "@/lib/selection-window";
+import { Button } from "@/components/ui/button";
 import { actorFromCtx } from "@/server/pathway-engine/access";
 import { electiveImpactFor, studentTargets } from "@/server/pathway-engine/levels-service";
 import { DEFAULT_CAPACITY } from "@/server/registration/allocate";
@@ -19,7 +22,7 @@ import { Panel, PanelHeader } from "@/components/app/panel";
 import { EmptyState } from "@/components/app/empty-state";
 import { StatCard } from "@/components/app/stat-card";
 import { Pill } from "@/components/app/badges";
-import { DeleteOfferingButton, MoveStudent, OfferingDialog, RunAllocationButton, WindowControl } from "@/components/registration/admin-controls";
+import { DeleteOfferingButton, MoveStudent, OfferingDialog, RunAllocationButton } from "@/components/registration/admin-controls";
 import { ImportErrorList, RegistrationImporter } from "@/components/registration/registration-import";
 
 export async function generateMetadata() {
@@ -43,7 +46,12 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
     const next = current ? await selectionYear(tx, orgId) : null;
     const pickNext = !!next && sp.year === "next";
     const y = pickNext ? next : current;
-    const w = y ? await getWindow(tx, orgId, new Date(), { yearId: y.id, next: pickNext }) : { eventId: null, deadline: null, open: false };
+    const now = new Date();
+    const ws = y ? await windowsForYears(tx, orgId, [y.id]) : [];
+    const open = ws.filter((x) => windowState(x, now) === "open").sort((a, b) => a.closesAt.getTime() - b.closesAt.getTime());
+    const upcoming = ws.filter((x) => windowState(x, now) === "upcoming").sort((a, b) => a.opensAt.getTime() - b.opensAt.getTime());
+    const closed = ws.filter((x) => windowState(x, now) === "closed").sort((a, b) => b.closesAt.getTime() - a.closesAt.getTime());
+    const w = { open: open.length > 0, openCount: open.length, nextClose: open[0]?.closesAt ?? null, nextOpen: upcoming[0]?.opensAt ?? null, lastClose: closed[0]?.closesAt ?? null, total: ws.length };
     const g = y ? await tx.subjectOffering.groupBy({ by: ["gradeLevel"], where: { orgId, academicYearId: y.id }, orderBy: { gradeLevel: "asc" } }) : [];
     return { year: y, thisYear: current, nextYear: next, isNext: pickNext, win: w, gradeLevels: g.map((x) => x.gradeLevel) };
   });
@@ -89,7 +97,12 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
         description={t("adminSubtitle")}
         actions={
           <>
-            <WindowControl open={win.open} deadlineDate={win.open && win.deadline ? new Date(win.deadline.getTime() + 4 * 3600_000).toISOString().slice(0, 10) : null} yearId={isNext ? year.id : null} />
+            <Button asChild variant="outline">
+              <Link href="/admin/registration/windows" data-testid="window-control">
+                <CalendarClock className="size-4" />
+                {t("windowsLink")}
+              </Link>
+            </Button>
             {!isNext && <RunAllocationButton />}
           </>
         }
@@ -108,7 +121,13 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
           {isNext ? (win.open ? t("next.windowOpen") : t("next.windowClosedPill")) : win.open ? t("windowOpen") : t("windowClosedPill")}
         </Pill>
         <span className="text-muted-foreground">
-          {win.deadline ? (win.open ? t("windowUntil", { date: fmtDateTime(prefs, win.deadline) }) : t("windowClosedOn", { date: fmtDateTime(prefs, win.deadline) })) : t("windowNever")}
+          {win.open && win.nextClose
+            ? t("windowsOpenUntil", { count: win.openCount, date: fmtDateTime(prefs, win.nextClose) })
+            : win.nextOpen
+              ? t("windowsNextOpens", { date: fmtDateTime(prefs, win.nextOpen) })
+              : win.lastClose
+                ? t("windowClosedOn", { date: fmtDateTime(prefs, win.lastClose) })
+                : t("windowNever")}
         </span>
         <span className="text-muted-foreground">·</span>
         <span className="text-muted-foreground" dir="ltr">{pick(locale, year.nameEn, year.nameAr)}</span>

@@ -27,6 +27,7 @@ import { seedCurriculum } from "./academics/curriculum";
 import { seedPathwayEngine } from "./academics/pathway-engine";
 import { seedTranscripts } from "./academics/transcripts";
 import { seedSubjectLevels } from "./academics/subject-levels";
+import { seedCourseSelection } from "./academics/course-selection";
 import { seedGlobalCatalog } from "./catalog";
 import { seedAccess } from "./access";
 import { seedGroupDemo } from "./groups";
@@ -743,6 +744,7 @@ export async function seedDemo(db: PrismaClient, opts: { log?: (m: string) => vo
   await seedPathwayEngine(world);
   await seedTranscripts(world);
   await seedSubjectLevels(world);
+  await seedCourseSelection(world);
   await seedCurriculum(world);
   await seedAccess(world);
   // School group: Horizon Education Group with two small extra schools (demo tenant only).

@@ -1,0 +1,1360 @@
+{
+  "registration": {
+    "windowsLink": [
+      "Selection windows",
+      "فترات اختيار المواد"
+    ],
+    "windowsOpenUntil": [
+      "{count, plural, one {# window open} other {# windows open}}. The next one closes {date}.",
+      "{count, plural, one {فترة واحدة مفتوحة} two {فترتان مفتوحتان} few {# فترات مفتوحة} other {# فترة مفتوحة}}. أقرب إغلاق في {date}."
+    ],
+    "windowsNextOpens": [
+      "No window open now. The next one opens {date}.",
+      "لا توجد فترة مفتوحة الآن. تبدأ الفترة التالية في {date}."
+    ],
+    "error": {
+      "CLOSED": [
+        "Choosing is closed for this grade. Ask your homeroom teacher or counselor if you need a change.",
+        "اختيار المواد مغلق لهذا الصف. تواصل مع معلم الصف أو المرشد الطلابي إذا احتجت إلى تغيير."
+      ],
+      "PARENT_SIGN_OFF_ONLY": [
+        "Your school asks parents to confirm choices, not make them.",
+        "تطلب مدرستك من أولياء الأمور تأكيد الاختيارات لا القيام بها."
+      ],
+      "PARENT_NOT_ALLOWED": [
+        "Your child makes these choices. They can let you help from their course screen.",
+        "يختار ابنك أو ابنتك هذه المواد. يمكنه السماح لك بالمساعدة من شاشة المواد الخاصة به."
+      ],
+      "DRAFT_THIS_YEAR": [
+        "This year's choices are saved in full. Choose every block first.",
+        "تُحفظ اختيارات هذا العام كاملة. اختر من كل مجموعة أولاً."
+      ]
+    }
+  },
+  "selection": {
+    "gradeSpan": [
+      "{from} to {to}",
+      "{from} إلى {to}"
+    ],
+    "calendarTitle": [
+      "Course selection closes: {grades}",
+      "إغلاق اختيار المواد: {grades}"
+    ],
+    "calendarTitleRound": [
+      "Course selection closes: {grades} ({round})",
+      "إغلاق اختيار المواد: {grades} ({round})"
+    ],
+    "calendarDesc": [
+      "Students in {grades} choose their courses for {year}. Choosing opened on {opens} (Dubai time).",
+      "يختار طلاب {grades} موادهم للعام {year}. بدأ الاختيار في {opens} بتوقيت دبي."
+    ],
+    "timeLabel": [
+      "Time",
+      "الوقت"
+    ],
+    "dubaiHint": [
+      "Dubai time (UTC+4).",
+      "بتوقيت دبي (UTC+4)."
+    ],
+    "contact": [
+      "{name} ({role})",
+      "{name} ({role})"
+    ],
+    "role": {
+      "homeroom": [
+        "Homeroom teacher",
+        "معلم الصف"
+      ],
+      "counselor": [
+        "Counselor",
+        "المرشد الطلابي"
+      ],
+      "advisor": [
+        "Career advisor",
+        "مستشار التوجيه المهني"
+      ],
+      "teacher": [
+        "Teacher",
+        "معلم المادة"
+      ],
+      "parent": [
+        "Parent",
+        "ولي الأمر"
+      ],
+      "staff": [
+        "Staff",
+        "من الكادر"
+      ]
+    },
+    "countdown": {
+      "ended": [
+        "now",
+        "الآن"
+      ],
+      "daysHours": [
+        "{days, plural, one {# day} other {# days}}{hours, plural, =0 {} one {, # hour} other {, # hours}}",
+        "{days, plural, one {يوم واحد} two {يومين} few {# أيام} other {# يومًا}}{hours, plural, =0 {} one { وساعة واحدة} two { وساعتين} few { و# ساعات} other { و# ساعة}}"
+      ],
+      "hoursMinutes": [
+        "{hours, plural, one {# hour} other {# hours}}{minutes, plural, =0 {} one {, # minute} other {, # minutes}}",
+        "{hours, plural, one {ساعة واحدة} two {ساعتين} few {# ساعات} other {# ساعة}}{minutes, plural, =0 {} one { ودقيقة واحدة} two { ودقيقتين} few { و# دقائق} other { و# دقيقة}}"
+      ],
+      "minutes": [
+        "{minutes, plural, one {# minute} other {# minutes}}",
+        "{minutes, plural, one {دقيقة واحدة} two {دقيقتين} few {# دقائق} other {# دقيقة}}"
+      ]
+    },
+    "banner": {
+      "openTitle": [
+        "Course selection for {year} is open.",
+        "اختيار المواد للعام {year} مفتوح."
+      ],
+      "closesIn": [
+        "Closes in",
+        "يغلق بعد"
+      ],
+      "openDetail": [
+        "Closes {date}, Dubai time.",
+        "يغلق {date} بتوقيت دبي."
+      ],
+      "upcomingTitle": [
+        "Course selection for {year} opens {date}.",
+        "يبدأ اختيار المواد للعام {year} في {date}."
+      ],
+      "upcomingDetail": [
+        "It closes {date}, Dubai time. You can look at the options now.",
+        "ويغلق {date} بتوقيت دبي. يمكنك الاطلاع على الخيارات الآن."
+      ],
+      "closedTitle": [
+        "Course selection for {year} closed on {date}.",
+        "أُغلق اختيار المواد للعام {year} في {date}."
+      ],
+      "closedAsk": {
+        "self": [
+          "Your choices are locked. To change them, ask {names}.",
+          "اختياراتك مقفلة. لتغييرها تواصل مع {names}."
+        ],
+        "other": [
+          "The choices are locked. To change them, ask {names}.",
+          "الاختيارات مقفلة. لتغييرها تواصل مع {names}."
+        ]
+      },
+      "closedAskSchool": {
+        "self": [
+          "Your choices are locked. To change them, ask your homeroom teacher or counselor.",
+          "اختياراتك مقفلة. لتغييرها تواصل مع معلم الصف أو المرشد الطلابي."
+        ],
+        "other": [
+          "The choices are locked. To change them, ask the homeroom teacher or counselor.",
+          "الاختيارات مقفلة. لتغييرها تواصل مع معلم الصف أو المرشد الطلابي."
+        ]
+      },
+      "noneTitle": [
+        "Course selection for {year} is not scheduled for this grade yet.",
+        "لم يُحدَّد موعد اختيار المواد للعام {year} لهذا الصف بعد."
+      ],
+      "noneDetail": [
+        "The school will announce the dates. You can look at the options now.",
+        "ستعلن المدرسة المواعيد. يمكنك الاطلاع على الخيارات الآن."
+      ],
+      "sessionTitle": [
+        "Choosing is open for {name} right now.",
+        "الاختيار مفتوح الآن لصف {name}."
+      ],
+      "sessionDetail": [
+        "Class session with your teacher until {time}.",
+        "جلسة صفية مع المعلم حتى {time}."
+      ],
+      "exceptionTitle": {
+        "self": [
+          "Your school allowed you to change your choices.",
+          "سمحت لك المدرسة بتغيير اختياراتك."
+        ],
+        "other": [
+          "The school allowed {name} to change these choices.",
+          "سمحت المدرسة لـ {name} بتغيير هذه الاختيارات."
+        ]
+      },
+      "exceptionDetail": [
+        "Until {date}, Dubai time.",
+        "حتى {date} بتوقيت دبي."
+      ],
+      "staffCanEdit": [
+        "You can still change these choices as staff with registration rights. Changes after closing are labelled.",
+        "يمكنك تغيير هذه الاختيارات بصفتك من الكادر المخوّل بالتسجيل. تُوسم التغييرات بعد الإغلاق."
+      ],
+      "requestChange": [
+        "Request a subject change",
+        "طلب تغيير مادة"
+      ],
+      "listSep": [
+        " or ",
+        " أو "
+      ]
+    },
+    "chosenBy": [
+      "Chosen by {by} for {name} on {date}",
+      "اختارها {by} لـ {name} في {date}"
+    ],
+    "behalf": {
+      "title": [
+        "Choosing on behalf of {name}",
+        "الاختيار نيابة عن {name}"
+      ],
+      "allowedByStudent": [
+        "{name} allowed you to help until {date}.",
+        "سمح لك {name} بالمساعدة حتى {date}."
+      ],
+      "allowedBy": [
+        "{by} allowed you to help until {date}.",
+        "سمح لك {by} بالمساعدة حتى {date}."
+      ],
+      "staff": [
+        "You can change these choices as staff with registration rights.",
+        "يمكنك تغيير هذه الاختيارات بصفتك من الكادر المخوّل بالتسجيل."
+      ],
+      "parent": [
+        "You are choosing for your child while choosing is open.",
+        "أنت تختار لابنك أو ابنتك ما دام الاختيار مفتوحًا."
+      ],
+      "recorded": [
+        "Every choice shows who made it.",
+        "يظهر مع كل اختيار اسم من قام به."
+      ]
+    },
+    "staffViewAssist": [
+      "You can see {name}'s choices. Turn on assisted choosing below to choose with them.",
+      "يمكنك الاطلاع على اختيارات {name}. فعّل الاختيار بالمساعدة أدناه لتختار معه."
+    ],
+    "parentNotAllowed": [
+      "{name} makes these choices and can let you help from the course screen, or a teacher can allow it.",
+      "يقوم {name} بهذه الاختيارات، ويمكنه السماح لك بالمساعدة من شاشة المواد، أو يمكن لأحد المعلمين السماح بذلك."
+    ],
+    "parentSignOffOnly": [
+      "Your school asks parents to confirm the choices rather than make them.",
+      "تطلب مدرستك من أولياء الأمور تأكيد الاختيارات بدلًا من القيام بها."
+    ],
+    "readOnly": {
+      "parentNotAllowed": [
+        "{name} makes these choices.",
+        "يقوم {name} بهذه الاختيارات."
+      ],
+      "signOffOnly": [
+        "Parents confirm the choices; the student makes them.",
+        "يؤكد أولياء الأمور الاختيارات ويقوم بها الطالب."
+      ],
+      "upcoming": [
+        "Choosing opens {date}.",
+        "يبدأ الاختيار في {date}."
+      ],
+      "none": [
+        "Choosing has not been scheduled yet.",
+        "لم يُحدَّد موعد الاختيار بعد."
+      ]
+    },
+    "afterClose": [
+      "Changed after closing",
+      "تغيّر بعد الإغلاق"
+    ],
+    "savedByFor": [
+      "Saved by {by} for {name} on {date}, not submitted yet.",
+      "حفظها {by} لـ {name} في {date}، ولم تُقدَّم بعد."
+    ],
+    "savedBy": [
+      "Saved by {by} on {date}, not submitted yet.",
+      "حفظها {by} في {date}، ولم تُقدَّم بعد."
+    ],
+    "submittedByFor": [
+      "Submitted by {by} for {name} on {date}.",
+      "قدّمها {by} لـ {name} في {date}."
+    ],
+    "submittedBy": [
+      "Submitted by {by} on {date}.",
+      "قدّمها {by} في {date}."
+    ],
+    "you": [
+      "you",
+      "أنت"
+    ],
+    "signedOffBy": [
+      "Confirmed by {by} on {date}.",
+      "أكّدها {by} في {date}."
+    ],
+    "signOff": {
+      "prompt": [
+        "Please check {name}'s choices and confirm them.",
+        "يرجى مراجعة اختيارات {name} وتأكيدها."
+      ],
+      "waiting": [
+        "Waiting for a parent to confirm.",
+        "بانتظار تأكيد ولي الأمر."
+      ],
+      "sameParent": [
+        "You made these choices, so {name} or another parent confirms them.",
+        "أنت من قام بهذه الاختيارات، لذا يؤكدها {name} أو ولي أمر آخر."
+      ],
+      "button": [
+        "Confirm these choices",
+        "تأكيد هذه الاختيارات"
+      ],
+      "done": [
+        "Choices confirmed for {name}",
+        "تم تأكيد اختيارات {name}"
+      ]
+    },
+    "status": {
+      "not_started": [
+        "Not started",
+        "لم يبدأ"
+      ],
+      "in_progress": [
+        "In progress",
+        "قيد الاختيار"
+      ],
+      "submitted": [
+        "Submitted",
+        "مُقدَّمة"
+      ],
+      "signed_off": [
+        "Signed off",
+        "مؤكَّدة"
+      ]
+    },
+    "picker": {
+      "saveDraft": [
+        "Save and finish later",
+        "حفظ وإكمال لاحقًا"
+      ],
+      "draftSaved": [
+        "Saved. Finish the other blocks before choosing closes.",
+        "تم الحفظ. أكمل باقي المجموعات قبل إغلاق الاختيار."
+      ]
+    },
+    "help": {
+      "title": [
+        "Let someone help me choose",
+        "اسمح لأحد بمساعدتي في الاختيار"
+      ],
+      "body": [
+        "They can make course choices for you on their phone until the date you set. You can stop it at any time, and every choice shows who made it.",
+        "يمكنه اختيار المواد لك من هاتفه حتى التاريخ الذي تحدده. يمكنك إيقاف ذلك في أي وقت، ويظهر مع كل اختيار اسم من قام به."
+      ],
+      "staffTitle": [
+        "Assisted choosing for {name}",
+        "الاختيار بالمساعدة لـ {name}"
+      ],
+      "staffBody": [
+        "Choose who can make course choices for {name}. {name} and their parents are told who can help and until when.",
+        "حدّد من يمكنه اختيار المواد نيابة عن {name}. يُبلَّغ {name} وأولياء أمره بمن يمكنه المساعدة وحتى متى."
+      ],
+      "pickLabel": [
+        "Who can help",
+        "من يمكنه المساعدة"
+      ],
+      "groupStaff": [
+        "Teachers and advisors",
+        "المعلمون والمرشدون"
+      ],
+      "groupParents": [
+        "Parents",
+        "أولياء الأمور"
+      ],
+      "noCandidates": [
+        "No teacher, counselor or advisor is linked to you yet. Ask the school office.",
+        "لا يوجد معلم أو مرشد مرتبط بك بعد. تواصل مع إدارة المدرسة."
+      ],
+      "untilLabel": [
+        "Until",
+        "حتى"
+      ],
+      "untilDefault": [
+        "Leave the date empty to allow it until choosing closes.",
+        "اترك التاريخ فارغًا للسماح بذلك حتى إغلاق الاختيار."
+      ],
+      "reasonLabel": [
+        "Note (optional)",
+        "ملاحظة (اختيارية)"
+      ],
+      "reasonPlaceholder": [
+        "For example: no phone at home, so we choose together in class.",
+        "مثال: لا يوجد هاتف في المنزل، لذا نختار معًا في الصف."
+      ],
+      "scopeNote": [
+        "This covers course selection only. It never shows cases, wellbeing or medical information.",
+        "يقتصر ذلك على اختيار المواد فقط، ولا يعرض أبدًا الحالات أو معلومات الرفاه أو المعلومات الطبية."
+      ],
+      "cancel": [
+        "Cancel",
+        "إلغاء"
+      ],
+      "save": [
+        "Allow",
+        "السماح"
+      ],
+      "granted": [
+        "{name} can now help",
+        "يمكن لـ {name} المساعدة الآن"
+      ],
+      "cardTitle": [
+        "Help with choosing",
+        "المساعدة في الاختيار"
+      ],
+      "cardTitleStaff": [
+        "Assisted choosing",
+        "الاختيار بالمساعدة"
+      ],
+      "cardActive": [
+        "These people can choose for you. Their name shows on every choice they make.",
+        "يمكن لهؤلاء الاختيار نيابة عنك، ويظهر اسمهم مع كل اختيار يقومون به."
+      ],
+      "cardEmpty": [
+        "No phone at hand, or want help? Let a teacher, your counselor or a parent choose with you.",
+        "لا يتوفر لديك هاتف أو تحتاج إلى مساعدة؟ اسمح لمعلم أو للمرشد أو لولي أمرك بالاختيار معك."
+      ],
+      "cardActiveStaff": [
+        "These people can choose for {name}.",
+        "يمكن لهؤلاء الاختيار نيابة عن {name}."
+      ],
+      "cardEmptyStaff": [
+        "Nobody is helping {name} choose yet.",
+        "لا أحد يساعد {name} في الاختيار حتى الآن."
+      ],
+      "letHelp": [
+        "Let someone help me",
+        "اسمح لأحد بمساعدتي"
+      ],
+      "turnOn": [
+        "Turn on assisted choosing",
+        "تفعيل الاختيار بالمساعدة"
+      ],
+      "untilShort": [
+        "until {date}",
+        "حتى {date}"
+      ],
+      "allowedBy": [
+        "Allowed by {name}",
+        "بسماح من {name}"
+      ],
+      "revoke": [
+        "Stop",
+        "إيقاف"
+      ],
+      "revokeTitle": [
+        "Stop {name} helping?",
+        "إيقاف مساعدة {name}؟"
+      ],
+      "revokeBody": [
+        "{name} will no longer be able to make choices. Choices already made stay as they are.",
+        "لن يتمكن {name} من القيام بأي اختيار بعد الآن، وتبقى الاختيارات السابقة كما هي."
+      ],
+      "revoked": [
+        "{name} can no longer help",
+        "لم يعد بإمكان {name} المساعدة"
+      ]
+    },
+    "exception": {
+      "button": [
+        "Allow changes",
+        "السماح بالتغيير"
+      ],
+      "title": [
+        "Allow changes for {name}",
+        "السماح بالتغيير لـ {name}"
+      ],
+      "body": [
+        "{name} can change these choices until the time you set, even when choosing is closed. {name} and their parents are told.",
+        "يمكن لـ {name} تغيير هذه الاختيارات حتى الوقت الذي تحدده حتى لو كان الاختيار مغلقًا، ويُبلَّغ {name} وأولياء أمره بذلك."
+      ],
+      "untilLabel": [
+        "Allow changes until",
+        "السماح بالتغيير حتى"
+      ],
+      "reasonLabel": [
+        "Reason",
+        "السبب"
+      ],
+      "reasonPlaceholder": [
+        "For example: AP Chemistry was full in Round 1, choosing again.",
+        "مثال: كانت مادة الكيمياء AP مكتملة في الجولة الأولى، لذا يختار مجددًا."
+      ],
+      "reasonHint": [
+        "Required. It is kept in the audit log.",
+        "مطلوب، ويُحفظ في سجل التدقيق."
+      ],
+      "cancel": [
+        "Cancel",
+        "إلغاء"
+      ],
+      "save": [
+        "Allow changes",
+        "السماح بالتغيير"
+      ],
+      "granted": [
+        "Changes allowed for {name}",
+        "تم السماح بالتغيير لـ {name}"
+      ],
+      "revoked": [
+        "Late changes ended",
+        "انتهى السماح بالتغيير"
+      ],
+      "revoke": [
+        "End",
+        "إنهاء"
+      ],
+      "cardTitle": [
+        "Late changes",
+        "التغيير بعد الموعد"
+      ],
+      "cardActive": [
+        "{name} can change choices outside the window.",
+        "يمكن لـ {name} تغيير الاختيارات خارج فترة الاختيار."
+      ],
+      "cardEmpty": [
+        "Let {name} change choices outside the window, until a time you set.",
+        "اسمح لـ {name} بتغيير الاختيارات خارج فترة الاختيار حتى وقت تحدده."
+      ],
+      "until": [
+        "Allowed until {date}",
+        "مسموح حتى {date}"
+      ],
+      "byReason": [
+        "{by}: {reason}",
+        "{by}: {reason}"
+      ]
+    },
+    "error": {
+      "generic": [
+        "Something went wrong. Please try again.",
+        "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
+      ],
+      "FORBIDDEN": [
+        "You do not have permission to do this.",
+        "ليست لديك صلاحية للقيام بذلك."
+      ],
+      "INVALID": [
+        "Please check the details and try again.",
+        "يُرجى مراجعة البيانات والمحاولة مرة أخرى."
+      ],
+      "NOT_FOUND": [
+        "This record no longer exists.",
+        "لم يعد هذا السجل موجودًا."
+      ],
+      "NO_YEAR": [
+        "There is no academic year for this.",
+        "لا يوجد عام دراسي لهذا الغرض."
+      ],
+      "BAD_RANGE": [
+        "The closing time must come after the opening time.",
+        "يجب أن يكون وقت الإغلاق بعد وقت البدء."
+      ],
+      "NO_GRADES": [
+        "Pick at least one grade.",
+        "اختر صفًا واحدًا على الأقل."
+      ],
+      "OVERLAP": [
+        "Another window for one of these grades overlaps these dates. Change the dates or the grades.",
+        "توجد فترة أخرى لأحد هذه الصفوف تتداخل مع هذه التواريخ. غيّر التواريخ أو الصفوف."
+      ],
+      "ALREADY_CLOSED": [
+        "This window is already closed.",
+        "هذه الفترة مغلقة بالفعل."
+      ],
+      "REASON_REQUIRED": [
+        "Please write a reason (at least 3 characters).",
+        "يرجى كتابة السبب (3 أحرف على الأقل)."
+      ],
+      "BAD_DATE": [
+        "Choose a time in the future, within the next 120 days.",
+        "اختر وقتًا في المستقبل خلال 120 يومًا."
+      ],
+      "NOT_ALLOWED_HELPER": [
+        "Only the student's own teachers, counselor or advisor can be chosen.",
+        "يمكن اختيار معلمي الطالب أو مرشده أو مستشاره فقط."
+      ],
+      "PARENTS_CANNOT_CHOOSE": [
+        "Your school asks parents to confirm choices, not make them.",
+        "تطلب مدرستك من أولياء الأمور تأكيد الاختيارات لا القيام بها."
+      ],
+      "PARENTS_ALWAYS": [
+        "Parents at this school can already choose while choosing is open.",
+        "يمكن لأولياء الأمور في هذه المدرسة الاختيار بالفعل ما دام الاختيار مفتوحًا."
+      ],
+      "NO_WINDOW": [
+        "There is no open or upcoming window. Choose an end date.",
+        "لا توجد فترة مفتوحة أو قادمة. اختر تاريخ انتهاء."
+      ],
+      "SELF": [
+        "Choose someone else.",
+        "اختر شخصًا آخر."
+      ],
+      "NOT_REQUIRED": [
+        "This school does not ask for sign-off.",
+        "لا تطلب هذه المدرسة تأكيد الاختيارات."
+      ],
+      "NOTHING_TO_SIGN": [
+        "There is nothing waiting for confirmation.",
+        "لا يوجد ما ينتظر التأكيد."
+      ],
+      "SAME_PARENT": [
+        "You made these choices, so another parent or the student confirms them.",
+        "أنت من قام بهذه الاختيارات، لذا يؤكدها ولي أمر آخر أو الطالب."
+      ],
+      "NOT_OPEN": [
+        "This window is not open.",
+        "هذه الفترة غير مفتوحة."
+      ],
+      "CLOSED": [
+        "Choosing is closed.",
+        "الاختيار مغلق."
+      ]
+    },
+    "windows": {
+      "title": [
+        "Course selection windows",
+        "فترات اختيار المواد"
+      ],
+      "subtitle": [
+        "When each grade chooses courses, in Dubai time. Students and parents can change choices only while a window is open.",
+        "مواعيد اختيار المواد لكل صف بتوقيت دبي. لا يمكن للطلاب وأولياء الأمور تغيير الاختيارات إلا أثناء فترة مفتوحة."
+      ],
+      "back": [
+        "Subject registration",
+        "تسجيل المواد"
+      ],
+      "new": [
+        "New window",
+        "فترة جديدة"
+      ],
+      "edit": [
+        "Edit",
+        "تعديل"
+      ],
+      "newTitle": [
+        "New selection window",
+        "فترة اختيار جديدة"
+      ],
+      "editTitle": [
+        "Edit selection window",
+        "تعديل فترة الاختيار"
+      ],
+      "dialogBody": [
+        "Students in the grades you pick can choose between the opening and closing times. Run another round later for students whose first choices were full.",
+        "يمكن لطلاب الصفوف المختارة الاختيار بين وقتي البدء والإغلاق. ويمكنك فتح جولة أخرى لاحقًا للطلاب الذين اكتملت خياراتهم الأولى."
+      ],
+      "yearLabel": [
+        "School year",
+        "العام الدراسي"
+      ],
+      "yearNext": [
+        "{year}: next year",
+        "{year}: العام القادم"
+      ],
+      "yearCurrent": [
+        "{year}: this year",
+        "{year}: العام الحالي"
+      ],
+      "gradesLabel": [
+        "Grades",
+        "الصفوف"
+      ],
+      "gradesHint": [
+        "The grades students are in now.",
+        "الصفوف التي يدرس فيها الطلاب حاليًا."
+      ],
+      "gradesHintNext": [
+        "The grades students are in now. A Grade 9 student chooses Grade 10 courses for next year.",
+        "الصفوف التي يدرس فيها الطلاب حاليًا. يختار طالب الصف التاسع مواد الصف العاشر للعام القادم."
+      ],
+      "opensLabel": [
+        "Opens",
+        "يبدأ"
+      ],
+      "closesLabel": [
+        "Closes",
+        "يغلق"
+      ],
+      "opensTime": [
+        "Opening time",
+        "وقت البدء"
+      ],
+      "closesTime": [
+        "Closing time",
+        "وقت الإغلاق"
+      ],
+      "dubaiHint": [
+        "Dates and times are in Dubai time (UTC+4). Choosing is open from the opening time until the closing time.",
+        "التواريخ والأوقات بتوقيت دبي (UTC+4). يكون الاختيار مفتوحًا من وقت البدء حتى وقت الإغلاق."
+      ],
+      "roundEn": [
+        "Round name in English (optional)",
+        "اسم الجولة بالإنجليزية (اختياري)"
+      ],
+      "roundAr": [
+        "Round name in Arabic (optional)",
+        "اسم الجولة بالعربية (اختياري)"
+      ],
+      "roundEnPlaceholder": [
+        "Round 1",
+        "مثال: Round 1"
+      ],
+      "roundArPlaceholder": [
+        "الجولة الأولى",
+        "الجولة الأولى"
+      ],
+      "cancel": [
+        "Cancel",
+        "إلغاء"
+      ],
+      "save": [
+        "Save window",
+        "حفظ الفترة"
+      ],
+      "saved": [
+        "Window saved",
+        "تم حفظ الفترة"
+      ],
+      "closeNow": [
+        "Close now",
+        "إغلاق الآن"
+      ],
+      "closeTitle": [
+        "Close this window now?",
+        "إغلاق هذه الفترة الآن؟"
+      ],
+      "closeBody": [
+        "Students and parents can no longer change choices. Staff with registration rights still can, and their changes are labelled.",
+        "لن يتمكن الطلاب وأولياء الأمور من تغيير الاختيارات. ويظل بإمكان الكادر المخوّل بالتسجيل ذلك مع وسم تغييراتهم."
+      ],
+      "closed": [
+        "Window closed",
+        "تم إغلاق الفترة"
+      ],
+      "gradeSpan": [
+        "{from} to {to}",
+        "{from} إلى {to}"
+      ],
+      "state": {
+        "open": [
+          "Open",
+          "مفتوحة"
+        ],
+        "upcoming": [
+          "Not open yet",
+          "لم تبدأ بعد"
+        ],
+        "closed": [
+          "Closed",
+          "مغلقة"
+        ]
+      },
+      "range": [
+        "{opens} to {closes}",
+        "من {opens} إلى {closes}"
+      ],
+      "done": [
+        "{done} of {total} finished",
+        "أنهى {done} من {total}"
+      ],
+      "overview": [
+        "Progress",
+        "التقدم"
+      ],
+      "empty": [
+        "No windows for this year",
+        "لا توجد فترات لهذا العام"
+      ],
+      "emptyBody": [
+        "Add a window so students know when to choose.",
+        "أضف فترة ليعرف الطلاب موعد الاختيار."
+      ],
+      "noYear": [
+        "No academic year yet",
+        "لا يوجد عام دراسي بعد"
+      ],
+      "noYearBody": [
+        "Add the academic year in School setup first.",
+        "أضف العام الدراسي من إعدادات المدرسة أولًا."
+      ],
+      "settingsTitle": [
+        "Rules for this school",
+        "قواعد هذه المدرسة"
+      ],
+      "settingsBody": [
+        "Who can make choices, and whether a parent confirms them.",
+        "من يمكنه الاختيار، وهل يؤكد ولي الأمر الاختيارات."
+      ]
+    },
+    "settings": {
+      "parentChoice": [
+        "Parents can make course choices",
+        "يمكن لأولياء الأمور اختيار المواد"
+      ],
+      "mode": {
+        "ALWAYS": {
+          "label": [
+            "Always",
+            "دائمًا"
+          ],
+          "help": [
+            "Parents can choose whenever choosing is open.",
+            "يمكن لأولياء الأمور الاختيار ما دام الاختيار مفتوحًا."
+          ]
+        },
+        "WHEN_ALLOWED": {
+          "label": [
+            "Only when allowed",
+            "عند السماح فقط"
+          ],
+          "help": [
+            "The student, a teacher or an admin allows a named parent first.",
+            "يسمح الطالب أو المعلم أو الإدارة لولي أمر محدد أولًا."
+          ]
+        },
+        "NEVER": {
+          "label": [
+            "Never, sign-off only",
+            "أبدًا، التأكيد فقط"
+          ],
+          "help": [
+            "Parents confirm the choices but never make them.",
+            "يؤكد أولياء الأمور الاختيارات ولا يقومون بها."
+          ]
+        }
+      },
+      "signOff": [
+        "A parent confirms the choices",
+        "يؤكد ولي الأمر الاختيارات"
+      ],
+      "signOffHelp": [
+        "After the choices are submitted, a parent signs them off.",
+        "بعد تقديم الاختيارات، يقوم ولي الأمر بتأكيدها."
+      ],
+      "parentSigns": [
+        "A parent's own choices count as their sign-off",
+        "اختيارات ولي الأمر تُعدّ تأكيدًا منه"
+      ],
+      "parentSignsHelp": [
+        "When this is off, another parent or the student confirms what a parent chose.",
+        "عند إيقاف هذا الخيار، يؤكد ولي أمر آخر أو الطالب ما اختاره ولي الأمر."
+      ],
+      "save": [
+        "Save rules",
+        "حفظ القواعد"
+      ],
+      "saved": [
+        "Rules saved",
+        "تم حفظ القواعد"
+      ]
+    },
+    "overview": {
+      "title": [
+        "Selection progress",
+        "تقدم اختيار المواد"
+      ],
+      "titleRound": [
+        "{grades}, {round}",
+        "{grades}، {round}"
+      ],
+      "subtitle": [
+        "{opens} to {closes}, Dubai time.",
+        "من {opens} إلى {closes} بتوقيت دبي."
+      ],
+      "back": [
+        "Selection windows",
+        "فترات الاختيار"
+      ],
+      "export": [
+        "Export CSV",
+        "تصدير CSV"
+      ],
+      "remind": [
+        "{count, plural, =0 {Everyone has finished} one {Remind # student not finished} other {Remind # students not finished}}",
+        "{count, plural, =0 {أنهى الجميع} one {تذكير طالب واحد لم ينهِ} two {تذكير طالبين لم ينهيا} few {تذكير # طلاب لم ينهوا} other {تذكير # طالبًا لم ينهوا}}"
+      ],
+      "reminded": [
+        "Reminders sent about {students} students to {people} people.",
+        "أُرسلت تذكيرات بشأن {students} من الطلاب إلى {people} من الأشخاص."
+      ],
+      "remindedAlready": [
+        "Everyone not finished was already reminded today.",
+        "تم تذكير كل من لم ينهِ اليوم بالفعل."
+      ],
+      "cohort": [
+        "{count, plural, one {# student chooses} other {# students choose}} in this window",
+        "{count, plural, one {يختار طالب واحد} two {يختار طالبان} few {يختار # طلاب} other {يختار # طالبًا}} في هذه الفترة"
+      ],
+      "stat": {
+        "not_started": [
+          "Not started",
+          "لم يبدأ"
+        ],
+        "in_progress": [
+          "In progress",
+          "قيد الاختيار"
+        ],
+        "submitted": [
+          "Submitted",
+          "مُقدَّمة"
+        ],
+        "signed_off": [
+          "Signed off",
+          "مؤكَّدة"
+        ]
+      },
+      "emptyCohort": [
+        "No students choose in this window",
+        "لا يوجد طلاب يختارون في هذه الفترة"
+      ],
+      "emptyCohortBody": [
+        "No student in these grades has courses to choose for this year yet. Add offerings first.",
+        "لا توجد مواد للاختيار لطلاب هذه الصفوف لهذا العام بعد. أضف المواد المطروحة أولًا."
+      ],
+      "byHomeroom": [
+        "Progress by homeroom",
+        "التقدم حسب الصف"
+      ],
+      "doneOf": [
+        "{done} of {total} finished",
+        "أنهى {done} من {total}"
+      ],
+      "noHomeroom": [
+        "{grade}, no homeroom",
+        "{grade}، دون صف"
+      ],
+      "students": [
+        "Students",
+        "الطلاب"
+      ],
+      "studentsBody": [
+        "{count, plural, one {# student} other {# students}} shown",
+        "{count, plural, one {طالب واحد معروض} two {طالبان معروضان} few {# طلاب معروضون} other {# طالبًا معروضًا}}"
+      ],
+      "allGrades": [
+        "All grades",
+        "كل الصفوف"
+      ],
+      "noMatch": [
+        "No students match these filters.",
+        "لا يوجد طلاب يطابقون هذه التصفية."
+      ],
+      "blocks": [
+        "{chosen} of {total} blocks",
+        "{chosen} من {total} مجموعات"
+      ],
+      "by": [
+        "last change by {name}",
+        "آخر تغيير بواسطة {name}"
+      ],
+      "afterClose": [
+        "Changed after closing",
+        "تغيّر بعد الإغلاق"
+      ],
+      "open": [
+        "Open",
+        "فتح"
+      ],
+      "exceptions": [
+        "Late changes",
+        "التغيير بعد الموعد"
+      ],
+      "exceptionsBody": [
+        "Students allowed to change choices outside the window.",
+        "الطلاب المسموح لهم بتغيير الاختيارات خارج الفترة."
+      ],
+      "noExceptions": [
+        "None right now.",
+        "لا يوجد حاليًا."
+      ],
+      "exceptionLine": [
+        "Allowed by {by} until {date}",
+        "بسماح من {by} حتى {date}"
+      ],
+      "assisted": [
+        "Assisted choosing",
+        "الاختيار بالمساعدة"
+      ],
+      "assistedBody": [
+        "Who can choose for a student, and until when.",
+        "من يمكنه الاختيار نيابة عن الطالب وحتى متى."
+      ],
+      "noAssisted": [
+        "None right now.",
+        "لا يوجد حاليًا."
+      ],
+      "helperLine": [
+        "{helper} for {student}",
+        "{helper} لـ {student}"
+      ],
+      "grantedByStudent": [
+        "Allowed by the student until {date}",
+        "بسماح من الطالب حتى {date}"
+      ],
+      "grantedBy": [
+        "Allowed by {by} until {date}",
+        "بسماح من {by} حتى {date}"
+      ],
+      "parent": [
+        "Parent",
+        "ولي الأمر"
+      ],
+      "sessions": [
+        "Class sessions now",
+        "الجلسات الصفية الآن"
+      ],
+      "sessionsBody": [
+        "Homerooms choosing together right now.",
+        "الصفوف التي تختار معًا الآن."
+      ],
+      "noSessions": [
+        "None right now.",
+        "لا يوجد حاليًا."
+      ],
+      "sessionLine": [
+        "Started by {by}, until {date}",
+        "بدأها {by}، حتى {date}"
+      ]
+    },
+    "session": {
+      "title": [
+        "Class choosing sessions",
+        "جلسات الاختيار الصفية"
+      ],
+      "subtitle": [
+        "Open choosing for your homeroom for a set time, for example during a homeroom period. Students scan the QR code on their phones.",
+        "افتح الاختيار لصفك لمدة محددة، مثلًا خلال حصة الصف. يمسح الطلاب رمز QR بهواتفهم."
+      ],
+      "back": [
+        "Help a student choose",
+        "مساعدة طالب في الاختيار"
+      ],
+      "noClasses": [
+        "No homeroom class",
+        "لا يوجد صف مسند إليك"
+      ],
+      "noClassesBody": [
+        "Class sessions are for homeroom teachers. Ask the school office if your homeroom is missing.",
+        "الجلسات الصفية مخصصة لمعلمي الصفوف. تواصل مع إدارة المدرسة إذا لم يظهر صفك."
+      ],
+      "studentsN": [
+        "{count, plural, one {# student} other {# students}}",
+        "{count, plural, one {طالب واحد} two {طالبان} few {# طلاب} other {# طالبًا}}"
+      ],
+      "forYear": [
+        "choosing for {year}",
+        "الاختيار للعام {year}"
+      ],
+      "live": [
+        "Live",
+        "مباشر"
+      ],
+      "liveUntil": [
+        "Live until {time}. Open the live screen",
+        "مباشر حتى {time}. افتح الشاشة المباشرة"
+      ],
+      "duration": [
+        "How long",
+        "المدة"
+      ],
+      "minutes": [
+        "{count} min",
+        "{count} د"
+      ],
+      "start": [
+        "Start session",
+        "بدء الجلسة"
+      ],
+      "history": [
+        "Earlier sessions",
+        "جلسات سابقة"
+      ],
+      "historyLine": [
+        "{start} to {end}",
+        "{start} إلى {end}"
+      ],
+      "liveTitle": [
+        "Class session",
+        "جلسة صفية"
+      ],
+      "liveHeading": [
+        "Choosing session: {name}",
+        "جلسة الاختيار: {name}"
+      ],
+      "liveSubtitle": [
+        "Course selection for {year}",
+        "اختيار المواد للعام {year}"
+      ],
+      "ended": [
+        "Ended",
+        "انتهت"
+      ],
+      "endedBody": [
+        "This session has ended. Students can change choices only while their window is open.",
+        "انتهت هذه الجلسة. لا يمكن للطلاب تغيير الاختيارات إلا أثناء فترتهم المفتوحة."
+      ],
+      "scan": [
+        "Scan to open your course choices",
+        "امسح الرمز لفتح اختيارات موادك"
+      ],
+      "qrLabel": [
+        "QR code for the {name} choosing session",
+        "رمز QR لجلسة اختيار صف {name}"
+      ],
+      "code": [
+        "Code",
+        "الرمز"
+      ],
+      "copied": [
+        "Link copied",
+        "تم نسخ الرابط"
+      ],
+      "copyFailed": [
+        "Could not copy the link",
+        "تعذّر نسخ الرابط"
+      ],
+      "classScreen": [
+        "Class screen",
+        "شاشة الصف"
+      ],
+      "end": [
+        "End session",
+        "إنهاء الجلسة"
+      ],
+      "endTitle": [
+        "End the session now?",
+        "إنهاء الجلسة الآن؟"
+      ],
+      "endBody": [
+        "Students in {name} can no longer change choices through this session.",
+        "لن يتمكن طلاب صف {name} من تغيير الاختيارات عبر هذه الجلسة."
+      ],
+      "endedToast": [
+        "Session ended",
+        "انتهت الجلسة"
+      ],
+      "cancel": [
+        "Cancel",
+        "إلغاء"
+      ],
+      "finished": [
+        "Finished",
+        "أنهوا"
+      ],
+      "choosing": [
+        "Choosing",
+        "يختارون"
+      ],
+      "waitingSignOff": [
+        "Waiting for sign-off",
+        "بانتظار التأكيد"
+      ],
+      "notStarted": [
+        "Not started",
+        "لم يبدؤوا"
+      ],
+      "noStudents": [
+        "No students in this class have courses to choose yet.",
+        "لا توجد مواد للاختيار لطلاب هذا الصف بعد."
+      ],
+      "waitingParent": [
+        "Waiting for parent",
+        "بانتظار ولي الأمر"
+      ],
+      "blocks": [
+        "{chosen} of {total} blocks",
+        "{chosen} من {total} مجموعات"
+      ],
+      "screenTitle": [
+        "{name}: choose your courses",
+        "{name}: اختر موادك"
+      ],
+      "closeScreen": [
+        "Close",
+        "إغلاق"
+      ]
+    },
+    "join": {
+      "title": [
+        "Class session",
+        "جلسة صفية"
+      ],
+      "endedTitle": [
+        "The {name} session has ended",
+        "انتهت جلسة صف {name}"
+      ],
+      "endedBody": [
+        "Ask your teacher to start a new one, or choose while your window is open.",
+        "اطلب من معلمك بدء جلسة جديدة، أو اختر أثناء فترتك المفتوحة."
+      ],
+      "otherClassTitle": [
+        "This link is for {name}",
+        "هذا الرابط مخصص لصف {name}"
+      ],
+      "otherClassBody": [
+        "Open your own course choices instead.",
+        "افتح اختيارات موادك بدلًا من ذلك."
+      ],
+      "open": [
+        "Go to my courses",
+        "الانتقال إلى موادي"
+      ]
+    },
+    "helpPage": {
+      "title": [
+        "Help a student choose",
+        "مساعدة طالب في الاختيار"
+      ],
+      "subtitle": [
+        "Choose courses with a student, on their behalf, from your phone. Students can ask you, or you can turn it on for students you teach or advise.",
+        "اختر المواد مع الطالب ونيابة عنه من هاتفك. يمكن للطلاب طلب ذلك منك، أو يمكنك تفعيله للطلاب الذين تدرّسهم أو ترشدهم."
+      ],
+      "classSession": [
+        "Class session",
+        "جلسة صفية"
+      ],
+      "askedTitle": [
+        "Asked for your help",
+        "طلبوا مساعدتك"
+      ],
+      "askedBody": [
+        "These students let you choose for them.",
+        "سمح لك هؤلاء الطلاب بالاختيار نيابة عنهم."
+      ],
+      "studentsTitle": [
+        "Your students",
+        "طلابك"
+      ],
+      "studentsAll": [
+        "Every student in the school.",
+        "جميع طلاب المدرسة."
+      ],
+      "studentsMine": [
+        "{count, plural, one {# student you teach or advise} other {# students you teach or advise}}",
+        "{count, plural, one {طالب واحد تدرّسه أو ترشده} two {طالبان تدرّسهما أو ترشدهما} few {# طلاب تدرّسهم أو ترشدهم} other {# طالبًا تدرّسهم أو ترشدهم}}"
+      ],
+      "searchPlaceholder": [
+        "Search by name or student number",
+        "ابحث بالاسم أو رقم الطالب"
+      ],
+      "search": [
+        "Search",
+        "بحث"
+      ],
+      "noMatch": [
+        "No students found",
+        "لم يتم العثور على طلاب"
+      ],
+      "noMatchBody": [
+        "Try another name or the student number.",
+        "جرّب اسمًا آخر أو رقم الطالب."
+      ],
+      "noStudents": [
+        "No students yet",
+        "لا يوجد طلاب بعد"
+      ],
+      "noStudentsBody": [
+        "Students you teach, advise or support appear here.",
+        "يظهر هنا الطلاب الذين تدرّسهم أو ترشدهم أو تدعمهم."
+      ],
+      "more": [
+        "Showing {shown} of {total}. Search to find others.",
+        "يُعرض {shown} من {total}. ابحث للعثور على غيرهم."
+      ],
+      "canHelpUntil": [
+        "You can help until {date}",
+        "يمكنك المساعدة حتى {date}"
+      ],
+      "helpChoose": [
+        "Help choose",
+        "ساعد في الاختيار"
+      ],
+      "open": [
+        "Open",
+        "فتح"
+      ]
+    }
+  },
+  "settings": {
+    "kinds": {
+      "course_selection": [
+        "Course selection: dates, reminders and help",
+        "اختيار المواد: المواعيد والتذكيرات والمساعدة"
+      ]
+    }
+  },
+  "nav": {
+    "helpChoose": [
+      "Help students choose",
+      "مساعدة الطلاب في الاختيار"
+    ]
+  },
+  "access": {
+    "perms": {
+      "registration": {
+        "assist": {
+          "label": [
+            "Help students choose courses",
+            "مساعدة الطلاب في اختيار المواد"
+          ],
+          "help": [
+            "Choose on a student's behalf when allowed, allow late changes and run class choosing sessions, for their own students.",
+            "الاختيار نيابة عن الطالب عند السماح بذلك، والسماح بالتغيير بعد الموعد، وإدارة جلسات الاختيار الصفية، لطلابهم فقط."
+          ]
+        }
+      }
+    }
+  },
+  "guide": {
+    "steps": {
+      "letTeacherHelp": {
+        "title": [
+          "Let a teacher or a parent help you",
+          "اسمح لمعلم أو لولي أمرك بمساعدتك"
+        ],
+        "body": [
+          "On Choose my courses, pick who can choose with you and until when. You can stop it at any time, and every choice shows who made it.",
+          "من شاشة اختيار المواد، حدّد من يمكنه الاختيار معك وحتى متى. يمكنك الإيقاف في أي وقت، ويظهر مع كل اختيار اسم من قام به."
+        ]
+      },
+      "helpChildChoose": {
+        "title": [
+          "Help Adam choose his courses",
+          "ساعد آدم في اختيار مواده"
+        ],
+        "body": [
+          "Adam allowed you to help. Choose on his behalf on your phone, with the same AP guidance he sees; your name shows on each choice.",
+          "سمح لك آدم بالمساعدة. اختر نيابة عنه من هاتفك مع إرشادات AP نفسها التي يراها، ويظهر اسمك مع كل اختيار."
+        ]
+      },
+      "classSession": {
+        "title": [
+          "Run a class choosing session",
+          "ابدأ جلسة اختيار صفية"
+        ],
+        "body": [
+          "Open choosing for Homeroom 9A for 45 minutes. Students scan the QR code and you watch who has finished, live.",
+          "افتح الاختيار لصف 9A لمدة 45 دقيقة. يمسح الطلاب رمز QR وتتابع مباشرة من أنهى الاختيار."
+        ]
+      },
+      "helpChoose": {
+        "title": [
+          "Help a student choose",
+          "ساعد طالبًا في الاختيار"
+        ],
+        "body": [
+          "Find a student who asked for help and choose on their behalf, with the guidance they would see.",
+          "ابحث عن طالب طلب المساعدة واختر نيابة عنه مع الإرشادات التي يراها."
+        ]
+      },
+      "selectionWindows": {
+        "title": [
+          "Set course selection windows",
+          "حدّد فترات اختيار المواد"
+        ],
+        "body": [
+          "Open and close choosing per grade in Dubai time, run rounds, and follow progress by homeroom.",
+          "افتح الاختيار وأغلقه لكل صف بتوقيت دبي، ونظّم الجولات، وتابع التقدم حسب الصف."
+        ]
+      }
+    }
+  }
+}

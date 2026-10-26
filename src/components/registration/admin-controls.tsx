@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { CalendarClock, Loader2, Lock, Pencil, Plus, Shuffle, Trash2 } from "lucide-react";
+import { Loader2, Pencil, Plus, Shuffle, Trash2 } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,67 +13,11 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { deleteOfferingAction, moveStudentAction, runAllocationAction, saveOfferingAction, setWindowAction } from "@/server/registration/actions";
+import { deleteOfferingAction, moveStudentAction, runAllocationAction, saveOfferingAction } from "@/server/registration/actions";
 
 export function useRegError() {
   const t = useTranslations("registration");
   return (code?: string) => (code && t.has(`error.${code}`) ? t(`error.${code}`) : t("error.generic"));
-}
-
-/** Open the registration window until a date (15:00 Dubai time), or close it now. yearId: next year's course selection. */
-export function WindowControl({ open, deadlineDate, yearId = null }: { open: boolean; deadlineDate: string | null; yearId?: string | null }) {
-  const t = useTranslations("registration");
-  const err = useRegError();
-  const router = useRouter();
-  const [dialog, setDialog] = useState(false);
-  const [date, setDate] = useState(deadlineDate ?? "");
-  const [pending, start] = useTransition();
-  const today = new Date().toISOString().slice(0, 10);
-
-  const save = (deadline: string | null) =>
-    start(async () => {
-      const res = await setWindowAction({ deadline, yearId });
-      if (!res.ok) return void toast.error(err(res.error));
-      toast.success(deadline ? t("windowOpened") : t("windowClosed"));
-      setDialog(false);
-      router.refresh();
-    });
-
-  return (
-    <>
-      <Button variant="outline" onClick={() => setDialog(true)} data-testid="window-control">
-        <CalendarClock className="size-4" />
-        {open ? t("changeDeadline") : yearId ? t("next.openWindow") : t("openWindow")}
-      </Button>
-      <Dialog open={dialog} onOpenChange={setDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{yearId ? t("next.windowTitle") : t("windowTitle")}</DialogTitle>
-            <DialogDescription>{yearId ? t("next.windowBody") : t("windowBody")}</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-1.5">
-            <Label htmlFor="reg-deadline">{t("deadlineLabel")}</Label>
-            <Input id="reg-deadline" type="date" min={today} value={date} onChange={(e) => setDate(e.target.value)} dir="ltr" data-testid="window-deadline" />
-            <p className="text-xs text-muted-foreground">{t("deadlineHint")}</p>
-          </div>
-          <DialogFooter className="gap-2 sm:justify-between">
-            {open ? (
-              <Button variant="outline" onClick={() => save(null)} disabled={pending} data-testid="window-close">
-                <Lock className="size-4" />
-                {t("closeNow")}
-              </Button>
-            ) : (
-              <span />
-            )}
-            <Button onClick={() => save(`${date}T15:00:00+04:00`)} disabled={pending || !date || date < today} data-testid="window-save">
-              {pending && <Loader2 className="size-4 animate-spin" />}
-              {open ? t("saveDeadline") : t("openWindow")}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
 }
 
 export function RunAllocationButton() {

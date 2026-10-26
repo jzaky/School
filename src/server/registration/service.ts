@@ -205,7 +205,7 @@ export async function runAllocation(tx: Tx, orgId: string, academicYearId: strin
   return summary;
 }
 
-export type SaveResult = { ok: true; summary: AllocationSummary } | { ok: false; error: "NO_YEAR" | "NOT_FOUND" | "NO_OFFERINGS" | "INVALID"; errors?: ChoiceError[] };
+export type SaveResult = { ok: true; summary: AllocationSummary; changed: number } | { ok: false; error: "NO_YEAR" | "NOT_FOUND" | "NO_OFFERINGS" | "INVALID"; errors?: ChoiceError[] };
 
 /**
  * Register a student: core subjects automatically, plus one option per block.
@@ -216,7 +216,7 @@ export type SaveResult = { ok: true; summary: AllocationSummary } | { ok: false;
 export async function saveRegistration(
   tx: Tx,
   orgId: string,
-  input: { studentId: string; optionSubjectIds: string[]; source: RegistrationSource; actorId: string | null; requireAllBlocks?: boolean; skipAllocation?: boolean; academicYearId?: string | null },
+  input: { studentId: string; optionSubjectIds: string[]; source: RegistrationSource; actorId: string | null; requireAllBlocks?: boolean; skipAllocation?: boolean; academicYearId?: string | null; now?: Date },
 ): Promise<SaveResult> {
   const target = await registrationYear(tx, orgId, input.academicYearId);
   if (!target) return { ok: false, error: "NO_YEAR" };
@@ -232,23 +232,27 @@ export async function saveRegistration(
   const existing = await tx.subjectRegistration.findMany({ where: { orgId, academicYearId: year.id, studentId: student.id } });
   const bySubject = new Map(existing.map((r) => [r.subjectId, r]));
   const chosen = new Set(input.optionSubjectIds);
+  let changed = 0;
   for (const o of offerings) {
     const want = o.kind === "CORE" || chosen.has(o.subjectId);
     const row = bySubject.get(o.subjectId);
     if (want) {
       if (!row) {
-        await tx.subjectRegistration.create({ data: { orgId, academicYearId: year.id, studentId: student.id, subjectId: o.subjectId, status: "REQUESTED", source: input.source, createdById: input.actorId } });
+        await tx.subjectRegistration.create({ data: { orgId, academicYearId: year.id, studentId: student.id, subjectId: o.subjectId, status: "REQUESTED", source: input.source, createdById: input.actorId, chosenAt: input.now ?? new Date() } });
+        changed++;
       } else if (!ACTIVE.has(row.status)) {
-        await tx.subjectRegistration.update({ where: { id: row.id }, data: { status: "REQUESTED", classId: null, source: input.source, createdById: input.actorId } });
+        await tx.subjectRegistration.update({ where: { id: row.id }, data: { status: "REQUESTED", classId: null, source: input.source, createdById: input.actorId, chosenAt: input.now ?? new Date() } });
+        changed++;
       }
     } else if (row && ACTIVE.has(row.status)) {
       await tx.subjectRegistration.update({ where: { id: row.id }, data: { status: "DROPPED" } });
+      changed++;
     }
   }
   const summary = input.skipAllocation || target.next
     ? { groups: 0, placed: 0, moved: 0, removed: 0, sectionsCreated: 0, registrationsUpdated: 0 }
     : await runAllocation(tx, orgId, year.id, { studentIds: [student.id] });
-  return { ok: true, summary };
+  return { ok: true, summary, changed };
 }
 
 async function subjectByRef(tx: Tx, orgId: string, ref: unknown) {
@@ -302,48 +306,4 @@ export async function moveStudent(tx: Tx, orgId: string, input: { registrationId
   await tx.enrollment.createMany({ data: [{ orgId, studentId: reg.studentId, classId: target.id, status: "ACTIVE" }], skipDuplicates: true });
   await tx.subjectRegistration.update({ where: { id: reg.id }, data: { classId: target.id, status: "ALLOCATED" } });
   return { ok: true, fromClassId: reg.classId };
-}
-
-// ---------------------------------------------------------------------------
-// Registration window
-// ---------------------------------------------------------------------------
-// There is no settings table, so the window is a DEADLINE calendar event carrying the marker
-// "registration_window" in its audience list. Its start is the deadline, so it shows on the
-// calendar on that day. The window is open while the deadline is in the future.
-
-export const WINDOW_MARKER = "registration_window";
-export const WINDOW_AUDIENCE = ["student", "parent", "staff", WINDOW_MARKER];
-/** Course selection for next year carries this tag as well, so each year has its own window. */
-export const yearTag = (yearId: string) => "year:" + yearId;
-
-export type RegistrationWindow = { eventId: string | null; deadline: Date | null; open: boolean };
-
-/** The window for the current year, or for next year's course selection (next with that year's id). */
-export async function getWindow(tx: Tx, orgId: string, now = new Date(), opts: { yearId?: string | null; next?: boolean } = {}): Promise<RegistrationWindow> {
-  const events = await tx.calendarEvent.findMany({ where: { orgId, kind: "DEADLINE", audience: { has: WINDOW_MARKER } }, orderBy: { startsAt: "desc" }, take: 20 });
-  const tagged = (a: string[]) => a.some((x) => x.startsWith("year:"));
-  const ev = opts.next && opts.yearId ? events.find((e) => e.audience.includes(yearTag(opts.yearId!))) : events.find((e) => !tagged(e.audience) || (!!opts.yearId && e.audience.includes(yearTag(opts.yearId))));
-  if (!ev) return { eventId: null, deadline: null, open: false };
-  return { eventId: ev.id, deadline: ev.startsAt, open: ev.startsAt.getTime() > now.getTime() };
-}
-
-/** Open the window until deadline, or close it now (deadline = now). next: next year's course selection. */
-export async function setWindow(tx: Tx, orgId: string, deadline: Date, ownerId: string | null, opts: { next?: { yearId: string; nameEn: string; nameAr: string } } = {}) {
-  const n = opts.next;
-  const current = await getWindow(tx, orgId, new Date(), n ? { yearId: n.yearId, next: true } : {});
-  const endsAt = new Date(deadline.getTime() + 60 * 60_000);
-  const data = {
-    kind: "DEADLINE" as const,
-    titleEn: n ? "Course selection deadline for " + n.nameEn : "Subject registration deadline",
-    titleAr: n ? "الموعد النهائي لاختيار مواد العام " + n.nameAr : "الموعد النهائي لتسجيل المواد الدراسية",
-    descEn: n ? "Students and parents choose next year's courses, one in each option block, before this time." : "Students and parents choose one subject in each option block before this time.",
-    descAr: n ? "يختار الطلاب وأولياء الأمور مواد العام القادم، مادة واحدة من كل مجموعة اختيارية، قبل هذا الموعد." : "يختار الطلاب وأولياء الأمور مادة واحدة من كل مجموعة اختيارية قبل هذا الموعد.",
-    startsAt: deadline,
-    endsAt,
-    allDay: false,
-    audience: n ? [...WINDOW_AUDIENCE, yearTag(n.yearId)] : WINDOW_AUDIENCE,
-    ownerId,
-  };
-  if (current.eventId) return tx.calendarEvent.update({ where: { id: current.eventId }, data });
-  return tx.calendarEvent.create({ data: { orgId, ...data } });
 }

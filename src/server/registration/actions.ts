@@ -2,13 +2,16 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import type { RegistrationSource } from "@prisma/client";
 import { getCtx, type Ctx } from "@/server/context";
 import { tenantTx } from "@/lib/tenant-db";
 import { audit } from "@/server/audit/audit";
 import { canSeeStudent } from "@/server/access/student-access";
-import { currentYear, getWindow, moveStudent, registrationYear, runAllocation, saveRegistration, setWindow } from "./service";
-import { actorFromCtx, EngineAccessError } from "@/server/pathway-engine/access";
+import { currentYear, moveStudent, registrationYear, runAllocation } from "./service";
+import { execCtx, type Effect } from "@/server/db";
+import { flushEffects } from "@/server/queue";
+import { selectionActorFromCtx, submitChoices } from "./selection";
+import { EngineAccessError } from "@/server/pathway-engine/access";
+import { pickerEngineActor } from "./selection-view";
 import { electiveImpactFor } from "@/server/pathway-engine/levels-service";
 import { importRegistrationRows, previewRegistrationRows, RegImportTooLargeError } from "./import";
 import type { ChoiceError } from "@/lib/registration";
@@ -28,43 +31,31 @@ async function manager(): Promise<Ctx | null> {
   return ctx.can("registration.manage") ? ctx : null;
 }
 
-/** Who may register this student, and as what source. Null when not allowed. */
-async function sourceFor(ctx: Ctx, studentId: string): Promise<RegistrationSource | null> {
-  if (ctx.can("registration.manage") && ctx.isStaff) return "STAFF";
-  if (!ctx.can("registration.submit")) return null;
-  if (ctx.isStudent) return ctx.membership.student?.id === studentId ? "STUDENT" : null;
-  if (ctx.isParent) return (await canSeeStudent(ctx, studentId)) ? "PARENT" : null;
-  return null;
-}
+const saveSchema = z.object({
+  studentId: z.string().min(1),
+  optionSubjectIds: z.array(z.string().min(1)).max(20),
+  yearId: z.string().min(1).nullable().optional(),
+  /** false: save progress without submitting (next year's course selection only). */
+  final: z.boolean().optional(),
+});
 
-const saveSchema = z.object({ studentId: z.string().min(1), optionSubjectIds: z.array(z.string().min(1)).max(20), yearId: z.string().min(1).nullable().optional() });
-
-/** Submit a student's option choices. Core subjects are registered automatically. Allocation runs straight away. */
+/**
+ * Save a student's option choices. Core subjects are registered automatically, and for this year
+ * allocation runs straight away. The window, exception, class session, parent and helper rules are
+ * enforced in submitChoices (src/server/registration/selection.ts), the only write path for choices.
+ */
 export async function saveRegistrationAction(input: z.input<typeof saveSchema>) {
   const parsed = saveSchema.safeParse(input);
   if (!parsed.success) return fail("INVALID");
   const ctx = await getCtx();
   const d = parsed.data;
-  const source = await sourceFor(ctx, d.studentId);
-  if (!source) return fail("FORBIDDEN");
-  const target = await tenantTx(ctx.orgId, (tx) => registrationYear(tx, ctx.orgId, d.yearId));
-  if (!target) return fail("NO_YEAR");
-  if (source !== "STAFF") {
-    const win = await tenantTx(ctx.orgId, (tx) => getWindow(tx, ctx.orgId, new Date(), { yearId: target.year.id, next: target.next }));
-    if (!win.open) return fail("CLOSED");
-  }
-  const res = await tenantTx(
-    ctx.orgId,
-    async (tx) => {
-      const r = await saveRegistration(tx, ctx.orgId, { studentId: d.studentId, optionSubjectIds: d.optionSubjectIds, source, actorId: ctx.membershipId, academicYearId: target.year.id });
-      if (r.ok) await audit(tx, ctx.orgId, { ...actorOf(ctx), action: target.next ? "registration.select_next_year" : "registration.submit", entityType: "Student", entityId: d.studentId, meta: { source, yearId: target.year.id, options: d.optionSubjectIds.length, ...r.summary } });
-      return r;
-    },
-    { timeout: 30_000 },
-  );
+  if (!(await canSeeStudent(ctx, d.studentId)) && !ctx.isStaff) return fail("FORBIDDEN");
+  const effects: Effect[] = [];
+  const res = await tenantTx(ctx.orgId, (tx) => submitChoices(tx, ctx.orgId, selectionActorFromCtx(ctx), { studentId: d.studentId, optionSubjectIds: d.optionSubjectIds, yearId: d.yearId, final: d.final }, execCtx(tx, ctx.orgId, { effects })), { timeout: 30_000 });
   if (!res.ok) return fail(res.error, res.errors);
+  await flushEffects(effects);
   refresh();
-  return { ok: true as const, summary: res.summary };
+  return { ok: true as const, summary: res.summary, status: res.status };
 }
 
 /** Run allocation for the whole current year. Only places unplaced students; existing placements stay. */
@@ -150,14 +141,17 @@ export async function saveOfferingAction(input: z.input<typeof offeringSchema>) 
       ...(d.courseId !== undefined ? { courseId: d.courseId } : {}),
       ...(d.isAP !== undefined ? { isAP: d.isAP } : {}),
     };
+    // A subject is offered once per grade and track; an "every track" row cannot sit beside a track row.
+    const clash = async (curriculum: (typeof CURRICULA)[number] | null, notId?: string) =>
+      tx.subjectOffering.findFirst({ where: { orgId: ctx.orgId, academicYearId: year.id, subjectId: d.subjectId, gradeLevel: d.gradeLevel, ...(notId ? { id: { not: notId } } : {}), ...(curriculum ? { OR: [{ curriculum: null }, { curriculum }] } : {}) } });
     if (d.id) {
       const existing = await tx.subjectOffering.findFirst({ where: { orgId: ctx.orgId, id: d.id } });
       if (!existing) return fail("NOT_FOUND");
+      if (await clash(d.curriculum !== undefined ? d.curriculum : existing.curriculum, existing.id)) return fail("DUPLICATE");
       await tx.subjectOffering.update({ where: { id: existing.id }, data });
       await audit(tx, ctx.orgId, { ...actorOf(ctx), action: "registration.offering_update", entityType: "SubjectOffering", entityId: existing.id, meta: data });
     } else {
-      const dup = await tx.subjectOffering.findFirst({ where: { orgId: ctx.orgId, academicYearId: year.id, subjectId: d.subjectId, gradeLevel: d.gradeLevel } });
-      if (dup) return fail("DUPLICATE");
+      if (await clash(d.curriculum ?? null)) return fail("DUPLICATE");
       const created = await tx.subjectOffering.create({ data: { orgId: ctx.orgId, academicYearId: year.id, subjectId: d.subjectId, gradeLevel: d.gradeLevel, ...data } });
       await audit(tx, ctx.orgId, { ...actorOf(ctx), action: "registration.offering_add", entityType: "SubjectOffering", entityId: created.id, meta: { gradeLevel: d.gradeLevel, ...data } });
     }
@@ -187,31 +181,6 @@ export async function deleteOfferingAction(input: { id: string }) {
   });
   if (res.ok) refresh();
   return res;
-}
-
-const windowSchema = z.object({ deadline: z.string().datetime({ offset: true }).nullable(), yearId: z.string().min(1).nullable().optional() });
-
-/** Open the registration window until a deadline, or close it now (deadline null). */
-export async function setWindowAction(input: z.input<typeof windowSchema>) {
-  const ctx = await manager();
-  if (!ctx) return fail("FORBIDDEN");
-  const parsed = windowSchema.safeParse(input);
-  if (!parsed.success) return fail("INVALID");
-  const now = new Date();
-  const deadline = parsed.data.deadline ? new Date(parsed.data.deadline) : now;
-  if (parsed.data.deadline && deadline.getTime() <= now.getTime()) return fail("PAST_DEADLINE");
-  const done = await tenantTx(ctx.orgId, async (tx) => {
-    const target = await registrationYear(tx, ctx.orgId, parsed.data.yearId);
-    if (!target) return false;
-    const next = target.next ? { yearId: target.year.id, nameEn: target.year.nameEn, nameAr: target.year.nameAr } : undefined;
-    const ev = await setWindow(tx, ctx.orgId, deadline, ctx.membershipId, { next });
-    await audit(tx, ctx.orgId, { ...actorOf(ctx), action: parsed.data.deadline ? "registration.window_open" : "registration.window_close", entityType: "CalendarEvent", entityId: ev.id, meta: { deadline: deadline.toISOString(), yearId: target.year.id } });
-    return true;
-  });
-  if (!done) return fail("NO_YEAR");
-  refresh();
-  revalidatePath("/[locale]/calendar", "page");
-  return { ok: true as const };
 }
 
 const rowsSchema = z.array(z.record(z.string(), z.unknown())).max(2000);
@@ -253,8 +222,11 @@ export async function electiveImpactAction(input: z.input<typeof impactSchema>) 
   if (!parsed.success) return fail("INVALID");
   const ctx = await getCtx();
   if (!(await canSeeStudent(ctx, parsed.data.studentId))) return fail("FORBIDDEN");
+  // A helping teacher sees the same guidance as the student, for that student only.
+  const actor = await pickerEngineActor(ctx, parsed.data.studentId);
+  if (!actor) return fail("FORBIDDEN");
   try {
-    const impact = await electiveImpactFor(await actorFromCtx(ctx), parsed.data.studentId, { yearId: parsed.data.yearId, chosen: parsed.data.chosen });
+    const impact = await electiveImpactFor(actor, parsed.data.studentId, { yearId: parsed.data.yearId, chosen: parsed.data.chosen });
     return { ok: true as const, impact };
   } catch (e) {
     if (e instanceof EngineAccessError) return fail("FORBIDDEN");

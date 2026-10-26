@@ -136,6 +136,8 @@ async function main() {
           return forEachOrg("applications.reminders", async (orgId) => (await import("@/server/applications/reminders")).runApplicationReminders(orgId));
         case "careerEvents.reminders":
           return forEachOrg("careerEvents.reminders", async (orgId) => (await import("@/server/career-events/reminders")).runCareerEventReminders(orgId));
+        case "courseSelection.notices":
+          return forEachOrg("courseSelection.notices", async (orgId) => (await import("@/server/registration/selection-notices")).runSelectionNotices(orgId));
         case "test.idempotent":
           return handlers.testIdempotent(job.data as TestIdempotentJob);
         default:
@@ -166,6 +168,8 @@ async function main() {
     await maintenance.upsertJobScheduler("applications.reminders", { pattern: "45 3 * * *", tz: "UTC" }, { name: "applications.reminders", opts: { attempts: 3 } });
     // Hourly: university fair and visit reminders about a day before the event (each sent once).
     await maintenance.upsertJobScheduler("careerEvents.reminders", { pattern: "20 * * * *", tz: "UTC" }, { name: "careerEvents.reminders", opts: { attempts: 3 } });
+    // Every 15 minutes: course selection notices when a window opens, 3 days and 1 day before it closes, and when it closes (each sent once).
+    await maintenance.upsertJobScheduler("courseSelection.notices", { pattern: "*/15 * * * *", tz: "UTC" }, { name: "courseSelection.notices", opts: { attempts: 3 } });
     if (demoMode) {
       // 22:00 UTC is 02:00 in Dubai.
       await maintenance.upsertJobScheduler("demo-reset", { pattern: "0 22 * * *", tz: "UTC" }, { name: "demo-reset", opts: { attempts: 2 } });

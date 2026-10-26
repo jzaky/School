@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { AlertTriangle, ArrowRight, Check, CheckCircle2, DoorOpen, GraduationCap, Loader2, Lock, Scale, Send, Target } from "lucide-react";
+import { AlertTriangle, ArrowRight, Check, CheckCircle2, DoorOpen, GraduationCap, Loader2, Lock, Save, Scale, Send, Target, UserCheck } from "lucide-react";
 import { Link, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -43,6 +43,9 @@ export function SubjectPicker({
   levelsHref,
   explore = false,
   studentName = "",
+  chosenBy = {},
+  canDraft = false,
+  readOnlyNote,
 }: {
   studentId: string;
   yearId: string | null;
@@ -56,12 +59,20 @@ export function SubjectPicker({
   impact: ElectiveImpact | null;
   /** The student is looking at their own choices. */
   self: boolean;
-  levelsHref: string;
+  /** The subject levels page for this student, or null when the viewer cannot open it (a helping teacher). */
+  levelsHref: string | null;
   /** Read-only staff (counselors): may try other choices to see their impact, never save them. */
   explore?: boolean;
   studentName?: string;
+  /** "Chosen by Daniel Carter for Adam on 26 Oct" per subject, when someone other than the student chose it. */
+  chosenBy?: Record<string, string>;
+  /** Next year's course selection: incomplete choices can be saved and finished later. */
+  canDraft?: boolean;
+  /** Why the choices cannot be changed now (for example "Choosing opens on Sun 9 Nov"). */
+  readOnlyNote?: string;
 }) {
   const t = useTranslations("registration");
+  const tSel = useTranslations("selection.picker");
   const locale = useLocale();
   const err = useRegError();
   const router = useRouter();
@@ -121,11 +132,11 @@ export function SubjectPicker({
   };
   const optImpact = (o: Opt) => impact?.options[o.subjectId] ?? null;
 
-  const submit = () =>
+  const submit = (final = true) =>
     start(async () => {
-      const res = await saveRegistrationAction({ studentId, optionSubjectIds: chosenIds, yearId });
+      const res = await saveRegistrationAction({ studentId, optionSubjectIds: chosenIds, yearId, final });
       if (!res.ok) return void toast.error(err(res.error));
-      toast.success(nextYear ? t("next.submitted") : t("submitted"));
+      toast.success(!final ? tSel("draftSaved") : nextYear ? t("next.submitted") : t("submitted"));
       router.refresh();
     });
 
@@ -151,10 +162,12 @@ export function SubjectPicker({
                 {totalTargets > 0 ? t(`impact.intro.${self ? "self" : "other"}`, { targets: totalTargets, checked: impact.checked, name: studentName }) : t(`impact.introNoTargets.${self ? "self" : "other"}`, { checked: impact.checked, name: studentName })}
               </span>
             </p>
-            <Link href={levelsHref} className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-brand hover:underline" data-testid="levels-link">
-              {t("impact.seeLevels")}
-              <ArrowRight className="size-3.5 rtl:rotate-180" />
-            </Link>
+            {levelsHref && (
+              <Link href={levelsHref} className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-brand hover:underline" data-testid="levels-link">
+                {t("impact.seeLevels")}
+                <ArrowRight className="size-3.5 rtl:rotate-180" />
+              </Link>
+            )}
           </div>
         )}
         <section className="rounded-xl border bg-card p-4 shadow-xs sm:p-5">
@@ -289,6 +302,12 @@ export function SubjectPicker({
                         )}
                         {impact && !o.linked && <span className="mt-2 block border-t pt-2 text-xs text-muted-foreground">{t("impact.notLinked")}</span>}
                         {selected && o.placement && !changed && <span className="mt-1 block text-xs font-medium text-brand">{[o.placement, o.teacher].filter(Boolean).join(" · ")}</span>}
+                        {selected && !changed && chosenBy[o.subjectId] && (
+                          <span className="mt-1 flex items-start gap-1 text-xs text-muted-foreground" data-testid="chosen-by">
+                            <UserCheck className="mt-px size-3 shrink-0" />
+                            {chosenBy[o.subjectId]}
+                          </span>
+                        )}
                       </span>
                     </button>
                   );
@@ -362,15 +381,23 @@ export function SubjectPicker({
               {nextYear ? t("next.registeredState") : t("registeredState")}
             </p>
           ) : (
-            <Button className="w-full" onClick={submit} disabled={pending || errors.length > 0} data-testid="submit-registration">
-              {pending ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
-              {complete ? t("saveChanges") : nextYear ? t("next.submit") : t("submit")}
-            </Button>
+            <div className="space-y-2">
+              <Button className="w-full" onClick={() => submit(true)} disabled={pending || errors.length > 0} data-testid="submit-registration">
+                {pending ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+                {complete ? t("saveChanges") : nextYear ? t("next.submit") : t("submit")}
+              </Button>
+              {canDraft && !complete && missingBlocks > 0 && chosenIds.length > 0 && hardErrors.length === 0 && changed && (
+                <Button variant="outline" className="w-full" onClick={() => submit(false)} disabled={pending} data-testid="save-draft">
+                  <Save className="size-4" />
+                  {tSel("saveDraft")}
+                </Button>
+              )}
+            </div>
           )
         ) : (
           <p className="flex items-start gap-1.5 text-xs text-muted-foreground" data-testid="read-only-note">
             <Lock className="mt-0.5 size-3.5 shrink-0" />
-            {explore ? t("impact.exploreNote") : t("readOnly")}
+            {explore ? t("impact.exploreNote") : (readOnlyNote ?? t("readOnly"))}
           </p>
         )}
       </aside>

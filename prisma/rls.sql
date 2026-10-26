@@ -162,3 +162,10 @@ REVOKE ALL ON TABLE "PlatformAuditEvent" FROM app_user;
 REVOKE ALL ON TABLE "MarketingLead" FROM app_user;
 REVOKE ALL ON TABLE "PlatformSetting" FROM app_user;
 REVOKE INSERT, UPDATE, DELETE ON TABLE "UptimeSample" FROM app_user;
+
+-- 7. Course selection (windows, exceptions, class sessions, assisted choosing, sign-off). Tenant isolation
+-- comes from section 2 (every table has orgId). Exceptions, class sessions and helper grants are history:
+-- the app revokes or ends them and never deletes them.
+REVOKE DELETE ON TABLE "CourseSelectionException" FROM app_user;
+REVOKE DELETE ON TABLE "CourseSelectionSession" FROM app_user;
+REVOKE DELETE ON TABLE "CourseSelectionHelper" FROM app_user;
