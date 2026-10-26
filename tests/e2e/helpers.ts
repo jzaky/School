@@ -111,3 +111,15 @@ export function idFromUrl(url: string, segment: string) {
   if (!m) throw new Error(`no ${segment} id in ${url}`);
   return m[1];
 }
+
+/** Expect a meeting in the upcoming meetings list, going through the list's pages when it runs over more than one. */
+export async function expectUpcomingMeeting(s: Session, meetingId: string, maxPages = 20) {
+  const row = s.page.locator(`[data-testid=meeting-row][href$="/meetings/${meetingId}"]`);
+  for (let n = 1; n <= maxPages; n++) {
+    await go(s, n === 1 ? "/meetings" : `/meetings?page=${n}`);
+    await expect(s.page.locator("[data-testid=upcoming-meetings]")).toBeVisible();
+    if (await row.isVisible()) return;
+    if (!(await s.page.locator("[data-testid=upcoming-meetings] ~ [data-testid=pager] [data-testid=pager-next]").isVisible())) break;
+  }
+  await expect(row).toBeVisible();
+}

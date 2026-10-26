@@ -10,22 +10,41 @@ import { EmptyState } from "@/components/app/empty-state";
 import { AppointmentStatusBadge } from "@/components/app/badges";
 import { Button } from "@/components/ui/button";
 import { appointmentWhere } from "@/server/appointments/queries";
+import { Pager } from "@/components/app/pager";
+import { pageWindow } from "@/server/common/paging";
+
+const UPCOMING_PAGE = 25;
+const PAST_PAGE = 15;
 
 export async function generateMetadata() {
   const t = await getTranslations("meetings");
   return { title: t("title") };
 }
 
-export default async function MeetingsPage() {
+export default async function MeetingsPage({ searchParams }: { searchParams: Promise<{ page?: string; past?: string }> }) {
+  const sp = await searchParams;
   const ctx = await getCtx();
   const t = await getTranslations("meetings");
   const prefs = await formatPrefs(ctx);
   const now = new Date();
   const scope = await appointmentWhere(ctx);
+  const upcomingWhere = { AND: [scope, { endsAt: { gte: now }, status: { in: ["CONFIRMED" as const, "SCHEDULED" as const] } }] };
+  const pastWhere = { AND: [scope, { OR: [{ endsAt: { lt: now } }, { status: { in: ["CANCELLED" as const, "COMPLETED" as const, "NO_SHOW" as const] } }] }] };
+  const [upcomingTotal, pastTotal] = await Promise.all([ctx.db.appointment.count({ where: upcomingWhere }), ctx.db.appointment.count({ where: pastWhere })]);
+  // Every meeting stays reachable: both lists page instead of stopping at a fixed number.
+  const upWin = pageWindow(sp.page, upcomingTotal, UPCOMING_PAGE);
+  const pastWin = pageWindow(sp.past, pastTotal, PAST_PAGE);
   const [upcoming, past] = await Promise.all([
-    ctx.db.appointment.findMany({ where: { AND: [scope, { endsAt: { gte: now }, status: { in: ["CONFIRMED", "SCHEDULED"] } }] }, include: { type: true }, orderBy: { startsAt: "asc" }, take: 30 }),
-    ctx.db.appointment.findMany({ where: { AND: [scope, { OR: [{ endsAt: { lt: now } }, { status: { in: ["CANCELLED", "COMPLETED", "NO_SHOW"] } }] }] }, include: { type: true }, orderBy: { startsAt: "desc" }, take: 15 }),
+    ctx.db.appointment.findMany({ where: upcomingWhere, include: { type: true }, orderBy: [{ startsAt: "asc" }, { id: "asc" }], skip: upWin.skip, take: upWin.take }),
+    ctx.db.appointment.findMany({ where: pastWhere, include: { type: true }, orderBy: [{ startsAt: "desc" }, { id: "asc" }], skip: pastWin.skip, take: pastWin.take }),
   ]);
+  const href = (up: number, pp: number) => {
+    const q = new URLSearchParams();
+    if (up > 1) q.set("page", String(up));
+    if (pp > 1) q.set("past", String(pp));
+    const s = q.toString();
+    return s ? `/meetings?${s}` : "/meetings";
+  };
   const ids = [...upcoming, ...past];
   const [members, students] = await Promise.all([
     ctx.db.membership.findMany({ where: { id: { in: [...new Set(ids.map((a) => a.hostId))] } }, include: { user: true } }),
@@ -80,21 +99,25 @@ export default async function MeetingsPage() {
         {upcoming.length === 0 ? (
           <EmptyState icon={<CalendarClock className="size-5" />} title={t("noUpcoming")} body={t("noUpcomingBody")} />
         ) : (
-          <ul className="divide-y overflow-hidden rounded-xl border bg-card shadow-xs">
-            {upcoming.map((a) => (
-              <Row key={a.id} a={a} />
-            ))}
-          </ul>
+          <>
+            <ul className="divide-y overflow-hidden rounded-xl border bg-card shadow-xs" data-testid="upcoming-meetings">
+              {upcoming.map((a) => (
+                <Row key={a.id} a={a} />
+              ))}
+            </ul>
+            {upWin.pages > 1 && <Pager win={upWin} prefs={prefs} href={(n) => href(n, pastWin.page)} />}
+          </>
         )}
       </section>
       {past.length > 0 && (
         <section>
           <SectionTitle>{t("past")}</SectionTitle>
-          <ul className="divide-y overflow-hidden rounded-xl border bg-card opacity-90 shadow-xs">
+          <ul className="divide-y overflow-hidden rounded-xl border bg-card opacity-90 shadow-xs" data-testid="past-meetings">
             {past.map((a) => (
               <Row key={a.id} a={a} />
             ))}
           </ul>
+          {pastWin.pages > 1 && <Pager win={pastWin} prefs={prefs} href={(n) => href(upWin.page, n)} />}
         </section>
       )}
     </PageBody>

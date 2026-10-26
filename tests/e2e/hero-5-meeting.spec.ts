@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { LOCALES, advanceToSubmit, expectNoErrors, go, idFromUrl, loginAs, pickSlot, toFirstStep } from "./helpers";
+import { LOCALES, advanceToSubmit, expectNoErrors, expectUpcomingMeeting, go, idFromUrl, loginAs, pickSlot, toFirstStep } from "./helpers";
 
 const DANIEL = { en: "Daniel Carter", ar: "دانيال كارتر" };
 
@@ -51,8 +51,7 @@ for (const locale of LOCALES) {
     expect(icsText).toContain(`DTSTART:${dayKey.replace(/-/g, "")}`);
 
     // It is in the parent's meetings list, and the request is complete.
-    await go(parent, "/meetings");
-    await expect(p.locator(`[data-testid=meeting-row][href$="/meetings/${meetingId}"]`)).toBeVisible();
+    await expectUpcomingMeeting(parent, meetingId);
     await go(parent, `/requests/${requestId}`);
     await expect(p.locator("[data-testid=request-title]")).toHaveAttribute("data-status", "COMPLETED");
     expectNoErrors(parent);
@@ -60,8 +59,7 @@ for (const locale of LOCALES) {
     // The teacher sees it in their meetings and calendar, and was notified.
     const teacher = await loginAs(browser, "teacher", locale);
     const t = teacher.page;
-    await go(teacher, "/meetings");
-    await expect(t.locator(`[data-testid=meeting-row][href$="/meetings/${meetingId}"]`)).toBeVisible();
+    await expectUpcomingMeeting(teacher, meetingId);
     await go(teacher, `/calendar?view=day&d=${dayKey}`);
     await expect(t.locator(`[data-testid=cal-item][href$="/meetings/${meetingId}"]`)).toBeVisible();
     await go(teacher, "/notifications");

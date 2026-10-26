@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { LOCALES, advanceToSubmit, expectNoErrors, go, idFromUrl, loginAs, marker, pickOption, pickSlot, toFirstStep } from "./helpers";
+import { LOCALES, advanceToSubmit, expectNoErrors, expectUpcomingMeeting, go, idFromUrl, loginAs, marker, pickOption, pickSlot, toFirstStep } from "./helpers";
 
 const SARAH = { en: "Sarah Ahmed", ar: "سارة أحمد" };
 const BOOK_TASK = { en: "Book a meeting with the family", ar: "حجز اجتماع مع الأسرة" };
@@ -88,8 +88,7 @@ for (const locale of LOCALES) {
     // Rania sees the meeting in her meetings and calendar.
     const parent = await loginAs(browser, "parent", locale);
     const p = parent.page;
-    await go(parent, "/meetings");
-    await expect(p.locator(`[data-testid=meeting-row][href$="/meetings/${meetingId}"]`)).toBeVisible();
+    await expectUpcomingMeeting(parent, meetingId);
     await go(parent, `/calendar?view=day&d=${dayKey}`);
     await expect(p.locator(`[data-testid=cal-item][href$="/meetings/${meetingId}"]`)).toBeVisible();
     await go(parent, `/meetings/${meetingId}`);
