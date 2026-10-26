@@ -9637,5 +9637,25 @@
     "openRegister": "Open register",
     "presentN": "{n} present",
     "awayN": "{n} away"
+  },
+  "gradeLevel": {
+    "label": "{level, select, kg1 {KG1} kg2 {KG2} other {Grade {grade}}}",
+    "short": "{level, select, kg1 {KG1} kg2 {KG2} other {{grade}}}"
+  },
+  "sso": {
+    "email": {
+      "subject": "Your sign-in link for {school}",
+      "body": "Use the button below to sign in to {school}. The link works once and expires in {minutes} minutes. If you did not ask for it, you can ignore this email: nobody can sign in without opening it."
+    },
+    "reset": {
+      "email": {
+        "subject": "Reset your password for {school}",
+        "body": "Someone asked to reset the password for this address. Use the button below to choose a new password. The link works once and expires in {minutes} minutes. If you did not ask, ignore this email: your password stays the same.",
+        "ssoSubject": "How to sign in to {school}",
+        "ssoBody": "Someone asked to reset the password for this address. {school} asks staff to sign in with the school's single sign-on, so there is no password to reset. Open the school's sign-in page and choose your school account. If you did not ask, you can ignore this email.",
+        "doneSubject": "Your password for {school} was changed",
+        "doneBody": "Your password was just changed, and you were signed out everywhere else. If this was not you, contact the school office straight away."
+      }
+    }
   }
 }

@@ -18,7 +18,7 @@ export class FetchExportError extends Error {
   }
 }
 
-const allowPrivate = () => process.env.INTEGRATIONS_ALLOW_PRIVATE_URLS === "true";
+export const allowPrivate = () => process.env.INTEGRATIONS_ALLOW_PRIVATE_URLS === "true";
 
 /** True for addresses a school export can never legitimately live on. */
 export function isBlockedAddress(address: string): boolean {
@@ -62,7 +62,7 @@ export function checkSourceUrl(raw: string): "URL" | null {
   return null;
 }
 
-function guardedLookup(hostname: string, options: object, cb: (err: NodeJS.ErrnoException | null, address: string | LookupAddress[], family?: number) => void) {
+export function guardedLookup(hostname: string, options: object, cb: (err: NodeJS.ErrnoException | null, address: string | LookupAddress[], family?: number) => void) {
   dnsLookup(hostname, { ...options, all: true }, (err, addresses) => {
     if (err) return cb(err, [], 0);
     const list = addresses as LookupAddress[];

@@ -1,0 +1,6 @@
+{
+  "gradeLevel": {
+    "label": ["{level, select, kg1 {KG1} kg2 {KG2} other {Grade {grade}}}", "{level, select, kg1 {الروضة الأولى} kg2 {الروضة الثانية} other {الصف {grade}}}"],
+    "short": ["{level, select, kg1 {KG1} kg2 {KG2} other {{grade}}}", "{level, select, kg1 {روضة 1} kg2 {روضة 2} other {{grade}}}"]
+  }
+}

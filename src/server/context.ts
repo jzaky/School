@@ -9,6 +9,7 @@ import type { Permission } from "@/server/identity/permissions";
 import { lastActiveIsStale, touchLastActive } from "@/server/identity/last-active";
 import { isLocale, type AppLocale } from "@/i18n/routing";
 import { groupRolesForUser } from "@/server/groups/access";
+import { sessionRevoked } from "@/server/sso/session-revocation";
 
 async function loadContext() {
   const session = await auth();
@@ -30,6 +31,8 @@ async function loadContext() {
     identityDb.user.findUnique({ where: { id: session.user.id } }),
   ]);
   if (!org || !membership || !user || membership.status !== "ACTIVE") return null;
+  // Sessions opened before a password reset have ended.
+  if (sessionRevoked(user.sessionsValidFrom, session.user.signedInAt)) return null;
   // Last active: no query when the loaded timestamp is fresh; never blocks or fails the request.
   if (lastActiveIsStale(membership.lastSeenAt, new Date())) void touchLastActive(db, membership.id, membership.lastSeenAt).catch(() => undefined);
   const perms = permissionsOf(membership);
