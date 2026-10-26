@@ -76,6 +76,7 @@ export function buildNav(ctx: Ctx, counts: { approvals: number; tasks: number; n
   const school: NavItem[] = [];
   if (c("people.view")) school.push({ key: "students", href: "/students", icon: "graduation-cap" });
   if (c("grades.enter") || c("registration.manage")) school.push({ key: "classes", href: "/classes", icon: "school" });
+  if (c("registration.assist")) school.push({ key: "helpChoose", href: "/subjects/help", icon: "heart-handshake" });
   if (c("grades.enter") || c("grades.view_all")) school.push({ key: "grades", href: "/grades", icon: "clipboard-check" });
   if (c("career.advise")) school.push({ key: "career", href: "/career", icon: "compass" }, { key: "careerEvents", href: "/career/events", icon: "calendar-check" });
   if (c("career.partners") || c("career.advise")) school.push({ key: "partnerResources", href: "/career/resources", icon: "handshake" });

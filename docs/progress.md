@@ -172,3 +172,12 @@
 - Audit log: "Access changes" preset with plain detail lines.
 - Demo: Hannah Morrison is Deputy DSL cover for ten days, an earlier wellbeing cover that ended, the DSL's report export and the alert they received; guide steps for the admin and DSL. Guide for schools: docs/guides/access.md.
 - Tests: tests/unit/limited-admin.test.ts (26), tests/integration/limited-admin.test.ts (15), tests/e2e/limited-admin.spec.ts (5: en and ar, desktop and 390px, DSL alert). Full vitest suite 740 passing.
+## Course selection windows, exceptions, class sessions and assisted choosing (reg worktree)
+- Windows per year and grade with opening and closing times in Dubai time, rounds, calendar deadlines and server-side enforcement in one write path (submitChoices). Students and parents see "Opens ...", an open countdown, or a closed screen with who to ask. Staff edits after closing are labelled and audited.
+- Late-change exceptions for one student (reason required, student and parents told), class choosing sessions for a homeroom with a QR code, short link and live progress, assisted choosing by teachers, counselors, advisors and (when the school allows it) parents, per-choice attribution, parent sign-off.
+- School rules: parents choose always, only when allowed, or never (sign-off only); sign-off on or off; a parent's own choice counts as sign-off or not.
+- Pages: /subjects (banner, helpers, exceptions, status and sign-off), /subjects/help, /subjects/session, /subjects/session/[id], /subjects/join/[code] and the short link /choose/[code], /admin/registration/windows and /admin/registration/windows/[id] with CSV export at /api/registration/windows/[id]/export.
+- Notices through notify() with ledger idempotency (open, 3 days, 1 day, closing summary, staff reminder), worker job courseSelection.notices every 15 minutes, ten bilingual message templates created on first use.
+- Schema: migrations 20261026143000_course_selection_windows (six tables, SubjectRegistration.chosenAt, data migration of deadline-only windows) and 20261026150000_offering_track_unique. New permission registration.assist (teacher, counselor, career advisor, school administrator).
+- Seed: prisma/seed/academics/course-selection.ts. Guide: docs/guides/course-selection.md.
+- Tests: tests/unit/selection-window.test.ts, tests/integration/course-selection.test.ts, tests/e2e/course-selection.spec.ts.

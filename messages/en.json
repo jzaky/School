@@ -161,7 +161,8 @@
     "platformLeads": "Marketing leads",
     "platformReferrals": "Referrals",
     "platformSettings": "Platform settings",
-    "accessReport": "Who can see what"
+    "accessReport": "Who can see what",
+    "helpChoose": "Help students choose"
   },
   "shell": {
     "openMenu": "Open menu",
@@ -1266,7 +1267,8 @@
       "break_glass": "Emergency access used",
       "request_message": "A new message on a request",
       "absence_excused": "A student in my homeroom is reported absent",
-      "safeguarding_access_changed": "Changes to who can see safeguarding records"
+      "safeguarding_access_changed": "Changes to who can see safeguarding records",
+      "course_selection": "Course selection: dates, reminders and help"
     }
   },
   "adminAudit": {
@@ -2454,6 +2456,26 @@
       "accessAlerts": {
         "title": "Review safeguarding access",
         "body": "You are told whenever someone gains or loses safeguarding or wellbeing access. Check who has it and until when."
+      },
+      "letTeacherHelp": {
+        "title": "Let a teacher or a parent help you",
+        "body": "On Choose my courses, pick who can choose with you and until when. You can stop it at any time, and every choice shows who made it."
+      },
+      "helpChildChoose": {
+        "title": "Help Adam choose his courses",
+        "body": "Adam allowed you to help. Choose on his behalf on your phone, with the same AP guidance he sees; your name shows on each choice."
+      },
+      "classSession": {
+        "title": "Run a class choosing session",
+        "body": "Open choosing for Homeroom 9A for 45 minutes. Students scan the QR code and you watch who has finished, live."
+      },
+      "helpChoose": {
+        "title": "Help a student choose",
+        "body": "Find a student who asked for help and choose on their behalf, with the guidance they would see."
+      },
+      "selectionWindows": {
+        "title": "Set course selection windows",
+        "body": "Open and close choosing per grade in Dubai time, run rounds, and follow progress by homeroom."
       }
     }
   },
@@ -3243,7 +3265,7 @@
       "generic": "Something went wrong. Please try again.",
       "FORBIDDEN": "You do not have permission to do this.",
       "INVALID": "Please check the choices and try again.",
-      "CLOSED": "Registration is closed. Ask for a subject change instead.",
+      "CLOSED": "Choosing is closed for this grade. Ask your homeroom teacher or counselor if you need a change.",
       "NO_YEAR": "There is no current academic year.",
       "NOT_FOUND": "This record no longer exists.",
       "NO_OFFERINGS": "No subjects are offered to this grade yet.",
@@ -3255,7 +3277,10 @@
       "DUPLICATE": "This subject is already offered to the grade.",
       "IN_USE": "Students are registered for this subject. Move them first.",
       "PAST_DEADLINE": "Choose a deadline in the future.",
-      "TOO_MANY_ROWS": "The file has too many rows."
+      "TOO_MANY_ROWS": "The file has too many rows.",
+      "PARENT_SIGN_OFF_ONLY": "Your school asks parents to confirm choices, not make them.",
+      "PARENT_NOT_ALLOWED": "Your child makes these choices. They can let you help from their course screen.",
+      "DRAFT_THIS_YEAR": "This year's choices are saved in full. Choose every block first."
     },
     "subjectsTitle": "My subjects",
     "subjectsFor": "Subjects for {name}",
@@ -3403,7 +3428,10 @@
       "summaryEmpty": "Choose courses to see their university impact.",
       "explorePick": "Try other choices to see their university impact.",
       "exploreNote": "View only. Choices you try here are not saved; the student, a parent or the registration team can save them."
-    }
+    },
+    "windowsLink": "Selection windows",
+    "windowsOpenUntil": "{count, plural, one {# window open} other {# windows open}}. The next one closes {date}.",
+    "windowsNextOpens": "No window open now. The next one opens {date}."
   },
   "grades": {
     "title": "Grades",
@@ -6651,6 +6679,10 @@
         "manage": {
           "label": "Run subject registration",
           "help": "Open registration, allocate places and publish class lists."
+        },
+        "assist": {
+          "label": "Help students choose courses",
+          "help": "Choose on a student's behalf when allowed, allow late changes and run class choosing sessions, for their own students."
         }
       },
       "calendar": {
@@ -9790,5 +9822,361 @@
       }
     },
     "peopleLabel": "with access"
+  },
+  "gradeLevel": {
+    "label": "{level, select, kg1 {KG1} kg2 {KG2} other {Grade {grade}}}",
+    "short": "{level, select, kg1 {KG1} kg2 {KG2} other {{grade}}}"
+  },
+  "selection": {
+    "gradeSpan": "{from} to {to}",
+    "calendarTitle": "Course selection closes: {grades}",
+    "calendarTitleRound": "Course selection closes: {grades} ({round})",
+    "calendarDesc": "Students in {grades} choose their courses for {year}. Choosing opened on {opens} (Dubai time).",
+    "timeLabel": "Time",
+    "dubaiHint": "Dubai time (UTC+4).",
+    "contact": "{name} ({role})",
+    "role": {
+      "homeroom": "Homeroom teacher",
+      "counselor": "Counselor",
+      "advisor": "Career advisor",
+      "teacher": "Teacher",
+      "parent": "Parent",
+      "staff": "Staff"
+    },
+    "countdown": {
+      "ended": "now",
+      "daysHours": "{days, plural, one {# day} other {# days}}{hours, plural, =0 {} one {, # hour} other {, # hours}}",
+      "hoursMinutes": "{hours, plural, one {# hour} other {# hours}}{minutes, plural, =0 {} one {, # minute} other {, # minutes}}",
+      "minutes": "{minutes, plural, one {# minute} other {# minutes}}"
+    },
+    "banner": {
+      "openTitle": "Course selection for {year} is open.",
+      "closesIn": "Closes in",
+      "openDetail": "Closes {date}, Dubai time.",
+      "upcomingTitle": "Course selection for {year} opens {date}.",
+      "upcomingDetail": "It closes {date}, Dubai time. You can look at the options now.",
+      "closedTitle": "Course selection for {year} closed on {date}.",
+      "closedAsk": {
+        "self": "Your choices are locked. To change them, ask {names}.",
+        "other": "The choices are locked. To change them, ask {names}."
+      },
+      "closedAskSchool": {
+        "self": "Your choices are locked. To change them, ask your homeroom teacher or counselor.",
+        "other": "The choices are locked. To change them, ask the homeroom teacher or counselor."
+      },
+      "noneTitle": "Course selection for {year} is not scheduled for this grade yet.",
+      "noneDetail": "The school will announce the dates. You can look at the options now.",
+      "sessionTitle": "Choosing is open for {name} right now.",
+      "sessionDetail": "Class session with your teacher until {time}.",
+      "exceptionTitle": {
+        "self": "Your school allowed you to change your choices.",
+        "other": "The school allowed {name} to change these choices."
+      },
+      "exceptionDetail": "Until {date}, Dubai time.",
+      "staffCanEdit": "You can still change these choices as staff with registration rights. Changes after closing are labelled.",
+      "requestChange": "Request a subject change",
+      "listSep": " or "
+    },
+    "chosenBy": "Chosen by {by} for {name} on {date}",
+    "behalf": {
+      "title": "Choosing on behalf of {name}",
+      "allowedByStudent": "{name} allowed you to help until {date}.",
+      "allowedBy": "{by} allowed you to help until {date}.",
+      "staff": "You can change these choices as staff with registration rights.",
+      "parent": "You are choosing for your child while choosing is open.",
+      "recorded": "Every choice shows who made it."
+    },
+    "staffViewAssist": "You can see {name}'s choices. Turn on assisted choosing below to choose with them.",
+    "parentNotAllowed": "{name} makes these choices and can let you help from the course screen, or a teacher can allow it.",
+    "parentSignOffOnly": "Your school asks parents to confirm the choices rather than make them.",
+    "readOnly": {
+      "parentNotAllowed": "{name} makes these choices.",
+      "signOffOnly": "Parents confirm the choices; the student makes them.",
+      "upcoming": "Choosing opens {date}.",
+      "none": "Choosing has not been scheduled yet."
+    },
+    "afterClose": "Changed after closing",
+    "savedByFor": "Saved by {by} for {name} on {date}, not submitted yet.",
+    "savedBy": "Saved by {by} on {date}, not submitted yet.",
+    "submittedByFor": "Submitted by {by} for {name} on {date}.",
+    "submittedBy": "Submitted by {by} on {date}.",
+    "you": "you",
+    "signedOffBy": "Confirmed by {by} on {date}.",
+    "signOff": {
+      "prompt": "Please check {name}'s choices and confirm them.",
+      "waiting": "Waiting for a parent to confirm.",
+      "sameParent": "You made these choices, so {name} or another parent confirms them.",
+      "button": "Confirm these choices",
+      "done": "Choices confirmed for {name}"
+    },
+    "status": {
+      "not_started": "Not started",
+      "in_progress": "In progress",
+      "submitted": "Submitted",
+      "signed_off": "Signed off"
+    },
+    "picker": {
+      "saveDraft": "Save and finish later",
+      "draftSaved": "Saved. Finish the other blocks before choosing closes."
+    },
+    "help": {
+      "title": "Let someone help me choose",
+      "body": "They can make course choices for you on their phone until the date you set. You can stop it at any time, and every choice shows who made it.",
+      "staffTitle": "Assisted choosing for {name}",
+      "staffBody": "Choose who can make course choices for {name}. {name} and their parents are told who can help and until when.",
+      "pickLabel": "Who can help",
+      "groupStaff": "Teachers and advisors",
+      "groupParents": "Parents",
+      "noCandidates": "No teacher, counselor or advisor is linked to you yet. Ask the school office.",
+      "untilLabel": "Until",
+      "untilDefault": "Leave the date empty to allow it until choosing closes.",
+      "reasonLabel": "Note (optional)",
+      "reasonPlaceholder": "For example: no phone at home, so we choose together in class.",
+      "scopeNote": "This covers course selection only. It never shows cases, wellbeing or medical information.",
+      "cancel": "Cancel",
+      "save": "Allow",
+      "granted": "{name} can now help",
+      "cardTitle": "Help with choosing",
+      "cardTitleStaff": "Assisted choosing",
+      "cardActive": "These people can choose for you. Their name shows on every choice they make.",
+      "cardEmpty": "No phone at hand, or want help? Let a teacher, your counselor or a parent choose with you.",
+      "cardActiveStaff": "These people can choose for {name}.",
+      "cardEmptyStaff": "Nobody is helping {name} choose yet.",
+      "letHelp": "Let someone help me",
+      "turnOn": "Turn on assisted choosing",
+      "untilShort": "until {date}",
+      "allowedBy": "Allowed by {name}",
+      "revoke": "Stop",
+      "revokeTitle": "Stop {name} helping?",
+      "revokeBody": "{name} will no longer be able to make choices. Choices already made stay as they are.",
+      "revoked": "{name} can no longer help"
+    },
+    "exception": {
+      "button": "Allow changes",
+      "title": "Allow changes for {name}",
+      "body": "{name} can change these choices until the time you set, even when choosing is closed. {name} and their parents are told.",
+      "untilLabel": "Allow changes until",
+      "reasonLabel": "Reason",
+      "reasonPlaceholder": "For example: AP Chemistry was full in Round 1, choosing again.",
+      "reasonHint": "Required. It is kept in the audit log.",
+      "cancel": "Cancel",
+      "save": "Allow changes",
+      "granted": "Changes allowed for {name}",
+      "revoked": "Late changes ended",
+      "revoke": "End",
+      "cardTitle": "Late changes",
+      "cardActive": "{name} can change choices outside the window.",
+      "cardEmpty": "Let {name} change choices outside the window, until a time you set.",
+      "until": "Allowed until {date}",
+      "byReason": "{by}: {reason}"
+    },
+    "error": {
+      "generic": "Something went wrong. Please try again.",
+      "FORBIDDEN": "You do not have permission to do this.",
+      "INVALID": "Please check the details and try again.",
+      "NOT_FOUND": "This record no longer exists.",
+      "NO_YEAR": "There is no academic year for this.",
+      "BAD_RANGE": "The closing time must come after the opening time.",
+      "NO_GRADES": "Pick at least one grade.",
+      "OVERLAP": "Another window for one of these grades overlaps these dates. Change the dates or the grades.",
+      "ALREADY_CLOSED": "This window is already closed.",
+      "REASON_REQUIRED": "Please write a reason (at least 3 characters).",
+      "BAD_DATE": "Choose a time in the future, within the next 120 days.",
+      "NOT_ALLOWED_HELPER": "Only the student's own teachers, counselor or advisor can be chosen.",
+      "PARENTS_CANNOT_CHOOSE": "Your school asks parents to confirm choices, not make them.",
+      "PARENTS_ALWAYS": "Parents at this school can already choose while choosing is open.",
+      "NO_WINDOW": "There is no open or upcoming window. Choose an end date.",
+      "SELF": "Choose someone else.",
+      "NOT_REQUIRED": "This school does not ask for sign-off.",
+      "NOTHING_TO_SIGN": "There is nothing waiting for confirmation.",
+      "SAME_PARENT": "You made these choices, so another parent or the student confirms them.",
+      "NOT_OPEN": "This window is not open.",
+      "CLOSED": "Choosing is closed."
+    },
+    "windows": {
+      "title": "Course selection windows",
+      "subtitle": "When each grade chooses courses, in Dubai time. Students and parents can change choices only while a window is open.",
+      "back": "Subject registration",
+      "new": "New window",
+      "edit": "Edit",
+      "newTitle": "New selection window",
+      "editTitle": "Edit selection window",
+      "dialogBody": "Students in the grades you pick can choose between the opening and closing times. Run another round later for students whose first choices were full.",
+      "yearLabel": "School year",
+      "yearNext": "{year}: next year",
+      "yearCurrent": "{year}: this year",
+      "gradesLabel": "Grades",
+      "gradesHint": "The grades students are in now.",
+      "gradesHintNext": "The grades students are in now. A Grade 9 student chooses Grade 10 courses for next year.",
+      "opensLabel": "Opens",
+      "closesLabel": "Closes",
+      "opensTime": "Opening time",
+      "closesTime": "Closing time",
+      "dubaiHint": "Dates and times are in Dubai time (UTC+4). Choosing is open from the opening time until the closing time.",
+      "roundEn": "Round name in English (optional)",
+      "roundAr": "Round name in Arabic (optional)",
+      "roundEnPlaceholder": "Round 1",
+      "roundArPlaceholder": "الجولة الأولى",
+      "cancel": "Cancel",
+      "save": "Save window",
+      "saved": "Window saved",
+      "closeNow": "Close now",
+      "closeTitle": "Close this window now?",
+      "closeBody": "Students and parents can no longer change choices. Staff with registration rights still can, and their changes are labelled.",
+      "closed": "Window closed",
+      "gradeSpan": "{from} to {to}",
+      "state": {
+        "open": "Open",
+        "upcoming": "Not open yet",
+        "closed": "Closed"
+      },
+      "range": "{opens} to {closes}",
+      "done": "{done} of {total} finished",
+      "overview": "Progress",
+      "empty": "No windows for this year",
+      "emptyBody": "Add a window so students know when to choose.",
+      "noYear": "No academic year yet",
+      "noYearBody": "Add the academic year in School setup first.",
+      "settingsTitle": "Rules for this school",
+      "settingsBody": "Who can make choices, and whether a parent confirms them."
+    },
+    "settings": {
+      "parentChoice": "Parents can make course choices",
+      "mode": {
+        "ALWAYS": {
+          "label": "Always",
+          "help": "Parents can choose whenever choosing is open."
+        },
+        "WHEN_ALLOWED": {
+          "label": "Only when allowed",
+          "help": "The student, a teacher or an admin allows a named parent first."
+        },
+        "NEVER": {
+          "label": "Never, sign-off only",
+          "help": "Parents confirm the choices but never make them."
+        }
+      },
+      "signOff": "A parent confirms the choices",
+      "signOffHelp": "After the choices are submitted, a parent signs them off.",
+      "parentSigns": "A parent's own choices count as their sign-off",
+      "parentSignsHelp": "When this is off, another parent or the student confirms what a parent chose.",
+      "save": "Save rules",
+      "saved": "Rules saved"
+    },
+    "overview": {
+      "title": "Selection progress",
+      "titleRound": "{grades}, {round}",
+      "subtitle": "{opens} to {closes}, Dubai time.",
+      "back": "Selection windows",
+      "export": "Export CSV",
+      "remind": "{count, plural, =0 {Everyone has finished} one {Remind # student not finished} other {Remind # students not finished}}",
+      "reminded": "Reminders sent about {students} students to {people} people.",
+      "remindedAlready": "Everyone not finished was already reminded today.",
+      "cohort": "{count, plural, one {# student chooses} other {# students choose}} in this window",
+      "stat": {
+        "not_started": "Not started",
+        "in_progress": "In progress",
+        "submitted": "Submitted",
+        "signed_off": "Signed off"
+      },
+      "emptyCohort": "No students choose in this window",
+      "emptyCohortBody": "No student in these grades has courses to choose for this year yet. Add offerings first.",
+      "byHomeroom": "Progress by homeroom",
+      "doneOf": "{done} of {total} finished",
+      "noHomeroom": "{grade}, no homeroom",
+      "students": "Students",
+      "studentsBody": "{count, plural, one {# student} other {# students}} shown",
+      "allGrades": "All grades",
+      "noMatch": "No students match these filters.",
+      "blocks": "{chosen} of {total} blocks",
+      "by": "last change by {name}",
+      "afterClose": "Changed after closing",
+      "open": "Open",
+      "exceptions": "Late changes",
+      "exceptionsBody": "Students allowed to change choices outside the window.",
+      "noExceptions": "None right now.",
+      "exceptionLine": "Allowed by {by} until {date}",
+      "assisted": "Assisted choosing",
+      "assistedBody": "Who can choose for a student, and until when.",
+      "noAssisted": "None right now.",
+      "helperLine": "{helper} for {student}",
+      "grantedByStudent": "Allowed by the student until {date}",
+      "grantedBy": "Allowed by {by} until {date}",
+      "parent": "Parent",
+      "sessions": "Class sessions now",
+      "sessionsBody": "Homerooms choosing together right now.",
+      "noSessions": "None right now.",
+      "sessionLine": "Started by {by}, until {date}"
+    },
+    "session": {
+      "title": "Class choosing sessions",
+      "subtitle": "Open choosing for your homeroom for a set time, for example during a homeroom period. Students scan the QR code on their phones.",
+      "back": "Help a student choose",
+      "noClasses": "No homeroom class",
+      "noClassesBody": "Class sessions are for homeroom teachers. Ask the school office if your homeroom is missing.",
+      "studentsN": "{count, plural, one {# student} other {# students}}",
+      "forYear": "choosing for {year}",
+      "live": "Live",
+      "liveUntil": "Live until {time}. Open the live screen",
+      "duration": "How long",
+      "minutes": "{count} min",
+      "start": "Start session",
+      "history": "Earlier sessions",
+      "historyLine": "{start} to {end}",
+      "liveTitle": "Class session",
+      "liveHeading": "Choosing session: {name}",
+      "liveSubtitle": "Course selection for {year}",
+      "ended": "Ended",
+      "endedBody": "This session has ended. Students can change choices only while their window is open.",
+      "scan": "Scan to open your course choices",
+      "qrLabel": "QR code for the {name} choosing session",
+      "code": "Code",
+      "copied": "Link copied",
+      "copyFailed": "Could not copy the link",
+      "classScreen": "Class screen",
+      "end": "End session",
+      "endTitle": "End the session now?",
+      "endBody": "Students in {name} can no longer change choices through this session.",
+      "endedToast": "Session ended",
+      "cancel": "Cancel",
+      "finished": "Finished",
+      "choosing": "Choosing",
+      "waitingSignOff": "Waiting for sign-off",
+      "notStarted": "Not started",
+      "noStudents": "No students in this class have courses to choose yet.",
+      "waitingParent": "Waiting for parent",
+      "blocks": "{chosen} of {total} blocks",
+      "screenTitle": "{name}: choose your courses",
+      "closeScreen": "Close",
+      "backSessions": "Class choosing sessions"
+    },
+    "join": {
+      "title": "Class session",
+      "endedTitle": "The {name} session has ended",
+      "endedBody": "Ask your teacher to start a new one, or choose while your window is open.",
+      "otherClassTitle": "This link is for {name}",
+      "otherClassBody": "Open your own course choices instead.",
+      "open": "Go to my courses"
+    },
+    "helpPage": {
+      "title": "Help a student choose",
+      "subtitle": "Choose courses with a student, on their behalf, from your phone. Students can ask you, or you can turn it on for students you teach or advise.",
+      "classSession": "Class session",
+      "askedTitle": "Asked for your help",
+      "askedBody": "These students let you choose for them.",
+      "studentsTitle": "Your students",
+      "studentsAll": "Every student in the school.",
+      "studentsMine": "{count, plural, one {# student you teach or advise} other {# students you teach or advise}}",
+      "searchPlaceholder": "Search by name or student number",
+      "search": "Search",
+      "noMatch": "No students found",
+      "noMatchBody": "Try another name or the student number.",
+      "noStudents": "No students yet",
+      "noStudentsBody": "Students you teach, advise or support appear here.",
+      "more": "Showing {shown} of {total}. Search to find others.",
+      "canHelpUntil": "You can help until {date}",
+      "helpChoose": "Help choose",
+      "open": "Open"
+    }
   }
 }

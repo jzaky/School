@@ -2183,7 +2183,8 @@ model SubjectOffering {
   isAP           Boolean           @default(false)
   createdAt      DateTime          @default(now())
 
-  @@unique([orgId, academicYearId, subjectId, gradeLevel])
+  // One row per subject, grade and track (a null track means every track; never alongside a track row).
+  @@unique([orgId, academicYearId, subjectId, gradeLevel, curriculum])
   @@index([orgId])
 }
 
@@ -2199,11 +2200,154 @@ model SubjectRegistration {
   classId        String?
   preference     Int                @default(1)
   createdById    String?
+  /// When this choice was last made (createdById made it).
+  chosenAt       DateTime?
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
 
   @@unique([academicYearId, studentId, subjectId])
   @@index([orgId, studentId])
+}
+
+// ---------------------------------------------------------------------------
+// Course selection: windows, late-change exceptions, class sessions, assisted choosing, sign-off
+// ---------------------------------------------------------------------------
+
+/// Whether parents can make course choices for their child.
+enum ParentChoiceMode {
+  /// Whenever choosing is open.
+  ALWAYS
+  /// Only after the student, a teacher or an admin allows that parent.
+  WHEN_ALLOWED
+  /// Parents confirm (sign off) but never choose.
+  NEVER
+}
+
+/// Course selection rules for one school. Defaults apply until the school saves them.
+model CourseSelectionSettings {
+  id                   String           @id @default(cuid())
+  orgId                String           @unique
+  parentChoice         ParentChoiceMode @default(ALWAYS)
+  /// A parent confirms the choices once they are submitted.
+  signOffRequired      Boolean          @default(false)
+  /// When a parent makes the choices, that counts as their own sign-off.
+  parentChoiceSignsOff Boolean          @default(true)
+  updatedById          String?
+  updatedAt            DateTime         @updatedAt
+}
+
+/// When students in some grades choose courses for a year. Rounds can follow each other.
+model CourseSelectionWindow {
+  id              String   @id @default(cuid())
+  orgId           String
+  academicYearId  String
+  /// Grades the students are in now (a Grade 9 student chooses Grade 10 courses for next year).
+  gradeLevels     Int[]
+  /// Open from opensAt (inclusive) until closesAt (exclusive).
+  opensAt         DateTime
+  closesAt        DateTime
+  roundEn         String?
+  roundAr         String?
+  /// The closing deadline on the school calendar.
+  calendarEventId String?
+  createdById     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([orgId, academicYearId])
+}
+
+/// One student may change their choices until a time, outside the window. Reason required.
+model CourseSelectionException {
+  id             String    @id @default(cuid())
+  orgId          String
+  studentId      String
+  academicYearId String
+  until          DateTime
+  reason         String
+  grantedById    String
+  createdAt      DateTime  @default(now())
+  revokedAt      DateTime?
+  revokedById    String?
+
+  @@index([orgId, studentId])
+}
+
+/// Choosing opened for one homeroom class for a short time (for example during a homeroom period).
+model CourseSelectionSession {
+  id             String    @id @default(cuid())
+  orgId          String
+  classId        String
+  academicYearId String
+  /// Short code for the link and QR code students scan.
+  code           String
+  startsAt       DateTime
+  endsAt         DateTime
+  startedById    String
+  /// Set when the teacher ends it early.
+  endedAt        DateTime?
+  endedById      String?
+  createdAt      DateTime  @default(now())
+
+  @@unique([orgId, code])
+  @@index([orgId, classId])
+}
+
+enum SelectionHelperKind {
+  STAFF
+  GUARDIAN
+}
+
+/// Someone allowed to make course choices for a student (assisted choosing). Selection data only.
+model CourseSelectionHelper {
+  id          String              @id @default(cuid())
+  orgId       String
+  studentId   String
+  /// Membership of the teacher, counselor, advisor or guardian who may help.
+  helperId    String
+  kind        SelectionHelperKind
+  until       DateTime
+  reason      String?
+  grantedById String
+  /// The student allowed it themselves (false: a teacher or an admin did).
+  byStudent   Boolean             @default(false)
+  createdAt   DateTime            @default(now())
+  revokedAt   DateTime?
+  revokedById String?
+
+  @@index([orgId, studentId])
+  @@index([orgId, helperId])
+}
+
+enum CourseSelectionStatus {
+  /// Some choices saved, not submitted yet.
+  DRAFT
+  SUBMITTED
+  SIGNED_OFF
+}
+
+/// Where a student's choices for a year stand, and who made and confirmed them.
+model CourseSelectionSubmission {
+  id             String                @id @default(cuid())
+  orgId          String
+  studentId      String
+  academicYearId String
+  status         CourseSelectionStatus @default(DRAFT)
+  lastById       String?
+  lastSource     RegistrationSource?
+  /// Made by someone other than the student (a helper, a parent or staff).
+  onBehalf       Boolean               @default(false)
+  /// Changed by staff after the window closed.
+  afterClose     Boolean               @default(false)
+  lastAt         DateTime?
+  submittedAt    DateTime?
+  signedOffAt    DateTime?
+  signedOffById  String?
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+
+  @@unique([academicYearId, studentId])
+  @@index([orgId, academicYearId])
 }
 
 // ---------------------------------------------------------------------------

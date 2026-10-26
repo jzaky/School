@@ -31,7 +31,43 @@ for (const k of A.keys()) if (!E.has(k)) problems.push(`missing in en: ${k}`);
 
 // Values that are fine without Arabic letters: digits, codes, brand-neutral symbols, language names shown in their own script.
 const ALLOW = /^([\d\s.,:%+\-/()#|·]*|[A-Z]{2,6}(-\d)?|English|Google|Microsoft|123|CSV|PDF|me-central-1|horizon\.school\/home|SUB-2026-0041)$/;
-const placeholders = (s: string) => [...s.matchAll(/\{(\w+)[,}]/g)].map((m) => m[1]).sort().join(",");
+// ICU argument names only: the branch texts of select and plural ({kg1 {KG1} other {...}}) are message text, not arguments.
+function placeholders(s: string): string {
+  const names = new Set<string>();
+  let i = 0;
+  const message = (stop: boolean) => {
+    while (i < s.length) {
+      const c = s[i];
+      if (c === "}" && stop) return;
+      if (c === "{") argument();
+      else i++;
+    }
+  };
+  const argument = () => {
+    i++;
+    const m = /^\s*(\w+)\s*(?:,\s*(\w+)\s*)?/.exec(s.slice(i));
+    if (!m) return;
+    names.add(m[1]);
+    i += m[0].length;
+    if (m[2] === "select" || m[2] === "plural" || m[2] === "selectordinal") {
+      if (s[i] === ",") i++;
+      while (i < s.length && s[i] !== "}") {
+        while (i < s.length && s[i] !== "{" && s[i] !== "}") i++;
+        if (s[i] !== "{") break;
+        i++;
+        message(true);
+        i++;
+      }
+    } else {
+      let depth = 1;
+      while (i < s.length && depth > 0) depth += s[i] === "{" ? 1 : s[i] === "}" ? -1 : 0, i++;
+      return;
+    }
+    i++;
+  };
+  message(false);
+  return [...names].sort().join(",");
+}
 for (const [k, v] of A) {
   if (!v.trim()) problems.push(`empty ar: ${k}`);
   else if (!/PlaceholderEn$/.test(k) && !/[؀-ۿ]/.test(v) && !ALLOW.test(v.trim()) && !/\{\w+\}/.test(v)) problems.push(`no Arabic text in ar: ${k} = ${v}`);

@@ -1,6 +1,5 @@
 // Demo data for subject registration and class allocation.
-// Offerings for grades 6 to 12 (core subjects, plus option blocks A to D from Grade 9), a registration
-// window that is open now, a registration for every student made from the classes they already sit in,
+// Offerings for grades 6 to 12 (core subjects, plus option blocks A to D from Grade 9), a registration for every student made from the classes they already sit in,
 // completed subject changes applied, and allocation run so every class has a roster.
 // Safe to re-run: offerings are only added when missing, students who already registered are kept,
 // and allocation is idempotent. Uses only db, orgId and now, and reads everything else.
@@ -8,10 +7,10 @@ import type { Prisma, PrismaClient, RegistrationSource } from "@prisma/client";
 import type { SeedWorld } from "../demo";
 import { at } from "../lib";
 import { blocksOf, missingPrerequisites } from "@/lib/registration";
-import { applySubjectChange, currentYear, getWindow, offeringsFor, runAllocation, setWindow } from "@/server/registration/service";
+import { applySubjectChange, currentYear, offeringsFor, runAllocation } from "@/server/registration/service";
 
 type Bi = { en: string; ar: string };
-type OfferingSpec = { code: string; kind: "CORE" | "OPTION"; block?: string; periods: number; prereq?: string[]; notes?: Bi };
+export type OfferingSpec = { code: string; kind: "CORE" | "OPTION"; block?: string; periods: number; prereq?: string[]; notes?: Bi };
 
 const LOWER: OfferingSpec[] = [
   { code: "MATH", kind: "CORE", periods: 6 },
@@ -24,7 +23,7 @@ const LOWER: OfferingSpec[] = [
   { code: "ART", kind: "CORE", periods: 2 },
 ];
 
-function upper(grade: number): OfferingSpec[] {
+export function upper(grade: number): OfferingSpec[] {
   const senior = grade >= 11;
   return [
     { code: "MATH", kind: "CORE", periods: 6 },
@@ -113,12 +112,7 @@ export async function seedRegistrationData(db: PrismaClient, orgId: string, now:
   }
   await db.subjectOffering.createMany({ data: offeringRows, skipDuplicates: true });
 
-  // 2. Registration window: open, closing in nine days.
-  const win = await getWindow(tx, orgId, now);
-  if (!win.eventId) {
-    const registrar = await db.membershipRole.findFirst({ where: { orgId, role: { key: "registrar" } }, select: { membershipId: true } });
-    await setWindow(tx, orgId, at(9, 15, 0, now), registrar?.membershipId ?? null);
-  }
+  // 2. Selection windows are seeded in ./course-selection.ts (they span this year and next).
 
   // 3. Registrations from the classes students already sit in.
   const [students, existing, enrollments, registrarRole] = await Promise.all([

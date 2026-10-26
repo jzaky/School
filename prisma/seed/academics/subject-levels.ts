@@ -13,7 +13,7 @@ import type { Prisma, PrismaClient, RegistrationSource } from "@prisma/client";
 import { tenantDb } from "@/lib/tenant-db";
 import { addProgramToShortlist } from "@/server/pathways/shortlist";
 import { blocksOf, missingPrerequisites } from "@/lib/registration";
-import { currentYear, getWindow, offeringsFor, priorSubjectCodes, saveRegistration, selectionYear, setWindow } from "@/server/registration/service";
+import { currentYear, offeringsFor, priorSubjectCodes, saveRegistration, selectionYear } from "@/server/registration/service";
 import type { SeedWorld } from "../demo";
 import { at } from "../lib";
 
@@ -205,13 +205,8 @@ export async function seedSubjectLevelsFor(db: PrismaClient, orgId: string, now 
   }
   await db.subjectOffering.createMany({ data: rows, skipDuplicates: true });
 
-  // 4. Course selection for next year: open now, closing in two and a half weeks.
-  const win = await getWindow(tx, orgId, now, { yearId: next.id, next: true });
+  // 4. Course selection windows for next year are seeded in ./course-selection.ts.
   const registrar = (await db.membershipRole.findFirst({ where: { orgId, role: { key: "registrar" } }, select: { membershipId: true } }))?.membershipId ?? null;
-  if (!win.eventId) {
-    const ev = await setWindow(tx, orgId, at(18, 15, 0, now), registrar, { next: { yearId: next.id, nameEn: next.nameEn, nameAr: next.nameAr } });
-    await db.calendarEvent.update({ where: { id: ev.id }, data: { createdAt: at(-10, 8, 30, now) } });
-  }
 
   // 5. More students on the American track: a few per grade who have no pathway records yet.
   const personaIds = new Set((await db.demoPersona.findMany({ where: { orgId } })).map((p) => p.membershipId));
