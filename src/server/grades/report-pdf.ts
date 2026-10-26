@@ -1,7 +1,7 @@
 // Bilingual term report card PDF. Uses the shared drawing helpers in documents/pdf.ts for Arabic shaping.
-import PDFDocument from "pdfkit";
-import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY, type Letterhead } from "@/server/documents/pdf";
+import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY, newPdf, type Letterhead } from "@/server/documents/pdf";
 import type { ReportCardData } from "./report-card";
+import { gradeTextIn } from "@/server/common/grade-text";
 
 function fmtDates(iso: string) {
   const d = new Date(iso);
@@ -16,7 +16,7 @@ const pctAr = (n: number | null) => (n === null ? "-" : `%${n.toFixed(1)}`);
 
 /** `letterhead` adds the school's logo; the names printed are the ones stored when the card was issued. */
 export async function renderReportCardPdf(data: ReportCardData, letterhead?: Letterhead | null): Promise<Buffer> {
-  const doc = new PDFDocument({ size: "A4", margin: 0, bufferPages: true, info: { Title: `Term report card ${data.student.en} ${data.term.en}`, Author: data.school.en } });
+  const doc = newPdf({ size: "A4", margin: 0, bufferPages: true, info: { Title: `Term report card ${data.student.en} ${data.term.en}`, Author: data.school.en } });
   const chunks: Buffer[] = [];
   doc.on("data", (c: Buffer) => chunks.push(c));
   const done = new Promise<Buffer>((resolve) => doc.on("end", () => resolve(Buffer.concat(chunks))));
@@ -41,12 +41,11 @@ export async function renderReportCardPdf(data: ReportCardData, letterhead?: Let
 
   // Student block
   const d = fmtDates(data.issuedAt);
-  const cls = `${data.student.grade}${data.student.section ?? ""}`;
   drawLtr(doc, data.student.en, M, 86, half, { size: 15, font: FONTS.bold, color: NAVY });
-  drawLtr(doc, `Student no. ${data.student.studentNo}  ·  Grade ${cls}`, M, 108, half, { size: 9, color: MUTED });
+  drawLtr(doc, `Student no. ${data.student.studentNo}  ·  ${gradeTextIn("en", data.student.grade, data.student.section)}`, M, 108, half, { size: 9, color: MUTED });
   drawLtr(doc, `${data.term.en}  ·  ${data.year.en}  ·  Issued ${d.en}`, M, 122, half, { size: 9, color: MUTED });
   drawRtl(doc, data.student.ar, W / 2 + 10, 82, half, { size: 15, font: FONTS.bold, color: NAVY });
-  drawRtl(doc, `الرقم ${data.student.studentNo}  ·  الصف ${cls}`, W / 2 + 10, 104, half, { size: 9, color: MUTED });
+  drawRtl(doc, `الرقم ${data.student.studentNo}  ·  ${gradeTextIn("ar", data.student.grade, data.student.section)}`, W / 2 + 10, 104, half, { size: 9, color: MUTED });
   drawRtl(doc, `${data.term.ar}  ·  ${data.year.ar}  ·  تاريخ الإصدار ${d.ar}`, W / 2 + 10, 120, half, { size: 9, color: MUTED });
 
   // Overall summary

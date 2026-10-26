@@ -24,6 +24,8 @@ import { StatCard } from "@/components/app/stat-card";
 import { Pill } from "@/components/app/badges";
 import { DeleteOfferingButton, MoveStudent, OfferingDialog, RunAllocationButton } from "@/components/registration/admin-controls";
 import { ImportErrorList, RegistrationImporter } from "@/components/registration/registration-import";
+import { gradeLabel } from "@/lib/grade-levels";
+import { gradeParam } from "@/server/students/grade-options";
 
 export async function generateMetadata() {
   const t = await getTranslations("registration");
@@ -39,6 +41,7 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
   const ctx = await getCtx();
   if (!ctx.can("registration.manage")) notFound();
   const t = await getTranslations("registration");
+  const tg = await getTranslations("gradeLevel");
   const prefs = await formatPrefs(ctx);
   const { db, locale, orgId } = ctx;
   const { year, thisYear, nextYear, isNext, win, gradeLevels } = await tenantTx(orgId, async (tx) => {
@@ -69,7 +72,7 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
   const offset = isNext ? 1 : 0;
   const studentGrades = await db.student.groupBy({ by: ["gradeLevel"], where: { status: "ACTIVE" }, orderBy: { gradeLevel: "asc" } });
   const grades = isNext ? gradeLevels : [...new Set([...gradeLevels, ...studentGrades.map((g) => g.gradeLevel)])].sort((a, b) => a - b);
-  const requested = sp.grade && /^\d{1,2}$/.test(sp.grade) ? Number(sp.grade) : null;
+  const requested = gradeParam(sp.grade);
   const grade = requested !== null && grades.includes(requested) ? requested : (gradeLevels.find((g) => g >= 10) ?? grades[0] ?? 10);
 
   // Next year: the cohort is the students on the tracks the offerings are for, in the grade below.
@@ -161,7 +164,7 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
         <div className="flex flex-wrap gap-1.5" data-testid="grade-chips">
           {grades.map((g) => (
             <Link key={g} href={tabHref(tab, g)} className={cn("rounded-full border px-3 py-1 text-xs font-medium", g === grade ? "border-brand bg-brand-soft text-brand" : "bg-card text-muted-foreground hover:text-foreground")}>
-              {t("gradeN", { grade: g })}
+              {gradeLabel(tg, g)}
             </Link>
           ))}
         </div>
@@ -263,7 +266,7 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-4">
           <div className="flex items-center justify-between gap-2">
-            <h2 className="text-sm font-semibold">{isNext ? t("next.offeringsFor", { grade, year: `\u2066${pick(locale, year!.nameEn, year!.nameAr)}\u2069` }) : t("offeringsFor", { grade })}</h2>
+            <h2 className="text-sm font-semibold">{isNext ? t("next.offeringsForLabel", { grade: gradeLabel(tg, grade), year: `\u2066${pick(locale, year!.nameEn, year!.nameAr)}\u2069` }) : t("offeringsForLabel", { grade: gradeLabel(tg, grade) })}</h2>
             <OfferingDialog grade={grade} yearId={isNext ? year!.id : null} subjects={subjectOptions} courses={courseOptions} takenSubjectIds={offerings.map((o) => o.subjectId)} taken={offerings.map((o) => ({ subjectId: o.subjectId, curriculum: o.curriculum }))} />
           </div>
           {offerings.length === 0 ? (
@@ -284,7 +287,7 @@ export default async function RegistrationAdminPage({ searchParams }: { searchPa
           )}
         </div>
         <Panel className="h-fit">
-          <PanelHeader title={isNext ? t("next.progressTitle") : t("progressTitle")} description={isNext ? t("next.progressBody", { done: students.length - missing.length, total: students.length, grade: grade - 1 }) : t("progressBody", { done: students.length - missing.length, total: students.length })} icon={<UserPlus className="size-4" />} />
+          <PanelHeader title={isNext ? t("next.progressTitle") : t("progressTitle")} description={isNext ? t("next.progressBodyLabel", { done: students.length - missing.length, total: students.length, grade: gradeLabel(tg, grade - 1) }) : t("progressBody", { done: students.length - missing.length, total: students.length })} icon={<UserPlus className="size-4" />} />
           {missing.length === 0 ? (
             <p className="text-sm text-muted-foreground">{students.length ? t("allRegistered") : t("noStudentsInGrade")}</p>
           ) : (

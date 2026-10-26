@@ -24,12 +24,14 @@ import { ConversationPanel } from "@/components/requests/conversation-panel";
 import { threadAccess, unreadByRequest, visibleMessageWhere } from "@/server/requests/conversation";
 import { Pill } from "@/components/app/badges";
 import { absencePrivacy, canSeeAbsenceReason } from "@/server/access/absence-access";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export default async function RequestPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ submitted?: string; danger?: string }> }) {
   const { id } = await params;
   const sp = await searchParams;
   const ctx = await getCtx();
   const t = await getTranslations("requests");
+  const tg = await getTranslations("gradeLevel");
   const { db, locale } = ctx;
   const prefs = await formatPrefs(ctx);
   const request = await db.request.findFirst({
@@ -265,8 +267,7 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
                         personName(request.student, locale)
                       )}
                       <span className="ms-2 text-xs text-muted-foreground">
-                        {request.student.gradeLevel}
-                        {request.student.section}
+                        {gradeLabel(tg, request.student.gradeLevel, request.student.section, { short: true })}
                       </span>
                     </dd>
                   </div>

@@ -153,7 +153,7 @@ export function normalizeEventInput(input: CareerEventInput, now: Date) {
   if (Number.isNaN(input.startsAt.getTime()) || Number.isNaN(input.endsAt.getTime()) || input.endsAt <= input.startsAt) throw new CareerEventError("INVALID_DATES");
   if (input.startsAt <= now) throw new CareerEventError("IN_PAST");
   if (input.registrationDeadline && (Number.isNaN(input.registrationDeadline.getTime()) || input.registrationDeadline > input.startsAt)) throw new CareerEventError("DEADLINE_AFTER_START");
-  const grades = [...new Set(input.gradeLevels.filter((g) => Number.isInteger(g) && g >= 1 && g <= 13))].sort((a, b) => a - b);
+  const grades = [...new Set(input.gradeLevels.filter((g) => Number.isInteger(g) && g >= -1 && g <= 13))].sort((a, b) => a - b);
   if (!grades.length) throw new CareerEventError("GRADES_REQUIRED");
   const url = input.onlineUrl.trim();
   if (url && !/^https:\/\/[^\s]+\.[^\s]+$/i.test(url)) throw new CareerEventError("INVALID_URL");

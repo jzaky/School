@@ -1,6 +1,5 @@
 // Printable lesson plan with the session laid out minute by minute. Arabic is shaped and laid out right to left.
-import PDFDocument from "pdfkit";
-import { drawLtr, drawRtl, FONTS } from "@/server/documents/pdf";
+import { drawLtr, drawRtl, FONTS, newPdf } from "@/server/documents/pdf";
 
 const NAVY = "#123A63";
 const GOLD = "#C8A24A";
@@ -18,7 +17,7 @@ export type LessonPdfInput = {
 };
 
 export async function renderLessonPlanPdf(input: LessonPdfInput): Promise<Buffer> {
-  const doc = new PDFDocument({ size: "A4", margin: 0, bufferPages: true, info: { Title: input.title } });
+  const doc = newPdf({ size: "A4", margin: 0, bufferPages: true, info: { Title: input.title } });
   const chunks: Buffer[] = [];
   doc.on("data", (c: Buffer) => chunks.push(c));
   const done = new Promise<Buffer>((resolve) => doc.on("end", () => resolve(Buffer.concat(chunks))));

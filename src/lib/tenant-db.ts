@@ -99,10 +99,15 @@ export async function tenantTx<T>(
  */
 export async function userScope<T>(userId: string, fn: (tx: TenantTx) => Promise<T>): Promise<T> {
   assertId(userId, "userId");
-  return prisma.$transaction(async (tx) => {
-    await tx.$executeRaw`SELECT set_config('app.current_user_id', ${userId}, true)`;
-    return fn(tx);
-  });
+  // Same limits as tenantTx: the defaults (2 s to start, 5 s to finish) failed sign-ins and page loads under load
+  // tests with 50 or more people at once (docs/capacity.md); a busy server should be slow, not fail.
+  return prisma.$transaction(
+    async (tx) => {
+      await tx.$executeRaw`SELECT set_config('app.current_user_id', ${userId}, true)`;
+      return fn(tx);
+    },
+    { timeout: 15000, maxWait: 5000 },
+  );
 }
 
 /** Global identity tables (User, Account, VerificationToken). No tenant data lives here. */

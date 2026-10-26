@@ -95,7 +95,7 @@ export async function checkJoinCodeAction(code: string) {
 const childSchema = z.object({
   studentNo: z.string().max(40).nullable().optional(),
   dateOfBirth: z.string().max(20).nullable().optional(),
-  grade: z.number().int().min(0).max(13).nullable().optional(),
+  grade: z.number().int().min(-1).max(13).nullable().optional(),
   fullName: z.string().max(120).nullable().optional(),
 });
 

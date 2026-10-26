@@ -16,6 +16,7 @@ import { STAFF_ROLE_KEYS } from "@/server/identity/permissions";
 import type { AttendanceStatus } from "@prisma/client";
 import { codeForStatus, resolveCode, statusOf, visibleCode } from "@/server/attendance/codes";
 import { loadCodes, loadSettings } from "@/server/attendance/settings";
+import { MIN_GRADE_LEVEL, parseGradeLevel } from "@/lib/grade-levels";
 
 export const API_ERROR_MESSAGES = {
   UNAUTHORIZED: "A valid API key is required in the Authorization header (Bearer).",
@@ -253,10 +254,12 @@ export async function listStudents(orgId: string, sp: URLSearchParams) {
   const { limit, cursor } = pageParams(sp);
   const status = sp.get("status");
   if (status !== null && !["ACTIVE", "INACTIVE", "GRADUATED", "WITHDRAWN"].includes(status)) throw new ApiError(400, "INVALID_QUERY");
-  const grade = sp.get("grade");
-  if (grade !== null && !/^\d{1,2}$/.test(grade)) throw new ApiError(400, "INVALID_QUERY");
+  // grade is the stored integer (-1 KG1, 0 KG2, 1 to 12); "KG1" and "KG2" are accepted too.
+  const rawGrade = sp.get("grade");
+  const grade = rawGrade === null ? null : parseGradeLevel(rawGrade);
+  if (rawGrade !== null && (grade === null || grade < MIN_GRADE_LEVEL || grade > 13)) throw new ApiError(400, "INVALID_QUERY");
   const rows = await tenantDb(orgId).student.findMany({
-    where: { ...(status ? { status: status as never } : {}), ...(grade ? { gradeLevel: Number(grade) } : {}) },
+    where: { ...(status ? { status: status as never } : {}), ...(grade !== null ? { gradeLevel: grade } : {}) },
     orderBy: { id: "asc" },
     take: limit + 1,
     ...cursorArgs(cursor),

@@ -21,10 +21,11 @@ import { CompareSwitcher, ParamSelect } from "@/components/discovery/client";
 import { engineFocus } from "@/server/pathway-engine/page-data";
 import { subjectNames } from "@/server/pathway-engine/page-data";
 import { CURRICULA, type Curriculum, type LineResult } from "@/server/pathway-engine/types";
-import { loadComparison, staffStudentOptions, type CompareColumn } from "@/server/discovery/service";
+import { loadComparison, staffCanSearchStudents, staffStudentOptions, type CompareColumn } from "@/server/discovery/service";
 import { SECTION_ORDER, rowDiffers, type CompareRow, type CompareSection } from "@/server/discovery/compare";
 import { parseCompareIds, tuitionUsd } from "@/server/discovery/search";
 import { CatalogNotice } from "@/components/pathway-engine/catalog-notice";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export async function generateMetadata() {
   const t = await getTranslations("discovery");
@@ -51,6 +52,7 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
   const curriculum = (student?.curriculum as Curriculum | undefined) ?? pickedCurriculum;
   const [data, names, staffOptions] = await Promise.all([ids.length >= 2 ? loadComparison(ctx, focus, ids, curriculum) : null, subjectNames(ctx), staffStudentOptions(ctx, focus)]);
   const pickerOptions = focus.options.length ? focus.options : staffOptions;
+  const staffSearch = !focus.options.length && staffCanSearchStudents(ctx, focus);
   const studentParam = student && !ctx.isStudent ? student.id : null;
   const withStudent = (href: string) => (studentParam ? `${href}${href.includes("?") ? "&" : "?"}student=${studentParam}` : href);
   const searchHref = withStudent("/career/pathways/search");
@@ -63,12 +65,12 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
         {t("title")}
       </Link>
       <PageHeader
-        eyebrow={student && !ctx.isStudent ? te("studentLine", { name: student.name, grade: student.gradeLevel, curriculum: te(`curriculum.${student.curriculum}`) }) : undefined}
+        eyebrow={student && !ctx.isStudent ? `${student.name} · ${gradeLabel(await getTranslations("gradeLevel"), student.gradeLevel)} · ${te(`curriculum.${student.curriculum}`)}` : undefined}
         title={t("compareTitle")}
         description={student ? t("compareSubtitleStudent", { curriculum: te(`curriculum.${curriculum}`) }) : t("compareSubtitle", { curriculum: te(`curriculum.${curriculum}`) })}
         actions={
           <>
-            {pickerOptions.length > 0 && <StudentPicker students={pickerOptions} current={student?.id ?? null} />}
+            {(pickerOptions.length > 0 || staffSearch) && <StudentPicker students={pickerOptions} current={student?.id ?? null} search={staffSearch} />}
             {!student && (
               <ParamSelect param="curriculum" label={t("filter.curriculum")} value={curriculum} options={CURRICULA.filter((c) => c !== "OTHER").map((c) => ({ value: c, label: te(`curriculum.${c}`) }))} className="w-48" testId="compare-curriculum" />
             )}

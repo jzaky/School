@@ -22,6 +22,7 @@ import { ActionPlanPanel } from "@/components/cases/action-plan";
 import { caseAccess, canViewCase, SENSITIVE } from "@/server/access/case-access";
 import { formatAnswers } from "@/server/forms/answers";
 import type { FormSchema } from "@/server/forms/schema";
+import { gradeLabel } from "@/lib/grade-levels";
 
 const TABS = ["overview", "timeline", "appointments", "tasks", "documents", "forms", "communications", "people", "audit"] as const;
 type Tab = (typeof TABS)[number];
@@ -32,6 +33,7 @@ export default async function CasePage({ params, searchParams }: { params: Promi
   const ctx = await getCtx();
   if (!ctx.isStaff) notFound();
   const t = await getTranslations("case");
+  const tg = await getTranslations("gradeLevel");
   const ts = await getTranslations("status");
   const tsg = await getTranslations("safeguarding");
   const prefs = await formatPrefs(ctx);
@@ -143,7 +145,7 @@ export default async function CasePage({ params, searchParams }: { params: Promi
                 {pick(locale, c.titleEn, c.titleAr)}
               </h1>
               <Link href={`/students/${c.studentId}`} className="text-sm text-muted-foreground hover:text-brand">
-                {personName(c.student, locale)} · {t("grade", { grade: `${c.student.gradeLevel}${c.student.section ?? ""}` })}
+                {personName(c.student, locale)} · {gradeLabel(tg, c.student.gradeLevel, c.student.section)}
               </Link>
             </div>
           </div>

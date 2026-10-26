@@ -15,11 +15,13 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { acceptImportAction, deleteFrameworkAction, deleteStandardAction, discardAiDraftAction, extractDocumentTextAction, previewImportAction, saveFrameworkAction, saveStandardAction } from "@/server/curriculum/actions";
 import type { DraftStandard } from "@/server/curriculum/parse";
 import { SimpleSelect, useCurriculumError } from "./fields";
+import { ALL_GRADE_LEVELS, gradeLabel } from "@/lib/grade-levels";
 
 type FrameworkValue = { id?: string; nameEn: string; nameAr: string; subjectId: string; gradeLevel: number; sourceEn: string };
 
 export function FrameworkDialog({ framework, subjects }: { framework?: FrameworkValue; subjects: Array<{ id: string; label: string }> }) {
   const t = useTranslations("curriculum");
+  const tg = useTranslations("gradeLevel");
   const err = useCurriculumError();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -61,7 +63,7 @@ export function FrameworkDialog({ framework, subjects }: { framework?: Framework
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="fw-grade">{t("frameworks.grade")}</Label>
-                <Input id="fw-grade" type="number" min={1} max={13} value={v.gradeLevel} onChange={(e) => setV({ ...v, gradeLevel: Number(e.target.value) })} />
+                <SimpleSelect id="fw-grade" testId="framework-grade" options={ALL_GRADE_LEVELS.map((g) => ({ value: String(g), label: gradeLabel(tg, g) }))} value={String(v.gradeLevel)} onChange={(g) => setV({ ...v, gradeLevel: Number(g) })} />
               </div>
             </div>
             <div className="space-y-1.5">

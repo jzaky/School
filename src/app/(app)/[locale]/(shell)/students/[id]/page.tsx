@@ -18,12 +18,14 @@ import { requestWhere, isRestrictedForViewer } from "@/server/access/request-acc
 import { audit } from "@/server/audit/audit";
 import { excusedLabelKey, seesStudentAbsenceReasons } from "@/server/access/absence-access";
 import { awaitingAuthority } from "@/server/admissions/page-data";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export default async function StudentPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const ctx = await getCtx();
   if (!ctx.can("people.view")) notFound();
   const t = await getTranslations("students");
+  const tg = await getTranslations("gradeLevel");
   const ts = await getTranslations("status");
   const ta = await getTranslations("attendance");
   const prefs = await formatPrefs(ctx);
@@ -69,7 +71,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
             </h1>
             <p className="text-muted-foreground">{locale === "ar" ? `${s.firstNameEn} ${s.lastNameEn}` : `${s.firstNameAr} ${s.lastNameAr}`}</p>
             <div className="mt-2 flex flex-wrap gap-2">
-              <Pill tone="brand">{t("gradeN", { grade: `${s.gradeLevel}${s.section ?? ""}` })}</Pill>
+              <Pill tone="brand" data-testid="student-grade">{gradeLabel(tg, s.gradeLevel, s.section)}</Pill>
               {homeroom && <Pill>{t("tutor", { name: nameOf(homeroom.class.teacherMembershipId) })}</Pill>}
               {s.houseEn && <Pill tone="gold" >{t("house", { house: pick(locale, s.houseEn, s.houseAr) })}</Pill>}
               {s.hasSen && <Pill tone="info">{t("sen")}</Pill>}

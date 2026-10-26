@@ -16,6 +16,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { PickerCombobox, type PickerOption } from "@/components/forms/picker-combobox";
+import { SearchPicker } from "@/components/forms/search-picker";
+import { searchMembersAction, type PickHit } from "@/server/people/search-actions";
 import {
   addRoleMemberAction,
   createRoleAction,
@@ -678,13 +680,13 @@ export function MemberRolesDialog({ membershipId, name, roles, current, selfBloc
   );
 }
 
-/** Person picker for the access check tab: navigates with ?person=. */
-export function AccessCheckPicker({ options, value }: { options: PickerOption[]; value: string }) {
+/** Person picker for the access check tab: searches everyone on the server and navigates with ?person=. */
+export function AccessCheckPicker({ selected, value }: { selected: PickHit | null; value: string }) {
   const t = useTranslations("adminRoles");
   const router = useRouter();
   return (
     <div className="max-w-md">
-      <PickerCombobox options={options} value={value} onChange={(v) => router.push(`/admin/roles?tab=check&person=${v}`)} placeholder={t("pickPerson")} testId="access-check-picker" />
+      <SearchPicker search={(q) => searchMembersAction({ q })} value={value} selected={selected} onChange={(v) => router.push(`/admin/roles?tab=check&person=${v}`)} placeholder={t("pickPerson")} testId="access-check-picker" />
     </div>
   );
 }

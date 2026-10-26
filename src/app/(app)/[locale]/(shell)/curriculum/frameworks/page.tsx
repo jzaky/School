@@ -8,6 +8,7 @@ import { EmptyState } from "@/components/app/empty-state";
 import { CurriculumNav } from "@/components/curriculum/curriculum-nav";
 import { FrameworkDialog } from "@/components/curriculum/framework-forms";
 import { curriculumShell } from "@/server/curriculum/shell";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export async function generateMetadata() {
   const t = await getTranslations("curriculum");
@@ -17,6 +18,7 @@ export async function generateMetadata() {
 export default async function FrameworksPage() {
   const ctx = await getCtx();
   const t = await getTranslations("curriculum");
+  const tg = await getTranslations("gradeLevel");
   if (!ctx.isStaff || !ctx.can("curriculum.manage")) {
     return (
       <PageBody>
@@ -55,7 +57,7 @@ export default async function FrameworksPage() {
             return (
               <Link key={f.id} href={`/curriculum/frameworks/${f.id}`} className="block rounded-xl border bg-card p-5 shadow-xs transition hover:border-brand/25 hover:shadow-sm">
                 <div className="text-xs text-muted-foreground">
-                  {subject ? pick(locale, subject.nameEn, subject.nameAr) : t("frameworks.noSubject")} · {t("gradeN", { grade: f.gradeLevel ?? 0 })}
+                  {subject ? pick(locale, subject.nameEn, subject.nameAr) : t("frameworks.noSubject")} · {f.gradeLevel === null ? "" : gradeLabel(tg, f.gradeLevel)}
                 </div>
                 <div className="mt-1 font-semibold">{pick(locale, f.nameEn, f.nameAr)}</div>
                 <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">

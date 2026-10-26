@@ -25,6 +25,8 @@ import type { Ctx } from "@/server/context";
 import type { FormatPrefs } from "@/lib/format";
 import { fmtDate, fmtNumber, fmtRelative } from "@/lib/format";
 import { initials, personName, pick, userName } from "@/lib/i18n-data";
+import { gradeLabel } from "@/lib/grade-levels";
+import { attendancePctFor } from "@/server/attendance/reports";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { PageBody } from "@/components/app/page-header";
@@ -58,7 +60,7 @@ export async function StudentHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs
   const chosen = profile?.chosenCareerId ? recs.find((r) => r.careerId === profile.chosenCareerId)?.career : null;
   return (
     <PageBody>
-      <Greeting ctx={ctx} prefs={prefs} subtitle={t("studentSubtitle", { grade: `${student.gradeLevel}${student.section ?? ""}` })} />
+      <Greeting ctx={ctx} prefs={prefs} subtitle={t("studentSubtitleLabel", { grade: gradeLabel(await getTranslations("gradeLevel"), student.gradeLevel, student.section) })} />
       <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <div className="space-y-6 lg:col-span-2">
           <RequestsPanel ctx={ctx} prefs={prefs} limit={4} />
@@ -115,10 +117,13 @@ export async function ParentHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs 
   const t = await getTranslations("home");
   const links = ctx.membership.guardian?.links ?? [];
   const kids = links.map((l) => l.student);
-  const since = new Date(Date.now() - 30 * 86400_000);
+  const tg = await getTranslations("gradeLevel");
+  const now = new Date();
+  const since = new Date(now.getTime() - 30 * 86400_000);
   const [attendance, homerooms, approvals] = await Promise.all([
-    ctx.db.attendanceRecord.groupBy({ by: ["studentId", "status"], where: { studentId: { in: kids.map((k) => k.id) }, date: { gte: since, lte: new Date() } }, _count: { _all: true } }),
-    ctx.db.enrollment.findMany({ where: { studentId: { in: kids.map((k) => k.id) }, class: { isHomeroom: true } }, include: { class: true } }),
+    // Last 30 days with the school's codes (the same maths as the child page); null when nothing is counted yet.
+    attendancePctFor(ctx.db, kids.map((k) => k.id), since, now),
+    ctx.db.enrollment.findMany({ where: { studentId: { in: kids.map((k) => k.id) }, status: "ACTIVE", class: { isHomeroom: true, academicYear: { isCurrent: true } } }, include: { class: true } }),
     ctx.db.approvalAssignee.findMany({ where: { membershipId: ctx.membershipId, status: "PENDING", approval: { status: "PENDING" } }, include: { approval: { include: { request: { include: { service: true } } } } } }),
   ]);
   const tutorIds = homerooms.map((h) => h.class.teacherMembershipId).filter(Boolean) as string[];
@@ -142,10 +147,9 @@ export async function ParentHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs 
       <ParentFeesHomeCard ctx={ctx} prefs={prefs} />
       <div className="grid gap-4 md:grid-cols-2 [&>*]:min-w-0">
         {kids.map((k) => {
-          const rows = attendance.filter((a) => a.studentId === k.id);
-          const total = rows.reduce((s, r) => s + r._count._all, 0);
-          const present = rows.filter((r) => r.status === "PRESENT" || r.status === "LATE").reduce((s, r) => s + r._count._all, 0);
-          const pct = total ? Math.round((present / total) * 100) : 100;
+          const raw = attendance.get(k.id) ?? null;
+          const pct = raw === null ? null : Math.round(raw);
+          const startsOn = k.enrolledOn && k.enrolledOn.getTime() > now.getTime() ? k.enrolledOn : null;
           const hr = homerooms.find((h) => h.studentId === k.id);
           const tutor = tutors.find((m) => m.id === hr?.class.teacherMembershipId);
           return (
@@ -156,11 +160,17 @@ export async function ParentHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs 
                   {personName(k, ctx.locale)}
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  {t("gradeSection", { grade: k.gradeLevel, section: k.section ?? "" })}
+                  <span data-testid="child-grade">{gradeLabel(tg, k.gradeLevel, k.section)}</span>
                   {tutor && ` · ${t("tutor", { name: userName(tutor.user, ctx.locale) })}`}
                 </div>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  <Pill tone={pct >= 95 ? "success" : pct >= 90 ? "warning" : "danger"}>{t("attendancePct", { pct })}</Pill>
+                  {startsOn ? (
+                    <Pill tone="info" data-testid="child-starts">{t("startsOn", { date: fmtDate(prefs, startsOn, "medium") })}</Pill>
+                  ) : pct === null ? (
+                    <Pill data-testid="child-no-attendance">{t("noAttendanceYet")}</Pill>
+                  ) : (
+                    <Pill tone={pct >= 95 ? "success" : pct >= 90 ? "warning" : "danger"}>{t("attendancePct", { pct })}</Pill>
+                  )}
                 </div>
               </div>
               <Button asChild size="sm" variant="outline">
@@ -190,9 +200,10 @@ export async function ParentHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs 
 // ---------------------------------------------------------------------------
 export async function TeacherHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs }) {
   const t = await getTranslations("home");
+  const tg = await getTranslations("gradeLevel");
   const { db, orgId, membershipId, locale } = ctx;
   const [classes, approvals, referrals, services] = await Promise.all([
-    db.schoolClass.findMany({ where: { orgId, teacherMembershipId: membershipId }, include: { subject: true, _count: { select: { enrollments: true } } }, orderBy: [{ isHomeroom: "desc" }, { gradeLevel: "asc" }] }),
+    db.schoolClass.findMany({ where: { orgId, teacherMembershipId: membershipId, academicYear: { isCurrent: true } }, include: { subject: true, _count: { select: { enrollments: { where: { status: "ACTIVE" } } } } }, orderBy: [{ isHomeroom: "desc" }, { gradeLevel: "asc" }] }),
     db.approvalAssignee.count({ where: { orgId, membershipId, status: "PENDING", approval: { status: "PENDING" } } }),
     db.request.findMany({ where: { orgId, requesterId: membershipId, service: { key: { in: REFERRAL_SERVICES } } }, include: { service: true, student: true }, orderBy: { submittedAt: "desc" }, take: 5 }),
     db.serviceDefinition.findMany({ where: { orgId, key: { in: ["academic_concern", "safeguarding_concern"] } } }),
@@ -237,9 +248,8 @@ export async function TeacherHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs
             <div className="grid gap-2 sm:grid-cols-2">
               {classes.map((c) => (
                 <Link key={c.id} href={`/students?class=${c.id}`} className="flex items-center gap-3 rounded-lg border p-3 transition hover:border-brand/30">
-                  <span className={cn("grid size-9 place-items-center rounded-md text-xs font-semibold", c.isHomeroom ? "bg-gold-soft text-[oklch(0.5_0.1_80)]" : "bg-brand-soft text-brand")}>
-                    {c.gradeLevel}
-                    {c.section ?? ""}
+                  <span className={cn("grid h-9 min-w-9 shrink-0 place-items-center whitespace-nowrap rounded-md px-1 text-xs font-semibold", c.isHomeroom ? "bg-gold-soft text-[oklch(0.5_0.1_80)]" : "bg-brand-soft text-brand")}>
+                    {gradeLabel(tg, c.gradeLevel, c.section, { short: true })}
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-sm font-medium">{pick(locale, c.nameEn, c.nameAr)}</div>
@@ -360,6 +370,7 @@ export async function CounselorHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPre
 // ---------------------------------------------------------------------------
 export async function CareerAdvisorHome({ ctx, prefs }: { ctx: Ctx; prefs: FormatPrefs }) {
   const t = await getTranslations("home");
+  const tg = await getTranslations("gradeLevel");
   const { db, orgId, membershipId, locale } = ctx;
   const now = new Date();
   const [cases, drafts, deadlines, sessions] = await Promise.all([
@@ -390,7 +401,7 @@ export async function CareerAdvisorHome({ ctx, prefs }: { ctx: Ctx; prefs: Forma
                     <span className="min-w-0 flex-1">
                       <span className="block truncate font-medium">{personName(c.student, locale)}</span>
                       <span className="block truncate text-xs text-muted-foreground">
-                        {t("gradeSection", { grade: c.student.gradeLevel, section: c.student.section ?? "" })} · {fmtRelative(prefs, c.openedAt)}
+                        {gradeLabel(tg, c.student.gradeLevel, c.student.section)} · {fmtRelative(prefs, c.openedAt)}
                       </span>
                     </span>
                     <CaseStatusBadge status={c.status} />

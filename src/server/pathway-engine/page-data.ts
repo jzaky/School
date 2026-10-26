@@ -3,6 +3,7 @@ import { cache } from "react";
 import type { Ctx } from "@/server/context";
 import { personName } from "@/lib/i18n-data";
 import { actorFromCtx, canApprovePlan, canEditPlan, canViewStudent, type EngineActor } from "./access";
+import { PATHWAY_MIN_GRADE } from "@/lib/grade-levels";
 
 /** Canonical subject names (global table), for labels. */
 export const subjectNames = cache(async (ctx: Ctx) => {
@@ -27,9 +28,10 @@ export async function engineFocus(ctx: Ctx, requested?: string | null): Promise<
   if (ctx.isStudent) id = ctx.membership.student?.id ?? null;
   else if (ctx.isParent) {
     const ids = actor.visibleStudentIds ?? [];
-    const kids = ids.length ? await ctx.db.student.findMany({ where: { id: { in: ids }, orgId: ctx.orgId }, orderBy: { gradeLevel: "desc" } }) : [];
+    // Pathway planning starts in Grade 9: younger brothers and sisters are not offered.
+    const kids = ids.length ? await ctx.db.student.findMany({ where: { id: { in: ids }, orgId: ctx.orgId, gradeLevel: { gte: PATHWAY_MIN_GRADE } }, orderBy: { gradeLevel: "desc" } }) : [];
     options = kids.length > 1 ? kids.map((k) => ({ value: k.id, label: personName(k, ctx.locale) })) : [];
-    id = requested && ids.includes(requested) ? requested : (kids[0]?.id ?? null);
+    id = requested && kids.some((k) => k.id === requested) ? requested : (kids[0]?.id ?? null);
   } else id = requested ?? null;
   if (!id || !canViewStudent(actor, id)) return { actor, student: null, canEdit: false, canApprove: false, options };
   const s = await ctx.db.student.findFirst({ where: { id, orgId: ctx.orgId } });

@@ -18,6 +18,8 @@ import { HolidaysDialog } from "@/components/calendar-admin/holidays-dialog";
 import { NewYearDialog, SetCurrentYearButton } from "@/components/calendar-admin/year-dialog";
 import { proposeUaeHolidays } from "@/server/calendar/uae-holidays";
 import { addDays, dayKey, weekdayOf } from "@/server/exams/schedule";
+import { gradeLabel } from "@/lib/grade-levels";
+import { gradeChoices } from "@/server/students/grade-options";
 
 export async function generateMetadata() {
   const t = await getTranslations("calendarAdmin");
@@ -26,15 +28,16 @@ export async function generateMetadata() {
 
 const KIND_TONE: Record<CalendarEventKind, Tone> = { EVENT: "brand", DEADLINE: "danger", HOLIDAY: "success", EXAM: "warning", FOLLOW_UP: "neutral" };
 const KINDS: CalendarEventKind[] = ["EVENT", "DEADLINE", "HOLIDAY", "EXAM"];
-const GRADES = [6, 7, 8, 9, 10, 11, 12];
 
 export default async function AdminCalendarPage({ searchParams }: { searchParams: Promise<{ year?: string; tab?: string; kind?: string }> }) {
   const sp = await searchParams;
   const ctx = await getCtx();
   if (!ctx.can("calendar.manage")) notFound();
   const t = await getTranslations("calendarAdmin");
+  const tg = await getTranslations("gradeLevel");
   const prefs = await formatPrefs(ctx);
   const { db, locale } = ctx;
+  const GRADES = await gradeChoices(db);
   const years = await db.academicYear.findMany({ orderBy: { startsOn: "desc" }, include: { terms: { orderBy: { startsOn: "asc" } } } });
   const year = years.find((y) => y.id === sp.year) ?? years.find((y) => y.isCurrent) ?? years[0];
   const tab = sp.tab === "list" ? "list" : "year";
@@ -278,7 +281,7 @@ export default async function AdminCalendarPage({ searchParams }: { searchParams
                         </div>
                         <div className="mt-0.5 text-xs text-muted-foreground">
                           {(e.audience.includes("all") ? ["staff", "student", "parent"] : e.audience).filter((a) => t.has(`audience.${a}`)).map((a) => t(`audience.${a}`)).join(" · ")}
-                          {e.gradeLevels.length > 0 && ` · ${e.gradeLevels.map((g) => t("gradeN", { grade: g })).join(", ")}`}
+                          {e.gradeLevels.length > 0 && ` · ${e.gradeLevels.map((g) => gradeLabel(tg, g)).join(", ")}`}
                           {pick(locale, e.locationEn, e.locationAr) && ` · ${pick(locale, e.locationEn, e.locationAr)}`}
                         </div>
                       </div>

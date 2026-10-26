@@ -34,7 +34,7 @@ function errorCode(e: unknown) {
 
 const qualSchema = z.object({
   membershipId: z.string().min(1),
-  rows: z.array(z.object({ subjectId: z.string().min(1), gradeLevels: z.array(z.number().int().min(0).max(13)).max(14) })).max(40),
+  rows: z.array(z.object({ subjectId: z.string().min(1), gradeLevels: z.array(z.number().int().min(-1).max(13)).max(15) })).max(40),
   maxPeriodsPerWeek: z.number().int().min(1).max(45),
 });
 
@@ -66,7 +66,7 @@ const bulkSchema = z.object({
   membershipIds: z.array(z.string().min(1)).min(1).max(200),
   maxPeriodsPerWeek: z.number().int().min(1).max(45).nullable(),
   addSubjectId: z.string().nullable(),
-  addGrades: z.array(z.number().int().min(0).max(13)).max(14),
+  addGrades: z.array(z.number().int().min(-1).max(13)).max(15),
 });
 
 /** Bulk edit: set the weekly maximum and/or add a subject with grades for several teachers at once. */

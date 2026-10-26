@@ -15,25 +15,28 @@ import { Pill } from "@/components/app/badges";
 import { DeleteSittingButton, PublishExamsButton, SittingDialog, SuggestDialog } from "@/components/exams/exam-admin";
 import { examContext } from "@/server/exams/queries";
 import { addDays, dayKey, detectClashes, type Clash } from "@/server/exams/schedule";
+import { gradeLabel } from "@/lib/grade-levels";
+import { gradeChoices, gradeParam } from "@/server/students/grade-options";
 
 export async function generateMetadata() {
   const t = await getTranslations("exams");
   return { title: t("adminTitle") };
 }
 
-const GRADES = [6, 7, 8, 9, 10, 11, 12];
 
 export default async function AdminExamsPage({ searchParams }: { searchParams: Promise<{ term?: string; grade?: string }> }) {
   const sp = await searchParams;
   const ctx = await getCtx();
   if (!ctx.can("calendar.manage")) notFound();
   const t = await getTranslations("exams");
+  const tg = await getTranslations("gradeLevel");
   const prefs = await formatPrefs(ctx);
   const { db, locale } = ctx;
   const ec = await examContext(ctx);
   const today = dayKey(new Date());
   const term = ec.terms.find((x) => x.id === sp.term) ?? ec.terms.find((x) => dayKey(x.startsOn) <= today && dayKey(x.endsOn) >= today) ?? ec.terms[0] ?? null;
-  const grade = sp.grade && /^\d{1,2}$/.test(sp.grade) ? Number(sp.grade) : null;
+  const grade = gradeParam(sp.grade);
+  const GRADES = await gradeChoices(ctx.db);
 
   const [all, subjects, staffRows] = await Promise.all([
     db.examSitting.findMany({ where: { termId: term?.id ?? null }, orderBy: [{ startsAt: "asc" }, { gradeLevel: "asc" }] }),
@@ -101,7 +104,7 @@ export default async function AdminExamsPage({ searchParams }: { searchParams: P
         </Link>
         {GRADES.map((g) => (
           <Link key={g} href={qs({ grade: String(g) })} className={cn("rounded-full border px-2.5 py-1 text-xs font-medium", grade === g ? "border-brand bg-brand-soft text-brand" : "bg-card text-muted-foreground")} data-testid={`filter-grade-${g}`}>
-            {t("gradeN", { grade: g })}
+            {gradeLabel(tg, g)}
           </Link>
         ))}
       </div>
@@ -124,7 +127,7 @@ export default async function AdminExamsPage({ searchParams }: { searchParams: P
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-1.5">
                           <span className="font-medium">{pick(locale, s.titleEn, s.titleAr)}</span>
-                          <Pill tone="brand">{t("gradeN", { grade: s.gradeLevel })}</Pill>
+                          <Pill tone="brand">{gradeLabel(tg, s.gradeLevel)}</Pill>
                           {s.status === "PUBLISHED" ? <Pill tone="success" dot>{t("statusPublished")}</Pill> : <Pill tone="neutral" dot>{t("statusDraft")}</Pill>}
                           {cs.map((c, i) => (
                             <Pill key={i} tone="danger" className="whitespace-normal">
@@ -157,7 +160,7 @@ export default async function AdminExamsPage({ searchParams }: { searchParams: P
                             invigilatorIds: s.invigilatorIds,
                           }}
                         />
-                        <DeleteSittingButton id={s.id} label={`${pick(locale, s.titleEn, s.titleAr)} (${s.gradeLevel})`} />
+                        <DeleteSittingButton id={s.id} label={`${pick(locale, s.titleEn, s.titleAr)} (${gradeLabel(tg, s.gradeLevel)})`} />
                       </div>
                     </li>
                   );

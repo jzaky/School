@@ -1,18 +1,39 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PickerCombobox, type PickerOption } from "@/components/forms/picker-combobox";
+import { StudentSearchPicker } from "@/components/forms/search-picker";
 
-/** Choose whose calendar to view: mine, a colleague, a department or a student. */
-export function CalendarScope({ staff, departments, students, isStaff }: { staff: PickerOption[]; departments: PickerOption[]; students: PickerOption[]; isStaff: boolean }) {
+/**
+ * Choose whose calendar to view: mine, a colleague, a department or a student. Parents pick from their children;
+ * staff search every student on the server (`searchStudents`), with `currentStudent` the one shown now.
+ */
+export function CalendarScope({
+  staff,
+  departments,
+  students,
+  isStaff,
+  searchStudents = false,
+  currentStudent = null,
+}: {
+  staff: PickerOption[];
+  departments: PickerOption[];
+  students: PickerOption[];
+  isStaff: boolean;
+  searchStudents?: boolean;
+  currentStudent?: PickerOption | null;
+}) {
   const t = useTranslations("calendar");
   const router = useRouter();
   const pathname = usePathname();
   const sp = useSearchParams();
-  const mode = sp.get("staff") ? "staff" : sp.get("dept") ? "dept" : sp.get("student") ? "student" : "me";
+  const [picking, setPicking] = useState(false);
+  const mode = sp.get("staff") ? "staff" : sp.get("dept") ? "dept" : sp.get("student") || picking ? "student" : "me";
+  const canStudent = searchStudents || students.length > 0;
   const go = (patch: Record<string, string | null>) => {
     const next = new URLSearchParams(sp.toString());
     for (const k of ["staff", "dept", "student"]) next.delete(k);
@@ -26,9 +47,11 @@ export function CalendarScope({ staff, departments, students, isStaff }: { staff
       <Select
         value={mode}
         onValueChange={(v) => {
+          setPicking(false);
           if (v === "me") go({});
           else if (v === "staff" && staff[0]) go({ staff: staff[0].value });
           else if (v === "dept" && departments[0]) go({ dept: departments[0].value });
+          else if (v === "student" && searchStudents) setPicking(true);
           else if (v === "student" && students[0]) go({ student: students[0].value });
         }}
       >
@@ -39,7 +62,7 @@ export function CalendarScope({ staff, departments, students, isStaff }: { staff
           <SelectItem value="me">{labels.me}</SelectItem>
           {isStaff && <SelectItem value="staff">{labels.staff}</SelectItem>}
           {isStaff && <SelectItem value="dept">{labels.dept}</SelectItem>}
-          {students.length > 0 && <SelectItem value="student">{labels.student}</SelectItem>}
+          {canStudent && <SelectItem value="student">{labels.student}</SelectItem>}
         </SelectContent>
       </Select>
       {mode === "staff" && (
@@ -54,7 +77,11 @@ export function CalendarScope({ staff, departments, students, isStaff }: { staff
       )}
       {mode === "student" && (
         <div className="w-56">
-          <PickerCombobox options={students} value={sp.get("student") ?? ""} onChange={(v) => go({ student: v })} />
+          {searchStudents ? (
+            <StudentSearchPicker value={sp.get("student") ?? ""} selected={currentStudent} onChange={(v) => go({ student: v })} testId="cal-student" />
+          ) : (
+            <PickerCombobox options={students} value={sp.get("student") ?? ""} onChange={(v) => go({ student: v })} />
+          )}
         </div>
       )}
     </div>

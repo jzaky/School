@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // Version skew protection across deploys (set from the commit in the Dockerfile).
   deploymentId: process.env.NEXT_DEPLOYMENT_ID || undefined,
-  serverExternalPackages: ["pdfkit", "bullmq", "ioredis", "@prisma/client", "bcryptjs"],
+  serverExternalPackages: ["pdfkit", "fontkit", "bullmq", "ioredis", "@prisma/client", "bcryptjs"],
   experimental: {
     serverActions: { bodySizeLimit: "10mb" },
   },

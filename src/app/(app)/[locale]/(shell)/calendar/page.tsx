@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { gradeLabel } from "@/lib/grade-levels";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
@@ -45,6 +46,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
   const sp = await searchParams;
   const ctx = await getCtx();
   const t = await getTranslations("calendar");
+  const tg = await getTranslations("gradeLevel");
   const prefs = await formatPrefs(ctx);
   const { db, orgId, locale } = ctx;
   const view: View = VIEWS.includes(sp.view as View) ? (sp.view as View) : ctx.isStaff ? "week" : "agenda";
@@ -106,7 +108,8 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
     ? await Promise.all([
         db.membership.findMany({ where: { orgId, status: "ACTIVE", staffProfile: { isNot: null } }, include: { user: true } }),
         db.department.findMany({ where: { orgId }, orderBy: { nameEn: "asc" } }),
-        ctx.can("people.view") ? db.student.findMany({ where: { orgId, status: "ACTIVE" }, orderBy: [{ gradeLevel: "asc" }, { firstNameEn: "asc" }] }) : Promise.resolve([]),
+        // Staff search students on the server; only the one being viewed is loaded here.
+        ctx.can("people.view") && sp.student ? db.student.findMany({ where: { orgId, id: sp.student } }) : Promise.resolve([]),
       ])
     : [[], [], ctx.isParent ? ctx.membership.guardian?.links.map((l) => l.student) ?? [] : []];
 
@@ -150,8 +153,10 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
           <CalendarScope
             staff={staffList.map((m) => ({ value: m.id, label: userName(m.user, locale) })).sort((a, b) => a.label.localeCompare(b.label))}
             departments={departments.map((d) => ({ value: d.id, label: pick(locale, d.nameEn, d.nameAr) }))}
-            students={students.map((s) => ({ value: s.id, label: personName(s, locale), hint: `${s.gradeLevel}${s.section ?? ""}` }))}
+            students={ctx.isStaff ? [] : students.map((s) => ({ value: s.id, label: personName(s, locale), hint: gradeLabel(tg, s.gradeLevel, s.section, { short: true }) }))}
             isStaff={ctx.isStaff}
+            searchStudents={ctx.isStaff && ctx.can("people.view")}
+            currentStudent={ctx.isStaff && students[0] ? { value: students[0].id, label: personName(students[0], locale), hint: gradeLabel(tg, students[0].gradeLevel, students[0].section, { short: true }) } : null}
           />
           <div className="flex rounded-lg bg-muted p-1">
             {VIEWS.map((v) => (

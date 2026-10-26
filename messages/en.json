@@ -594,7 +594,10 @@
     "chartByService": "Requests by service",
     "chartByDepartment": "Cases by department",
     "slowest": "Slowest services",
-    "slowestHint": "Average hours to close, last 30 days"
+    "slowestHint": "Average hours to close, last 30 days",
+    "studentSubtitleLabel": "{grade}. Here is what is happening for you today.",
+    "startsOn": "Starts on {date}",
+    "noAttendanceYet": "No attendance marks yet"
   },
   "safeguarding": {
     "level": {
@@ -974,7 +977,8 @@
     "documents": "Documents",
     "download": "Download",
     "career": "Career matches",
-    "none": "Nothing yet."
+    "none": "Nothing yet.",
+    "startsOn": "Starts school on {date}. Attendance appears from the first day."
   },
   "career": {
     "title": "Career guidance",
@@ -3573,7 +3577,12 @@
       "fieldAP": "AP course",
       "apHint": "Shows an AP badge to students and parents.",
       "countsAs": "Counts as {course}",
-      "neededByTargets": "{count, plural, one {Needed by # student's targets} other {Needed by # students' targets}}"
+      "neededByTargets": "{count, plural, one {Needed by # student's targets} other {Needed by # students' targets}}",
+      "subtitleLabel": "{grade} courses for {year}",
+      "tabNextLabel": "Next year: {grade} ({year})",
+      "tabCurrentLabel": "This year: {grade} ({year})",
+      "offeringsForLabel": "Courses for {grade} in {year}",
+      "progressBodyLabel": "{done} of {total} students now in {grade} have chosen all their courses."
     },
     "impact": {
       "error": "Could not update the university impact. Try again.",
@@ -3623,7 +3632,10 @@
     "windowsLink": "Selection windows",
     "windowsOpenUntil": "{count, plural, one {# window open} other {# windows open}}. The next one closes {date}.",
     "windowsNextOpens": "No window open now. The next one opens {date}.",
-    "takeRegister": "Take register"
+    "takeRegister": "Take register",
+    "offeringsForLabel": "Subjects for {grade}",
+    "addOfferingTitleLabel": "Add a subject to {grade}",
+    "subjectsSubtitleLabel": "{grade}, {year}"
   },
   "grades": {
     "title": "Grades",
@@ -7653,7 +7665,8 @@
       "NOTE_REQUIRED": "Add a short note so they know what to do next.",
       "STUDENT_TAKEN": "That student already has an account.",
       "OTHER_ACCESS": "This person already has a different kind of access at the school."
-    }
+    },
+    "claimByNameLabel": "{name}, {grade}"
   },
   "join": {
     "inviteMetaTitle": "Join your school",
@@ -10625,7 +10638,9 @@
   },
   "gradeLevel": {
     "label": "{level, select, kg1 {KG1} kg2 {KG2} other {Grade {grade}}}",
-    "short": "{level, select, kg1 {KG1} kg2 {KG2} other {{grade}}}"
+    "short": "{level, select, kg1 {KG1} kg2 {KG2} other {{grade}}}",
+    "withSection": "{level, select, kg1 {KG1 {section}} kg2 {KG2 {section}} other {Grade {grade}{section}}}",
+    "shortWithSection": "{level, select, kg1 {KG1 {section}} kg2 {KG2 {section}} other {{grade}{section}}}"
   },
   "selection": {
     "gradeSpan": "{from} to {to}",
@@ -14187,5 +14202,17 @@
     "errorBody": "Please try again. If it keeps happening, tell your school administrator.",
     "retry": "Try again",
     "fewerShort": "<{n}"
+  },
+  "paging": {
+    "showing": "Showing {from} to {to} of {total}",
+    "none": "Nothing to show",
+    "page": "Page {page} of {pages}",
+    "prev": "Previous",
+    "next": "Next",
+    "firstPage": "This is the first page",
+    "lastPage": "This is the last page",
+    "searching": "Searching...",
+    "searchFailed": "Search did not work. Try again.",
+    "typeToNarrow": "Showing the first 20 matches. Type more of the name to narrow the list."
   }
 }

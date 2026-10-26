@@ -5,6 +5,7 @@ import type { Tx } from "@/server/db";
 import { assignTeachers, type AssignResult } from "./assign";
 import { solveTimetable, type SolveResult, type SolverClass } from "./solver";
 import type { BellRow } from "./bell";
+import { ALL_GRADE_LEVELS } from "@/lib/grade-levels";
 
 export const DEFAULT_PERIODS = 4;
 
@@ -182,10 +183,12 @@ export async function prefillQualifications(tx: Tx, orgId: string) {
   };
   for (const c of classes) add(c.teacherMembershipId!, c.subjectId!, [c.gradeLevel]);
   const taught = new Set(classes.map((c) => c.teacherMembershipId));
+  // Grades the school teaches (from its classes), or every grade for a school with no classes yet.
+  const schoolGrades = [...new Set(classes.map((c) => c.gradeLevel))].sort((a, b) => a - b);
   for (const p of profiles) {
     // Department subjects only for teachers who have no classes yet: a new colleague can be assigned straight away.
     if (taught.has(p.membershipId)) continue;
-    const grades = p.gradeLevels.length ? p.gradeLevels : [6, 7, 8, 9, 10, 11, 12];
+    const grades = p.gradeLevels.length ? p.gradeLevels : schoolGrades.length ? schoolGrades : [...ALL_GRADE_LEVELS];
     for (const s of subjects.filter((x) => x.departmentId === p.departmentId)) add(p.membershipId, s.id, grades);
   }
   let created = 0;

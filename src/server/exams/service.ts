@@ -5,6 +5,7 @@ import type { ExecCtx } from "@/server/db";
 import { notify } from "@/server/notify/notify";
 import { audit } from "@/server/audit/audit";
 import { ensureCalendarTemplates } from "@/server/trips/templates";
+import { gradeTextIn } from "@/server/common/grade-text";
 
 const fmtDay = (d: Date, locale: "en" | "ar") =>
   new Intl.DateTimeFormat(locale === "ar" ? "ar-AE-u-nu-latn" : "en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "Asia/Dubai" }).format(d);
@@ -12,8 +13,8 @@ const fmtDay = (d: Date, locale: "en" | "ar") =>
 export function sittingEventData(s: { titleEn: string; titleAr: string; gradeLevel: number; startsAt: Date; endsAt: Date; room: string | null }) {
   return {
     kind: "EXAM" as const,
-    titleEn: `Grade ${s.gradeLevel} exam: ${s.titleEn}`,
-    titleAr: `امتحان الصف ${s.gradeLevel}: ${s.titleAr}`,
+    titleEn: `${gradeTextIn("en", s.gradeLevel)} exam: ${s.titleEn}`,
+    titleAr: `امتحان ${gradeTextIn("ar", s.gradeLevel)}: ${s.titleAr}`,
     descEn: s.room ? `Room ${s.room}` : null,
     descAr: s.room ? `القاعة ${s.room}` : null,
     locationEn: s.room,

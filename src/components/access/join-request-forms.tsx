@@ -10,7 +10,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { PickerCombobox, type PickerOption } from "@/components/forms/picker-combobox";
+import { StudentSearchPicker } from "@/components/forms/search-picker";
+import type { PickHit } from "@/server/people/search-actions";
 import { approveJoinRequestAction, rejectJoinRequestAction } from "@/server/access/actions";
 
 export type Candidate = { id: string; label: string; detail: string; reasons: string[]; exact: boolean; taken: boolean };
@@ -21,20 +22,18 @@ export function JoinRequestDecision({
   candidates,
   preselected,
   roles,
-  students,
 }: {
   requestId: string;
   kind: "PARENT" | "STAFF" | "STUDENT";
   candidates: Candidate[];
   preselected: string[];
   roles: Array<{ key: string; label: string }>;
-  students: PickerOption[];
 }) {
   const t = useTranslations("joinRequests");
   const router = useRouter();
   const [selected, setSelected] = useState<string[]>(preselected);
   const [extra, setExtra] = useState<Candidate[]>([]);
-  const [pick, setPick] = useState("");
+  const [pick, setPick] = useState<PickHit | null>(null);
   const [roleKeys, setRoleKeys] = useState<string[]>(["teacher"]);
   const [note, setNote] = useState("");
   const [rejectOpen, setRejectOpen] = useState(false);
@@ -95,19 +94,19 @@ export function JoinRequestDecision({
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
             <div className="min-w-0 flex-1">
-              <PickerCombobox options={students.filter((s) => !all.some((c) => c.id === s.value))} value={pick} onChange={setPick} placeholder={t("findAnother")} />
+              <StudentSearchPicker value={pick?.value ?? ""} selected={pick} onChange={(_, hit) => setPick(hit)} placeholder={t("findAnother")} testId={`jr-find-${requestId}`} />
             </div>
             <Button
               type="button"
               variant="outline"
               disabled={!pick}
               onClick={() => {
-                const s = students.find((x) => x.value === pick);
-                if (s) {
+                const s = pick;
+                if (s && !all.some((c) => c.id === s.value)) {
                   setExtra((e) => [...e, { id: s.value, label: s.label, detail: s.hint ?? "", reasons: [], exact: false, taken: false }]);
                   setSelected((cur) => [...cur, s.value]);
                 }
-                setPick("");
+                setPick(null);
               }}
             >
               {t("add")}

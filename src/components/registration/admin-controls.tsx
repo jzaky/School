@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { deleteOfferingAction, moveStudentAction, runAllocationAction, saveOfferingAction } from "@/server/registration/actions";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export function useRegError() {
   const t = useTranslations("registration");
@@ -86,6 +87,7 @@ export function OfferingDialog({
   yearId?: string | null;
 }) {
   const t = useTranslations("registration");
+  const tg = useTranslations("gradeLevel");
   const err = useRegError();
   const router = useRouter();
   const editing = Boolean(value?.id);
@@ -149,7 +151,7 @@ export function OfferingDialog({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editing ? t("editOffering") : t("addOfferingTitle", { grade })}</DialogTitle>
+            <DialogTitle>{editing ? t("editOffering") : t("addOfferingTitleLabel", { grade: gradeLabel(tg, grade) })}</DialogTitle>
             <DialogDescription>{t("offeringBody")}</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">

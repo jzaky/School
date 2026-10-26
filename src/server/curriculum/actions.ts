@@ -14,6 +14,7 @@ import { isActivity, isMaterial, writeBilingualText, type Activity, type Bilingu
 import { PlanError, reviewPlan, submitPlan } from "./review";
 import { extractPdfText } from "./pdf-text";
 import { termOf } from "./coverage";
+import { gradeTextIn } from "@/server/common/grade-text";
 
 type Fail = { ok: false; error: string };
 const fail = (error: string): Fail => ({ ok: false, error });
@@ -39,7 +40,7 @@ export async function saveFrameworkAction(input: { id?: string; nameEn: string; 
   const nameAr = clip(input.nameAr, 160) || nameEn;
   const grade = Math.round(Number(input.gradeLevel));
   if (!nameEn) return fail("NAME");
-  if (!Number.isFinite(grade) || grade < 1 || grade > 13) return fail("GRADE");
+  if (!Number.isFinite(grade) || grade < -1 || grade > 13) return fail("GRADE");
   const subject = await ctx.db.subject.findUnique({ where: { id: input.subjectId } });
   if (!subject) return fail("SUBJECT");
   const data = { nameEn, nameAr, subjectId: subject.id, gradeLevel: grade, sourceEn: clip(input.sourceEn, 200) || null };
@@ -426,7 +427,7 @@ export async function draftUnitAction(input: { frameworkId: string; standardIds:
     subjectType: "CurriculumFramework",
     subjectId: found.fw.id,
     instructions:
-      `Plan a unit of at most ${maxLessons} lessons of ${durationMin} minutes for Grade ${found.fw.gradeLevel} ${found.subject.nameEn} that together cover every listed standard. ` +
+      `Plan a unit of at most ${maxLessons} lessons of ${durationMin} minutes for ${found.fw.gradeLevel === null ? "all grades" : gradeTextIn("en", found.fw.gradeLevel)} ${found.subject.nameEn} that together cover every listed standard. ` +
       "Order lessons so ideas build on each other. For each lesson give objectives (one per line), the main teaching points, activities with phase starter, main or plenary and minutes that add up to the lesson length, " +
       "materials and resources, assessment for learning, and differentiation (support and stretch). standardIds must only use the ids given. " +
       "Every field ending in En must be in British English and every field ending in Ar in Modern Standard Arabic.",

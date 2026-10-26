@@ -3,6 +3,8 @@
 // step pdfkit lacks: it wraps lines itself and places mixed Arabic / Latin / number runs in visual order.
 import PDFDocument from "pdfkit";
 import path from "node:path";
+import { readFileSync } from "node:fs";
+import { create as createFont } from "fontkit";
 import { applyMerge } from "./merge";
 
 const FONT_DIR = path.join(process.cwd(), "assets", "fonts");
@@ -11,6 +13,26 @@ export const FONTS = {
   semibold: path.join(FONT_DIR, "IBMPlexSansArabic-SemiBold.ttf"),
   bold: path.join(FONT_DIR, "IBMPlexSansArabic-Bold.ttf"),
 };
+
+// Fonts parsed once per process and shared by every PDF it makes. Parsing the three font files again for each
+// document was over half the time a report card took (measured with 1,500 cards at full size). Safe to share:
+// pdfkit lays out and embeds text synchronously, and each document keeps its own glyph subset.
+const parsedFonts = new Map<string, ReturnType<typeof createFont>>();
+function parsedFont(file: string) {
+  let f = parsedFonts.get(file);
+  if (!f) {
+    f = createFont(readFileSync(file));
+    parsedFonts.set(file, f);
+  }
+  return f;
+}
+
+/** A new PDF with the school fonts registered under their FONTS names (doc.font(FONTS.bold) uses the parsed font). */
+export function newPdf(options?: PDFKit.PDFDocumentOptions): PDFKit.PDFDocument {
+  const doc = new PDFDocument(options);
+  for (const file of Object.values(FONTS)) doc.registerFont(file, parsedFont(file) as unknown as Buffer);
+  return doc;
+}
 
 export const NAVY = "#123A63";
 export const GOLD = "#C8A24A";
@@ -161,7 +183,7 @@ function dates(d: Date) {
 }
 
 export async function renderLetterPdf(input: LetterInput): Promise<Buffer> {
-  const doc = new PDFDocument({ size: "A4", margin: 0, info: { Title: `${input.title.en} ${input.reference}`, Author: input.school.en } });
+  const doc = newPdf({ size: "A4", margin: 0, info: { Title: `${input.title.en} ${input.reference}`, Author: input.school.en } });
   doc.registerFont("regular", FONTS.regular);
   const chunks: Buffer[] = [];
   doc.on("data", (c: Buffer) => chunks.push(c));
@@ -244,7 +266,7 @@ export async function renderLetterPdf(input: LetterInput): Promise<Buffer> {
 
 /** A simple placeholder PDF for sample uploaded documents in the demo. */
 export async function renderSamplePdf(title: { en: string; ar: string }, subtitle: { en: string; ar: string }): Promise<Buffer> {
-  const doc = new PDFDocument({ size: "A4", margin: 0 });
+  const doc = newPdf({ size: "A4", margin: 0 });
   const chunks: Buffer[] = [];
   doc.on("data", (c: Buffer) => chunks.push(c));
   const done = new Promise<Buffer>((resolve) => doc.on("end", () => resolve(Buffer.concat(chunks))));
@@ -263,7 +285,7 @@ export async function renderSamplePdf(title: { en: string; ar: string }, subtitl
 
 /** Case chronology export: every action, decision and contact with timestamps. */
 export async function renderChronologyPdf(input: { title: string; subtitle: string; rows: Array<{ when: string; who: string; kind: string; text: string }>; footer: string }): Promise<Buffer> {
-  const doc = new PDFDocument({ size: "A4", margin: 48, info: { Title: input.title } });
+  const doc = newPdf({ size: "A4", margin: 48, info: { Title: input.title } });
   const chunks: Buffer[] = [];
   doc.on("data", (c: Buffer) => chunks.push(c));
   const done = new Promise<Buffer>((resolve) => doc.on("end", () => resolve(Buffer.concat(chunks))));

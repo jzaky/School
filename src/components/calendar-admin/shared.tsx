@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { gradeLabel } from "@/lib/grade-levels";
 
 /** Error text for an action error code, from the calendarAdmin.error namespace. */
 export function useActionError() {
@@ -22,7 +23,7 @@ export function Field({ label, htmlFor, children, className, hint }: { label: st
 
 /** Toggle chips for grade levels. */
 export function GradePicker({ grades, value, onChange, testId }: { grades: number[]; value: number[]; onChange: (v: number[]) => void; testId?: string }) {
-  const t = useTranslations("calendarAdmin");
+  const tg = useTranslations("gradeLevel");
   return (
     <div className="flex flex-wrap gap-1.5" data-testid={testId}>
       {grades.map((g) => {
@@ -36,7 +37,7 @@ export function GradePicker({ grades, value, onChange, testId }: { grades: numbe
             className={cn("rounded-full border px-2.5 py-1 text-xs font-medium transition", on ? "border-brand bg-brand-soft text-brand" : "bg-card text-muted-foreground hover:text-foreground")}
             data-testid={`grade-${g}`}
           >
-            {t("gradeN", { grade: g })}
+            {gradeLabel(tg, g)}
           </button>
         );
       })}

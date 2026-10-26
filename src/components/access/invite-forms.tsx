@@ -16,7 +16,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { PickerCombobox, type PickerOption } from "@/components/forms/picker-combobox";
+import { StudentSearchPicker } from "@/components/forms/search-picker";
+import type { PickHit } from "@/server/people/search-actions";
 import { encodeQr, qrSvgPath } from "@/server/access/qr";
 import {
   createStaffLinkAction,
@@ -131,7 +132,7 @@ function SentPanel({ links, onDone }: { links: Array<{ email: string | null; tok
 // Invite one person
 // ---------------------------------------------------------------------------
 
-export function InviteDialog({ roles, departments, students, accountless }: { roles: RoleChoice[]; departments: DeptChoice[]; students: PickerOption[]; accountless: PickerOption[] }) {
+export function InviteDialog({ roles, departments, accountlessCount }: { roles: RoleChoice[]; departments: DeptChoice[]; accountlessCount: number }) {
   const t = useTranslations("adminInvites");
   const err = useInviteError();
   const router = useRouter();
@@ -143,8 +144,8 @@ export function InviteDialog({ roles, departments, students, accountless }: { ro
   const [email, setEmail] = useState("");
   const [roleKeys, setRoleKeys] = useState<string[]>(["teacher"]);
   const [dept, setDept] = useState("none");
-  const [children, setChildren] = useState<string[]>([]);
-  const [pick, setPick] = useState("");
+  const [children, setChildren] = useState<PickHit[]>([]);
+  const [pick, setPick] = useState<PickHit | null>(null);
   const [studentId, setStudentId] = useState("");
 
   const reset = () => {
@@ -154,7 +155,7 @@ export function InviteDialog({ roles, departments, students, accountless }: { ro
     setRoleKeys(["teacher"]);
     setDept("none");
     setChildren([]);
-    setPick("");
+    setPick(null);
     setStudentId("");
   };
   const okEmail = EMAIL_RE.test(email.trim());
@@ -166,7 +167,7 @@ export function InviteDialog({ roles, departments, students, accountless }: { ro
         tab === "staff"
           ? await inviteStaffAction({ rows: [{ nameEn: name, email, roleKeys, department: dept === "none" ? null : dept }] })
           : tab === "parent"
-            ? await inviteParentAction({ email, nameEn: name, studentIds: children })
+            ? await inviteParentAction({ email, nameEn: name, studentIds: children.map((c) => c.value) })
             : await inviteStudentAction({ email, studentId });
       if (!res.ok) return void toast.error(err(res.error));
       const problems = (res as { problems?: Array<{ row: number; code: string }> }).problems ?? [];
@@ -236,17 +237,17 @@ export function InviteDialog({ roles, departments, students, accountless }: { ro
                     <Label>{t("fieldChildren")}</Label>
                     <div className="flex flex-col gap-2 sm:flex-row">
                       <div className="min-w-0 flex-1">
-                        <PickerCombobox options={students.filter((s) => !children.includes(s.value))} value={pick} onChange={setPick} placeholder={t("searchStudent")} testId="invite-child-picker" />
+                        <StudentSearchPicker value={pick?.value ?? ""} selected={pick} onChange={(_, hit) => setPick(hit)} placeholder={t("searchStudent")} testId="invite-child-picker" />
                       </div>
-                      <Button type="button" variant="outline" disabled={!pick} onClick={() => { setChildren((c) => [...c, pick]); setPick(""); }} data-testid="invite-add-child">
+                      <Button type="button" variant="outline" disabled={!pick} onClick={() => { const p = pick; if (p) setChildren((c) => (c.some((x) => x.value === p.value) ? c : [...c, p])); setPick(null); }} data-testid="invite-add-child">
                         {t("addChild")}
                       </Button>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
-                      {children.map((id) => (
-                        <span key={id} className="inline-flex items-center gap-1 rounded-full bg-brand-soft px-2 py-0.5 text-xs text-brand">
-                          {students.find((s) => s.value === id)?.label}
-                          <button type="button" onClick={() => setChildren((c) => c.filter((x) => x !== id))} aria-label={t("removeChild")}>
+                      {children.map((child) => (
+                        <span key={child.value} className="inline-flex items-center gap-1 rounded-full bg-brand-soft px-2 py-0.5 text-xs text-brand">
+                          {child.label}
+                          <button type="button" onClick={() => setChildren((c) => c.filter((x) => x.value !== child.value))} aria-label={t("removeChild")}>
                             <X className="size-3" />
                           </button>
                         </span>
@@ -255,8 +256,8 @@ export function InviteDialog({ roles, departments, students, accountless }: { ro
                   </TabsContent>
                   <TabsContent value="student" className="space-y-1.5">
                     <Label>{t("fieldStudent")}</Label>
-                    <PickerCombobox options={accountless} value={studentId} onChange={setStudentId} placeholder={t("searchStudent")} testId="invite-student-picker" />
-                    {accountless.length === 0 && <p className="text-xs text-muted-foreground">{t("allStudentsHaveAccounts")}</p>}
+                    <StudentSearchPicker value={studentId} onChange={(v) => setStudentId(v)} filters={{ withoutAccount: true }} placeholder={t("searchStudent")} testId="invite-student-picker" disabled={accountlessCount === 0} />
+                    {accountlessCount === 0 && <p className="text-xs text-muted-foreground">{t("allStudentsHaveAccounts")}</p>}
                   </TabsContent>
                 </div>
               </Tabs>

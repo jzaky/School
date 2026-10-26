@@ -130,7 +130,8 @@ export async function movements(db: TenantDb, fromKey: string, toKey: string): P
   const ids = joined.map((j) => j.id);
   const [apps, readmits] = await Promise.all([
     ids.length ? db.admissionApplication.findMany({ where: { studentId: { in: ids }, stage: "ENROLLED" }, select: { id: true, studentId: true, schooling: true, enrolledAt: true }, orderBy: { enrolledAt: "desc" } }) : [],
-    ids.length ? db.auditEvent.findMany({ where: { action: "student.readmit", entityId: { in: ids } }, select: { entityId: true } }) : [],
+    // Readmissions are rare: read them all (indexed by action) rather than sending every joiner's id; only joiners are looked up below.
+    ids.length ? db.auditEvent.findMany({ where: { action: "student.readmit", entityType: "Student" }, select: { entityId: true } }) : [],
   ]);
   const readmitted = new Set(readmits.map((r) => r.entityId));
   const out: Movement[] = [];

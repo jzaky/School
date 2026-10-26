@@ -594,7 +594,10 @@
     "chartByService": "الطلبات حسب الخدمة",
     "chartByDepartment": "الحالات حسب القسم",
     "slowest": "الخدمات الأبطأ",
-    "slowestHint": "متوسط ساعات الإغلاق خلال 30 يومًا"
+    "slowestHint": "متوسط ساعات الإغلاق خلال 30 يومًا",
+    "studentSubtitleLabel": "{grade}. إليك ما يخصك اليوم.",
+    "startsOn": "يبدأ الدراسة في {date}",
+    "noAttendanceYet": "لا توجد سجلات حضور بعد"
   },
   "safeguarding": {
     "level": {
@@ -974,7 +977,8 @@
     "documents": "المستندات",
     "download": "تنزيل",
     "career": "المهن المناسبة",
-    "none": "لا يوجد شيء بعد."
+    "none": "لا يوجد شيء بعد.",
+    "startsOn": "يبدأ الدراسة في {date}، ويظهر الحضور ابتداءً من اليوم الأول."
   },
   "career": {
     "title": "التوجيه المهني",
@@ -3573,7 +3577,12 @@
       "fieldAP": "مادة AP",
       "apHint": "تظهر شارة AP للطلاب وأولياء الأمور.",
       "countsAs": "تُحتسب على أنها {course}",
-      "neededByTargets": "{count, plural, zero {لا تتطلبها أهداف أي طالب} one {تتطلبها أهداف طالب واحد} two {تتطلبها أهداف طالبين} few {تتطلبها أهداف # طلاب} many {تتطلبها أهداف # طالباً} other {تتطلبها أهداف # طالب}}"
+      "neededByTargets": "{count, plural, zero {لا تتطلبها أهداف أي طالب} one {تتطلبها أهداف طالب واحد} two {تتطلبها أهداف طالبين} few {تتطلبها أهداف # طلاب} many {تتطلبها أهداف # طالباً} other {تتطلبها أهداف # طالب}}",
+      "subtitleLabel": "مواد {grade} للعام {year}",
+      "tabNextLabel": "العام القادم: {grade} ({year})",
+      "tabCurrentLabel": "هذا العام: {grade} ({year})",
+      "offeringsForLabel": "مواد {grade} للعام {year}",
+      "progressBodyLabel": "أكمل {done} من أصل {total} من طلاب {grade} الحالي اختيار جميع موادهم."
     },
     "impact": {
       "error": "تعذّر تحديث الأثر على الجامعات. حاول مرة أخرى.",
@@ -3623,7 +3632,10 @@
     "windowsLink": "فترات اختيار المواد",
     "windowsOpenUntil": "{count, plural, one {فترة واحدة مفتوحة} two {فترتان مفتوحتان} few {# فترات مفتوحة} other {# فترة مفتوحة}}. أقرب إغلاق في {date}.",
     "windowsNextOpens": "لا توجد فترة مفتوحة الآن. تبدأ الفترة التالية في {date}.",
-    "takeRegister": "أخذ الحضور"
+    "takeRegister": "أخذ الحضور",
+    "offeringsForLabel": "مواد {grade}",
+    "addOfferingTitleLabel": "إضافة مادة إلى {grade}",
+    "subjectsSubtitleLabel": "{grade}، {year}"
   },
   "grades": {
     "title": "الدرجات",
@@ -7653,7 +7665,8 @@
       "NOTE_REQUIRED": "أضف ملاحظة قصيرة ليعرف ما يجب فعله بعد ذلك.",
       "STUDENT_TAKEN": "لدى هذا الطالب حساب بالفعل.",
       "OTHER_ACCESS": "لدى هذا الشخص نوع آخر من الصلاحيات في المدرسة."
-    }
+    },
+    "claimByNameLabel": "{name}، {grade}"
   },
   "join": {
     "inviteMetaTitle": "انضم إلى مدرستك",
@@ -10625,7 +10638,9 @@
   },
   "gradeLevel": {
     "label": "{level, select, kg1 {الروضة الأولى} kg2 {الروضة الثانية} other {الصف {grade}}}",
-    "short": "{level, select, kg1 {روضة 1} kg2 {روضة 2} other {{grade}}}"
+    "short": "{level, select, kg1 {روضة 1} kg2 {روضة 2} other {{grade}}}",
+    "withSection": "{level, select, kg1 {الروضة الأولى {section}} kg2 {الروضة الثانية {section}} other {الصف {grade}{section}}}",
+    "shortWithSection": "{level, select, kg1 {روضة 1 {section}} kg2 {روضة 2 {section}} other {{grade}{section}}}"
   },
   "selection": {
     "gradeSpan": "{from} إلى {to}",
@@ -14187,5 +14202,17 @@
     "errorBody": "يرجى المحاولة مجددًا، وإذا تكرر ذلك فأبلغ مسؤول المدرسة.",
     "retry": "إعادة المحاولة",
     "fewerShort": "أقل من {n}"
+  },
+  "paging": {
+    "showing": "عرض {from} إلى {to} من أصل {total}",
+    "none": "لا توجد نتائج",
+    "page": "الصفحة {page} من {pages}",
+    "prev": "السابق",
+    "next": "التالي",
+    "firstPage": "هذه هي الصفحة الأولى",
+    "lastPage": "هذه هي الصفحة الأخيرة",
+    "searching": "جارٍ البحث...",
+    "searchFailed": "تعذّر البحث. حاول مرة أخرى.",
+    "typeToNarrow": "تظهر أول 20 نتيجة. اكتب جزءًا أكبر من الاسم لتضييق القائمة."
   }
 }

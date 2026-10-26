@@ -16,13 +16,13 @@ import { EventDialog, RegisterButton } from "@/components/career-events/event-fo
 import { actingStudents, canManageEvents } from "@/server/career-events/access";
 import { closesAt, gradeEligible, registrationState } from "@/server/career-events/service";
 import { addDays, dayKey } from "@/server/exams/schedule";
+import { gradeChoices } from "@/server/students/grade-options";
 
 export async function generateMetadata() {
   const t = await getTranslations("careerEvents");
   return { title: t("title") };
 }
 
-const GRADES = [6, 7, 8, 9, 10, 11, 12];
 
 async function EventCard({ ev, prefs, locale, taken, footer }: { ev: CareerEvent; prefs: FormatPrefs; locale: string; taken: number; footer?: React.ReactNode }) {
   const t = await getTranslations("careerEvents");
@@ -67,6 +67,7 @@ export default async function CareerEventsPage() {
   const t = await getTranslations("careerEvents");
   const prefs = await formatPrefs(ctx);
   const { db, locale } = ctx;
+  const GRADES = await gradeChoices(db);
   const now = new Date();
   const manager = canManageEvents(ctx);
   const family = ctx.isStudent || ctx.isParent;

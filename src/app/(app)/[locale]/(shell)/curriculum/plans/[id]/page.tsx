@@ -14,6 +14,7 @@ import { SessionPlan } from "@/components/curriculum/session-plan";
 import { DeletePlanButton, ReviewPanel, SubmitPlanButton } from "@/components/curriculum/plan-actions";
 import { canEditPlan, canSeePlan, inScope, reviewScope } from "@/server/curriculum/access";
 import { pickBi, readActivities, readBilingualText, readMaterials } from "@/server/curriculum/types";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -35,6 +36,7 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   const ctx = await getCtx();
   const t = await getTranslations("curriculum");
+  const tg = await getTranslations("gradeLevel");
   const { db, locale } = ctx;
   const plan = await db.lessonPlan.findUnique({ where: { id }, include: { standards: { include: { standard: { include: { framework: true } } } } } });
   if (!plan || !canSeePlan(ctx, plan)) notFound();
@@ -64,7 +66,7 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
         {t("plans.title")}
       </Link>
       <PageHeader
-        eyebrow={`${subject ? pick(locale, subject.nameEn, subject.nameAr) : ""} · ${t("gradeN", { grade: plan.gradeLevel })}`}
+        eyebrow={`${subject ? pick(locale, subject.nameEn, subject.nameAr) : ""} · ${gradeLabel(tg, plan.gradeLevel)}`}
         title={
           <span className="inline-flex flex-wrap items-center gap-2">
             {pick(locale, plan.titleEn, plan.titleAr)}

@@ -42,7 +42,7 @@ export default async function ResultsPage({ searchParams }: { searchParams: Prom
     return (
       <PageBody>
         {back}
-        <PageHeader title={t("results.title")} description={t("results.subtitleStaff")} actions={<StudentPicker students={focus.options} current={null} />} />
+        <PageHeader title={t("results.title")} description={t("results.subtitleStaff")} actions={<StudentPicker students={focus.options} current={null} search={focus.search} />} />
         <EmptyState icon={<GraduationCap className="size-5" />} title={t("results.pickStudent")} body={t("results.pickStudentBody")} />
       </PageBody>
     );
@@ -81,7 +81,7 @@ export default async function ResultsPage({ searchParams }: { searchParams: Prom
         description={focus.isAdvisor ? t("results.subtitleStaff") : t("results.subtitle")}
         actions={
           <>
-            {focus.options.length > 0 && <StudentPicker students={focus.options} current={s.id} />}
+            {(focus.search || focus.options.length > 0) && <StudentPicker students={focus.options} current={s.id} search={focus.search} />}
             {focus.isAdvisor && <ConfirmButton studentId={s.id} resultIds={unconfirmedResults} scoreIds={unconfirmedScores} />}
           </>
         }

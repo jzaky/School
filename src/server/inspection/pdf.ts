@@ -1,6 +1,5 @@
 // Bilingual evidence pack PDF on the school's letterhead. Aggregates only: no names, no case references.
-import PDFDocument from "pdfkit";
-import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY, type Letterhead } from "@/server/documents/pdf";
+import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY, newPdf, type Letterhead } from "@/server/documents/pdf";
 import type { EvidencePack } from "./evidence";
 import { breakdownText, frameworkLabel, headingLabel, L, metricLabel, metricValue, periodText } from "./format";
 
@@ -8,7 +7,7 @@ export async function renderEvidencePdf(pack: EvidencePack, input: { letterhead:
   const en = L("en");
   const ar = L("ar");
   const lh = input.letterhead;
-  const doc = new PDFDocument({ size: "A4", margin: 0, info: { Title: `${en.title} - ${lh.school.en}`, Author: lh.school.en } });
+  const doc = newPdf({ size: "A4", margin: 0, info: { Title: `${en.title} - ${lh.school.en}`, Author: lh.school.en } });
   const chunks: Buffer[] = [];
   doc.on("data", (c: Buffer) => chunks.push(c));
   const done = new Promise<Buffer>((resolve) => doc.on("end", () => resolve(Buffer.concat(chunks))));

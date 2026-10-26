@@ -31,7 +31,7 @@ export async function saveSittingAction(input: SittingInput): Promise<Result> {
   const ctx = await manager();
   if (!ctx) return { ok: false, error: "FORBIDDEN" };
   if (!KEY_RE.test(input.date) || !TIME_RE.test(input.startTime) || !TIME_RE.test(input.endTime) || mins(input.endTime) <= mins(input.startTime)) return { ok: false, error: "INVALID_TIMES" };
-  if (!Number.isInteger(input.gradeLevel) || input.gradeLevel < 1 || input.gradeLevel > 13) return { ok: false, error: "INVALID" };
+  if (!Number.isInteger(input.gradeLevel) || input.gradeLevel < -1 || input.gradeLevel > 13) return { ok: false, error: "INVALID" };
   const subject = await ctx.db.subject.findUnique({ where: { id: input.subjectId } });
   if (!subject) return { ok: false, error: "SUBJECT_REQUIRED" };
   const staff = input.invigilatorIds.length ? await ctx.db.staffProfile.findMany({ where: { membershipId: { in: input.invigilatorIds } }, select: { membershipId: true } }) : [];

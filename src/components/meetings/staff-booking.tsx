@@ -12,10 +12,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { BookingPicker, type BookingChoice } from "@/components/booking/booking-picker";
 import { PickerCombobox, type PickerOption } from "@/components/forms/picker-combobox";
+import { StudentSearchPicker } from "@/components/forms/search-picker";
 import { bookAppointmentAction } from "@/server/appointments/actions";
 import type { BookingSetup } from "@/server/appointments/booking-setup";
 
-export function StaffBooking({ setup, studentId, students, caseId, guardians, defaultInvite, sensitive }: { setup: BookingSetup; studentId: string | null; students: PickerOption[]; caseId: string | null; guardians: Array<{ id: string; name: string }>; defaultInvite: boolean; sensitive: boolean }) {
+export function StaffBooking({ setup, studentId, students, studentSearch = false, caseId, guardians, defaultInvite, sensitive }: { setup: BookingSetup; studentId: string | null; students: PickerOption[]; studentSearch?: boolean; caseId: string | null; guardians: Array<{ id: string; name: string }>; defaultInvite: boolean; sensitive: boolean }) {
   const t = useTranslations("meetings");
   const tc = useTranslations("common");
   const router = useRouter();
@@ -25,6 +26,11 @@ export function StaffBooking({ setup, studentId, students, caseId, guardians, de
   const [invite, setInvite] = useState<string | null>(defaultInvite ? (guardians[0]?.id ?? null) : null);
   const [notes, setNotes] = useState("");
   const [pending, start] = useTransition();
+  const pickStudent = (v: string) => {
+    const next = new URLSearchParams(sp.toString());
+    next.set("student", v);
+    router.replace(`${pathname}?${next.toString()}`);
+  };
   const book = () =>
     start(async () => {
       if (!choice) return;
@@ -36,20 +42,14 @@ export function StaffBooking({ setup, studentId, students, caseId, guardians, de
     });
   return (
     <div className="space-y-6">
-      {students.length > 0 && (
+      {(studentSearch || students.length > 0) && (
         <div className="max-w-sm space-y-1.5">
           <Label>{tc("student")}</Label>
-          <PickerCombobox
-            options={students}
-            value={studentId ?? ""}
-            placeholder={t("chooseStudent")}
-            onChange={(v) => {
-              const next = new URLSearchParams(sp.toString());
-              next.set("student", v);
-              router.replace(`${pathname}?${next.toString()}`);
-            }}
-            testId="book-student"
-          />
+          {studentSearch ? (
+            <StudentSearchPicker value={studentId ?? ""} selected={students.find((o) => o.value === studentId) ?? null} placeholder={t("chooseStudent")} onChange={(v) => pickStudent(v)} testId="book-student" />
+          ) : (
+            <PickerCombobox options={students} value={studentId ?? ""} placeholder={t("chooseStudent")} onChange={(v) => pickStudent(v)} testId="book-student" />
+          )}
         </div>
       )}
       <BookingPicker setup={setup} value={choice} onChange={setChoice} />

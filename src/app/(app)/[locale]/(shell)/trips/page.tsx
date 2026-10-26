@@ -13,13 +13,13 @@ import { Pill } from "@/components/app/badges";
 import { CONSENT_TONE, STATUS_TONE } from "@/components/trips/tones";
 import { TripDialog } from "@/components/trips/trip-forms";
 import { dayKey, addDays } from "@/server/exams/schedule";
+import { gradeChoices } from "@/server/students/grade-options";
 
 export async function generateMetadata() {
   const t = await getTranslations("trips");
   return { title: t("title") };
 }
 
-const GRADES = [6, 7, 8, 9, 10, 11, 12];
 
 type TripRow = { id: string; titleEn: string; titleAr: string; destinationEn: string; destinationAr: string; startsAt: Date; costAed: number | null; consentDeadline: Date | null; status: TripStatus };
 
@@ -61,6 +61,7 @@ export default async function TripsPage() {
   const t = await getTranslations("trips");
   const prefs = await formatPrefs(ctx);
   const { db, locale } = ctx;
+  const GRADES = await gradeChoices(db);
   const now = new Date();
 
   // Families: trips per child.

@@ -12,6 +12,7 @@ import { Panel, PanelHeader } from "@/components/app/panel";
 import type { publishedGradesFor } from "@/server/grades/queries";
 import { Sparkline } from "./sparkline";
 import { ReportCardButton } from "./grade-controls";
+import { gradeLabel } from "@/lib/grade-levels";
 
 type Data = NonNullable<Awaited<ReturnType<typeof publishedGradesFor>>>;
 
@@ -46,6 +47,7 @@ export async function FamilyGrades({
   releasedBySchool?: boolean;
 }) {
   const t = await getTranslations("grades");
+  const tg = await getTranslations("gradeLevel");
   const locale = prefs.locale;
   const pct = (n: number | null) => (n === null ? "-" : `${fmtNumber(prefs, n, { maximumFractionDigits: 1 })}%`);
   const defaultTermId = data.term?.id ?? null;
@@ -62,7 +64,7 @@ export async function FamilyGrades({
               className={cn("shrink-0 rounded-full border px-3.5 py-1.5 text-sm font-medium transition", c.id === activeChildId ? "border-brand bg-brand text-brand-foreground" : "bg-card hover:bg-muted")}
               data-testid="child-switch"
             >
-              {c.name} <span className="opacity-70">· {t("gradeLevel", { grade: c.grade })}</span>
+              {c.name} <span className="opacity-70">· {gradeLabel(tg, c.grade)}</span>
             </Link>
           ))}
         </nav>

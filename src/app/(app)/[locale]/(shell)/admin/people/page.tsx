@@ -24,6 +24,10 @@ import { audienceOfRole, opensSensitiveRecords } from "@/server/access/permissio
 import { rolesBlockedForSelf } from "@/server/access/guardrails";
 import { loadSnapshot } from "@/server/access/snapshot";
 import { assignmentActive } from "@/server/access/until";
+import { gradeLabel } from "@/lib/grade-levels";
+import { Pager, pageHref } from "@/components/app/pager";
+import { pageWindow, searchTerm } from "@/server/common/paging";
+import { gradeParam, gradesInUse, studentSearchWhere } from "@/server/students/grade-options";
 
 export async function generateMetadata() {
   const t = await getTranslations("adminPeople");
@@ -36,24 +40,26 @@ const MEMBER_STATUSES: MembershipStatus[] = ["ACTIVE", "INVITED", "SUSPENDED"];
 const STUDENT_STATUSES: PersonStatus[] = ["ACTIVE", "INACTIVE", "GRADUATED", "WITHDRAWN"];
 const MEMBER_TONE: Record<MembershipStatus, Tone> = { ACTIVE: "success", INVITED: "info", SUSPENDED: "danger", PENDING_APPROVAL: "warning" };
 const STUDENT_TONE: Record<PersonStatus, Tone> = { ACTIVE: "success", INACTIVE: "neutral", GRADUATED: "brand", WITHDRAWN: "warning" };
-const LIMIT = 200;
 
-export default async function AdminPeoplePage({ searchParams }: { searchParams: Promise<{ tab?: string; q?: string; role?: string; dept?: string; grade?: string; status?: string }> }) {
+export default async function AdminPeoplePage({ searchParams }: { searchParams: Promise<{ tab?: string; q?: string; role?: string; dept?: string; grade?: string; status?: string; page?: string }> }) {
   const sp = await searchParams;
   const ctx = await getCtx();
   if (!ctx.can("people.manage")) notFound();
   const t = await getTranslations("adminPeople");
+  const tg = await getTranslations("gradeLevel");
   const prefs = await formatPrefs(ctx);
   const { db, locale } = ctx;
   const tab: Tab = TABS.includes(sp.tab as Tab) ? (sp.tab as Tab) : "staff";
-  const q = sp.q?.trim() || "";
-  const grade = sp.grade && /^\d{1,2}$/.test(sp.grade) ? Number(sp.grade) : null;
+  const q = searchTerm(sp.q);
+  const grade = gradeParam(sp.grade);
+  const keep = { tab: sp.tab, q: sp.q, role: sp.role, dept: sp.dept, grade: sp.grade, status: sp.status };
+  const href = (p: number) => pageHref("/admin/people", keep, p);
 
   const staffBase: Prisma.MembershipWhereInput = { student: { is: null }, guardian: { is: null }, roles: { some: { role: { key: { notIn: ["student", "parent"] } } } } };
   const [roles, departments, gradeRows, counts] = await Promise.all([
     db.role.findMany({ orderBy: { nameEn: "asc" } }),
     db.department.findMany({ orderBy: { nameEn: "asc" } }),
-    db.student.groupBy({ by: ["gradeLevel"], orderBy: { gradeLevel: "asc" } }),
+    gradesInUse(db),
     Promise.all([
       db.membership.count({ where: staffBase }),
       db.student.count(),
@@ -67,7 +73,7 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
   const staffRoles = roles.filter((r) => STAFF_ROLE_KEYS.includes(r.key));
   const roleOptions = staffRoles.map((r) => ({ key: r.key, label: pick(locale, r.nameEn, r.nameAr), description: pick(locale, r.descEn, r.descAr) }));
   const deptOptions = departments.map((d) => ({ id: d.id, label: pick(locale, d.nameEn, d.nameAr) }));
-  const grades = gradeRows.map((g) => g.gradeLevel);
+  const grades = gradeRows;
   const canAdminRole = ctx.can("school.manage");
   const canManageRoles = ctx.can("roles.manage");
   const canImportCenter = ctx.can("admin.access");
@@ -99,7 +105,7 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
             {tab === "staff" ? (
               <AddStaffDialog roles={roleOptions} departments={deptOptions} canAssignAdmin={canAdminRole} />
             ) : tab === "students" || tab === "families" ? (
-              <AddStudentDialog guardians={await guardianOptions()} />
+              <AddStudentDialog />
             ) : null}
           </>
         }
@@ -120,7 +126,7 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
         ]}
         roles={tab === "staff" ? staffRoles.map((r) => ({ value: r.key, label: pick(locale, r.nameEn, r.nameAr) })) : undefined}
         departments={tab === "staff" ? deptOptions.map((d) => ({ value: d.id, label: d.label })) : undefined}
-        grades={tab === "students" || tab === "families" ? grades.map((g) => ({ value: String(g), label: t("gradeN", { grade: g }) })) : undefined}
+        grades={tab === "students" || tab === "families" ? grades.map((g) => ({ value: String(g), label: gradeLabel(tg, g) })) : undefined}
         statuses={
           tab === "staff"
             ? MEMBER_STATUSES.map((s) => ({ value: s, label: t(`memberStatus.${s}`) }))
@@ -136,11 +142,6 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
       {tab === "imports" && (await importsTab())}
     </PageBody>
   );
-
-  async function guardianOptions() {
-    const gs = await db.guardian.findMany({ orderBy: [{ lastNameEn: "asc" }, { firstNameEn: "asc" }], take: 1000 });
-    return gs.map((g) => ({ value: g.id, label: personName(g, locale), hint: g.email ?? undefined, keywords: `${g.firstNameEn} ${g.lastNameEn} ${g.firstNameAr} ${g.lastNameAr} ${g.email ?? ""}` }));
-  }
 
   async function staffTab() {
     const where: Prisma.MembershipWhereInput = {
@@ -162,15 +163,13 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
           : {},
       ],
     };
-    const [members, total, admins] = await Promise.all([
-      db.membership.findMany({ where, include: { user: true, roles: { include: { role: true } }, staffProfile: { include: { department: true } } }, orderBy: { user: { nameEn: "asc" } }, take: LIMIT }),
-      db.membership.count({ where }),
-      db.membership.findMany({ where: { status: "ACTIVE", roles: { some: { role: { key: "school_admin" } } } }, select: { id: true } }),
-    ]);
+    const [total, admins] = await Promise.all([db.membership.count({ where }), db.membership.findMany({ where: { status: "ACTIVE", roles: { some: { role: { key: "school_admin" } } } }, select: { id: true } })]);
+    const win = pageWindow(sp.page, total);
+    const members = await db.membership.findMany({ where, include: { user: true, roles: { include: { role: true } }, staffProfile: { include: { department: true } } }, orderBy: [{ user: { nameEn: "asc" } }, { id: "asc" }], skip: win.skip, take: win.take });
     if (members.length === 0) return <EmptyState icon={<Contact className="size-5" />} title={t("emptyStaff")} body={t("emptyFiltered")} />;
     const lastAdminId = admins.length === 1 ? admins[0].id : null;
     return (
-      <Table endLast cols="lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.3fr)_110px_280px]" header={[t("colName"), t("colTitleDept"), t("colRoles"), t("colStatus"), t("colActions")]} footer={total > members.length ? t("showing", { shown: members.length, total }) : undefined}>
+      <Table endLast cols="lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.3fr)_110px_280px]" header={[t("colName"), t("colTitleDept"), t("colRoles"), t("colStatus"), t("colActions")]} footer={<Pager win={win} prefs={prefs} href={href} />}>
         {members.map((m) => {
           const name = userName(m.user, locale);
           const other = locale === "ar" ? m.user.nameEn : m.user.nameAr;
@@ -253,18 +252,15 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
     const where: Prisma.StudentWhereInput = {
       ...(statusFilter ? { status: statusFilter as PersonStatus } : {}),
       ...(grade !== null ? { gradeLevel: grade } : {}),
-      ...(q
-        ? { OR: [{ firstNameEn: { contains: q, mode: "insensitive" } }, { lastNameEn: { contains: q, mode: "insensitive" } }, { firstNameAr: { contains: q } }, { lastNameAr: { contains: q } }, { studentNo: { contains: q, mode: "insensitive" } }] }
-        : {}),
+      ...(q ? studentSearchWhere(q) : {}),
     };
-    const [students, total] = await Promise.all([
-      db.student.findMany({ where, include: { _count: { select: { guardians: true } } }, orderBy: [{ gradeLevel: "asc" }, { section: "asc" }, { lastNameEn: "asc" }, { firstNameEn: "asc" }], take: LIMIT }),
-      db.student.count({ where }),
-    ]);
+    const total = await db.student.count({ where });
+    const win = pageWindow(sp.page, total);
+    const students = await db.student.findMany({ where, include: { _count: { select: { guardians: true } } }, orderBy: [{ gradeLevel: "asc" }, { section: "asc" }, { lastNameEn: "asc" }, { firstNameEn: "asc" }, { id: "asc" }], skip: win.skip, take: win.take });
     if (students.length === 0) return <EmptyState icon={<GraduationCap className="size-5" />} title={t("emptyStudents")} body={t("emptyFiltered")} />;
     const cols = "lg:grid-cols-[120px_minmax(0,1.6fr)_110px_110px_100px]";
     return (
-      <Table cols={cols} header={[t("colStudentNo"), t("colName"), t("colGrade"), t("colGuardians"), t("colStatus")]} footer={total > students.length ? t("showing", { shown: students.length, total }) : undefined}>
+      <Table cols={cols} header={[t("colStudentNo"), t("colName"), t("colGrade"), t("colGuardians"), t("colStatus")]} footer={<Pager win={win} prefs={prefs} href={href} />}>
         {students.map((s) => (
           <Row key={s.id} cols={cols} testId="student-row">
             <div className="text-xs font-medium tabular-nums text-muted-foreground">
@@ -276,7 +272,7 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
               </Link>
               <div className="truncate text-xs text-muted-foreground">{locale === "ar" ? `${s.firstNameEn} ${s.lastNameEn}` : `${s.firstNameAr} ${s.lastNameAr}`}</div>
             </div>
-            <div className="text-sm">{t("gradeSection", { grade: s.gradeLevel, section: s.section ?? "" })}</div>
+            <div className="text-sm" data-testid="student-row-grade">{gradeLabel(tg, s.gradeLevel, s.section)}</div>
             <div className="text-sm">{s._count.guardians === 0 ? <Pill tone="warning">{t("noGuardians")}</Pill> : t("guardianCount", { count: s._count.guardians })}</div>
             <div>
               <Pill tone={STUDENT_TONE[s.status]} dot>
@@ -306,14 +302,13 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
           }
         : {}),
     };
-    const [guardians, total] = await Promise.all([
-      db.guardian.findMany({ where, include: { links: { include: { student: true }, orderBy: { student: { gradeLevel: "desc" } } }, membership: { select: { status: true } } }, orderBy: [{ lastNameEn: "asc" }, { firstNameEn: "asc" }], take: LIMIT }),
-      db.guardian.count({ where }),
-    ]);
+    const total = await db.guardian.count({ where });
+    const win = pageWindow(sp.page, total);
+    const guardians = await db.guardian.findMany({ where, include: { links: { include: { student: true }, orderBy: { student: { gradeLevel: "desc" } } }, membership: { select: { status: true } } }, orderBy: [{ lastNameEn: "asc" }, { firstNameEn: "asc" }, { id: "asc" }], skip: win.skip, take: win.take });
     if (guardians.length === 0) return <EmptyState icon={<Users className="size-5" />} title={t("emptyFamilies")} body={t("emptyFiltered")} />;
     const cols = "lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,2fr)]";
     return (
-      <Table cols={cols} header={[t("colGuardian"), t("colContact"), t("colChildren")]} footer={total > guardians.length ? t("showing", { shown: guardians.length, total }) : undefined}>
+      <Table cols={cols} header={[t("colGuardian"), t("colContact"), t("colChildren")]} footer={<Pager win={win} prefs={prefs} href={href} />}>
         {guardians.map((g) => (
           <Row key={g.id} cols={cols} testId="guardian-row">
             <div className="min-w-0">
@@ -352,7 +347,7 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
                     {personName(l.student, locale)}
                   </Link>
                   <span className="text-xs text-muted-foreground">
-                    {pick(locale, l.relationshipEn, l.relationshipAr)} · {t("gradeSection", { grade: l.student.gradeLevel, section: l.student.section ?? "" })}
+                    {pick(locale, l.relationshipEn, l.relationshipAr)} · {gradeLabel(tg, l.student.gradeLevel, l.student.section)}
                   </span>
                   {l.isPrimary && <Pill tone="brand">{t("flagPrimary")}</Pill>}
                   {l.canApprove ? <Pill tone="success">{t("flagApprove")}</Pill> : <Pill>{t("flagNoApprove")}</Pill>}
@@ -441,7 +436,7 @@ export default async function AdminPeoplePage({ searchParams }: { searchParams: 
   }
 }
 
-function Table({ cols, header, footer, endLast, children }: { cols: string; header: string[]; footer?: string; endLast?: boolean; children: React.ReactNode }) {
+function Table({ cols, header, footer, endLast, children }: { cols: string; header: string[]; footer?: React.ReactNode; endLast?: boolean; children: React.ReactNode }) {
   return (
     <div className="overflow-hidden rounded-xl border bg-card shadow-xs">
       <div className={`hidden gap-3 border-b bg-muted/30 px-5 py-2.5 text-xs font-medium text-muted-foreground lg:grid ${cols}`}>
@@ -452,7 +447,7 @@ function Table({ cols, header, footer, endLast, children }: { cols: string; head
         ))}
       </div>
       <div className="divide-y">{children}</div>
-      {footer && <div className="border-t bg-muted/20 px-5 py-2.5 text-xs text-muted-foreground">{footer}</div>}
+      {footer && <div className="border-t bg-muted/20 px-5 py-1">{footer}</div>}
     </div>
   );
 }

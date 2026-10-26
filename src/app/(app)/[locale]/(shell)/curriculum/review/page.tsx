@@ -11,6 +11,7 @@ import { CurriculumNav } from "@/components/curriculum/curriculum-nav";
 import { AiDraftedBadge, PlanStatusBadge } from "@/components/curriculum/badges";
 import { reviewScope, reviewScopeWhere } from "@/server/curriculum/access";
 import { curriculumShell } from "@/server/curriculum/shell";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export async function generateMetadata() {
   const t = await getTranslations("curriculum");
@@ -20,6 +21,7 @@ export async function generateMetadata() {
 export default async function ReviewQueuePage() {
   const ctx = await getCtx();
   const t = await getTranslations("curriculum");
+  const tg = await getTranslations("gradeLevel");
   if (!ctx.isStaff || !ctx.can("curriculum.review")) {
     return (
       <PageBody>
@@ -44,7 +46,7 @@ export default async function ReviewQueuePage() {
   const label = (p: (typeof all)[number]) => {
     const s = subjects.find((x) => x.id === p.subjectId);
     const c = classes.find((x) => x.id === p.classId);
-    return [s ? pick(locale, s.nameEn, s.nameAr) : null, c ? pick(locale, c.nameEn, c.nameAr) : t("gradeN", { grade: p.gradeLevel })].filter(Boolean).join(" · ");
+    return [s ? pick(locale, s.nameEn, s.nameAr) : null, c ? pick(locale, c.nameEn, c.nameAr) : gradeLabel(tg, p.gradeLevel)].filter(Boolean).join(" · ");
   };
   const author = (id: string) => userName(authors.find((a) => a.id === id)?.user, locale);
   const noScope = !scope.all && scope.subjectIds.length === 0;

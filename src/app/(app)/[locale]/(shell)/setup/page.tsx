@@ -6,7 +6,7 @@ import { canSetup } from "@/server/onboarding/access";
 import { schoolVerified } from "@/server/onboarding/verification";
 import { formatPrefs } from "@/server/format";
 import { fmtDate, fmtNumber } from "@/lib/format";
-import { personName, pick } from "@/lib/i18n-data";
+import { pick } from "@/lib/i18n-data";
 import { cn } from "@/lib/utils";
 import { enabledOptionalModules, moduleEnabled } from "@/lib/modules";
 import { ACCESS_PAGES, ACCESS_PAGES_LIVE, isSetupStep, SETUP_STEPS, setupProgress, stepState, WORK_STEPS, type SetupStep } from "@/lib/onboarding";
@@ -210,18 +210,16 @@ export default async function SetupPage({ searchParams }: { searchParams: Promis
     if (s === "modules") return <ModulesStepForm initial={enabledOptionalModules(org)} />;
     if (s === "people") {
       const staffBase = { student: { is: null }, guardian: { is: null }, roles: { some: { role: { key: { in: STAFF_ROLE_KEYS } } } } } as const;
-      const [staff, students, guardians, roles, departments, guardianRows] = await Promise.all([
+      const [staff, students, guardians, roles, departments] = await Promise.all([
         db.membership.count({ where: staffBase }),
         db.student.count(),
         db.guardian.count(),
         db.role.findMany({ orderBy: { nameEn: "asc" } }),
         db.department.findMany({ orderBy: { nameEn: "asc" } }),
-        db.guardian.findMany({ orderBy: [{ lastNameEn: "asc" }, { firstNameEn: "asc" }], take: 1000 }),
       ]);
       const canPeople = ctx.can("people.manage");
       const roleOptions = roles.filter((r) => STAFF_ROLE_KEYS.includes(r.key)).map((r) => ({ key: r.key, label: pick(locale, r.nameEn, r.nameAr), description: pick(locale, r.descEn, r.descAr) }));
       const deptOptions = departments.map((d) => ({ id: d.id, label: pick(locale, d.nameEn, d.nameAr) }));
-      const guardianOptions = guardianRows.map((g) => ({ value: g.id, label: personName(g, locale), hint: g.email ?? undefined, keywords: `${g.firstNameEn} ${g.lastNameEn} ${g.firstNameAr} ${g.lastNameAr} ${g.email ?? ""}` }));
       return (
         <div className="space-y-6">
           <div className="grid gap-3 sm:grid-cols-3">
@@ -241,7 +239,7 @@ export default async function SetupPage({ searchParams }: { searchParams: Promis
             <>
               <div className="flex flex-wrap gap-2">
                 <AddStaffDialog roles={roleOptions} departments={deptOptions} canAssignAdmin={ctx.can("school.manage")} />
-                <AddStudentDialog guardians={guardianOptions} />
+                <AddStudentDialog />
                 <Button variant="ghost" asChild>
                   <Link href="/admin/people">{t("people.openPeople")}</Link>
                 </Button>

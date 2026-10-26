@@ -13,23 +13,26 @@ import { EmptyState } from "@/components/app/empty-state";
 import { Pill } from "@/components/app/badges";
 import { defaultTimetableStudent, publishedSittings, timetableStudents } from "@/server/exams/queries";
 import { dayKey } from "@/server/exams/schedule";
+import { gradeLabel } from "@/lib/grade-levels";
+import { gradeChoices, gradeParam } from "@/server/students/grade-options";
 
 export async function generateMetadata() {
   const t = await getTranslations("exams");
   return { title: t("title") };
 }
 
-const GRADES = [6, 7, 8, 9, 10, 11, 12];
 
 export default async function ExamsPage({ searchParams }: { searchParams: Promise<{ student?: string; grade?: string }> }) {
   const sp = await searchParams;
   const ctx = await getCtx();
   const t = await getTranslations("exams");
+  const tg = await getTranslations("gradeLevel");
   const prefs = await formatPrefs(ctx);
   const { locale } = ctx;
   const students = timetableStudents(ctx);
   const chosen = students ? await defaultTimetableStudent(ctx, students, sp.student) : null;
-  const grade = students ? (chosen?.gradeLevel ?? null) : sp.grade && /^\d{1,2}$/.test(sp.grade) ? Number(sp.grade) : 9;
+  const GRADES = await gradeChoices(ctx.db);
+  const grade = students ? (chosen?.gradeLevel ?? null) : (gradeParam(sp.grade) ?? (GRADES.includes(9) ? 9 : (GRADES[0] ?? 9)));
   const now = new Date();
   const sittings = grade !== null ? await publishedSittings(ctx, grade) : [];
   const upcoming = sittings.filter((s) => s.endsAt > now);
@@ -59,7 +62,7 @@ export default async function ExamsPage({ searchParams }: { searchParams: Promis
         <div className="flex flex-wrap gap-2">
           {students.map((s) => (
             <Link key={s.id} href={`/exams?student=${s.id}`} className={cn("rounded-full border px-3 py-1 text-sm font-medium", s.id === chosen?.id ? "border-brand bg-brand-soft text-brand" : "bg-card text-muted-foreground hover:text-foreground")} data-testid="exam-child">
-              {personName(s, locale)} · {t("gradeN", { grade: s.gradeLevel })}
+              {personName(s, locale)} · {gradeLabel(tg, s.gradeLevel)}
             </Link>
           ))}
         </div>
@@ -68,7 +71,7 @@ export default async function ExamsPage({ searchParams }: { searchParams: Promis
         <div className="flex flex-wrap gap-1.5">
           {GRADES.map((g) => (
             <Link key={g} href={`/exams?grade=${g}`} className={cn("rounded-full border px-2.5 py-1 text-xs font-medium", grade === g ? "border-brand bg-brand-soft text-brand" : "bg-card text-muted-foreground")}>
-              {t("gradeN", { grade: g })}
+              {gradeLabel(tg, g)}
             </Link>
           ))}
         </div>
@@ -82,7 +85,7 @@ export default async function ExamsPage({ searchParams }: { searchParams: Promis
               <li key={d.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 text-sm">
                 <span className="w-40 text-xs tabular-nums text-muted-foreground">{fmtDate(prefs, d.startsAt)} · {fmtTime(prefs, d.startsAt)}</span>
                 <span className="font-medium">{pick(locale, d.titleEn, d.titleAr)}</span>
-                <Pill tone="brand">{t("gradeN", { grade: d.gradeLevel })}</Pill>
+                <Pill tone="brand">{gradeLabel(tg, d.gradeLevel)}</Pill>
                 {d.room && <span className="text-xs text-muted-foreground">{d.room}</span>}
               </li>
             ))}

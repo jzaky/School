@@ -4,6 +4,7 @@
 import type { Prisma, RegistrationSource, SchoolCurriculum } from "@prisma/client";
 import { checkChoices, type ChoiceError, type OfferingLite } from "@/lib/registration";
 import { allocateGroup, DEFAULT_CAPACITY, type AllocRequest } from "./allocate";
+import { gradeTextIn } from "@/server/common/grade-text";
 
 type Tx = Prisma.TransactionClient;
 
@@ -172,8 +173,8 @@ export async function runAllocation(tx: Tx, orgId: string, academicYearId: strin
             campusId: sibling?.campusId ?? null,
             subjectId: grp.subjectId,
             teacherMembershipId: null,
-            nameEn: `Grade ${grp.gradeLevel} ${subject?.nameEn ?? ""} ${ns.section}`.replace(/\s+/g, " ").trim(),
-            nameAr: `${subject?.nameAr ?? ""} للصف ${grp.gradeLevel} ${ns.section}`.replace(/\s+/g, " ").trim(),
+            nameEn: `${gradeTextIn("en", grp.gradeLevel)} ${subject?.nameEn ?? ""} ${ns.section}`.replace(/\s+/g, " ").trim(),
+            nameAr: `${subject?.nameAr ?? ""} ${gradeTextIn("ar", grp.gradeLevel)} ${ns.section}`.replace(/\s+/g, " ").trim(),
             gradeLevel: grp.gradeLevel,
             section: ns.section,
             isHomeroom: false,

@@ -16,26 +16,28 @@ import { Pill } from "@/components/app/badges";
 import { EmptyState } from "@/components/app/empty-state";
 import { bulkEditTeachersAction, prefillTeacherSubjectsAction, saveTeacherSubjectsAction } from "@/server/timetable/actions";
 import { useTtError } from "./lesson-dialog";
+import { gradeLabel, type GradeTranslator } from "@/lib/grade-levels";
 
 export type TeacherRow = { id: string; name: string; department: string; max: number; load: number; quals: Array<{ subjectId: string; subject: string; grades: number[] }> };
 type Subject = { id: string; name: string };
-const GRADES = [6, 7, 8, 9, 10, 11, 12];
 
-function gradeRange(gs: number[]) {
+function gradeRange(gs: number[], tg: GradeTranslator) {
   if (!gs.length) return "";
   const s = [...gs].sort((a, b) => a - b);
+  const short = (g: number) => gradeLabel(tg, g, null, { short: true });
   const contiguous = s.every((g, i) => i === 0 || g === s[i - 1] + 1);
-  return contiguous && s.length > 1 ? `${s[0]}-${s[s.length - 1]}` : s.join(", ");
+  return contiguous && s.length > 1 ? `${short(s[0])}-${short(s[s.length - 1])}` : s.map(short).join(", ");
 }
 
-function GradePicker({ value, onChange }: { value: number[]; onChange: (v: number[]) => void }) {
+function GradePicker({ value, onChange, grades }: { value: number[]; onChange: (v: number[]) => void; grades: number[] }) {
+  const tg = useTranslations("gradeLevel");
   return (
     <div className="flex flex-wrap gap-1">
-      {GRADES.map((g) => {
+      {grades.map((g) => {
         const on = value.includes(g);
         return (
-          <button key={g} type="button" onClick={() => onChange(on ? value.filter((x) => x !== g) : [...value, g])} className={cn("size-8 rounded-md border text-xs font-medium tabular-nums", on ? "border-brand bg-brand text-brand-foreground" : "bg-card text-muted-foreground")} aria-pressed={on}>
-            {g}
+          <button key={g} type="button" onClick={() => onChange(on ? value.filter((x) => x !== g) : [...value, g])} className={cn("h-8 min-w-8 whitespace-nowrap rounded-md border px-1.5 text-xs font-medium tabular-nums", on ? "border-brand bg-brand text-brand-foreground" : "bg-card text-muted-foreground")} aria-pressed={on}>
+            {gradeLabel(tg, g, null, { short: true })}
           </button>
         );
       })}
@@ -43,8 +45,9 @@ function GradePicker({ value, onChange }: { value: number[]; onChange: (v: numbe
   );
 }
 
-export function TeacherSubjectsTable({ rows, subjects }: { rows: TeacherRow[]; subjects: Subject[] }) {
+export function TeacherSubjectsTable({ rows, subjects, grades }: { rows: TeacherRow[]; subjects: Subject[]; grades: number[] }) {
   const t = useTranslations("timetable");
+  const tg = useTranslations("gradeLevel");
   const err = useTtError();
   const router = useRouter();
   const [selected, setSelected] = useState<string[]>([]);
@@ -97,7 +100,7 @@ export function TeacherSubjectsTable({ rows, subjects }: { rows: TeacherRow[]; s
                     <div className="truncate text-xs text-muted-foreground">{r.department || t("noDepartment")}</div>
                   </div>
                   <div className="col-span-2 col-start-2 flex flex-wrap gap-1 lg:col-span-1 lg:col-start-auto">
-                    {r.quals.length === 0 ? <span className="text-xs text-muted-foreground">{t("noQuals")}</span> : r.quals.map((q) => <Pill key={q.subjectId}>{t("qualChip", { subject: q.subject, grades: gradeRange(q.grades) })}</Pill>)}
+                    {r.quals.length === 0 ? <span className="text-xs text-muted-foreground">{t("noQuals")}</span> : r.quals.map((q) => <Pill key={q.subjectId}>{t("qualChip", { subject: q.subject, grades: gradeRange(q.grades, tg) })}</Pill>)}
                   </div>
                   <div className="col-span-2 col-start-2 lg:col-span-1 lg:col-start-auto">
                     <div className="text-xs tabular-nums">{t("loadOf", { load: r.load, max: r.max })}</div>
@@ -117,13 +120,13 @@ export function TeacherSubjectsTable({ rows, subjects }: { rows: TeacherRow[]; s
           </ul>
         </div>
       )}
-      {editing && <EditDialog row={editing} subjects={subjects} onClose={() => setEditing(null)} />}
-      {bulk && <BulkDialog ids={selected} subjects={subjects} onClose={() => setBulk(false)} onDone={() => setSelected([])} />}
+      {editing && <EditDialog row={editing} subjects={subjects} grades={grades} onClose={() => setEditing(null)} />}
+      {bulk && <BulkDialog ids={selected} subjects={subjects} grades={grades} onClose={() => setBulk(false)} onDone={() => setSelected([])} />}
     </div>
   );
 }
 
-function EditDialog({ row, subjects, onClose }: { row: TeacherRow; subjects: Subject[]; onClose: () => void }) {
+function EditDialog({ row, subjects, grades, onClose }: { row: TeacherRow; subjects: Subject[]; grades: number[]; onClose: () => void }) {
   const t = useTranslations("timetable");
   const err = useTtError();
   const router = useRouter();
@@ -162,7 +165,7 @@ function EditDialog({ row, subjects, onClose }: { row: TeacherRow; subjects: Sub
                     <Trash2 className="size-4" />
                   </Button>
                 </div>
-                <GradePicker value={q.grades} onChange={(g) => setQuals(quals.map((x) => (x.subjectId === q.subjectId ? { ...x, grades: g } : x)))} />
+                <GradePicker grades={grades} value={q.grades} onChange={(g) => setQuals(quals.map((x) => (x.subjectId === q.subjectId ? { ...x, grades: g } : x)))} />
               </div>
             ))}
             {quals.length === 0 && <p className="text-sm text-muted-foreground">{t("noQuals")}</p>}
@@ -200,7 +203,7 @@ function EditDialog({ row, subjects, onClose }: { row: TeacherRow; subjects: Sub
   );
 }
 
-function BulkDialog({ ids, subjects, onClose, onDone }: { ids: string[]; subjects: Subject[]; onClose: () => void; onDone: () => void }) {
+function BulkDialog({ ids, subjects, grades: schoolGrades, onClose, onDone }: { ids: string[]; subjects: Subject[]; grades: number[]; onClose: () => void; onDone: () => void }) {
   const t = useTranslations("timetable");
   const err = useTtError();
   const router = useRouter();
@@ -244,7 +247,7 @@ function BulkDialog({ ids, subjects, onClose, onDone }: { ids: string[]; subject
                 ))}
               </SelectContent>
             </Select>
-            {subjectId && <GradePicker value={grades} onChange={setGrades} />}
+            {subjectId && <GradePicker grades={schoolGrades} value={grades} onChange={setGrades} />}
           </div>
         </div>
         <DialogFooter>

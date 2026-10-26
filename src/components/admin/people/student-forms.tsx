@@ -10,8 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { PickerCombobox, type PickerOption } from "@/components/forms/picker-combobox";
+import { GuardianSearchPicker } from "@/components/forms/search-picker";
 import { cn } from "@/lib/utils";
+import { gradeLabel } from "@/lib/grade-levels";
 import { MAX_GRADE, MIN_GRADE, RELATIONSHIPS } from "@/lib/people-csv";
 import { addStudentAction } from "@/server/admin/people-actions";
 import { usePeopleError } from "./staff-forms";
@@ -47,8 +48,9 @@ function RelationshipSelect({ value, onChange }: { value: string; onChange: (v: 
   );
 }
 
-export function AddStudentDialog({ guardians }: { guardians: PickerOption[] }) {
+export function AddStudentDialog() {
   const t = useTranslations("adminPeople");
+  const tg = useTranslations("gradeLevel");
   const err = usePeopleError();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -113,7 +115,7 @@ export function AddStudentDialog({ guardians }: { guardians: PickerOption[] }) {
                   <SelectContent>
                     {GRADES.map((n) => (
                       <SelectItem key={n} value={String(n)}>
-                        {t("gradeN", { grade: n })}
+                        {gradeLabel(tg, n)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -173,7 +175,7 @@ export function AddStudentDialog({ guardians }: { guardians: PickerOption[] }) {
               {mode === "existing" && (
                 <div className="grid gap-3 sm:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
                   <Field label={t("fieldGuardian")}>
-                    <PickerCombobox options={guardians} value={guardianId} onChange={setGuardianId} placeholder={t("chooseGuardian")} testId="guardian-picker" />
+                    <GuardianSearchPicker value={guardianId} onChange={(v) => setGuardianId(v)} placeholder={t("chooseGuardian")} testId="guardian-picker" />
                   </Field>
                   <Field label={t("fieldRelationship")}>
                     <RelationshipSelect value={relationship} onChange={setRelationship} />

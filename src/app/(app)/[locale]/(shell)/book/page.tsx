@@ -23,7 +23,7 @@ export default async function BookPage({ searchParams }: { searchParams: Promise
   const caseOk = theCase ? await canViewCase(ctx, theCase, { audit: false }) : false;
   if (theCase && caseOk && !studentId) studentId = theCase.studentId;
   const setup = selected ? await loadBookingSetup(ctx, selected.key, studentId) : null;
-  const options = await loadPickerOptions(ctx, null);
+  const options = await loadPickerOptions(ctx, null, { selectedStudentId: studentId });
   const guardians = studentId ? await db.guardianLink.findMany({ where: { studentId }, include: { guardian: true }, orderBy: { isPrimary: "desc" } }) : [];
   const sensitive = theCase && (theCase.sensitivity === "WELLBEING" || theCase.sensitivity === "SAFEGUARDING");
   return (
@@ -47,6 +47,7 @@ export default async function BookPage({ searchParams }: { searchParams: Promise
             setup={setup}
             studentId={studentId}
             students={ctx.isStaff ? options.students : []}
+            studentSearch={ctx.isStaff && options.studentSearch}
             caseId={theCase && caseOk ? theCase.id : null}
             guardians={guardians.filter((g) => g.guardian.membershipId).map((g) => ({ id: g.guardianId, name: `${personName(g.guardian, locale)} (${pick(locale, g.relationshipEn, g.relationshipAr)})` }))}
             defaultInvite={!sensitive}

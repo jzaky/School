@@ -7,7 +7,7 @@ import { audit } from "@/server/audit/audit";
 import { identityDb, tenantTx, type TenantTx } from "@/lib/tenant-db";
 import { encryptField } from "@/lib/crypto";
 import { STAFF_ROLE_KEYS } from "@/server/identity/permissions";
-import { RELATIONSHIPS, emiratesIdLast4, isEmail, parseDate, parseEmiratesId } from "@/lib/people-csv";
+import { MAX_GRADE, MIN_GRADE, RELATIONSHIPS, emiratesIdLast4, isEmail, parseDate, parseEmiratesId } from "@/lib/people-csv";
 import { ImportTooLargeError, importStudentRows } from "@/server/admin/people-import";
 import { AccessError, alertMemberAccessChange, assertMemberRolesChangeAllowed } from "@/server/access/roles";
 import { loadSnapshot } from "@/server/access/snapshot";
@@ -225,7 +225,7 @@ const addStudentSchema = z.object({
   lastNameEn: nameEn,
   firstNameAr: nameAr,
   lastNameAr: nameAr,
-  gradeLevel: z.number().int().min(1).max(13),
+  gradeLevel: z.number().int().min(MIN_GRADE).max(MAX_GRADE),
   section: z.string().trim().toUpperCase().regex(/^[A-Z0-9]{0,3}$/).optional(),
   dateOfBirth: z.string().optional(),
   emiratesId: z.string().optional(),

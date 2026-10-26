@@ -17,9 +17,10 @@ import { STATUS_ORDER } from "@/components/pathway-engine/labels";
 import { CompareProvider, CompareToggle, CompareTray, CountryFilter, ParamSelect, SearchBox } from "@/components/discovery/client";
 import { engineFocus, pathwayHref } from "@/server/pathway-engine/page-data";
 import { CURRICULA } from "@/server/pathway-engine/types";
-import { searchCatalog, shortlistedIds, staffStudentOptions } from "@/server/discovery/service";
+import { searchCatalog, shortlistedIds, staffCanSearchStudents, staffStudentOptions } from "@/server/discovery/service";
 import { DEGREE_TYPES, LANGUAGES, LEVELS, SORTS, TUITION_BANDS, parseDiscoveryQuery, queryParams, tuitionUsd } from "@/server/discovery/search";
 import { CatalogNotice } from "@/components/pathway-engine/catalog-notice";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export async function generateMetadata() {
   const t = await getTranslations("discovery");
@@ -47,6 +48,7 @@ export default async function ProgramSearchPage({ searchParams }: { searchParams
     staffStudentOptions(ctx, focus),
   ]);
   const pickerOptions = focus.options.length ? focus.options : staffOptions;
+  const staffSearch = !focus.options.length && staffCanSearchStudents(ctx, focus);
   const shortlisted = student && !ctx.isParent && focus.canEdit ? await shortlistedIds(ctx, student.id, result.items.map((i) => i.meta)) : null;
   const studentParam = student && !ctx.isStudent ? student.id : null;
   const programHref = (id: string) => `/career/pathways/programs/${id}${studentParam ? `?student=${studentParam}` : ""}`;
@@ -72,12 +74,12 @@ export default async function ProgramSearchPage({ searchParams }: { searchParams
         {te("title")}
       </Link>
       <PageHeader
-        eyebrow={student && !ctx.isStudent ? te("studentLine", { name: student.name, grade: student.gradeLevel, curriculum: te(`curriculum.${student.curriculum}`) }) : undefined}
+        eyebrow={student && !ctx.isStudent ? `${student.name} · ${gradeLabel(await getTranslations("gradeLevel"), student.gradeLevel)} · ${te(`curriculum.${student.curriculum}`)}` : undefined}
         title={t("title")}
         description={t("subtitle", { n: fmt(result.catalogTotal) })}
         actions={
           <>
-            {pickerOptions.length > 0 && <StudentPicker students={pickerOptions} current={student?.id ?? null} />}
+            {(pickerOptions.length > 0 || staffSearch) && <StudentPicker students={pickerOptions} current={student?.id ?? null} search={staffSearch} />}
             {studentParam && ctx.isStaff && (
               <Button asChild variant="ghost" size="sm">
                 <Link href={`/career/pathways/search?${queryParams({ ...query, page: 1, status: null, sort: query.sort === "match" ? "rank" : query.sort }).toString()}`} data-testid="clear-student">

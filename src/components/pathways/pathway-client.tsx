@@ -12,6 +12,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Pill } from "@/components/app/badges";
+import { StudentSearchPicker } from "@/components/forms/search-picker";
+import { PATHWAY_MIN_GRADE } from "@/lib/grade-levels";
 import {
   addProgramToShortlistAction,
   confirmAction,
@@ -69,10 +71,21 @@ export function PathwayFilters({ filters }: { filters: Array<{ param: string; la
   );
 }
 
-/** Parents with several children and advising staff choose whose pathway they are looking at. */
-export function StudentPicker({ students, current }: { students: Opt[]; current: string | null }) {
+/**
+ * Parents with several children and advising staff choose whose pathway they are looking at. Staff search the
+ * whole Grade 9 to 12 cohort on the server (`search`); `students` then holds only the student in focus.
+ */
+export function StudentPicker({ students, current, search }: { students: Opt[]; current: string | null; search?: boolean }) {
   const t = useTranslations("pathways");
   const { set } = useParamSetter();
+  if (search) {
+    const now = students.find((s) => s.value === current);
+    return (
+      <div className="w-64 max-w-full">
+        <StudentSearchPicker value={current ?? ""} selected={now ? { value: now.value, label: now.label } : null} onChange={(v) => set({ student: v })} filters={{ minGrade: PATHWAY_MIN_GRADE }} placeholder={t("chooseStudent")} testId="student-picker" />
+      </div>
+    );
+  }
   return (
     <Select value={current ?? ""} onValueChange={(v) => set({ student: v })}>
       <SelectTrigger size="sm" className="w-56 max-w-full" data-testid="student-picker">

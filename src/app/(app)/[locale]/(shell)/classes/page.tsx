@@ -12,6 +12,8 @@ import { DEFAULT_CAPACITY } from "@/server/registration/allocate";
 import { PageBody, PageHeader } from "@/components/app/page-header";
 import { EmptyState } from "@/components/app/empty-state";
 import { Pill } from "@/components/app/badges";
+import { gradeLabel } from "@/lib/grade-levels";
+import { gradeParam } from "@/server/students/grade-options";
 
 export async function generateMetadata() {
   const t = await getTranslations("registration");
@@ -23,10 +25,11 @@ export default async function ClassesPage({ searchParams }: { searchParams: Prom
   const ctx = await getCtx();
   if (!ctx.isStaff || !(ctx.can("grades.enter") || ctx.can("registration.manage"))) notFound();
   const t = await getTranslations("registration");
+  const tg = await getTranslations("gradeLevel");
   const { db, locale, orgId } = ctx;
   const seesAll = ctx.can("registration.manage");
   const year = await tenantTx(orgId, (tx) => currentYear(tx, orgId));
-  const grade = sp.grade && /^\d{1,2}$/.test(sp.grade) ? Number(sp.grade) : null;
+  const grade = gradeParam(sp.grade);
   const where = {
     ...(year ? { academicYearId: year.id } : {}),
     ...(seesAll ? {} : { teacherMembershipId: ctx.membershipId }),
@@ -49,7 +52,7 @@ export default async function ClassesPage({ searchParams }: { searchParams: Prom
           </Link>
           {gradeRows.map((g) => (
             <Link key={g.gradeLevel} href={`/classes?grade=${g.gradeLevel}`} className={cn("rounded-full border px-3 py-1 text-xs font-medium", g.gradeLevel === grade ? "border-brand bg-brand-soft text-brand" : "bg-card text-muted-foreground hover:text-foreground")}>
-              {t("gradeN", { grade: g.gradeLevel })}
+              {gradeLabel(tg, g.gradeLevel)}
             </Link>
           ))}
         </div>
@@ -69,7 +72,7 @@ export default async function ClassesPage({ searchParams }: { searchParams: Prom
                       {pick(locale, c.nameEn, c.nameAr)}
                     </Link>
                     <div className="truncate text-xs text-muted-foreground">
-                      {c.isHomeroom ? t("homeroom") : c.subject ? pick(locale, c.subject.nameEn, c.subject.nameAr) : ""} · {t("gradeN", { grade: c.gradeLevel })}
+                      {c.isHomeroom ? t("homeroom") : c.subject ? pick(locale, c.subject.nameEn, c.subject.nameAr) : ""} · {gradeLabel(tg, c.gradeLevel, c.section)}
                       {c.room ? ` · ${t("roomN", { room: c.room })}` : ""}
                     </div>
                     {seesAll && <div className="mt-0.5 truncate text-xs text-muted-foreground">{teacher ? userName(teacher.user, locale) : <Pill tone="warning">{t("teacherTbc")}</Pill>}</div>}

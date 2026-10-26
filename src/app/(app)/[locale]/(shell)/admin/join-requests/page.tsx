@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { gradeLabel } from "@/lib/grade-levels";
 import { Inbox, UserCheck } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
@@ -89,12 +90,9 @@ export default async function JoinRequestsPage({ searchParams }: { searchParams:
   async function pendingList() {
     const allClaims = requests.map((r) => ({ r, claims: claimsOf(r.claimedStudents) }));
     const candidates = await studentsForClaims(db as never, allClaims.flatMap((x) => x.claims));
-    const [roles, students] = await Promise.all([
-      db.role.findMany({ select: { key: true, nameEn: true, nameAr: true } }),
-      db.student.findMany({ where: { status: "ACTIVE" }, select: { id: true, studentNo: true, gradeLevel: true, section: true, firstNameEn: true, lastNameEn: true, firstNameAr: true, lastNameAr: true }, orderBy: [{ gradeLevel: "asc" }, { lastNameEn: "asc" }], take: 3000 }),
-    ]);
+    const roles = await db.role.findMany({ select: { key: true, nameEn: true, nameAr: true } });
+    const tg = await getTranslations("gradeLevel");
     const staffRoles = roles.filter((r) => audienceOfRole(r.key) === "staff").map((r) => ({ key: r.key, label: pick(locale, r.nameEn, r.nameAr) }));
-    const studentOptions = students.map((s) => ({ value: s.id, label: personName(s, locale), hint: `${s.studentNo} · ${t("gradeSection", { grade: s.gradeLevel, section: s.section ?? "" })}`, keywords: `${s.firstNameEn} ${s.lastNameEn} ${s.firstNameAr} ${s.lastNameAr} ${s.studentNo}` }));
     return (
       <div className="space-y-4">
         {allClaims.map(({ r, claims }) => {
@@ -108,7 +106,7 @@ export default async function JoinRequestsPage({ searchParams }: { searchParams:
                 hints.set(s.id, {
                   id: s.id,
                   label: personName(s, locale),
-                  detail: `${s.studentNo} · ${t("gradeSection", { grade: s.gradeLevel, section: s.section ?? "" })}${s.dateOfBirth ? ` · ${fmtDate(prefs, s.dateOfBirth)}` : ""}`,
+                  detail: `${s.studentNo} · ${gradeLabel(tg, s.gradeLevel, s.section)}${s.dateOfBirth ? ` · ${fmtDate(prefs, s.dateOfBirth)}` : ""}`,
                   reasons: h.reasons,
                   exact: h.exact,
                   taken: r.kind === "STUDENT" && !!s.membershipId,
@@ -135,7 +133,7 @@ export default async function JoinRequestsPage({ searchParams }: { searchParams:
                     <ul className="space-y-1">
                       {claims.map((c, i) => (
                         <li key={i} className="rounded-lg border px-3 py-2 text-sm" data-testid="jr-claim">
-                          {c.studentNo ? t("claimByNumber", { number: c.studentNo, dob: c.dateOfBirth ?? "" }) : t("claimByName", { name: c.fullName ?? "", grade: c.grade ?? 0 })}
+                          {c.studentNo ? t("claimByNumber", { number: c.studentNo, dob: c.dateOfBirth ?? "" }) : c.grade === null || c.grade === undefined ? (c.fullName ?? "") : t("claimByNameLabel", { name: c.fullName ?? "", grade: gradeLabel(tg, c.grade) })}
                         </li>
                       ))}
                     </ul>
@@ -148,7 +146,6 @@ export default async function JoinRequestsPage({ searchParams }: { searchParams:
                 candidates={list}
                 preselected={list.filter((c) => c.exact && !c.taken).map((c) => c.id)}
                 roles={staffRoles}
-                students={studentOptions}
               />
             </Panel>
           );

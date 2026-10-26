@@ -19,8 +19,8 @@ import { selfEscalation, withMemberRoles } from "@/server/access/guardrails";
 import { alertMemberAccessChange } from "@/server/access/roles";
 import { finishRecord, startRecord } from "./record";
 import { releaseUnprovenPassword } from "@/server/identity/unproven-account";
+import { ALL_GRADE_LEVELS } from "@/lib/grade-levels";
 
-const ALL_GRADES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 type Ctx = {
   lookups: StaffLookups;
@@ -62,7 +62,7 @@ async function loadContext(tx: TenantTx, orgId: string): Promise<Ctx> {
     },
     roleKeyById: new Map(roles.map((r) => [r.id, r.key])),
     subjectGrades,
-    schoolGrades: schoolGrades.length ? schoolGrades : ALL_GRADES,
+    schoolGrades: schoolGrades.length ? schoolGrades : [...ALL_GRADE_LEVELS],
   };
 }
 

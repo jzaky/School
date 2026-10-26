@@ -4,6 +4,7 @@ import { listableCaseWhere, SENSITIVE } from "@/server/access/case-access";
 import { visibleStudentIds } from "@/server/access/student-access";
 import { timetableCalendarItems } from "@/server/timetable/calendar";
 import { applicationCalendarItems } from "@/server/applications/calendar";
+import { gradeTextIn } from "@/server/common/grade-text";
 
 export type CalKind = "appointment" | "task" | "event" | "deadline" | "followup" | "cover" | "lesson";
 export type CalItem = { id: string; kind: CalKind; title: string; subtitle?: string; start: string; end: string; allDay: boolean; href?: string; color?: string };
@@ -82,7 +83,7 @@ export async function calendarItems(ctx: Ctx, from: Date, to: Date, scope: CalSc
   }
   if (kinds.includes("event") && ctx.isStaff && memberIds.length) {
     const duties = await db.examSitting.findMany({ where: { orgId, status: "PUBLISHED", invigilatorIds: { hasSome: memberIds }, startsAt: { lt: to }, endsAt: { gt: from } } });
-    for (const x of duties) items.push({ id: `x-${x.id}`, kind: "event", title: pick(locale, `Invigilation: Grade ${x.gradeLevel} ${x.titleEn}`, `مراقبة امتحان: الصف ${x.gradeLevel} ${x.titleAr}`), subtitle: x.room ?? undefined, start: x.startsAt.toISOString(), end: x.endsAt.toISOString(), allDay: false, href: "/exams", color: "#EF4444" });
+    for (const x of duties) items.push({ id: `x-${x.id}`, kind: "event", title: pick(locale, `Invigilation: ${gradeTextIn("en", x.gradeLevel)} ${x.titleEn}`, `مراقبة امتحان: ${gradeTextIn("ar", x.gradeLevel)} ${x.titleAr}`), subtitle: x.room ?? undefined, start: x.startsAt.toISOString(), end: x.endsAt.toISOString(), allDay: false, href: "/exams", color: "#EF4444" });
   }
   if (kinds.includes("deadline") && (studentIds.length || ctx.isStudent)) {
     const ids = ctx.isStudent && ctx.membership.student ? [ctx.membership.student.id] : studentIds;

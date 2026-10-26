@@ -12,6 +12,8 @@ import { applyErasure, displayPlan, planErasure, summarise, type ErasurePlan } f
 import { anonymiseAccountIfUnused } from "./account";
 import { PRIVACY_QUEUE, SCHOOL_EXPORT_JOB, requestSchoolExport, runSchoolExport } from "./school-export";
 import { BASIS_VALUES, CATEGORY_VALUES } from "./purposes";
+import { gradeLabel } from "@/lib/grade-levels";
+import { getTranslations } from "next-intl/server";
 
 type Res<T = object> = ({ ok: true } & T) | { ok: false; error: string };
 
@@ -43,8 +45,9 @@ export async function searchSubjectsAction(input: { q: string }): Promise<Res<{ 
     db.guardian.findMany({ where: { orgId, OR: [{ firstNameEn: like }, { lastNameEn: like }, { firstNameAr: like }, { lastNameAr: like }, { email: like }] }, take: 6, orderBy: { lastNameEn: "asc" } }),
     db.membership.findMany({ where: { orgId, student: { is: null }, guardian: { is: null }, user: { OR: [{ nameEn: like }, { nameAr: like }, { email: like }] } }, include: { user: true, staffProfile: true }, take: 6 }),
   ]);
+  const tg = await getTranslations("gradeLevel");
   const hits: SubjectHit[] = [
-    ...students.map((s) => ({ kind: "student" as const, id: s.id, nameEn: `${s.firstNameEn} ${s.lastNameEn}`, nameAr: `${s.firstNameAr} ${s.lastNameAr}`, reference: s.studentNo, detail: String(s.gradeLevel) })),
+    ...students.map((s) => ({ kind: "student" as const, id: s.id, nameEn: `${s.firstNameEn} ${s.lastNameEn}`, nameAr: `${s.firstNameAr} ${s.lastNameAr}`, reference: s.studentNo, detail: gradeLabel(tg, s.gradeLevel, s.section) })),
     ...guardians.map((g) => ({ kind: "guardian" as const, id: g.id, nameEn: `${g.firstNameEn} ${g.lastNameEn}`, nameAr: `${g.firstNameAr} ${g.lastNameAr}`, reference: `G-${g.id.slice(-6).toUpperCase()}`, detail: "" })),
     ...staff.map((m) => ({ kind: "staff" as const, id: m.id, nameEn: m.user.nameEn, nameAr: m.user.nameAr ?? m.user.nameEn, reference: m.staffProfile?.employeeNo || `M-${m.id.slice(-6).toUpperCase()}`, detail: m.staffProfile?.jobTitleEn ?? "" })),
   ];

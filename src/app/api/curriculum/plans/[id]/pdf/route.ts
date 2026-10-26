@@ -5,6 +5,7 @@ import { canSeePlan } from "@/server/curriculum/access";
 import { renderLessonPlanPdf } from "@/server/curriculum/pdf";
 import { pickBi, readActivities, readBilingualText, readMaterials, sessionTimeline } from "@/server/curriculum/types";
 import { userName } from "@/lib/i18n-data";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export const runtime = "nodejs";
 
@@ -18,6 +19,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const q = new URL(req.url).searchParams.get("locale");
   const locale = q === "ar" || q === "en" ? q : ctx.locale;
   const t = await getTranslations({ locale, namespace: "curriculum" });
+  const tg = await getTranslations({ locale, namespace: "gradeLevel" });
   const [subject, cls, term, author] = await Promise.all([
     ctx.db.subject.findUnique({ where: { id: plan.subjectId } }),
     plan.classId ? ctx.db.schoolClass.findUnique({ where: { id: plan.classId } }) : null,
@@ -31,7 +33,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     rtl: locale === "ar",
     school: p(ctx.org.nameEn, ctx.org.nameAr),
     title: p(plan.titleEn, plan.titleAr),
-    subtitle: `${subject ? p(subject.nameEn, subject.nameAr) : ""} · ${t("gradeN", { grade: plan.gradeLevel })} · ${t(`status.${plan.status}`)}`,
+    subtitle: `${subject ? p(subject.nameEn, subject.nameAr) : ""} · ${gradeLabel(tg, plan.gradeLevel)} · ${t(`status.${plan.status}`)}`,
     meta: [
       [t("plan.class"), cls ? p(cls.nameEn, cls.nameAr) : t("plan.noClass")],
       [t("plan.teacher"), userName(author?.user, locale)],

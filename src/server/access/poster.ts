@@ -1,7 +1,6 @@
 // Printable bilingual family join poster: school name, the join code, a QR code to the join page and
 // three short steps in English and Arabic. Arabic is shaped and laid out by the shared PDF helpers.
-import PDFDocument from "pdfkit";
-import { FONTS, GOLD, MUTED, NAVY, drawLtr, drawRtl, drawSchoolMark } from "@/server/documents/pdf";
+import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY, newPdf } from "@/server/documents/pdf";
 import { encodeQr } from "./qr";
 
 export type PosterInput = {
@@ -19,7 +18,7 @@ export type PosterInput = {
 };
 
 export async function renderJoinPoster(input: PosterInput): Promise<Buffer> {
-  const doc = new PDFDocument({ size: "A4", margin: 0, info: { Title: `${input.title.en} ${input.school.en}`, Author: input.school.en } });
+  const doc = newPdf({ size: "A4", margin: 0, info: { Title: `${input.title.en} ${input.school.en}`, Author: input.school.en } });
   const chunks: Buffer[] = [];
   doc.on("data", (c: Buffer) => chunks.push(c));
   const done = new Promise<Buffer>((resolve) => doc.on("end", () => resolve(Buffer.concat(chunks))));

@@ -16,6 +16,7 @@ import { CancelAbsenceButton, ReportAbsenceDialog } from "@/components/timetable
 import { names, periodsOf, slotLessons, studentClassIds, teacherWeek, weekOf, yearOf, type GridData } from "@/server/timetable/queries";
 import { addDays, dateKey, keyToDate, weekdayOfKey } from "@/server/timetable/cover";
 import { dubaiDateKey } from "@/server/appointments/slots";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export async function generateMetadata() {
   const t = await getTranslations("timetable");
@@ -26,6 +27,7 @@ export default async function TimetablePage({ searchParams }: { searchParams: Pr
   const sp = await searchParams;
   const ctx = await getCtx();
   const t = await getTranslations("timetable");
+  const tg = await getTranslations("gradeLevel");
   const prefs = await formatPrefs(ctx);
   const { db, locale } = ctx;
   const year = await yearOf(ctx);
@@ -110,7 +112,7 @@ export default async function TimetablePage({ searchParams }: { searchParams: Pr
         <div className="flex flex-wrap gap-2" role="tablist" aria-label={t("chooseChild")}>
           {children.map((c) => (
             <Link key={c.id} href={`/timetable?child=${c.id}${sp.week ? `&week=${sp.week}` : ""}`} role="tab" aria-selected={c.id === childId} className={cn("rounded-full border px-3 py-1.5 text-sm font-medium transition", c.id === childId ? "border-brand bg-brand text-brand-foreground" : "bg-card hover:border-brand/40")} data-testid="child-tab">
-              {c.name} <span className="opacity-75">· {t("gradeN", { grade: c.grade })}</span>
+              {c.name} <span className="opacity-75">· {gradeLabel(tg, c.grade)}</span>
             </Link>
           ))}
         </div>

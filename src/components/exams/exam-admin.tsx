@@ -14,6 +14,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Field, GradePicker, useActionError } from "@/components/calendar-admin/shared";
 import { applySuggestionAction, deleteSittingAction, previewSuggestionAction, publishSittingsAction, saveSittingAction, type SittingInput, type SuggestOptions } from "@/server/exams/actions";
+import { gradeLabel } from "@/lib/grade-levels";
 
 export type Option = { value: string; label: string };
 
@@ -39,6 +40,7 @@ function StaffChecklist({ staff, value, onChange }: { staff: Option[]; value: st
 
 export function SittingDialog({ termId, subjects, staff, grades, initial, defaultDate }: { termId: string | null; subjects: Option[]; staff: Option[]; grades: number[]; initial?: SittingInput; defaultDate: string }) {
   const t = useTranslations("exams");
+  const tg = useTranslations("gradeLevel");
   const tc = useTranslations("common");
   const err = useActionError();
   const router = useRouter();
@@ -97,7 +99,7 @@ export function SittingDialog({ termId, subjects, staff, grades, initial, defaul
                   <SelectContent>
                     {grades.map((g) => (
                       <SelectItem key={g} value={String(g)}>
-                        {t("gradeN", { grade: g })}
+                        {gradeLabel(tg, g)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -183,6 +185,7 @@ type Preview = Awaited<ReturnType<typeof previewSuggestionAction>>;
 
 export function SuggestDialog({ termId, grades, staff, defaultStart, defaultEnd }: { termId: string | null; grades: number[]; staff: Option[]; defaultStart: string; defaultEnd: string }) {
   const t = useTranslations("exams");
+  const tg = useTranslations("gradeLevel");
   const tc = useTranslations("common");
   const locale = useLocale();
   const err = useActionError();
@@ -295,7 +298,7 @@ export function SuggestDialog({ termId, grades, staff, defaultStart, defaultEnd 
                         <tr key={i}>
                           <td className="px-3 py-1.5 whitespace-nowrap">{fmtDay(s.dateKey)}</td>
                           <td className="px-3 py-1.5 tabular-nums">{hhmm(s.startMinute)}</td>
-                          <td className="px-3 py-1.5">{s.gradeLevel}</td>
+                          <td className="px-3 py-1.5">{gradeLabel(tg, s.gradeLevel, null, { short: true })}</td>
                           <td className="px-3 py-1.5">{locale === "ar" ? preview.subjectNames[s.subjectId]?.ar : preview.subjectNames[s.subjectId]?.en}</td>
                           <td className="hidden px-3 py-1.5 text-muted-foreground sm:table-cell">
                             {s.room ?? "-"}

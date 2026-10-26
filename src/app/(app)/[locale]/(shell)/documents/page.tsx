@@ -1,5 +1,6 @@
 import type { Prisma, Sensitivity } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
+import { gradeLabel } from "@/lib/grade-levels";
 import { ArrowLeft, ArrowRight, Download, Eye, FileSignature, FileText, FolderOpen, Plus, TimerReset } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
@@ -78,15 +79,15 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
   ]);
   const studentIds = [...new Set(docs.map((d) => d.studentId).filter(Boolean) as string[])];
   const canUpload = ctx.isStaff && (ctx.can("documents.manage") || ctx.can("documents.view"));
-  const [students, pickerStudents, uploaders] = await Promise.all([
+  const [students, uploaders] = await Promise.all([
     db.student.findMany({ where: { id: { in: studentIds } } }),
-    canUpload && !caseRow ? db.student.findMany({ where: { status: "ACTIVE" }, orderBy: [{ gradeLevel: "asc" }, { lastNameEn: "asc" }], take: 400 }) : Promise.resolve([]),
     db.membership.findMany({ where: { id: { in: [...new Set(docs.map((d) => d.uploadedById))] } }, include: { user: true } }),
   ]);
   const filterStudent = sp.student ? (students.find((s) => s.id === sp.student) ?? (await db.student.findUnique({ where: { id: sp.student } }))) : null;
   const visibleCats = categories.filter((c) => !SENSITIVE.includes(c.sensitivity));
 
-  const studentOptions = pickerStudents.map((s) => ({ value: s.id, label: personName(s, locale), hint: t("grade", { grade: s.gradeLevel }), keywords: `${s.firstNameEn} ${s.lastNameEn} ${s.firstNameAr} ${s.lastNameAr} ${s.studentNo}` }));
+  const tg = await getTranslations("gradeLevel");
+  const defaultStudent = filterStudent && canUpload && !caseRow ? { value: filterStudent.id, label: personName(filterStudent, locale), hint: `${filterStudent.studentNo} · ${gradeLabel(tg, filterStudent.gradeLevel, filterStudent.section, { short: true })}` } : null;
   const caseLabel = caseRow && caseOk ? `${caseRow.number} · ${personName(caseRow.student, locale)}` : undefined;
   const uploadCategories = (caseRow ? categories : visibleCats).map((c) => ({ id: c.id, label: pick(locale, c.nameEn, c.nameAr), sensitive: c.sensitivity !== "STANDARD" }));
 
@@ -104,7 +105,7 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
         actions={
           ctx.isStaff ? (
             canUpload && (!caseRow || caseOk) ? (
-              <UploadDocument categories={uploadCategories} students={studentOptions} defaultStudentId={sp.student} caseId={caseOk ? caseRow?.id : undefined} caseLabel={caseLabel} canShare={ctx.can("documents.manage")} />
+              <UploadDocument categories={uploadCategories} defaultStudent={defaultStudent} caseId={caseOk ? caseRow?.id : undefined} caseLabel={caseLabel} canShare={ctx.can("documents.manage")} />
             ) : null
           ) : (
             <Button asChild>

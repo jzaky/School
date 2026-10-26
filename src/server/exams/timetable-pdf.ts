@@ -1,6 +1,5 @@
 // Printable bilingual exam timetable, in the same letterhead style as school letters.
-import PDFDocument from "pdfkit";
-import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY } from "@/server/documents/pdf";
+import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY, newPdf } from "@/server/documents/pdf";
 
 export type TimetableRow = { start: Date; end: Date; subjectEn: string; subjectAr: string; room: string | null };
 
@@ -17,7 +16,7 @@ export async function renderExamTimetablePdf(input: {
   /** The school's logo; the school's initial is drawn when there is none. */
   logo?: Buffer | null;
 }): Promise<Buffer> {
-  const doc = new PDFDocument({ size: "A4", margin: 0, info: { Title: input.heading.en, Author: input.school.en } });
+  const doc = newPdf({ size: "A4", margin: 0, info: { Title: input.heading.en, Author: input.school.en } });
   const chunks: Buffer[] = [];
   doc.on("data", (c: Buffer) => chunks.push(c));
   const done = new Promise<Buffer>((resolve) => doc.on("end", () => resolve(Buffer.concat(chunks))));

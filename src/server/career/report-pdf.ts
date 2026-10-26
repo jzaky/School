@@ -1,7 +1,6 @@
 // Bilingual career guidance report PDF. English reads from the left edge, Arabic from the right edge of the
 // same row, using the shared helpers in documents/pdf.ts for Arabic shaping and right-to-left runs.
-import PDFDocument from "pdfkit";
-import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY, type Letterhead } from "@/server/documents/pdf";
+import { drawLtr, drawRtl, drawSchoolMark, FONTS, GOLD, MUTED, NAVY, newPdf, type Letterhead } from "@/server/documents/pdf";
 import { PLAN_STATUS, type CareerReportData } from "./report";
 
 function fmtDates(iso: string) {
@@ -12,7 +11,7 @@ function fmtDates(iso: string) {
 }
 
 export async function renderCareerReportPdf(data: CareerReportData, letterhead?: Letterhead | null): Promise<Buffer> {
-  const doc = new PDFDocument({ size: "A4", margin: 0, bufferPages: true, info: { Title: `Career guidance report ${data.student.en}`, Author: data.school.en } });
+  const doc = newPdf({ size: "A4", margin: 0, bufferPages: true, info: { Title: `Career guidance report ${data.student.en}`, Author: data.school.en } });
   const chunks: Buffer[] = [];
   doc.on("data", (c: Buffer) => chunks.push(c));
   const done = new Promise<Buffer>((resolve) => doc.on("end", () => resolve(Buffer.concat(chunks))));
@@ -60,9 +59,9 @@ export async function renderCareerReportPdf(data: CareerReportData, letterhead?:
   // Student
   const issued = fmtDates(data.issuedAt);
   drawLtr(doc, data.student.en, M, 86, half, { size: 15, font: FONTS.bold, color: NAVY });
-  drawLtr(doc, `Student no. ${data.student.studentNo}  ·  Grade ${data.student.grade}  ·  Issued ${issued.en}`, M, 108, half, { size: 9, color: MUTED });
+  drawLtr(doc, `Student no. ${data.student.studentNo}  ·  ${data.student.grade.en}  ·  Issued ${issued.en}`, M, 108, half, { size: 9, color: MUTED });
   drawRtl(doc, data.student.ar, xAr, 82, half, { size: 15, font: FONTS.bold, color: NAVY });
-  drawRtl(doc, `الرقم ${data.student.studentNo}  ·  الصف ${data.student.grade}  ·  تاريخ الإصدار ${issued.ar}`, xAr, 104, half, { size: 9, color: MUTED });
+  drawRtl(doc, `الرقم ${data.student.studentNo}  ·  ${data.student.grade.ar}  ·  تاريخ الإصدار ${issued.ar}`, xAr, 104, half, { size: 9, color: MUTED });
   let y = 140;
 
   // 1. Assessment
