@@ -36,8 +36,8 @@ export async function createPaymentLink(
   now = new Date(),
   providerIn?: OnlineProvider | null,
 ): Promise<{ ok: true; url: string; test: boolean } | { ok: false; error: string }> {
-  const cfgOn = await tenantTx(orgId, (tx) => loadFinanceConfig(tx, orgId));
-  const { available, provider: configured } = onlinePaymentAvailable(cfgOn.onlinePayments);
+  const [cfgOn, org] = await tenantTx(orgId, (tx) => Promise.all([loadFinanceConfig(tx, orgId), tx.organization.findUnique({ where: { id: orgId }, select: { isDemo: true } })]));
+  const { available, provider: configured } = onlinePaymentAvailable(cfgOn.onlinePayments, { isDemo: Boolean(org?.isDemo) });
   const provider = providerIn ?? configured;
   if (!provider || (!providerIn && !available)) return { ok: false, error: "ONLINE_NOT_SET_UP" };
   const prepared = await tenantTx(orgId, async (tx) => {

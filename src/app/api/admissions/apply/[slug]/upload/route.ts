@@ -10,6 +10,8 @@ import { loadSettings } from "@/server/admissions/settings";
 import { docTypesFor, MAX_FILES_PER_APPLICATION, MAX_UPLOAD_BYTES } from "@/server/admissions/config";
 import { checkUpload } from "@/server/admissions/files";
 import { recordEvent } from "@/server/admissions/events";
+import { BodyTooLargeError, readFormLimited } from "@/lib/http-body";
+import { scanBytes, scanRefuses } from "@/server/files/scan";
 
 export const runtime = "nodejs";
 
@@ -24,13 +26,17 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
   const { slug } = await params;
   const school = await applySchoolBySlug(slug);
   if (!school) return json({ error: "not_found" }, 404);
-  const applicant = await currentApplicant();
+  const applicant = await currentApplicant(school?.id);
   if (!applicant?.verified) return json({ error: "unauthorized" }, 401);
   const limit = await hit(`apply-upload:${applicant.userId}`, 60, 60 * 60);
   if (!limit.ok) return json({ error: "RATE_LIMITED" }, 429);
-  const len = Number(req.headers.get("content-length") ?? 0);
-  if (len > MAX_UPLOAD_BYTES + 64 * 1024) return json({ error: "TOO_LARGE" }, 413);
-  const form = await req.formData().catch(() => null);
+  let form: FormData | null;
+  try {
+    form = await readFormLimited(req, MAX_UPLOAD_BYTES + 64 * 1024);
+  } catch (e) {
+    if (e instanceof BodyTooLargeError) return json({ error: "TOO_LARGE" }, 413);
+    throw e;
+  }
   const file = form?.get("file");
   const applicationId = String(form?.get("applicationId") ?? "");
   const typeKey = String(form?.get("typeKey") ?? "");
@@ -38,6 +44,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
   const bytes = new Uint8Array(await file.arrayBuffer());
   const check = checkUpload(file.name, bytes);
   if (!check.ok) return json({ error: check.problem }, 415);
+  if (scanRefuses(await scanBytes(bytes))) return json({ error: "ACTIVE_CONTENT" }, 415);
 
   const result = await tenantTx(school.id, async (tx) => {
     const app = await tx.admissionApplication.findFirst({ where: { id: applicationId, orgId: school.id, applicantUserId: applicant.userId } });

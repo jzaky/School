@@ -18,6 +18,7 @@ import { loadSnapshot } from "@/server/access/snapshot";
 import { selfEscalation, withMemberRoles } from "@/server/access/guardrails";
 import { alertMemberAccessChange } from "@/server/access/roles";
 import { finishRecord, startRecord } from "./record";
+import { releaseUnprovenPassword } from "@/server/identity/unproven-account";
 
 const ALL_GRADES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
@@ -252,8 +253,10 @@ export async function importStaff(actor: ImportActor, fileName: string, records:
       if (!user) {
         const u = await identityDb.user.create({ data: { email: r.email, nameEn: r.nameEn, nameAr: r.nameAr } });
         user = { id: u.id, nameEn: u.nameEn, nameAr: u.nameAr, managedBySchool: true };
-      } else if (plan.names && user.managedBySchool) {
-        await identityDb.user.update({ where: { id: user.id }, data: plan.names });
+      } else {
+        if (plan.names && user.managedBySchool) await identityDb.user.update({ where: { id: user.id }, data: plan.names });
+        // An existing account whose address was never proven keeps no password it set itself (unproven-account.ts).
+        if (!member) await releaseUnprovenPassword(user.id);
       }
       const userId = user.id;
       const membershipId = await tenantTx(actor.orgId, async (tx) => {

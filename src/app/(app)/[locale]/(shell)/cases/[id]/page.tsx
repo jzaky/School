@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { openText } from "@/lib/sealed-text";
 import { AlertOctagon, CalendarPlus, ChevronLeft, Download, FileText, Lock, Mail, MessageSquare, ShieldAlert, ShieldCheck, Sparkles, UserRound } from "lucide-react";
 import { getCtx } from "@/server/context";
 import { formatPrefs } from "@/server/format";
@@ -241,7 +242,7 @@ export default async function CasePage({ params, searchParams }: { params: Promi
                     <div className="mb-1 text-xs text-muted-foreground">
                       {t(`noteKind.${n.kind}`)} · {nameOf(n.authorId)} · {fmtRelative(prefs, n.occurredAt)}
                     </div>
-                    <p className="line-clamp-3 text-sm">{n.versions[0]?.body}</p>
+                    <p className="line-clamp-3 text-sm">{openText(n.versions[0]?.body)}</p>
                   </li>
                 ))}
               </ul>
@@ -386,12 +387,12 @@ export default async function CasePage({ params, searchParams }: { params: Promi
                         {canManage && (
                           <AmendNote
                             noteId={it.n.id}
-                            current={it.n.versions[0]?.body ?? ""}
-                            versions={it.n.versions.map((v) => ({ version: v.version, body: v.body, when: fmtDateTime(prefs, v.createdAt), who: nameOf(v.editedById), reason: v.reason }))}
+                            current={openText(it.n.versions[0]?.body)}
+                            versions={it.n.versions.map((v) => ({ version: v.version, body: openText(v.body), when: fmtDateTime(prefs, v.createdAt), who: nameOf(v.editedById), reason: v.reason }))}
                           />
                         )}
                       </div>
-                      <p className="whitespace-pre-line text-sm">{it.n.versions[0]?.body}</p>
+                      <p className="whitespace-pre-line text-sm">{openText(it.n.versions[0]?.body)}</p>
                     </div>
                   </li>
                 ) : (

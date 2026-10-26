@@ -28,7 +28,7 @@ export default async function ApplyLanding({ params }: { params: Promise<{ slug:
     const withGrades = await Promise.all(ys.map(async (y) => ({ ...y, grades: gradesOffered(await capacityRows(tx, school.id, y.id), ALL_GRADE_LEVELS) })));
     return { settings: s, years: withGrades };
   });
-  const applicant = await currentApplicant();
+  const applicant = await currentApplicant(school?.id);
   const apps = applicant?.verified ? await listFamilyApplications(school.id, applicant.userId) : [];
   const intro = pick(locale, settings.intro.en, settings.intro.ar);
   const fmt = (d: Date) => new Intl.DateTimeFormat(locale === "ar" ? "ar-AE-u-nu-latn" : "en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(d);

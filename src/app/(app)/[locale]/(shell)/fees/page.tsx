@@ -57,7 +57,7 @@ export default async function FeesPage({ searchParams }: { searchParams: Promise
   const prefs = await formatPrefs(ctx);
   const L = ctx.locale;
   const cfg = await loadFinanceConfig(ctx.db, ctx.orgId);
-  const { available } = onlinePaymentAvailable(cfg.onlinePayments);
+  const { available } = onlinePaymentAvailable(cfg.onlinePayments, { isDemo: ctx.org.isDemo });
   const today = new Date(`${todayKey()}T00:00:00+04:00`);
   // An instalment shows its period; a one-off invoice shows what it is for (its first line) instead of a generic label.
   const invoiceTitle = (i: (typeof st.invoices)[number]) => {

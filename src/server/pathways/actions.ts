@@ -250,11 +250,11 @@ const reqSchema = z
   .object({
     route: z.object({ via: z.enum(APPLY_ROUTES), url: z.string().optional(), deadlines: z.array(z.object({ kind: z.string(), month: z.number().int().min(1).max(12), day: z.number().int().min(1).max(31).optional() })).optional() }).optional(),
     admissionsTests: z.array(z.string()).optional(),
-    BRITISH: z.record(z.unknown()).optional(),
-    IB: z.record(z.unknown()).optional(),
-    AMERICAN: z.record(z.unknown()).optional(),
-    UAE_MOE: z.record(z.unknown()).optional(),
-    JORDAN_TAWJIHI: z.record(z.unknown()).optional(),
+    BRITISH: z.record(z.string(), z.unknown()).optional(),
+    IB: z.record(z.string(), z.unknown()).optional(),
+    AMERICAN: z.record(z.string(), z.unknown()).optional(),
+    UAE_MOE: z.record(z.string(), z.unknown()).optional(),
+    JORDAN_TAWJIHI: z.record(z.string(), z.unknown()).optional(),
   })
   .strict();
 const englishSchema = z.object({ ielts: z.number().min(0).max(9).optional(), ieltsMinBand: z.number().min(0).max(9).optional(), toefl: z.number().min(0).max(120).optional(), emsatEnglish: z.number().min(500).max(2000).optional(), notesEn: z.string().optional(), notesAr: z.string().optional() }).strict();

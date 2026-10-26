@@ -9,6 +9,7 @@ import type { RefreshJob, ScorecardJob } from "@/server/catalog-pipeline/jobs";
 import type { SchoolExportJob } from "@/server/privacy/school-export";
 // Fees as the admissions seat booking provider, so fee code run by the worker sees the same hooks as the web server.
 import "@/server/fees/admissions-link";
+import { installLogRedaction } from "@/lib/log-redaction";
 
 async function loadDotenv() {
   // Local development convenience. In production the platform injects variables and .env is absent.
@@ -31,6 +32,8 @@ function describeError(err: unknown) {
 
 async function main() {
   await loadDotenv();
+  // Query details (personal data) never reach the worker log.
+  installLogRedaction();
   const redisUrl = process.env.REDIS_URL;
   if (!redisUrl) {
     console.log("[worker] REDIS_URL is not set: background jobs are disabled, exiting");

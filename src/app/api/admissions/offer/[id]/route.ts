@@ -18,7 +18,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   let audited: { actorId: string | null; actorUserId: string } | null = null;
   if (slug) {
     const school = await applySchoolBySlug(slug);
-    const applicant = await currentApplicant();
+    const applicant = await currentApplicant(school?.id);
     if (!school || !applicant?.verified) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     const own = await tenantDb(school.id).admissionApplication.findFirst({ where: { id, orgId: school.id, applicantUserId: applicant.userId }, select: { id: true } });
     if (!own) return NextResponse.json({ error: "not_found" }, { status: 404 });

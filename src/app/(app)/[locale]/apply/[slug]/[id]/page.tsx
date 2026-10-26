@@ -22,7 +22,7 @@ export default async function ApplicationPage({ params, searchParams }: { params
   const sp = await searchParams;
   const school = await applySchoolBySlug(slug);
   if (!school) notFound();
-  const applicant = await currentApplicant();
+  const applicant = await currentApplicant(school?.id);
   if (!applicant?.verified) redirect({ href: `/apply/${slug}`, locale });
   let view: Awaited<ReturnType<typeof familyApplicationView>>;
   try {

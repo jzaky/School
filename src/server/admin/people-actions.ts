@@ -14,6 +14,7 @@ import { loadSnapshot } from "@/server/access/snapshot";
 import { withMemberRoles, withMemberStatus } from "@/server/access/guardrails";
 import { flushEffects } from "@/server/queue";
 import type { Effect } from "@/server/db";
+import { releaseUnprovenPassword } from "@/server/identity/unproven-account";
 
 type Fail = { ok: false; error: string };
 const fail = (error: string): Fail => ({ ok: false, error });
@@ -71,6 +72,8 @@ export async function addStaffAction(input: z.input<typeof addStaffSchema>) {
   if (user) {
     const existing = await ctx.db.membership.findUnique({ where: { orgId_userId: { orgId: ctx.orgId, userId: user.id } }, select: { id: true } });
     if (existing) return fail("ALREADY_MEMBER");
+    // The school is giving this address access: a password set before the address was proven must not come with it.
+    await releaseUnprovenPassword(user.id);
   } else {
     user = await identityDb.user.create({ data: { email: d.email, nameEn: d.nameEn, nameAr: d.nameAr || null } });
   }

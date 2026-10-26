@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getOptionalCtx } from "@/server/context";
+import { openText } from "@/lib/sealed-text";
 import { audit } from "@/server/audit/audit";
 import { renderChronologyPdf } from "@/server/documents/pdf";
 import { caseAccess } from "@/server/access/case-access";
@@ -28,7 +29,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
   const who = (mid: string | null) => (mid ? userName(people.find((p) => p.id === mid)?.user, "en") : "System");
   const fmt = (d: Date) => new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Dubai" }).format(d);
   const rows = [
-    ...c.notes.map((n) => ({ at: n.occurredAt, when: fmt(n.occurredAt), who: who(n.authorId), kind: `${n.kind}${n.currentVersion > 1 ? ` (amended, v${n.currentVersion})` : ""}`, text: n.versions[0]?.body ?? "" })),
+    ...c.notes.map((n) => ({ at: n.occurredAt, when: fmt(n.occurredAt), who: who(n.authorId), kind: `${n.kind}${n.currentVersion > 1 ? ` (amended, v${n.currentVersion})` : ""}`, text: openText(n.versions[0]?.body) })),
     ...events.filter((e) => !e.kind.startsWith("note")).map((e) => ({ at: e.createdAt, when: fmt(e.createdAt), who: who(e.actorId), kind: "EVENT", text: [e.titleEn, e.bodyEn].filter(Boolean).join(": ") })),
     ...referrals.map((r) => ({ at: r.referredAt, when: fmt(r.referredAt), who: who(r.createdById), kind: "EXTERNAL REFERRAL", text: `${r.agencyEn}${r.referenceNo ? `, ref ${r.referenceNo}` : ""}${r.contactName ? `, contact ${r.contactName}` : ""}` })),
     ...decisions.map((d) => ({ at: d.createdAt, when: fmt(d.createdAt), who: who(d.decidedById), kind: `PARENT NOTIFICATION: ${d.decision}`, text: d.reason })),

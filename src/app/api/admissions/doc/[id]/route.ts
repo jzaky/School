@@ -7,6 +7,7 @@ import { renderSamplePdf } from "@/server/documents/pdf";
 import { currentApplicant } from "@/server/admissions/applicant";
 import { applySchoolBySlug } from "@/server/admissions/public-school";
 import { canOpenAdmissionDoc } from "@/server/admissions/access";
+import { contentDisposition } from "@/lib/files/check";
 import { loadSettings } from "@/server/admissions/settings";
 
 export const runtime = "nodejs";
@@ -25,7 +26,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 
   if (slug) {
     const school = await applySchoolBySlug(slug);
-    const applicant = await currentApplicant();
+    const applicant = await currentApplicant(school?.id);
     if (!school || !applicant?.verified) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     doc = await tenantTx(school.id, async (tx) => {
       const d = await tx.admissionDocument.findFirst({ where: { id, orgId: school.id, application: { applicantUserId: applicant.userId } } });
@@ -54,7 +55,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   // Demo files: a placeholder PDF named after the document type (no real family documents in the demo).
   if (doc.storageKey.startsWith("sample:")) {
     const pdf = await renderSamplePdf(typeLabel ?? { en: doc.fileName, ar: doc.fileName }, { en: doc.fileName, ar: doc.fileName });
-    return new NextResponse(new Uint8Array(pdf), { headers: { "Content-Type": "application/pdf", "Content-Disposition": `attachment; filename="${encodeURIComponent(doc.fileName)}"`, "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff" } });
+    return new NextResponse(new Uint8Array(pdf), { headers: { "Content-Type": "application/pdf", "Content-Disposition": contentDisposition("attachment", doc.fileName), "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff" } });
   }
   const signed = await signedObjectUrl(doc.storageKey, doc.fileName, 300, "attachment");
   if (signed) return NextResponse.redirect(signed, 302);
@@ -63,7 +64,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   return new NextResponse(new Uint8Array(bytes), {
     headers: {
       "Content-Type": doc.mimeType,
-      "Content-Disposition": `attachment; filename="${encodeURIComponent(doc.fileName)}"`,
+      "Content-Disposition": contentDisposition("attachment", doc.fileName),
       "Cache-Control": "private, no-store",
       "X-Content-Type-Options": "nosniff",
       "Content-Security-Policy": "sandbox",

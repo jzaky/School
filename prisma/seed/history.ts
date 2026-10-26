@@ -3,6 +3,7 @@
 import type { Prisma } from "@prisma/client";
 import type { ExecCtx } from "@/server/db";
 import { execCtx } from "@/server/db";
+import { sealText } from "@/lib/sealed-text";
 import type { FormField, FormSchema } from "@/server/forms/schema";
 import { submitRequest } from "@/server/services/submit";
 import { decideApproval } from "@/server/workflows/approvals";
@@ -414,9 +415,9 @@ export async function seedHistory(w: SeedWorld, base: ExecCtx) {
     for (const n of notes) {
       const when = at(day + n.days, n.hour, 15, now);
       const note = await db.caseNote.create({ data: { orgId, caseId: theCase.id, authorId: khalid, kind: n.kind, currentVersion: n.amended ? 2 : 1, occurredAt: when, createdAt: when } });
-      await db.caseNoteVersion.create({ data: { orgId, noteId: note.id, version: 1, body: n.body, editedById: khalid, createdAt: when } });
+      await db.caseNoteVersion.create({ data: { orgId, noteId: note.id, version: 1, body: sealText(n.body), editedById: khalid, createdAt: when } });
       if (n.amended) {
-        await db.caseNoteVersion.create({ data: { orgId, noteId: note.id, version: 2, body: n.amended, editedById: khalid, reason: "Added the support offered to the family.", createdAt: new Date(when.getTime() + 3600_000) } });
+        await db.caseNoteVersion.create({ data: { orgId, noteId: note.id, version: 2, body: sealText(n.amended), editedById: khalid, reason: "Added the support offered to the family.", createdAt: new Date(when.getTime() + 3600_000) } });
       }
       await db.timelineEvent.create({
         data: { orgId, caseId: theCase.id, studentId: s.id, actorId: khalid, kind: `note_${n.kind.toLowerCase()}`, titleEn: `${n.kind === "DECISION" ? "Decision" : n.kind === "CONTACT" ? "Contact" : n.kind === "ACTION" ? "Action" : "Note"} recorded`, titleAr: n.kind === "DECISION" ? "تم تسجيل قرار" : n.kind === "CONTACT" ? "تم تسجيل تواصل" : n.kind === "ACTION" ? "تم تسجيل إجراء" : "تمت إضافة ملاحظة", sensitivity: "SAFEGUARDING", staffOnly: true, createdAt: when },
@@ -499,7 +500,7 @@ export async function seedHistory(w: SeedWorld, base: ExecCtx) {
       const when = at(opened + j * 2, 11 + j, 0, now);
       const noteId = id();
       await db.caseNote.create({ data: { id: noteId, orgId, caseId, authorId: assignee, kind: j === 0 ? "ACTION" : "NOTE", occurredAt: when, createdAt: when } });
-      await db.caseNoteVersion.create({ data: { orgId, noteId, version: 1, body, editedById: assignee, createdAt: when } });
+      await db.caseNoteVersion.create({ data: { orgId, noteId, version: 1, body: sealText(body), editedById: assignee, createdAt: when } });
     }
     await db.timelineEvent.createMany({
       data: [

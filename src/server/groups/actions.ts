@@ -8,6 +8,7 @@ import { requirePermission } from "@/server/context";
 import { listUserOrganizations } from "@/server/identity/session-org";
 import { rateLimit } from "@/server/platform/rate-limit";
 import { putObject } from "@/server/documents/storage";
+import { checkFile, IMAGE_KINDS, sniffFile } from "@/lib/files/check";
 import { GroupAccessError, platformAdminById } from "./access";
 import { createGroupInvite, revokeGroupInvite } from "./invites";
 import { listPushItems, pushTemplate, PushError, PUSH_KINDS, type PushKind, type PushItem, type PushResult } from "./push";
@@ -161,16 +162,18 @@ export async function updateGroupAction(input: { groupId: string; nameEn: string
   return platformRun(() => updateGroup({ groupId: String(input.groupId), nameEn: input.nameEn, nameAr: input.nameAr }));
 }
 
-const LOGO_TYPES: Record<string, string> = { "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp" };
-
 export async function uploadGroupLogoAction(form: FormData) {
   return platformRun(async () => {
     const groupId = String(form.get("groupId") ?? "");
     const file = form.get("file");
     if (!groupId) throw new GroupPlatformError("invalid");
     if (form.get("remove") === "1") return setGroupLogo(groupId, null);
-    if (!(file instanceof File) || !LOGO_TYPES[file.type] || file.size === 0 || file.size > 512 * 1024) throw new GroupPlatformError("invalid");
-    const key = await putObject(`groups/${groupId}`, `logo.${LOGO_TYPES[file.type]}`, Buffer.from(await file.arrayBuffer()), file.type);
+    if (!(file instanceof File) || file.size === 0 || file.size > 512 * 1024) throw new GroupPlatformError("invalid");
+    // Recognised by content, not by the type the browser claims.
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    const check = checkFile(`logo.${sniffFile(bytes)?.ext ?? "bin"}`, bytes, { allow: IMAGE_KINDS, maxBytes: 512 * 1024 });
+    if (!check.ok) throw new GroupPlatformError("invalid");
+    const key = await putObject(`groups/${groupId}`, `logo.${check.type.ext}`, Buffer.from(bytes), check.type.mime);
     return setGroupLogo(groupId, key);
   });
 }

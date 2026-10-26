@@ -10,6 +10,7 @@
 import { createHash } from "node:crypto";
 import type { Prisma, SourceStatus } from "@prisma/client";
 import { putR2Object } from "@/server/documents/r2";
+import { guardedFetch } from "@/server/integrations/guarded-fetch";
 
 export const USER_AGENT = "HorizonSchoolOS-RequirementsBot/1.0 (+university entry requirements review; contact: school admissions office)";
 export const ROBOTS_AGENT = "horizonschoolos-requirementsbot";
@@ -251,7 +252,7 @@ async function robotsFor(origin: string, opts: FetchOptions): Promise<RobotsGrou
   const cache = opts.robotsCache;
   const hit = cache?.get(origin);
   if (hit) return hit;
-  const f = opts.fetchImpl ?? fetch;
+  const f = opts.fetchImpl ?? guardedFetch;
   let groups: RobotsGroup[];
   try {
     const res = await f(`${origin}/robots.txt`, { headers: { "user-agent": USER_AGENT }, redirect: "follow", signal: AbortSignal.timeout(opts.timeoutMs ?? FETCH_TIMEOUT_MS) });
@@ -268,7 +269,7 @@ async function robotsFor(origin: string, opts: FetchOptions): Promise<RobotsGrou
 
 /** Fetch one page, following redirects by hand so every hop is checked against robots.txt. */
 export async function fetchPage(url: string, opts: FetchOptions = {}): Promise<FetchedPage> {
-  const f = opts.fetchImpl ?? fetch;
+  const f = opts.fetchImpl ?? guardedFetch;
   let current: URL;
   try {
     current = new URL(url);

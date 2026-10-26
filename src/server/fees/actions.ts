@@ -11,7 +11,7 @@ import { tenantTx } from "@/lib/tenant-db";
 import { execCtx, type Effect } from "@/server/db";
 import { flushEffects } from "@/server/queue";
 import { recordManualPayment } from "@/server/payments/manual";
-import { consoleSignedEvent } from "@/server/payments/providers";
+import { consoleSignedEvent, testCheckoutAllowed } from "@/server/payments/providers";
 import { createPaymentLink, handlePaymentWebhook } from "@/server/payments/links";
 import { bouncePayment, cancelProforma, clearCheque, creditableLines, decideRefund, FeeError, issueCreditNote, issueInvoice, markRefundPaid, requestRefund, applyAccountCredit, type Actor } from "./ledger";
 import { billAccount, createBillingRun, partWithShare } from "./billing";
@@ -558,8 +558,8 @@ export async function payOnlineAction(invoiceId: string): Promise<Result<{ url: 
 /** Test checkout result: signed like a provider webhook and handled by the same webhook code. */
 export async function completeTestPaymentAction(linkId: string, outcome: "paid" | "failed"): Promise<Result<{ result: string }>> {
   const ctx = await getCtx();
-  if (!ctx.isParent) return { ok: false, error: "FORBIDDEN" };
-  const link = await ctx.db.paymentLink.findFirst({ where: { id: linkId, provider: "console", status: "OPEN" } });
+  if (!ctx.isParent || !testCheckoutAllowed(ctx.org.isDemo)) return { ok: false, error: "FORBIDDEN" };
+  const link = await ctx.db.paymentLink.findFirst({ where: { id: String(linkId), provider: "console", status: "OPEN" } });
   if (!link || !link.invoiceId || !(await parentInvoice(ctx, link.invoiceId))) return { ok: false, error: "NOT_FOUND" };
   const now = new Date();
   const { body, signature } = consoleSignedEvent({ type: outcome === "paid" ? "payment.succeeded" : "payment.failed", orgId: ctx.orgId, linkId: link.id, amountFils: link.amountFils, currency: link.currency }, now);

@@ -8,11 +8,25 @@ import path from "node:path";
 import { DeleteObjectCommand, DeleteObjectsCommand, GetObjectCommand, ListObjectsV2Command, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { r2Configured, s3 } from "./r2";
+import { dispositionFor, mimeForName } from "../../lib/files/check";
 
 export const localDir = () => process.env.LOCAL_UPLOAD_DIR ?? path.join(process.cwd(), ".uploads");
 
 /** Keys of stored files (as opposed to documents rendered on demand: render:, reportcard:, sample:). */
 export const isStoredKey = (key: string) => key.startsWith("r2:") || key.startsWith("local:");
+
+/**
+ * True when `key` is a stored file of this school: the right backend prefix, the school's own folder, and a plain
+ * path (no "." or ".." segments, backslashes or control characters). Use it for every key that arrives from a form.
+ */
+export function ownsStoredKey(orgId: string, key: unknown): key is string {
+  if (typeof key !== "string" || !orgId || !isStoredKey(key) || key.length > 600) return false;
+  const rest = key.slice(key.indexOf(":") + 1);
+  if (/[\\\u0000-\u001f\u007f]/.test(rest)) return false;
+  const segments = rest.split("/");
+  if (segments.some((s) => s === "" || s === "." || s === "..")) return false;
+  return segments[0] === orgId && segments.length > 1;
+}
 
 function localPath(rel: string) {
   if (!rel || rel.includes("..")) return null;
@@ -132,12 +146,22 @@ export async function deleteOrgObjects(orgId: string): Promise<number> {
   return removed;
 }
 
-/** A signed URL (R2 only) valid for `expiresIn` seconds, or null for locally stored files. */
+/**
+ * A signed URL (R2 only) for one object, valid for `expiresIn` seconds (at most 15 minutes), or null for locally
+ * stored files. The content type comes from the stored name (set by the upload check), and only images and PDFs
+ * may open inline; everything else downloads.
+ */
 export async function signedObjectUrl(storageKey: string, fileName: string, expiresIn = 300, disposition: "inline" | "attachment" = "inline") {
   if (!storageKey.startsWith("r2:") || !r2Configured()) return null;
+  const mime = mimeForName(storageKey);
   return getSignedUrl(
     s3(),
-    new GetObjectCommand({ Bucket: process.env.R2_BUCKET!, Key: storageKey.slice(3), ResponseContentDisposition: `${disposition}; filename="${encodeURIComponent(fileName)}"` }),
-    { expiresIn },
+    new GetObjectCommand({
+      Bucket: process.env.R2_BUCKET!,
+      Key: storageKey.slice(3),
+      ResponseContentDisposition: dispositionFor(mime, fileName, disposition === "inline"),
+      ResponseContentType: mime,
+    }),
+    { expiresIn: Math.min(Math.max(1, expiresIn), 900) },
   );
 }

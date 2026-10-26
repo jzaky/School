@@ -1,4 +1,5 @@
 // Marketing lead validation shared by the public forms and the server actions. Pure: no database access.
+import "./zod-setup";
 import { z } from "zod";
 
 /** Bump when the consent wording on /try or /pricing changes, so each lead records what was agreed. */

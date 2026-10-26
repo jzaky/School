@@ -6,6 +6,9 @@ import { inflateRawSync } from "node:zlib";
 
 type Entry = { name: string; method: number; size: number; offset: number };
 
+/** Largest size one XML part may inflate to (a 20,000 row sheet is well under this). */
+export const MAX_PART_BYTES = 32 * 1024 * 1024;
+
 function entries(buf: Buffer): Entry[] {
   // End of central directory: signature 0x06054b50, within the last 64 KB plus 22 bytes.
   let eocd = -1;
@@ -38,7 +41,8 @@ function read(buf: Buffer, e: Entry): string {
   const start = e.offset + 30 + buf.readUInt16LE(e.offset + 26) + buf.readUInt16LE(e.offset + 28);
   const raw = buf.subarray(start, start + e.size);
   if (e.method === 0) return raw.toString("utf8");
-  if (e.method === 8) return inflateRawSync(raw).toString("utf8");
+  // A part may not expand beyond MAX_PART_BYTES, so a small crafted file cannot exhaust memory.
+  if (e.method === 8) return inflateRawSync(raw, { maxOutputLength: MAX_PART_BYTES }).toString("utf8");
   throw new Error("unsupported_compression");
 }
 

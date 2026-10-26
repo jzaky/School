@@ -307,7 +307,7 @@ describe("safeguarding and wellbeing access", () => {
   });
 
   it("parents are never notified automatically about a wellbeing request", async () => {
-    const student = await owner.student.findFirstOrThrow({ where: { orgId, gradeLevel: 11 }, include: { guardians: { include: { guardian: true } } } });
+    const student = await owner.student.findFirstOrThrow({ where: { orgId, gradeLevel: 11, membershipId: { not: null } }, include: { guardians: { include: { guardian: true } } } });
     const svc = await service("talk_to_someone");
     const before = await owner.notification.count({ where: { orgId, recipientId: { in: student.guardians.map((g) => g.guardian.membershipId!).filter(Boolean) } } });
     await tenantTx(orgId, (tx) => submitRequest(execCtx(tx, orgId, { quiet: true }), { serviceId: svc.id, requesterId: student.membershipId!, studentId: student.id, data: data(svc, { who: "counselor", howUrgent: "today" }) }));

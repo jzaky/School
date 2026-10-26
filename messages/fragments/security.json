@@ -1,0 +1,10 @@
+{
+  "documents": {
+    "error": {
+      "type": ["This file type is not supported. Upload a PDF, a photo, a Word document or a CSV file whose name matches its content.", "نوع الملف غير مدعوم. ارفع ملف PDF أو صورة أو مستند Word أو ملف CSV يطابق اسمه محتواه."],
+      "active_content": ["This file contains active content, such as scripts or macros, and cannot be uploaded. Save it as a PDF and try again.", "يحتوي هذا الملف على محتوى نشط مثل البرامج النصية أو وحدات الماكرو، ولا يمكن رفعه. احفظه بصيغة PDF وحاول مرة أخرى."],
+      "scan": ["The file did not pass the security check and was not uploaded.", "لم يجتز الملف الفحص الأمني ولم يُرفع."],
+      "rate": ["Too many uploads in a short time. Please wait a few minutes and try again.", "عدد كبير من عمليات الرفع في وقت قصير. يرجى الانتظار بضع دقائق ثم المحاولة مرة أخرى."]
+    }
+  }
+}

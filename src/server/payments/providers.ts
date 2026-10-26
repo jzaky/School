@@ -215,8 +215,17 @@ export function providerForWebhook(key: string): OnlineProvider | null {
   return p && p.key === key ? p : null;
 }
 
+/**
+ * The built-in test checkout marks invoices paid without any money moving, so it only serves demonstration schools
+ * unless PAYMENTS_TEST_ALL_SCHOOLS=true (a test environment with no real schools).
+ */
+export function testCheckoutAllowed(isDemo: boolean): boolean {
+  return isDemo || env("PAYMENTS_TEST_ALL_SCHOOLS") === "true";
+}
+
 /** Online payment is offered to families only when the platform provider is ready and the school switched it on. */
-export function onlinePaymentAvailable(schoolEnabled: boolean): { available: boolean; provider: OnlineProvider | null } {
+export function onlinePaymentAvailable(schoolEnabled: boolean, opts: { isDemo?: boolean } = {}): { available: boolean; provider: OnlineProvider | null } {
   const provider = configuredProvider();
-  return { available: Boolean(provider?.ready && schoolEnabled), provider };
+  const allowed = !provider?.test || testCheckoutAllowed(Boolean(opts.isDemo));
+  return { available: Boolean(provider?.ready && schoolEnabled && allowed), provider };
 }

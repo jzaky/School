@@ -238,3 +238,15 @@
 - Schema: migration 20261026210000_government_reporting (GovReturn, GovReturnExport, GovSubmission, GovDueDate), rls.sql section 10.
 - Demo: prisma/seed/academics/government.ts. KHDA; last term's census submitted (signed off, two files, reference CNS-2026-04127); a draft census with four problems; six due dates, reminders already in the bell. Guide steps for registrar, admin and principal.
 - Guide: docs/guides/government-reporting.md (with what each authority publishes, and what is format to be confirmed). Tests: tests/unit/govreports.test.ts, tests/integration/government.test.ts, tests/e2e/government.spec.ts.
+
+## Security review and hardening (sec worktree, Oct 2026)
+- Headers on every response (HSTS, nosniff, referrer policy, frame options, permissions policy) and a nonce-based content security policy on every page. E2E: tests/e2e/security-headers.spec.ts; tests/e2e/helpers.ts fails any session that logs a policy violation, so site-check.spec.ts covers every persona page.
+- Uploads checked by content with per-path kinds and size limits read from the stream (src/lib/files/check.ts, src/lib/http-body.ts); optional ClamAV scan (CLAMD_HOST). Downloads: type from the stored name, inline only for images and PDFs, RFC 6266 file names, stored keys validated with ownsStoredKey.
+- Sign-in and sessions: revocation checked on every session read (password reset, sign-out, absolute lifetime), unproven accounts do not keep a self-set password when a school provisions the address, provider sign-ins link only verified addresses, rate limits read the client address from trusted proxy entries, first blocked password attempt audited.
+- Case notes encrypted at field level; db:migrate seals older notes. Production logs keep query arguments out (Prisma error events, console redaction in web and worker).
+- Outbound requests from user-supplied URLs (catalog pages, push endpoints) use the connect-time private address guard, which now understands every IPv6 notation.
+- Built-in test checkout limited to the demonstration school (PAYMENTS_TEST_ALL_SCHOOLS for test environments).
+- Dependencies: Next.js 15.5.28, next-auth 5.0.0-beta.32, postcss 8.5.31 (override), vite and source-map-js patch releases, zod 4.6.7.
+- scripts/authz-sweep.ts: every server action and route handler with what guards it; exits 1 on anything unguarded and unlisted.
+- Tests: tests/unit/security.test.ts, tests/integration/security-idor.test.ts (cross-family, cross-role and cross-school access through the real routes and actions), tests/integration/security-hardening.test.ts.
+- New variables in docs/deploy.md: TRUSTED_PROXY_HOPS, SESSION_ABSOLUTE_HOURS, CLAMD_*, PAYMENTS_TEST_ALL_SCHOOLS.

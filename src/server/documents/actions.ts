@@ -10,6 +10,8 @@ import { notify } from "@/server/notify/notify";
 import { tenantTx } from "@/lib/tenant-db";
 import { execCtx, type Effect } from "@/server/db";
 import { flushEffects } from "@/server/queue";
+import { ownsStoredKey } from "@/server/documents/storage-core";
+import { mimeForName } from "@/lib/files/check";
 
 type FileRef = { key: string; name: string; size: number; type: string };
 
@@ -17,7 +19,7 @@ const RANK: Sensitivity[] = ["STANDARD", "CONFIDENTIAL", "MEDICAL", "WELLBEING",
 const higher = (a: Sensitivity, b: Sensitivity) => (RANK.indexOf(a) >= RANK.indexOf(b) ? a : b);
 
 function ownKey(orgId: string, key: string) {
-  return (key.startsWith("local:") || key.startsWith("r2:")) && key.split(":")[1].startsWith(`${orgId}/`);
+  return ownsStoredKey(orgId, key);
 }
 
 /** Store an uploaded file as a document. Sensitivity follows the category and any linked case, whichever is stricter. */
@@ -71,7 +73,7 @@ export async function createDocumentAction(input: {
       },
     });
     const version = await tx.documentVersion.create({
-      data: { orgId: ctx.orgId, documentId: doc.id, version: 1, storageKey: input.file.key, fileName: input.file.name, mimeType: input.file.type || "application/octet-stream", sizeBytes: input.file.size, createdById: ctx.membershipId },
+      data: { orgId: ctx.orgId, documentId: doc.id, version: 1, storageKey: input.file.key, fileName: String(input.file.name ?? "file").slice(0, 150), mimeType: mimeForName(input.file.key), sizeBytes: Math.max(0, Math.min(2_000_000_000, Math.round(Number(input.file.size) || 0))), createdById: ctx.membershipId },
     });
     await tx.document.update({ where: { id: doc.id }, data: { currentVersionId: version.id } });
     await audit(tx, ctx.orgId, { actorId: ctx.membershipId, actorUserId: ctx.user.id, action: "document.upload", entityType: "Document", entityId: doc.id, sensitivity });
@@ -106,7 +108,7 @@ export async function addVersionAction(input: { documentId: string; file: FileRe
   if (!(await canOpenDocument(ctx, doc)) || !(ctx.can("documents.manage") || doc.uploadedById === ctx.membershipId)) return { ok: false as const, error: "FORBIDDEN" };
   const next = (doc.versions[0]?.version ?? 0) + 1;
   const version = await ctx.db.documentVersion.create({
-    data: { orgId: ctx.orgId, documentId: doc.id, version: next, storageKey: input.file.key, fileName: input.file.name, mimeType: input.file.type || "application/octet-stream", sizeBytes: input.file.size, createdById: ctx.membershipId },
+    data: { orgId: ctx.orgId, documentId: doc.id, version: next, storageKey: input.file.key, fileName: String(input.file.name ?? "file").slice(0, 150), mimeType: mimeForName(input.file.key), sizeBytes: Math.max(0, Math.min(2_000_000_000, Math.round(Number(input.file.size) || 0))), createdById: ctx.membershipId },
   });
   await ctx.db.document.update({ where: { id: doc.id }, data: { currentVersionId: version.id } });
   await audit(ctx.db, ctx.orgId, { actorId: ctx.membershipId, actorUserId: ctx.user.id, action: "document.version", entityType: "Document", entityId: doc.id, sensitivity: doc.sensitivity, meta: { version: next } });

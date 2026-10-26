@@ -1,5 +1,6 @@
 "use server";
 
+import { openText } from "@/lib/sealed-text";
 import { revalidatePath } from "next/cache";
 import { getCtx, type Ctx } from "@/server/context";
 import { canViewCase, SENSITIVE } from "@/server/access/case-access";
@@ -41,7 +42,7 @@ async function caseFacts(ctx: Ctx, caseId: string) {
       case: { type: c.type, title: ctx.locale === "ar" ? c.titleAr : c.titleEn, summary: c.summaryEn, priority: c.priority, status: c.status, openedDaysAgo: Math.round((Date.now() - c.openedAt.getTime()) / 86400_000) },
       attendance30Days: total ? Math.round((present / total) * 100) : null,
       subjects: enrollments.map((e) => e.class.subject?.nameEn).filter(Boolean),
-      recentNotes: c.notes.map((n) => n.versions[0]?.body).filter(Boolean),
+      recentNotes: c.notes.map((n) => openText(n.versions[0]?.body)).filter(Boolean),
       openTasks: tasks.map((t) => t.titleEn),
       nextMeeting: nextMeeting ? { type: nextMeeting.type.nameEn, at: nextMeeting.startsAt.toISOString() } : null,
       career: c.type === "CAREER" || profile ? { interests: profile?.interestsEn ?? [], topStrengths: topDims, recommendations: recs.map((r) => ({ career: r.career.titleEn, match: r.matchScore, status: r.status })), chosenCareer: chosen?.titleEn ?? null, shortlist: shortlist.map((s) => ({ university: s.university.nameEn, category: s.category, status: s.status })) } : null,
@@ -54,7 +55,7 @@ function briefFallback(ctx: Ctx, data: NonNullable<Awaited<ReturnType<typeof cas
   const ar = ctx.locale === "ar";
   const { c, extra } = data;
   const name = ar ? c.student.firstNameAr : c.student.firstNameEn;
-  const notes = c.notes.slice(0, 3).map((n) => n.versions[0]?.body).filter(Boolean) as string[];
+  const notes = c.notes.slice(0, 3).map((n) => openText(n.versions[0]?.body)).filter(Boolean) as string[];
   if (c.type === "CAREER") {
     const top = extra.recs.slice(0, 3).map((r) => (ar ? r.career.titleAr : r.career.titleEn));
     const chosen = extra.chosen ? (ar ? extra.chosen.titleAr : extra.chosen.titleEn) : null;

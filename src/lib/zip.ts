@@ -125,7 +125,7 @@ export function readZip(buf: Buffer): Map<string, Buffer> {
     const lExtraLen = buf.readUInt16LE(localOffset + 28);
     const start = localOffset + 30 + lNameLen + lExtraLen;
     const data = buf.subarray(start, start + size);
-    out.set(name, method === 8 ? inflateRawSync(data) : Buffer.from(data));
+    out.set(name, method === 8 ? inflateRawSync(data, { maxOutputLength: 256 * 1024 * 1024 }) : Buffer.from(data));
     p += 46 + nameLen + extraLen + commentLen;
   }
   return out;

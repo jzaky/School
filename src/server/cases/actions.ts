@@ -1,5 +1,6 @@
 "use server";
 
+import { sealText } from "@/lib/sealed-text";
 import { revalidatePath } from "next/cache";
 import type { CaseNoteKind, CaseStatus, ParentNotifyDecision, Priority } from "@prisma/client";
 import { getCtx, type Ctx } from "@/server/context";
@@ -44,7 +45,7 @@ export async function addNoteAction(input: { caseId: string; kind: CaseNoteKind;
   await tenantTx(ctx.orgId, async (tx) => {
     const when = input.occurredAt ? new Date(input.occurredAt) : new Date();
     const note = await tx.caseNote.create({ data: { orgId: ctx.orgId, caseId: w.c.id, authorId: ctx.membershipId, kind: input.kind, occurredAt: when } });
-    await tx.caseNoteVersion.create({ data: { orgId: ctx.orgId, noteId: note.id, version: 1, body: input.body.trim(), editedById: ctx.membershipId } });
+    await tx.caseNoteVersion.create({ data: { orgId: ctx.orgId, noteId: note.id, version: 1, body: sealText(input.body.trim()), editedById: ctx.membershipId } });
     await tx.timelineEvent.create({ data: { orgId: ctx.orgId, caseId: w.c.id, studentId: w.c.studentId, actorId: ctx.membershipId, kind: `note_${input.kind.toLowerCase()}`, titleEn: KIND_LABEL[input.kind].en, titleAr: KIND_LABEL[input.kind].ar, staffOnly: true, sensitivity: w.c.sensitivity } });
     await tx.auditEvent.create({ data: { orgId: ctx.orgId, actorId: ctx.membershipId, action: "case.note.add", entityType: "Case", entityId: w.c.id, sensitivity: w.c.sensitivity } });
   });
@@ -60,7 +61,7 @@ export async function amendNoteAction(input: { noteId: string; body: string; rea
   if (!input.reason.trim() || !input.body.trim()) return { ok: false, error: "REASON_REQUIRED" };
   await tenantTx(ctx.orgId, async (tx) => {
     const next = note.currentVersion + 1;
-    await tx.caseNoteVersion.create({ data: { orgId: ctx.orgId, noteId: note.id, version: next, body: input.body.trim(), editedById: ctx.membershipId, reason: input.reason.trim() } });
+    await tx.caseNoteVersion.create({ data: { orgId: ctx.orgId, noteId: note.id, version: next, body: sealText(input.body.trim()), editedById: ctx.membershipId, reason: input.reason.trim() } });
     await tx.caseNote.update({ where: { id: note.id }, data: { currentVersion: next } });
     await tx.timelineEvent.create({ data: { orgId: ctx.orgId, caseId: note.caseId, studentId: w.c.studentId, actorId: ctx.membershipId, kind: "note_amended", titleEn: `Note amended (version ${next})`, titleAr: `تم تعديل ملاحظة (الإصدار ${next})`, bodyEn: input.reason.trim(), bodyAr: input.reason.trim(), staffOnly: true, sensitivity: w.c.sensitivity } });
     await tx.auditEvent.create({ data: { orgId: ctx.orgId, actorId: ctx.membershipId, action: "case.note.amend", entityType: "CaseNote", entityId: note.id, sensitivity: w.c.sensitivity, reason: input.reason.trim() } });

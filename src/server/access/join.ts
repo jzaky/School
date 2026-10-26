@@ -4,6 +4,7 @@
 import bcrypt from "bcryptjs";
 import type { InviteKind, Prisma } from "@prisma/client";
 import { identityDb, tenantDb, tenantTx, userScope } from "@/lib/tenant-db";
+import { passwordMatches } from "@/server/identity/password";
 import { isEmail, parseDate } from "@/lib/people-csv";
 import { audit } from "@/server/audit/audit";
 import { findInvitationByToken, findSchoolByJoinCode, schoolById, type PublicSchool } from "@/server/platform/join-lookup";
@@ -59,7 +60,7 @@ export async function resolveAccount(input: AccountInput, opts: { ip: string; pr
   if (!limit.ok) throw new JoinError("RATE_LIMITED");
   const existing = await identityDb.user.findUnique({ where: { email } });
   if (input.mode === "signin") {
-    if (!existing?.passwordHash || !(await bcrypt.compare(input.password, existing.passwordHash))) throw new JoinError("CREDENTIALS");
+    if (!(await passwordMatches(input.password, existing?.passwordHash)) || !existing) throw new JoinError("CREDENTIALS");
     return { userId: existing.id, email, nameEn: existing.nameEn, nameAr: existing.nameAr, created: false };
   }
   const name = input.name.trim().replace(/\s+/g, " ");
@@ -69,6 +70,13 @@ export async function resolveAccount(input: AccountInput, opts: { ip: string; pr
     if (existing.passwordHash) {
       // Someone who already has an account and typed their own password: treat it as signing in.
       if (await bcrypt.compare(input.password, existing.passwordHash)) return { userId: existing.id, email, nameEn: existing.nameEn, nameAr: existing.nameAr, created: false };
+      // A personal invitation proves the address. A password set before the address was ever proven gives way to
+      // the invited person's own, and every older session ends.
+      if (!existing.emailVerified && opts.provenEmail === email) {
+        const now = new Date();
+        const u = await identityDb.user.update({ where: { id: existing.id }, data: { passwordHash: await bcrypt.hash(input.password, 10), emailVerified: now, sessionsValidFrom: now } });
+        return { userId: u.id, email, nameEn: u.nameEn, nameAr: u.nameAr, created: false };
+      }
       throw new JoinError("CREDENTIALS");
     }
     // An account the school created (staff invite, directory import) with no password yet.

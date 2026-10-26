@@ -22,6 +22,7 @@ import type { MembershipStatus } from "@prisma/client";
 import { identityDb, tenantDb, tenantTx, type TenantTx } from "@/lib/tenant-db";
 import { decryptField } from "@/lib/crypto";
 import { audit } from "@/server/audit/audit";
+import { releaseUnprovenPassword } from "@/server/identity/unproven-account";
 import { JoinError, ensureMembership, ensureStaffProfile, grantRoles, rolesByKeys } from "@/server/access/membership-setup";
 import { domainOf, loadPolicy, methodAvailable, type Policy } from "./policy";
 import type { NormalizedIdentity } from "./flow";
@@ -243,6 +244,9 @@ export async function resolveSignIn(orgId: string | null, identity: NormalizedId
   if (typeof decision === "string") return refuse(orgId, identity, decision);
   const out = decision.outcome;
   if (!out.ok) return out;
+  // The school's sign-in confirmed this member: a password set on the account before its address was proven
+  // no longer opens it (see src/server/identity/unproven-account.ts).
+  await releaseUnprovenPassword(out.userId, now);
   if (decision.activate) {
     // Staff added by an import or the roster arrive INVITED; their school's directory confirming them activates them.
     await tenantDb(orgId).membership.updateMany({ where: { id: out.membershipId, status: "INVITED" }, data: { status: "ACTIVE" } });

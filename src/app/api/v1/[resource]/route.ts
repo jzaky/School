@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { API_RESOURCES, allows, isApiResource, type ApiResource } from "@/lib/integrations/scopes";
 import { keyFromHeaders } from "@/server/integrations/key-format";
 import { authenticateApiKey } from "@/server/integrations/keys";
+import { BodyTooLargeError, readTextLimited } from "@/lib/http-body";
 import { API_ERROR_MESSAGES, ApiError, listAttendance, listClasses, listEnrollments, listStaff, listStudents, upsert, upsertAttendance, type ApiErrorCode } from "@/server/integrations/api";
 
 export const runtime = "nodejs";
@@ -43,10 +44,13 @@ async function handle(req: Request, params: Promise<{ resource: string }>, metho
                 : await listAttendance(auth.orgId, sp);
       return NextResponse.json(page, { headers: { "Cache-Control": "no-store" } });
     }
-    const length = Number(req.headers.get("content-length") ?? 0);
-    if (length > MAX_BODY_BYTES) return errorResponse(413, "TOO_LARGE");
-    const text = await req.text();
-    if (text.length > MAX_BODY_BYTES) return errorResponse(413, "TOO_LARGE");
+    let text: string;
+    try {
+      text = await readTextLimited(req, MAX_BODY_BYTES);
+    } catch (e) {
+      if (e instanceof BodyTooLargeError) return errorResponse(413, "TOO_LARGE");
+      throw e;
+    }
     let body: unknown;
     try {
       body = JSON.parse(text);

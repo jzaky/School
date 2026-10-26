@@ -7,6 +7,7 @@ import type { Prisma } from "@prisma/client";
 import { tenantDb, tenantTx } from "@/lib/tenant-db";
 import { createZip, type ZipEntry } from "@/lib/zip";
 import { toCsv } from "@/lib/csv-out";
+import { openText } from "@/lib/sealed-text";
 import { deleteObject, getObject, isStoredKey, putObjectAt } from "@/server/documents/storage-core";
 import { delegate, scrubRow, tenantModels } from "./subject";
 import { exportLabel } from "./labels";
@@ -118,6 +119,8 @@ export async function runSchoolExport(job: SchoolExportJob, opts: { now?: Date }
       const open: Array<Record<string, unknown>> = [];
       const restricted: Array<Record<string, unknown>> = [];
       for (const r of rows) {
+        // Case notes are encrypted at rest; the school's own export carries them readable.
+        if (model === "CaseNoteVersion" && typeof r.body === "string") r.body = openText(r.body);
         if (isRestricted(model, r)) {
           restricted.push(scrubRow(r));
           if (model === "Document") restrictedDocs.add(r.id as string);
