@@ -1,0 +1,25 @@
+# Edge proxy for the offline installation. The only container that people can reach.
+{
+	auto_https disable_redirects
+	# No ACME: the machine is offline. Certificates come from Caddy's internal CA, or from /certs.
+	skip_install_trust
+}
+
+# Plain HTTP on the server itself (published on 127.0.0.1 only).
+http://:3000 {
+	reverse_proxy web:3000
+}
+http://:4000 {
+	reverse_proxy api:4000
+}
+
+# HTTPS for users on the network. To use the entity's own certificate, put cert.pem and key.pem in
+# ./certs and set AEGIS_TLS=/certs/cert.pem /certs/key.pem in .env (install.sh does this when it finds them).
+https://{$AEGIS_HOST}:443 {
+	tls {$AEGIS_TLS:internal}
+	reverse_proxy web:3000
+}
+https://{$AEGIS_HOST}:8443 {
+	tls {$AEGIS_TLS:internal}
+	reverse_proxy api:4000
+}

@@ -1,0 +1,148 @@
+# Offline (air-gapped) installation. Every image comes from the bundle loaded by install.sh; nothing is
+# pulled or built on the customer's machine.
+#
+# Network boundary:
+# - `core` is an internal Docker network: containers on it have no route to the internet. The database,
+#   cache, migrations, api, worker and web console live only on `core`.
+# - `edge` is the only network with published ports. The Caddy proxy is the only container on both, so
+#   people can reach the console and the gateway, while AEGIS itself cannot reach out.
+# - Ports 3000 and 4000 are plain HTTP bound to 127.0.0.1 for use on the server itself. Ports 443 (console)
+#   and 8443 (gateway) serve HTTPS for AEGIS_HOST with a certificate from Caddy's internal CA, or the
+#   entity's own certificate (see docs/OFFLINE_INSTALL.md).
+#
+# Credential boundaries match deploy/docker-compose.yml: only `migrate` and `seed` receive the owner URL.
+name: aegis
+x-app-env: &app-env
+  DATABASE_URL: postgresql://aegis_app:${POSTGRES_APP_PASSWORD:?set in .env}@postgres:5432/aegis
+  MIGRATION_DATABASE_URL: ""
+  AEGIS_APP_PASSWORD: ""
+  REDIS_URL: redis://redis:6379
+  AEGIS_STORAGE_DIR: /data/uploads
+x-owner-env: &owner-env
+  MIGRATION_DATABASE_URL: postgresql://aegis_owner:${POSTGRES_OWNER_PASSWORD:?set in .env}@postgres:5432/aegis
+  DATABASE_URL: postgresql://aegis_app:${POSTGRES_APP_PASSWORD:?set in .env}@postgres:5432/aegis
+  AEGIS_APP_PASSWORD: ${POSTGRES_APP_PASSWORD:?set in .env}
+services:
+  postgres:
+    image: ${AEGIS_POSTGRES_IMAGE:-postgres:16}
+    pull_policy: never
+    environment:
+      POSTGRES_USER: aegis_owner
+      POSTGRES_PASSWORD: ${POSTGRES_OWNER_PASSWORD:?set in .env}
+      POSTGRES_DB: aegis
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres-init.sql:/docker-entrypoint-initdb.d/01-roles.sql:ro
+    networks: [core]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aegis_owner -d aegis"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+  redis:
+    image: ${AEGIS_REDIS_IMAGE:-redis:7-alpine}
+    pull_policy: never
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    networks: [core]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+  migrate:
+    image: aegis-migrate:${AEGIS_VERSION:?set in .env}
+    pull_policy: never
+    env_file: .env
+    environment:
+      <<: *owner-env
+      AEGIS_PROCESS: migrate
+    networks: [core]
+    depends_on:
+      postgres: { condition: service_healthy }
+    restart: "no"
+  # Optional synthetic demo tenant: ./install.sh --demo, or
+  #   docker compose --profile seed run --rm seed
+  seed:
+    image: aegis-migrate:${AEGIS_VERSION:?set in .env}
+    pull_policy: never
+    env_file: .env
+    environment:
+      <<: *owner-env
+      AEGIS_PROCESS: script
+      AEGIS_DEMO_KEYS_FILE: /out/.demo-keys.json
+    volumes:
+      - ./seed-output:/out
+    command: ["pnpm", "--filter", "@aegis/core", "seed"]
+    networks: [core]
+    profiles: ["seed"]
+    depends_on:
+      postgres: { condition: service_healthy }
+  api:
+    image: aegis-api:${AEGIS_VERSION:?set in .env}
+    pull_policy: never
+    env_file: .env
+    environment:
+      <<: *app-env
+      AEGIS_PROCESS: api
+    volumes:
+      - uploads:/data/uploads
+    networks: [core]
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+      redis: { condition: service_healthy }
+    restart: unless-stopped
+  worker:
+    image: aegis-worker:${AEGIS_VERSION:?set in .env}
+    pull_policy: never
+    env_file: .env
+    environment:
+      <<: *app-env
+      AEGIS_PROCESS: worker
+    volumes:
+      - uploads:/data/uploads
+    networks: [core]
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    restart: unless-stopped
+  web:
+    image: aegis-web:${AEGIS_VERSION:?set in .env}
+    pull_policy: never
+    env_file: .env
+    environment:
+      <<: *app-env
+      AEGIS_PROCESS: web
+      API_PUBLIC_URL: http://api:4000
+    volumes:
+      - uploads:/data/uploads
+    networks: [core]
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    restart: unless-stopped
+  proxy:
+    image: ${AEGIS_CADDY_IMAGE:-caddy:2-alpine}
+    pull_policy: never
+    environment:
+      AEGIS_HOST: ${AEGIS_HOST:-localhost}
+      AEGIS_TLS: ${AEGIS_TLS:-internal}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./certs:/certs:ro
+      - caddydata:/data
+    ports:
+      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:4000:4000"
+      - "${AEGIS_BIND:-0.0.0.0}:443:443"
+      - "${AEGIS_BIND:-0.0.0.0}:8443:8443"
+    networks: [edge, core]
+    depends_on: [web, api]
+    restart: unless-stopped
+networks:
+  core:
+    internal: true
+  edge: {}
+volumes:
+  pgdata: {}
+  uploads: {}
+  caddydata: {}

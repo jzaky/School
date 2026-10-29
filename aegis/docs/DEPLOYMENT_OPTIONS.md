@@ -10,7 +10,7 @@ changes is who operates it, where it runs and who holds the keys.
 | Multi-tenant SaaS | AEGIS provider | Row-level security per organization in one database, a non-owner application role, secrets sealed per record | `deploy/k8s` or a managed platform (`docs/DEPLOYMENT.md`) |
 | Single-tenant managed | AEGIS provider | Dedicated database, cache, storage and keys for one customer | `deploy/k8s`, one namespace and database per customer |
 | Customer-controlled private cloud | Customer | Customer's own account and network | `deploy/k8s` or `deploy/docker-compose.yml` |
-| On-premises | Customer | Customer's own hardware | `deploy/docker-compose.yml` or `deploy/systemd`; needs PostgreSQL 16 and Redis 7, and no internet access except for integrations the customer enables |
+| On-premises | Customer | Customer's own hardware | Offline bundle (`deploy/offline`, `docs/OFFLINE_INSTALL.md`), or `deploy/docker-compose.yml` or `deploy/systemd`; needs PostgreSQL 16 and Redis 7, and no internet access except for integrations the customer enables |
 
 Status: the installation files exist and the Compose and Kubernetes layouts were written for these
 models, but only the local development setup and the CI build are exercised in this repository. No
