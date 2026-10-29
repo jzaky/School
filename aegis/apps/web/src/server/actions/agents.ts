@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant, type AgentStatus } from "@aegis/db";
-import { addAgentVersion, AGENT_TRANSITIONS, agentInputSchema, agentListFilter, createAgent, forbidden, notFound, validation, grantResourcePermission, issueApiKey, listAgents, revokeAgentTool, revokeApiKey, revokeResourcePermission, setAgentTool, transitionAgent, updateAgent } from "@aegis/core";
+import { addAgentVersion, AGENT_TRANSITIONS, agentInputSchema, agentListFilter, createAgent, forbidden, notFound, validation, grantResourcePermission, issueApiKey, listAgents, revokeAgentTool, revokeApiKey, revokeResourcePermission, setAgentTool, transitionAgent, updateAgent, parsePatch } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { act } from "./util";
 import { userNames } from "@/server/queries/users";
@@ -23,7 +23,7 @@ export async function createAgentAction(input: unknown) {
 export async function updateAgentAction(agentId: string, input: unknown) {
   return act(async () => {
     const c = await getConsoleContext();
-    const data = agentInputSchema.partial().parse(input);
+    const data = parsePatch(agentInputSchema, input);
     await withTenant(c.ctx.orgId, (db) => updateAgent(db, c.ctx, z.string().uuid().parse(agentId), data));
     revalidatePath(`/agents/${agentId}`);
     revalidatePath("/agents");

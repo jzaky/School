@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { withTenant } from "@aegis/db";
-import { catalogForOrg, createDestination, destinationCommonSchema, destinationInputSchema, getDestination, listDestinations, replaceDestinationSecret, retryDelivery, sendTestEvent, updateDestination } from "@aegis/core";
+import { catalogForOrg, createDestination, destinationCommonSchema, destinationInputSchema, getDestination, listDestinations, replaceDestinationSecret, retryDelivery, sendTestEvent, updateDestination, parsePatch } from "@aegis/core";
 import { z } from "zod";
 import { requirePerson } from "../plugins/auth.js";
 
@@ -33,7 +33,7 @@ export async function destinationRoutes(app: FastifyInstance) {
   app.patch("/destinations/:id", async (req) => {
     const ctx = await req.orgContext();
     const { id } = idParam.parse(req.params);
-    const body = destinationCommonSchema.partial().extend({ enabled: z.boolean().optional() }).parse(req.body);
+    const body = parsePatch(destinationCommonSchema.extend({ enabled: z.boolean().optional() }), req.body);
     const d = await withTenant(ctx.orgId, (db) => updateDestination(db, ctx, id, body));
     const { secretEnvelope: _s, ...safe } = d;
     return { ...safe, cursorSeq: safe.cursorSeq.toString() };

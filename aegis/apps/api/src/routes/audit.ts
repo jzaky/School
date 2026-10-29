@@ -48,7 +48,7 @@ import {
   validateFinding,
   validateFindingSchema,
 } from "@aegis/core/audit/index";
-import { validation } from "@aegis/core";
+import { validation, parsePatch } from "@aegis/core";
 
 const idParam = z.object({ id: z.string().uuid() });
 
@@ -135,7 +135,7 @@ export async function auditRoutes(app: FastifyInstance) {
   app.patch("/controls/:id", async (req) => {
     const ctx = await req.orgContext();
     const { id } = idParam.parse(req.params);
-    const body = controlInputSchema.partial().parse(req.body);
+    const body = parsePatch(controlInputSchema, req.body);
     return withTenant(ctx.orgId, (db) => updateControl(db, ctx, id, body));
   });
   app.delete("/controls/:id", async (req) => {

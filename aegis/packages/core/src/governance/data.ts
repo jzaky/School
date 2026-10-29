@@ -7,6 +7,7 @@ import type { OrgContext } from "../lib/context.js";
 import { conflict, forbidden, notFound, validation } from "../lib/errors.js";
 import { assertPermission, slugSchema } from "../orgs/orgs.js";
 import { DATA_CATEGORIES } from "./models.js";
+import { parsePatch } from "../lib/patch.js";
 
 /**
  * Dataset inventory, access auditing and deletion requests (docs/MODEL_DATA_GOVERNANCE.md).
@@ -80,7 +81,7 @@ export async function registerDataset(db: TenantDb, ctx: OrgContext, raw: z.inpu
 export async function updateDataset(db: TenantDb, ctx: OrgContext, id: string, raw: Partial<z.input<typeof datasetInputSchema>>) {
   assertPermission(ctx, "security:write");
   await loadDataset(db, ctx, id);
-  const { key: _key, ...patch } = datasetInputSchema.partial().parse(raw);
+  const { key: _key, ...patch } = parsePatch(datasetInputSchema, raw);
   const ds = await db.dataset.update({ where: { id }, data: patch });
   await appendEvidence(db, ctx, { type: "dataset.updated", subjectType: "dataset", subjectId: id, payload: { fields: Object.keys(patch) } });
   return ds;

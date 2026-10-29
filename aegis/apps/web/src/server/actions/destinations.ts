@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant } from "@aegis/db";
-import { createDestination, destinationCommonSchema, destinationInputSchema, replaceDestinationSecret, retryDelivery, sendTestEvent, updateDestination } from "@aegis/core";
+import { createDestination, destinationCommonSchema, destinationInputSchema, replaceDestinationSecret, retryDelivery, sendTestEvent, updateDestination, parsePatch } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { act } from "./util";
 
@@ -21,7 +21,7 @@ export async function createDestinationAction(input: unknown) {
 export async function updateDestinationAction(id: string, input: unknown) {
   return act(async () => {
     const c = await getConsoleContext();
-    const data = destinationCommonSchema.partial().extend({ enabled: z.boolean().optional() }).parse(input);
+    const data = parsePatch(destinationCommonSchema.extend({ enabled: z.boolean().optional() }), input);
     await withTenant(c.ctx.orgId, (db) => updateDestination(db, c.ctx, uuid.parse(id), data));
     revalidatePath(`/integrations/destinations/${id}`);
     revalidatePath("/integrations/destinations");

@@ -36,6 +36,7 @@ import {
   validateFindingSchema,
   validation,
   type ControlInput,
+  parsePatch,
 } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { act } from "./util";
@@ -140,7 +141,7 @@ export async function updateControlAction(frameworkId: string, controlId: string
     const c = await getConsoleContext();
     const fid = uuid.parse(frameworkId);
     const cid = uuid.parse(controlId);
-    const data = controlInputSchema.partial().parse(input);
+    const data = parsePatch(controlInputSchema, input);
     await withTenant(c.ctx.orgId, (db) => updateControl(db, c.ctx, cid, data));
     revalidatePath(`/audit/standards/${fid}`);
   });

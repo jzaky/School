@@ -15,6 +15,7 @@ import { forbidden, notFound, validation } from "../lib/errors.js";
 import { logger } from "../lib/logger.js";
 import { assertPermission } from "../orgs/orgs.js";
 import { signWebhook } from "./service.js";
+import { parsePatch } from "../lib/patch.js";
 
 /**
  * Event destinations (docs/ENTERPRISE_INTEGRATIONS.md): AEGIS sends governance events to the systems an
@@ -317,7 +318,7 @@ export async function updateDestination(db: TenantDb, ctx: OrgContext, id: strin
   assertPermission(ctx, "integrations:write");
   requirePerson(ctx, "change an event destination");
   await loadDestination(db, ctx, id);
-  const data = destinationCommonSchema.partial().extend({ enabled: z.boolean().optional() }).parse(patch);
+  const data = parsePatch(destinationCommonSchema.extend({ enabled: z.boolean().optional() }), patch);
   const d = await db.eventDestination.update({ where: { id }, data });
   await appendEvidence(db, ctx, { type: data.enabled === false ? "destination.disabled" : data.enabled === true ? "destination.enabled" : "destination.updated", subjectType: "event_destination", subjectId: id, payload: { fields: Object.keys(data) } });
   return d;

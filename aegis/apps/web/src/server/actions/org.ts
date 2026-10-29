@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant } from "@aegis/db";
-import { changeMemberRole, createRole, createTeam, deleteRole, env, forbidden, inviteUser, roleInputSchema, setContinuousGovernance, setMemberStatus, setTeamMembers, slugSchema, ssoConnectionSchema, updateOrganization, updateRole, upsertSsoConnection } from "@aegis/core";
+import { changeMemberRole, createRole, createTeam, deleteRole, env, forbidden, inviteUser, roleInputSchema, setContinuousGovernance, setMemberStatus, setTeamMembers, slugSchema, ssoConnectionSchema, updateOrganization, updateRole, upsertSsoConnection, parsePatch } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { act } from "./util";
 
@@ -66,7 +66,7 @@ export async function createRoleAction(input: unknown) {
 export async function updateRoleAction(roleId: string, input: unknown) {
   return act(async () => {
     const c = await getConsoleContext();
-    const data = roleInputSchema.pick({ name: true, description: true, permissions: true }).partial().parse(input);
+    const data = parsePatch(roleInputSchema.pick({ name: true, description: true, permissions: true }), input);
     await withTenant(c.ctx.orgId, (db) => updateRole(db, c.ctx, z.string().uuid().parse(roleId), data));
     revalidatePath("/org/roles");
   });

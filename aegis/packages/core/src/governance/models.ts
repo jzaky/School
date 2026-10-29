@@ -5,6 +5,7 @@ import { appendEvidence } from "../evidence/ledger.js";
 import type { OrgContext } from "../lib/context.js";
 import { conflict, forbidden, notFound, validation } from "../lib/errors.js";
 import { assertPermission, slugSchema } from "../orgs/orgs.js";
+import { parsePatch } from "../lib/patch.js";
 
 /**
  * Model registry and lifecycle (docs/MODEL_DATA_GOVERNANCE.md).
@@ -93,7 +94,7 @@ export async function updateModel(db: TenantDb, ctx: OrgContext, id: string, raw
   assertPermission(ctx, "agents:write");
   const model = await loadModel(db, ctx, id);
   if (model.stage === "retired") throw validation("A retired model cannot be edited");
-  const { key: _key, linkMatchingAgents: _link, ...patch } = modelInputSchema.partial().parse(raw);
+  const { key: _key, linkMatchingAgents: _link, ...patch } = parsePatch(modelInputSchema, raw);
   const updated = await db.aiModel.update({ where: { id }, data: patch });
   await appendEvidence(db, ctx, { type: "model.updated", subjectType: "ai_model", subjectId: id, payload: { fields: Object.keys(patch) } });
   return updated;

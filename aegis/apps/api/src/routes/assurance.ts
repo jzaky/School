@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { withTenant } from "@aegis/db";
 import { z } from "zod";
-import { acknowledgeAlert, alertFilter, alertStats, approvalTurnaround, complianceControlsForFramework, complianceMappingSummary, createMonitoringRule, deleteMonitoringRule, evidenceFilter, evidenceTypes, exportEvidence, getEvidenceEvent, governanceMetrics, governanceReport, governanceTimeSeries, listAlerts, listEvidence, listMonitoringRules, observedTechnicalControls, resolveAlert, ruleInputSchema, runMonitoring, serviceHealth, topAgentsByDenials, updateMonitoringRule, verifyAndRecord } from "@aegis/core";
+import { acknowledgeAlert, alertFilter, alertStats, approvalTurnaround, complianceControlsForFramework, complianceMappingSummary, createMonitoringRule, deleteMonitoringRule, evidenceFilter, evidenceTypes, exportEvidence, getEvidenceEvent, governanceMetrics, governanceReport, governanceTimeSeries, listAlerts, listEvidence, listMonitoringRules, observedTechnicalControls, resolveAlert, ruleInputSchema, runMonitoring, serviceHealth, topAgentsByDenials, updateMonitoringRule, verifyAndRecord, parsePatch } from "@aegis/core";
 
 export async function assuranceRoutes(app: FastifyInstance) {
   app.get("/dashboard", async (req) => {
@@ -68,7 +68,7 @@ export async function assuranceRoutes(app: FastifyInstance) {
   app.patch("/monitoring/rules/:id", async (req) => {
     const ctx = await req.orgContext();
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
-    return withTenant(ctx.orgId, (db) => updateMonitoringRule(db, ctx, id, ruleInputSchema.omit({ key: true }).partial().parse(req.body)));
+    return withTenant(ctx.orgId, (db) => updateMonitoringRule(db, ctx, id, parsePatch(ruleInputSchema.omit({ key: true }), req.body)));
   });
   app.delete("/monitoring/rules/:id", async (req) => {
     const ctx = await req.orgContext();

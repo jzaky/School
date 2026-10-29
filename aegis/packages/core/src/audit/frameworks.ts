@@ -12,6 +12,7 @@ import { appendEvidence } from "../evidence/ledger.js";
 import type { OrgContext } from "../lib/context.js";
 import { conflict, notFound, validation } from "../lib/errors.js";
 import { assertPermission } from "../orgs/orgs.js";
+import { parsePatch } from "../lib/patch.js";
 
 export const frameworkKeySchema = z
   .string()
@@ -100,7 +101,7 @@ export async function updateControl(db: TenantDb, ctx: OrgContext, controlId: st
   const c = await db.control.findUnique({ where: { id: controlId }, include: { framework: true } });
   if (!c) throw notFound("Control");
   if (!c.framework.isCustom || c.framework.orgId !== ctx.orgId) throw validation("Controls of shared catalog frameworks cannot be edited");
-  const data = controlInputSchema.partial().parse(patch);
+  const data = parsePatch(controlInputSchema, patch);
   if (data.code && data.code !== c.code) {
     const dup = await db.control.findUnique({ where: { frameworkId_code: { frameworkId: c.frameworkId, code: data.code } } });
     if (dup) throw conflict(`Control ${data.code} already exists in this framework`);
