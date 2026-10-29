@@ -30,7 +30,7 @@ has been verified in a deployed environment. No completion percentages are given
 - **Shield.** Data classes, tool security, injection signals and responses, incidents, and the Attack Simulation Lab.
 - **Governance registers.** Model, data and regulatory registers.
 - **Evidence.** A signed, hash-chained evidence ledger.
-- **Audit workspace** with 20 framework catalogs.
+- **Audit workspace** with 21 framework catalogs.
 - **Integrations.** An integration marketplace and event destinations.
 - **Console.** Control Center, System Health, deployment readiness and residency assessment, and an Arabic right-to-left console.
 - **Commercial records,** and the sales demonstration.

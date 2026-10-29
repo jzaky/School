@@ -5,8 +5,8 @@ import { AUTOMATED_EVIDENCE_TYPES } from "../src/audit/automated-checks.js";
 import { CHECKER_FRAMEWORKS, CHECKER_QUESTIONS, checkerSummaryText, scoreChecker } from "../src/audit/checker.js";
 
 describe("shared framework catalogs", () => {
-  it("has twenty catalogs (TypeScript and JSON drop-ins) with unique keys, unique codes, categories, keywords and a license note each", () => {
-    expect(SHARED_FRAMEWORKS.map((f) => f.key)).toEqual(["iso-42001", "iso-27001-2022", "nist-ai-rmf-1.0", "eu-ai-act", "gdpr", "uae-pdpl", "desc-isr", "iso-23894", "iso-27701", "iso-27017", "iso-27018", "iso-42005", "iso-38507", "difc-dpl-2020", "nist-csf-2", "owasp-llm-top10", "pci-dss-4", "sdaia-ai-ethics", "sg-model-ai-governance", "soc2-tsc"]);
+  it("has twenty-one catalogs (TypeScript and JSON drop-ins) with unique keys, unique codes, categories, keywords and a license note each", () => {
+    expect(SHARED_FRAMEWORKS.map((f) => f.key)).toEqual(["iso-42001", "iso-27001-2022", "nist-ai-rmf-1.0", "eu-ai-act", "gdpr", "uae-pdpl", "desc-isr", "iso-23894", "iso-27701", "iso-27017", "iso-27018", "iso-42005", "iso-38507", "difc-dpl-2020", "nist-csf-2", "owasp-llm-top10", "pci-dss-4", "sdaia-ai-ethics", "sg-model-ai-governance", "soc2-tsc", "uae-ia"]);
     for (const f of SHARED_FRAMEWORKS) {
       expect(f.licenseNote.length, f.key).toBeGreaterThan(40);
       expect(f.controls.length, f.key).toBeGreaterThan(5);
@@ -25,7 +25,7 @@ describe("shared framework catalogs", () => {
     const total = SHARED_FRAMEWORKS.reduce((n, f) => n + f.controls.length, 0);
     expect(total).toBeGreaterThan(450);
     for (const f of SHARED_FRAMEWORKS) expect(frameworkSeedSchema.safeParse(f).success, `${f.key} validates against the catalog schema`).toBe(true);
-    expect(loadJsonCatalogs().length).toBe(7);
+    expect(loadJsonCatalogs().length).toBe(8);
   });
 
   it("every checker reference points at a seeded framework control", () => {

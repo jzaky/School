@@ -17,9 +17,9 @@ export const FIGURES = {
   /** `test(` cases across those spec files. */
   e2eTests: 129,
   /** Shared framework catalogs seeded for every tenant. */
-  catalogs: 20,
+  catalogs: 21,
   /** Controls across those catalogs. */
-  controls: 472,
+  controls: 487,
 };
 
 export interface ProofRow {

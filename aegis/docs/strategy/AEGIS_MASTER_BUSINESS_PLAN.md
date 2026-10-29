@@ -51,7 +51,7 @@ Each item gives the evidence and its location.
   - API keys with scopes. An agent key cannot carry the provisioning or grant-verification scopes.
 - **Tenant isolation.** PostgreSQL row-level security on tenant tables, with an isolation test suite (`packages/db/tests/isolation.test.ts`).
 - **Shield.** Sensitive data detection on parameters, destination allowlists, injection heuristics, security events and incidents.
-- **Assurance and Audit.** Twelve deterministic monitoring rules, optional automatic containment responses, and 20 framework catalogs holding 472 original control summaries. Includes document assessment, remediation tracking and reports.
+- **Assurance and Audit.** Twelve deterministic monitoring rules, optional automatic containment responses, and 21 framework catalogs holding 487 original control summaries. Includes document assessment, remediation tracking and reports.
 - **Developer surface.**
   - TypeScript SDK with guards for the OpenAI Agents SDK, LangChain, LangGraph and Anthropic tool use.
   - A Python SDK.

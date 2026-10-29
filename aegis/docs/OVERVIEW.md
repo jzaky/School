@@ -78,7 +78,7 @@ Screenshots of every screen are in `docs/screens/`.
 | Database models | 50 |
 | Automated tests passing | 186 (120 core, 11 isolation, 6 API, 49 browser) |
 | Console screens | 31 navigation items, all functional |
-| Compliance controls encoded | 472 across 20 frameworks |
+| Compliance controls encoded | 487 across 21 frameworks |
 | Shield evaluation corpus | 38 cases, 18/18 injections caught, 0/10 benign blocked |
 | Evidence events verified in the demo tenant | about 1,900, chain valid |
 

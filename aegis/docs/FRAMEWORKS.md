@@ -26,6 +26,7 @@ assessment, not a certification.
 | owasp-llm-top10 | OWASP Top 10 for LLM Applications (2025) | 10 | JSON |
 | nist-csf-2 | NIST Cybersecurity Framework 2.0 (categories) | 22 | JSON |
 | difc-dpl-2020 | DIFC Data Protection Law 2020 (principles) | 15 | JSON |
+| uae-ia | UAE Information Assurance Regulation (control families) | 15 | JSON |
 | sg-model-ai-governance | Singapore Model AI Governance Framework | 10 | JSON |
 | sdaia-ai-ethics | SDAIA AI Ethics Principles (Saudi Arabia) | 7 | JSON |
 | soc2-tsc | SOC 2 Trust Services Criteria (category level) | 13 | JSON |
