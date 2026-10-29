@@ -104,7 +104,12 @@ export async function auditAllEnforcementPaths(run: TenantRunner, ctx: OrgContex
   return out;
 }
 
-export type EnforcementStrength = "gateway_executes" | "downstream_verifies" | "self_reported" | "not_enforced";
+/**
+ * How a tool's calls were seen to be enforced over the last 30 days. Strength is read from observed traffic,
+ * never assumed from configuration: a tool with no calls is not_observed, and downstream_verifies needs the
+ * downstream system to have actually verified grants for that tool.
+ */
+export type EnforcementStrength = "gateway_executes" | "downstream_verifies" | "self_reported" | "not_enforced" | "not_observed";
 
 /**
  * How each granted tool is enforced, per agent. The strongest path is the gateway executing the
@@ -121,6 +126,8 @@ export async function enforcementCoverage(db: TenantDb, ctx: OrgContext) {
   const agents = await db.agent.findMany({ where: { isLab: false, orgId: ctx.orgId, status: { in: ["active", "registered", "suspended"] } }, select: { id: true, slug: true, name: true, status: true, tools: { where: { enabled: true, revokedAt: null }, select: { tool: { select: { key: true, integration: { select: { id: true, key: true, type: true, enforcementSummary: true, lastEnforcementAuditAt: true } } } } } } }, orderBy: { slug: "asc" } });
   const modes = await db.actionRequest.groupBy({ by: ["agentId", "toolKey"], where: { orgId: ctx.orgId, createdAt: { gte: since } }, _count: { _all: true } });
   const agentMode = await db.$queryRaw<{ agent_id: string; tool_key: string; n: bigint }[]>`SELECT agent_id, tool_key, count(*)::bigint AS n FROM action_requests WHERE org_id = ${ctx.orgId}::uuid AND created_at >= ${since} AND context->>'executionMode' = 'agent' GROUP BY agent_id, tool_key`;
+  const verified = await db.$queryRaw<{ tool_key: string; n: bigint }[]>`SELECT payload->>'tool' AS tool_key, count(*)::bigint AS n FROM evidence_events WHERE org_id = ${ctx.orgId}::uuid AND occurred_at >= ${since} AND type = 'gateway.grant_verified_downstream' GROUP BY payload->>'tool'`;
+  const downstreamVerified = new Map(verified.map((v) => [v.tool_key, Number(v.n)]));
   const total = new Map(modes.map((m) => [`${m.agentId}:${m.toolKey}`, m._count._all]));
   const selfRun = new Map(agentMode.map((m) => [`${m.agent_id}:${m.tool_key}`, Number(m.n)]));
   return agents.map((a) => ({
@@ -133,9 +140,10 @@ export async function enforcementCoverage(db: TenantDb, ctx: OrgContext) {
       const requests30d = total.get(key) ?? 0;
       const agentExecuted = selfRun.get(key) ?? 0;
       const connector = tool.integration ? resolveDownstreamSystem(tool.integration) : undefined;
-      const strength: EnforcementStrength = !tool.integration ? "not_enforced" : agentExecuted > 0 ? (connector ? "downstream_verifies" : "self_reported") : connector ? "gateway_executes" : "self_reported";
+      const verifiedDownstream = downstreamVerified.get(tool.key) ?? 0;
+      const strength: EnforcementStrength = !tool.integration ? "not_enforced" : requests30d === 0 ? "not_observed" : agentExecuted > 0 ? (verifiedDownstream > 0 ? "downstream_verifies" : "self_reported") : connector ? "gateway_executes" : "self_reported";
       const summary = (tool.integration?.enforcementSummary ?? {}) as { observable?: boolean; bypass?: number; unknownRequest?: number; unauthorized?: number };
-      return { toolKey: tool.key, integrationKey: tool.integration?.key ?? null, strength, requests30d, agentExecuted, observable: summary.observable ?? null, lastAuditAt: tool.integration?.lastEnforcementAuditAt?.toISOString() ?? null, outsideGateway: (summary.bypass ?? 0) + (summary.unknownRequest ?? 0) + (summary.unauthorized ?? 0) };
+      return { toolKey: tool.key, integrationKey: tool.integration?.key ?? null, strength, requests30d, agentExecuted, verifiedDownstream, observable: summary.observable ?? null, lastAuditAt: tool.integration?.lastEnforcementAuditAt?.toISOString() ?? null, outsideGateway: (summary.bypass ?? 0) + (summary.unknownRequest ?? 0) + (summary.unauthorized ?? 0) };
     }),
   }));
 }

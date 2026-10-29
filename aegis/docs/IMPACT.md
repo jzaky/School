@@ -54,6 +54,16 @@ The impact script exports the run's evidence, verifies it, then rewrites one ref
 in a copy and confirms the verifier reports the edited record. The CI test also deletes a record and
 confirms that fails.
 
+Two limits, and how to close them:
+
+- By default the verifier checks the signature with the key inside the bundle, so someone who rebuilt
+  the whole bundle with their own key would also pass. Pass `--fingerprint <key id or SHA-256>` (or
+  `--key <public-key.pem>`) with the key obtained from the AEGIS operator separately, and a bundle signed
+  with any other key fails.
+- Records removed from the end of a bundle leave a shorter, still consistent chain. Pass
+  `--expect-through <record number>` with a number noted earlier (for example from a previous export)
+  and a shorter bundle fails. Publishing checkpoints somewhere outside AEGIS is still on the roadmap.
+
 ## Reading the results honestly
 
 These are measurements of the real AEGIS engines on synthetic cases against a simulated system, in

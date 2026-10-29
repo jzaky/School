@@ -3,7 +3,13 @@
  * Independent verifier for an AEGIS evidence bundle. Needs only Node.js: no AEGIS code, no database,
  * no network. Anyone (an auditor, a customer, a regulator) can run it on an exported bundle.
  *
- *   node verify-evidence.mjs <bundle-folder>
+ *   node verify-evidence.mjs <bundle-folder> [--key <public-key.pem> | --fingerprint <sha256-hex>] [--expect-through <seq>]
+ *
+ * --key or --fingerprint pins the signing key you obtained from the AEGIS operator separately. The
+ * fingerprint is the SHA-256 of the key (SPKI, DER); its first 16 characters are the key id AEGIS records
+ * with every checkpoint, and either form is accepted. Without it the verifier can only use the key inside the bundle, so a bundle
+ * rebuilt with a different key would also pass: the result says so. --expect-through checks that the bundle
+ * reaches a record number you noted earlier, which detects records removed from the end.
  *
  * The folder holds events.jsonl (one evidence record per line, in sequence), checkpoint.json (a signed
  * checkpoint at the last record) and public-key.pem (the Ed25519 key that signs checkpoints).
@@ -16,9 +22,14 @@ import { createHash, createPublicKey, verify } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-const dir = process.argv[2];
+const args = process.argv.slice(2);
+const dir = args.find((a, i) => !a.startsWith("--") && !(i > 0 && args[i - 1].startsWith("--")));
+const opt = (name) => {
+  const i = args.indexOf(name);
+  return i >= 0 ? args[i + 1] : undefined;
+};
 if (!dir) {
-  console.error("usage: node verify-evidence.mjs <bundle-folder>");
+  console.error("usage: node verify-evidence.mjs <bundle-folder> [--key <public-key.pem> | --fingerprint <sha256-hex>] [--expect-through <seq>]");
   process.exit(2);
 }
 
@@ -46,13 +57,20 @@ function hashOf(e) {
 const lines = readFileSync(join(dir, "events.jsonl"), "utf8").split("\n").filter(Boolean);
 const events = lines.map((l) => JSON.parse(l));
 const checkpoint = JSON.parse(readFileSync(join(dir, "checkpoint.json"), "utf8"));
-const publicKey = createPublicKey(readFileSync(join(dir, "public-key.pem"), "utf8"));
+const bundledKey = createPublicKey(readFileSync(join(dir, "public-key.pem"), "utf8"));
+const fingerprintOf = (k) => createHash("sha256").update(k.export({ type: "spki", format: "der" })).digest("hex");
+const pinnedKeyFile = opt("--key");
+const pinnedFingerprint = opt("--fingerprint")?.toLowerCase().replace(/[^0-9a-f]/g, "");
+const publicKey = pinnedKeyFile ? createPublicKey(readFileSync(pinnedKeyFile, "utf8")) : bundledKey;
+const expectThrough = opt("--expect-through");
 
 let ok = true;
 const fail = (msg) => {
   ok = false;
   console.log(`FAIL  ${msg}`);
 };
+if (pinnedKeyFile && fingerprintOf(bundledKey) !== fingerprintOf(publicKey)) fail("the bundle's public key is not the key you supplied");
+if (pinnedFingerprint && (pinnedFingerprint.length < 16 || !fingerprintOf(bundledKey).startsWith(pinnedFingerprint))) fail(`the bundle's public key has fingerprint ${fingerprintOf(bundledKey)}, not the one you supplied`);
 for (let i = 0; i < events.length; i++) {
   const e = events[i];
   if (i > 0 && BigInt(e.seq) !== BigInt(events[i - 1].seq) + 1n) fail(`record ${e.seq}: sequence gap after ${events[i - 1].seq}`);
@@ -66,5 +84,10 @@ else {
   const message = Buffer.from(canonicalJson({ v: 1, orgId: last.orgId, throughSeq: String(checkpoint.throughSeq), hash: checkpoint.hash }));
   if (!verify(null, message, publicKey, Buffer.from(checkpoint.signature, "base64"))) fail("checkpoint signature is not valid for this public key");
 }
-if (ok) console.log(`OK    ${events.length} records, ${events[0].seq} to ${last.seq}: consecutive, linked, unedited, and the signed checkpoint matches.`);
+if (expectThrough !== undefined && last && BigInt(last.seq) < BigInt(expectThrough)) fail(`the bundle ends at record ${last.seq}, before record ${expectThrough} you expected: records may have been removed from the end`);
+if (ok) {
+  console.log(`OK    ${events.length} records, ${events[0].seq} to ${last.seq}: consecutive, linked, unedited, and the signed checkpoint matches.`);
+  if (!pinnedKeyFile && !pinnedFingerprint) console.log(`NOTE  checked against the key inside the bundle (fingerprint ${fingerprintOf(bundledKey)}). Compare it with the key id the AEGIS operator gives you (its first 16 characters), or pass --fingerprint, so a rebuilt bundle cannot pass.`);
+  if (expectThrough === undefined) console.log("NOTE  records removed from the end cannot be detected from the bundle alone; pass --expect-through with a record number noted earlier.");
+}
 process.exit(ok ? 0 : 1);

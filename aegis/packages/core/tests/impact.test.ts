@@ -12,9 +12,9 @@ import { runImpact, type ImpactRun } from "../src/validation/impact.js";
 import { COUNCIL_CASES, setupCouncilScenarios } from "../src/validation/council.js";
 
 const verifier = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "scripts", "verify-evidence.mjs");
-const verify = (folder: string) => {
+const verify = (folder: string, ...flags: string[]) => {
   try {
-    execFileSync("node", [verifier, folder], { encoding: "utf8" });
+    execFileSync("node", [verifier, folder, ...flags], { encoding: "utf8" });
     return true;
   } catch {
     return false;
@@ -88,6 +88,11 @@ describe("impact: the same requests without and with AEGIS", () => {
       writeFileSync(join(dir, "checkpoint.json"), JSON.stringify({ throughSeq: cp.throughSeq.toString(), hash: cp.hash, signature: cp.signature, keyId: cp.keyId }));
       writeFileSync(join(dir, "public-key.pem"), pem!);
       expect(verify(dir)).toBe(true);
+      // Pinned key (audit P2-7): the right key id passes, a different key fails, and an expected end detects truncation.
+      expect(verify(dir, "--fingerprint", cp.keyId)).toBe(true);
+      expect(verify(dir, "--fingerprint", "0".repeat(64))).toBe(false);
+      expect(verify(dir, "--expect-through", cp.throughSeq.toString())).toBe(true);
+      expect(verify(dir, "--expect-through", (cp.throughSeq + 1n).toString())).toBe(false);
       const i = lines.findIndex((l) => l.includes('"type":"gateway.decision.deny"'));
       writeFileSync(join(dir, "events.jsonl"), lines.map((l, j) => (j === i ? l.replace('"result":"deny"', '"result":"allow"') : l)).join("\n") + "\n");
       expect(verify(dir)).toBe(false);

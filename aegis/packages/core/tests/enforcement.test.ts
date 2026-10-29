@@ -1,3 +1,4 @@
+import { setAgentTool } from "../src/agents/registry.js";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { randomUUID } from "node:crypto";
 import { disconnectAll, withTenant } from "@aegis/db";
@@ -60,10 +61,17 @@ describe("enforcement-path audit", () => {
   });
   it("coverage shows how each granted tool is enforced", async () => {
     await f.call({ amount: 10, executionMode: "agent" });
+    // A granted tool the agent never called is reported as not observed, not as enforced.
+    await run(async (db) => setAgentTool(db, f.engineer.ctx, f.agentId, (await db.tool.findFirstOrThrow({ where: { orgId: f.orgId, key: "export-customer-records" } })).id, true));
     const cov = await run((db) => enforcementCoverage(db, f.ownerCtx));
     const tool = cov.find((a) => a.agentId === f.agentId)!.tools.find((t) => t.toolKey === "issue-refund")!;
-    expect(tool.strength).toBe("downstream_verifies");
+    // Audit P2-11: the agent ran it itself and no downstream system verified a grant, so it is self-reported.
+    expect(tool.strength).toBe("self_reported");
     expect(tool.agentExecuted).toBe(1);
+    expect(tool.verifiedDownstream).toBe(0);
+    const unused = cov.find((a) => a.agentId === f.agentId)!.tools.find((t) => t.toolKey === "export-customer-records")!;
+    expect(unused.requests30d).toBe(0);
+    expect(unused.strength).toBe("not_observed");
     expect(tool.outsideGateway).toBe(3);
   });
   it("reads the request id only from a well-formed gateway key", () => {

@@ -19,7 +19,7 @@ Complexity: S (days), M (one to two weeks), L (several weeks), XL (a quarter or 
 | --- | --- | --- | --- | --- | --- |
 | 0 System discovery | Works | This matrix, `DEFECT_REGISTER.md`, `AEGIS_FULL_PLATFORM_AUDIT.md` | Keep current per milestone | S | M1 |
 | 1 Open-source repository evaluation | Partial | `OPEN_SOURCE_RESEARCH.md`, `PROVENANCE.md`; `THIRD_PARTY.md` is stale | Refresh the third-party inventory, sharp licence note | S | M1 |
-| 2 Comprehensive security audit | Works, P2 open | 7 P1s and 11 of 16 P2s fixed with regression tests | P2-3, P2-5, P2-7, P2-11, P2-14 | M | M1 |
+| 2 Comprehensive security audit | Works, P2 open | 7 P1s and 12 of 16 P2s fixed with regression tests, P2-7 in part | P2-3, P2-5, P2-7 (external anchor), P2-14 | M | M1 |
 | 3 Real AI agent red teaming | Partial | Attack Simulation Lab, held-out injection dataset run (`LIVE_VALIDATION.md`: recall 30% on held-out data) | Live-model runs need `ANTHROPIC_API_KEY` (blocked: not configured) | M | M1 |
 | 4 Receipt and financial validation | Works | `RECEIPT_VALIDATION.md`, `PAYMENT_MATCHING.md`, 10 receipt tests with real images | Console panel and demo seed; P2-13 | S | M1 |
 | 5 Governance engine hardening | Works, P2 open | Delegation, execution window, policy-version binding fixed (P1-2, P1-5) | P2-3, P2-6, P2-12 | M | M1 |
@@ -42,7 +42,7 @@ Complexity: S (days), M (one to two weeks), L (several weeks), XL (a quarter or 
 | 17 Continuous attack simulation | Partial | On-demand lab runs only | Scheduled runs through the job worker | M | M2 |
 | 18 Model and data governance | Works | Model registry, data inventory | None | S | M2 |
 | 19 Autonomous incident containment | Works | Continuous Governance automatic responses, emergency pause, freezes | None | S | M2 |
-| 20 Cryptographic evidence | Partial | Hash-chained, signed checkpoints; P2-7 (no external anchor, verifier trusts bundled key) | External anchoring, verifier key input | M | M2 |
+| 20 Cryptographic evidence | Partial | Hash-chained, signed checkpoints; the verifier can pin the key and the expected last record | External anchoring of checkpoints | M | M2 |
 | 21 Enterprise integration marketplace | Works | Connector catalog, generic HTTPS connector | None | S | M2 |
 | 22 Enterprise control center | Works | Control Center, System Health | None | S | M2 |
 
@@ -51,7 +51,7 @@ Complexity: S (days), M (one to two weeks), L (several weeks), XL (a quarter or 
 | Phase | Status | Evidence | Next | Cx | Milestone |
 | --- | --- | --- | --- | --- | --- |
 | 23 AI discovery and inventory | Works, P2 open | Shadow AI discovery | P2-10 | S | M3 |
-| 24 Execution-path coverage | Partial | Bypass detection, enforcement coverage (overstates, P2-11) | Coverage from observed gateway traffic | M | M3 |
+| 24 Execution-path coverage | Partial | Bypass detection; enforcement coverage from observed traffic (P2-11 fixed) | Network-level observation for agents outside the SDK | M | M3 |
 | 25 Enterprise deployment and resilience | Partial | Compose, offline install, deployment profiles; ports on all interfaces (P3) | Bind to localhost by default; restore drill | M | M5 |
 | 26 Compliance and assurance | Works | 21 framework catalogs, 487 controls, ISO 27001 readiness pack. Internal mapping only, not certification | None; never describe as certified | S | M5 |
 | 27 Commercial infrastructure | Works | Plans, metering, invoices; indefinite trial (P3) | Trial end default | S | M5 |
