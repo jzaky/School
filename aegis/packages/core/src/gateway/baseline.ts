@@ -67,7 +67,7 @@ export function validateParams(schema: unknown, params: unknown): { ok: true } |
   return { ok: false, errors: (validate.errors ?? []).map((e) => `${e.instancePath || "/"} ${e.message ?? "invalid"}`.trim()) };
 }
 
-const CLASS_ORDER = ["public", "internal", "confidential", "restricted"];
+export const CLASS_ORDER = ["public", "internal", "confidential", "restricted"];
 
 export function baselineChecks(args: {
   agent: Agent & { tools: { enabled: boolean; revokedAt: Date | null; toolId: string; expiresAt?: Date | null }[]; permissions: { resourceId: string; actions: string[]; expiresAt: Date | null; revokedAt: Date | null }[] };
@@ -140,7 +140,7 @@ export function baselineChecks(args: {
   return { failures, permittedActions };
 }
 
-function domainMatches(host: string, allowed: string): boolean {
+export function domainMatches(host: string, allowed: string): boolean {
   const a = allowed.toLowerCase();
   if (a.startsWith("*.")) return host === a.slice(2) || host.endsWith(a.slice(1));
   return host === a || host.endsWith(`.${a}`);

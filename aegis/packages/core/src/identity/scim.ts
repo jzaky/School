@@ -13,8 +13,8 @@ import { AegisError, forbidden } from "../lib/errors.js";
  * Safety rules: a provisioned user joins with the viewer role; groups can assign any role except
  * owner and admin, which only a person in the console can grant; deleting a user suspends the
  * membership (evidence and approvals keep their author) and never deletes the global account; an
- * existing account is linked only when its email domain is one this organization's SSO connection
- * claims, so provisioning cannot pull in an unrelated person's account.
+ * account that already exists is never linked by provisioning (claimed email domains are not proof of
+ * ownership); it joins only by accepting an invitation, so provisioning cannot pull in another person's account.
  */
 export const SCIM_USER_SCHEMA = "urn:ietf:params:scim:schemas:core:2.0:User";
 export const SCIM_GROUP_SCHEMA = "urn:ietf:params:scim:schemas:core:2.0:Group";
@@ -49,11 +49,6 @@ const userInput = z.object({
 type Member = { id: string; userId: string; status: string; role: { key: string } };
 function toScimUser(m: Member, u: { id: string; email: string; name: string }, base: string) {
   return { schemas: [SCIM_USER_SCHEMA], id: m.userId, userName: u.email, displayName: u.name, name: { formatted: u.name }, emails: [{ value: u.email, primary: true }], active: m.status === "active", groups: [{ value: m.role.key, display: m.role.key }], meta: { resourceType: "User", location: `${base}/Users/${m.userId}` } };
-}
-
-async function claimedDomains(db: TenantDb, orgId: string): Promise<string[]> {
-  const sso = await db.ssoConnection.findUnique({ where: { orgId } });
-  return sso?.emailDomains ?? [];
 }
 
 export async function scimListUsers(db: TenantDb, ctx: OrgContext, q: { filter?: string; startIndex?: number; count?: number }, base: string) {
@@ -93,15 +88,15 @@ export async function scimCreateUser(db: TenantDb, ctx: OrgContext, body: unknow
   const input = userInput.parse(body);
   const email = input.userName.toLowerCase();
   const name = input.displayName ?? input.name?.formatted ?? ([input.name?.givenName, input.name?.familyName].filter(Boolean).join(" ") || email);
-  let user = await rawPrisma().user.findUnique({ where: { email } });
-  if (user) {
-    const existing = await db.membership.findUnique({ where: { orgId_userId: { orgId: ctx.orgId, userId: user.id } } });
+  const found = await rawPrisma().user.findUnique({ where: { email } });
+  if (found) {
+    const existing = await db.membership.findUnique({ where: { orgId_userId: { orgId: ctx.orgId, userId: found.id } } });
     if (existing) throw new ScimError(409, "uniqueness", "User already exists in this organization");
-    const domains = await claimedDomains(db, ctx.orgId);
-    if (!domains.includes(email.split("@")[1] ?? "")) throw new ScimError(409, "uniqueness", "An account with this email exists outside this organization's claimed domains; invite it from the console");
-  } else {
-    user = await rawPrisma().user.create({ data: { email, name, passwordHash: null } });
+    // Claimed email domains are not proof of ownership, so an existing account (which may belong to another
+    // organization) is never attached by provisioning. It joins only by accepting an invitation, signed in as itself.
+    throw new ScimError(409, "uniqueness", "An account with this email already exists; invite it from the console so its owner accepts");
   }
+  const user = await rawPrisma().user.create({ data: { email, name, passwordHash: null } });
   const viewer = await db.role.findUniqueOrThrow({ where: { orgId_key: { orgId: ctx.orgId, key: "viewer" } } });
   const m = await db.membership.create({ data: { orgId: ctx.orgId, userId: user.id, roleId: viewer.id, status: input.active ? "active" : "suspended" }, include: { role: true } });
   await appendEvidence(db, ctx, { type: "scim.user_provisioned", subjectType: "membership", subjectId: m.id, payload: { userId: user.id, role: "viewer", active: input.active, externalId: input.externalId ?? null } });

@@ -222,10 +222,12 @@ function policyApplies(doc: PolicyDocument, input: unknown): string | null {
  * Deterministic evaluation of every assigned policy. Pure function: same input and policies
  * always give the same result. Throws only on programmer error; comparisons never throw.
  */
-export function evaluatePolicies(policies: PolicyToEvaluate[], input: unknown, opts: { skipRules?: ReadonlySet<string> } = {}): EvaluationResult {
+export function evaluatePolicies(policies: PolicyToEvaluate[], defaultInput: unknown, opts: { skipRules?: ReadonlySet<string>; inputFor?: (p: PolicyToEvaluate) => unknown } = {}): EvaluationResult {
   const trace: RuleTrace[] = [];
   const skipped: { policyKey: string; reason: string }[] = [];
   for (const p of policies) {
+    // A policy may be judged on its own input: under a delegation, the delegating agent's policies see its attributes.
+    const input = opts.inputFor?.(p) ?? defaultInput;
     const skipReason = policyApplies(p.document, input);
     if (skipReason) {
       skipped.push({ policyKey: p.policyKey, reason: skipReason });

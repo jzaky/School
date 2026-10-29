@@ -138,9 +138,7 @@ export async function dismissOnboardingAction() {
 export async function restoreOnboardingAction() {
   return act(async () => {
     const c = await getConsoleContext();
-    const settings = { ...c.org.settings };
-    delete settings.onboardingDismissedAt;
-    await updateOrganization(c.ctx, { settings });
+    await updateOrganization(c.ctx, { settings: { onboardingDismissedAt: null } });
     revalidatePath("/getting-started");
     revalidatePath("/org/settings");
     revalidatePath("/overview");

@@ -11,3 +11,6 @@
 **/coverage
 **/*.log
 .git
+.bench-keys.json
+**/.uploads
+deploy/seed-output

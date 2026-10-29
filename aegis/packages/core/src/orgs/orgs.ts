@@ -49,11 +49,30 @@ export async function getOrganization(orgId: string) {
   return org;
 }
 
+/** Settings that only their own functions may change (gateway pause and resume, freezes, two-person recovery). */
+export const PROTECTED_SETTINGS = ["gatewayPaused", "gatewayPausedReason", "gatewayPausedAt", "gatewayPausedBy", "gatewayPausedById", "gatewayResumedAt", "gatewayResumeReason", "changeFreezes", "twoPersonRecovery"] as const;
+
 export async function updateOrganization(ctx: OrgContext, patch: { name?: string; settings?: Record<string, unknown> }) {
   assertPermission(ctx, "org:admin");
-  const org = await rawPrisma().organization.update({ where: { id: ctx.orgId }, data: { ...(patch.name ? { name: patch.name.trim() } : {}), ...(patch.settings ? { settings: patch.settings as Prisma.InputJsonValue } : {}) } });
-  await withTenant(ctx.orgId, (db) => appendEvidence(db, ctx, { type: "org.updated", subjectType: "organization", subjectId: ctx.orgId, payload: { fields: Object.keys(patch) } }));
-  return org;
+  // Read and write under a row lock, and keep the current value of every key an emergency control owns: a save
+  // built from an older snapshot must never resume a paused gateway, end a freeze or switch off two-person recovery.
+  return withTenant(ctx.orgId, async (db) => {
+    await db.$queryRawUnsafe(`SELECT 1 FROM organizations WHERE id = $1::uuid FOR UPDATE`, ctx.orgId);
+    const current = ((await db.organization.findUniqueOrThrow({ where: { id: ctx.orgId }, select: { settings: true } })).settings ?? {}) as Record<string, unknown>;
+    let settings: Record<string, unknown> | undefined;
+    if (patch.settings) {
+      // A patch merges into the current settings; a key set to null is removed.
+      settings = { ...current, ...patch.settings };
+      for (const [k, v] of Object.entries(patch.settings)) if (v === null) delete settings[k];
+      for (const k of PROTECTED_SETTINGS) {
+        if (k in current) settings[k] = current[k];
+        else delete settings[k];
+      }
+    }
+    const org = await db.organization.update({ where: { id: ctx.orgId }, data: { ...(patch.name ? { name: patch.name.trim() } : {}), ...(settings ? { settings: settings as Prisma.InputJsonValue } : {}) } });
+    await appendEvidence(db, ctx, { type: "org.updated", subjectType: "organization", subjectId: ctx.orgId, payload: { fields: Object.keys(patch) } });
+    return org;
+  });
 }
 
 // ---------- Members ----------

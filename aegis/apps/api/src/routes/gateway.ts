@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { withTenant } from "@aegis/db";
 import { z } from "zod";
 import { requireScope } from "../plugins/auth.js";
-import { actionRequestInputSchema, appendEvidence, env, m, auditEnforcementPath, authorizeAndExecute, enforcementCoverage, consumeGrant, forbidden, getActionRequest, hashObject, issueGrantForRequest, listActionRequests, recordAgentExecution, releaseQuarantine, releaseQuarantineSchema, requestListFilter, provideApprovalInfo } from "@aegis/core";
+import { actionRequestInputSchema, appendEvidence, env, m, auditEnforcementPath, authorizeAndExecute, enforcementCoverage, consumeGrant, forbidden, getActionRequest, hashObject, requestGrant, listActionRequests, recordAgentExecution, releaseQuarantine, releaseQuarantineSchema, requestListFilter, provideApprovalInfo } from "@aegis/core";
 
 /**
  * The Action Gateway. Agents call POST /v1/gateway/actions before doing anything protected.
@@ -52,7 +52,7 @@ export async function gatewayRoutes(app: FastifyInstance) {
     const ctx = await req.orgContext();
     if (ctx.actor.type !== "agent") throw forbidden("Use an agent API key");
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
-    return withTenant(ctx.orgId, (db) => issueGrantForRequest(db, ctx, id));
+    return requestGrant(withTenant, ctx, id);
   });
 
   /** Agent-mode: the agent reports the outcome of executing through its own channel (writes the receipt). */

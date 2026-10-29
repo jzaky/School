@@ -22,7 +22,10 @@ export async function buildApp(opts: { modules?: "all" | "ai-gateway" } = {}): P
     requestIdHeader: "x-request-id",
     genReqId: () => crypto.randomUUID(),
     bodyLimit: 1024 * 1024,
-    trustProxy: true,
+    // Only proxies on private networks are trusted for X-Forwarded-For by default, so a client cannot spoof its
+    // address (rate limits and the localhost-only metrics check use it). AEGIS_TRUST_PROXY overrides: "true",
+    // "false", or a comma-separated list of addresses or CIDR ranges.
+    trustProxy: trustProxySetting(process.env.AEGIS_TRUST_PROXY),
   });
 
   // Evidence sequence numbers are BigInt; serialise them as strings everywhere.
@@ -79,4 +82,12 @@ export async function buildApp(opts: { modules?: "all" | "ai-gateway" } = {}): P
   await app.register(agentRoutes, { prefix: "/v1/agents" });
   await registerModuleRoutes(app);
   return app;
+}
+
+export function trustProxySetting(v: string | undefined): boolean | string {
+  const raw = (v ?? "").trim();
+  if (!raw) return "loopback,linklocal,uniquelocal";
+  if (raw === "true") return true;
+  if (raw === "false") return false;
+  return raw;
 }

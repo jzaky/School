@@ -102,6 +102,23 @@ export function extractDestinationDomain(params: Record<string, unknown>): strin
   return null;
 }
 
+/** The agent attributes policies see. Also used to judge a delegating agent's policies on its own attributes. */
+export function agentAttributes(agent: Agent & { tools: { enabled: boolean; revokedAt: Date | null; tool: Tool }[] }): AuthorizationInput["agent"] {
+  return {
+    id: agent.id,
+    slug: agent.slug,
+    status: agent.status,
+    environment: agent.environment,
+    riskTier: agent.riskTier,
+    dataClassificationLimit: agent.dataClassificationLimit,
+    teamId: agent.teamId,
+    businessOwnerId: agent.businessOwnerId,
+    technicalOwnerId: agent.technicalOwnerId,
+    tools: agent.tools.filter((t) => t.enabled && !t.revokedAt).map((t) => t.tool.key),
+    version: agent.currentVersion,
+  };
+}
+
 export async function buildAuthorizationInput(
   db: TenantDb,
   args: {
@@ -146,19 +163,7 @@ export async function buildAuthorizationInput(
   ]);
   const { amount, currency } = extractAmount(args.params);
   return {
-    agent: {
-      id: args.agent.id,
-      slug: args.agent.slug,
-      status: args.agent.status,
-      environment: args.agent.environment,
-      riskTier: args.agent.riskTier,
-      dataClassificationLimit: args.agent.dataClassificationLimit,
-      teamId: args.agent.teamId,
-      businessOwnerId: args.agent.businessOwnerId,
-      technicalOwnerId: args.agent.technicalOwnerId,
-      tools: args.agent.tools.filter((t) => t.enabled && !t.revokedAt).map((t) => t.tool.key),
-      version: args.agent.currentVersion,
-    },
+    agent: agentAttributes(args.agent),
     principal: args.principal,
     org: { id: args.agent.orgId },
     action: { tool: args.tool.key, name: args.action, riskLevel: args.tool.riskLevel, integration: args.tool.integration?.key ?? null },

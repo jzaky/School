@@ -16,9 +16,9 @@ import type { MoreInformationSpec, QuarantineSpec } from "../policy/schema.js";
 import { policyIntegrityFailures, resolvePoliciesForAgent } from "../policy/service.js";
 import { hasPermission } from "../identity/permissions.js";
 import { createSecurityEvent } from "../shield/security-events.js";
-import { baselineChecks, type BaselineFailure } from "./baseline.js";
-import { buildAuthorizationInput, extractAmount, extractDestinationDomain, type AuthorizationInput } from "./input.js";
-import { consumeGrant, EXECUTABLE_STATUSES, hashGrantToken, issueGrant, parseGrantToken, voidLiveGrants } from "./grants.js";
+import { baselineChecks, CLASS_ORDER as CLASSIFICATION_ORDER, domainMatches, type BaselineFailure } from "./baseline.js";
+import { agentAttributes, buildAuthorizationInput, extractAmount, extractDestinationDomain, type AuthorizationInput } from "./input.js";
+import { consumeGrant, EXECUTABLE_STATUSES, hashGrantToken, issueGrant, parseGrantToken, staleAuthorization, voidLiveGrants } from "./grants.js";
 import { applyRestrictions } from "./restrictions.js";
 import { applyAutonomyLevel, isAutonomyLevel, stricterAutonomy, type AutonomyLevel } from "../autonomy/levels.js";
 import { applyAutomaticDowngrade, checkDenialBurst } from "../autonomy/service.js";
@@ -97,7 +97,7 @@ async function resolveDelegation(db: TenantDb, orgId: string, delegateAgentId: s
 }
 
 /** The delegate never gains more than the intersection of its own grants, the delegator's grants and the delegation's scope. */
-function delegationChecks(d: DelegationContext, tool: Tool | null, resource: Resource | null, action: string, params: Record<string, unknown>, now: Date): BaselineFailure[] {
+function delegationChecks(d: DelegationContext, tool: Tool | null, resource: Resource | null, action: string, params: Record<string, unknown>, destinationDomain: string | null, now: Date): BaselineFailure[] {
   const failures: BaselineFailure[] = [];
   if (tool) {
     if (d.row.toolKeys.length && !d.row.toolKeys.includes(tool.key)) failures.push({ code: "delegation_not_permitted", message: `Delegation does not cover tool ${tool.key}` });
@@ -109,15 +109,19 @@ function delegationChecks(d: DelegationContext, tool: Tool | null, resource: Res
     if (!p) failures.push({ code: "delegation_not_permitted", message: `Delegating agent ${d.delegator.slug} has no permission on resource ${resource.key}` });
     else if (!p.actions.includes(action) && !p.actions.includes("*")) failures.push({ code: "delegation_not_permitted", message: `Delegating agent ${d.delegator.slug} may not ${action} on ${resource.key}` });
   }
+  // The delegating agent's own boundaries bind the delegate too: its authority must not have lapsed, and its
+  // destination allow-list and data classification limit apply exactly as if it made the call itself.
+  if (d.delegator.credentialExpiresAt && d.delegator.credentialExpiresAt <= now) failures.push({ code: "delegation_invalid", message: `Delegating agent ${d.delegator.slug}'s authority lapsed on ${d.delegator.credentialExpiresAt.toISOString().slice(0, 10)}; it must be re-certified` });
+  if (d.delegator.allowedDestinations?.length && destinationDomain && !d.delegator.allowedDestinations.some((x) => domainMatches(destinationDomain, x))) failures.push({ code: "destination_not_allowed", message: `Destination ${destinationDomain} is outside the delegating agent's allowed destinations` });
+  if (resource) {
+    const rc = CLASSIFICATION_ORDER.indexOf(resource.classification);
+    const lim = CLASSIFICATION_ORDER.indexOf(d.delegator.dataClassificationLimit);
+    if (rc < 0 || lim < 0 || rc > lim) failures.push({ code: "classification_exceeded", message: `Resource ${resource.key} is ${resource.classification}; the delegating agent is limited to ${d.delegator.dataClassificationLimit}` });
+  }
   const constraints = (d.row.constraints ?? {}) as { maxAmount?: number };
   const { amount } = extractAmount(params);
   if (typeof constraints.maxAmount === "number" && amount !== null && amount > constraints.maxAmount) failures.push({ code: "delegation_limit_exceeded", message: `Amount ${amount} exceeds the delegation limit of ${constraints.maxAmount}` });
   return failures;
-}
-
-function mergePolicies(a: PolicyToEvaluate[], b: PolicyToEvaluate[]): PolicyToEvaluate[] {
-  const seen = new Set(a.map((p) => p.policyVersionId));
-  return [...a, ...b.filter((p) => !seen.has(p.policyVersionId))].sort((x, y) => x.policyKey.localeCompare(y.policyKey));
 }
 
 export function requestHashOf(toolKey: string, action: string, params: Record<string, unknown>): string {
@@ -267,7 +271,7 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
     const { paused, freezes } = await gatewayOrgState(db, ctx.orgId);
     freeze = tool ? activeFreezeFor(freezes, { now, toolKey: tool.key, toolRisk: tool.riskLevel, agentId }) : null;
     const baseline = baselineChecks({ agent, tool, action: input.action, resource, resourceKeyRequested: input.resource ?? null, params: input.params, destinationDomain, gatewayPaused: paused, freeze, now });
-    const failures: BaselineFailure[] = [...baseline.failures, ...(delegationFailure ? [delegationFailure] : []), ...(delegation ? delegationChecks(delegation, tool, resource, input.action, input.params, now) : [])];
+    const failures: BaselineFailure[] = [...baseline.failures, ...(delegationFailure ? [delegationFailure] : []), ...(delegation ? delegationChecks(delegation, tool, resource, input.action, input.params, destinationDomain, now) : [])];
     const claimRule = tool ? readClaimRule(tool.destinationRules) : null;
     if (claimRule) {
       claimCheck = await checkClaimForPayment(db, ctx.orgId, claimRule, input.params, request.id);
@@ -338,13 +342,16 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
         uncertainty: { level: uncertainty.level, missing: uncertainty.missing, contradictions: uncertainty.contradictions, confidence: uncertainty.confidence?.calibratedAccuracy ?? uncertainty.confidence?.value ?? null, confidenceBasis: uncertainty.confidence?.basis ?? null },
         now,
       });
-      // Under a delegation both agents' policies apply: the union with deny-overrides is never looser than either alone.
-      const policies = delegation ? mergePolicies(ownPolicies, delegatorPolicies) : ownPolicies;
+      // Under a delegation both agents' policies apply, strictest outcome wins. The delegating agent's policies are
+      // judged on its own attributes (risk tier, team, owners), since it is that agent's authority being used.
+      const delegatorInput = delegation ? { ...authzInput, agent: agentAttributes(delegation.delegator) } : null;
+      const asDelegator = new Set<PolicyToEvaluate>(delegation ? delegatorPolicies.map((p) => ({ ...p })) : []);
+      const policies = delegation ? [...ownPolicies, ...asDelegator].sort((x, y) => x.policyKey.localeCompare(y.policyKey)) : ownPolicies;
       // Approved, unexpired exceptions skip their rule for this agent; never under a delegation.
       const exceptions = delegation ? { keys: new Set<string>(), ids: [] as string[] } : await activeExceptionRules(db, agent.id, input.tool, now);
       exceptionIds = exceptions.ids;
       const evalStart = process.hrtime.bigint();
-      evaluation = evaluatePolicies(policies, authzInput, { skipRules: exceptions.keys });
+      evaluation = evaluatePolicies(policies, authzInput, { skipRules: exceptions.keys, inputFor: (p) => (asDelegator.has(p) ? delegatorInput : undefined) });
       m.policyEvaluationSeconds.observe(secondsSince(evalStart));
       decisionResult = evaluation.result;
       policyOnlyResult = evaluation.result;
@@ -956,6 +963,27 @@ export async function resumeGateway(db: TenantDb, ctx: OrgContext, reason: strin
   await appendEvidence(db, ctx, { type: "gateway.resumed", subjectType: "organization", subjectId: ctx.orgId, payload: { reason } });
 }
 
+/**
+ * The API path for an agent-mode grant. A request whose authorization has gone stale (past the execution window,
+ * or a deciding policy version retired) is marked expired in its own committed transaction, then refused;
+ * otherwise the grant is issued. issueGrant re-checks staleness inside the issuing transaction.
+ */
+export async function requestGrant(run: <T>(orgId: string, fn: (db: TenantDb) => Promise<T>) => Promise<T>, ctx: OrgContext, actionRequestId: string) {
+  const now = ctx.now ?? new Date();
+  const stale = await run(ctx.orgId, async (db) => {
+    const r = await db.actionRequest.findUnique({ where: { id: actionRequestId }, select: { id: true, agentId: true, status: true, correlationId: true } });
+    if (!r || (ctx.actor.type === "agent" && r.agentId !== ctx.actor.id)) throw notFound("Action request");
+    if (!(EXECUTABLE_STATUSES as readonly string[]).includes(r.status)) return null;
+    const why = await staleAuthorization(db, r.id, r.status, now);
+    if (!why) return null;
+    const moved = await db.actionRequest.updateMany({ where: { id: r.id, status: { in: [...EXECUTABLE_STATUSES] } }, data: { status: "expired", completedAt: now } });
+    if (moved.count) await appendEvidence(db, ctx, { type: "gateway.authorization_expired", subjectType: "action_request", subjectId: r.id, correlationId: r.correlationId, payload: { reason: why } });
+    return why;
+  });
+  if (stale) throw conflict(stale);
+  return run(ctx.orgId, (db) => issueGrantForRequest(db, ctx, actionRequestId));
+}
+
 /** Issues the agent-mode grant for an allowed or approved request (one live grant per request, see grants.ts). */
 export async function issueGrantForRequest(db: TenantDb, ctx: OrgContext, actionRequestId: string) {
   const r = await db.actionRequest.findUnique({ where: { id: actionRequestId }, include: { agent: { select: { status: true } } } });
@@ -1029,10 +1057,11 @@ export async function listActionRequests(db: TenantDb, ctx: OrgContext, f: z.inf
   const integrationToolIds = ctx.actor.type === "integration" ? (await db.tool.findMany({ where: { orgId: ctx.orgId, integrationId: ctx.actor.id! }, select: { id: true } })).map((t) => t.id) : null;
   const where: Prisma.ActionRequestWhereInput = {
     orgId: ctx.orgId,
-    ...(ctx.actor.type === "agent" ? { agentId: ctx.actor.id! } : {}),
     ...(integrationToolIds ? { toolId: { in: integrationToolIds } } : {}),
     ...(f.status ? { status: f.status as ActionRequest["status"] } : {}),
     ...(f.agentId ? { agentId: f.agentId } : {}),
+    // Last, so a filter can never widen an agent's view beyond its own requests.
+    ...(ctx.actor.type === "agent" ? { agentId: ctx.actor.id! } : {}),
     ...(f.tool ? { toolKey: f.tool } : {}),
     ...(f.since ? { createdAt: { gte: f.since } } : {}),
     ...(f.q ? { OR: [{ correlationId: { contains: f.q } }, { toolKey: { contains: f.q } }, { idempotencyKey: { contains: f.q } }, { justification: { contains: f.q, mode: "insensitive" } }] } : {}),

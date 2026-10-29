@@ -117,12 +117,38 @@ export async function voidLiveGrants(db: TenantDb, ctx: OrgContext, reason: stri
  * The unique index turns a race between two issuers into a conflict for the loser.
  * `integrationId` scopes the grant to the downstream system that may verify it.
  */
+/** Minutes an allowed or approved request stays executable (AEGIS_EXECUTION_WINDOW_MINUTES, default 60). */
+export function executionWindowMs(): number {
+  const m = Number(process.env.AEGIS_EXECUTION_WINDOW_MINUTES ?? 60);
+  return (Number.isFinite(m) && m > 0 ? m : 60) * 60_000;
+}
+
+/**
+ * Authorization is bound to time and to the policy versions that decided it. Returns why an allowed or approved
+ * request may no longer execute (past the execution window, or a deciding policy version no longer active), or null.
+ */
+export async function staleAuthorization(db: TenantDb, actionRequestId: string, status: string, now: Date): Promise<string | null> {
+  const [decision, approval] = await Promise.all([
+    db.authorizationDecision.findFirst({ where: { actionRequestId }, orderBy: { createdAt: "desc" }, select: { createdAt: true, policyVersionIds: true } }),
+    status === "approved" ? db.approvalRequest.findFirst({ where: { actionRequestId, status: "approved" }, orderBy: { decidedAt: "desc" }, select: { decidedAt: true } }) : null,
+  ]);
+  const authorizedAt = approval?.decidedAt ?? decision?.createdAt ?? null;
+  if (authorizedAt && now.getTime() > authorizedAt.getTime() + executionWindowMs()) return `The execution window of ${executionWindowMs() / 60_000} minutes after authorization has passed; submit the action again so current policy decides it`;
+  if (decision?.policyVersionIds.length) {
+    const current = await db.policyVersion.findMany({ where: { id: { in: decision.policyVersionIds } }, select: { state: true } });
+    if (current.length !== new Set(decision.policyVersionIds).size || current.some((v) => v.state !== "active")) return "A policy that decided this request has changed since; submit the action again so current policy decides it";
+  }
+  return null;
+}
+
 export async function issueGrant(db: TenantDb, orgId: string, actionRequestId: string, requestHash: string, opts: { now?: Date; integrationId?: string | null } = {}) {
   const now = opts.now ?? new Date();
   const request = await db.actionRequest.findUnique({ where: { id: actionRequestId }, select: { status: true, toolId: true, agent: { select: { status: true } } } });
   if (!request) throw conflict("Action request not found");
   if (!(EXECUTABLE_STATUSES as readonly string[]).includes(request.status)) throw conflict(`Request is ${request.status}; a grant can only be issued for an allowed or approved request`);
   if (request.agent.status !== "active") throw conflict(`Agent is ${request.agent.status}; no grant issued`);
+  const stale = await staleAuthorization(db, actionRequestId, request.status, now);
+  if (stale) throw conflict(stale);
   const paused = await gatewayPaused(db, orgId);
   if (paused.paused) throw conflict(`Gateway is paused: ${paused.reason ?? "emergency control"}; no grant issued`);
   await db.executionGrant.updateMany({ where: { actionRequestId, consumedAt: null, voidedAt: null, expiresAt: { lte: now } }, data: { voidedAt: now, voidReason: "expired" } });
