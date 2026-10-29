@@ -2143,3 +2143,53 @@ model SoftwareEvidence {
   @@index([orgId, itemId])
   @@map("software_evidence")
 }
+
+// ---------- Agent access reviews (docs/ACCESS_REVIEWS.md) ----------
+
+model AccessReview {
+  id           String    @id @default(uuid(7)) @db.Uuid
+  orgId        String    @map("org_id") @db.Uuid
+  title        String
+  /// open, completed
+  status       String    @default("open")
+  dueAt        DateTime  @map("due_at")
+  /// When set, the next review is due this many days after this one completes.
+  intervalDays Int?      @map("interval_days")
+  /// A grant not used for this many days is marked unused, so the reviewer sees it as a candidate to remove.
+  unusedDays   Int       @default(90) @map("unused_days")
+  createdBy    String?   @map("created_by") @db.Uuid
+  completedBy  String?   @map("completed_by") @db.Uuid
+  completedAt  DateTime? @map("completed_at")
+  summary      Json      @default("{}")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  items AccessReviewItem[]
+
+  @@index([orgId, status])
+  @@map("access_reviews")
+}
+
+model AccessReviewItem {
+  id         String    @id @default(uuid(7)) @db.Uuid
+  orgId      String    @map("org_id") @db.Uuid
+  reviewId   String    @map("review_id") @db.Uuid
+  agentId    String    @map("agent_id") @db.Uuid
+  /// tool (an agent_tools row) or resource (a permissions row)
+  kind       String
+  targetId   String    @map("target_id") @db.Uuid
+  label      String
+  detail     Json      @default("{}")
+  uses       Int       @default(0)
+  lastUsedAt DateTime? @map("last_used_at")
+  /// null until decided; keep or remove
+  decision   String?
+  note       String    @default("")
+  decidedBy  String?   @map("decided_by") @db.Uuid
+  decidedAt  DateTime? @map("decided_at")
+
+  review AccessReview @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, reviewId])
+  @@map("access_review_items")
+}
+
