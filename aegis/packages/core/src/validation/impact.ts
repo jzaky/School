@@ -18,6 +18,7 @@ import { authorizeAndExecute, recordAgentExecution, requestHashOf } from "../gat
 import { makeContext, type OrgContext } from "../lib/context.js";
 import { validation } from "../lib/errors.js";
 import { SECTOR_PACKS, type LabCase, type SectorPack } from "./sector-lab.js";
+import { COUNCIL_CASES, COUNCIL_RISKS, councilParams, type CouncilRisk } from "./council.js";
 
 export type ImpactClass = "harmful" | "needs_review" | "legitimate";
 export type ImpactUnit = "AED" | "USD" | "records" | "actions";
@@ -83,6 +84,16 @@ export interface ImpactTotals {
   decisionMs: { p50: number; p95: number };
 }
 
+export interface CouncilImpactCase extends ImpactCase {
+  risk: CouncilRisk;
+}
+
+export interface CouncilImpact {
+  risks: typeof COUNCIL_RISKS;
+  cases: CouncilImpactCase[];
+  totals: { harmful: number; harmfulExecutedWithout: number; harmfulExecutedWith: number; legitimate: number; legitimateExecutedWith: number; valueWithout: Record<string, number>; valueWith: Record<string, number> };
+}
+
 export interface ImpactRun {
   notice: string;
   startedAt: string;
@@ -91,6 +102,8 @@ export interface ImpactRun {
   evidenceRange: { fromSeq: string; toSeq: string };
   cases: ImpactCase[];
   totals: ImpactTotals;
+  /** The four risks the UAE Cyber Security Council named (validation/council.ts), when run. */
+  council: CouncilImpact | null;
 }
 
 export const IMPACT_NOTICE = "Synthetic organization, agents and records sent to a simulated downstream system. The decisions are made by the real AEGIS engines and the evidence is the real ledger. Not a customer, live-system or pilot result.";
@@ -106,7 +119,7 @@ const addTo = (m: Record<string, number>, e: ImpactEffect) => {
 };
 
 /** Runs every case without and with AEGIS in the sector lab organization (see setupSectorLab). */
-export async function runImpact(orgId: string, opts: { packs?: SectorPack[] } = {}): Promise<ImpactRun> {
+export async function runImpact(orgId: string, opts: { packs?: SectorPack[]; council?: { runTag: string } } = {}): Promise<ImpactRun> {
   const org = await rawPrisma().organization.findUnique({ where: { id: orgId } });
   if (!org || (org.settings as { sectorLab?: boolean } | null)?.sectorLab !== true) throw validation("The impact run uses the sector lab organization");
   const packs = opts.packs ?? SECTOR_PACKS;
@@ -119,42 +132,55 @@ export async function runImpact(orgId: string, opts: { packs?: SectorPack[] } = 
   const grantsUsed: { token: string; requestId: string; agentCtx: OrgContext }[] = [];
   let seq = 0;
 
-  for (const pack of packs) {
-    for (const c of pack.cases) {
-      // Without AEGIS: straight to the system.
-      system.apply(c, "direct", c.params);
-      // With AEGIS: through the gateway; the system acts only on a verified, single-use permission.
-      const agentCtx = makeContext(orgId, { type: "agent", id: agentIds[c.agent]!, label: c.agent }, { requestId: correlationId });
-      const t0 = performance.now();
-      const g = await authorizeAndExecute(withTenant, agentCtx, { tool: c.tool, action: "execute", params: c.params, context: c.context ?? {}, justification: c.justification ?? "", idempotencyKey: `${correlationId}-${++seq}`, principal: { type: "system" }, executionMode: "agent" });
-      const decisionMs = performance.now() - t0;
-      let executed = false;
-      let fields: number | null = null;
-      if (g.grant) {
-        const token = g.grant.token;
-        executed = await withTenant(orgId, async (db) => {
-          const req = await db.actionRequest.findUniqueOrThrow({ where: { id: g.requestId }, select: { toolKey: true, action: true, params: true } });
-          const params = req.params as Record<string, unknown>;
-          const check = await consumeGrant(db, token, requestHashOf(req.toolKey, req.action, params));
-          if (!check.ok) return false;
-          system.apply(c, "aegis", params);
-          fields = Array.isArray(params.fields) ? params.fields.length : null;
-          await recordAgentExecution(db, agentCtx, g.requestId, { grant: token, outcome: "succeeded", reference: `SIM-${g.requestId.slice(0, 8)}` });
-          return true;
-        });
-        grantsUsed.push({ token, requestId: g.requestId, agentCtx });
-      }
-      cases.push({
-        sector: pack.key,
-        caseId: c.id,
-        title: c.title,
-        class: classOf(c),
-        narrowed: c.expect === "restricted",
-        effect: effectOf(c),
-        without: { executed: true, fields: Array.isArray(c.params.fields) ? (c.params.fields as unknown[]).length : null },
-        with: { executed, fields, outcome: g.status, decisionMs: Math.round(decisionMs * 10) / 10, requestId: g.requestId },
+  const runCase = async (sector: string, c: LabCase, params: Record<string, unknown>): Promise<ImpactCase> => {
+    // Without AEGIS: straight to the system.
+    system.apply(c, "direct", params);
+    // With AEGIS: through the gateway; the system acts only on a verified, single-use permission.
+    const agentCtx = makeContext(orgId, { type: "agent", id: agentIds[c.agent]!, label: c.agent }, { requestId: correlationId });
+    const t0 = performance.now();
+    const g = await authorizeAndExecute(withTenant, agentCtx, { tool: c.tool, action: "execute", params, context: c.context ?? {}, justification: c.justification ?? "", idempotencyKey: `${correlationId}-${++seq}`, principal: { type: "system" }, executionMode: "agent" });
+    const decisionMs = performance.now() - t0;
+    let executed = false;
+    let fields: number | null = null;
+    if (g.grant) {
+      const token = g.grant.token;
+      executed = await withTenant(orgId, async (db) => {
+        const req = await db.actionRequest.findUniqueOrThrow({ where: { id: g.requestId }, select: { toolKey: true, action: true, params: true } });
+        const p = req.params as Record<string, unknown>;
+        const check = await consumeGrant(db, token, requestHashOf(req.toolKey, req.action, p));
+        if (!check.ok) return false;
+        system.apply(c, "aegis", p);
+        fields = Array.isArray(p.fields) ? p.fields.length : null;
+        await recordAgentExecution(db, agentCtx, g.requestId, { grant: token, outcome: "succeeded", reference: `SIM-${g.requestId.slice(0, 8)}` });
+        return true;
       });
+      grantsUsed.push({ token, requestId: g.requestId, agentCtx });
     }
+    return {
+      sector,
+      caseId: c.id,
+      title: c.title,
+      class: classOf(c),
+      narrowed: c.expect === "restricted",
+      effect: effectOf(c),
+      without: { executed: true, fields: Array.isArray(params.fields) ? (params.fields as unknown[]).length : null },
+      with: { executed, fields, outcome: g.status, decisionMs: Math.round(decisionMs * 10) / 10, requestId: g.requestId },
+    };
+  };
+
+  for (const pack of packs) for (const c of pack.cases) cases.push(await runCase(pack.key, c, c.params));
+
+  let council: CouncilImpact | null = null;
+  if (opts.council) {
+    const cc: CouncilImpactCase[] = [];
+    for (const c of COUNCIL_CASES) cc.push({ ...(await runCase("council", c, councilParams(c, opts.council.runTag))), risk: c.risk });
+    const harmfulC = cc.filter((c) => c.class === "harmful");
+    const t = { harmful: harmfulC.length, harmfulExecutedWithout: harmfulC.length, harmfulExecutedWith: harmfulC.filter((c) => c.with.executed).length, legitimate: cc.filter((c) => c.class === "legitimate").length, legitimateExecutedWith: cc.filter((c) => c.class === "legitimate" && c.with.executed).length, valueWithout: {} as Record<string, number>, valueWith: {} as Record<string, number> };
+    for (const c of harmfulC) {
+      addTo(t.valueWithout, c.effect);
+      if (c.with.executed) addTo(t.valueWith, c.effect);
+    }
+    council = { risks: COUNCIL_RISKS, cases: cc, totals: t };
   }
 
   // What an attacker at the downstream system would try: act with no permission, and reuse one.
@@ -219,5 +245,5 @@ export async function runImpact(orgId: string, opts: { packs?: SectorPack[] } = 
     if (c.narrowed && c.without.fields !== null) totals.fieldsReleased.without += c.without.fields;
     if (c.narrowed && c.with.fields !== null) totals.fieldsReleased.with += c.with.fields;
   }
-  return { notice: IMPACT_NOTICE, startedAt, finishedAt: new Date().toISOString(), orgId, evidenceRange: { fromSeq: firstSeq.toString(), toSeq: lastSeq.toString() }, cases, totals };
+  return { notice: IMPACT_NOTICE, startedAt, finishedAt: new Date().toISOString(), orgId, evidenceRange: { fromSeq: firstSeq.toString(), toSeq: lastSeq.toString() }, cases, totals, council };
 }

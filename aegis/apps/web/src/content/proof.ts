@@ -9,13 +9,13 @@
 
 export const FIGURES = {
   /** `it(` cases under packages/core/tests. */
-  coreTests: 471,
+  coreTests: 495,
   /** `it(` cases under packages/db/tests (tenant isolation). */
   dbTests: 22,
   /** Playwright spec files under apps/web/tests/e2e. */
-  e2eFiles: 32,
+  e2eFiles: 36,
   /** `test(` cases across those spec files. */
-  e2eTests: 131,
+  e2eTests: 138,
   /** Shared framework catalogs seeded for every tenant. */
   catalogs: 21,
   /** Controls across those catalogs. */
@@ -36,6 +36,7 @@ export const VERIFIED: ProofRow[] = [
   { what: "Tenant isolation", shows: `${FIGURES.dbTests} tests that each customer's data is kept apart inside the database (row-level security): one tenant cannot read, write or even count another tenant's rows, and the application's own database role cannot bypass the rules`, repeat: "pnpm --filter @aegis/db test" },
   { what: "Sector validation lab", shows: "48 synthetic cases across eleven sectors (government finance, healthcare, defence logistics, energy, banking, aviation, telecommunications, education, public safety, government services, ports and customs) decided as expected through the real gateway, including a forged bank-details payment held then rejected by a person and hidden instructions to the AI quarantined; the evidence ledger verifies afterwards. Synthetic data, not a customer or pilot result", repeat: "pnpm --filter @aegis/core sector-lab" },
   { what: "Before and after AEGIS", shows: "The 48 sector lab requests sent to a simulated system without and with AEGIS: harmful actions carried out fell from 20 to 0 and hidden attacks that worked from 3 to 0, while all 12 legitimate actions still went through; forged and reused permissions were refused at the system; the run's evidence verified with a standalone verifier, and an edited copy failed. Synthetic data against a simulated system, not a customer result", repeat: "pnpm --filter @aegis/core impact" },
+  { what: "The Council's four risks", shows: "Eight synthetic scenarios modelled on the four AI risks the UAE Cyber Security Council set out for auditors: a database deletion during a change freeze, a compromised email connector, hidden instructions to pay, and inflated, invented and reused expense receipts. Without AEGIS all 6 harmful actions were carried out; with AEGIS none were, and both genuine actions (a read-only query and a matching expense claim) still went through. Synthetic data against a simulated system, not a customer result", repeat: "pnpm --filter @aegis/core impact" },
   { what: "Refund journey over HTTP", shows: "12 of 12 checks passed in one run from start to finish: register an agent, give it a tool, submit a refund below and above the limit, approve it, have the downstream system verify its one-time permission slip (execution grant), then read the receipt and the evidence", repeat: "npx tsx scripts/smoke-refund-journey.mts" },
   { what: "Stripe test-mode connector", shows: "Run through the real gateway against a stand-in Stripe server: the same refund is never carried out twice (idempotent), a lost response is settled by checking Stripe's own records (reconciliation), and live keys are refused", repeat: "npx vitest run tests/stripe-connector.test.ts" },
   { what: "Alpaca paper connector", shows: "Run through the real gateway against a stand-in Alpaca server: each order carries the gateway's never-twice key (idempotency key), orders in the approval band wait for a person to release them, a lost response is settled by looking the order up, and live keys and the live host are refused", repeat: "npx vitest run tests/trading.test.ts" },

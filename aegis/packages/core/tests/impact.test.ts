@@ -9,6 +9,7 @@ import { registerUser } from "../src/identity/auth.js";
 import { exportCheckpointPublicKey, writeCheckpoint } from "../src/evidence/ledger.js";
 import { setupSectorLab } from "../src/validation/sector-lab.js";
 import { runImpact, type ImpactRun } from "../src/validation/impact.js";
+import { COUNCIL_CASES, setupCouncilScenarios } from "../src/validation/council.js";
 
 const verifier = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "scripts", "verify-evidence.mjs");
 const verify = (folder: string) => {
@@ -27,7 +28,8 @@ describe("impact: the same requests without and with AEGIS", () => {
   beforeAll(async () => {
     userId = (await registerUser({ email: `impact-${Date.now().toString(36)}@test.aegis.local`, name: "Impact", password: "CorrectHorse1Battery" })).id;
     orgId = (await setupSectorLab(userId)).id;
-    run = await runImpact(orgId);
+    await setupCouncilScenarios(userId, "t1");
+    run = await runImpact(orgId, { council: { runTag: "t1" } });
   }, 240_000);
   afterAll(async () => {
     await ownerPrisma().organization.delete({ where: { id: orgId } }).catch(() => undefined);
@@ -55,6 +57,20 @@ describe("impact: the same requests without and with AEGIS", () => {
     expect(t.replay.refused).toBe(t.replay.attempts);
     expect(t.evidence.recordsWith).toBeGreaterThan(run.cases.length);
     expect(t.evidence.ledgerValid).toBe(true);
+  });
+
+  it("the Council's four risks: each harmful case is stopped by its control, and the genuine work still runs", () => {
+    const c = run.council!;
+    expect(c.cases.map((x) => x.caseId)).toEqual(COUNCIL_CASES.map((x) => x.id));
+    for (const k of COUNCIL_CASES) {
+      const got = c.cases.find((x) => x.caseId === k.id)!;
+      expect(got.with.outcome === "executed" ? "allowed" : got.with.outcome, k.id).toBe(k.expect === "allowed" ? "allowed" : k.expect);
+    }
+    expect(new Set(c.cases.map((x) => x.risk))).toEqual(new Set(["permissions", "connector", "hidden_instructions", "receipts"]));
+    expect(c.totals.harmfulExecutedWithout).toBe(c.totals.harmful);
+    expect(c.totals.harmfulExecutedWith).toBe(0);
+    expect(c.totals.legitimateExecutedWith).toBe(c.totals.legitimate);
+    expect(c.totals.valueWithout).toMatchObject({ records: 1206 });
   });
 
   it("an exported bundle verifies with the standalone verifier, and an edited copy does not", async () => {

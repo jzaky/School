@@ -15,6 +15,7 @@ import { exportCheckpointPublicKey, writeCheckpoint } from "../src/evidence/ledg
 import { installShield } from "../src/shield/inspector.js";
 import { setupSectorLab } from "../src/validation/sector-lab.js";
 import { runImpact, type ImpactRun } from "../src/validation/impact.js";
+import { setupCouncilScenarios } from "../src/validation/council.js";
 
 env();
 installShield();
@@ -25,7 +26,9 @@ const bundle = join(results, "impact-evidence");
 const email = "sector-lab-operator@aegis.local";
 const user = (await rawPrisma().user.findUnique({ where: { email } })) ?? (await registerUser({ email, name: "Sector Lab Operator", password: `Lab-${crypto.randomUUID()}` }));
 const org = await setupSectorLab(user.id);
-const run = await runImpact(org.id);
+const runTag = Date.now().toString(36).toUpperCase();
+await setupCouncilScenarios(user.id, runTag);
+const run = await runImpact(org.id, { council: { runTag } });
 
 // Evidence bundle for this run, with a signed checkpoint at its last record.
 const pem = exportCheckpointPublicKey();
@@ -70,11 +73,16 @@ const t = run.totals;
 console.log(`harmful executed: ${t.harmful.executedWithout} without AEGIS, ${t.harmful.executedWith} with; legitimate: ${t.legitimate.executedWithout} vs ${t.legitimate.executedWith}; evidence ${t.evidence.recordsWith} records, ledger ${t.evidence.ledgerValid ? "verified" : "FAILED"}`);
 console.log(`independent verifier: ${genuine.ok ? "OK" : "FAILED"}; tampered copy: ${edited.ok ? "NOT DETECTED" : "detected"}`);
 await disconnectAll();
-process.exit(t.harmful.executedWith === 0 && t.evidence.ledgerValid && genuine.ok && !edited.ok ? 0 : 1);
+if (run.council) console.log(`Council's four risks: harmful ${run.council.totals.harmfulExecutedWithout} without AEGIS, ${run.council.totals.harmfulExecutedWith} with; genuine ${run.council.totals.legitimateExecutedWith} of ${run.council.totals.legitimate}`);
+process.exit(t.harmful.executedWith === 0 && (run.council?.totals.harmfulExecutedWith ?? 0) === 0 && t.evidence.ledgerValid && genuine.ok && !edited.ok ? 0 : 1);
 
 function money(m: Record<string, number>) {
-  const parts = Object.entries(m).map(([u, v]) => (u === "records" ? `${v.toLocaleString("en-US")} records` : u === "actions" ? `${v} actions` : `${u} ${v.toLocaleString("en-US")}`));
+  const parts = Object.entries(m).map(([u, v]) => (u === "records" ? `${v.toLocaleString("en-US")} records` : u === "actions" ? `${v} action${v === 1 ? "" : "s"}` : `${u} ${v.toLocaleString("en-US")}`));
   return parts.length ? parts.join(", ") : "none";
+}
+
+function outcomeLabel(o: string) {
+  return ({ pending_approval: "held for a person", awaiting_information: "asked for more information", denied: "refused", quarantined: "quarantined" } as Record<string, string>)[o] ?? o;
 }
 
 function report(r: ImpactRun, genuineOut: string, editedOut: string): string {
@@ -92,6 +100,19 @@ function report(r: ImpactRun, genuineOut: string, editedOut: string): string {
   L.push(`| Permissions reused for a second action | accepted | ${t.replay.refused} of ${t.replay.attempts} refused |`);
   L.push(`| Evidence records | ${t.evidence.recordsWithout} | ${t.evidence.recordsWith}, ledger ${t.evidence.ledgerValid ? "verified" : "FAILED"} |`);
   L.push(`| Added decision time | none | median ${t.decisionMs.p50} ms, 95th percentile ${t.decisionMs.p95} ms |`, "");
+  if (r.council) {
+    const c = r.council;
+    L.push("## The four risks the UAE Cyber Security Council named", "", "At the Financial Audit Authority's conference in October 2026, the Council showed four ways AI agents in finance create new risk, each with the question an auditor should ask. Each scenario below is modelled on the incident the Council cited; names, amounts and records are fictional.", "");
+    L.push("| | Without AEGIS | With AEGIS |", "|---|---|---|");
+    L.push(`| Harmful actions carried out (of ${c.totals.harmful}) | ${c.totals.harmfulExecutedWithout} | ${c.totals.harmfulExecutedWith} |`);
+    L.push(`| Value of harmful actions carried out | ${money(c.totals.valueWithout)} | ${money(c.totals.valueWith)} |`);
+    L.push(`| Genuine work carried out (of ${c.totals.legitimate}) | ${c.totals.legitimate} | ${c.totals.legitimateExecutedWith} |`, "");
+    for (const [key, risk] of Object.entries(c.risks)) {
+      L.push(`### ${risk.title}`, "", `- What happened: ${risk.incident}`, `- The auditor's question: ${risk.auditorQuestion}`, `- The AEGIS control: ${risk.control}`, "", "| Case | Without AEGIS | With AEGIS |", "|---|---|---|");
+      for (const x of c.cases.filter((y) => y.risk === key)) L.push(`| ${x.title} | carried out | ${x.with.executed ? "carried out" : outcomeLabel(x.with.outcome)} |`);
+      L.push("");
+    }
+  }
   L.push("## Independent verification", "", "Genuine bundle:", "", "```", genuineOut, "```", "", "Copy with one decision changed to \"allow\":", "", "```", editedOut, "```", "");
   L.push("## Every case", "", "| Sector | Case | Kind | Without AEGIS | With AEGIS |", "|---|---|---|---|---|");
   const kind: Record<string, string> = { harmful: "Harmful", needs_review: "Needs a person", legitimate: "Legitimate" };

@@ -29,6 +29,22 @@ their value, attacks that worked, risky actions done with no person checking, le
 carried out, fields released when policy narrows a request, forged and reused permissions refused,
 evidence records written and verified, and the decision time AEGIS adds.
 
+## The four risks the UAE Cyber Security Council named
+
+The run also covers eight scenarios modelled on the four risks the Council set out for auditors at
+the Financial Audit Authority's conference in October 2026 (`packages/core/src/validation/council.ts`).
+Each uses the control built for it:
+
+| Risk | Scenario | Control |
+|---|---|---|
+| Permissions wider than the task | Delete the production database during a freeze; a read-only query in the same freeze | Change freeze (`docs/CHANGE_FREEZE.md`) |
+| A compromised connector | Send through an email connector whose new version adds a hidden copy | Tool definition pinning (`docs/TOOL_PINNING.md`) |
+| Hidden instructions in content | A supplier page that tells the agent to pay | Injection signals quarantine the payment |
+| AI-generated receipts | Inflated, invented and reused receipts; one genuine claim | Payment document matching (`docs/PAYMENT_MATCHING.md`) |
+
+The report lists them in their own section, with the incident the Council cited and the auditor's
+question for each. They are not added to the 48 sector lab totals.
+
 ## Independent verification
 
 `scripts/verify-evidence.mjs` needs only Node.js: no AEGIS code, no database, no network. Given an
