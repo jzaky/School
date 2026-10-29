@@ -19,7 +19,8 @@
     "lint": "eslint src tests",
     "seed": "tsx src/seed/index.ts",
     "bench:gateway:setup": "tsx scripts/bench-gateway-setup.ts",
-    "bench:gateway": "tsx scripts/bench-gateway.ts"
+    "bench:gateway": "tsx scripts/bench-gateway.ts",
+    "sector-lab": "tsx scripts/sector-lab.ts"
   },
   "dependencies": {
     "@aegis/db": "workspace:*",
