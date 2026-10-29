@@ -118,7 +118,8 @@ jobs:
             trivy image --skip-version-check --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 --no-progress "$img"
           done
   e2e:
-    runs-on: ubuntu-latest
+    # Pinned: Playwright 1.56 cannot install Chromium dependencies on Ubuntu 26.04 (ubuntu-latest since late October 2026).
+    runs-on: ubuntu-24.04
     needs: test
     timeout-minutes: 30
     defaults:
