@@ -2193,3 +2193,33 @@ model AccessReviewItem {
   @@map("access_review_items")
 }
 
+// ---------- Payment document matching (docs/PAYMENT_MATCHING.md) ----------
+
+model PaymentDocument {
+  id                  String    @id @default(uuid(7)) @db.Uuid
+  orgId               String    @map("org_id") @db.Uuid
+  /// The document number in the system of record, unique per organization.
+  ref                 String
+  /// invoice, receipt, purchase_order
+  kind                String
+  vendorRef           String    @map("vendor_ref")
+  amount              Decimal   @db.Decimal(18, 2)
+  currency            String
+  /// open, void. Whether it is paid is read from the request that reserved it.
+  status              String    @default("open")
+  /// integration (the system of record) or user; agents cannot register documents.
+  sourceType          String    @map("source_type")
+  sourceId            String?   @map("source_id") @db.Uuid
+  sourceLabel         String?   @map("source_label")
+  /// The payment request that claimed this document; a second payment against it is a duplicate.
+  reservedByRequestId String?   @map("reserved_by_request_id") @db.Uuid
+  reservedAt          DateTime? @map("reserved_at")
+  detail              Json      @default("{}")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  @@unique([orgId, ref])
+  @@index([orgId, vendorRef])
+  @@map("payment_documents")
+}
+

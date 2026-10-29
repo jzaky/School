@@ -39,7 +39,8 @@ export interface BaselineFailure {
     | "policy_integrity"
     | "concurrency_limit"
     | "change_freeze"
-    | "tool_definition_changed";
+    | "tool_definition_changed"
+    | "payment_document_mismatch";
   message: string;
   details?: unknown;
 }

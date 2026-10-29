@@ -95,6 +95,7 @@ export * from "./pilots/kits.js";
 export * from "./gateway/freeze.js";
 export * from "./shield/tool-pins.js";
 export * from "./agents/access-reviews.js";
+export * from "./payments/matching.js";
 export * from "./lib/patch.js";
 export * from "./lib/metrics.js";
 export * from "./assurance/ops-alerts.js";

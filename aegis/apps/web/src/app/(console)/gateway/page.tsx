@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { FlaskConical } from "lucide-react";
 import { withTenant } from "@aegis/db";
-import { governanceMetrics, listActionRequests, readFreezes, requestListFilter, twoPersonRecovery } from "@aegis/core";
+import { governanceMetrics, listActionRequests, listPaymentDocuments, readDocumentMatch, readFreezes, requestListFilter, twoPersonRecovery } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { agentOptions, keyParams } from "@/server/queries/control";
 import { PageHeader } from "@/components/ui/page-header";
@@ -11,6 +11,7 @@ import { LinkButton } from "@/components/ui/link-button";
 import { GatewayTable, type RequestRow } from "@/components/control/gateway-table";
 import { EmergencyControls } from "@/components/control/emergency-controls";
 import { ChangeFreezes, type FreezeRow } from "@/components/control/change-freezes";
+import { PaymentMatching } from "@/components/control/payment-matching";
 
 export const metadata: Metadata = { title: "Action Gateway" };
 export const dynamic = "force-dynamic";
@@ -23,15 +24,20 @@ export default async function GatewayPage({ searchParams }: { searchParams: Prom
   const filter = parsed.success ? parsed.data : requestListFilter.parse({});
   const canControl = c.can("agents:control");
   const canAdmin = c.can("org:admin");
-  const { page, today, agents, toolKeys, integrations } = await withTenant(c.ctx.orgId, async (db) => {
-    const [page, today, agents, tools, integrations] = await Promise.all([
+  const { page, today, agents, toolKeys, integrations, matchingTools, documents } = await withTenant(c.ctx.orgId, async (db) => {
+    const [page, today, agents, tools, integrations, documents] = await Promise.all([
       listActionRequests(db, c.ctx, filter),
       governanceMetrics(db, c.ctx, 1),
       agentOptions(db, c.ctx.orgId),
-      db.tool.findMany({ where: { orgId: c.ctx.orgId }, select: { key: true }, orderBy: { key: "asc" } }),
+      db.tool.findMany({ where: { orgId: c.ctx.orgId }, select: { key: true, destinationRules: true }, orderBy: { key: "asc" } }),
       canControl ? db.integration.findMany({ where: { orgId: c.ctx.orgId }, select: { id: true, name: true, key: true, status: true, credentials: { select: { id: true, name: true, revokedAt: true } } }, orderBy: { name: "asc" } }) : [],
+      listPaymentDocuments(db, c.ctx, { take: 8 }),
     ]);
-    return { page, today, agents, toolKeys: tools.map((t) => t.key), integrations };
+    const matchingTools = tools.flatMap((t) => {
+      const m = readDocumentMatch(t.destinationRules);
+      return m ? [{ key: t.key, documentParam: m.documentParam, kinds: m.kinds, effect: m.effect }] : [];
+    });
+    return { page, today, agents, toolKeys: tools.map((t) => t.key), integrations, matchingTools, documents };
   });
   const rows: RequestRow[] = page.items.map((r) => {
     const kp = keyParams(r.params);
@@ -75,6 +81,7 @@ export default async function GatewayPage({ searchParams }: { searchParams: Prom
         </div>
         <div className="space-y-4">
           <EmergencyControls paused={!!settings.gatewayPaused} pausedReason={settings.gatewayPausedReason ?? null} pausedBy={settings.gatewayPausedBy ?? null} canAdmin={canAdmin} canControl={canControl} agents={agents.map((x) => ({ id: x.id, name: x.name, slug: x.slug, status: x.status, tools: x.tools }))} integrations={integrations.map((i) => ({ id: i.id, name: i.name, key: i.key, status: i.status, credentials: i.credentials.map((cr) => ({ id: cr.id, name: cr.name, revoked: !!cr.revokedAt })) }))} />
+          <PaymentMatching tools={matchingTools} documents={documents.map((d) => ({ id: d.id, ref: d.ref, kind: d.kind, vendorRef: d.vendorRef, amount: d.amount, currency: d.currency, state: d.state, source: d.sourceLabel ?? d.sourceType }))} />
           <ChangeFreezes freezes={freezes} twoPerson={twoPersonRecovery(c.org.settings)} canControl={canControl} canAdmin={canAdmin} agents={agents.map((x) => ({ id: x.id, name: x.name }))} />
         </div>
       </div>

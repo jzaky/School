@@ -231,6 +231,7 @@ DECLARE pair text; c_table text; c_col text; p_table text; trg text;
 BEGIN
   FOREACH pair IN ARRAY ARRAY[
     'access_review_items.agent_id>agents', 'access_review_items.review_id>access_reviews',
+    'payment_documents.reserved_by_request_id>action_requests',
     'access_requests.agent_id>agents', 'access_requests.resource_id>resources', 'access_requests.tool_id>tools',
     'action_requests.on_behalf_of_agent_id>agents', 'action_requests.tool_id>tools',
     'agents.model_record_id>ai_models', 'agents.team_id>teams',

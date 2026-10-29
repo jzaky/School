@@ -17,6 +17,7 @@ import { pilotRoutes } from "./pilots.js";
 import { freezeRoutes } from "./freezes.js";
 import { toolDefinitionRoutes } from "./tool-definitions.js";
 import { accessReviewRoutes } from "./access-reviews.js";
+import { paymentDocumentRoutes } from "./payment-documents.js";
 import { governanceRegistryRoutes } from "./governance-registry.js";
 import { destinationRoutes } from "./destinations.js";
 import { policyInsightRoutes } from "./policy-insights.js";
@@ -44,6 +45,7 @@ export async function registerModuleRoutes(app: FastifyInstance): Promise<void> 
   await app.register(freezeRoutes, { prefix: "/v1/gateway/freezes" });
   await app.register(toolDefinitionRoutes, { prefix: "/v1/tool-definitions" });
   await app.register(accessReviewRoutes, { prefix: "/v1/access-reviews" });
+  await app.register(paymentDocumentRoutes, { prefix: "/v1/payment-documents" });
   await app.register(governanceRegistryRoutes, { prefix: "/v1/governance" });
   await app.register(destinationRoutes, { prefix: "/v1/integrations" });
   await app.register(policyInsightRoutes, { prefix: "/v1/policies/insights" });

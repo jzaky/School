@@ -33,6 +33,7 @@ import { activeExceptionRules } from "../policy/exceptions.js";
 import { readIntegrationCredential, resolveDownstreamSystem, type DownstreamContext } from "./simulators.js";
 import { readWatchOnly } from "../pilots/watch-only.js";
 import { activeFreezeFor, freezeMessage, readFreezes, twoPersonRecovery, type ChangeFreeze } from "./freeze.js";
+import { checkPaymentDocument, readDocumentMatch, reservePaymentDocument, type DocumentMatch, type MatchResult } from "../payments/matching.js";
 
 export const actionRequestInputSchema = z.object({
   tool: z.string().min(1).max(80),
@@ -253,6 +254,10 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
   /** A change freeze in force for this request (freeze.ts); a hold it causes is never relaxed by watch-only mode. */
   let freeze: ChangeFreeze | null = null;
   let freezeHeld = false;
+  /** Payment document matching (payments/matching.ts): the tool's rule and the match for this request. */
+  let docRule: DocumentMatch | null = null;
+  let docMatch: MatchResult | null = null;
+  let docHeld = false;
 
   try {
     const destinationDomain = extractDestinationDomain(input.params);
@@ -260,6 +265,11 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
     freeze = tool ? activeFreezeFor(freezes, { now, toolKey: tool.key, toolRisk: tool.riskLevel, agentId }) : null;
     const baseline = baselineChecks({ agent, tool, action: input.action, resource, resourceKeyRequested: input.resource ?? null, params: input.params, destinationDomain, gatewayPaused: paused, freeze, now });
     const failures: BaselineFailure[] = [...baseline.failures, ...(delegationFailure ? [delegationFailure] : []), ...(delegation ? delegationChecks(delegation, tool, resource, input.action, input.params, now) : [])];
+    docRule = tool ? readDocumentMatch(tool.destinationRules) : null;
+    if (docRule) {
+      docMatch = await checkPaymentDocument(db, ctx.orgId, docRule, input.params, request.id);
+      if (!docMatch.ok && docRule.effect === "deny") failures.push({ code: "payment_document_mismatch", message: docMatch.message, details: { code: docMatch.code } });
+    }
     // Policy tampering: a stored policy that no longer matches its recorded hash is never evaluated.
     const ownPolicies = await resolvePoliciesForAgent(db, ctx.orgId, agent);
     const delegatorPolicies = delegation ? await resolvePoliciesForAgent(db, ctx.orgId, delegation.delegator) : [];
@@ -430,6 +440,13 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
         decisionResult = "require_approval";
         evaluation = { ...evaluation, result: "require_approval", approval: { roles: [], minApprovers: 1, expiresInMinutes: 240, separationOfDuties: true, escalateToRoles: [], instructions: why.slice(0, 500) }, reasons: [...evaluation.reasons, why] };
       }
+      // Payment document matching with an approval path: a mismatch goes to a person to check.
+      if (docMatch && !docMatch.ok && docRule?.effect === "require_approval" && (decisionResult === "allow" || decisionResult === "restrict")) {
+        docHeld = true;
+        const why = `${docMatch.message}. A person must check the payment against the records.`;
+        decisionResult = "require_approval";
+        evaluation = { ...evaluation, result: "require_approval", approval: { roles: [], minApprovers: 1, expiresInMinutes: 240, separationOfDuties: true, escalateToRoles: [], instructions: why.slice(0, 500) }, reasons: [...evaluation.reasons, why] };
+      }
       // Managed autonomy (Phase 3): the agent's level is applied after policy and data protection and can only
       // make the outcome stricter. Under a delegation the stricter of the two agents' settings applies.
       const policyOutcome = decisionResult;
@@ -507,11 +524,23 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
   // AEGIS would have done, and the action proceeds unchanged. Baseline, data protection and error refusals are
   // never relaxed, and the decision row keeps the real outcome.
   // An operator's autonomy level 0 (observe only) is a deliberate stop and is not relaxed either.
-  const watchOnly = readWatchOnly(agent.metadata) && !agent.isLab && explanation.stage === "policy" && !freezeHeld && autonomyRecord?.effect !== "observe_only" && decisionResult !== "allow" && decisionResult !== "error" ? { wouldHave: decisionResult } : null;
+  let watchOnly = readWatchOnly(agent.metadata) && !agent.isLab && explanation.stage === "policy" && !freezeHeld && !docHeld && autonomyRecord?.effect !== "observe_only" && decisionResult !== "allow" && decisionResult !== "error" ? { wouldHave: decisionResult } : null;
   if (watchOnly) {
     explanation = { ...explanation, watchOnly };
     riskIndicators = [...riskIndicators, `watch_only:${decisionResult}`];
     if (paramsBeforeRestrict) effectiveParams = paramsBeforeRestrict;
+  }
+
+  // A matched payment claims its document now, so a second payment against it is refused as a duplicate.
+  // The claim is conditional: of two payments racing for one document, only one wins.
+  if (docMatch?.ok && decisionResult !== "deny" && decisionResult !== "error") {
+    const won = await reservePaymentDocument(db, docMatch, request.id, now);
+    if (!won) {
+      decisionResult = "deny";
+      watchOnly = null;
+      reasons = [...reasons, `Document ${docMatch.doc.ref} was just claimed by another payment: this would pay it twice`];
+      explanation = { ...explanation, stage: "baseline", paymentDocument: { ref: docMatch.doc.ref, code: "duplicate" } };
+    }
   }
 
   const decision = await db.authorizationDecision.create({

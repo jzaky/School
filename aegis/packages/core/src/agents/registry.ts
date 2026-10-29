@@ -217,7 +217,11 @@ export async function listTools(db: TenantDb, ctx: OrgContext) {
 
 export async function upsertTool(db: TenantDb, ctx: OrgContext, input: z.infer<typeof toolInputSchema>) {
   assertPermission(ctx, "agents:write");
-  const data = { ...input, parameterSchema: input.parameterSchema as Prisma.InputJsonValue, destinationRules: input.destinationRules as Prisma.InputJsonValue };
+  // Payment document matching is set on its own (payments/matching.ts) and kept across ordinary tool edits.
+  const existing = await db.tool.findUnique({ where: { orgId_key: { orgId: ctx.orgId, key: input.key } }, select: { destinationRules: true } });
+  const documentMatch = (existing?.destinationRules as { documentMatch?: unknown } | null)?.documentMatch;
+  const destinationRules = documentMatch === undefined ? input.destinationRules : { ...input.destinationRules, documentMatch };
+  const data = { ...input, parameterSchema: input.parameterSchema as Prisma.InputJsonValue, destinationRules: destinationRules as Prisma.InputJsonValue };
   const row = await db.tool.upsert({ where: { orgId_key: { orgId: ctx.orgId, key: input.key } }, create: { orgId: ctx.orgId, ...data }, update: data });
   await appendEvidence(db, ctx, { type: "tool.upserted", subjectType: "tool", subjectId: row.id, payload: { key: row.key, riskLevel: row.riskLevel } });
   return row;
