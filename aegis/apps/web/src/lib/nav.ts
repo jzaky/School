@@ -20,6 +20,7 @@ import {
   LifeBuoy,
   Briefcase,
   Presentation,
+  Flag,
   History,
   Landmark,
   LayoutDashboard,
@@ -90,6 +91,7 @@ export const SECONDARY_NAV: NavGroup[] = [
       { label: "Control Center", href: "/control-center", icon: Radar, ready: true, permission: "org:read" },
       { label: "System Health", href: "/org/health", icon: HeartPulse, ready: true, permission: "org:read" },
       { label: "Sales Demo", href: "/sales-demo", icon: Presentation, ready: true, permission: "gateway:read" },
+      { label: "Pilots", href: "/pilots", icon: Flag, ready: true, permission: "reports:read" },
     ],
   },
   {

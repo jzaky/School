@@ -31,6 +31,7 @@ import { escalateForInjection, getInjectionResponse } from "../shield/injection-
 import { escalateForModel, getModelGovernance, modelGateCheck } from "../governance/models.js";
 import { activeExceptionRules } from "../policy/exceptions.js";
 import { readIntegrationCredential, resolveDownstreamSystem, type DownstreamContext } from "./simulators.js";
+import { readWatchOnly } from "../pilots/watch-only.js";
 
 export const actionRequestInputSchema = z.object({
   tool: z.string().min(1).max(80),
@@ -68,6 +69,8 @@ export interface GatewayResponse {
   quarantine?: { securityEventId: string | null; expiresAt: string };
   delegation?: { delegationId: string; onBehalfOf: string };
   duplicate?: boolean;
+  /** Watch-only pilot mode: the action proceeded, and this is what AEGIS would otherwise have decided. */
+  watchOnly?: { wouldHave: string };
   correlationId: string;
 }
 
@@ -237,6 +240,8 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
   let modelRecordState: { status: string; enforcement: string; escalated: boolean; model: string | null } | null = null;
   /** What the policies alone decided, before data protection, uncertainty and autonomy (used by replay). */
   let policyOnlyResult: string | null = null;
+  /** Parameters before policy narrowing, so watch-only mode can let the original request through. */
+  let paramsBeforeRestrict: Record<string, unknown> | null = null;
 
   try {
     const destinationDomain = extractDestinationDomain(input.params);
@@ -314,6 +319,7 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
       decisionResult = evaluation.result;
       policyOnlyResult = evaluation.result;
       if (decisionResult === "restrict") {
+        paramsBeforeRestrict = effectiveParams;
         const narrowed = applyRestrictions(effectiveParams, evaluation.restrict);
         effectiveParams = narrowed.params;
         restrictApplied = narrowed.applied;
@@ -478,6 +484,17 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
     logger.error({ requestId: request.id, err: err instanceof Error ? err.message : String(err) }, "policy evaluation failed");
   }
 
+  // Watch-only pilot mode (src/pilots/watch-only.ts): a policy-stage outcome other than allow is recorded as what
+  // AEGIS would have done, and the action proceeds unchanged. Baseline, data protection and error refusals are
+  // never relaxed, and the decision row keeps the real outcome.
+  // An operator's autonomy level 0 (observe only) is a deliberate stop and is not relaxed either.
+  const watchOnly = readWatchOnly(agent.metadata) && !agent.isLab && explanation.stage === "policy" && autonomyRecord?.effect !== "observe_only" && decisionResult !== "allow" && decisionResult !== "error" ? { wouldHave: decisionResult } : null;
+  if (watchOnly) {
+    explanation = { ...explanation, watchOnly };
+    riskIndicators = [...riskIndicators, `watch_only:${decisionResult}`];
+    if (paramsBeforeRestrict) effectiveParams = paramsBeforeRestrict;
+  }
+
   const decision = await db.authorizationDecision.create({
     data: { createdAt: now, orgId: ctx.orgId, actionRequestId: request.id, result: decisionResult, policyVersionIds, matchedRuleIds, explanation: explanation as Prisma.InputJsonValue, inputHash: authzInput ? hashObject(authzInput) : paramsHash, latencyMs: Date.now() - started, uncertaintyLevel: uncertainty?.level ?? null },
   });
@@ -491,7 +508,7 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
     const created = await createSecurityEvent(db, ctx, { type: securityType, severity: securitySeverity ?? "medium", title: `${isLab ? "[lab] " : ""}${securityType.replace(/[._]/g, " ")}: ${agent.slug} ${input.tool}`, agentId, actionRequestId: request.id, escalate: isLab ? false : undefined, detail: { reasons, tool: input.tool, action: input.action, resource: input.resource ?? null, destinationDomain: extractDestinationDomain(input.params), onBehalfOf: input.onBehalfOf?.agentId ?? null, ...(isLab ? { lab: true } : {}) } });
     securityEventId = created.event.id;
     // A tampered policy is not the agent's doing, so it does not lower the agent's autonomy.
-    if (!isLab && securityType !== "policy.integrity_failure") await applyAutomaticDowngrade(db, { ...systemContextFor(ctx.orgId), now }, agentId, { rule: "security_event", severity: securitySeverity ?? "medium", securityEventType: securityType, actionRequestId: request.id });
+    if (!isLab && !watchOnly && securityType !== "policy.integrity_failure") await applyAutomaticDowngrade(db, { ...systemContextFor(ctx.orgId), now }, agentId, { rule: "security_event", severity: securitySeverity ?? "medium", securityEventType: securityType, actionRequestId: request.id });
   }
 
   let status: ActionRequest["status"];
@@ -499,7 +516,13 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
   let grant: { token: string; expiresAt: Date } | null = null;
   let holdExpiresAt: Date | null = null;
   const effectiveHash = requestHashOf(input.tool, input.action, effectiveParams);
-  if (decisionResult === "allow" || decisionResult === "restrict") {
+  if (watchOnly) {
+    status = "allowed";
+    await db.actionRequest.update({ where: { id: request.id }, data: { status: "allowed", updatedAt: now } });
+    const g = await issueGrant(db, ctx.orgId, request.id, effectiveHash, { now, integrationId: tool?.integrationId ?? null });
+    grant = { token: g.token, expiresAt: g.grant.expiresAt };
+    await appendEvidence(db, ctx, { type: "gateway.watch_only_passed", subjectType: "action_request", subjectId: request.id, correlationId, payload: { wouldHave: watchOnly.wouldHave, reasons } });
+  } else if (decisionResult === "allow" || decisionResult === "restrict") {
     status = "allowed";
     // The request becomes executable before its single grant is issued; the grant binds the parameters that will
     // execute (after Shield masking and policy narrowing), so the downstream check matches.
@@ -543,6 +566,10 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
   response.reasons = reasons;
   if (response.quarantine) response.quarantine.securityEventId = securityEventId;
   if (delegation) response.delegation = { delegationId: delegation.row.id, onBehalfOf: delegation.delegator.slug };
+  if (watchOnly) {
+    response.watchOnly = watchOnly;
+    delete response.restrictions;
+  }
   if (grant) response.grant = { token: grant.token, expiresAt: grant.expiresAt.toISOString() };
   // Store what the executor needs (post-commit) without leaking the grant into the response for gateway mode.
   if (status === "allowed") (response as GatewayResponse & { __pendingExecution?: { grantToken: string; params: Record<string, unknown> } }).__pendingExecution = { grantToken: grant!.token, params: effectiveParams };

@@ -6,6 +6,8 @@ import { conflict, notFound, validation } from "../lib/errors.js";
 import { pageSchema, skipTake, toPage, type PageInput } from "../lib/pagination.js";
 import { assertPermission, slugSchema } from "../orgs/orgs.js";
 import { voidLiveGrants } from "../gateway/grants.js";
+import { preserveWatchOnly } from "../pilots/watch-only.js";
+import { parsePatch } from "../lib/patch.js";
 
 export const agentInputSchema = z.object({
   slug: slugSchema,
@@ -86,7 +88,8 @@ export async function createAgent(db: TenantDb, ctx: OrgContext, raw: AgentInput
   const input = agentInputSchema.parse(raw);
   const dup = await db.agent.findUnique({ where: { orgId_slug: { orgId: ctx.orgId, slug: input.slug } } });
   if (dup) throw conflict("An agent with this slug already exists");
-  const agent = await db.agent.create({ data: { orgId: ctx.orgId, ...input, metadata: input.metadata as Prisma.InputJsonValue } });
+  // Watch-only mode is set only through setWatchOnly, which needs policies:activate.
+  const agent = await db.agent.create({ data: { orgId: ctx.orgId, ...input, metadata: preserveWatchOnly(input.metadata, null) as Prisma.InputJsonValue } });
   await db.agentVersion.create({ data: { orgId: ctx.orgId, agentId: agent.id, version: 1, manifest: { modelProvider: input.modelProvider, modelId: input.modelId, environment: input.environment }, notes: "Initial registration", createdBy: ctx.actor.id } });
   await appendEvidence(db, ctx, { type: "agent.created", subjectType: "agent", subjectId: agent.id, payload: { slug: agent.slug, name: agent.name, environment: agent.environment, riskTier: agent.riskTier } });
   return agent;
@@ -97,9 +100,9 @@ export async function updateAgent(db: TenantDb, ctx: OrgContext, agentId: string
   const current = await db.agent.findUnique({ where: { id: agentId } });
   if (!current) throw notFound("Agent");
   if (current.status === "revoked" || current.status === "archived") throw validation(`A ${current.status} agent cannot be edited`);
-  const parsed = agentInputSchema.partial().parse(patch);
+  const parsed = parsePatch(agentInputSchema, patch);
   const { slug: _slug, metadata, ...rest } = parsed;
-  const agent = await db.agent.update({ where: { id: agentId }, data: { ...rest, ...(metadata ? { metadata: metadata as Prisma.InputJsonValue } : {}) } });
+  const agent = await db.agent.update({ where: { id: agentId }, data: { ...rest, ...(metadata ? { metadata: preserveWatchOnly(metadata, current.metadata) as Prisma.InputJsonValue } : {}) } });
   await appendEvidence(db, ctx, { type: "agent.updated", subjectType: "agent", subjectId: agentId, payload: { fields: Object.keys(patch) } });
   return agent;
 }

@@ -13,6 +13,7 @@ import { autonomyRoutes } from "./autonomy.js";
 import { uncertaintyRoutes } from "./uncertainty.js";
 import { decisionRoutes } from "./decisions.js";
 import { labRoutes } from "./lab.js";
+import { pilotRoutes } from "./pilots.js";
 import { governanceRegistryRoutes } from "./governance-registry.js";
 import { destinationRoutes } from "./destinations.js";
 import { policyInsightRoutes } from "./policy-insights.js";
@@ -36,6 +37,7 @@ export async function registerModuleRoutes(app: FastifyInstance): Promise<void> 
   await app.register(uncertaintyRoutes, { prefix: "/v1/uncertainty" });
   await app.register(decisionRoutes, { prefix: "/v1/decisions" });
   await app.register(labRoutes, { prefix: "/v1/lab" });
+  await app.register(pilotRoutes, { prefix: "/v1/pilots" });
   await app.register(governanceRegistryRoutes, { prefix: "/v1/governance" });
   await app.register(destinationRoutes, { prefix: "/v1/integrations" });
   await app.register(policyInsightRoutes, { prefix: "/v1/policies/insights" });

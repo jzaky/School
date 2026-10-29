@@ -23,8 +23,8 @@ describe("sector validation lab", () => {
     await disconnectAll();
   });
 
-  it("covers eight sectors, each with routine, held and refused cases and synthetic references only", () => {
-    expect(SECTOR_PACKS.map((p) => p.key)).toEqual(["government", "healthcare", "defence", "energy", "banking", "aviation", "telecom", "education"]);
+  it("covers eleven sectors, each with routine, held and refused cases and synthetic references only", () => {
+    expect(SECTOR_PACKS.map((p) => p.key)).toEqual(["government", "healthcare", "defence", "energy", "banking", "aviation", "telecom", "education", "public-safety", "government-services", "ports-customs"]);
     for (const p of SECTOR_PACKS) {
       const outcomes = new Set(p.cases.map((c) => c.expect));
       expect(outcomes.has("allowed"), p.key).toBe(true);

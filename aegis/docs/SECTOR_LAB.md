@@ -27,6 +27,9 @@ decision time, and the evidence ledger is verified at the end.
 | Aviation and transport | AI certifying airworthiness; passenger data to the wrong party | Border authority report, maintenance sign-off held for certifying staff, open defect, passenger data to a marketing partner |
 | Telecommunications | SIM-swap fraud and bulk subscriber data | Verified swap, unverified swap, high-value line, bulk export out |
 | Education | Changes to published grades; minors' data outside the school | Draft grade, published grade, record to an outside site |
+| Public safety and policing | Record searches with no case, bulk searches, case files leaving the force | Case search, no-case search, bulk search, file to a personal email, hidden instruction in a statement |
+| Government services | Fee waivers and permits beyond policy; citizens' data leaving government | Routine permit, permit with open violations, large waiver, data to a private company |
+| Ports, customs and logistics | Releasing flagged or controlled cargo; rewriting manifests | Routine release, flagged container, controlled goods, manifest changed after arrival |
 
 The policies are illustrative starting points written for the lab, not sector regulations.
 
@@ -51,4 +54,4 @@ Real results need a real entity. The plan for each pilot:
 4. **Measure from the ledger.** Every figure comes from the evidence ledger, not from manual counts.
 5. **Publish with permission.** Results are shared only in the form the entity approves.
 
-Install inside the entity: `docs/OFFLINE_INSTALL.md`.
+Install inside the entity: `docs/OFFLINE_INSTALL.md`. Each sector here is also an installable pilot kit with watch-only mode: `docs/PILOTS.md`.
