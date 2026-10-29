@@ -134,7 +134,9 @@ export async function staleAuthorization(db: TenantDb, actionRequestId: string, 
   ]);
   const authorizedAt = approval?.decidedAt ?? decision?.createdAt ?? null;
   if (authorizedAt && now.getTime() > authorizedAt.getTime() + executionWindowMs()) return `The execution window of ${executionWindowMs() / 60_000} minutes after authorization has passed; submit the action again so current policy decides it`;
-  if (decision?.policyVersionIds.length) {
+  const voidedDoc = await db.paymentDocument.findFirst({ where: { reservedByRequestId: actionRequestId, status: "void" }, select: { ref: true } });
+  if (voidedDoc) return `Payment document ${voidedDoc.ref} was voided after this payment was authorized; it cannot be paid`;
+    if (decision?.policyVersionIds.length) {
     const current = await db.policyVersion.findMany({ where: { id: { in: decision.policyVersionIds } }, select: { state: true } });
     if (current.length !== new Set(decision.policyVersionIds).size || current.some((v) => v.state !== "active")) return "A policy that decided this request has changed since; submit the action again so current policy decides it";
   }
@@ -190,7 +192,9 @@ export async function consumeGrant(db: TenantDb, token: string, requestHash: str
   if (grant.voidedAt) return { ok: false, reason: "voided" };
   if (grant.expiresAt < now || claims.exp < now.getTime()) return { ok: false, reason: "expired" };
   if (grant.requestHash !== requestHash || claims.h !== requestHash) return { ok: false, reason: "hash_mismatch" };
-  if (opts.integrationId !== undefined && grant.integrationId !== null && grant.integrationId !== opts.integrationId) return { ok: false, reason: "integration_mismatch" };
+  // A downstream system can only consume a grant issued for it. A grant with no integration (a tool AEGIS
+  // executes itself, or one with no connected system) cannot be consumed by any integration key.
+  if (opts.integrationId !== undefined && grant.integrationId !== opts.integrationId) return { ok: false, reason: "integration_mismatch" };
   if (!(EXECUTABLE_STATUSES as readonly string[]).includes(grant.request.status)) return { ok: false, reason: "request_not_executable" };
   if (grant.request.agent.status !== "active") return { ok: false, reason: "agent_inactive" };
   const paused = await gatewayPaused(db, grant.request.orgId);

@@ -30,18 +30,20 @@ export async function loginWithPassword(input: z.infer<typeof loginSchema>, meta
     await verifyPassword(dummyHash, input.password);
     throw unauthorized("Invalid email or password");
   }
-  if (user.lockedUntil && user.lockedUntil > new Date()) {
-    throw new AegisError("rate_limited", "Account temporarily locked after repeated failures. Try again later.");
+  // Each attempt reserves its place in the failure count with one atomic update before the password is checked,
+  // so parallel guesses cannot all read the same count and pass the limit together. A success resets it.
+  const reserved = await db.$queryRaw<{ failed_logins: number }[]>`
+    UPDATE users SET failed_logins = failed_logins + 1,
+      locked_until = CASE WHEN failed_logins + 1 >= ${MAX_FAILED}::int THEN now() + make_interval(mins => ${LOCK_MINUTES}::int) ELSE locked_until END
+    WHERE id = ${user.id}::uuid AND (locked_until IS NULL OR locked_until <= now()) AND failed_logins < ${MAX_FAILED}::int
+    RETURNING failed_logins`;
+  if (!reserved.length) {
+    // Locked, or a previous lock has just ended: an ended lock starts a fresh count once, atomically.
+    const restarted = await db.user.updateMany({ where: { id: user.id, failedLogins: { gte: MAX_FAILED }, OR: [{ lockedUntil: null }, { lockedUntil: { lte: new Date() } }] }, data: { failedLogins: 1, lockedUntil: null } });
+    if (!restarted.count) throw new AegisError("rate_limited", "Account temporarily locked after repeated failures. Try again later.");
   }
   const ok = await verifyPassword(user.passwordHash, input.password);
-  if (!ok) {
-    const failed = user.failedLogins + 1;
-    await db.user.update({
-      where: { id: user.id },
-      data: { failedLogins: failed, lockedUntil: failed >= MAX_FAILED ? new Date(Date.now() + LOCK_MINUTES * 60_000) : null },
-    });
-    throw unauthorized("Invalid email or password");
-  }
+  if (!ok) throw unauthorized("Invalid email or password");
   const memberships = await listUserMemberships(user.id);
   const membership = memberships.find((m) => m.status === "active");
   await db.user.update({ where: { id: user.id }, data: { failedLogins: 0, lockedUntil: null, lastLoginAt: new Date() } });

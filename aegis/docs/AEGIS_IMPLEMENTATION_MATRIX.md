@@ -2,7 +2,7 @@
 
 Maps each phase of the master engineering program to what the repository holds today, based on the October 2026
 code audit (three independent reviews of the source, not of the documentation) and on test runs on 2026-10-29:
-core 520 tests, API 61, database isolation 22, all passing. Defects are tracked in `DEFECT_REGISTER.md`.
+core 531 tests, API 61, database isolation 22, SDK 19, MCP gateway 8, all passing. Defects are tracked in `DEFECT_REGISTER.md`.
 
 Status:
 - **Works**: built, tested, and the audit found no open P1 or P2 against it.
@@ -19,7 +19,7 @@ Complexity: S (days), M (one to two weeks), L (several weeks), XL (a quarter or 
 | --- | --- | --- | --- | --- | --- |
 | 0 System discovery | Works | This matrix, `DEFECT_REGISTER.md`, `AEGIS_FULL_PLATFORM_AUDIT.md` | Keep current per milestone | S | M1 |
 | 1 Open-source repository evaluation | Partial | `OPEN_SOURCE_RESEARCH.md`, `PROVENANCE.md`; `THIRD_PARTY.md` is stale | Refresh the third-party inventory, sharp licence note | S | M1 |
-| 2 Comprehensive security audit | Works, P2 open | 7 P1s fixed with regression tests (72aa80c); 16 P2s open | Fix P2-1 to P2-16 | M | M1 |
+| 2 Comprehensive security audit | Works, P2 open | 7 P1s and 11 of 16 P2s fixed with regression tests | P2-3, P2-5, P2-7, P2-11, P2-14 | M | M1 |
 | 3 Real AI agent red teaming | Partial | Attack Simulation Lab, held-out injection dataset run (`LIVE_VALIDATION.md`: recall 30% on held-out data) | Live-model runs need `ANTHROPIC_API_KEY` (blocked: not configured) | M | M1 |
 | 4 Receipt and financial validation | Works | `RECEIPT_VALIDATION.md`, `PAYMENT_MATCHING.md`, 10 receipt tests with real images | Console panel and demo seed; P2-13 | S | M1 |
 | 5 Governance engine hardening | Works, P2 open | Delegation, execution window, policy-version binding fixed (P1-2, P1-5) | P2-3, P2-6, P2-12 | M | M1 |

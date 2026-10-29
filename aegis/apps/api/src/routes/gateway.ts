@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { withTenant } from "@aegis/db";
 import { z } from "zod";
 import { requireScope } from "../plugins/auth.js";
-import { actionRequestInputSchema, appendEvidence, env, m, auditEnforcementPath, authorizeAndExecute, enforcementCoverage, consumeGrant, forbidden, getActionRequest, hashObject, requestGrant, listActionRequests, recordAgentExecution, releaseQuarantine, releaseQuarantineSchema, requestListFilter, provideApprovalInfo } from "@aegis/core";
+import { actionRequestInputSchema, appendEvidence, env, m, auditEnforcementPath, authorizeAndExecute, enforcementCoverage, consumeGrant, forbidden, getActionRequest, hashObject, requestGrant, startAgentExecution, listActionRequests, recordAgentExecution, releaseQuarantine, releaseQuarantineSchema, requestListFilter, provideApprovalInfo } from "@aegis/core";
 
 /**
  * The Action Gateway. Agents call POST /v1/gateway/actions before doing anything protected.
@@ -53,6 +53,16 @@ export async function gatewayRoutes(app: FastifyInstance) {
     if (ctx.actor.type !== "agent") throw forbidden("Use an agent API key");
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
     return requestGrant(withTenant, ctx, id);
+  });
+
+  /** Agent-mode: the agent presents its grant before running the tool; the grant is consumed now. */
+  app.post("/actions/:id/start", async (req) => {
+    requireScope(req, "gateway:submit");
+    const ctx = await req.orgContext();
+    if (ctx.actor.type !== "agent") throw forbidden("Use an agent API key");
+    const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
+    const { grant } = z.object({ grant: z.string().min(10) }).parse(req.body);
+    return withTenant(ctx.orgId, (db) => startAgentExecution(db, ctx, id, grant));
   });
 
   /** Agent-mode: the agent reports the outcome of executing through its own channel (writes the receipt). */

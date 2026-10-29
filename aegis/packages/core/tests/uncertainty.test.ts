@@ -69,7 +69,8 @@ describe("uncertainty assessment (pure)", () => {
     const policy = on({ minConfidence: 0.8 });
     const self = assessUncertainty({ params: {}, supplied: { confidence: 0.6 }, policy, now });
     expect(self.confidence).toMatchObject({ value: 0.6, basis: "self_reported", calibratedAccuracy: null });
-    expect(self.level).toBe("elevated");
+    // Audit P2-8: a self-reported figure below the minimum is at least as strict as no figure (which is unknown).
+    expect(self.level).toBe("high");
     const absent = assessUncertainty({ params: {}, supplied: {}, policy, now });
     expect(absent.level).toBe("unknown");
     const few = lookupFromReport(computeCalibration(Array.from({ length: 20 }, () => ({ confidence: 0.95, correct: true }))));

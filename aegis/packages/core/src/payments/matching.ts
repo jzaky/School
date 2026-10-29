@@ -1,3 +1,4 @@
+import { voidGrantsForRequest } from "../gateway/grants.js";
 import type { PaymentDocument, Prisma, TenantDb } from "@aegis/db";
 import { z } from "zod";
 import { appendEvidence } from "../evidence/ledger.js";
@@ -64,7 +65,9 @@ export async function checkPaymentDocument(db: TenantDb, orgId: string, rule: Do
   const vendor = params[rule.vendorParam];
   if (vendor !== doc.vendorRef) return { ok: false, code: "vendor_mismatch", message: `Document ${ref} is for vendor ${doc.vendorRef}, but the payment goes to ${typeof vendor === "string" ? vendor : "an unnamed payee"}` };
   const currency = params[rule.currencyParam];
-  if (typeof currency === "string" && currency.toUpperCase() !== doc.currency.toUpperCase()) return { ok: false, code: "currency_mismatch", message: `Document ${ref} is in ${doc.currency}, the payment is in ${currency}` };
+  // A payment that states no currency cannot be shown to match the document's: fail closed.
+  if (typeof currency !== "string" || !currency.trim()) return { ok: false, code: "currency_mismatch", message: `Document ${ref} is in ${doc.currency}, and the payment states no currency in "${rule.currencyParam}"` };
+  if (currency.toUpperCase() !== doc.currency.toUpperCase()) return { ok: false, code: "currency_mismatch", message: `Document ${ref} is in ${doc.currency}, the payment is in ${currency}` };
   const amount = Number(params[rule.amountParam]);
   const expected = Number(doc.amount);
   if (!Number.isFinite(amount) || Math.abs(amount - expected) > rule.amountTolerance + 1e-9) return { ok: false, code: "amount_mismatch", message: `Document ${ref} is for ${doc.currency} ${expected.toLocaleString("en-US")}, the payment is for ${Number.isFinite(amount) ? amount.toLocaleString("en-US") : "no amount"}` };
@@ -131,6 +134,11 @@ export async function registerPaymentDocuments(db: TenantDb, ctx: OrgContext, in
   return { results };
 }
 
+/** Mismatches a person may resolve; a voided or already-paid document is refused in every mode. */
+export function isStructuralMismatch(code: Exclude<MatchResult, { ok: true }>["code"]): boolean {
+  return code === "void" || code === "duplicate";
+}
+
 export async function voidPaymentDocument(db: TenantDb, ctx: OrgContext, id: string, reason: string) {
   if (ctx.actor.type === "agent") throw forbidden("Agents cannot void documents");
   if (ctx.actor.type !== "integration") assertPermission(ctx, "integrations:write");
@@ -139,6 +147,9 @@ export async function voidPaymentDocument(db: TenantDb, ctx: OrgContext, id: str
   if (!doc) throw notFound("Payment document");
   if ((await documentState(db, doc)).state === "paid") throw conflict("This document is already paid; reverse the payment in the system of record");
   await db.paymentDocument.update({ where: { id }, data: { status: "void" } });
+  // A payment already authorized against this document loses its permission: live grants are voided, and a
+  // later grant is refused (staleAuthorization re-checks the document).
+  if (doc.reservedByRequestId) await voidGrantsForRequest(db, doc.reservedByRequestId, `Payment document ${doc.ref} was voided`);
   await appendEvidence(db, ctx, { type: "payment_document.voided", subjectType: "payment_document", subjectId: id, payload: { ref: doc.ref, reason: reason.trim() } });
 }
 

@@ -7,7 +7,8 @@ import { z } from "zod";
  * same assessment and history can be replayed exactly.
  *
  * AEGIS never invents a confidence number. Every indicator says what it rests on:
- *   measured       a fact AEGIS checked (a field is present, two values differ, a timestamp is old)
+ *   measured       a fact AEGIS checked (a field is present, two values differ, a timestamp is old). Evidence an
+ *                  agent supplies and AEGIS cannot check (its sources, its observation times) is self_reported.
  *   heuristic      a rule of thumb that suggests risk but proves nothing (a policy decided by precedence)
  *   self_reported  a figure the agent supplied about itself, not checked against outcomes
  *   calibrated     an agent's figure mapped to the accuracy actually observed over labelled outcomes
@@ -157,7 +158,8 @@ export function assessUncertainty(input: AssessInput): UncertaintyAssessment {
         missing.push(`context.evidence[${field}]`);
         indicators.push({ key: `evidence:${field}`, label: `${field} is backed by evidence`, basis: "measured", status: "unknown", detail: `No evidence was supplied for ${field}, so its value cannot be checked.` });
       } else if (!contradictions.includes(field)) {
-        indicators.push({ key: `evidence:${field}`, label: `${field} is backed by evidence`, basis: "measured", status: "ok", detail: `Backed by ${items.map((i) => i.source).join(", ")}.` });
+        // The evidence comes from the agent; AEGIS checked that it is present and consistent, not that it is true.
+        indicators.push({ key: `evidence:${field}`, label: `${field} is backed by evidence`, basis: "self_reported", status: "ok", detail: `Backed by ${items.map((i) => i.source).join(", ")}, as reported by the agent.` });
       }
     }
     // 5. Freshness.
@@ -169,7 +171,7 @@ export function assessUncertainty(input: AssessInput): UncertaintyAssessment {
         }
         const ageMin = (now.getTime() - new Date(e.observedAt).getTime()) / 60_000;
         const stale = ageMin > policy.maxEvidenceAgeMinutes;
-        indicators.push({ key: `freshness:${e.field}`, label: `Evidence for ${e.field} is recent`, basis: "measured", status: ageMin < -5 ? "fail" : stale ? "warning" : "ok", detail: ageMin < -5 ? `${e.source} is dated in the future.` : `${e.source} observed it ${Math.round(ageMin)} minutes ago (limit ${policy.maxEvidenceAgeMinutes}).` });
+        indicators.push({ key: `freshness:${e.field}`, label: `Evidence for ${e.field} is recent`, basis: ageMin < -5 || stale ? "measured" : "self_reported", status: ageMin < -5 ? "fail" : stale ? "warning" : "ok", detail: ageMin < -5 ? `${e.source} is dated in the future.` : `${e.source} observed it ${Math.round(ageMin)} minutes ago (limit ${policy.maxEvidenceAgeMinutes}).` });
       }
     }
     // 6. Trusted sources.
@@ -195,7 +197,9 @@ export function assessUncertainty(input: AssessInput): UncertaintyAssessment {
         key: "confidence",
         label: `Confidence is at least ${policy.minConfidence}`,
         basis: acc === null ? "self_reported" : "calibrated",
-        status: below ? (acc === null ? "warning" : "fail") : "ok",
+        // An agent reporting confidence below the minimum is at least as uncertain as one reporting none, so a low
+        // figure fails whether or not it is calibrated (a missing one is unknown and escalates the same way).
+        status: below ? "fail" : "ok",
         detail: acc === null ? `The agent reports ${rawConf}. Not calibrated: ${input.calibration ? `${input.calibration.sampleSize} labelled outcomes, ${MIN_CALIBRATION_SAMPLES} needed` : "no labelled outcomes"}.` : `The agent reports ${rawConf}; over ${cal!.sampleSize} labelled outcomes, requests at that confidence were right ${(acc * 100).toFixed(0)}% of the time.`,
       });
     } else {

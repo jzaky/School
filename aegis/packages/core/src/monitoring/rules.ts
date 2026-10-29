@@ -11,7 +11,7 @@ export const ruleDefinitionSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("repeated_denials"), threshold: z.number().int().min(1).default(5), windowMinutes: z.number().int().min(5).default(1440) }),
   z.object({ type: z.literal("permission_escalation"), threshold: z.number().int().min(1).default(3), windowMinutes: z.number().int().min(5).default(1440) }),
   z.object({ type: z.literal("unusual_tool_usage"), baselineDays: z.number().int().min(1).default(30) }),
-  z.object({ type: z.literal("transaction_volume"), toolKey: z.string().default("initiate-transfer"), amountThreshold: z.number().min(0).default(1_000_000), windowMinutes: z.number().int().min(5).default(1440) }),
+  z.object({ type: z.literal("transaction_volume"), toolKey: z.string().optional(), amountThreshold: z.number().min(0).default(1_000_000), windowMinutes: z.number().int().min(5).default(1440) }),
   z.object({ type: z.literal("integration_failures"), threshold: z.number().int().min(1).default(3), windowMinutes: z.number().int().min(5).default(60) }),
   z.object({ type: z.literal("policy_evaluation_failures"), threshold: z.number().int().min(1).default(1), windowMinutes: z.number().int().min(5).default(60) }),
   z.object({ type: z.literal("missing_evidence"), olderThanMinutes: z.number().int().min(1).default(10) }),
@@ -35,7 +35,7 @@ export const DEFAULT_RULES: { key: string; name: string; description: string; se
   { key: "RM-001", name: "Repeated denied actions", description: "An agent was denied 5 or more times in 24 hours", severity: "medium", definition: { type: "repeated_denials", threshold: 5, windowMinutes: 1440 } },
   { key: "RM-002", name: "Permission escalation attempts", description: "An agent tried tools, resources or classifications it was never granted, 3 or more times in 24 hours", severity: "high", definition: { type: "permission_escalation", threshold: 3, windowMinutes: 1440 } },
   { key: "RM-003", name: "Unusual tool usage", description: "An agent used a tool it had not used in the previous 30 days", severity: "low", definition: { type: "unusual_tool_usage", baselineDays: 30 } },
-  { key: "RM-004", name: "Unexpected transaction volume", description: "Executed transfers by one agent exceeded AED 1,000,000 in 24 hours", severity: "high", definition: { type: "transaction_volume", toolKey: "initiate-transfer", amountThreshold: 1_000_000, windowMinutes: 1440 } },
+  { key: "RM-004", name: "Unexpected transaction volume", description: "Executed actions with an amount, by one agent, exceeded 1,000,000 in 24 hours (any tool)", severity: "high", definition: { type: "transaction_volume", amountThreshold: 1_000_000, windowMinutes: 1440 } },
   { key: "RM-005", name: "Integration failures", description: "3 or more failed executions against one integration in 60 minutes", severity: "medium", definition: { type: "integration_failures", threshold: 3, windowMinutes: 60 } },
   { key: "RM-006", name: "Policy evaluation failures", description: "Any decision that ended in an evaluation error (denied fail-closed)", severity: "high", definition: { type: "policy_evaluation_failures", threshold: 1, windowMinutes: 60 } },
   { key: "RM-007", name: "Missing evidence or receipts", description: "Allowed or approved requests older than 10 minutes without an execution receipt", severity: "high", definition: { type: "missing_evidence", olderThanMinutes: 10 } },
@@ -79,11 +79,13 @@ export async function evaluateRule(db: TenantDb, orgId: string, def: RuleDefinit
     case "transaction_volume": {
       const rows = await db.$queryRaw<{ agent_id: string; total: number; n: bigint }[]>`
         SELECT r.agent_id, sum((r.params->>'amount')::numeric)::float8 AS total, count(*)::bigint AS n
-        FROM action_requests r WHERE r.org_id = ${orgId}::uuid AND r.tool_key = ${def.toolKey} AND r.status = 'executed'
+        FROM action_requests r WHERE r.org_id = ${orgId}::uuid AND (${def.toolKey ?? null}::text IS NULL OR r.tool_key = ${def.toolKey ?? null}) AND r.status = 'executed'
           AND r.created_at >= ${minutesAgo(now, def.windowMinutes)} AND (r.params->>'amount') ~ '^[0-9.]+$'
         GROUP BY r.agent_id`;
+      // Without a tool key the rule covers every tool whose calls carry an amount, not one demo tool.
+      const what = def.toolKey ?? "actions with an amount";
       const hits = rows.filter((r) => r.total >= def.amountThreshold);
-      return await withAgentNames(db, hits.map((r) => ({ dedupeKey: `transaction_volume:${r.agent_id}:${def.toolKey}:${bucket(now, def.windowMinutes)}`, agentId: r.agent_id, title: `{agent} executed ${def.toolKey} totalling ${Math.round(r.total).toLocaleString("en-US")} in ${def.windowMinutes / 60}h`, detail: { total: r.total, count: Number(r.n), threshold: def.amountThreshold, tool: def.toolKey } })));
+      return await withAgentNames(db, hits.map((r) => ({ dedupeKey: `transaction_volume:${r.agent_id}:${def.toolKey ?? "*"}:${bucket(now, def.windowMinutes)}`, agentId: r.agent_id, title: `{agent} executed ${what} totalling ${Math.round(r.total).toLocaleString("en-US")} in ${def.windowMinutes / 60}h`, detail: { total: r.total, count: Number(r.n), threshold: def.amountThreshold, tool: def.toolKey ?? null } })));
     }
     case "integration_failures": {
       const rows = await db.executionReceipt.groupBy({ by: ["downstreamSystem"], where: { orgId, status: "failed", createdAt: { gte: minutesAgo(now, def.windowMinutes) } }, _count: { _all: true } });

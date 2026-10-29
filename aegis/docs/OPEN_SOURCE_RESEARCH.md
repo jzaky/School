@@ -19,7 +19,7 @@ Guiding constraints:
 - Maintenance: CNCF graduated project, very active, thousands of commits.
 - Security: mature, widely deployed as a sidecar; decisions depend on the data pushed to it, so input construction remains our responsibility.
 - Integration complexity: medium. Needs a sidecar or embedded WASM; Rego has a learning curve for customers who author policies; explaining decisions requires a convention in the policy (returning reasons).
-- Decision: **Adapt now, Adopt as optional evaluator.** AEGIS ships an original deterministic policy evaluator in TypeScript (`packages/core/src/policy`) whose policy model mirrors the public concepts OPA popularised: versioned policy documents, input document, deterministic evaluation, structured decision with explanation, policy unit tests. An `OpaEvaluator` adapter implements the same `PolicyEvaluator` interface against OPA's documented `/v1/data` REST API for customers who already run OPA. The adapter is untested against a live OPA in this environment (the OPA binary could not be downloaded from GitHub because the egress policy blocks github.com) and is marked experimental.
+- Decision: **Adapt now, Adopt as optional evaluator.** AEGIS ships an original deterministic policy evaluator in TypeScript (`packages/core/src/policy`) whose policy model mirrors the public concepts OPA popularised: versioned policy documents, input document, deterministic evaluation, structured decision with explanation, policy unit tests. An `OpaEvaluator` adapter implements the same `PolicyEvaluator` interface against OPA's documented `/v1/data` REST API for customers who already run OPA. The adapter is untested against a live OPA in this environment (the OPA binary could not be downloaded from GitHub because the egress policy blocks github.com) and is marked experimental. It is not wired into the gateway: every live decision uses the built-in evaluator, and there is no setting that routes decisions to OPA.
 - Why: the built-in evaluator keeps the enforcement path in-process, has no network hop to fail open through, is testable with Vitest, and gives customers a JSON policy format that the console can render and edit visually. OPA remains available as an escape hatch.
 
 ### OpenFGA
@@ -140,7 +140,7 @@ Guiding constraints:
 
 | Concern | Choice | Status |
 |---|---|---|
-| Policy evaluation | Original TypeScript deterministic evaluator; OPA adapter optional | Built |
+| Policy evaluation | Original TypeScript deterministic evaluator; OPA adapter present but not wired into decisions | Built (evaluator); adapter experimental |
 | Relationship authorization | Tables plus resolver; OpenFGA later | Built (tables) |
 | Durable jobs | PostgreSQL job table plus worker | Built |
 | Observability | OpenTelemetry; SigNoz optional | Built (instrumentation) |

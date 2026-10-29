@@ -4,8 +4,8 @@ import type { AegisClient, AuthorizeInput, Decision } from "./index.js";
  * Framework-neutral enforcement wrapper. Every adapter in this package reduces to `guardedCall`:
  *
  *   1. Ask the gateway (agent execution mode) before the tool runs.
- *   2. allow or restrict: run the tool with the parameters the gateway returned (restricted ones when
- *      narrowed), present the single-use grant, then report the outcome so a receipt is written.
+ *   2. allow or restrict: present the single-use grant (consumed now), run the tool with the parameters the
+ *      gateway returned (restricted ones when narrowed), then report the outcome so a receipt is written.
  *   3. require_approval: optionally wait for a person; otherwise refuse with a clear message.
  *   4. deny, quarantine, request_more_information, error or an unreachable gateway: the tool never
  *      runs. The framework receives an AegisRefusal it can show to the model.
@@ -108,6 +108,10 @@ export async function guardedCall<T>(client: AegisClient, toolName: string, args
   if ((decision.decision !== "allow" && decision.decision !== "restrict") || !grant) throw new AegisRefusal(decision, refusalMessage(decision));
 
   const params = decision.decision === "restrict" && decision.restrictions ? decision.restrictions.params : args;
+  // The grant is consumed before the tool runs, never after: if the gateway was paused or the grant voided
+  // since the decision, the tool does not run.
+  const refused = await client.startExecution(decision.requestId, grant);
+  if (refused !== null) throw new AegisRefusal(decision, `The action did not run: ${refused}`);
   let result: T;
   try {
     result = await run(params);

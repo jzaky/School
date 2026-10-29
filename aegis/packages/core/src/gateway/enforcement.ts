@@ -114,7 +114,9 @@ export type EnforcementStrength = "gateway_executes" | "downstream_verifies" | "
  * no integration is attached, so nothing downstream can refuse a call that skipped AEGIS.
  */
 export async function enforcementCoverage(db: TenantDb, ctx: OrgContext) {
-  if (ctx.actor.type === "user" && !hasPermission(ctx.actor.permissions, "integrations:read")) throw forbidden("Missing permission integrations:read");
+  // Coverage shows how every agent's tools are enforced and where gaps are: people with integrations:read only.
+  if (ctx.actor.type !== "user") throw forbidden("Enforcement coverage is available to console users only");
+  if (!hasPermission(ctx.actor.permissions, "integrations:read")) throw forbidden("Missing permission integrations:read");
   const since = new Date((ctx.now ?? new Date()).getTime() - 30 * 24 * 3600_000);
   const agents = await db.agent.findMany({ where: { isLab: false, orgId: ctx.orgId, status: { in: ["active", "registered", "suspended"] } }, select: { id: true, slug: true, name: true, status: true, tools: { where: { enabled: true, revokedAt: null }, select: { tool: { select: { key: true, integration: { select: { id: true, key: true, type: true, enforcementSummary: true, lastEnforcementAuditAt: true } } } } } } }, orderBy: { slug: "asc" } });
   const modes = await db.actionRequest.groupBy({ by: ["agentId", "toolKey"], where: { orgId: ctx.orgId, createdAt: { gte: since } }, _count: { _all: true } });

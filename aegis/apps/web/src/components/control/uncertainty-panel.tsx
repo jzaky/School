@@ -28,7 +28,7 @@ const LEVEL_TEXT: Record<UncertaintyView["level"], string> = {
 export const BASIS_TEXT: Record<UncertaintyView["indicators"][number]["basis"], string> = {
   measured: "measured fact",
   heuristic: "heuristic, suggests risk but proves nothing",
-  self_reported: "the agent's own figure, not checked against outcomes",
+  self_reported: "reported by the agent; not checked by AEGIS",
   calibrated: "calibrated on labelled outcomes",
 };
 const STATUS_TONE: Record<string, Tone> = { ok: "allow", warning: "approval", fail: "deny", unknown: "deny" };

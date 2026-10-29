@@ -140,6 +140,15 @@ export class AegisClient {
   }
 
   /**
+   * Agent-mode: present the grant before running the tool. The gateway consumes it now, so a paused gateway,
+   * a voided grant or a second use stops the call before it happens. Returns the refusal reason, or null on success.
+   */
+  async startExecution(requestId: string, grant: string): Promise<string | null> {
+    const r = await this.request<{ started: boolean }>("POST", `/v1/gateway/actions/${requestId}/start`, { grant });
+    return r.ok ? null : (r.error ?? "the gateway did not confirm the start");
+  }
+
+  /**
    * Agent-mode: report the outcome of executing with the grant (the gateway writes the receipt).
    * Report `failed` when the downstream system definitively refused; if you do not know whether the
    * call happened, do not report at all: the gateway reconciles the request from the downstream system.

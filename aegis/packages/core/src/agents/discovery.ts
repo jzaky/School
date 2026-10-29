@@ -30,12 +30,15 @@ export async function recordAgentObservation(db: TenantDb, ctx: OrgContext, inpu
   if (existing) {
     return db.discoveredAgent.update({ where: { id: existing.id }, data: { lastSeenAt: now, observations: { increment: 1 }, name: input.name, platform: input.platform || existing.platform, metadata: { ...(existing.metadata as object), ...input.metadata } as Prisma.InputJsonValue } });
   }
-  // Match by slug or name to the registry first: a known agent seen somewhere new is linked, not flagged.
+  // Only a stable identifier links an observation to the registry automatically: the external id must equal a
+  // registered agent's slug. A display name is easy to copy, so a name match is only a suggestion for a person.
   const slug = input.externalId.toLowerCase();
-  const match = await db.agent.findFirst({ where: { orgId: ctx.orgId, OR: [{ slug }, { name: input.name }] }, select: { id: true } });
+  const match = await db.agent.findFirst({ where: { orgId: ctx.orgId, slug }, select: { id: true } });
+  const suggested = match ? null : await db.agent.findFirst({ where: { orgId: ctx.orgId, name: input.name }, select: { id: true } });
+  if (suggested) input = { ...input, metadata: { ...input.metadata, possibleMatchAgentId: suggested.id } };
   const row = await db.discoveredAgent.create({ data: { orgId: ctx.orgId, source, externalId: input.externalId, name: input.name, platform: input.platform, metadata: input.metadata as Prisma.InputJsonValue, firstSeenAt: now, lastSeenAt: now, status: match ? "linked" : "unregistered", linkedAgentId: match?.id ?? null } });
   await appendEvidence(db, ctx, { type: match ? "discovery.agent_matched" : "discovery.agent_unregistered", subjectType: "discovered_agent", subjectId: row.id, payload: { source, externalId: input.externalId, name: input.name, platform: input.platform, linkedAgentId: match?.id ?? null } });
-  if (!match) await createSecurityEvent(db, ctx, { type: "discovery.unregistered_agent", severity: "medium", title: `Unregistered AI agent seen: ${input.name.slice(0, 80)}`, detail: { source, externalId: input.externalId, platform: input.platform }, escalate: false });
+  if (!match) await createSecurityEvent(db, ctx, { type: "discovery.unregistered_agent", severity: "medium", title: `Unregistered AI agent seen: ${input.name.slice(0, 80)}`, detail: { source, externalId: input.externalId, platform: input.platform, possibleMatchAgentId: suggested?.id ?? null }, escalate: false });
   return row;
 }
 

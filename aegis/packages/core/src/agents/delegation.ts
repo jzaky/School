@@ -4,6 +4,7 @@ import { appendEvidence } from "../evidence/ledger.js";
 import type { OrgContext } from "../lib/context.js";
 import { forbidden, notFound, validation } from "../lib/errors.js";
 import { assertPermission } from "../orgs/orgs.js";
+import { hasPermission } from "../identity/permissions.js";
 
 /**
  * Agent-to-agent delegation. A person (never an agent) lets one agent act on another's behalf for a
@@ -46,7 +47,9 @@ export async function createDelegation(db: TenantDb, ctx: OrgContext, input: z.i
 /** Revocation is immediate: the next delegated request is refused. Requests already executed are not reversed. */
 export async function revokeDelegation(db: TenantDb, ctx: OrgContext, delegationId: string, reason: string) {
   if (ctx.actor.type !== "user") throw forbidden("Only a person can revoke a delegation");
-  assertPermission(ctx, "agents:control");
+  // Revoking narrows authority, so anyone who may grant a delegation (agents:write) may also take it back,
+  // as may anyone who controls agents (agents:control).
+  if (!hasPermission(ctx.actor.permissions, "agents:write") && !hasPermission(ctx.actor.permissions, "agents:control")) throw forbidden("Missing permission agents:write or agents:control");
   if (reason.trim().length < 3) throw validation("A reason is required");
   const row = await db.agentDelegation.findUnique({ where: { id: delegationId } });
   if (!row) throw notFound("Delegation");

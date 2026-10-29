@@ -2,8 +2,8 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { disconnectAll, withTenant } from "@aegis/db";
 import { addUserWithRole, makeTestTenant, type TestTenant } from "./helpers.js";
 import { makeContext } from "../src/lib/context.js";
-import { authorizeAndExecute, recordAgentExecution } from "../src/gateway/gateway.js";
-import { listPaymentDocuments, registerPaymentDocuments, setDocumentMatching, voidPaymentDocument } from "../src/payments/matching.js";
+import { authorizeAndExecute, recordAgentExecution, requestGrant } from "../src/gateway/gateway.js";
+import { checkPaymentDocument, documentMatchSchema, listPaymentDocuments, registerPaymentDocuments, setDocumentMatching, voidPaymentDocument } from "../src/payments/matching.js";
 import { upsertTool } from "../src/agents/registry.js";
 import { installPilotKit } from "../src/pilots/kits.js";
 
@@ -85,5 +85,31 @@ describe("payment document matching", () => {
     await withTenant(t.orgId, (db) => upsertTool(db, t.ownerCtx, { key: KEY, name: "Release contractor payment", description: "edited", parameterSchema: {}, destinationRules: { allowedDomains: [], allowedResourceKeys: [] }, riskLevel: "high" }));
     const tool = await withTenant(t.orgId, (db) => db.tool.findUniqueOrThrow({ where: { id: toolId } }));
     expect((tool.destinationRules as { documentMatch?: { effect: string } }).documentMatch?.effect).toBe("require_approval");
+  });
+  // Audit P2-13 regressions. The rule is in approval mode here (set above).
+  it("in approval mode a voided or already-paid document is still refused, not sent to a person", async () => {
+    const paid = await call(pay);
+    expect(paid.status).toBe("denied");
+    expect(paid.reasons.join(" ")).toMatch(/pay it twice/);
+    const voided = await call({ ...pay, purchaseOrder: "PO-SYN-2209", amount: 7000 });
+    expect(voided.status).toBe("denied");
+    expect(voided.reasons.join(" ")).toMatch(/voided/);
+  });
+
+  it("a payment that states no currency does not match", async () => {
+    await register([po("PO-SYN-2211", 4000)]);
+    const rule = documentMatchSchema.parse({ documentParam: "purchaseOrder", kinds: ["purchase_order"] });
+    const r = await withTenant(t.orgId, (db) => checkPaymentDocument(db, t.orgId, rule, { ...pay, purchaseOrder: "PO-SYN-2211", amount: 4000, currency: undefined }, "00000000-0000-0000-0000-000000000000"));
+    expect(r).toMatchObject({ ok: false, code: "currency_mismatch" });
+  });
+
+  it("voiding a document after a payment was authorized cancels that payment's permission", async () => {
+    await register([po("PO-SYN-2210", 3000)]);
+    const r = await call({ ...pay, purchaseOrder: "PO-SYN-2210", amount: 3000 });
+    expect(r.status).toBe("allowed");
+    const doc = (await withTenant(t.orgId, (db) => listPaymentDocuments(db, t.ownerCtx))).find((d) => d.ref === "PO-SYN-2210")!;
+    await withTenant(t.orgId, (db) => voidPaymentDocument(db, t.ownerCtx, doc.id, "Contract terminated before payment"));
+    await expect(withTenant(t.orgId, (db) => recordAgentExecution(db, agentCtx(), r.requestId, { grant: r.grant!.token, outcome: "succeeded", reference: "SIM-9" }))).rejects.toThrow();
+    await expect(requestGrant(withTenant, agentCtx(), r.requestId)).rejects.toThrow(/voided/);
   });
 });

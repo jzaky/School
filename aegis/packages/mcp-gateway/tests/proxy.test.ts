@@ -38,6 +38,8 @@ function fakeAegis() {
       });
       return Response.json({ results });
     }
+    // The gateway consumes the grant before the call is forwarded (docs/DEFECT_REGISTER.md P2-9).
+    if (path.endsWith("/start")) return Response.json({ started: true });
     if (path.endsWith("/execute")) {
       reports.push(body);
       return Response.json({});

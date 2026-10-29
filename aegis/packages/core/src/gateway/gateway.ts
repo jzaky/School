@@ -33,7 +33,7 @@ import { activeExceptionRules } from "../policy/exceptions.js";
 import { readIntegrationCredential, resolveDownstreamSystem, type DownstreamContext } from "./simulators.js";
 import { readWatchOnly } from "../pilots/watch-only.js";
 import { activeFreezeFor, freezeMessage, readFreezes, twoPersonRecovery, type ChangeFreeze } from "./freeze.js";
-import { checkPaymentDocument, readDocumentMatch, reservePaymentDocument, type DocumentMatch, type MatchResult } from "../payments/matching.js";
+import { checkPaymentDocument, isStructuralMismatch, readDocumentMatch, reservePaymentDocument, type DocumentMatch, type MatchResult } from "../payments/matching.js";
 import { checkClaimForPayment, readClaimRule, reserveClaim, type ClaimCheck } from "../payments/receipts.js";
 
 export const actionRequestInputSchema = z.object({
@@ -280,7 +280,7 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
     docRule = tool ? readDocumentMatch(tool.destinationRules) : null;
     if (docRule) {
       docMatch = await checkPaymentDocument(db, ctx.orgId, docRule, input.params, request.id);
-      if (!docMatch.ok && docRule.effect === "deny") failures.push({ code: "payment_document_mismatch", message: docMatch.message, details: { code: docMatch.code } });
+      if (!docMatch.ok && (docRule.effect === "deny" || isStructuralMismatch(docMatch.code))) failures.push({ code: "payment_document_mismatch", message: docMatch.message, details: { code: docMatch.code } });
     }
     // Policy tampering: a stored policy that no longer matches its recorded hash is never evaluated.
     const ownPolicies = await resolvePoliciesForAgent(db, ctx.orgId, agent);
@@ -988,6 +988,8 @@ export async function requestGrant(run: <T>(orgId: string, fn: (db: TenantDb) =>
 export async function issueGrantForRequest(db: TenantDb, ctx: OrgContext, actionRequestId: string) {
   const r = await db.actionRequest.findUnique({ where: { id: actionRequestId }, include: { agent: { select: { status: true } } } });
   if (!r || (ctx.actor.type === "agent" && r.agentId !== ctx.actor.id)) throw notFound("Action request");
+  // A request submitted for the gateway to execute is never handed to the agent to execute itself.
+  if ((((r.context ?? {}) as { executionMode?: string }).executionMode ?? "gateway") !== "agent") throw conflict("This request was submitted for the gateway to execute; an agent-mode grant is only issued for requests submitted with executionMode agent");
   const params = r.params as Record<string, unknown>;
   const requestHash = requestHashOf(r.toolKey, r.action, params);
   const g = await issueGrant(db, ctx.orgId, r.id, requestHash, { now: ctx.now });
@@ -1000,6 +1002,23 @@ export async function issueGrantForRequest(db: TenantDb, ctx: OrgContext, action
  * system verified the grant) reports the outcome. The grant must be the consumed one for this
  * request. Idempotent: a repeated report returns the recorded receipt.
  */
+/**
+ * Agent-mode start: the agent presents its grant before running the tool, and the grant is consumed now. A
+ * paused gateway, a voided or expired grant, or a second use is refused before anything runs. The outcome is
+ * then reported with recordAgentExecution.
+ */
+export async function startAgentExecution(db: TenantDb, ctx: OrgContext, actionRequestId: string, grantToken: string): Promise<{ started: true; requestId: string }> {
+  const req = await db.actionRequest.findUnique({ where: { id: actionRequestId } });
+  if (!req || (ctx.actor.type === "agent" && req.agentId !== ctx.actor.id)) throw notFound("Action request");
+  if (!parseGrantToken(grantToken)) throw forbidden("The grant token is not valid");
+  const grant = await db.executionGrant.findUnique({ where: { tokenHash: hashGrantToken(grantToken) } });
+  if (!grant || grant.actionRequestId !== req.id) throw forbidden("The grant does not belong to this request");
+  const check = await consumeGrant(db, grantToken, requestHashOf(req.toolKey, req.action, req.params as Record<string, unknown>), { now: ctx.now });
+  if (!check.ok) throw conflict(`Grant cannot be used: ${check.reason}`);
+  await appendEvidence(db, ctx, { type: "gateway.agent_execution_started", subjectType: "action_request", subjectId: req.id, correlationId: req.correlationId, payload: { grantId: grant.id } });
+  return { started: true, requestId: req.id };
+}
+
 export async function recordAgentExecution(db: TenantDb, ctx: OrgContext, actionRequestId: string, input: { grant: string; outcome: "succeeded" | "failed"; reference?: string | null; summary?: Record<string, unknown> }): Promise<ExecutionOutcome> {
   const req = await db.actionRequest.findUnique({ where: { id: actionRequestId }, include: { receipts: { orderBy: { createdAt: "desc" }, take: 1 } } });
   if (!req || (ctx.actor.type === "agent" && req.agentId !== ctx.actor.id)) throw notFound("Action request");

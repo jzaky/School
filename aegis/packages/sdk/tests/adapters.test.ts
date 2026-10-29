@@ -5,7 +5,7 @@ import { AegisClient, AegisRefusal, aegisAnthropicToolUse, aegisLangChainTool, a
  * A stand-in for the AEGIS gateway HTTP API. Decides by the "amount" argument so each outcome can be
  * exercised, and records every call so tests can prove what happened in what order.
  */
-function fakeGateway(opts: { down?: boolean; status500?: boolean } = {}) {
+function fakeGateway(opts: { down?: boolean; status500?: boolean; refuseStart?: boolean } = {}) {
   const calls: { method: string; path: string; body: unknown }[] = [];
   const reports: Record<string, unknown>[] = [];
   const decisions = new Map<string, Decision>();
@@ -33,6 +33,10 @@ function fakeGateway(opts: { down?: boolean; status500?: boolean } = {}) {
       const code = d.decision === "allow" || d.decision === "restrict" ? 200 : d.decision === "deny" ? 403 : 202;
       return new Response(JSON.stringify(d), { status: code });
     }
+    if (path.endsWith("/start")) {
+      if (opts.refuseStart) return new Response(JSON.stringify({ error: { message: "Grant cannot be used: gateway_paused" } }), { status: 409 });
+      return new Response(JSON.stringify({ started: true }), { status: 200 });
+    }
     if (path.endsWith("/execute")) {
       reports.push(body);
       return new Response(JSON.stringify({ status: body.outcome }), { status: 200 });
@@ -52,6 +56,19 @@ describe("guardedCall", () => {
     expect(out.decision.decision).toBe("allow");
     expect(ran).toBe(1);
     expect(g.reports).toEqual([{ grant: "g-req-1", outcome: "succeeded", reference: null, summary: {} }]);
+  });
+  it("consumes the grant before the tool runs, and never runs it when the start is refused", async () => {
+    const ok = fakeGateway();
+    const order: string[] = [];
+    await guardedCall(ok.client, "issue-refund", { amount: 50 }, () => order.push(`run after ${ok.calls.map((c) => c.path.split("/").pop()).join(",")}`));
+    expect(order).toEqual(["run after actions,start"]);
+    const paused = fakeGateway({ refuseStart: true });
+    let ran = 0;
+    const err = await guardedCall(paused.client, "issue-refund", { amount: 50 }, () => ++ran).catch((e: unknown) => e);
+    expect(err).toBeInstanceOf(AegisRefusal);
+    expect((err as Error).message).toMatch(/gateway_paused/);
+    expect(ran).toBe(0);
+    expect(paused.reports).toHaveLength(0);
   });
   it("runs the tool with the gateway's narrowed parameters on restrict", async () => {
     const g = fakeGateway();
