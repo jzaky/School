@@ -149,6 +149,16 @@ export class AegisClient {
     return r.ok ? r.data : null;
   }
 
+  /**
+   * Reports the tool definitions a connector serves, with the connector's name and version (docs/TOOL_PINNING.md).
+   * AEGIS pins the first report; a later difference blocks the tool until a person reviews it. Returns null
+   * when the report could not be delivered.
+   */
+  async reportToolDefinitions(input: { server: { name: string | null; version: string | null }; tools: { key: string; name: string; description?: string; inputSchema?: unknown; annotations?: Record<string, unknown> }[] }): Promise<{ results: { key: string; outcome: string }[] } | null> {
+    const r = await this.request<{ results: { key: string; outcome: string }[] }>("POST", "/v1/tool-definitions/report", input);
+    return r.ok ? r.data : null;
+  }
+
   async provideApprovalInfo(approvalRequestId: string, info: string): Promise<boolean> {
     const r = await this.request("POST", `/v1/gateway/approvals/${approvalRequestId}/info`, { info });
     return r.ok;

@@ -416,6 +416,8 @@ model Tool {
   uncertaintyPolicy Json     @default("{}") @map("uncertainty_policy")
   /// Rationale requirements for this tool (docs/REASONING_GOVERNANCE.md). Empty: only integrity failures escalate.
   reasoningPolicy   Json     @default("{}") @map("reasoning_policy")
+  /// Pinned definition fingerprint and connector version, and any change waiting for a person (docs/TOOL_PINNING.md).
+  definitionPin     Json     @default("{}") @map("definition_pin")
   enabled           Boolean  @default(true)
   disabledReason    String?  @map("disabled_reason")
   createdAt         DateTime @default(now()) @map("created_at")

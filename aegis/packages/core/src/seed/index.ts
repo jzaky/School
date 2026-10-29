@@ -20,6 +20,7 @@ import { seedDemoPolicyExtras } from "./demo-policy-extras.js";
 import { seedDemoAiGateway } from "./demo-ai-gateway.js";
 import { seedDemoShadowAi } from "./demo-shadow-ai.js";
 import { seedDemoSoftware } from "./demo-software.js";
+import { seedDemoToolPins } from "./demo-tool-pins.js";
 import type { TenantRunner } from "../gateway/gateway.js";
 import { updateInjectionResponse } from "../shield/injection-response.js";
 import { initKeyring } from "../lib/keyring.js";
@@ -61,6 +62,8 @@ export async function runSeed() {
   const shadow = await seedDemoShadowAi(t);
   console.log(`Shadow AI: ${shadow.signals} signals from ${shadow.imports} synthetic log exports`);
   console.log(`Software requests: ${await seedDemoSoftware(t)}`);
+  const pins = await seedDemoToolPins(t);
+  console.log(`Tool pins: ${pins.pinned} pinned, ${pins.pending} change waiting for review`);
   // Monitoring over the seeded history: run at several points in the past so alerts carry realistic timestamps,
   // then once now. A few alerts are already handled.
   const mon = await withTenant(t.orgId, async (db) => {

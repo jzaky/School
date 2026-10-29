@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant } from "@aegis/db";
-import { compileCustomPattern, createCustomDataClass, createDataClassSchema, deleteDataClass, evaluateToolSecurity, forbidden, inspectParams, inspectUntrustedContent, loadEnabledDataClasses, triageSchema, triageSecurityEvent, updateDataClass, updateDataClassSchema, validation, type Finding, type InjectionSignal, type Provenance, type ToolSecurityReport } from "@aegis/core";
+import { approveToolDefinition, compileCustomPattern, createCustomDataClass, rejectToolDefinition, createDataClassSchema, deleteDataClass, evaluateToolSecurity, forbidden, inspectParams, inspectUntrustedContent, loadEnabledDataClasses, triageSchema, triageSecurityEvent, updateDataClass, updateDataClassSchema, validation, type Finding, type InjectionSignal, type Provenance, type ToolSecurityReport } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { act } from "./util";
 
@@ -160,5 +160,16 @@ export async function evaluateToolSecurityAction(input: unknown) {
     }
     const destination = data.destinationDomain?.trim();
     return withTenant(c.ctx.orgId, (db) => evaluateToolSecurity(db, c.ctx.orgId, { agentId: data.agentId, toolKey: data.toolKey, params, resourceKey: data.resourceKey?.trim() || null, destinationDomain: destination ? destination.toLowerCase() : undefined }), { readOnly: true });
+  });
+}
+
+/** Tool definition pinning (docs/TOOL_PINNING.md): a person approves or rejects a changed connector version. */
+export async function reviewToolDefinitionAction(toolId: string, verdict: "approve" | "reject", reason: string) {
+  return act(async () => {
+    const c = await getConsoleContext();
+    const id = z.string().uuid().parse(toolId);
+    const ctx = { ...c.ctx, actor: { ...c.ctx.actor, label: c.session.user.name } };
+    await withTenant(c.ctx.orgId, (db) => (verdict === "approve" ? approveToolDefinition(db, ctx, id, reason) : rejectToolDefinition(db, ctx, id, reason)));
+    revalidatePath("/security/tools");
   });
 }

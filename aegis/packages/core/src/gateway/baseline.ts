@@ -9,6 +9,7 @@ const addFormats = ((addFormatsModule as unknown as { default?: unknown }).defau
 import type { Agent, Integration, Resource, Tool } from "@aegis/db";
 import { hashObject } from "../lib/crypto.js";
 import { freezeMessage, type ChangeFreeze } from "./freeze.js";
+import { pendingDefinitionChange } from "../shield/tool-pins.js";
 
 /**
  * Structural checks that run before any policy. They encode the registry, not customer policy:
@@ -37,7 +38,8 @@ export interface BaselineFailure {
     | "delegation_limit_exceeded"
     | "policy_integrity"
     | "concurrency_limit"
-    | "change_freeze";
+    | "change_freeze"
+    | "tool_definition_changed";
   message: string;
   details?: unknown;
 }
@@ -90,6 +92,8 @@ export function baselineChecks(args: {
     return { failures, permittedActions: [] };
   }
   if (args.freeze?.effect === "deny") failures.push({ code: "change_freeze", message: freezeMessage(args.freeze), details: { freezeId: args.freeze.id } });
+  const definitionChange = pendingDefinitionChange(tool.definitionPin);
+  if (definitionChange) failures.push({ code: "tool_definition_changed", message: `Tool ${tool.key}: ${definitionChange}` });
   if (!tool.enabled) failures.push({ code: "tool_disabled", message: `Tool ${tool.key} is disabled${tool.disabledReason ? `: ${tool.disabledReason}` : ""}` });
   if (tool.integration && tool.integration.status !== "active") failures.push({ code: "integration_disabled", message: `Integration ${tool.integration.key} is disabled${tool.integration.statusReason ? `: ${tool.integration.statusReason}` : ""}` });
   const grant = agent.tools.find((t) => t.toolId === tool.id);
