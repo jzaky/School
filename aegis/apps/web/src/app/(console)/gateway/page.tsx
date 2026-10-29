@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { FlaskConical } from "lucide-react";
 import { withTenant } from "@aegis/db";
-import { governanceMetrics, listActionRequests, requestListFilter } from "@aegis/core";
+import { governanceMetrics, listActionRequests, readFreezes, requestListFilter, twoPersonRecovery } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { agentOptions, keyParams } from "@/server/queries/control";
 import { PageHeader } from "@/components/ui/page-header";
@@ -10,6 +10,7 @@ import { StatPanel } from "@/components/ui/stat-panel";
 import { LinkButton } from "@/components/ui/link-button";
 import { GatewayTable, type RequestRow } from "@/components/control/gateway-table";
 import { EmergencyControls } from "@/components/control/emergency-controls";
+import { ChangeFreezes, type FreezeRow } from "@/components/control/change-freezes";
 
 export const metadata: Metadata = { title: "Action Gateway" };
 export const dynamic = "force-dynamic";
@@ -40,6 +41,10 @@ export default async function GatewayPage({ searchParams }: { searchParams: Prom
   });
   const filters = { status: filter.status ?? "", agentId: filter.agentId ?? "", tool: filter.tool ?? "", q: filter.q ?? "", since: typeof flat.since === "string" ? flat.since : "" };
   const settings = c.org.settings as { gatewayPaused?: boolean; gatewayPausedReason?: string; gatewayPausedBy?: string };
+  const agentName = new Map(agents.map((x) => [x.id, x.name]));
+  const freezes: FreezeRow[] = readFreezes(c.org.settings)
+    .sort((x, y) => y.startsAt.localeCompare(x.startsAt))
+    .map((f) => ({ id: f.id, title: f.title, reason: f.reason, startsAt: f.startsAt, endsAt: f.endsAt, effect: f.effect, minRiskLevel: f.minRiskLevel, agentNames: f.agentIds.map((id) => agentName.get(id) ?? "Removed agent"), createdBy: f.createdBy.label, endedAt: f.endedAt ?? null, endedBy: f.endedBy?.label ?? null, endReason: f.endReason ?? null }));
   const a = today.actions;
   return (
     <div>
@@ -68,8 +73,9 @@ export default async function GatewayPage({ searchParams }: { searchParams: Prom
         <div className="xl:col-span-2">
           <GatewayTable rows={rows} pagination={{ page: page.page, pageSize: page.pageSize, total: page.total }} filters={filters} agents={agents.map((x) => ({ id: x.id, name: x.name }))} tools={toolKeys} />
         </div>
-        <div>
+        <div className="space-y-4">
           <EmergencyControls paused={!!settings.gatewayPaused} pausedReason={settings.gatewayPausedReason ?? null} pausedBy={settings.gatewayPausedBy ?? null} canAdmin={canAdmin} canControl={canControl} agents={agents.map((x) => ({ id: x.id, name: x.name, slug: x.slug, status: x.status, tools: x.tools }))} integrations={integrations.map((i) => ({ id: i.id, name: i.name, key: i.key, status: i.status, credentials: i.credentials.map((cr) => ({ id: cr.id, name: cr.name, revoked: !!cr.revokedAt })) }))} />
+          <ChangeFreezes freezes={freezes} twoPerson={twoPersonRecovery(c.org.settings)} canControl={canControl} canAdmin={canAdmin} agents={agents.map((x) => ({ id: x.id, name: x.name }))} />
         </div>
       </div>
     </div>

@@ -92,6 +92,7 @@ export * from "./demos/sales.js";
 export * from "./validation/sector-lab.js";
 export * from "./pilots/watch-only.js";
 export * from "./pilots/kits.js";
+export * from "./gateway/freeze.js";
 export * from "./lib/patch.js";
 export * from "./lib/metrics.js";
 export * from "./assurance/ops-alerts.js";

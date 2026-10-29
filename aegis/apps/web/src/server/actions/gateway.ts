@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { withTenant } from "@aegis/db";
-import { auditEnforcementPath, executeApprovedRequest, forbidden, pauseGateway, releaseQuarantine, releaseQuarantineSchema, reconcileExecution, resolveExecutionManually, resumeGateway, revokeAgentTool, revokeCredential, setIntegrationStatus, transitionAgent } from "@aegis/core";
+import { auditEnforcementPath, createFreeze, endFreeze, executeApprovedRequest, forbidden, setTwoPersonRecovery, pauseGateway, releaseQuarantine, releaseQuarantineSchema, reconcileExecution, resolveExecutionManually, resumeGateway, revokeAgentTool, revokeCredential, setIntegrationStatus, transitionAgent } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { activityFamily, subjectHref, type ActivityFamily } from "@/server/queries/control";
 import { actorLabel, evidenceLabels } from "@/server/queries/assurance";
@@ -213,5 +213,31 @@ export async function auditEnforcementAction(integrationId: string) {
     revalidatePath(`/integrations/${id}`);
     revalidatePath("/security/events");
     return { observable: out.observable, operations: out.operations, matched: out.matched, outside: out.findings.length, error: out.error };
+  });
+}
+
+/** Change freezes (docs/CHANGE_FREEZE.md): permission and input checks are in core. */
+export async function createFreezeAction(input: { title: string; reason: string; startsAt: string; endsAt: string; effect: "deny" | "require_approval"; minRiskLevel: "low" | "medium" | "high" | "critical"; agentIds: string[] }) {
+  return act(async () => {
+    const c = await getConsoleContext();
+    const f = await withTenant(c.ctx.orgId, (db) => createFreeze(db, { ...c.ctx, actor: { ...c.ctx.actor, label: c.session.user.name } }, input));
+    revalidateGateway();
+    return { id: f.id };
+  });
+}
+
+export async function endFreezeAction(freezeId: string, reason: string) {
+  return act(async () => {
+    const c = await getConsoleContext();
+    await withTenant(c.ctx.orgId, (db) => endFreeze(db, { ...c.ctx, actor: { ...c.ctx.actor, label: c.session.user.name } }, uuid.parse(freezeId), reason));
+    revalidateGateway();
+  });
+}
+
+export async function setTwoPersonRecoveryAction(enabled: boolean, reason: string) {
+  return act(async () => {
+    const c = await getConsoleContext();
+    await withTenant(c.ctx.orgId, (db) => setTwoPersonRecovery(db, c.ctx, { enabled: z.boolean().parse(enabled), reason }));
+    revalidateGateway();
   });
 }

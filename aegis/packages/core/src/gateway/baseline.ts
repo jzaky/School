@@ -8,6 +8,7 @@ const Ajv = ((AjvModule as unknown as { default?: unknown }).default ?? AjvModul
 const addFormats = ((addFormatsModule as unknown as { default?: unknown }).default ?? addFormatsModule) as unknown as (ajv: import("ajv").default) => void;
 import type { Agent, Integration, Resource, Tool } from "@aegis/db";
 import { hashObject } from "../lib/crypto.js";
+import { freezeMessage, type ChangeFreeze } from "./freeze.js";
 
 /**
  * Structural checks that run before any policy. They encode the registry, not customer policy:
@@ -35,7 +36,8 @@ export interface BaselineFailure {
     | "delegation_not_permitted"
     | "delegation_limit_exceeded"
     | "policy_integrity"
-    | "concurrency_limit";
+    | "concurrency_limit"
+    | "change_freeze";
   message: string;
   details?: unknown;
 }
@@ -72,6 +74,8 @@ export function baselineChecks(args: {
   params: Record<string, unknown>;
   destinationDomain: string | null;
   gatewayPaused: { paused: boolean; reason?: string };
+  /** A change freeze in force for this tool and agent whose effect is to refuse (see freeze.ts). */
+  freeze?: ChangeFreeze | null;
   /** The request clock (replays pass the original time). */
   now?: Date;
 }): { failures: BaselineFailure[]; permittedActions: string[] } {
@@ -85,6 +89,7 @@ export function baselineChecks(args: {
     failures.push({ code: "tool_not_found", message: "Unknown tool" });
     return { failures, permittedActions: [] };
   }
+  if (args.freeze?.effect === "deny") failures.push({ code: "change_freeze", message: freezeMessage(args.freeze), details: { freezeId: args.freeze.id } });
   if (!tool.enabled) failures.push({ code: "tool_disabled", message: `Tool ${tool.key} is disabled${tool.disabledReason ? `: ${tool.disabledReason}` : ""}` });
   if (tool.integration && tool.integration.status !== "active") failures.push({ code: "integration_disabled", message: `Integration ${tool.integration.key} is disabled${tool.integration.statusReason ? `: ${tool.integration.statusReason}` : ""}` });
   const grant = agent.tools.find((t) => t.toolId === tool.id);

@@ -32,6 +32,7 @@ import { escalateForModel, getModelGovernance, modelGateCheck } from "../governa
 import { activeExceptionRules } from "../policy/exceptions.js";
 import { readIntegrationCredential, resolveDownstreamSystem, type DownstreamContext } from "./simulators.js";
 import { readWatchOnly } from "../pilots/watch-only.js";
+import { activeFreezeFor, freezeMessage, readFreezes, twoPersonRecovery, type ChangeFreeze } from "./freeze.js";
 
 export const actionRequestInputSchema = z.object({
   tool: z.string().min(1).max(80),
@@ -122,6 +123,13 @@ export function requestHashOf(toolKey: string, action: string, params: Record<st
 }
 
 /** Reads through the transaction client: never touch the shared pool from inside a tenant transaction (pool exhaustion under load). */
+/** The organization's pause state and change freezes, read in one query for the decision. */
+export async function gatewayOrgState(db: TenantDb, orgId: string): Promise<{ paused: { paused: boolean; reason?: string }; freezes: ChangeFreeze[] }> {
+  const settings = await orgSettings(db, orgId);
+  const s = (settings ?? {}) as { gatewayPaused?: boolean; gatewayPausedReason?: string };
+  return { paused: { paused: !!s.gatewayPaused, reason: s.gatewayPausedReason }, freezes: readFreezes(settings) };
+}
+
 export async function gatewayPausedState(db: TenantDb, orgId: string): Promise<{ paused: boolean; reason?: string }> {
   const org = { settings: await orgSettings(db, orgId) };
   const s = (org?.settings ?? {}) as { gatewayPaused?: boolean; gatewayPausedReason?: string };
@@ -242,11 +250,15 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
   let policyOnlyResult: string | null = null;
   /** Parameters before policy narrowing, so watch-only mode can let the original request through. */
   let paramsBeforeRestrict: Record<string, unknown> | null = null;
+  /** A change freeze in force for this request (freeze.ts); a hold it causes is never relaxed by watch-only mode. */
+  let freeze: ChangeFreeze | null = null;
+  let freezeHeld = false;
 
   try {
     const destinationDomain = extractDestinationDomain(input.params);
-    const paused = await gatewayPausedState(db, ctx.orgId);
-    const baseline = baselineChecks({ agent, tool, action: input.action, resource, resourceKeyRequested: input.resource ?? null, params: input.params, destinationDomain, gatewayPaused: paused, now });
+    const { paused, freezes } = await gatewayOrgState(db, ctx.orgId);
+    freeze = tool ? activeFreezeFor(freezes, { now, toolKey: tool.key, toolRisk: tool.riskLevel, agentId }) : null;
+    const baseline = baselineChecks({ agent, tool, action: input.action, resource, resourceKeyRequested: input.resource ?? null, params: input.params, destinationDomain, gatewayPaused: paused, freeze, now });
     const failures: BaselineFailure[] = [...baseline.failures, ...(delegationFailure ? [delegationFailure] : []), ...(delegation ? delegationChecks(delegation, tool, resource, input.action, input.params, now) : [])];
     // Policy tampering: a stored policy that no longer matches its recorded hash is never evaluated.
     const ownPolicies = await resolvePoliciesForAgent(db, ctx.orgId, agent);
@@ -411,6 +423,13 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
           evaluation = { ...evaluation, result: "deny", reasons: [...evaluation.reasons, why] };
         }
       }
+      // Change freeze with an approval path: changes in the window go to a person as emergency changes.
+      if (freeze?.effect === "require_approval" && (decisionResult === "allow" || decisionResult === "restrict")) {
+        freezeHeld = true;
+        const why = `${freezeMessage(freeze)}. Changes during the freeze need a person's approval.`;
+        decisionResult = "require_approval";
+        evaluation = { ...evaluation, result: "require_approval", approval: { roles: [], minApprovers: 1, expiresInMinutes: 240, separationOfDuties: true, escalateToRoles: [], instructions: why.slice(0, 500) }, reasons: [...evaluation.reasons, why] };
+      }
       // Managed autonomy (Phase 3): the agent's level is applied after policy and data protection and can only
       // make the outcome stricter. Under a delegation the stricter of the two agents' settings applies.
       const policyOutcome = decisionResult;
@@ -488,7 +507,7 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
   // AEGIS would have done, and the action proceeds unchanged. Baseline, data protection and error refusals are
   // never relaxed, and the decision row keeps the real outcome.
   // An operator's autonomy level 0 (observe only) is a deliberate stop and is not relaxed either.
-  const watchOnly = readWatchOnly(agent.metadata) && !agent.isLab && explanation.stage === "policy" && autonomyRecord?.effect !== "observe_only" && decisionResult !== "allow" && decisionResult !== "error" ? { wouldHave: decisionResult } : null;
+  const watchOnly = readWatchOnly(agent.metadata) && !agent.isLab && explanation.stage === "policy" && !freezeHeld && autonomyRecord?.effect !== "observe_only" && decisionResult !== "allow" && decisionResult !== "error" ? { wouldHave: decisionResult } : null;
   if (watchOnly) {
     explanation = { ...explanation, watchOnly };
     riskIndicators = [...riskIndicators, `watch_only:${decisionResult}`];
@@ -860,7 +879,7 @@ export async function pauseGateway(db: TenantDb, ctx: OrgContext, reason: string
   if (reason.trim().length < 3) throw new AegisError("validation", "A reason is required");
   const now = ctx.now ?? new Date();
   const org = await db.organization.findUniqueOrThrow({ where: { id: ctx.orgId }, select: { settings: true } });
-  const settings = { ...((org.settings ?? {}) as Record<string, unknown>), gatewayPaused: true, gatewayPausedReason: reason, gatewayPausedAt: now.toISOString(), gatewayPausedBy: ctx.actor.label ?? ctx.actor.id ?? "user" };
+  const settings = { ...((org.settings ?? {}) as Record<string, unknown>), gatewayPaused: true, gatewayPausedReason: reason, gatewayPausedAt: now.toISOString(), gatewayPausedBy: ctx.actor.label ?? ctx.actor.id ?? "user", gatewayPausedById: ctx.actor.id ?? null };
   await db.organization.update({ where: { id: ctx.orgId }, data: { settings: settings as Prisma.InputJsonValue } });
   const voidedGrants = await voidLiveGrants(db, ctx, `gateway paused: ${reason}`);
   await appendEvidence(db, ctx, { type: "gateway.paused", subjectType: "organization", subjectId: ctx.orgId, payload: { reason, voidedGrants } });
@@ -871,10 +890,15 @@ export async function resumeGateway(db: TenantDb, ctx: OrgContext, reason: strin
   if (!ctx.actor.permissions?.includes("*") && !ctx.actor.permissions?.includes("org:admin")) throw forbidden("Missing permission org:admin");
   const now = ctx.now ?? new Date();
   const org = await db.organization.findUniqueOrThrow({ where: { id: ctx.orgId }, select: { settings: true } });
-  const settings: Record<string, unknown> = { ...((org.settings ?? {}) as Record<string, unknown>), gatewayPaused: false, gatewayResumedAt: now.toISOString(), gatewayResumeReason: reason };
+  const current = (org.settings ?? {}) as Record<string, unknown>;
+  // Two-person recovery: the person who stopped everything cannot also be the one who starts it again.
+  if (current.gatewayPaused && twoPersonRecovery(current) && current.gatewayPausedById && current.gatewayPausedById === ctx.actor.id) throw forbidden("Two-person recovery is on: a different administrator must resume the gateway");
+  if (current.gatewayPaused && twoPersonRecovery(current) && reason.trim().length < 5) throw new AegisError("validation", "A reason of at least 5 characters is required to resume");
+  const settings: Record<string, unknown> = { ...current, gatewayPaused: false, gatewayResumedAt: now.toISOString(), gatewayResumeReason: reason };
   delete settings.gatewayPausedReason;
   delete settings.gatewayPausedAt;
   delete settings.gatewayPausedBy;
+  delete settings.gatewayPausedById;
   await db.organization.update({ where: { id: ctx.orgId }, data: { settings: settings as Prisma.InputJsonValue } });
   await appendEvidence(db, ctx, { type: "gateway.resumed", subjectType: "organization", subjectId: ctx.orgId, payload: { reason } });
 }
