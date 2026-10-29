@@ -9,7 +9,7 @@
 
 export const FIGURES = {
   /** `it(` cases under packages/core/tests. */
-  coreTests: 526,
+  coreTests: 527,
   /** `it(` cases under packages/db/tests (tenant isolation). */
   dbTests: 22,
   /** Playwright spec files under apps/web/tests/e2e. */

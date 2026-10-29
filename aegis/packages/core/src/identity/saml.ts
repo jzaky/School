@@ -10,10 +10,16 @@ import { finishSsoLogin, readSsoState, signSsoState } from "./oidc.js";
  * built on node-saml (MIT). Requirements enforced on every response:
  * - the assertion is signed with the identity provider's configured certificate;
  * - it is addressed to this service provider (audience) and inside its validity window;
- * - the RelayState is AEGIS's own signed, ten-minute state naming the organization;
+ * - the RelayState is AEGIS's own signed, ten-minute state naming the organization, and its nonce must
+ *   match the cookie set on the browser that started the login (no login CSRF);
+ * - the signed assertion answers the request AEGIS sent: SubjectConfirmationData InResponseTo equals the
+ *   request id derived from that nonce (unsolicited, identity-provider-initiated responses are refused);
  * - an assertion id is accepted once, across every process (shared `saml_assertions` table).
  * The account rules after that are the same as OIDC: see finishSsoLogin.
  */
+/** Cookie holding the nonce of the SAML login this browser started. */
+export const SAML_NONCE_COOKIE = "aegis_saml_login";
+
 export function samlEntityId(orgSlug: string): string {
   return `${env().WEB_PUBLIC_URL}/sso/saml/${orgSlug}/metadata`;
 }
@@ -32,8 +38,14 @@ async function connectionFor(orgId: string) {
   return conn;
 }
 
-function client(conn: { samlEntryPoint: string | null; samlIdpCert: string | null }, slug: string) {
+/** The AuthnRequest id for a login, derived from the relay-state nonce so the response can be matched to it. */
+export function samlRequestId(nonce: string): string {
+  return `_aegis${nonce}`;
+}
+
+function client(conn: { samlEntryPoint: string | null; samlIdpCert: string | null }, slug: string, nonce?: string) {
   return new SAML({
+    ...(nonce ? { generateUniqueId: () => samlRequestId(nonce) } : {}),
     entryPoint: conn.samlEntryPoint!,
     issuer: samlEntityId(slug),
     callbackUrl: samlAcsUrl(),
@@ -48,13 +60,15 @@ function client(conn: { samlEntryPoint: string | null; samlIdpCert: string | nul
   });
 }
 
-export async function beginSamlLogin(orgSlug: string): Promise<{ url: string }> {
+export async function beginSamlLogin(orgSlug: string): Promise<{ url: string; nonce: string; requestId: string }> {
   const org = await rawPrisma().organization.findUnique({ where: { slug: orgSlug } });
   if (!org) throw notFound("Organization");
   const conn = await connectionFor(org.id);
-  const relayState = signSsoState({ orgId: org.id, slug: orgSlug, nonce: randomBytes(12).toString("hex"), protocol: "saml" });
-  const url = await client(conn, orgSlug).getAuthorizeUrlAsync(relayState, undefined, {});
-  return { url };
+  const nonce = randomBytes(12).toString("hex");
+  const relayState = signSsoState({ orgId: org.id, slug: orgSlug, nonce, protocol: "saml" });
+  const url = await client(conn, orgSlug, nonce).getAuthorizeUrlAsync(relayState, undefined, {});
+  // The caller sets `nonce` as a short-lived cookie on the browser; completeSamlLogin requires it back.
+  return { url, nonce, requestId: samlRequestId(nonce) };
 }
 
 /**
@@ -70,9 +84,10 @@ export async function acceptAssertionOnce(orgId: string, assertionId: string, tt
   });
 }
 
-export async function completeSamlLogin(params: { samlResponse: string; relayState: string; ip?: string; userAgent?: string }) {
+export async function completeSamlLogin(params: { samlResponse: string; relayState: string; browserNonce: string | null | undefined; ip?: string; userAgent?: string }) {
   const st = readSsoState(params.relayState);
-  if (st.protocol !== "saml" || !st.orgId || !st.slug) throw unauthorized("Invalid SAML relay state");
+  if (st.protocol !== "saml" || !st.orgId || !st.slug || typeof st.nonce !== "string") throw unauthorized("Invalid SAML relay state");
+  if (!params.browserNonce || params.browserNonce !== st.nonce) throw unauthorized("This sign-in was not started from this browser; start again from the sign-in page");
   const conn = await connectionFor(st.orgId);
   let profile;
   try {
@@ -81,6 +96,9 @@ export async function completeSamlLogin(params: { samlResponse: string; relaySta
     throw unauthorized(`SAML response rejected: ${e instanceof Error ? e.message : "invalid"}`);
   }
   if (!profile) throw unauthorized("SAML response carried no assertion");
+  // Inside the signed assertion: the response must answer the request this browser started.
+  const answered = profile.getAssertionXml?.().match(/<(?:\w+:)?SubjectConfirmationData\b[^>]*\bInResponseTo="([^"]+)"/)?.[1] ?? null;
+  if (answered !== samlRequestId(st.nonce)) throw unauthorized("The SAML response does not answer the sign-in request AEGIS sent");
   const assertionId = (profile as { ID?: string }).ID ?? (profile.getAssertionXml?.().match(/\bID="([^"]+)"/)?.[1] ?? null);
   if (!assertionId || !(await acceptAssertionOnce(st.orgId, assertionId, 10 * 60_000))) throw unauthorized("This SAML assertion was already used");
   const p = profile as Record<string, unknown>;

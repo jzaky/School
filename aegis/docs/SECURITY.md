@@ -4,7 +4,7 @@
 Fail closed, least privilege, every action attributable, tamper-evident evidence, tenant isolation enforced in the database.
 
 ## Identity
-- Console users: argon2id password hashes, lockout after 8 failures, server-side sessions (12 hour absolute, 2 hour idle) in HttpOnly Secure SameSite=Lax cookies, TOTP MFA (RFC 6238), per-organization OpenID Connect with PKCE and JIT provisioning limited to allowed email domains. SAML 2.0 (node-saml, signed assertions, audience and validity checks, one-time assertion ids recorded in the database per organisation, so a replay is refused by every replica).
+- Console users: argon2id password hashes, lockout after 8 failures, server-side sessions (12 hour absolute, 2 hour idle) in HttpOnly Secure SameSite=Lax cookies, TOTP MFA (RFC 6238), per-organization OpenID Connect with PKCE and JIT provisioning limited to allowed email domains. SAML 2.0 (node-saml, signed assertions, audience and validity checks, one-time assertion ids recorded in the database per organisation, so a replay is refused by every replica; service-provider initiated only: the signed assertion must answer the request AEGIS sent (InResponseTo), and the relay state must match a cookie on the browser that started the login, so neither an unsolicited response nor a login started elsewhere is accepted).
 - Agents and integrations: API keys `aegis_ak_<prefix>_<secret>`, SHA-256 hashed at rest, shown once, scoped to one subject, revocable, revoked automatically when an agent is revoked.
 - Roles: 8 system roles over 22 explicit permissions; custom roles cannot hold the wildcard. Four-eyes rule on policy activation. Separation of duties on approvals (owners of an agent cannot approve its requests).
 
