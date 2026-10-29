@@ -21,7 +21,8 @@
     "bench:gateway:setup": "tsx scripts/bench-gateway-setup.ts",
     "bench:gateway": "tsx scripts/bench-gateway.ts",
     "sector-lab": "tsx scripts/sector-lab.ts",
-    "impact": "tsx scripts/impact.ts"
+    "impact": "tsx scripts/impact.ts",
+    "live": "tsx scripts/live-validation.ts"
   },
   "dependencies": {
     "@aegis/db": "workspace:*",

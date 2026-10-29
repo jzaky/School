@@ -49,7 +49,7 @@ export interface ParsedComponent {
 }
 
 export interface ParsedFinding {
-  kind: "vulnerability" | "secret" | "maintenance";
+  kind: "vulnerability" | "malicious" | "secret" | "maintenance";
   severity: "critical" | "high" | "medium" | "low";
   ref: string;
   component: string;
@@ -336,14 +336,25 @@ export async function osvLookup(components: ParsedComponent[], s: SoftwarePolicy
     for (const v of arr(get(r, "vulns"))) hits.push({ id: str(get(v, "id")), component: `${pub[i]!.name}@${pub[i]!.version}` });
   });
   const ids = [...new Set(hits.map((h) => h.id))].slice(0, 100);
-  const details = new Map<string, { severity: ParsedFinding["severity"]; summary: string; fixed: string | null }>();
+  const details = new Map<string, { severity: ParsedFinding["severity"]; summary: string; text: string; fixed: string | null }>();
   for (const id of ids) {
     const d = await jsonSender({ method: "GET", url: `${osvBaseUrl()}/v1/vulns/${encodeURIComponent(id)}` });
     const sev = str(get(get(d.json, "database_specific"), "severity"));
     const fixed = arr(get(d.json, "affected")).flatMap((a) => arr(get(a, "ranges")).flatMap((r) => arr(get(r, "events")).map((e) => str(get(e, "fixed"))))).find(Boolean) ?? null;
-    details.set(id, { severity: sev ? normalizeSeverity(sev) : "medium", summary: str(get(d.json, "summary")) || id, fixed });
+    details.set(id, { severity: sev ? normalizeSeverity(sev) : "medium", summary: str(get(d.json, "summary")) || id, text: str(get(d.json, "details")), fixed });
   }
-  return hits.filter((h) => details.has(h.id)).map((h) => ({ kind: "vulnerability", severity: details.get(h.id)!.severity, ref: h.id, component: h.component, title: details.get(h.id)!.summary.slice(0, 300), source: "osv", fixedIn: details.get(h.id)!.fixed }));
+  // Malicious-package records (MAL- ids from the OpenSSF malicious packages feed) usually carry no severity, and
+  // advisories for hijacked releases describe malware rather than a flaw: both are known malicious code.
+  // The details are checked with stricter phrases, because ordinary vulnerability write-ups say "a malicious user could".
+  const malicious = (id: string, summary: string, text: string) =>
+    id.startsWith("MAL-") || /\b(malicious (code|package|version)|embedded malware|malware|backdoor)\b/i.test(summary) || /\b(considered malicious|malicious (code|package|version|dependency)|embedded malware|contains malware|backdoor(ed)?)\b/i.test(text);
+  return hits
+    .filter((h) => details.has(h.id))
+    .map((h) => {
+      const d = details.get(h.id)!;
+      const bad = malicious(h.id, d.summary, d.text);
+      return { kind: bad ? ("malicious" as const) : ("vulnerability" as const), severity: bad ? ("critical" as const) : d.severity, ref: h.id, component: h.component, title: d.summary.slice(0, 300), source: "osv", fixedIn: d.fixed };
+    });
 }
 
 // ---------- assessment ----------
@@ -376,6 +387,7 @@ export function assessSoftware(input: { item: Pick<SoftwareItem, "name" | "ecosy
   add("Critical vulnerabilities", Math.min(80, vc * 40), `${vc} known critical vulnerabilities without an accepted risk`);
   add("High vulnerabilities", Math.min(60, vh * 20), `${vh} known high vulnerabilities`);
   add("Medium and low vulnerabilities", Math.min(20, vm * 5 + vl), `${vm} medium and ${vl} low`);
+  add("Known malicious code", count("malicious") ? 100 : 0, `${count("malicious")} components with a published malicious-code record`);
   add("Possible typosquatting", count("typosquat") ? 50 : 0, `${count("typosquat")} components named one edit away from a popular package`);
   add("Dependency confusion", count("dependency_confusion") ? 60 : 0, `${count("dependency_confusion")} internal names resolved from a public registry`);
   add("Secrets in the code", count("secret") ? 30 : 0, `${count("secret")} secrets found by a scanner`);
@@ -396,6 +408,7 @@ export function assessSoftware(input: { item: Pick<SoftwareItem, "name" | "ecosy
     if (STATUS_RANK[s] > STATUS_RANK[floor]) floor = s;
     reasons.push(why);
   };
+  if (count("malicious")) raise("prohibited", "A component has a published record of malicious code");
   if (count("typosquat") || count("dependency_confusion")) raise("prohibited", "A component looks like typosquatting or dependency confusion");
   if (prohibited) raise("prohibited", "A component's license is prohibited by your license policy");
   if (count("secret") || vc) raise("quarantined", vc ? "Known critical vulnerabilities" : "Secrets were found in the code");
@@ -411,7 +424,7 @@ export function assessSoftware(input: { item: Pick<SoftwareItem, "name" | "ecosy
     risk: { score },
     sbom: { components: input.components },
     scorecard: { score: input.scorecard },
-    findings: { critical: vc, high: vh, medium: vm, low: vl, typosquat: count("typosquat"), dependencyConfusion: count("dependency_confusion"), secrets: count("secret"), installScripts: count("install_script"), prohibitedLicenses: prohibited, reviewLicenses: review, missingIntegrity: count("provenance") },
+    findings: { critical: vc, high: vh, medium: vm, low: vl, malicious: count("malicious"), typosquat: count("typosquat"), dependencyConfusion: count("dependency_confusion"), secrets: count("secret"), installScripts: count("install_script"), prohibitedLicenses: prohibited, reviewLicenses: review, missingIntegrity: count("provenance") },
   };
   const r = evaluatePolicies(policies, evalInput);
   const fromPolicy: SoftwareStatus = r.result === "allow" ? "approved" : r.result === "restrict" ? "restricted" : r.result === "quarantine" ? "quarantined" : r.result === "deny" ? "prohibited" : "under_review";

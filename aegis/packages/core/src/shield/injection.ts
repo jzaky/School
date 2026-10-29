@@ -45,6 +45,18 @@ const RULES: SignalRule[] = [
       { re: /\bfrom now on\b[^.\n]{0,40}\b(?:you|ignore|always|never|must)\b/i, confidence: 0.6 },
       { re: /\b(?:do not|don't|never)\s+follow\b[^.\n]{0,30}\b(?:instructions?|rules?|policy|policies)\b/i, confidence: 0.8 },
       { re: /\b(?:your|the)\s+(?:real|true|actual|new)\s+(?:task|goal|instructions?|objective)\s+(?:is|are)\b/i, confidence: 0.75 },
+      // Generic resets, found in public injection datasets: "forget everything above", "ignore all instructions".
+      { re: /\b(?:forget|ignore|disregard)\s+(?:about\s+)?(?:everything|all|anything)\b/i, confidence: 0.8 },
+      { re: /\b(?:forget|ignore|disregard|leave)\b[^.\n]{0,30}\b(?:previous|prior|earlier|above)\s+(?:tasks?|information|context|conversation|messages?)\b/i, confidence: 0.8 },
+      { re: /\b(?:now|next)\s+(?:new\s+tasks?\s+follow|focus on (?:your|a|the) new task|(?:we\s+)?start over)\b/i, confidence: 0.75 },
+      { re: /\bnew tasks? follows?\b|\bstart over with a new task\b/i, confidence: 0.75 },
+      { re: /\bstopp?\s*[-:!]\s*(?:now\s+)?(?:write|say|print|output|schreib\w*)\b/i, confidence: 0.8 },
+      // German and French equivalents.
+      { re: /\bvergiss(?:t)?\s+alles\b|\bvergessen sie alles\b/i, confidence: 0.8 },
+      { re: /\b(?:ignorier\w*|vergiss\w*|vergessen)\b[^.\n]{0,40}\b(?:vorherig\w*|bisherig\w*|obig\w*|anweisung\w*)\b/i, confidence: 0.8 },
+      { re: /\b(?:alle|die)\s+(?:bisherigen|vorherigen|obigen)\s+(?:informationen|anweisungen|aufgaben|ausführungen)\b/i, confidence: 0.75 },
+      { re: /\bnun folgen (?:weitere|neue) aufgaben\b/i, confidence: 0.75 },
+      { re: /\b(?:oubliez|ignorez)\s+(?:toutes\s+)?(?:les\s+)?(?:instructions|consignes|règles)\b/i, confidence: 0.85 },
     ],
   },
   {
@@ -56,6 +68,11 @@ const RULES: SignalRule[] = [
       { re: /\b(?:act|behave|pretend|roleplay|role-play)\s+as\s+(?:an?\s+)?(?:unrestricted|unfiltered|jailbroken|admin|administrator|root|developer|system|different|new)\b/i, confidence: 0.8 },
       { re: /\bact as\b[^.\n]{0,40}\b(?:without|no)\s+(?:restrictions?|limits?|rules?|filters?)\b/i, confidence: 0.85 },
       { re: /\b(?:developer|god|dan|jailbreak|debug)\s+mode\b/i, confidence: 0.7 },
+      // Persona takeovers: "now you are X", "I want you to act as", "repeat after me".
+      { re: /\b(?:now|okay\.?)\s+you\s+are\b/i, confidence: 0.6 },
+      { re: /\bi want you to act as\b|\bact as an? (?:python|javascript|linux|sql|bash)\b[^.\n]{0,20}\b(?:interpreter|terminal|console|shell)\b/i, confidence: 0.65 },
+      { re: /\bich möchte,? dass sie als\b[^.\n]{0,80}\bfungieren\b|\bstell dir vor,? du bist\b/i, confidence: 0.6 },
+      { re: /\brepeat after me\b|\bsprich mir nach\b/i, confidence: 0.7 },
     ],
   },
   {

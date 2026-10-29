@@ -36,8 +36,10 @@ beforeAll(async () => {
     osvCalls.push(req);
     if (req.url.endsWith("/v1/querybatch")) {
       const qs = (req.body as { queries: { package: { name: string }; version: string }[] }).queries;
-      return { status: 200, json: { results: qs.map((q) => (q.package.name === "lodash" && q.version === "4.17.20" ? { vulns: [{ id: "GHSA-test-0001" }] } : {})) } };
+      return { status: 200, json: { results: qs.map((q) => (q.package.name === "lodash" && q.version === "4.17.20" ? { vulns: [{ id: "GHSA-test-0001" }] } : q.package.name === "postmark-mcp" && q.version === "1.0.16" ? { vulns: [{ id: "MAL-2025-47604" }] } : {})) } };
     }
+    // The shape of the real OpenSSF malicious-package record: no severity at all.
+    if (req.url.endsWith("/MAL-2025-47604")) return { status: 200, json: { id: "MAL-2025-47604", summary: "Malicious code in postmark-mcp (npm)", affected: [{ ranges: [{ type: "SEMVER", events: [{ introduced: "1.0.16" }] }] }] } };
     return { status: 200, json: { id: "GHSA-test-0001", summary: "Prototype pollution in lodash (test advisory)", database_specific: { severity: "HIGH" }, affected: [{ ranges: [{ events: [{ introduced: "0" }, { fixed: "4.17.21" }] }] }] } };
   });
 }, 60_000);
@@ -158,6 +160,18 @@ describe("the approval workflow", () => {
     expect(osvCalls.length).toBeGreaterThan(before);
     await run((db) => updateSoftwareSettings(db, t.ownerCtx, { internalPrefixes: ["@meridian/"], internalHosts: [], osvLookup: false, autoApprove: false }));
     expect(await run((db) => refreshSoftwareAdvisories(db, t.ownerCtx))).toMatchObject({ checked: 0 });
+  });
+
+  it("a published malicious-package record prohibits the software even though it carries no severity, and automatic approval cannot pass it", async () => {
+    await run((db) => updateSoftwareSettings(db, t.ownerCtx, { internalPrefixes: [], internalHosts: [], osvLookup: true, autoApprove: true }));
+    const r = await run((db) => requestSoftware(db, engineer.ctx, { name: "postmark-mcp", ecosystem: "npm", version: "1.0.16" }));
+    const lockText = JSON.stringify({ lockfileVersion: 3, packages: { "": { dependencies: { "postmark-mcp": "1.0.16" } }, "node_modules/postmark-mcp": { version: "1.0.16", resolved: "https://registry.npmjs.org/postmark-mcp/-/postmark-mcp-1.0.16.tgz", integrity: "sha512-m", license: "MIT" } } });
+    const a = await run((db) => attachSoftwareEvidence(db, t.ownerCtx, r.item.id, { format: "npm_lock", text: lockText }));
+    expect(a.item.recommended).toBe("prohibited");
+    expect(a.item.status).toBe("under_review");
+    expect(a.assessment.reasons.join(" ")).toMatch(/malicious code/);
+    const f = await run((db) => db.softwareFinding.findFirstOrThrow({ where: { itemId: r.item.id, ref: "MAL-2025-47604" } }));
+    expect(f).toMatchObject({ kind: "malicious", severity: "critical" });
   });
 
   it("automatic approval, when switched on, applies only to a clean recommendation", async () => {
