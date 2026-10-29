@@ -80,9 +80,11 @@ describe("commercial records (database)", () => {
   it("only a platform administrator creates a customer, which starts with no members and an owner invitation for its first administrator", async () => {
     await expect(platformCreateOrganization(t.ownerUserId, { name: "Nope", slug: `nope-${Date.now().toString(36)}`, adminEmail: "a@b.example" })).rejects.toThrow(/Platform administrators only/);
     const email = `first-${Date.now().toString(36)}@test.aegis.local`;
-    const { org, invitationToken } = await platformCreateOrganization(adminId, { name: "Customer One", slug: `cust-${Date.now().toString(36)}`, adminEmail: email, plan: "trial", trialDays: 14 }, NOW);
+    // Created at the real time: the invitation is accepted below, and acceptance checks expiry against the clock.
+    const createdAt = new Date();
+    const { org, invitationToken } = await platformCreateOrganization(adminId, { name: "Customer One", slug: `cust-${Date.now().toString(36)}`, adminEmail: email, plan: "trial", trialDays: 14 }, createdAt);
     created.push(org.id);
-    expect(org.trialEndsAt!.toISOString()).toBe("2026-10-28T08:00:00.000Z");
+    expect(org.trialEndsAt!.toISOString()).toBe(new Date(createdAt.getTime() + 14 * 86_400_000).toISOString());
     expect(await withTenant(org.id, (db) => db.membership.count())).toBe(0);
     const user = await registerUser({ email, name: "First Admin", password: "CorrectHorse1Battery" });
     await acceptInvitation(invitationToken, user.id);
