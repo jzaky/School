@@ -2223,3 +2223,68 @@ model PaymentDocument {
   @@map("payment_documents")
 }
 
+// ---------- Expense receipt validation (docs/RECEIPT_VALIDATION.md) ----------
+
+/// A card or bank transaction from the system of record (a bank or card feed). Agents cannot register these.
+model FinancialTransaction {
+  id           String   @id @default(uuid(7)) @db.Uuid
+  orgId        String   @map("org_id") @db.Uuid
+  ref          String
+  /// purchase, refund, reversal
+  kind         String
+  cardRef      String?  @map("card_ref")
+  merchantName String   @map("merchant_name")
+  /// Money is kept in minor units (fils, cents) so every comparison is exact.
+  amountMinor  BigInt   @map("amount_minor")
+  currency     String
+  postedAt     DateTime @map("posted_at")
+  /// For a refund or reversal: the purchase it undoes.
+  originalRef  String?  @map("original_ref")
+  sourceType   String   @map("source_type")
+  sourceId     String?  @map("source_id") @db.Uuid
+  sourceLabel  String?  @map("source_label")
+  detail       Json     @default("{}")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@unique([orgId, ref])
+  @@index([orgId, postedAt])
+  @@map("financial_transactions")
+}
+
+/// An expense claim with what was read from its receipt, the verdict and the findings behind it.
+model ExpenseClaim {
+  id                  String    @id @default(uuid(7)) @db.Uuid
+  orgId               String    @map("org_id") @db.Uuid
+  ref                 String
+  claimantRef         String    @map("claimant_ref")
+  cardRef             String?   @map("card_ref")
+  merchantName        String    @map("merchant_name")
+  receiptDate         DateTime  @map("receipt_date")
+  currency            String
+  subtotalMinor       BigInt?   @map("subtotal_minor")
+  vatMinor            BigInt?   @map("vat_minor")
+  totalMinor          BigInt    @map("total_minor")
+  claimedMinor        BigInt    @map("claimed_minor")
+  trn                 String?
+  jurisdiction        String
+  receiptSha256       String?   @map("receipt_sha256")
+  /// 64-bit difference hash of the receipt image, to find the same picture resized or re-saved.
+  receiptDhash        String?   @map("receipt_dhash")
+  receiptMeta         Json      @default("{}") @map("receipt_meta")
+  /// verified_match, requires_review, confirmed_mismatch, insufficient_evidence
+  verdict             String
+  findings            Json      @default("[]")
+  matchedRefs         String[]  @default([]) @map("matched_refs")
+  reservedByRequestId String?   @map("reserved_by_request_id") @db.Uuid
+  reservedAt          DateTime? @map("reserved_at")
+  sourceType          String    @map("source_type")
+  sourceId            String?   @map("source_id") @db.Uuid
+  sourceLabel         String?   @map("source_label")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  @@unique([orgId, ref])
+  @@index([orgId, receiptSha256])
+  @@map("expense_claims")
+}
+

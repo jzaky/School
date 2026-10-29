@@ -40,7 +40,8 @@ export interface BaselineFailure {
     | "concurrency_limit"
     | "change_freeze"
     | "tool_definition_changed"
-    | "payment_document_mismatch";
+    | "payment_document_mismatch"
+    | "expense_claim_mismatch";
   message: string;
   details?: unknown;
 }

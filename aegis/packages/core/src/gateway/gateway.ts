@@ -34,6 +34,7 @@ import { readIntegrationCredential, resolveDownstreamSystem, type DownstreamCont
 import { readWatchOnly } from "../pilots/watch-only.js";
 import { activeFreezeFor, freezeMessage, readFreezes, twoPersonRecovery, type ChangeFreeze } from "./freeze.js";
 import { checkPaymentDocument, readDocumentMatch, reservePaymentDocument, type DocumentMatch, type MatchResult } from "../payments/matching.js";
+import { checkClaimForPayment, readClaimRule, reserveClaim, type ClaimCheck } from "../payments/receipts.js";
 
 export const actionRequestInputSchema = z.object({
   tool: z.string().min(1).max(80),
@@ -258,6 +259,8 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
   let docRule: DocumentMatch | null = null;
   let docMatch: MatchResult | null = null;
   let docHeld = false;
+  /** Expense claim validation (payments/receipts.ts): the claim check for a reimbursement tool. */
+  let claimCheck: ClaimCheck | null = null;
 
   try {
     const destinationDomain = extractDestinationDomain(input.params);
@@ -265,6 +268,11 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
     freeze = tool ? activeFreezeFor(freezes, { now, toolKey: tool.key, toolRisk: tool.riskLevel, agentId }) : null;
     const baseline = baselineChecks({ agent, tool, action: input.action, resource, resourceKeyRequested: input.resource ?? null, params: input.params, destinationDomain, gatewayPaused: paused, freeze, now });
     const failures: BaselineFailure[] = [...baseline.failures, ...(delegationFailure ? [delegationFailure] : []), ...(delegation ? delegationChecks(delegation, tool, resource, input.action, input.params, now) : [])];
+    const claimRule = tool ? readClaimRule(tool.destinationRules) : null;
+    if (claimRule) {
+      claimCheck = await checkClaimForPayment(db, ctx.orgId, claimRule, input.params, request.id);
+      if (claimCheck.outcome === "deny") failures.push({ code: "expense_claim_mismatch", message: claimCheck.message });
+    }
     docRule = tool ? readDocumentMatch(tool.destinationRules) : null;
     if (docRule) {
       docMatch = await checkPaymentDocument(db, ctx.orgId, docRule, input.params, request.id);
@@ -447,6 +455,12 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
         decisionResult = "require_approval";
         evaluation = { ...evaluation, result: "require_approval", approval: { roles: [], minApprovers: 1, expiresInMinutes: 240, separationOfDuties: true, escalateToRoles: [], instructions: why.slice(0, 500) }, reasons: [...evaluation.reasons, why] };
       }
+      // Expense claims that need a person, or have nothing authoritative to verify against, are held.
+      if (claimCheck?.outcome === "require_approval" && (decisionResult === "allow" || decisionResult === "restrict")) {
+        docHeld = true;
+        decisionResult = "require_approval";
+        evaluation = { ...evaluation, result: "require_approval", approval: { roles: [], minApprovers: 1, expiresInMinutes: 24 * 60, separationOfDuties: true, escalateToRoles: [], instructions: claimCheck.message.slice(0, 500) }, reasons: [...evaluation.reasons, claimCheck.message] };
+      }
       // Managed autonomy (Phase 3): the agent's level is applied after policy and data protection and can only
       // make the outcome stricter. Under a delegation the stricter of the two agents' settings applies.
       const policyOutcome = decisionResult;
@@ -531,6 +545,16 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
     if (paramsBeforeRestrict) effectiveParams = paramsBeforeRestrict;
   }
 
+  // A reimbursement claims its expense claim now, so the same claim cannot be paid twice.
+  if (claimCheck && claimCheck.outcome !== "deny" && decisionResult !== "deny" && decisionResult !== "error") {
+    const won = await reserveClaim(db, claimCheck.claim.id, claimCheck.stale, request.id, now);
+    if (!won) {
+      decisionResult = "deny";
+      watchOnly = null;
+      reasons = [...reasons, `Claim ${claimCheck.claim.ref} was just claimed by another reimbursement: this would pay it twice`];
+      explanation = { ...explanation, stage: "baseline", expenseClaim: { ref: claimCheck.claim.ref, code: "duplicate" } };
+    }
+  }
   // A matched payment claims its document now, so a second payment against it is refused as a duplicate.
   // The claim is conditional: of two payments racing for one document, only one wins.
   if (docMatch?.ok && decisionResult !== "deny" && decisionResult !== "error") {
