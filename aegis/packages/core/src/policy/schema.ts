@@ -71,9 +71,9 @@ export type ApprovalRequirement = z.infer<typeof approvalRequirementSchema>;
 /** Narrowing applied when a rule with effect "restrict" decides. Paths are top-level or dotted parameter names. */
 export const restrictSpecSchema = z.object({
   /** Numeric parameters capped at the given value, for example { "amount": 5000 }. */
-  capNumeric: z.record(z.number()).default({}),
+  capNumeric: z.record(z.string(), z.number()).default({}),
   /** Parameters forced to a value, for example { "channel": "sandbox" }. */
-  setParams: z.record(z.unknown()).default({}),
+  setParams: z.record(z.string(), z.unknown()).default({}),
   /** Parameters removed before execution. */
   removeParams: z.array(z.string().min(1).max(80)).max(20).default([]),
   /** Shown to the agent and recorded in evidence. */
@@ -141,7 +141,7 @@ export const policyDocumentSchema = z
       .array(
         z.object({
           name: z.string().max(120),
-          input: z.record(z.unknown()),
+          input: z.record(z.string(), z.unknown()),
           expect: z.enum(EFFECTS),
         }),
       )
@@ -155,7 +155,7 @@ export const policyDocumentSchema = z
         template: z
           .object({
             id: z.string().min(1).max(64),
-            settings: z.record(z.unknown()),
+            settings: z.record(z.string(), z.unknown()),
           })
           .optional(),
       })

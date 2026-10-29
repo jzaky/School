@@ -21,7 +21,7 @@ export async function policyRoutes(app: FastifyInstance) {
   app.post("/simulate", async (req) => {
     const ctx = await req.orgContext();
     void ctx;
-    const body = z.object({ document: z.unknown(), input: z.record(z.unknown()) }).parse(req.body);
+    const body = z.object({ document: z.unknown(), input: z.record(z.string(), z.unknown()) }).parse(req.body);
     return simulatePolicy(body.document, body.input);
   });
   app.get("/:id", async (req) => {

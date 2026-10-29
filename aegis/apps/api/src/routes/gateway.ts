@@ -61,7 +61,7 @@ export async function gatewayRoutes(app: FastifyInstance) {
     const ctx = await req.orgContext();
     if (ctx.actor.type !== "agent") throw forbidden("Use an agent API key");
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
-    const body = z.object({ grant: z.string().min(10), outcome: z.enum(["succeeded", "failed"]).default("succeeded"), reference: z.string().max(200).nullable().optional(), summary: z.record(z.unknown()).optional() }).parse(req.body);
+    const body = z.object({ grant: z.string().min(10), outcome: z.enum(["succeeded", "failed"]).default("succeeded"), reference: z.string().max(200).nullable().optional(), summary: z.record(z.string(), z.unknown()).optional() }).parse(req.body);
     return withTenant(ctx.orgId, (db) => recordAgentExecution(db, ctx, id, body));
   });
 
@@ -73,7 +73,7 @@ export async function gatewayRoutes(app: FastifyInstance) {
     requireScope(req, "grants:verify");
     const ctx = await req.orgContext();
     if (ctx.actor.type !== "integration") throw forbidden("Use an integration API key");
-    const body = z.object({ grant: z.string().min(10), toolKey: z.string(), action: z.string().default("execute"), params: z.record(z.unknown()) }).parse(req.body);
+    const body = z.object({ grant: z.string().min(10), toolKey: z.string(), action: z.string().default("execute"), params: z.record(z.string(), z.unknown()) }).parse(req.body);
     const result = await withTenant(ctx.orgId, async (db) => {
       // The grant must have been issued for this integration: another downstream system's key cannot consume it.
       const r = await consumeGrant(db, body.grant, hashObject({ toolKey: body.toolKey, action: body.action, params: body.params }), { integrationId: ctx.actor.id! });

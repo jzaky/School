@@ -35,13 +35,13 @@ import { readIntegrationCredential, resolveDownstreamSystem, type DownstreamCont
 export const actionRequestInputSchema = z.object({
   tool: z.string().min(1).max(80),
   action: z.string().min(1).max(80).default("execute"),
-  params: z.record(z.unknown()).default({}),
+  params: z.record(z.string(), z.unknown()).default({}),
   resource: z.string().max(80).optional(),
   idempotencyKey: z.string().min(8).max(200),
   correlationId: z.string().max(120).optional(),
   justification: z.string().max(2000).default(""),
   principal: z.object({ type: z.enum(["user", "customer", "system", "none"]).default("none"), ref: z.string().max(200).optional(), userId: z.string().uuid().optional() }).default({ type: "none" }),
-  context: z.record(z.unknown()).default({}),
+  context: z.record(z.string(), z.unknown()).default({}),
   /** "gateway": AEGIS executes through the integration. "agent": AEGIS returns a grant for the agent to present downstream. */
   executionMode: z.enum(["gateway", "agent"]).default("gateway"),
   /** Act on behalf of another agent under an active delegation. The delegate never gains more than its delegator holds. */

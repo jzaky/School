@@ -37,7 +37,7 @@ export async function webhookRoutes(app: FastifyInstance) {
       reply.status(401);
       return { ok: false, reason: check.reason };
     }
-    const body = z.object({ type: z.string(), payload: z.record(z.unknown()).default({}) }).parse(req.body);
+    const body = z.object({ type: z.string(), payload: z.record(z.string(), z.unknown()).default({}) }).parse(req.body);
     await withTenant(ctx.orgId, async (db) => {
       const integ = await db.integration.findFirst({ where: { key: integrationKey } });
       if (integ && body.type === "health") await recordIntegrationHealth(db, integ.id, body.payload.ok !== false);

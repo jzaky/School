@@ -22,7 +22,7 @@ export const agentInputSchema = z.object({
   purpose: z.string().max(1000).default(""),
   allowedDestinations: z.array(z.string().min(3).max(253).regex(/^(\*\.)?[a-z0-9.-]+$/i, "Use a domain such as example.com or *.example.com")).max(50).default([]),
   credentialExpiresAt: z.coerce.date().nullable().optional(),
-  metadata: z.record(z.unknown()).default({}),
+  metadata: z.record(z.string(), z.unknown()).default({}),
 });
 export type AgentInput = z.input<typeof agentInputSchema>;
 
@@ -202,7 +202,7 @@ export const toolInputSchema = z.object({
   name: z.string().min(2).max(120),
   description: z.string().max(1000).default(""),
   integrationId: z.string().uuid().nullable().optional(),
-  parameterSchema: z.record(z.unknown()).default({}),
+  parameterSchema: z.record(z.string(), z.unknown()).default({}),
   destinationRules: z.object({ allowedDomains: z.array(z.string()).default([]), allowedResourceKeys: z.array(z.string()).default([]) }).default({ allowedDomains: [], allowedResourceKeys: [] }),
   riskLevel: z.enum(["low", "medium", "high", "critical"]).default("medium"),
 });
@@ -233,7 +233,7 @@ export const resourceInputSchema = z.object({
   type: z.string().min(2).max(60),
   classification: z.enum(["public", "internal", "confidential", "restricted"]).default("internal"),
   ownerTeamId: z.string().uuid().nullable().optional(),
-  attributes: z.record(z.unknown()).default({}),
+  attributes: z.record(z.string(), z.unknown()).default({}),
 });
 
 export async function listResources(db: TenantDb, ctx: OrgContext) {

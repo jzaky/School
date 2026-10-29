@@ -43,7 +43,7 @@ export const evaluationInputSchema = z.object({
   kind: z.enum(EVALUATION_KINDS),
   result: z.enum(["pass", "conditional", "fail"]),
   summary: z.string().trim().min(10, "Describe what was evaluated and how, in at least 10 characters").max(4000),
-  metrics: z.record(z.union([z.number(), z.string(), z.boolean()])).default({}),
+  metrics: z.record(z.string(), z.union([z.number(), z.string(), z.boolean()])).default({}),
   documentId: z.string().uuid().nullable().optional(),
 });
 

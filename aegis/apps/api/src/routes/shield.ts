@@ -59,7 +59,7 @@ export async function shieldRoutes(app: FastifyInstance) {
   });
 
   // ---------- dry runs (no persistence) ----------
-  const inspectSchema = z.object({ params: z.record(z.unknown()), toolKey: z.string().min(1).max(80).optional(), agentId: z.string().uuid().optional(), resourceKey: z.string().max(80).optional(), action: z.string().max(80).optional() }).strict();
+  const inspectSchema = z.object({ params: z.record(z.string(), z.unknown()), toolKey: z.string().min(1).max(80).optional(), agentId: z.string().uuid().optional(), resourceKey: z.string().max(80).optional(), action: z.string().max(80).optional() }).strict();
   app.post("/inspect", async (req) => {
     const ctx = await req.orgContext();
     assertPermission(ctx, "security:read");

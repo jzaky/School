@@ -20,7 +20,7 @@ const base = {
   email: z.string().trim().toLowerCase().email("Enter a valid work email").max(254),
   organization: z.string().trim().min(2, "Enter your organization").max(160),
   role: z.string().trim().min(2, "Enter your role").max(120),
-  interest: z.enum(INTERESTS, { errorMap: () => ({ message: "Choose an area of interest" }) }),
+  interest: z.enum(INTERESTS, { error: "Choose an area of interest" }),
   message: z.string().trim().max(4000).default(""),
   // Honeypot. Humans never see this field; bots fill it.
   website: z.string().max(200).default(""),
@@ -32,7 +32,7 @@ const demoSchema = z.object({
   ...base,
   kind: z.literal("demo_request"),
   preferredDates: z.string().trim().min(2, "Suggest one or two dates or a week").max(300),
-  deploymentPreference: z.enum(DEPLOYMENTS, { errorMap: () => ({ message: "Choose a deployment preference" }) }),
+  deploymentPreference: z.enum(DEPLOYMENTS, { error: "Choose a deployment preference" }),
 });
 const pilotSchema = demoSchema.extend({ kind: z.literal("pilot_request") });
 const schema = z.discriminatedUnion("kind", [inquirySchema, demoSchema, pilotSchema]);

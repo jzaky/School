@@ -18,7 +18,7 @@ export const observationSchema = z.object({
   externalId: z.string().min(1).max(200),
   name: z.string().min(1).max(200),
   platform: z.string().max(80).default(""),
-  metadata: z.record(z.unknown()).default({}),
+  metadata: z.record(z.string(), z.unknown()).default({}),
 });
 
 export async function recordAgentObservation(db: TenantDb, ctx: OrgContext, input: z.infer<typeof observationSchema>) {
