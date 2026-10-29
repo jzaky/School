@@ -61,17 +61,23 @@ export async function purgeRateLimitBuckets(olderThanMs = 24 * 60 * 60 * 1000, n
  */
 export class SharedRateLimitStore {
   private readonly windowMs: number;
-  constructor(options: { timeWindow?: unknown }) {
+  /** Route limits count separately from the global limit: "login 10 a minute" must not include other requests. */
+  private readonly prefix: string;
+  constructor(options: { timeWindow?: unknown; prefix?: string }) {
     this.windowMs = typeof options.timeWindow === "number" ? options.timeWindow : 60_000;
+    this.prefix = options.prefix ?? "";
   }
   /** Called by the plugin as incr(key, callback, timeWindowMs, max). */
   incr(key: string, callback: (err: Error | null, result?: { current: number; ttl: number }) => void, timeWindow?: number, max?: number): void {
     const windowMs = typeof timeWindow === "number" && timeWindow > 0 ? timeWindow : this.windowMs;
-    consumeRateLimit(`api:${key}`, max ?? Number.MAX_SAFE_INTEGER, windowMs)
+    consumeRateLimit(`api:${this.prefix}${key}`, max ?? Number.MAX_SAFE_INTEGER, windowMs)
       .then((r) => callback(null, { current: r.count, ttl: r.resetInMs }))
       .catch((e: unknown) => callback(e instanceof Error ? e : new Error(String(e))));
   }
-  child(routeOptions: { timeWindow?: unknown }): SharedRateLimitStore {
-    return new SharedRateLimitStore({ timeWindow: typeof routeOptions.timeWindow === "number" ? routeOptions.timeWindow : this.windowMs });
+  /** The plugin creates one child per route with its own limit; routeInfo names the route. */
+  child(routeOptions: { timeWindow?: unknown; routeInfo?: { method?: string | string[]; url?: string } }): SharedRateLimitStore {
+    const method = routeOptions.routeInfo?.method;
+    const route = routeOptions.routeInfo?.url ? `route:${Array.isArray(method) ? method.join(",") : (method ?? "")} ${routeOptions.routeInfo.url}:` : "";
+    return new SharedRateLimitStore({ timeWindow: typeof routeOptions.timeWindow === "number" ? routeOptions.timeWindow : this.windowMs, prefix: route });
   }
 }
