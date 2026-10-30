@@ -1,6 +1,6 @@
 import { createServer } from "node:http";
 import { withTenant, disconnectAll } from "@aegis/db";
-import { assertApplicationProcess, initKeyring, auditAllEnforcementPaths, claimJobs, deliverNotificationEmails, dispatchEvents, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, periodOf, prometheusText, purgeRateLimitBuckets, recomputeCalibration, recordOperationalAlerts, reconcileExecution, recoverStaleJobs, refreshSoftwareAdvisories, syncEntra, ENTRA_KEY, registerJobHandler, runJob, snapshotUsage, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
+import { assertApplicationProcess, initKeyring, auditAllEnforcementPaths, claimJobs, deliverNotificationEmails, dispatchEvents, expireTemporaryAccess, env, expireApproval, expireHeldRequest, expireHeldRequests, expireOverdueApprovals, installConnectors, installShield, logger, periodOf, prometheusText, purgeRateLimitBuckets, recomputeCalibration, recordOperationalAlerts, reconcileExecution, runScheduledLabs, recoverStaleJobs, refreshSoftwareAdvisories, syncEntra, ENTRA_KEY, registerJobHandler, runJob, snapshotUsage, startTelemetry, sweepStuckExecutions, systemContext, writeCheckpoint } from "@aegis/core";
 import { rawPrisma } from "@aegis/db";
 import { registerModuleHandlers } from "./handlers.js";
 
@@ -152,6 +152,20 @@ registerJobHandler("entra.sync", async () => {
   }
 });
 
+/** Continuous attack simulation: runs the lab against scheduled agents that are due and flags regressions. */
+registerJobHandler("lab.scheduled", async () => {
+  const orgs = await rawPrisma().organization.findMany({ select: { id: true } });
+  for (const o of orgs) {
+    try {
+      const results = await runScheduledLabs((fn) => withTenant(o.id, fn), o.id);
+      const ran = results.filter((r) => r.status === "ran");
+      if (ran.length) log.info({ orgId: o.id, ran: ran.length, regressions: ran.reduce((n, r) => n + r.regressions.length, 0) }, "scheduled attack simulation");
+    } catch (e) {
+      log.error({ orgId: o.id, err: e instanceof Error ? e.message : String(e) }, "scheduled attack simulation failed");
+    }
+  }
+});
+
 registerModuleHandlers();
 
 /** Recurring jobs are re-scheduled by key so there is always exactly one pending instance. */
@@ -171,6 +185,7 @@ async function scheduleRecurring() {
   await enqueueJob({ type: "usage.snapshot", payload: {}, idempotencyKey: `usage.snapshot:${Math.floor(minute / 360)}`, runAt: new Date() });
   await enqueueJob({ type: "uncertainty.calibrate", payload: {}, idempotencyKey: `uncertainty.calibrate:${Math.floor(minute / 60)}`, runAt: new Date() });
   await enqueueJob({ type: "entra.sync", payload: {}, idempotencyKey: `entra.sync:${Math.floor(minute / 15)}`, runAt: new Date() });
+  await enqueueJob({ type: "lab.scheduled", payload: {}, idempotencyKey: `lab.scheduled:${Math.floor(minute / 60)}`, runAt: new Date() });
   await enqueueJob({ type: "software.advisories", payload: {}, idempotencyKey: `software.advisories:${Math.floor(minute / 1440)}`, runAt: new Date() });
 }
 

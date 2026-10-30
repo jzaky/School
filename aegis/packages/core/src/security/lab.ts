@@ -392,6 +392,14 @@ async function writeResult(db: TenantDb, env: LabEnv, key: string, r: ResultDraf
 export async function runAttackSimulation(run: TenantRunner, ctx: OrgContext, raw: z.input<typeof startLabRunSchema>) {
   assertPermission(ctx, "security:write");
   if (ctx.actor.type !== "user" || !ctx.actor.id) throw forbidden("Only a person can start an Attack Simulation Lab run");
+  return runLab(run, ctx, raw, { scheduled: false });
+}
+
+/**
+ * The run itself. Called by runAttackSimulation (a person) and by the schedule a person turned on
+ * (lab-schedule.ts, with the system context); `scheduled` is recorded in the run summary.
+ */
+export async function runLab(run: TenantRunner, ctx: OrgContext, raw: z.input<typeof startLabRunSchema>, opts: { scheduled: boolean }) {
   const input = startLabRunSchema.parse(raw);
   const { runId, env, scenarioKeys } = await run((db) => prepare(db, ctx, input));
   const counts: Record<string, number> = {};
@@ -425,7 +433,7 @@ export async function runAttackSimulation(run: TenantRunner, ctx: OrgContext, ra
       if (lab.status === "active" || lab.status === "suspended") await transitionAgent(db, sys, env.labAgentId, "revoked", "Attack Simulation Lab run finished");
       await transitionAgent(db, sys, env.labAgentId, "archived", "Attack Simulation Lab run finished");
       await db.policyAssignment.deleteMany({ where: { orgId: ctx.orgId, targetType: "agent", targetId: env.labAgentId } });
-      const summary = { counts, control: env.control?.response?.decision ?? null, tool: env.toolKey };
+      const summary = { counts, control: env.control?.response?.decision ?? null, tool: env.toolKey, scheduled: opts.scheduled };
       await db.attackSimulationRun.update({ where: { id: runId }, data: { status: fatal ? "failed" : "completed", error: fatal, summary: summary as Prisma.InputJsonValue, completedAt: new Date() } });
       await appendEvidence(db, ctx, { type: fatal ? "lab.run_failed" : "lab.run_completed", subjectType: "attack_simulation_run", subjectId: runId, payload: { ...summary, error: fatal } });
     });

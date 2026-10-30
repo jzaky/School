@@ -9,13 +9,13 @@
 
 export const FIGURES = {
   /** `it(` cases under packages/core/tests. */
-  coreTests: 529,
+  coreTests: 532,
   /** `it(` cases under packages/db/tests (tenant isolation). */
   dbTests: 22,
   /** Playwright spec files under apps/web/tests/e2e. */
   e2eFiles: 36,
   /** `test(` cases across those spec files. */
-  e2eTests: 139,
+  e2eTests: 140,
   /** Shared framework catalogs seeded for every tenant. */
   catalogs: 21,
   /** Controls across those catalogs. */

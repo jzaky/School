@@ -130,6 +130,16 @@ The full-run test asserts every baseline control is defended against the fixture
 
 ## Not done
 
-- **No scheduling.** Runs are started by hand; a scheduled run, with an alert when a gap appears, is a natural next step.
 - **Fixed scenarios.** Organizations cannot add their own patterns yet.
-- **Detection is heuristic.** Injection detection is pattern-based (`packages/core/src/shield/injection.ts`) and has not been evaluated against an independent adversarial corpus.
+- **Detection is heuristic.** Injection detection is pattern-based (`packages/core/src/shield/injection.ts`). On the held-out split of a public prompt-injection dataset it caught 30% of attacks with no ordinary text flagged (`docs/LIVE_VALIDATION.md`).
+
+## Scheduled runs
+
+A person with `security:write` can turn on scheduled runs on the lab page (or `PUT /v1/lab/schedule` with
+`{ enabled, agentIds, everyHours: 24 | 168 }`, up to ten agents). The worker's hourly `lab.scheduled` job runs the
+lab against each scheduled agent that has had no scheduled run within the interval, with the same decision-only
+clone as a hand-started run, and records `scheduled: true` in the run summary. When a scenario the agent defended
+in its previous completed run is a gap in this one, AEGIS raises a high-severity `lab.regression` security event
+naming the scenarios. An agent that is not active, holds no tools or meets a run already in progress is skipped
+and tried again at the next interval. Changing the schedule is recorded in the evidence ledger. Covered by
+`packages/core/tests/lab-schedule.test.ts` and `apps/web/tests/e2e/lab.spec.ts`.

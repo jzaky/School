@@ -48,4 +48,23 @@ test.describe("attack simulation lab", () => {
     await page.goto("/security/data-protection");
     await expect(page.getByTestId("injection-response-form")).toContainText("Hold for security review");
   });
+  test("a security analyst turns scheduled runs on for one agent and off again; a viewer cannot change them", async ({ page, browser }) => {
+    await login(page, ANALYST);
+    await page.goto("/security/lab");
+    const schedule = page.getByTestId("lab-schedule");
+    await expect(page.getByTestId("lab-schedule-state")).toContainText("Off.");
+    await expect(page.getByTestId("lab-schedule-save")).toBeDisabled();
+    await schedule.getByRole("checkbox").first().check();
+    await page.getByTestId("lab-schedule-save").click();
+    await expect(page.getByTestId("lab-schedule-state")).toContainText("On: every week for 1 agent.");
+    await page.getByTestId("lab-schedule-off").click();
+    await expect(page.getByTestId("lab-schedule-state")).toContainText("Off.");
+
+    const viewer = await browser.newPage();
+    await login(viewer, "sara.khalil@meridian-demo.example");
+    await viewer.goto("/security/lab");
+    await expect(viewer.getByTestId("lab-schedule").getByRole("checkbox").first()).toBeDisabled();
+    await expect(viewer.getByTestId("lab-schedule-save")).toBeDisabled();
+    await viewer.close();
+  });
 });

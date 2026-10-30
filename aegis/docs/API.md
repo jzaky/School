@@ -28,6 +28,10 @@ Base URL: `API_PUBLIC_URL` (default http://localhost:4000). JSON everywhere. Err
 - `POST /v1/policies/:id/versions`, `POST /v1/policies/versions/:versionId/submit`, `POST /v1/policies/versions/:versionId/activate`, `POST /v1/policies/versions/:versionId/rollback`, `POST /v1/policies/:id/deactivate`, `POST /v1/policies/:id/assignments`
 - `POST /v1/policies/simulate` `{ document, input }` dry run, records nothing
 
+## Attack Simulation Lab (users)
+- `GET /v1/lab/scenarios`, `GET /v1/lab/runs`, `GET /v1/lab/runs/:id`, `POST /v1/lab/runs` `{ targetAgentId, toolKey?, scenarios? }` (security:write). Decision-only; see docs/ATTACK_SIMULATION_LAB.md.
+- `GET /v1/lab/schedule`, `PUT /v1/lab/schedule` `{ enabled, agentIds, everyHours: 24 | 168 }` (security:write, a person): scheduled runs; a scenario that was defended and is now a gap raises a high-severity `lab.regression` security event.
+
 ## Webhooks (integrations)
 - `POST /v1/webhooks/:integrationKey` requires the integration API key plus `X-Aegis-Timestamp` (ms epoch, 5 minute window) and `X-Aegis-Signature` (hex HMAC-SHA256 of `timestamp.rawBody` with the integration's webhook secret)
 

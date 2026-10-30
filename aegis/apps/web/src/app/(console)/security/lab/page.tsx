@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { FlaskConical } from "lucide-react";
 import { withTenant } from "@aegis/db";
-import { LAB_SCENARIOS, listLabRuns } from "@aegis/core";
+import { LAB_SCENARIOS, listLabRuns, readLabSchedule } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { PageHeader } from "@/components/ui/page-header";
 import { Panel } from "@/components/ui/panel";
@@ -12,6 +12,7 @@ import { Note } from "@/components/ui/note";
 import { EmptyState } from "@/components/ui/empty-state";
 import { SimpleTable, Td, Th } from "@/components/ui/simple-table";
 import { LabRunForm } from "@/components/shield/lab-run-form";
+import { LabScheduleForm } from "@/components/shield/lab-schedule-form";
 import { formatDateTime } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Attack Simulation Lab" };
@@ -28,6 +29,7 @@ export default async function LabPage() {
     },
     { readOnly: true },
   );
+  const schedule = readLabSchedule(c.org.settings);
   return (
     <div>
       <PageHeader title="Attack Simulation Lab" description="Clone an agent with its exact grants, limits and policies, send it known attacks through the Action Gateway, and see which ones your configuration stops. Decision-only: nothing reaches a downstream system." badges={<DemoBadge show={c.org.demoMode} />} />
@@ -100,9 +102,18 @@ export default async function LabPage() {
             </ul>
           </Panel>
         </div>
-        <Panel title="Run the lab" description="The clone gets the agent's tools, resource permissions, team, limits, autonomy settings and agent policies">
-          {targets.length === 0 ? <p className="text-sm text-fg-muted">No active agent holds a tool, so there is nothing to clone.</p> : <LabRunForm targets={targets} canRun={c.can("security:write")} />}
-        </Panel>
+        <div className="space-y-4">
+          <Panel title="Run the lab" description="The clone gets the agent's tools, resource permissions, team, limits, autonomy settings and agent policies">
+            {targets.length === 0 ? <p className="text-sm text-fg-muted">No active agent holds a tool, so there is nothing to clone.</p> : <LabRunForm targets={targets} canRun={c.can("security:write")} />}
+          </Panel>
+          <Panel title="Scheduled runs" description="Runs the lab again on its own, so a control that stops holding after a change is found the same day or week">
+            {targets.length === 0 ? (
+              <p className="text-sm text-fg-muted">No active agent holds a tool, so there is nothing to schedule.</p>
+            ) : (
+              <LabScheduleForm targets={targets} canEdit={c.can("security:write")} schedule={schedule ? { enabled: schedule.enabled, agentIds: schedule.agentIds, everyHours: schedule.everyHours, setBy: schedule.setBy.label, setAt: schedule.setAt } : { enabled: false, agentIds: [], everyHours: 168, setBy: null, setAt: null }} />
+            )}
+          </Panel>
+        </div>
       </div>
     </div>
   );

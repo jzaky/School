@@ -1,7 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { withTenant } from "@aegis/db";
-import { injectionResponseSchema, runAttackSimulation, startLabRunSchema, updateInjectionResponse } from "@aegis/core";
+import { injectionResponseSchema, runAttackSimulation, setLabSchedule, startLabRunSchema, updateInjectionResponse } from "@aegis/core";
 import { getConsoleContext } from "@/server/session";
 import { act } from "./util";
 
@@ -21,6 +21,15 @@ export async function updateInjectionResponseAction(input: unknown) {
     const data = injectionResponseSchema.parse(input);
     const saved = await withTenant(c.ctx.orgId, (db) => updateInjectionResponse(db, c.ctx, data));
     revalidatePath("/security/data-protection");
+    return saved;
+  });
+}
+
+export async function setLabScheduleAction(input: unknown) {
+  return act(async () => {
+    const c = await getConsoleContext();
+    const saved = await withTenant(c.ctx.orgId, (db) => setLabSchedule(db, c.ctx, input));
+    revalidatePath("/security/lab");
     return saved;
   });
 }
