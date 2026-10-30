@@ -21,12 +21,12 @@ Complexity: S (days), M (one to two weeks), L (several weeks), XL (a quarter or 
 | 1 Open-source repository evaluation | Partial | `OPEN_SOURCE_RESEARCH.md`, `PROVENANCE.md`; `THIRD_PARTY.md` is stale | Refresh the third-party inventory, sharp licence note | S | M1 |
 | 2 Comprehensive security audit | Works, P2 open | 7 P1s and 13 of 16 P2s fixed with regression tests, P2-7 in part | P2-3, P2-7 (external anchor), P2-14 | M | M1 |
 | 3 Real AI agent red teaming | Partial | Attack Simulation Lab, held-out injection dataset run (`LIVE_VALIDATION.md`: recall 30% on held-out data) | Live-model runs need `ANTHROPIC_API_KEY` (blocked: not configured) | M | M1 |
-| 4 Receipt and financial validation | Works | `RECEIPT_VALIDATION.md`, `PAYMENT_MATCHING.md`, 10 receipt tests with real images | Console panel and demo seed; P2-13 | S | M1 |
+| 4 Receipt and financial validation | Works | `RECEIPT_VALIDATION.md`, `PAYMENT_MATCHING.md`, 10 receipt tests with real images | Done: console panel and demo claims; P2-13 fixed. Next: scanned-receipt extraction | S | M1 |
 | 5 Governance engine hardening | Works, P2 open | Delegation, execution window, policy-version binding (P1-2, P1-5), agent-mode grants and revoke rights (P2-6, P2-12) fixed | P2-3 | M | M1 |
 | 6 Performance and reliability | Works | `PERFORMANCE.md` benchmarks, circuit breakers, dead-letter queue | Re-run benchmark after P1 changes | S | M2 |
 | 7 Observability | Works | OpenTelemetry, structured logs, metrics, alerts | None urgent | S | M2 |
 | 8 Automated testing | Works | Core, API, database and browser suites in CI; Proof page figures checked in CI | SBOMs of the shipped images and pinned actions are in CI; static analysis (SAST) is not yet | S | M1 |
-| 9 User experience | Works | Control Center, Arabic console, onboarding | Receipt validation panel | S | M2 |
+| 9 User experience | Works | Control Center, Arabic console, onboarding, receipt validation panel | None urgent | S | M2 |
 | 10 Live integration verification | Partial | OSV.dev and the injection dataset run live; Stripe and Alpaca only against fake servers in CI; Entra connector tested against recorded responses | Stripe test mode and Alpaca paper need the owner's sandbox keys | M | M1 |
 | 11 Defect remediation | Partial | P1 done; P2 and P3 open | Work the register in order | M | M1 |
 | 12 Production readiness | Partial | Deploy kits, backup docs, pentest readiness pack; no external pentest yet; not deployed to production | External pentest; deployment only with the owner's approval | L | M5 |
@@ -85,7 +85,7 @@ Complexity: S (days), M (one to two weeks), L (several weeks), XL (a quarter or 
 | --- | --- | --- | --- | --- |
 | 41 Competitive intelligence | Partial: `COMPARISON_DNRS.md` | Refresh before any public comparison; never claim first, only or best without independent evidence | S | M7 |
 | 42 Technical differentiation research | Partial | Get legal advice before publishing anything potentially patentable | S | M7 |
-| 43 Enterprise demonstrations | Works: six demo scenarios, impact test, platform tour | Add receipt validation to the demo | S | M7 |
+| 43 Enterprise demonstrations | Works: six demo scenarios, impact test, platform tour | Receipt validation is in the demo; next, a guided demo scenario for it | S | M7 |
 | 44 Independent validation | Missing: no external pentest or audit yet | External pentest (RFQ ready in `PENTEST_RFQ.md`) | XL | M7 |
 | 45 Customer pilots | Partial: pilot kits and watch-only mode are built; no live pilot | Needs a customer | XL | M7 |
 

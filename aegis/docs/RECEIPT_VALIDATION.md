@@ -43,3 +43,12 @@ deterministic and money is compared in minor units (fils, cents).
   from the expense system's own extraction (or a document-extraction service such as Docling, under evaluation).
 
 Agents cannot register transactions or submit claims, so an agent cannot create the record it is paid against.
+
+## In the console and the demo
+
+The Action Gateway page has a read-only Receipt validation panel: each claim with its verdict and the finding
+that decided it. The demo tenant seeds five synthetic card transactions and six claims, one per outcome: a
+receipt that matches its charge, an inflated receipt (the card was charged AED 64.00, the receipt says 164.00),
+the same dinner claimed by a second person, VAT at 6% where the UAE rate is 5%, a cash receipt with no charge to
+check it against, and a hotel charge claimed after it was refunded. Covered by
+`apps/web/tests/e2e/payment-matching.spec.ts`.

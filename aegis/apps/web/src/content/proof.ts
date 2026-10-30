@@ -15,7 +15,7 @@ export const FIGURES = {
   /** Playwright spec files under apps/web/tests/e2e. */
   e2eFiles: 36,
   /** `test(` cases across those spec files. */
-  e2eTests: 138,
+  e2eTests: 139,
   /** Shared framework catalogs seeded for every tenant. */
   catalogs: 21,
   /** Controls across those catalogs. */

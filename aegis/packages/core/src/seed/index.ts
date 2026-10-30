@@ -23,6 +23,7 @@ import { seedDemoSoftware } from "./demo-software.js";
 import { seedDemoToolPins } from "./demo-tool-pins.js";
 import { seedDemoAccessReviews } from "./demo-access-reviews.js";
 import { seedDemoPaymentMatching } from "./demo-payment-matching.js";
+import { seedDemoExpenseReceipts } from "./demo-expense-receipts.js";
 import type { TenantRunner } from "../gateway/gateway.js";
 import { updateInjectionResponse } from "../shield/injection-response.js";
 import { initKeyring } from "../lib/keyring.js";
@@ -70,6 +71,8 @@ export async function runSeed() {
   console.log(`Access reviews: ${reviews.completed} completed, ${reviews.open} open`);
   const matching = await seedDemoPaymentMatching(t);
   console.log(`Payment matching: ${matching.documents} invoices, ${matching.refused} payments refused`);
+  const receipts = await seedDemoExpenseReceipts(t);
+  console.log(`Receipt validation: ${receipts.transactions} card transactions, claims ${JSON.stringify(receipts.claims)}`);
   // Monitoring over the seeded history: run at several points in the past so alerts carry realistic timestamps,
   // then once now. A few alerts are already handled.
   const mon = await withTenant(t.orgId, async (db) => {
