@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aegis-worker
+  namespace: aegis
+  labels: { app: aegis-worker }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: aegis-worker }
+  template:
+    metadata:
+      labels: { app: aegis-worker }
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: worker
+          image: ghcr.io/example/aegis-worker:latest
+          envFrom:
+            - configMapRef: { name: aegis-config }
+            - secretRef: { name: aegis-secrets }
+          env:
+            - { name: AEGIS_PROCESS, value: worker }
+          volumeMounts:
+            - { name: uploads, mountPath: /data/uploads }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities: { drop: ["ALL"] }
+          resources:
+            requests: { cpu: 250m, memory: 512Mi }
+            limits: { cpu: "1", memory: 1Gi }
+      volumes:
+        - name: uploads
+          persistentVolumeClaim: { claimName: aegis-uploads }

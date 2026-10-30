@@ -1,0 +1,11 @@
+{
+  "model": "customer_private",
+  "name": "AEGIS in the customer's cloud account (example)",
+  "operator": "Customer IT",
+  "components": [
+    { "key": "cluster", "kind": "hosting", "provider": "Customer Kubernetes cluster (deploy/k8s)", "country": "unknown" },
+    { "key": "database", "kind": "database", "provider": "Customer PostgreSQL 16", "country": "unknown", "encryptionAtRest": "unknown" },
+    { "key": "cache", "kind": "cache", "provider": "Customer Redis 7", "country": "unknown", "holdsCustomerData": false }
+  ],
+  "secrets": { "source": "kubernetes_secret" }
+}

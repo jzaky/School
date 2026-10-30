@@ -1,0 +1,10 @@
+# Optional: ship traces and metrics to SigNoz (MIT core) or any OTLP collector.
+# docker compose -f deploy/docker-compose.yml -f deploy/docker-compose.observability.yml up
+# Set OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318 in .env.
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.111.0
+    command: ["--config=/etc/otel/config.yaml"]
+    volumes:
+      - ./otel-collector.yaml:/etc/otel/config.yaml:ro
+    ports: ["${AEGIS_BIND_ADDRESS:-127.0.0.1}:4318:4318"]

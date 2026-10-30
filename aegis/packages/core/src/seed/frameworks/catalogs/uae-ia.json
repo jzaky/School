@@ -1,0 +1,204 @@
+{
+  "key": "uae-ia",
+  "name": "UAE Information Assurance Regulation (control families)",
+  "version": "Family summary",
+  "publisher": "UAE Telecommunications and Digital Government Regulatory Authority (summarised by AEGIS)",
+  "licenseNote": "The UAE Information Assurance Regulation is issued for UAE government entities and critical sectors. AEGIS references its management and technical control family identifiers only; every title and summary is original AEGIS wording and is not the text of the regulation. Entities must work from the regulation as issued. Mapping an AEGIS record to a family here is not a compliance assessment.",
+  "description": "The management (M1 to M6) and technical (T1 to T9) control families of the UAE Information Assurance Regulation, with the AI-agent controls AEGIS can evidence against each.",
+  "controls": [
+    {
+      "code": "M1",
+      "title": "Strategy and planning",
+      "summary": "The entity sets an information assurance strategy, approves policies and assigns roles, including ownership of AI systems that act on its behalf.",
+      "category": "Management",
+      "keywords": [
+        "strategy",
+        "policy",
+        "roles",
+        "ownership",
+        "governance"
+      ],
+      "automatedEvidenceType": "policy_versioning"
+    },
+    {
+      "code": "M2",
+      "title": "Information security risk management",
+      "summary": "Risks to information and systems, including risks from AI agents and automation, are identified, assessed, treated and accepted by named risk owners.",
+      "category": "Management",
+      "keywords": [
+        "risk assessment",
+        "risk treatment",
+        "risk owner",
+        "AI risk"
+      ]
+    },
+    {
+      "code": "M3",
+      "title": "Awareness and training",
+      "summary": "Staff understand their security responsibilities, including how to review and approve actions requested by AI agents.",
+      "category": "Management",
+      "keywords": [
+        "awareness",
+        "training",
+        "approvers"
+      ]
+    },
+    {
+      "code": "M4",
+      "title": "Human resources security",
+      "summary": "Security responsibilities are set before, during and after employment, and access held by people and the agents they own is removed when roles change.",
+      "category": "Management",
+      "keywords": [
+        "screening",
+        "joiners",
+        "leavers",
+        "responsibilities"
+      ]
+    },
+    {
+      "code": "M5",
+      "title": "Compliance",
+      "summary": "Legal, regulatory and contractual obligations are identified, and evidence shows that controls operate as intended.",
+      "category": "Management",
+      "keywords": [
+        "compliance",
+        "regulatory",
+        "evidence",
+        "audit"
+      ],
+      "automatedEvidenceType": "security_events"
+    },
+    {
+      "code": "M6",
+      "title": "Performance evaluation and improvement",
+      "summary": "The effectiveness of controls is monitored, measured and reviewed, and weaknesses are tracked to remediation.",
+      "category": "Management",
+      "keywords": [
+        "monitoring",
+        "metrics",
+        "internal audit",
+        "improvement",
+        "remediation"
+      ],
+      "automatedEvidenceType": "monitoring"
+    },
+    {
+      "code": "T1",
+      "title": "Asset management",
+      "summary": "Information assets and the systems that process them, including AI agents, their tools and their connections, are inventoried, classified and owned.",
+      "category": "Technical",
+      "keywords": [
+        "inventory",
+        "classification",
+        "agents",
+        "tools",
+        "ownership"
+      ],
+      "automatedEvidenceType": "agent_inventory"
+    },
+    {
+      "code": "T2",
+      "title": "Physical and environmental security",
+      "summary": "Facilities and equipment that hold information are protected against unauthorised access and environmental hazards.",
+      "category": "Technical",
+      "keywords": [
+        "physical",
+        "facilities",
+        "equipment"
+      ]
+    },
+    {
+      "code": "T3",
+      "title": "Operations management",
+      "summary": "Operating procedures, change control, logging, monitoring and protection against malicious code keep systems secure and their activity traceable, including every action an AI agent takes.",
+      "category": "Technical",
+      "keywords": [
+        "operations",
+        "change control",
+        "logging",
+        "audit trail",
+        "malware"
+      ],
+      "automatedEvidenceType": "evidence_ledger"
+    },
+    {
+      "code": "T4",
+      "title": "Communications",
+      "summary": "Networks and information in transit are protected, and transfers of information to external parties are controlled and recorded.",
+      "category": "Technical",
+      "keywords": [
+        "network",
+        "data transfer",
+        "egress",
+        "destinations"
+      ],
+      "automatedEvidenceType": "data_protection"
+    },
+    {
+      "code": "T5",
+      "title": "Access control",
+      "summary": "Access by people and automated agents is granted on need, strongly authenticated, limited to approved actions, reviewed and revoked promptly.",
+      "category": "Technical",
+      "keywords": [
+        "access control",
+        "least privilege",
+        "authentication",
+        "agents",
+        "approval"
+      ],
+      "automatedEvidenceType": "access_control"
+    },
+    {
+      "code": "T6",
+      "title": "Third party security",
+      "summary": "Suppliers, cloud services and AI model providers are assessed, bound by security requirements and monitored.",
+      "category": "Technical",
+      "keywords": [
+        "supplier",
+        "third party",
+        "cloud",
+        "model provider"
+      ],
+      "automatedEvidenceType": "integration_security"
+    },
+    {
+      "code": "T7",
+      "title": "Information systems acquisition, development and maintenance",
+      "summary": "Security requirements are built into systems that are bought or developed, changes are tested, and software components are checked for known weaknesses.",
+      "category": "Technical",
+      "keywords": [
+        "secure development",
+        "testing",
+        "change control",
+        "software components"
+      ]
+    },
+    {
+      "code": "T8",
+      "title": "Information security incident management",
+      "summary": "Security events, including attacks aimed at AI agents, are detected, reported, contained and learned from, with records kept.",
+      "category": "Technical",
+      "keywords": [
+        "incident",
+        "detection",
+        "response",
+        "prompt injection",
+        "reporting"
+      ],
+      "automatedEvidenceType": "incident_management"
+    },
+    {
+      "code": "T9",
+      "title": "Information systems continuity management",
+      "summary": "Critical services continue through disruption, with tested backup and recovery, and AI agents can be paused without losing control of outstanding actions.",
+      "category": "Technical",
+      "keywords": [
+        "continuity",
+        "backup",
+        "recovery",
+        "pause",
+        "kill switch"
+      ]
+    }
+  ]
+}

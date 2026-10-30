@@ -1,0 +1,16 @@
+node_modules
+dist
+.next
+out
+coverage
+*.log
+.env
+.env.*
+!.env.example
+playwright-report
+test-results
+.uploads
+.turbo
+.demo-keys.json
+deploy/seed-output/
+.bench-keys.json

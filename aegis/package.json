@@ -1,0 +1,31 @@
+{
+  "name": "aegis",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.34.7",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter ./apps/* dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "test:isolation": "pnpm --filter @aegis/db test",
+    "db:migrate": "pnpm --filter @aegis/db migrate",
+    "db:seed": "pnpm --filter @aegis/core seed",
+    "db:reset": "pnpm --filter @aegis/db reset",
+    "licenses:check": "pnpm licenses list --json > docs/licenses.json"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@types/node": "^22.20.4",
+    "eslint": "9.39.5",
+    "prettier": "^3.6.2",
+    "tsx": "^4.23.15",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.1",
+    "vitest": "^3.2.7"
+  }
+}

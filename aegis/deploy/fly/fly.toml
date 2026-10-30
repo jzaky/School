@@ -1,0 +1,51 @@
+# Fly.io configuration for the AEGIS hosted demo (synthetic data only). Steps: docs/DEPLOY_FLY_DEMO.md.
+# Replace the app name; the region is the closest Fly region to the Gulf with good latency. Production
+# for UAE customers runs in a UAE region on another platform (docs/DEPLOYMENT_OPTIONS.md).
+app = "aegis-demo"
+primary_region = "fra"
+
+# Build: run from the aegis/ directory with
+#   fly deploy --config deploy/fly/fly.toml --dockerfile deploy/Dockerfile --build-target demo
+
+[env]
+  NODE_ENV = "production"
+  AEGIS_DEMO_MODE = "true"
+  AEGIS_STORAGE_DIR = "/data/uploads"
+  API_PORT = "4000"
+  LOG_LEVEL = "info"
+
+[mounts]
+  source = "aegis_data"
+  destination = "/data"
+
+# Console on 443.
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "60s"
+    method = "GET"
+    path = "/login"
+
+# Action Gateway API on 8443 (agents and SDKs call it).
+[[services]]
+  internal_port = 4000
+  protocol = "tcp"
+  [[services.ports]]
+    port = 8443
+    handlers = ["tls", "http"]
+  [[services.http_checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "60s"
+    method = "get"
+    path = "/health"
+
+[[vm]]
+  size = "shared-cpu-2x"
+  memory = "2gb"

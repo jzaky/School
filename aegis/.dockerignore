@@ -1,0 +1,16 @@
+# Never send secrets, local state or build output into an image.
+.env
+.env.*
+!.env.example
+.demo-keys.json
+**/node_modules
+**/.next
+**/dist
+**/test-results
+**/playwright-report
+**/coverage
+**/*.log
+.git
+.bench-keys.json
+**/.uploads
+deploy/seed-output

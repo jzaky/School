@@ -1,0 +1,55 @@
+name: AEGIS browser tests against a live URL
+
+# Runs the console's Playwright suite against a deployed AEGIS instead of a local build.
+# Started by hand only. "smoke" is read-only (public pages, sign-in, the Content-Security-Policy)
+# and is safe against any deployment. "full" runs every spec, which creates policies, approvals and
+# agents: use it only against a disposable demo deployment (AEGIS_DEMO_MODE=true, seeded), never
+# against a customer's tenant. See docs/DEMO_TO_PRODUCTION.md, "Browser tests against a live URL".
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Console URL, for example https://aegis-demo.fly.dev"
+        required: true
+      api_url:
+        description: "API URL (only the full suite calls it directly)"
+        required: false
+        default: ""
+      suite:
+        description: "smoke (read-only) or full (demo deployments only)"
+        required: true
+        default: smoke
+        type: choice
+        options: [smoke, full]
+
+jobs:
+  live:
+    # Pinned: Playwright 1.56 cannot install Chromium dependencies on Ubuntu 26.04 (ubuntu-latest since late October 2026).
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: aegis/apps/web
+    env:
+      E2E_BASE_URL: ${{ github.event.inputs.base_url }}
+      AEGIS_API_URL: ${{ github.event.inputs.api_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10.34.7 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm, cache-dependency-path: aegis/pnpm-lock.yaml }
+      - run: pnpm install --frozen-lockfile
+        working-directory: aegis
+      - run: npx playwright install --with-deps chromium
+      - name: Check the target answers
+        run: curl -sf "$E2E_BASE_URL/login" > /dev/null
+      - name: Smoke suite (read-only)
+        if: github.event.inputs.suite == 'smoke'
+        run: npx playwright test tests/e2e/public.spec.ts tests/e2e/marketing.spec.ts tests/e2e/csp.spec.ts --reporter=list
+      - name: Full suite (demo deployments only)
+        if: github.event.inputs.suite == 'full'
+        run: npx playwright test --reporter=list
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with: { name: aegis-live-playwright-report, path: aegis/apps/web/playwright-report }

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="t d">
+  <title id="t">AEGIS: define, enforce, prove</title>
+  <desc id="d">Dark graphite card with the AEGIS wordmark and the sentence: Define what your AI agents may do. Enforce it before execution. Prove what happened.</desc>
+  <rect width="1200" height="630" fill="#0b0f17"/>
+  <rect x="1" y="1" width="1198" height="628" fill="none" stroke="#223049" stroke-width="2"/>
+  <g transform="translate(80 90)">
+    <path d="M24 3 L42 10.5 V24 C42 34.5 33.75 42 24 45 C14.25 42 6 34.5 6 24 V10.5 Z" fill="none" stroke="#5b8def" stroke-width="3.3" stroke-linejoin="round"/>
+    <path d="M24 13.5 L33 30 H15 Z" fill="#5b8def"/>
+    <text x="62" y="36" font-family="Inter, system-ui, sans-serif" font-size="30" font-weight="600" letter-spacing="4" fill="#e6ebf5">AEGIS</text>
+  </g>
+  <text x="80" y="260" font-family="Inter, system-ui, sans-serif" font-size="54" font-weight="600" fill="#e6ebf5" letter-spacing="-1">Define what your AI agents may do.</text>
+  <text x="80" y="330" font-family="Inter, system-ui, sans-serif" font-size="54" font-weight="600" fill="#e6ebf5" letter-spacing="-1">Enforce it before execution.</text>
+  <text x="80" y="400" font-family="Inter, system-ui, sans-serif" font-size="54" font-weight="600" fill="#5b8def" letter-spacing="-1">Prove what happened.</text>
+  <text x="80" y="480" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#93a1ba">Enterprise AI governance, authorization, security and assurance.</text>
+  <text x="80" y="560" font-family="ui-monospace, Menlo, monospace" font-size="18" fill="#5f6d87">registry -> shield -> policy -> decision -> approval -> grant -> receipt -> evidence</text>
+</svg>

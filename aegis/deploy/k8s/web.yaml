@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aegis-web
+  namespace: aegis
+  labels: { app: aegis-web }
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: aegis-web }
+  template:
+    metadata:
+      labels: { app: aegis-web }
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: web
+          image: ghcr.io/example/aegis-web:latest
+          envFrom:
+            - configMapRef: { name: aegis-config }
+            - secretRef: { name: aegis-secrets }
+          env:
+            - { name: AEGIS_PROCESS, value: web }
+          volumeMounts:
+            - { name: uploads, mountPath: /data/uploads }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities: { drop: ["ALL"] }
+          resources:
+            requests: { cpu: 250m, memory: 512Mi }
+            limits: { cpu: "1", memory: 1Gi }
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet: { path: /login, port: 3000 }
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /login, port: 3000 }
+            periodSeconds: 30
+      volumes:
+        - name: uploads
+          persistentVolumeClaim: { claimName: aegis-uploads }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aegis-web
+  namespace: aegis
+spec:
+  selector: { app: aegis-web }
+  ports:
+    - port: 3000
+      targetPort: 3000

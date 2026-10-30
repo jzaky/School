@@ -1,0 +1,13 @@
+# Gitleaks configuration for the AEGIS secret scan in CI (.github/workflows/aegis-ci.yml).
+# The default rules apply. The allowlisted paths hold synthetic secrets on purpose: the data
+# protection tests and the evaluation corpus check that AEGIS detects and blocks them. None of
+# them is a real credential. Anything else that matches fails the build.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Synthetic secrets in data protection tests and the shield evaluation corpus"
+paths = [
+  '''^aegis/(packages|apps)/[^/]+/tests/''',
+  '''^aegis/packages/core/src/shield/eval/corpus\.ts$''',
+]
