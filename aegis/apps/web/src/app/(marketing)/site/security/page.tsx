@@ -9,8 +9,8 @@ const BLOCKS: { id: string; title: string; items: string[] }[] = [
     id: "identity",
     title: "Identity",
     items: [
-      "Console users: argon2id password hashes, lockout after 8 failures, server-side sessions (12 hour absolute, 2 hour idle) in HttpOnly Secure SameSite=Lax cookies, TOTP MFA (RFC 6238).",
-      "Per-organization OpenID Connect with PKCE and just-in-time provisioning limited to allowed email domains. SAML is not implemented.",
+      "Console users: argon2id password hashes, lockout after 8 failures (counted atomically, so parallel guesses cannot exceed it), server-side sessions (12 hour absolute, 2 hour idle) in HttpOnly Secure SameSite=Lax cookies, TOTP MFA (RFC 6238).",
+      "Per-organization OpenID Connect with PKCE and just-in-time provisioning limited to allowed email domains. SAML 2.0 (service-provider initiated): signed assertions, audience and validity checks, the response must answer the request AEGIS sent and return to the browser that started the login, and each assertion is accepted once.",
       "Agents and integrations: API keys aegis_ak_<prefix>_<secret>, SHA-256 hashed at rest, shown once, scoped to one subject, revocable, revoked automatically when an agent is revoked.",
       "Roles: 8 system roles over 22 explicit permissions; custom roles cannot hold the wildcard. Four-eyes rule on policy activation (a second person must switch it on). Separation of duties on approvals (the people who own an agent cannot approve its requests).",
     ],
@@ -21,23 +21,23 @@ const BLOCKS: { id: string; title: string; items: string[] }[] = [
     items: [
       "Registry checks (agent active, tool granted and enabled, integration active, parameter schema, resource permission, classification, destination allowlist, gateway pause), then Shield inspection, then deterministic policy evaluation with default deny (the same request always gets the same answer, and when no rule matches the answer is no).",
       "Decisions, approvals and receipts are written in the same transaction as the evidence event; an evidence failure rolls back the decision.",
-      "Execution grants (a one-time permission slip the downstream system checks before acting) are single use, five minutes, bound to the SHA-256 of tool, action and parameters; downstream systems verify them.",
+      "Execution grants (a one-time permission slip the downstream system checks before acting) are single use, five minutes, bound to the SHA-256 of tool, action and parameters; downstream systems verify them. An allowed or approved action must start within an execution window (60 minutes by default) while every policy version that decided it is still active, or it must be submitted again.",
     ],
   },
   {
     id: "data",
     title: "Data protection",
     items: [
-      "Secrets at rest: AES-256-GCM with the master key, ciphertext bound to the row (additional authenticated data).",
+      "Secrets at rest: AES-256-GCM with a data key, ciphertext bound to the row (additional authenticated data). The data key can be held wrapped by AWS KMS or Azure Key Vault and unwrapped in memory at startup; rotation re-encrypts stored secrets with a dry run first.",
       "Logs: pino redaction of credentials and tool parameters; evidence payloads carry hashes and summaries; traces truncate long values.",
       "Sensitive data in tool parameters: detector registry with mask, redact, block and approval actions (Shield).",
-      "Documents uploaded to Audit never leave the deployment. No external AI calls exist in this version.",
+      "Documents uploaded to Audit never leave the deployment. AEGIS makes no AI model calls of its own; the optional AI gateway forwards an organization's own model requests, after inspection, only to the providers that organization has approved.",
     ],
   },
   {
     id: "isolation",
     title: "Tenant isolation",
-    items: ["Row-level security on every tenant table (each customer's data is kept apart inside the database), application role NOBYPASSRLS and non-owner, transaction-local app.current_org, three SECURITY DEFINER functions for the only cross-tenant lookups (API key by hash, memberships by user, invitation by hash).", "Covered by the isolation test suite (11 tests) that proves two organizations cannot see each other through reads, writes or raw SQL."],
+    items: ["Row-level security on every tenant table (each customer's data is kept apart inside the database), application role NOBYPASSRLS and non-owner, transaction-local app.current_org, three SECURITY DEFINER functions for the only cross-tenant lookups (API key by hash, memberships by user, invitation by hash).", "Covered by the isolation test suite (22 tests) that proves two organizations cannot see each other through reads, writes or raw SQL."],
   },
   {
     id: "integrity",
@@ -52,13 +52,13 @@ const BLOCKS: { id: string; title: string; items: string[] }[] = [
 ];
 
 const GAPS: string[][] = [
-  ["No SAML", "OpenID Connect only. Organizations that require SAML need an OIDC bridge from their identity provider."],
-  ["Keys in environment variables", "The master key, session secret and evidence signing key are read from the environment, not from a KMS or HSM."],
-  ["Manual master key rotation", "Rotating AEGIS_MASTER_KEY requires re-encrypting stored secrets; this is documented, not automated."],
+  ["SAML is service-provider initiated only", "Logins started from the identity provider's portal are refused; people start from the AEGIS sign-in page."],
+  ["Some keys in environment variables", "The session secret and the evidence signing key are read from the environment. The data key that protects stored secrets can be held by AWS KMS or Azure Key Vault; that path is verified against local stand-ins, not yet against a real KMS or Key Vault."],
+  ["Key rotation is an operator procedure", "Rotating the data key is a documented command with a dry run (data-key new, then data-key rotate); it is not scheduled automatically."],
   ["Egress enforcement depends on the platform", "For real downstream systems, stopping agents from bypassing the gateway at the network level depends on the customer network policy. The shipped Kubernetes manifest is a template."],
   ["Heuristic injection detection", "Prompt-injection signals are pattern based with confidences. They will miss novel phrasing. Authorization does not depend on them."],
   ["No independent penetration test", "No third party has tested this build. No certification or independent audit exists."],
-  ["Lockout is basic", "Account lockout counts failures per account; adaptive or risk-based controls are not implemented."],
+  ["Lockout is basic", "Account lockout counts failures per account, atomically; adaptive or risk-based controls are not implemented."],
 ];
 
 export default function SecurityPage() {

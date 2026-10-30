@@ -1,3 +1,4 @@
+import { THREE_DECIMAL_CURRENCIES, ZERO_DECIMAL_CURRENCIES } from "../gateway/connectors/stripe.js";
 import { z } from "zod";
 import { rawPrisma, withTenant, type TenantDb } from "@aegis/db";
 import { appendEvidence } from "../evidence/ledger.js";
@@ -71,7 +72,8 @@ export async function platformSetPlan(actorUserId: string, orgId: string, raw: u
   const input = setPlanSchema.parse(raw);
   const before = await rawPrisma().organization.findUnique({ where: { id: orgId } });
   if (!before) throw notFound("Organization");
-  const trialEndsAt = input.plan === "trial" ? (input.trialEndsAt ?? before.trialEndsAt ?? null) : null;
+  // A trial always ends: without a date given or already set, it runs for the plan's standard length.
+  const trialEndsAt = input.plan === "trial" ? (input.trialEndsAt ?? before.trialEndsAt ?? new Date(Date.now() + (PLANS.trial.trialDays ?? 30) * 86_400_000)) : null;
   const org = await rawPrisma().organization.update({ where: { id: orgId }, data: { plan: input.plan, trialEndsAt } });
   await withTenant(orgId, (db) => appendEvidence(db, platformCtx(orgId, actorUserId), { type: "org.plan_changed", subjectType: "organization", subjectId: orgId, payload: { from: normalizePlan(before.plan), to: input.plan, trialEndsAt: trialEndsAt?.toISOString() ?? null } }));
   return org;
@@ -178,9 +180,20 @@ export const contractSchema = z
   })
   .refine((c) => c.termEnd > c.termStart, { message: "The term must end after it starts", path: ["termEnd"] });
 
-/** Major units to minor units without floating-point drift (2 decimal places). */
-export function toMinor(major: number): bigint {
-  return BigInt(Math.round(major * 100));
+/** Decimal places of a currency's minor unit (ISO 4217): 0 for JPY and similar, 3 for BHD, KWD, OMR, JOD, TND, else 2. */
+export function currencyDecimals(currency: string): number {
+  const c = currency.toUpperCase();
+  return ZERO_DECIMAL_CURRENCIES.has(c) ? 0 : THREE_DECIMAL_CURRENCIES.has(c) ? 3 : 2;
+}
+
+/** Major units to minor units without floating-point drift, in the currency's own decimal places. */
+export function toMinor(major: number, currency: string): bigint {
+  return BigInt(Math.round(major * 10 ** currencyDecimals(currency)));
+}
+
+/** Minor units back to major units for display. */
+export function fromMinor(minor: bigint | number | string, currency: string): number {
+  return Number(minor) / 10 ** currencyDecimals(currency);
 }
 
 export async function platformSetContract(actorUserId: string, orgId: string, raw: unknown) {
@@ -197,7 +210,7 @@ export async function platformSetContract(actorUserId: string, orgId: string, ra
         termEnd: c.termEnd,
         billingPeriod: c.billingPeriod,
         currency: c.currency,
-        periodFeeMinor: toMinor(c.periodFee),
+        periodFeeMinor: toMinor(c.periodFee, c.currency),
         includedDecisions: c.includedDecisions,
         overageUnitPrice4: c.overageUnitPrice === null ? null : BigInt(Math.round(c.overageUnitPrice * 10_000)),
         taxRateBp: Math.round(c.taxRatePercent * 100),
@@ -225,7 +238,7 @@ export function contractView(c: ContractRow) {
     termEnd: c.termEnd,
     billingPeriod: c.billingPeriod,
     currency: c.currency,
-    periodFee: Number(c.periodFeeMinor) / 100,
+    periodFee: fromMinor(c.periodFeeMinor, c.currency),
     includedDecisions: c.includedDecisions,
     overageUnitPrice: c.overageUnitPrice4 === null ? null : Number(c.overageUnitPrice4) / 10_000,
     taxRatePercent: c.taxRateBp / 100,
@@ -247,13 +260,15 @@ export interface InvoiceLine {
 }
 
 /** Pure: the lines and totals for one period. All arithmetic is in integers. */
-export function computeInvoice(input: { periodFeeMinor: bigint; includedDecisions: number | null; overageUnitPrice4: bigint | null; decisionsUsed: number; taxRateBp: number; periodLabel: string; planName: string }) {
-  const lines: InvoiceLine[] = [{ description: `${input.planName} plan, ${input.periodLabel}`, quantity: 1, unitPrice4: (input.periodFeeMinor * 100n).toString(), amountMinor: input.periodFeeMinor.toString() }];
+export function computeInvoice(input: { periodFeeMinor: bigint; includedDecisions: number | null; overageUnitPrice4: bigint | null; decisionsUsed: number; taxRateBp: number; periodLabel: string; planName: string; currency?: string }) {
+  // price4 is 1/10000 of the major unit; one minor unit is 10^(4 - decimals) price4 units.
+  const per = 10n ** BigInt(4 - currencyDecimals(input.currency ?? "AED"));
+  const lines: InvoiceLine[] = [{ description: `${input.planName} plan, ${input.periodLabel}`, quantity: 1, unitPrice4: (input.periodFeeMinor * per).toString(), amountMinor: input.periodFeeMinor.toString() }];
   let subtotal = input.periodFeeMinor;
   if (input.includedDecisions !== null && input.overageUnitPrice4 !== null && input.decisionsUsed > input.includedDecisions) {
     const over = BigInt(input.decisionsUsed - input.includedDecisions);
-    // price4 is 1/10000 of the major unit; minor is 1/100, so divide by 100 with half-up rounding.
-    const amount = (over * input.overageUnitPrice4 + 50n) / 100n;
+    // From price4 units to the currency's minor units, half-up.
+    const amount = (over * input.overageUnitPrice4 + per / 2n) / per;
     lines.push({ description: `Gateway decisions above the ${input.includedDecisions.toLocaleString("en-GB")} included`, quantity: Number(over), unitPrice4: input.overageUnitPrice4.toString(), amountMinor: amount.toString() });
     subtotal += amount;
   }
@@ -270,7 +285,7 @@ export async function platformDraftInvoice(actorUserId: string, orgId: string, i
     const existing = await db.invoice.findFirst({ where: { orgId, periodStart: start, status: { not: "void" } } });
     if (existing) throw conflict(`Invoice ${existing.number} already covers ${input.period}`);
     const usage = await snapshotUsage(db, orgId, input.period);
-    const computed = computeInvoice({ periodFeeMinor: contract.periodFeeMinor, includedDecisions: contract.includedDecisions, overageUnitPrice4: contract.overageUnitPrice4, decisionsUsed: usage.monthlyDecisions, taxRateBp: contract.taxRateBp, periodLabel: input.period, planName: PLANS[normalizePlan(contract.plan)].name });
+    const computed = computeInvoice({ periodFeeMinor: contract.periodFeeMinor, includedDecisions: contract.includedDecisions, overageUnitPrice4: contract.overageUnitPrice4, decisionsUsed: usage.monthlyDecisions, taxRateBp: contract.taxRateBp, periodLabel: input.period, planName: PLANS[normalizePlan(contract.plan)].name, currency: contract.currency });
     const count = await db.invoice.count({ where: { orgId } });
     const org = await rawPrisma().organization.findUniqueOrThrow({ where: { id: orgId }, select: { slug: true } });
     const number = `${org.slug.slice(0, 12).toUpperCase()}-${input.period.replace("-", "")}-${String(count + 1).padStart(3, "0")}`;
@@ -320,10 +335,10 @@ export function invoiceView(i: InvoiceRow) {
     periodStart: i.periodStart,
     periodEnd: i.periodEnd,
     currency: i.currency,
-    lines: (i.lines as unknown as InvoiceLine[]).map((l) => ({ description: l.description, quantity: l.quantity, unitPrice: Number(l.unitPrice4) / 10_000, amount: Number(l.amountMinor) / 100 })),
-    subtotal: Number(i.subtotalMinor) / 100,
-    tax: Number(i.taxMinor) / 100,
-    total: Number(i.totalMinor) / 100,
+    lines: (i.lines as unknown as InvoiceLine[]).map((l) => ({ description: l.description, quantity: l.quantity, unitPrice: Number(l.unitPrice4) / 10_000, amount: fromMinor(l.amountMinor, i.currency) })),
+    subtotal: fromMinor(i.subtotalMinor, i.currency),
+    tax: fromMinor(i.taxMinor, i.currency),
+    total: fromMinor(i.totalMinor, i.currency),
     issuedAt: i.issuedAt,
     dueAt: i.dueAt,
     paidAt: i.paidAt,

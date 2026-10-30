@@ -165,7 +165,7 @@ The stack is Postgres, Redis, a one-shot migrate job, the API on port 4000, the 
 
 To run the smoke test from the host, copy that file to `aegis/.demo-keys.json`, then run `AEGIS_API_URL=http://127.0.0.1:4000 npx tsx scripts/smoke-refund-journey.mts`. Expect 12/12.
 
-Put Caddy or any other TLS proxy in front exactly as in Route A step 8, pointing at ports 3000 and 4000. Sign-in needs HTTPS in production because the cookies are Secure.
+Put Caddy or any other TLS proxy in front exactly as in Route A step 8, pointing at ports 3000 and 4000. Sign-in needs HTTPS in production because the cookies are Secure. Compose publishes ports 3000 and 4000 on 127.0.0.1 only, so they are reachable from the proxy on the same host and not from the internet; set `AEGIS_BIND_ADDRESS=0.0.0.0` only if the proxy runs on another machine, and then firewall the ports.
 
 Database passwords for Compose come from `POSTGRES_OWNER_PASSWORD` and `POSTGRES_APP_PASSWORD` in your shell environment (defaults are development values; set real ones for anything reachable from the internet).
 

@@ -22,10 +22,10 @@ Complexity: S (days), M (one to two weeks), L (several weeks), XL (a quarter or 
 | 2 Comprehensive security audit | Works, P2 open | 7 P1s and 13 of 16 P2s fixed with regression tests, P2-7 in part | P2-3, P2-7 (external anchor), P2-14 | M | M1 |
 | 3 Real AI agent red teaming | Partial | Attack Simulation Lab, held-out injection dataset run (`LIVE_VALIDATION.md`: recall 30% on held-out data) | Live-model runs need `ANTHROPIC_API_KEY` (blocked: not configured) | M | M1 |
 | 4 Receipt and financial validation | Works | `RECEIPT_VALIDATION.md`, `PAYMENT_MATCHING.md`, 10 receipt tests with real images | Console panel and demo seed; P2-13 | S | M1 |
-| 5 Governance engine hardening | Works, P2 open | Delegation, execution window, policy-version binding fixed (P1-2, P1-5) | P2-3, P2-6, P2-12 | M | M1 |
+| 5 Governance engine hardening | Works, P2 open | Delegation, execution window, policy-version binding (P1-2, P1-5), agent-mode grants and revoke rights (P2-6, P2-12) fixed | P2-3 | M | M1 |
 | 6 Performance and reliability | Works | `PERFORMANCE.md` benchmarks, circuit breakers, dead-letter queue | Re-run benchmark after P1 changes | S | M2 |
 | 7 Observability | Works | OpenTelemetry, structured logs, metrics, alerts | None urgent | S | M2 |
-| 8 Automated testing | Works | Core, API, database and browser suites in CI; Proof page figures checked in CI | Add SAST and SBOM (P3) | S | M1 |
+| 8 Automated testing | Works | Core, API, database and browser suites in CI; Proof page figures checked in CI | SBOMs of the shipped images and pinned actions are in CI; static analysis (SAST) is not yet | S | M1 |
 | 9 User experience | Works | Control Center, Arabic console, onboarding | Receipt validation panel | S | M2 |
 | 10 Live integration verification | Partial | OSV.dev and the injection dataset run live; Stripe and Alpaca only against fake servers in CI; Entra connector tested against recorded responses | Stripe test mode and Alpaca paper need the owner's sandbox keys | M | M1 |
 | 11 Defect remediation | Partial | P1 done; P2 and P3 open | Work the register in order | M | M1 |
@@ -36,9 +36,9 @@ Complexity: S (days), M (one to two weeks), L (several weeks), XL (a quarter or 
 | Phase | Status | Evidence | Next | Cx | Milestone |
 | --- | --- | --- | --- | --- | --- |
 | 13 Agent autonomy management | Works | Levels 0 to 4, deterministic transitions, history | None | S | M2 |
-| 14 Real-time uncertainty engine | Works, P2 open | Uncertainty assessment feeds policy input | P2-8 | S | M2 |
+| 14 Real-time uncertainty engine | Works | Uncertainty assessment feeds policy input; low confidence escalates (P2-8 fixed) | None | S | M2 |
 | 15 Decision Inspector | Works | Full rule and comparison trace per decision | None | S | M2 |
-| 16 Agent-to-agent governance | Works | Delegations; delegate bound by delegator limits and policies (P1-5) | P2-12 | S | M2 |
+| 16 Agent-to-agent governance | Works | Delegations; delegate bound by delegator limits and policies (P1-5, P2-12 fixed) | None | S | M2 |
 | 17 Continuous attack simulation | Partial | On-demand lab runs only | Scheduled runs through the job worker | M | M2 |
 | 18 Model and data governance | Works | Model registry, data inventory | None | S | M2 |
 | 19 Autonomous incident containment | Works | Continuous Governance automatic responses, emergency pause, freezes | None | S | M2 |
@@ -50,11 +50,11 @@ Complexity: S (days), M (one to two weeks), L (several weeks), XL (a quarter or 
 
 | Phase | Status | Evidence | Next | Cx | Milestone |
 | --- | --- | --- | --- | --- | --- |
-| 23 AI discovery and inventory | Works, P2 open | Shadow AI discovery | P2-10 | S | M3 |
+| 23 AI discovery and inventory | Works | Shadow AI discovery; links by stable id only (P2-10 fixed) | None | S | M3 |
 | 24 Execution-path coverage | Partial | Bypass detection; enforcement coverage from observed traffic (P2-11 fixed) | Network-level observation for agents outside the SDK | M | M3 |
-| 25 Enterprise deployment and resilience | Partial | Compose, offline install, deployment profiles; ports on all interfaces (P3) | Bind to localhost by default; restore drill | M | M5 |
+| 25 Enterprise deployment and resilience | Partial | Compose (ports on localhost by default), offline install, deployment profiles | Production restore drill with point-in-time recovery | M | M5 |
 | 26 Compliance and assurance | Works | 21 framework catalogs, 487 controls, ISO 27001 readiness pack. Internal mapping only, not certification | None; never describe as certified | S | M5 |
-| 27 Commercial infrastructure | Works | Plans, metering, invoices; indefinite trial (P3) | Trial end default | S | M5 |
+| 27 Commercial infrastructure | Works | Plans, metering, invoices in each currency's decimals; trials always end | None | S | M5 |
 
 ## Workstream IV: new capabilities
 

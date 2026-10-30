@@ -46,14 +46,23 @@ Regression tests: `packages/core/tests/audit-p2.test.ts`, plus the files named b
 
 ## P3
 
-Indefinite trial when no end date is set; billing `toMinor` assumes two decimal places; AED defaults inside core;
-UAE frameworks applied to every pilot kit; CI actions not pinned by commit SHA; the worker image is not scanned;
-no SAST or SBOM step in CI; Compose publishes ports on all interfaces; `THIRD_PARTY.md` is stale (sharp is now a
-direct dependency of core, which contradicts the note that the LGPL component is removable).
+| Finding | Status |
+| --- | --- |
+| Indefinite trial when no end date is set | Fixed: moving to the trial plan without a date gives the plan's standard 30 days (`tests/commercial.test.ts`). |
+| Billing `toMinor` assumes two decimal places | Fixed: amounts and invoices use each currency's ISO 4217 decimals (KWD, BHD, OMR three; JPY none) (`tests/commercial.test.ts`). |
+| AED defaults inside core | Open. |
+| UAE frameworks applied to every pilot kit | Open. |
+| CI actions not pinned by commit SHA | Fixed: every action is pinned to a commit, with the tag in a comment. |
+| The worker image is not scanned | Fixed: CI builds and scans the worker image with the API and web images. |
+| No SAST or SBOM step in CI | Partly fixed: CycloneDX SBOMs of the three images are produced and kept with each run. Static analysis is open. |
+| Compose publishes ports on all interfaces | Fixed: ports bind to 127.0.0.1 unless `AEGIS_BIND_ADDRESS` is set. |
+| `THIRD_PARTY.md` stale on sharp | Fixed: sharp is recorded as a direct core dependency, used by receipt validation. |
 
 ## Documentation drift
 
-Counts in `STATUS.md`; the security page's SAML, KMS and key-rotation statements; the Proof page "not yet" item for
+Corrected on 2026-10-30: the security page (SAML, key vault, rotation, lockout, execution window, isolation test count, AI calls), the Proof page OSV.dev item, the website integration labels ("Tested against a stand-in" instead of "Sandbox tested"), the backup RPO and RTO (now stated as unmeasured targets), the QuantOS Syft and Trivy rows, and a current-status section in `STATUS.md`.
+
+Found by the audit: counts in `STATUS.md`; the security page's SAML, KMS and key-rotation statements; the Proof page "not yet" item for
 OSV.dev (now validated live, see `LIVE_VALIDATION.md`); the roadmap; OPA environment variables; Stripe and Alpaca
 labelled "Sandbox tested" where only the fake servers ran in CI; the WAL archiving claim in `BACKUP_RECOVERY.md`;
 Syft and cosign statements in `QUANTOS_INTEGRATION.md`.

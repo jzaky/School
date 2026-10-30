@@ -76,7 +76,7 @@ services:
       AEGIS_PROCESS: api
     volumes:
       - uploads:/data/uploads
-    ports: ["4000:4000"]
+    ports: ["${AEGIS_BIND_ADDRESS:-127.0.0.1}:4000:4000"]
     depends_on:
       migrate: { condition: service_completed_successfully }
       redis: { condition: service_healthy }
@@ -101,7 +101,7 @@ services:
       API_PUBLIC_URL: http://api:4000
     volumes:
       - uploads:/data/uploads
-    ports: ["3000:3000"]
+    ports: ["${AEGIS_BIND_ADDRESS:-127.0.0.1}:3000:3000"]
     depends_on:
       migrate: { condition: service_completed_successfully }
     restart: unless-stopped

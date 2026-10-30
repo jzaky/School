@@ -8,6 +8,8 @@ import { effectiveLimits, featuresFor, normalizePlan, trialState, usageAgainstLi
 import {
   computeInvoice,
   createSupportRequest,
+  fromMinor,
+  toMinor,
   customerHealth,
   getInvoiceForOrg,
   listSupportRequests,
@@ -57,6 +59,19 @@ describe("plans and invoices (pure)", () => {
     expect(none.lines).toHaveLength(1);
     expect(periodOf(NOW)).toBe("2026-10");
     expect(periodBounds("2026-12").end.toISOString()).toBe("2027-01-01T00:00:00.000Z");
+  });
+
+  it("uses each currency's own decimal places (KWD three, JPY none)", () => {
+    expect(toMinor(125.5, "KWD")).toBe(125_500n);
+    expect(toMinor(1500, "JPY")).toBe(1500n);
+    expect(toMinor(12.5, "AED")).toBe(1250n);
+    expect(fromMinor(125_500n, "KWD")).toBe(125.5);
+    // 333 decisions x 0.0125 KWD = 4.1625 KWD = 4.163 (fils, half-up): three decimals keep a digit AED rounds away.
+    const kwd = computeInvoice({ periodFeeMinor: 1_000_000n, includedDecisions: 100_000, overageUnitPrice4: 125n, decisionsUsed: 100_333, taxRateBp: 0, periodLabel: "x", planName: "Core", currency: "KWD" });
+    expect(kwd.lines[0]!.unitPrice4).toBe("10000000");
+    expect(kwd.lines[1]!.amountMinor).toBe("4163");
+    const jpy = computeInvoice({ periodFeeMinor: 50_000n, includedDecisions: 0, overageUnitPrice4: 15_000n, decisionsUsed: 3, taxRateBp: 0, periodLabel: "x", planName: "Core", currency: "JPY" });
+    expect(jpy.lines[1]!.amountMinor).toBe("5");
   });
 });
 
@@ -145,5 +160,11 @@ describe("commercial records (database)", () => {
     expect(h.trial.state).toBe("ending_soon");
     expect(h.onboarding.total).toBeGreaterThan(0);
     expect(h.support.open).toBe(0);
+    // Moving an organization to the trial plan with no end date gives the standard length, never an open-ended trial.
+    await rawPrisma().organization.update({ where: { id: t.orgId }, data: { plan: "core", trialEndsAt: null } });
+    await platformSetPlan(adminId, t.orgId, { plan: "trial" });
+    const ends = (await rawPrisma().organization.findUniqueOrThrow({ where: { id: t.orgId } })).trialEndsAt;
+    expect(ends).not.toBeNull();
+    expect(Math.round((ends!.getTime() - Date.now()) / 86_400_000)).toBe(30);
   });
 });

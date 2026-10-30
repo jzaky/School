@@ -15,7 +15,7 @@
 6. Any approval that was pending at the time of the outage stays pending until its original expiry; nothing executes during the outage because the gateway was down (fail closed). Agents using the SDK saw deny results.
 
 ## Recovery objectives (targets, not yet measured in production)
-RPO: 5 minutes with WAL archiving. RTO: 30 minutes for a single-region restore following the steps above.
+Targets, not measured: RPO 5 minutes once WAL archiving is configured (it is not configured by the shipped Compose or Kubernetes files; it needs the managed provider's point-in-time recovery or an operator-configured archive), RTO 30 minutes for a single-region restore following the steps above.
 
 ## Tested
 Exercised on 2026-10-11 in the development environment: `pg_dump -Fc` of the seeded database (0.78 MB), `pg_restore` into a fresh `aegis_test` database, the migrate job re-applied RLS and triggers, the 11-test isolation suite passed against the restored database, and `verifyChain` over the restored demo organization returned valid for all 1,772 evidence events. A production-grade drill with WAL archiving and point-in-time recovery has not been performed and is listed as remaining work.

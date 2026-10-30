@@ -7,4 +7,4 @@ services:
     command: ["--config=/etc/otel/config.yaml"]
     volumes:
       - ./otel-collector.yaml:/etc/otel/config.yaml:ro
-    ports: ["4318:4318"]
+    ports: ["${AEGIS_BIND_ADDRESS:-127.0.0.1}:4318:4318"]

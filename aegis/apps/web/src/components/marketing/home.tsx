@@ -44,12 +44,12 @@ const TODAY = [
   "Optional continuous governance: when a monitoring rule fires, AEGIS can respond on its own (suspend the agent, pause the gateway, disable the integration). You choose the response for each rule, every response is recorded as evidence, and a person can reverse it",
 ];
 
-const INTEGRATIONS: { system: string; status: "Sandbox tested" | "Simulated" | "Planned"; detail: string }[] = [
-  { system: "Stripe refunds (test mode)", status: "Sandbox tested", detail: "Built against Stripe's documented test mode. The same refund is never sent twice (idempotency keys), AEGIS checks with Stripe what actually happened (metadata reconciliation), and there is a connection test. Verified locally against a fake Stripe server; the live test-mode run needs a customer test key. Live keys are refused." },
+const INTEGRATIONS: { system: string; status: "Tested against a stand-in" | "Simulated" | "Planned"; detail: string }[] = [
+  { system: "Stripe refunds (test mode)", status: "Tested against a stand-in", detail: "Built against Stripe's documented test mode. The same refund is never sent twice (idempotency keys), AEGIS checks with Stripe what actually happened (metadata reconciliation), and there is a connection test. Verified locally against a fake Stripe server; the live test-mode run needs a customer test key. Live keys are refused." },
   { system: "Support platform refunds", status: "Simulated", detail: "A stand-in that runs inside AEGIS and is used by the sample workflow. It checks the permission slip (grant) and never carries out the same request twice, as a real system would. It keeps a visible ledger." },
   { system: "Core banking transfers", status: "Simulated", detail: "A stand-in that runs inside AEGIS, used by the banking scenario." },
   { system: "Email gateway, CRM, data warehouse", status: "Simulated", detail: "Stand-ins that run inside AEGIS, used by the scenario where an agent tries to move customer data out (data egress)." },
-  { system: "Alpaca paper trading (AEGIS Trading)", status: "Sandbox tested", detail: "Built against Alpaca's paper trading API. The same order is never sent twice (client_order_id idempotency), AEGIS checks with Alpaca what actually happened (order lookup reconciliation), and there is an account connection test. Verified locally against a fake Alpaca server; the paper-account run needs a customer paper key. Live keys and the live host are refused." },
+  { system: "Alpaca paper trading (AEGIS Trading)", status: "Tested against a stand-in", detail: "Built against Alpaca's paper trading API. The same order is never sent twice (client_order_id idempotency), AEGIS checks with Alpaca what actually happened (order lookup reconciliation), and there is an account connection test. Verified locally against a fake Alpaca server; the paper-account run needs a customer paper key. Live keys and the live host are refused." },
   { system: "Helpdesk refunds (Zendesk, Intercom), PayPal, Adyen", status: "Planned", detail: "Would use the same connector interface. Not started." },
   { system: "Approvals in Slack or Teams", status: "Planned", detail: "Today, approvals are decided in the console and over the API." },
 ];
@@ -183,7 +183,7 @@ export function HomePage() {
               <span key="s" className="font-medium">
                 {i.system}
               </span>,
-              <Pill key="p" tone={i.status === "Sandbox tested" ? "allow" : i.status === "Simulated" ? "approval" : "neutral"}>
+              <Pill key="p" tone={i.status === "Tested against a stand-in" ? "allow" : i.status === "Simulated" ? "approval" : "neutral"}>
                 {i.status}
               </Pill>,
               <span key="d" className="text-(--mk-muted)">
