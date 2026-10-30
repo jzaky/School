@@ -50,8 +50,8 @@ Regression tests: `packages/core/tests/audit-p2.test.ts`, plus the files named b
 | --- | --- |
 | Indefinite trial when no end date is set | Fixed: moving to the trial plan without a date gives the plan's standard 30 days (`tests/commercial.test.ts`). |
 | Billing `toMinor` assumes two decimal places | Fixed: amounts and invoices use each currency's ISO 4217 decimals (KWD, BHD, OMR three; JPY none) (`tests/commercial.test.ts`). |
-| AED defaults inside core | Open. |
-| UAE frameworks applied to every pilot kit | Open. |
+| AED defaults inside core | Fixed: with no organization currency set, no currency mismatch is assumed (gateway and autonomy simulation); the demo tenant sets AED explicitly. The refund template still suggests AED as an editable default. |
+| UAE frameworks applied to every pilot kit | Fixed: kits map to ISO/IEC 42001 and NIST AI RMF everywhere; UAE IA, Dubai ISR and the PDPL are added only for an organization whose data residency is the UAE (`tests/pilots.test.ts`). |
 | CI actions not pinned by commit SHA | Fixed: every action is pinned to a commit, with the tag in a comment. |
 | The worker image is not scanned | Fixed: CI builds and scans the worker image with the API and web images. |
 | No SAST or SBOM step in CI | Partly fixed: CycloneDX SBOMs of the three images are produced and kept with each run. Static analysis is open. |

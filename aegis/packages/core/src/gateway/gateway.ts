@@ -480,7 +480,7 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
         toolRisk: tool.riskLevel,
         amount: authzInput.context.amount,
         ceiling: autonomySetting.ceiling,
-        currencyMismatch: !!authzInput.context.currency && authzInput.context.currency !== orgCurrency,
+        currencyMismatch: !!orgCurrency && !!authzInput.context.currency && authzInput.context.currency !== orgCurrency,
       });
       if (autonomy.effect === "observe_only") {
         decisionResult = "deny";
@@ -1153,8 +1153,9 @@ function autonomyLevelOf(v: number): AutonomyLevel {
   return isAutonomyLevel(v) ? v : 0;
 }
 
-async function organizationCurrency(db: TenantDb, orgId: string): Promise<string> {
+/** The organization's own currency, or null when it has not set one (then no currency mismatch is assumed). */
+async function organizationCurrency(db: TenantDb, orgId: string): Promise<string | null> {
   const org = { settings: await orgSettings(db, orgId) };
   const c = (org?.settings as { currency?: unknown } | null)?.currency;
-  return typeof c === "string" && c ? c.toUpperCase() : "AED";
+  return typeof c === "string" && c ? c.toUpperCase() : null;
 }

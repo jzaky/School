@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Flag } from "lucide-react";
 import { withTenant } from "@aegis/db";
-import { PILOT_KITS, PILOT_MEASURES, pilotReport, readWatchOnly } from "@aegis/core";
+import { kitFrameworks, PILOT_KITS, PILOT_MEASURES, pilotReport, readWatchOnly } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { PageHeader } from "@/components/ui/page-header";
 import { Panel } from "@/components/ui/panel";
@@ -22,6 +22,8 @@ const OUTCOME: Record<string, string> = { require_approval: "Held for a person",
 
 export default async function PilotsPage({ searchParams }: { searchParams: Promise<{ days?: string }> }) {
   const c = await requirePermission("reports:read");
+  const residency = (c.org.settings as { dataResidencyCountry?: unknown }).dataResidencyCountry;
+  const country = typeof residency === "string" && /^[A-Z]{2}$/.test(residency) ? residency : null;
   const { days: raw } = await searchParams;
   const days = WINDOWS.find((d) => String(d) === raw) ?? 30;
   const to = new Date();
@@ -79,7 +81,7 @@ export default async function PilotsPage({ searchParams }: { searchParams: Promi
                   </div>
                   <p className="text-xs text-fg-muted">{k.problem}</p>
                   <p className="text-xs text-fg-dim">
-                    {k.scenarios.length} tested scenarios. Evidence maps to {k.frameworks.length} frameworks, including the UAE Information Assurance Regulation and Dubai ISR.
+                    {k.scenarios.length} tested scenarios. Evidence maps to {kitFrameworks(k, country).length} frameworks{country === "AE" ? ", including the UAE Information Assurance Regulation and Dubai ISR" : ""}.
                   </p>
                   <div className="mt-auto">
                     <InstallKitButton kitKey={k.key} kitName={k.name} canInstall={canInstall} />

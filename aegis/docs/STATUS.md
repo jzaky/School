@@ -1,7 +1,7 @@
 # AEGIS status
 
 ## Current status (2026-10-30)
-Sections below are a dated log; figures in older sections are as of their date. Today: core 533 tests, API 61, tenant isolation 22, SDK 19, MCP gateway 8, browser 139 in 36 spec files. The October 2026 audit's 7 P1 findings and 13 of 16 P2 findings are fixed with regression tests (docs/DEFECT_REGISTER.md); phase-by-phase status is in docs/AEGIS_IMPLEMENTATION_MATRIX.md.
+Sections below are a dated log; figures in older sections are as of their date. Today: core 534 tests, API 61, tenant isolation 22, SDK 19, MCP gateway 8, browser 139 in 36 spec files. The October 2026 audit's 7 P1 findings and 13 of 16 P2 findings are fixed with regression tests (docs/DEFECT_REGISTER.md); phase-by-phase status is in docs/AEGIS_IMPLEMENTATION_MATRIX.md.
 
 Updated at the end of each phase. `docs/IMPLEMENTATION_REPORT.md` has the current per-area breakdown (implemented, executed and verified, simulated, remaining).
 

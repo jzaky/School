@@ -75,8 +75,8 @@ Complexity: S (days), M (one to two weeks), L (several weeks), XL (a quarter or 
 
 | Phase | Status | Next | Cx | Milestone |
 | --- | --- | --- | --- | --- |
-| 38 Universal governance architecture | Partial: tool, resource and policy model is sector-neutral; AED defaults in core (P3) | Remove currency and region defaults from core | S | M6 |
-| 39 Industry policy packs | Works: sector templates and pilot kits | UAE frameworks only where relevant (P3) | S | M6 |
+| 38 Universal governance architecture | Works: tool, resource and policy model is sector-neutral; no currency or region assumed in core | Default the refund template currency to the organization's own | S | M6 |
+| 39 Industry policy packs | Works: sector templates and pilot kits | UAE frameworks only for UAE-resident organizations (done) | S | M6 |
 | 40 Global and jurisdictional support | Partial: English and Arabic, UAE and GCC VAT rules, data residency settings | Add jurisdictions as customers need them | M | M6 |
 
 ## Workstream VI: validation and market

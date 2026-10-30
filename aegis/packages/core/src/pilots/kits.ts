@@ -16,16 +16,20 @@ import { activateVersion, assignPolicy, createPolicy, submitForReview } from "..
 import { SECTOR_PACKS, type SectorPack } from "../validation/sector-lab.js";
 import { readWatchOnly, setWatchOnly } from "./watch-only.js";
 
-/** Frameworks every kit's evidence maps to, plus sector extras (keys of the shared framework catalogs). */
-const BASE_FRAMEWORKS = ["uae-ia", "desc-isr", "iso-42001", "nist-ai-rmf-1.0"];
-const SECTOR_FRAMEWORKS: Record<string, string[]> = {
-  healthcare: ["uae-pdpl"],
-  banking: ["pci-dss-4"],
-  telecom: ["uae-pdpl"],
-  education: ["uae-pdpl"],
-  "public-safety": ["uae-pdpl"],
-  "government-services": ["uae-pdpl"],
+/** Frameworks every kit's evidence maps to, wherever the organization operates (keys of the shared framework catalogs). */
+const BASE_FRAMEWORKS = ["iso-42001", "nist-ai-rmf-1.0"];
+const SECTOR_FRAMEWORKS: Record<string, string[]> = { banking: ["pci-dss-4"] };
+/** Added only for organizations whose data residency is in that country. */
+const COUNTRY_FRAMEWORKS: Record<string, { all: string[]; personalData: string[] }> = {
+  AE: { all: ["uae-ia", "desc-isr"], personalData: ["uae-pdpl"] },
 };
+const PERSONAL_DATA_SECTORS = new Set(["healthcare", "telecom", "education", "public-safety", "government-services"]);
+
+/** The frameworks a kit maps to for an organization in `country` (ISO 3166 alpha-2, or null when not set). */
+export function kitFrameworks(kit: Pick<PilotKit, "key" | "frameworks">, country: string | null): string[] {
+  const local = country ? COUNTRY_FRAMEWORKS[country.toUpperCase()] : undefined;
+  return [...kit.frameworks, ...(local ? [...local.all, ...(PERSONAL_DATA_SECTORS.has(kit.key) ? local.personalData : [])] : [])];
+}
 
 /** What every pilot measures, from the ledger. Entities agree targets for each before the pilot starts. */
 export const PILOT_MEASURES = [
@@ -44,6 +48,7 @@ export interface PilotKit {
   agents: { slug: string; name: string; purpose: string }[];
   tools: string[];
   policies: string[];
+  /** Frameworks that apply wherever the organization operates; kitFrameworks adds the country's own. */
   frameworks: string[];
   /** The scenarios the kit is proven against in the sector lab. */
   scenarios: { title: string; shows: string; expect: string }[];

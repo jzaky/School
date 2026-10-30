@@ -355,7 +355,7 @@ export async function simulateAutonomy(db: TenantDb, ctx: OrgContext, agentId: s
   const agent = await db.agent.findUnique({ where: { id: agentId }, select: { id: true, autonomyLevel: true, autonomyCeilingAmount: true } });
   if (!agent) throw notFound("Agent");
   const org = { settings: await orgSettings(db, ctx.orgId) };
-  const orgCurrency = ((org?.settings as { currency?: string } | null)?.currency ?? "AED").toUpperCase();
+  const orgCurrency = (org?.settings as { currency?: string } | null)?.currency?.toUpperCase() ?? null;
   const ceiling = input.ceilingAmount === undefined ? toNum(agent.autonomyCeilingAmount) : input.ceilingAmount;
   const requests = await db.actionRequest.findMany({
     where: { agentId, createdAt: { gte: new Date(now.getTime() - days * 86_400_000) } },
@@ -374,7 +374,7 @@ export async function simulateAutonomy(db: TenantDb, ctx: OrgContext, agentId: s
     const policyOutcome = (exp.autonomy?.policyOutcome ?? d.result) as PolicyOutcome;
     const amount = exp.inputSummary?.amount ?? null;
     const currency = exp.inputSummary?.currency ?? null;
-    const sim = applyAutonomyLevel({ level: input.level, policyOutcome, toolRisk: (r.toolId ? riskOf.get(r.toolId) : undefined) ?? "critical", amount, ceiling, currencyMismatch: !!currency && currency.toUpperCase() !== orgCurrency });
+    const sim = applyAutonomyLevel({ level: input.level, policyOutcome, toolRisk: (r.toolId ? riskOf.get(r.toolId) : undefined) ?? "critical", amount, ceiling, currencyMismatch: !!orgCurrency && !!currency && currency.toUpperCase() !== orgCurrency });
     rows.push({ requestId: r.id, createdAt: r.createdAt, tool: r.toolKey, amount, recorded: d.result, policyOutcome, simulated: sim.outcome, changed: sim.outcome !== d.result, code: sim.code });
   }
   const count = (pred: (o: PolicyOutcome) => boolean, key: "simulated" | "recorded") => rows.filter((r) => pred(r[key] as PolicyOutcome)).length;

@@ -89,7 +89,7 @@ export async function seedDemoTenant(): Promise<SeededTenant> {
   }
   const ownerUser = created.find((u) => u.role === "owner")!;
   const org = await createOrganization({ name: "Meridian Gulf Bank", slug: DEMO_SLUG, ownerUserId: ownerUser.id, demoMode: true });
-  await rawPrisma().organization.update({ where: { id: org.id }, data: { settings: { currency: "AED", timezone: "Asia/Dubai", approvalDefaultExpiryMinutes: 240, aiProviderEnabled: false } } });
+  await rawPrisma().organization.update({ where: { id: org.id }, data: { settings: { currency: "AED", timezone: "Asia/Dubai", dataResidencyCountry: "AE", approvalDefaultExpiryMinutes: 240, aiProviderEnabled: false } } });
 
   const users: SeededTenant["users"] = {};
   await withTenant(org.id, async (db) => {

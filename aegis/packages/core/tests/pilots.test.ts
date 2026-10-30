@@ -1,3 +1,4 @@
+import { kitFrameworks } from "../src/pilots/kits.js";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { disconnectAll, withTenant } from "@aegis/db";
 import { addUserWithRole, makeTestTenant, type TestTenant } from "./helpers.js";
@@ -34,8 +35,18 @@ describe("pilot kits and watch-only mode", () => {
     const keys = new Set(SHARED_FRAMEWORKS.map((f) => f.key));
     for (const k of PILOT_KITS) {
       expect(k.scenarios.length, k.key).toBeGreaterThan(2);
-      for (const f of k.frameworks) expect(keys.has(f), `${k.key} -> ${f}`).toBe(true);
+      for (const f of kitFrameworks(k, "AE")) expect(keys.has(f), `${k.key} -> ${f}`).toBe(true);
     }
+  });
+
+  it("adds UAE frameworks only for an organization whose data residency is the UAE", () => {
+    const health = PILOT_KITS.find((k) => k.key === "healthcare")!;
+    expect(kitFrameworks(health, null)).not.toContain("uae-ia");
+    expect(kitFrameworks(health, "SA")).not.toContain("uae-pdpl");
+    expect(kitFrameworks(health, "AE")).toEqual(expect.arrayContaining(["uae-ia", "desc-isr", "uae-pdpl", "iso-42001"]));
+    const banking = PILOT_KITS.find((k) => k.key === "banking")!;
+    expect(kitFrameworks(banking, "AE")).not.toContain("uae-pdpl");
+    expect(kitFrameworks(banking, null)).toContain("pci-dss-4");
   });
 
   it("installs a kit with its agent in watch-only mode, and repeating the install changes nothing", async () => {
