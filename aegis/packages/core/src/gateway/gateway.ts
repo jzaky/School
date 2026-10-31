@@ -18,7 +18,7 @@ import { hasPermission } from "../identity/permissions.js";
 import { createSecurityEvent } from "../shield/security-events.js";
 import { baselineChecks, CLASS_ORDER as CLASSIFICATION_ORDER, domainMatches, type BaselineFailure } from "./baseline.js";
 import { agentAttributes, buildAuthorizationInput, extractAmount, extractDestinationDomain, type AuthorizationInput } from "./input.js";
-import { consumeGrant, EXECUTABLE_STATUSES, hashGrantToken, issueGrant, parseGrantToken, staleAuthorization, voidLiveGrants } from "./grants.js";
+import { consumeGrant, EXECUTABLE_STATUSES, hashGrantToken, issueGrant, parseGrantToken, staleAuthorization, voidAtCommitIfPaused, voidLiveGrants } from "./grants.js";
 import { applyRestrictions } from "./restrictions.js";
 import { applyAutonomyLevel, isAutonomyLevel, stricterAutonomy, type AutonomyLevel } from "../autonomy/levels.js";
 import { applyAutomaticDowngrade, checkDenialBurst } from "../autonomy/service.js";
@@ -633,6 +633,7 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
     status = "allowed";
     await db.actionRequest.update({ where: { id: request.id }, data: { status: "allowed", updatedAt: now } });
     const g = await issueGrant(db, ctx.orgId, request.id, effectiveHash, { now, integrationId: tool?.integrationId ?? null });
+    voidAtCommitIfPaused(db, ctx, request.id);
     grant = { token: g.token, expiresAt: g.grant.expiresAt };
     await appendEvidence(db, ctx, { type: "gateway.watch_only_passed", subjectType: "action_request", subjectId: request.id, correlationId, payload: { wouldHave: watchOnly.wouldHave, reasons } });
   } else if (decisionResult === "allow" || decisionResult === "restrict") {
@@ -641,6 +642,7 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
     // execute (after Shield masking and policy narrowing), so the downstream check matches.
     await db.actionRequest.update({ where: { id: request.id }, data: { status: "allowed", updatedAt: now } });
     const g = await issueGrant(db, ctx.orgId, request.id, effectiveHash, { now, integrationId: tool?.integrationId ?? null });
+    voidAtCommitIfPaused(db, ctx, request.id);
     grant = { token: g.token, expiresAt: g.grant.expiresAt };
   } else if (decisionResult === "require_approval") {
     status = "pending_approval";

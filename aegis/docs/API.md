@@ -2,6 +2,13 @@
 
 Base URL: `API_PUBLIC_URL` (default http://localhost:4000). JSON everywhere. Errors: `{ "error": { "code", "message", "details" }, "requestId" }`.
 
+Invalid input answers `400` with `code: "validation"`, and `details` gives:
+- `formErrors` and `fieldErrors` (the flattened messages);
+- `issues`, one entry per problem: `{ path, code, message, expected?, format?, origin?, minimum?, maximum?, keys?, values? }`.
+
+The values the client sent are never echoed back. A body containing a NUL character, or nested more than 48 levels
+deep, is refused with `400` on every route.
+
 ## Authentication
 - Console users: session cookie `aegis_session` (set by `POST /v1/auth/login`).
 - Agents and integrations: `Authorization: Bearer aegis_ak_<prefix>_<secret>`. Keys are scoped to one agent or integration and are revoked when the agent is revoked.

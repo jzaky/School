@@ -3,7 +3,7 @@ import { z } from "zod";
 import { decryptSecret, encryptSecret } from "../lib/crypto.js";
 import { AegisError, unauthorized, validation } from "../lib/errors.js";
 import { hashPassword, passwordPolicyIssues, verifyPassword } from "./password.js";
-import { createSession } from "./sessions.js";
+import { createSession, revokeAllSessions } from "./sessions.js";
 import { generateTotpSecret, totpUri, matchTotpStep, verifyTotp } from "./totp.js";
 import { listUserMemberships } from "./memberships.js";
 
@@ -60,12 +60,14 @@ export async function registerUser(input: { email: string; name: string; passwor
   return rawPrisma().user.create({ data: { email, name: input.name.trim(), passwordHash: await hashPassword(input.password) } });
 }
 
-export async function changePassword(userId: string, current: string, next: string) {
+/** Changes the password and signs out every other session of the user; keepSessionId stays signed in. */
+export async function changePassword(userId: string, current: string, next: string, keepSessionId?: string) {
   const user = await rawPrisma().user.findUniqueOrThrow({ where: { id: userId } });
   if (!user.passwordHash || !(await verifyPassword(user.passwordHash, current))) throw unauthorized("Current password is incorrect");
   const issues = passwordPolicyIssues(next);
   if (issues.length) throw validation(`Password needs ${issues.join(", ")}`);
   await rawPrisma().user.update({ where: { id: userId }, data: { passwordHash: await hashPassword(next) } });
+  await revokeAllSessions(userId, keepSessionId);
 }
 
 /** Step 1 of MFA enrolment: creates a secret (stored encrypted, not yet enabled) and returns the otpauth URI. */
@@ -108,19 +110,24 @@ export const MFA_MAX_FAILURES = 5;
  * six-digit code cannot be guessed by repeated tries. On success the session is marked MFA-passed.
  */
 export async function verifySessionMfa(sessionId: string, userId: string, code: string): Promise<{ ok: true } | { ok: false; revoked: boolean; remaining: number }> {
-  const session = await rawPrisma().session.findUnique({ where: { id: sessionId } });
-  if (!session || session.revokedAt || session.userId !== userId) return { ok: false, revoked: true, remaining: 0 };
-  if (session.mfaFailures >= MFA_MAX_FAILURES) return { ok: false, revoked: true, remaining: 0 };
+  // Each attempt reserves its place in the failure count with one conditional update before the code is checked,
+  // so parallel attempts cannot check more than MFA_MAX_FAILURES codes in one session (found by the enterprise
+  // attack validation: 20 parallel wrong codes were all checked before the count caught up).
+  const reserved = await rawPrisma().session.updateMany({ where: { id: sessionId, userId, revokedAt: null, mfaFailures: { lt: MFA_MAX_FAILURES } }, data: { mfaFailures: { increment: 1 } } });
+  if (reserved.count === 0) {
+    await rawPrisma().session.updateMany({ where: { id: sessionId, userId, revokedAt: null }, data: { revokedAt: new Date() } });
+    return { ok: false, revoked: true, remaining: 0 };
+  }
   if (await verifyMfaCode(userId, code)) {
     await rawPrisma().session.update({ where: { id: sessionId }, data: { mfaPassed: true, mfaFailures: 0 } });
     return { ok: true };
   }
-  const updated = await rawPrisma().session.update({ where: { id: sessionId }, data: { mfaFailures: { increment: 1 } } });
-  if (updated.mfaFailures >= MFA_MAX_FAILURES) {
+  const s = await rawPrisma().session.findUniqueOrThrow({ where: { id: sessionId }, select: { mfaFailures: true } });
+  if (s.mfaFailures >= MFA_MAX_FAILURES) {
     await rawPrisma().session.update({ where: { id: sessionId }, data: { revokedAt: new Date() } });
     return { ok: false, revoked: true, remaining: 0 };
   }
-  return { ok: false, revoked: false, remaining: MFA_MAX_FAILURES - updated.mfaFailures };
+  return { ok: false, revoked: false, remaining: MFA_MAX_FAILURES - s.mfaFailures };
 }
 
 export async function disableMfa(userId: string, code: string) {

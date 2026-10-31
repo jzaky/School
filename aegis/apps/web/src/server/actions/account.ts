@@ -12,9 +12,8 @@ export async function changePasswordAction(input: unknown) {
     const s = await requireUser();
     const data = z.object({ current: z.string().min(1).max(512), next: z.string().min(1).max(512), confirm: z.string().min(1).max(512) }).parse(input);
     if (data.next !== data.confirm) throw validation("New passwords do not match");
-    await changePassword(s.user.id, data.current, data.next);
     // Other sessions are signed out after a password change; this one stays.
-    await revokeAllSessions(s.user.id, s.id);
+    await changePassword(s.user.id, data.current, data.next, s.id);
     revalidatePath("/account/security");
   });
 }

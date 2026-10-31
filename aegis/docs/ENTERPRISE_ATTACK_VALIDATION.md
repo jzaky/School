@@ -5,11 +5,19 @@ tenant, a low-privilege user and a compromised agent or integration key. Method:
 real Fastify application and a real PostgreSQL database with row-level security, plus core regression tests for
 every fix. This is AEGIS's own testing. It is not an independent penetration test (`PENTEST_RFQ.md`).
 
-Suites:
-- `apps/api/tests/enterprise-attacks.test.ts` (16 tests)
-- `packages/core/tests/attack-validation-regressions.test.ts` (6 tests)
+**What the results mean.** A passing test shows that AEGIS resisted that specific attack, in this environment, at the
+concurrency tried. Thousands of passing requests are evidence of resistance to the attacks tested. They are not
+proof that AEGIS is secure against every attack, and this report claims nothing beyond the attacks listed.
 
-Both run in CI on every push.
+Suites (all run in CI on every push):
+- Phase 1:
+  - `apps/api/tests/enterprise-attacks.test.ts` (16 tests);
+  - `packages/core/tests/attack-validation-regressions.test.ts` (7 tests).
+- Phase 2:
+  - `apps/api/tests/enterprise-attacks-deep.test.ts` (2 tests);
+  - `apps/api/tests/enterprise-attacks-identity.test.ts` (10 tests);
+  - `apps/api/tests/enterprise-attacks-races.test.ts` (6 tests).
+- Shared world: `apps/api/tests/attack-harness.ts`. Body synthesis: `apps/api/tests/body-synthesis.ts`.
 
 ## Set-up
 
@@ -97,6 +105,63 @@ All are refused. Nothing in the attacker's organization references a victim obje
 - A suspended agent is allowed nothing.
 - Deny, approval and duplicate rules hold through the HTTP path (above).
 
+## Phase 2 (2026-10-31)
+
+Phase 2 attacked the gaps phase 1 reported.
+
+### Write routes with bodies they accept
+
+In phase 1, 1,458 of 3,769 requests stopped at input validation. In phase 2 each body is built from the route's
+own validation errors:
+- The API now returns each issue's path, kind and limits (never the values sent).
+- A body is filled one round at a time until the route stops answering 400.
+- Id-shaped fields get ids chosen by name: the victim's for cross-tenant attacks, the attacker's own for privilege
+  attacks.
+
+Results:
+- **Cross-tenant, the attacker's owner against all 132 write routes:** 116 got past validation, answering 200
+  (14), 201 (8), 401 (9), 403 (6), 404 (78) or 406 (1). The victim's rows were unchanged and no victim id
+  leaked. 16 routes still answered 400. The synthesizer cannot build unions, discriminated types, cross-field
+  rules or file uploads. Eight of those 16 (assignments, access requests, delegations, the lab schedule,
+  watch-only, freezes, discovery resolution, custom scenarios) are covered by phase 1's hand-written valid-body
+  attacks.
+- **Privilege, with the attacker's own ids, as a viewer, an agent key and an integration key:** every write
+  route was tried. Nothing was written outside an explicit allow-list, in which each entry carries its reason:
+  - a viewer may verify the evidence chain, run the dry-run inspection and injection checks, and ask for
+    software to be assessed;
+  - an agent may submit actions and report its own tools' definitions;
+  - an integration may report discovered agents, its tools' definitions and payment documents.
+
+  The test also fails on any other table changed or any other kind of evidence recorded.
+
+### Identity and sessions
+
+Held:
+- A signed-out session is dead.
+- Tampered, forged, truncated and empty session cookies are refused.
+- Removal from the organization ends access at once, and a disabled account is refused.
+- A session cannot switch into an organization its user does not belong to.
+- A single sign-on session cannot switch to another organization of the same user.
+- With two-factor sign-in on, a password alone opens nothing.
+- Revoked and expired keys are refused at once, and a session cookie does not rescue a bad key.
+- An attacker's SCIM provisioning key cannot read, change, deactivate, delete or adopt the victim's users.
+
+Two findings, both fixed (E-7, E-8 below).
+
+### Race conditions
+
+Twelve or six requests are fired at once, and the invariant is checked afterwards. Held:
+- Approvers deciding the same approval at once: exactly one decision is accepted, and at most one grant exists.
+- One grant verified by many downstream calls at once: consumed exactly once.
+- One idempotency key sent with small and large amounts: one stored request, and the large amount is never
+  allowed. The losing variants get 409.
+- Many refunds for one order at once: at most one allowed.
+- An agent starting one granted request many times at once: started once.
+
+One finding, fixed (E-9). The pause test staggers the pause over six delays and requires at least one round in
+which decisions landed both before and after it. Its first version always paused first and proved nothing; that
+is why the delays were added.
+
 ## Findings and fixes
 
 Each has a regression test that failed before the fix.
@@ -109,15 +174,21 @@ Each has a regression test that failed before the fix.
 | E-4 | P3 | An access review silently dropped agent ids that were not the organization's and started an empty review, which then blocked starting a real one. | Unknown agent ids are refused. |
 | E-5 | P3 | Acknowledging an alert the organization cannot see answered 500. | Not found (404). The API also maps any "record to update not found" database error to 404. |
 | E-6 | P3 | A gateway request with a NUL character, or nesting deeper than the database driver accepts (about 100 levels), answered 500. It failed closed: nothing was allowed and nothing was stored. But it was a server error, not a recorded refusal. | The gateway input schema refuses NUL characters and nesting beyond 32 levels (400), checking depth without recursion. As defense in depth, the API refuses any body with a NUL character or nesting beyond 48 levels; the hostile-body sweep showed no other route reached the database with such input even without that check. |
+| E-7 | P2 | The two-factor failure limit (5 wrong codes per session) was counted after each code was checked. 20 codes sent at once were all checked (18 counted). With enough source addresses to pass the per-address rate limit, someone holding the password could try far more than 5 codes per session. | Each attempt reserves its place in the count with one conditional update before the code is checked; at the limit the session is closed. |
+| E-8 | P3 | Changing a password signed out other sessions only in the console action that called it; the core function did not, so another caller could leave stolen sessions alive. | The core function revokes every other session, keeping only the one named. |
+| E-9 | P3 | An emergency pause could commit while a decision was in progress, after the pause had voided every live grant, so one fresh grant survived it. The grant could not be used while paused (consumption re-checks the pause) and an allowed request can be re-granted after a resume by design, so there was no added capability. But the pause did not void every outstanding grant as documented, and its evidence count missed it. | The decision re-checks the pause under the organization lock just before commit and voids its own grant. The evidence ledger also schedules a new flush for evidence appended after an earlier flush in the same transaction, which this fix relies on. |
 
 ## Limits of this validation
 
-- **Generic bodies.** The route sweep sends generic bodies, so for many write routes input validation answers
-  before any lookup (1,458 of the 3,769 requests got 400). The well-formed attacks cover the cross-tenant writes
-  judged most valuable. They do not cover every write route.
+- **Generic bodies.** Phase 1's route sweep sends generic bodies, so for many write routes input validation answers
+  before any lookup (1,458 of the 3,769 requests got 400). Phase 2's synthesized bodies reach 116 of 132 write
+  routes past validation; 16 are not reached that way, and 8 of those are covered by hand-written attacks.
+- **Race coverage.** The races were tried at 6 to 12 concurrent requests on one machine. Other interleavings, more
+  replicas or a different database configuration could behave differently.
 - **API only.** The console's server actions call the same core services, but they were not swept.
-- **Not attacked here:** single sign-on and SCIM protocol flows (they have their own tests), and the model
-  provider path of the AI gateway.
+- **Not attacked here:** the SAML and OIDC protocol exchanges themselves (they have their own tests; phase 2
+  covered the sessions they produce), password reset (AEGIS has no self-service reset), and the model provider
+  path of the AI gateway.
 - **Known gap.** Splitting a refund into several requests under the per-request limit still passes. This is the
   Attack Simulation Lab's documented gap; a rate or volume rule closes it (`docs/ATTACK_SIMULATION_LAB.md`).
 - **Independence.** An independent penetration test is still needed (`PENTEST_RFQ.md`).

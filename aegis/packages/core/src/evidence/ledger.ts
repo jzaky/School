@@ -80,7 +80,9 @@ const pendingByTx = new WeakMap<object, Pending[]>();
 async function flushPending(db: TenantDb, orgId: string) {
   const list = pendingByTx.get(db);
   if (!list?.length) return;
-  pendingByTx.set(db, []);
+  // Forget the flushed list: an event appended later in this transaction (by another before-commit step) starts a
+  // new list and schedules its own flush, instead of being added to a list that will never be written.
+  pendingByTx.delete(db);
   await db.$executeRawUnsafe(`SELECT pg_advisory_xact_lock(hashtext('evidence:' || $1))`, orgId);
   const last = await db.evidenceEvent.findFirst({ where: { orgId }, orderBy: { seq: "desc" }, select: { seq: true, hash: true } });
   let seq = last?.seq ?? 0n;

@@ -60,7 +60,7 @@ Regression tests: `packages/core/tests/audit-p2.test.ts`, plus the files named b
 
 ## Enterprise attack validation (2026-10-31)
 
-Found by black-box attack suites against the API (`docs/ENTERPRISE_ATTACK_VALIDATION.md`). Each fix has a regression
+Found by black-box attack suites against the API, phases 1 and 2 (`docs/ENTERPRISE_ATTACK_VALIDATION.md`). Each fix has a regression
 test in `packages/core/tests/attack-validation-regressions.test.ts` or `apps/api/tests/enterprise-attacks.test.ts`.
 
 | Finding | Status |
@@ -71,6 +71,9 @@ test in `packages/core/tests/attack-validation-regressions.test.ts` or `apps/api
 | E-4 (P3) Access reviews silently dropped unknown agent ids and started empty | Fixed: refused. |
 | E-5 (P3) Acknowledging an unknown alert answered 500 | Fixed: 404, and record-not-found database errors map to 404 API-wide. |
 | E-6 (P3) NUL characters or very deep nesting in a gateway request answered 500 (failed closed) | Fixed: refused as invalid input at the gateway and, as defense in depth, for every API body. |
+| E-7 (P2) Parallel two-factor codes were all checked before the per-session failure limit applied | Fixed: each attempt reserves its place in the count before the code is checked (`enterprise-attacks-identity.test.ts`). |
+| E-8 (P3) The core password change left other sessions signed in | Fixed: it revokes every other session (`enterprise-attacks-identity.test.ts`). |
+| E-9 (P3) A pause committing during a decision left that decision's fresh grant live | Fixed: the decision re-checks the pause under the organization lock before commit; evidence appended after a flush is no longer dropped (`enterprise-attacks-races.test.ts`). |
 
 ## Documentation drift
 

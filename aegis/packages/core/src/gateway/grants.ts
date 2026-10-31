@@ -1,6 +1,6 @@
 import { orgSettings } from "../lib/tx-cache.js";
 import { createHmac, randomUUID } from "node:crypto";
-import type { TenantDb } from "@aegis/db";
+import { isDeferredTransaction, onBeforeCommit, type TenantDb } from "@aegis/db";
 import { appendEvidence } from "../evidence/ledger.js";
 import type { OrgContext } from "../lib/context.js";
 import { constantTimeEqual, hmacHex, randomToken } from "../lib/crypto.js";
@@ -102,9 +102,27 @@ export async function voidGrantsForRequest(db: TenantDb, actionRequestId: string
 }
 
 /** Voids every live grant in the organization, optionally restricted to one agent. Used by pause, suspension and revocation. */
-export async function voidLiveGrants(db: TenantDb, ctx: OrgContext, reason: string, filter: { agentId?: string } = {}) {
+/**
+ * A decision in a deferred-lock transaction takes the organization lock only at commit, so an emergency pause can
+ * commit while the decision is being made, after the pause has voided every live grant (found by the enterprise
+ * attack validation). This re-checks the pause under the lock, just before commit, and voids the grant this
+ * transaction issued if the gateway was paused meanwhile. With the default lock the decision and the pause are
+ * already serialized.
+ */
+export function voidAtCommitIfPaused(db: TenantDb, ctx: OrgContext, actionRequestId: string): void {
+  if (!isDeferredTransaction(db)) return;
+  onBeforeCommit(db, async () => {
+    await db.$executeRawUnsafe(`SELECT pg_advisory_xact_lock(hashtext('evidence:' || $1))`, ctx.orgId);
+    // Read past the per-transaction settings cache: the point is to see a pause committed since the decision began.
+    const org = await db.organization.findUnique({ where: { id: ctx.orgId }, select: { settings: true } });
+    const paused = { paused: !!(org?.settings as { gatewayPaused?: boolean } | null)?.gatewayPaused, reason: (org?.settings as { gatewayPausedReason?: string } | null)?.gatewayPausedReason };
+    if (paused.paused) await voidLiveGrants(db, ctx, `gateway paused while the decision was made: ${paused.reason ?? "emergency control"}`, { actionRequestId });
+  });
+}
+
+export async function voidLiveGrants(db: TenantDb, ctx: OrgContext, reason: string, filter: { agentId?: string; actionRequestId?: string } = {}) {
   const now = ctx.now ?? new Date();
-  const live = await db.executionGrant.findMany({ where: { orgId: ctx.orgId, consumedAt: null, voidedAt: null, ...(filter.agentId ? { request: { agentId: filter.agentId } } : {}) }, select: { id: true, actionRequestId: true } });
+  const live = await db.executionGrant.findMany({ where: { orgId: ctx.orgId, consumedAt: null, voidedAt: null, ...(filter.agentId ? { request: { agentId: filter.agentId } } : {}), ...(filter.actionRequestId ? { actionRequestId: filter.actionRequestId } : {}) }, select: { id: true, actionRequestId: true } });
   if (live.length === 0) return 0;
   await db.executionGrant.updateMany({ where: { id: { in: live.map((g) => g.id) } }, data: { voidedAt: now, voidReason: reason } });
   await appendEvidence(db, ctx, { type: "gateway.grants_voided", subjectType: "organization", subjectId: ctx.orgId, payload: { reason, count: live.length, actionRequestIds: live.map((g) => g.actionRequestId), agentId: filter.agentId ?? null } });

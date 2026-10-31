@@ -74,7 +74,7 @@ export async function buildApp(opts: { modules?: "all" | "ai-gateway"; onRoute?:
       return reply.status(err.status).send({ error: { code: err.code, message: err.message, details: err.details ?? null }, requestId: req.id });
     }
     if (err instanceof ZodError) {
-      return reply.status(400).send({ error: { code: "validation", message: "Invalid request", details: err.flatten() }, requestId: req.id });
+      return reply.status(400).send({ error: { code: "validation", message: "Invalid request", details: { ...err.flatten(), issues: describeIssues(err) } }, requestId: req.id });
     }
     const e = err as { statusCode?: number; message?: string; name?: string; code?: unknown };
     // Prisma "record to update or delete not found": an id this tenant cannot see is a 404, never a 500.
@@ -107,4 +107,18 @@ export function trustProxySetting(v: string | undefined): boolean | string {
   if (raw === "true") return true;
   if (raw === "false") return false;
   return raw;
+}
+
+/**
+ * Where and why input failed, for API clients: the path, the kind of problem and its limits. Listed field by field so
+ * the values the client sent are never echoed back.
+ */
+export function describeIssues(err: ZodError) {
+  return err.issues.slice(0, 50).map((i) => {
+    const x = i as unknown as Record<string, unknown>;
+    const out: Record<string, unknown> = { path: i.path.map(String), code: i.code, message: i.message };
+    for (const k of ["expected", "format", "origin", "minimum", "maximum", "keys"]) if (x[k] !== undefined) out[k] = x[k];
+    if (Array.isArray(x.values)) out.values = (x.values as unknown[]).slice(0, 50);
+    return out;
+  });
 }
