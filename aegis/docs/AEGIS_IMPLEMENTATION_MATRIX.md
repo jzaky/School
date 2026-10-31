@@ -25,7 +25,7 @@ Complexity: S (days), M (one to two weeks), L (several weeks), XL (a quarter or 
 | 5 Governance engine hardening | Works, P2 open | Delegation, execution window, policy-version binding (P1-2, P1-5), agent-mode grants and revoke rights (P2-6, P2-12) fixed | P2-3 | M | M1 |
 | 6 Performance and reliability | Works | `PERFORMANCE.md` benchmarks, circuit breakers, dead-letter queue | Re-run benchmark after P1 changes | S | M2 |
 | 7 Observability | Works | OpenTelemetry, structured logs, metrics, alerts | None urgent | S | M2 |
-| 8 Automated testing | Works | Core, API, database and browser suites in CI; Proof page figures checked in CI | SBOMs of the shipped images and pinned actions are in CI; static analysis (SAST) is not yet | S | M1 |
+| 8 Automated testing | Works | Core, API, database and browser suites in CI; Proof page figures checked in CI | SBOMs, pinned actions, and CodeQL plus Semgrep with a blocking gate are in CI (`SAST.md`) | S | M1 |
 | 9 User experience | Works | Control Center, Arabic console, onboarding, receipt validation panel | None urgent | S | M2 |
 | 10 Live integration verification | Partial | OSV.dev and the injection dataset run live; Stripe and Alpaca only against fake servers in CI; Entra connector tested against recorded responses | Stripe test mode and Alpaca paper need the owner's sandbox keys | M | M1 |
 | 11 Defect remediation | Partial | P1 done; P2 and P3 open | Work the register in order | M | M1 |

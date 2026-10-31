@@ -1,0 +1,10 @@
+name: "School and AEGIS CodeQL configuration"
+# security-extended: the default security queries plus lower-precision security queries.
+queries:
+  - uses: security-extended
+paths-ignore:
+  - "**/node_modules/**"
+  - "**/.next/**"
+  - "**/dist/**"
+  - "**/playwright-report/**"
+  - "**/test-results/**"

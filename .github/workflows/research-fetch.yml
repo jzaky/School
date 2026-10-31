@@ -28,7 +28,10 @@ jobs:
       matrix: ${{ steps.m.outputs.matrix }}
     steps:
       - id: m
-        run: echo "matrix=$(python3 -c "import json;print(json.dumps(list(range(max(1,min(16,int('${{ inputs.chunks }}')))))))")" >> "$GITHUB_OUTPUT"
+        # Expressions reach the shell as environment variables, never as command text.
+        env:
+          IN_CHUNKS: ${{ inputs.chunks }}
+        run: echo "matrix=$(python3 -c "import json,os;print(json.dumps(list(range(max(1,min(16,int(os.environ['IN_CHUNKS'])))))))")" >> "$GITHUB_OUTPUT"
 
   fetch:
     needs: plan
@@ -39,8 +42,8 @@ jobs:
       matrix:
         chunk: ${{ fromJSON(needs.plan.outputs.matrix) }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
       - name: Install a browser
@@ -49,10 +52,15 @@ jobs:
           npx playwright install --with-deps chromium
           sudo apt-get install -y -qq poppler-utils >/dev/null
       - name: Fetch pages
+        # Expressions reach the shell as environment variables, never as command text.
+        env:
+          IN_LIST: ${{ inputs.list }}
+          IN_M_CHUNK: ${{ matrix.chunk }}
+          IN_S_JOB_TOTAL: ${{ strategy.job-total }}
         run: |
           cp scripts/research/fetch-pages.mjs /tmp/pw/
-          node /tmp/pw/fetch-pages.mjs --list "${{ inputs.list }}" --chunk ${{ matrix.chunk }} --of ${{ strategy.job-total }} --out "out/chunk-${{ matrix.chunk }}.json" --key research/fetch-key.pub
-      - uses: actions/upload-artifact@v4
+          node /tmp/pw/fetch-pages.mjs --list "${IN_LIST}" --chunk ${IN_M_CHUNK} --of ${IN_S_JOB_TOTAL} --out "out/chunk-${IN_M_CHUNK}.json" --key research/fetch-key.pub
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: chunk-${{ matrix.chunk }}
           path: out/
@@ -63,21 +71,25 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ github.ref_name }}
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           path: dl
       - name: Commit encrypted snapshots
+        # Expressions reach the shell as environment variables, never as command text.
+        env:
+          IN_LABEL: ${{ inputs.label }}
+          IN_GH_REF_NAME: ${{ github.ref_name }}
         run: |
-          mkdir -p "research/cache/${{ inputs.label }}"
-          find dl -name '*.json' -exec cp {} "research/cache/${{ inputs.label }}/" \;
+          mkdir -p "research/cache/${IN_LABEL}"
+          find dl -name '*.json' -exec cp {} "research/cache/${IN_LABEL}/" \;
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add research/cache
-          git commit -m "Research fetch ${{ inputs.label }}: encrypted page snapshots" || exit 0
+          git commit -m "Research fetch ${IN_LABEL}: encrypted page snapshots" || exit 0
           for i in 1 2 3 4 5; do
-            git pull --rebase origin "${{ github.ref_name }}" && git push origin "HEAD:${{ github.ref_name }}" && break
+            git pull --rebase origin "${IN_GH_REF_NAME}" && git push origin "HEAD:${IN_GH_REF_NAME}" && break
             sleep $((i * 5))
           done

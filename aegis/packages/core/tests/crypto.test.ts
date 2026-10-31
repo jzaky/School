@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { canonicalJson, decryptSecret, encryptSecret, hashObject, maskSecret } from "../src/lib/crypto.js";
+import { canonicalJson, decryptSecret, encryptSecret, hashObject, maskSecret, trimTrailing } from "../src/lib/crypto.js";
 import { base32Decode, base32Encode, generateTotpSecret, totpCode, verifyTotp } from "../src/identity/totp.js";
 import { generateApiKey } from "../src/identity/api-keys.js";
 
@@ -21,6 +21,17 @@ describe("canonical JSON", () => {
   });
 });
 
+describe("trimTrailing", () => {
+  it("removes every trailing character in linear time (replaces /x+$/ regexes, SAST ReDoS fix)", () => {
+    expect(trimTrailing("https://a.example///", "/")).toBe("https://a.example");
+    expect(trimTrailing("JBSWY3DP====", "=")).toBe("JBSWY3DP");
+    expect(trimTrailing("////", "/")).toBe("");
+    const t0 = Date.now();
+    expect(trimTrailing("/".repeat(200_000) + "x", "/")).toHaveLength(200_001);
+    expect(Date.now() - t0).toBeLessThan(500);
+  });
+});
+
 describe("secret envelope", () => {
   it("round-trips and binds to its context", () => {
     const enc = encryptSecret("super-secret", "row:1");
@@ -28,6 +39,14 @@ describe("secret envelope", () => {
     expect(decryptSecret(enc, "row:1")).toBe("super-secret");
     expect(() => decryptSecret(enc, "row:2")).toThrow();
     expect(() => decryptSecret(enc.slice(0, -2) + "zz", "row:1")).toThrow();
+  });
+  it("refuses a truncated authentication tag (GCM tag length is fixed at 16 bytes)", () => {
+    const enc = encryptSecret("super-secret", "row:1");
+    const parts = enc.split(".");
+    const tag = Buffer.from(parts[4]!, "base64url");
+    // A 4-byte tag would be accepted by a decipher without a fixed tag length, cutting forgery cost to 2^32.
+    const short = [...parts.slice(0, 4), tag.subarray(0, 4).toString("base64url")].join(".");
+    expect(() => decryptSecret(short, "row:1")).toThrow();
   });
   it("never produces the same ciphertext twice", () => {
     expect(encryptSecret("x")).not.toBe(encryptSecret("x"));

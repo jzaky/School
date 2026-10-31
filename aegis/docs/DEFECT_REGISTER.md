@@ -54,7 +54,7 @@ Regression tests: `packages/core/tests/audit-p2.test.ts`, plus the files named b
 | UAE frameworks applied to every pilot kit | Fixed: kits map to ISO/IEC 42001 and NIST AI RMF everywhere; UAE IA, Dubai ISR and the PDPL are added only for an organization whose data residency is the UAE (`tests/pilots.test.ts`). |
 | CI actions not pinned by commit SHA | Fixed: every action is pinned to a commit, with the tag in a comment. |
 | The worker image is not scanned | Fixed: CI builds and scans the worker image with the API and web images. |
-| No SAST or SBOM step in CI | Partly fixed: CycloneDX SBOMs of the three images are produced and kept with each run. Static analysis is open. |
+| No SAST or SBOM step in CI | Fixed: CycloneDX SBOMs of the three images; CodeQL and Semgrep on every push and pull request with a blocking gate (`docs/SAST.md`). The first scans found and fixed real issues listed there. |
 | Compose publishes ports on all interfaces | Fixed: ports bind to 127.0.0.1 unless `AEGIS_BIND_ADDRESS` is set. |
 | `THIRD_PARTY.md` stale on sharp | Fixed: sharp is recorded as a direct core dependency, used by receipt validation. |
 

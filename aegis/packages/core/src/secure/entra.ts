@@ -172,7 +172,7 @@ export function explainGraphError(status: number, body: string): string {
   if (/Authentication_RequestFromNonPremiumTenantOrB2CTenant/i.test(code)) return "Microsoft refused: this tenant's sign-in logs are not available through the API (Microsoft requires a premium Entra ID licence for this). App consents can still be read.";
   if (/invalid_client|AADSTS7000215|AADSTS7000222/i.test(code)) return "Microsoft rejected the client secret: it is wrong or has expired. Create a new secret and update the connection.";
   if (/AADSTS700016|unauthorized_client/i.test(code)) return "Microsoft does not know this application in this tenant: check the tenant ID and the application (client) ID.";
-  if (/AADSTS90002|invalid_tenant|tenant.*not found/i.test(code)) return "Microsoft does not know this tenant ID.";
+  if (/AADSTS90002|invalid_tenant/i.test(code) || (code.toLowerCase().includes("tenant") && code.toLowerCase().includes("not found"))) return "Microsoft does not know this tenant ID.";
   if (status === 403 || /Authorization_RequestDenied|Forbidden/i.test(code)) return "Microsoft refused access: grant the application permissions AuditLog.Read.All and Directory.Read.All and give admin consent.";
   if (status === 401) return "Microsoft did not accept the access token.";
   if (status === 429) return "Microsoft is throttling requests; the next run continues from where this one stopped.";

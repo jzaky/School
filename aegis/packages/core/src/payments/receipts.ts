@@ -364,10 +364,11 @@ export function extractReceiptText(text: string): { merchantName: string | null;
   return {
     merchantName: lines[0] ?? null,
     date: iso,
-    subtotal: amount(new RegExp(String.raw`(?:sub\s*-?\s*total|net(?:\s+amount)?|amount before vat)\D{0,20}` + num, "i")),
+    subtotal: amount(new RegExp(String.raw`(?:sub[\s-]{0,3}total|net|amount before vat)\D{0,20}` + num, "i")),
     vat: amount(new RegExp(String.raw`\b(?:vat|tax)\b(?!\s*(?:no|number|reg|trn))[^\n]{0,24}?` + num, "i")),
-    total: amount(new RegExp(String.raw`\b(?:grand\s+total|total(?:\s+amount)?|amount\s+due|fare|total\s+due)\b\D{0,20}` + num, "i")),
-    trn: /\b(?:TRN|VAT\s*(?:reg(?:istration)?\s*)?(?:no|number)\.?)\s*[:#]?\s*([0-9][0-9 -]{12,20}[0-9])/i.exec(text)?.[1]?.replace(/[\s-]/g, "") ?? null,
+    // "total amount" and "total due" are covered by \D{0,20}; optional \s+ groups there overlap with it (ReDoS).
+    total: amount(new RegExp(String.raw`\b(?:grand\s{1,5}total|total|amount\s{1,5}due|fare)\b\D{0,20}` + num, "i")),
+    trn: /\b(?:TRN|VAT\s*(?:reg(?:istration)?\s*)?(?:no|number)\.?)\s*(?:[:#]\s*)?([0-9][0-9 -]{12,20}[0-9])/i.exec(text)?.[1]?.replace(/[\s-]/g, "") ?? null,
     currency: /\b(AED|SAR|USD|EUR|GBP|BHD|OMR|QAR|KWD)\b/.exec(text)?.[1] ?? null,
   };
 }

@@ -21,21 +21,29 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ github.ref_name }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
       - name: Read sitemaps
-        run: node scripts/research/discover.mjs --list "${{ inputs.list }}" --out "research/candidates/${{ inputs.label }}.json"
+        # Inputs reach the shell as environment variables, never as command text.
+        env:
+          IN_LIST: ${{ inputs.list }}
+          IN_LABEL: ${{ inputs.label }}
+        run: node scripts/research/discover.mjs --list "$IN_LIST" --out "research/candidates/$IN_LABEL.json"
       - name: Commit candidates
+        # Expressions reach the shell as environment variables, never as command text.
+        env:
+          IN_LABEL: ${{ inputs.label }}
+          IN_GH_REF_NAME: ${{ github.ref_name }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add research/candidates
-          git commit -m "Research discovery ${{ inputs.label }}: candidate official pages" || exit 0
+          git commit -m "Research discovery ${IN_LABEL}: candidate official pages" || exit 0
           for i in 1 2 3 4 5; do
-            git pull --rebase origin "${{ github.ref_name }}" && git push origin "HEAD:${{ github.ref_name }}" && break
+            git pull --rebase origin "${IN_GH_REF_NAME}" && git push origin "HEAD:${IN_GH_REF_NAME}" && break
             sleep $((i * 5))
           done

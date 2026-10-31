@@ -1,6 +1,13 @@
 import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { currentDataKey, dataKeyById, dataKeys } from "./keyring.js";
 
+/** Removes every trailing `ch` in linear time (a /ch+$/ regex is quadratic on long runs of `ch`). */
+export function trimTrailing(s: string, ch: string): string {
+  let end = s.length;
+  while (end > 0 && s[end - 1] === ch) end--;
+  return s.slice(0, end);
+}
+
 export function sha256Hex(input: string | Buffer): string {
   return createHash("sha256").update(input).digest("hex");
 }
@@ -36,7 +43,7 @@ export function encryptSecret(plaintext: string, aad = ""): string {
 }
 
 function openWith(key: Buffer, ivB: string, ctB: string, tagB: string, aad: string): string {
-  const decipher = createDecipheriv("aes-256-gcm", key, Buffer.from(ivB, "base64url"));
+  const decipher = createDecipheriv("aes-256-gcm", key, Buffer.from(ivB, "base64url"), { authTagLength: 16 });
   if (aad) decipher.setAAD(Buffer.from(aad));
   decipher.setAuthTag(Buffer.from(tagB, "base64url"));
   return Buffer.concat([decipher.update(Buffer.from(ctB, "base64url")), decipher.final()]).toString("utf8");

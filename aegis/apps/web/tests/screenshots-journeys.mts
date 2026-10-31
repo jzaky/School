@@ -32,7 +32,7 @@ const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
 const page = await ctx.newPage();
 // External font hosts are unreachable from the build container and keep "waiting for fonts" open; local fallbacks render.
-await page.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort());
+await page.route(/^https:\/\/fonts\.(googleapis|gstatic)\.com\//, (r) => r.abort());
 
 async function login(p: Page, email: string) {
   await p.goto(`${base}/login`);

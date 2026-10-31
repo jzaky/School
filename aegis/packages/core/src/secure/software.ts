@@ -126,7 +126,7 @@ export function parseNpmLock(text: string): ParsedComponent[] {
       host = null;
     }
     const lic = str(get(p, "license"));
-    out.push({ name, version: str(get(p, "version")), ecosystem: "npm", purl: `pkg:npm/${name.replace("@", "%40")}@${str(get(p, "version"))}`, licenses: lic ? [lic] : [], resolvedHost: host, hasIntegrity: resolved ? !!str(get(p, "integrity")) : null, hasInstallScript: get(p, "hasInstallScript") === true, direct: path === `node_modules/${name}` && rootDeps.has(name) });
+    out.push({ name, version: str(get(p, "version")), ecosystem: "npm", purl: `pkg:npm/${name.replaceAll("@", "%40")}@${str(get(p, "version"))}`, licenses: lic ? [lic] : [], resolvedHost: host, hasIntegrity: resolved ? !!str(get(p, "integrity")) : null, hasInstallScript: get(p, "hasInstallScript") === true, direct: path === `node_modules/${name}` && rootDeps.has(name) });
   }
   return out;
 }
@@ -257,7 +257,15 @@ export function classifyLicense(expr: string, policy: SoftwarePolicySettings["li
     if (policy.review.some((p) => p.toLowerCase() === t.toLowerCase())) return "review";
     return "unknown";
   };
-  const ors = expr.split(/\s+OR\s+/i).map((part) => part.split(/\s+AND\s+/i).map(one).reduce((a, b) => (rank[a] >= rank[b] ? a : b)));
+  // Tokenised on whitespace, then grouped: OR alternatives of AND conjunctions (linear, no backtracking).
+  const groups: string[][][] = [[[]]];
+  for (const tok of expr.trim().split(/\s+/)) {
+    const up = tok.toUpperCase();
+    if (up === "OR") groups.push([[]]);
+    else if (up === "AND") groups[groups.length - 1]!.push([]);
+    else groups[groups.length - 1]!.at(-1)!.push(tok);
+  }
+  const ors = groups.map((ands) => ands.map((t) => one(t.join(" "))).reduce((a, b) => (rank[a] >= rank[b] ? a : b)));
   return ors.reduce((a, b) => (rank[a] <= rank[b] ? a : b));
 }
 

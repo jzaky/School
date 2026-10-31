@@ -1,3 +1,4 @@
+import { trimTrailing } from "../lib/crypto.js";
 import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 
 /** RFC 6238 TOTP (SHA-1, 6 digits, 30s) implemented from the public specification. */
@@ -20,7 +21,7 @@ export function base32Encode(buf: Buffer): string {
 }
 
 export function base32Decode(s: string): Buffer {
-  const clean = s.toUpperCase().replace(/=+$/, "").replace(/\s/g, "");
+  const clean = trimTrailing(s.toUpperCase().replace(/\s/g, ""), "=");
   let bits = 0;
   let value = 0;
   const out: number[] = [];

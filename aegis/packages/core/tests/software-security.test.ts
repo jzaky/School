@@ -62,6 +62,12 @@ describe("parsers and local checks", () => {
     const p = DEFAULT_SOFTWARE_SETTINGS.licenses;
     expect(classifyLicense("MIT OR GPL-2.0", p)).toBe("allowed");
     expect(classifyLicense("MIT AND GPL-3.0-only", p)).toBe("prohibited");
+    // Mixed case, extra spaces and a long expression (SAST ReDoS fix: tokenised, not split by regex).
+    expect(classifyLicense("  MIT   or   GPL-3.0-only  ", p)).toBe("allowed");
+    expect(classifyLicense("(MIT and GPL-3.0-only) OR GPL-3.0-only", p)).not.toBe("allowed");
+    const t0 = Date.now();
+    classifyLicense("MIT " + "OR ".repeat(20_000) + "x", p);
+    expect(Date.now() - t0).toBeLessThan(1000);
     expect(classifyLicense("MPL-2.0", p)).toBe("review");
     expect(classifyLicense("Weird-License", p)).toBe("unknown");
   });

@@ -9,7 +9,7 @@ import type { EventDestination, EvidenceEvent, Prisma, TenantDb } from "@aegis/d
 import { z } from "zod";
 import { env } from "../env.js";
 import { appendEvidence } from "../evidence/ledger.js";
-import { decryptSecret, encryptSecret, randomToken } from "../lib/crypto.js";
+import { decryptSecret, encryptSecret, randomToken, trimTrailing } from "../lib/crypto.js";
 import type { OrgContext } from "../lib/context.js";
 import { forbidden, notFound, validation } from "../lib/errors.js";
 import { logger } from "../lib/logger.js";
@@ -148,11 +148,11 @@ function targetUrl(d: Pick<EventDestination, "kind" | "config">, secret: string)
     case "teams":
       return secret;
     case "splunk_hec":
-      return `${c.url!.replace(/\/+$/, "")}/services/collector/event`;
+      return `${trimTrailing(c.url!, "/")}/services/collector/event`;
     case "datadog_logs":
-      return c.baseUrl ? `${c.baseUrl.replace(/\/+$/, "")}/api/v2/logs` : `https://http-intake.logs.${c.site}/api/v2/logs`;
+      return c.baseUrl ? `${trimTrailing(c.baseUrl, "/")}/api/v2/logs` : `https://http-intake.logs.${c.site}/api/v2/logs`;
     case "servicenow":
-      return `${c.instanceUrl!.replace(/\/+$/, "")}/api/now/table/incident`;
+      return `${trimTrailing(c.instanceUrl!, "/")}/api/now/table/incident`;
     default:
       throw validation(`Unknown destination kind ${d.kind}`);
   }

@@ -94,7 +94,16 @@ async function walk(dir: string): Promise<string[]> {
   return out;
 }
 
-const validOrgPrefix = (orgId: string) => Boolean(orgId) && !orgId.includes("/") && !orgId.includes("..");
+/** An organization id is used as a path segment and an object prefix: only a plain identifier is accepted. */
+const validOrgPrefix = (orgId: string) => /^[A-Za-z0-9_-]{1,64}$/.test(orgId);
+
+/** The organization's local storage folder, or null if the id would resolve outside the storage root. */
+function orgLocalDir(orgId: string): string | null {
+  if (!validOrgPrefix(orgId)) return null;
+  const root = path.resolve(localDir());
+  const dir = path.resolve(root, orgId);
+  return dir.startsWith(root + path.sep) ? dir : null;
+}
 
 /** Every stored object under an organization's prefix, as storage keys. */
 export async function listOrgObjects(orgId: string): Promise<string[]> {
@@ -109,7 +118,8 @@ export async function listOrgObjects(orgId: string): Promise<string[]> {
     } while (token);
   }
   const base = localDir();
-  for (const f of await walk(path.join(base, orgId))) keys.push(`local:${path.relative(base, f).split(path.sep).join("/")}`);
+  const dir = orgLocalDir(orgId);
+  if (dir) for (const f of await walk(dir)) keys.push(`local:${path.relative(base, f).split(path.sep).join("/")}`);
   return keys;
 }
 
@@ -127,7 +137,8 @@ export async function deleteOrgObjects(orgId: string): Promise<number> {
   const local = keys.filter((k) => k.startsWith("local:"));
   if (local.length) {
     removed += local.length;
-    await rm(path.join(localDir(), orgId), { recursive: true, force: true });
+    const dir = orgLocalDir(orgId);
+    if (dir) await rm(dir, { recursive: true, force: true });
   }
   return removed;
 }

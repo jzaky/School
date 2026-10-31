@@ -10,7 +10,7 @@
  * `pnpm --filter @aegis/core exec vitest run tests/frameworks-checker.test.ts` and `pnpm db:seed`
  * (or `node scripts/seed-frameworks.mjs`). See docs/FRAMEWORKS.md.
  */
-import { existsSync, writeFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -21,10 +21,6 @@ if (!key || !name || !/^[a-z0-9][a-z0-9.-]*[a-z0-9]$/.test(key)) {
 }
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const file = resolve(root, "packages/core/src/seed/frameworks/catalogs", `${key}.json`);
-if (existsSync(file)) {
-  console.error(`${file} already exists`);
-  process.exit(1);
-}
 const seed = {
   key,
   name,
@@ -43,6 +39,13 @@ const seed = {
     },
   ],
 };
-writeFileSync(file, JSON.stringify(seed, null, 2) + "\n");
+// "wx": create only, so an existing catalog is never overwritten (and there is no check-then-write race).
+try {
+  writeFileSync(file, JSON.stringify(seed, null, 2) + "\n", { flag: "wx" });
+} catch (e) {
+  if (e.code !== "EEXIST") throw e;
+  console.error(`${file} already exists`);
+  process.exit(1);
+}
 console.log(`wrote ${file}`);
 console.log("next: fill in the controls, keep summaries original, then run the catalog test and reseed (docs/FRAMEWORKS.md)");

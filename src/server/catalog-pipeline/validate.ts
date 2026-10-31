@@ -64,7 +64,7 @@ export function numberInEvidence(value: number, evidence: string) {
   if (Number.isInteger(value)) candidates.delete(value.toFixed(2));
   for (const c of candidates) {
     if (!Number.isInteger(value) && c === value.toFixed(0)) continue;
-    const re = new RegExp(`(^|[^0-9.])${c.replace(".", "\\.")}(?![0-9])`);
+    const re = new RegExp(`(^|[^0-9.])${c.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![0-9])`);
     if (re.test(ev) || re.test(evidence)) return true;
   }
   return false;

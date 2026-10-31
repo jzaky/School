@@ -1,3 +1,4 @@
+import { trimTrailing } from "../lib/crypto.js";
 import type { TenantDb } from "@aegis/db";
 import { env } from "../env.js";
 import { logger } from "../lib/logger.js";
@@ -46,7 +47,7 @@ export const consoleEmailProvider: EmailProvider = {
 
 /** Resend's REST API (POST /emails) with its Idempotency-Key header. */
 export function resendEmailProvider(apiKey: string, opts: { baseUrl?: string; from?: string; fetchImpl?: typeof fetch } = {}): EmailProvider {
-  const base = (opts.baseUrl ?? env().RESEND_API_BASE).replace(/\/+$/, "");
+  const base = trimTrailing(opts.baseUrl ?? env().RESEND_API_BASE, "/");
   const f = opts.fetchImpl ?? fetch;
   return {
     name: "resend",

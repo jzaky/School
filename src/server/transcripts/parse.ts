@@ -99,8 +99,8 @@ export function parseCurriculum(raw: string | null | undefined): Curriculum | nu
   const s = raw.trim().toUpperCase().replace(/[\s-]+/g, "_");
   if ((CURRICULA as readonly string[]).includes(s)) return s as Curriculum;
   if (/IGCSE|GCSE|A_LEVEL|BRITISH|CAMBRIDGE|EDEXCEL/.test(s)) return "BRITISH";
-  if (/^IB|BACCALAUREATE/.test(s)) return "IB";
-  if (/AMERICAN|^US|^AP$/.test(s)) return "AMERICAN";
+  if (/(?:^IB)|BACCALAUREATE/.test(s)) return "IB";
+  if (/AMERICAN|(?:^US)|(?:^AP$)/.test(s)) return "AMERICAN";
   if (/CBSE/.test(s)) return "CBSE";
   if (/MOE|MINISTRY/.test(s)) return "UAE_MOE";
   if (/TAWJIHI/.test(s)) return "JORDAN_TAWJIHI";

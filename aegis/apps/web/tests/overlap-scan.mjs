@@ -97,7 +97,7 @@ const useFonts = process.argv.includes("--fonts");
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 const page = await ctx.newPage();
-if (!useFonts) await page.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort());
+if (!useFonts) await page.route(/^https:\/\/fonts\.(googleapis|gstatic)\.com\//, (r) => r.abort());
 
 const results = {};
 async function visit(path) {
