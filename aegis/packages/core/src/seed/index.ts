@@ -2,7 +2,7 @@ import { disconnectAll } from "@aegis/db";
 import { writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { seedDemoTenant, DEMO_PASSWORD, DEMO_USERS, PLATFORM_ADMIN } from "./demo-tenant.js";
+import { seedDemoTenant, DEMO_PASSWORD, DEMO_USERS, PLATFORM_ADMIN, personaPassword } from "./demo-tenant.js";
 import { seedDemoHistory } from "./demo-history.js";
 import { runBankingDemo, runOutcomesDemo, runRefundDemo, runSensitiveDataDemo } from "../demos/scenarios.js";
 import { runMonitoring, acknowledgeAlert, resolveAlert } from "../monitoring/service.js";
@@ -94,7 +94,7 @@ export async function runSeed() {
   console.log(`Demo agent API keys written to ${keysPath}`);
   console.log(`Seeded demo tenant ${t.orgId} in ${Date.now() - started}ms`);
   console.log(`Agents: ${Object.keys(t.agents).length}, tools: ${Object.keys(t.tools).length}, resources: ${Object.keys(t.resources).length}`);
-  console.log(`Sign in with any demo user (password ${DEMO_PASSWORD}):`);
+  console.log(personaPassword() === DEMO_PASSWORD ? `Sign in with any demo user (password ${DEMO_PASSWORD}):` : "Sign in with any demo user (the password set in AEGIS_SEED_PERSONA_PASSWORD; the published demo password is not accepted):");
   for (const u of DEMO_USERS) console.log(`  ${u.email}  (${u.role})`);
   console.log(`Platform admin: ${PLATFORM_ADMIN.email} (its own password, in ${keysPath}; never the demo password)`);
   return t;

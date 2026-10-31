@@ -1,0 +1,84 @@
+# Fly.io configuration for AEGIS staging: synthetic data only, never customer data.
+# Separate from the hosted demo (deploy/fly/fly.toml): its own app, database, volume and secrets.
+# Runbook: docs/STAGING_FLY.md. Review before the first deploy: docs/STAGING_CONFIG_REVIEW.md.
+# Nothing in this repository deploys it; the owner runs `fly deploy` after the review.
+app = "aegis-staging"
+primary_region = "fra"
+
+# Build from the aegis/ directory:
+#   fly deploy --config deploy/fly/staging/fly.toml --dockerfile deploy/Dockerfile --build-target demo
+# The `demo` target runs the api, worker and web console in one machine so they share the upload volume
+# (deploy/fly/start-all.sh). It is the same image as the hosted demo; staging differs in its settings below.
+
+[build]
+  # Pin the image of a reviewed commit for every deploy: fly deploy --image-label <git sha>
+
+[deploy]
+  # One machine holds the upload volume, so it is replaced in place. Migrations are run beforehand from the
+  # operator's machine (docs/STAGING_FLY.md, step 5): the app never holds the database owner credentials.
+  strategy = "immediate"
+
+[env]
+  NODE_ENV = "production"
+  # Staging behaves like production: the public site does not invite visitors to sign in to a demo.
+  AEGIS_DEMO_MODE = "false"
+  AEGIS_STORAGE_DIR = "/data/uploads"
+  API_PORT = "4000"
+  LOG_LEVEL = "info"
+  OTEL_SERVICE_NAME = "aegis-staging"
+
+[mounts]
+  source = "aegis_staging_data"
+  destination = "/data"
+  # Fly keeps daily snapshots of the volume; keep two weeks.
+  snapshot_retention = 14
+
+# Console on 443 (HTTPS only; HTTP is redirected).
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 200
+    hard_limit = 250
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "90s"
+    method = "GET"
+    path = "/login"
+
+# Action Gateway API on 8443, TLS terminated by Fly. There is no plain-HTTP port for the API.
+[[services]]
+  internal_port = 4000
+  protocol = "tcp"
+  auto_stop_machines = "off"
+  min_machines_running = 1
+  [[services.ports]]
+    port = 8443
+    handlers = ["tls", "http"]
+  # Liveness: the process answers.
+  [[services.http_checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "90s"
+    method = "get"
+    path = "/health"
+  # Readiness: the database answers through the restricted role.
+  [[services.http_checks]]
+    interval = "60s"
+    timeout = "10s"
+    grace_period = "90s"
+    method = "get"
+    path = "/ready"
+
+[[restart]]
+  policy = "always"
+  retries = 10
+
+[[vm]]
+  size = "shared-cpu-2x"
+  memory = "2gb"

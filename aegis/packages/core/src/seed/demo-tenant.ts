@@ -77,9 +77,21 @@ export function platformAdminPassword(): string {
   return `Adm-${randomToken(18)}`;
 }
 
+/**
+ * The personas' sign-in password. The hosted demo uses the published DEMO_PASSWORD. A deployment reachable by
+ * people who should not sign in (staging, a pentest target) sets AEGIS_SEED_PERSONA_PASSWORD instead, so the
+ * published password opens nothing there.
+ */
+export function personaPassword(): string {
+  const configured = process.env.AEGIS_SEED_PERSONA_PASSWORD;
+  if (configured === undefined || configured === "") return DEMO_PASSWORD;
+  if (configured.length < 12) throw new Error("AEGIS_SEED_PERSONA_PASSWORD must be at least 12 characters");
+  return configured;
+}
+
 export async function seedDemoTenant(): Promise<SeededTenant> {
   await resetDemoTenant();
-  const passwordHash = await hashPassword(DEMO_PASSWORD);
+  const passwordHash = await hashPassword(personaPassword());
   const adminPassword = platformAdminPassword();
   const admin = await rawPrisma().user.create({ data: { email: PLATFORM_ADMIN.email, name: PLATFORM_ADMIN.name, passwordHash: await hashPassword(adminPassword), isPlatformAdmin: true } });
   const created = [] as { id: string; email: string; role: string; title: string }[];

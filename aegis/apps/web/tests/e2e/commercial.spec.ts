@@ -2,7 +2,8 @@ import { test, expect, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-const PASSWORD = "AegisDemo2026!";
+/** The personas' password: the published demo password, or the one a staging seed set (E2E_PERSONA_PASSWORD). */
+const PASSWORD = process.env.E2E_PERSONA_PASSWORD || "AegisDemo2026!";
 const NADIA = "nadia.haddad@meridian-demo.example";
 const VIEWER = "sara.khalil@meridian-demo.example";
 

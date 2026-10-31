@@ -4,7 +4,8 @@ import { test, expect, type Page } from "@playwright/test";
 test.describe.configure({ timeout: 180_000 });
 const SLOW = { timeout: 60_000 };
 
-const PASSWORD = "AegisDemo2026!";
+/** The personas' password: the published demo password, or the one a staging seed set (E2E_PERSONA_PASSWORD). */
+const PASSWORD = process.env.E2E_PERSONA_PASSWORD || "AegisDemo2026!";
 const ANALYST = "tariq.saleh@meridian-demo.example";
 const VIEWER = "sara.khalil@meridian-demo.example";
 

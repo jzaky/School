@@ -1,5 +1,5 @@
 #!/bin/bash
-# Demo only: runs the api, worker and web console in one machine so they share one volume for
+# Demo and staging (deploy/fly/staging/fly.toml): runs the api, worker and web console in one machine so they share one volume for
 # uploads (AEGIS_STORAGE_DIR). Production runs them as separate services (docs/DEPLOYMENT.md).
 # Started as root only to give the freshly mounted volume to the aegis user, then drops to it.
 # If any of the three processes exits, the script exits and the platform restarts the machine.

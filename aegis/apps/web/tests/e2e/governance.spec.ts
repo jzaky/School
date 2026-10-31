@@ -3,7 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 async function login(page: Page, email: string) {
   await page.goto("/login");
   await page.fill("#email", email);
-  await page.fill("#password", "AegisDemo2026!");
+  await page.fill("#password", process.env.E2E_PERSONA_PASSWORD || "AegisDemo2026!");
   await page.click("button[type=submit]");
   await page.waitForURL(/\/(overview|getting-started)/);
 }

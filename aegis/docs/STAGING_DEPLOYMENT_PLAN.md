@@ -2,6 +2,8 @@
 
 Status: **plan for approval. Nothing has been deployed.** Staging uses synthetic data only. No public deployment happens until the owner approves this plan in writing.
 
+**Update 2026-10-31:** the owner chose Fly.io for staging. The configuration is `deploy/fly/staging/fly.toml` and the runbook is `docs/STAGING_FLY.md`. Before the first deploy, the owner reviews `docs/STAGING_CONFIG_REVIEW.md`. This plan remains as the record of the options considered.
+
 The step-by-step commands are in `docs/DEPLOY_STEP_BY_STEP.md`. This document decides where staging runs, what it costs, how it is configured and how it is watched.
 
 ## 1. What staging is for

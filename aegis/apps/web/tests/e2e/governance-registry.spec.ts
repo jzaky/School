@@ -1,6 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
 
-const PASSWORD = "AegisDemo2026!";
+/** The personas' password: the published demo password, or the one a staging seed set (E2E_PERSONA_PASSWORD). */
+const PASSWORD = process.env.E2E_PERSONA_PASSWORD || "AegisDemo2026!";
 const OMAR = "omar.farouk@meridian-demo.example";
 const TARIQ = "tariq.saleh@meridian-demo.example";
 const NADIA = "nadia.haddad@meridian-demo.example";
