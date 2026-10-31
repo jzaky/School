@@ -38,7 +38,12 @@ describe("secret envelope", () => {
     expect(enc.startsWith("v2.")).toBe(true);
     expect(decryptSecret(enc, "row:1")).toBe("super-secret");
     expect(() => decryptSecret(enc, "row:2")).toThrow();
-    expect(() => decryptSecret(enc.slice(0, -2) + "zz", "row:1")).toThrow();
+    // Tamper with the tag by flipping a bit in its bytes. Replacing base64 characters is not enough: the last
+    // character of a 16-byte tag carries only two bits, so a replacement can decode to the same tag (about 1 in 256).
+    const parts = enc.split(".");
+    const tag = Buffer.from(parts[4]!, "base64url");
+    tag[0] = tag[0]! ^ 1;
+    expect(() => decryptSecret([...parts.slice(0, 4), tag.toString("base64url")].join("."), "row:1")).toThrow();
   });
   it("refuses a truncated authentication tag (GCM tag length is fixed at 16 bytes)", () => {
     const enc = encryptSecret("super-secret", "row:1");

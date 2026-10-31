@@ -11,3 +11,10 @@ paths = [
   '''^aegis/(packages|apps)/[^/]+/tests/''',
   '''^aegis/packages/core/src/shield/eval/corpus\.ts$''',
 ]
+
+[[allowlists]]
+description = "A shell variable in a curl authorization header: the token is read at run time (scripts/deployment-check.sh), never written in the file"
+regexTarget = "match"
+regexes = [
+  '''(?i)authorization: bearer \$\{?[a-z_][a-z0-9_]*\}?"''',
+]
