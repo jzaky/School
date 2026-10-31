@@ -16,6 +16,21 @@ export function hmacHex(key: string | Buffer, input: string | Buffer): string {
   return createHmac("sha256", key).update(input).digest("hex");
 }
 
+/**
+ * Digest and keyed digest of a high-entropy random secret: an API key or a session token, 256 bits from
+ * randomToken. A fast hash is the right construction for these. A slow password hash adds nothing against a
+ * 256-bit random value and would cost every authenticated request. Never use these for a password a person chose:
+ * passwords use argon2 (identity/password.ts).
+ */
+export function tokenDigest(token: string): string {
+  // codeql[js/insufficient-password-hash] A 256-bit random token, not a password a person chose.
+  return createHash("sha256").update(token).digest("hex");
+}
+export function tokenMac(key: string | Buffer, token: string): string {
+  // codeql[js/insufficient-password-hash] A 256-bit random token, not a password a person chose.
+  return createHmac("sha256", key).update(token).digest("hex");
+}
+
 export function randomToken(bytes = 32): string {
   return randomBytes(bytes).toString("base64url");
 }

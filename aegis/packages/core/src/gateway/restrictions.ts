@@ -49,21 +49,25 @@ function getPath(obj: Record<string, unknown>, path: string): unknown {
 }
 function setPath(obj: Record<string, unknown>, path: string, value: unknown) {
   const segs = segments(path);
-  if (segs.some((s) => s === "__proto__" || s === "constructor" || s === "prototype")) return;
   let cur = obj;
   for (const s of segs.slice(0, -1)) {
+    if (s === "__proto__" || s === "constructor" || s === "prototype") return;
     if (!cur[s] || typeof cur[s] !== "object") cur[s] = {};
     cur = cur[s] as Record<string, unknown>;
   }
-  cur[segs[segs.length - 1]!] = value;
+  const last = segs[segs.length - 1]!;
+  if (last === "__proto__" || last === "constructor" || last === "prototype") return;
+  cur[last] = value;
 }
 function deletePath(obj: Record<string, unknown>, path: string) {
   const segs = segments(path);
-  if (segs.some((s) => s === "__proto__" || s === "constructor" || s === "prototype")) return;
   let cur: Record<string, unknown> = obj;
   for (const s of segs.slice(0, -1)) {
+    if (s === "__proto__" || s === "constructor" || s === "prototype") return;
     if (!cur[s] || typeof cur[s] !== "object") return;
     cur = cur[s] as Record<string, unknown>;
   }
-  delete cur[segs[segs.length - 1]!];
+  const last = segs[segs.length - 1]!;
+  if (last === "__proto__" || last === "constructor" || last === "prototype") return;
+  delete cur[last];
 }

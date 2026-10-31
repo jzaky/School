@@ -1,5 +1,5 @@
 import { m } from "../lib/metrics.js";
-import { createPrivateKey, createPublicKey, sign, verify, type KeyObject } from "node:crypto";
+import { createHash, createPrivateKey, createPublicKey, sign, verify, type KeyObject } from "node:crypto";
 import { isDeferredTransaction, onBeforeCommit, type Prisma, type TenantDb } from "@aegis/db";
 import { env } from "../env.js";
 import { canonicalJson, canonicalValue, sha256Hex } from "../lib/crypto.js";
@@ -55,7 +55,10 @@ export function evidenceHashInput(e: Omit<EvidenceRecord, "id" | "hash">): strin
 }
 
 export function computeEvidenceHash(e: Omit<EvidenceRecord, "id" | "hash">): string {
-  return sha256Hex(evidenceHashInput(e));
+  // The hash chain over evidence records. Records never hold a secret: an API key's event carries its id and its
+  // public prefix only (identity/api-keys.ts).
+  // codeql[js/insufficient-password-hash] A hash chain over records, not a password hash.
+  return createHash("sha256").update(evidenceHashInput(e)).digest("hex");
 }
 
 /**

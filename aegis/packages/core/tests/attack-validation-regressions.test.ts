@@ -6,6 +6,7 @@ import { acknowledgeAlert, runMonitoring } from "../src/monitoring/service.js";
 import { assignPolicy } from "../src/policy/service.js";
 import { startAccessReview } from "../src/agents/access-reviews.js";
 import { actionRequestInputSchema, jsonDepth } from "../src/gateway/gateway.js";
+import { contextFromTrace } from "../src/policy/boundary.js";
 
 // Findings of the enterprise attack validation (apps/api/tests/enterprise-attacks.test.ts), held at the core layer.
 let f: GatewayFixture;
@@ -64,5 +65,15 @@ describe("gateway input the database cannot store", () => {
     let ok: unknown = 1;
     for (let i = 0; i < 30; i++) ok = { a: ok };
     expect(actionRequestInputSchema.safeParse({ ...base, params: { ok } }).success).toBe(true);
+  });
+});
+
+describe("prototype pollution through policy attribute paths (CodeQL)", () => {
+  it("a context path naming __proto__, constructor or prototype is skipped; ordinary paths still rebuild", () => {
+    const cmp = (attr: string, actual: unknown) => ({ attr, op: "eq", actual, result: true });
+    const out = contextFromTrace([{ ruleId: "r", matched: true, comparisons: [cmp("context.__proto__.polluted", "yes"), cmp("context.constructor.prototype.polluted", "yes"), cmp("context.a.prototype", 1), cmp("context.channel.name", "chat")] }]);
+    expect(({} as Record<string, unknown>).polluted).toBeUndefined();
+    expect(Object.prototype).not.toHaveProperty("polluted");
+    expect(out).toEqual({ channel: { name: "chat" } });
   });
 });

@@ -21,6 +21,7 @@ const keys = JSON.parse(readFileSync(new URL("../../../.demo-keys.json", import.
 const agentKey = keys.agents["support-refund-agent"]!;
 const run = Date.now().toString(36);
 async function refund(params: Record<string, unknown>, idempotencyKey: string) {
+  // codeql[js/file-access-to-http] Developer screenshot script: sends the local demo agent key to the local API it was issued by.
   const res = await fetch(`${api}/v1/gateway/actions`, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${agentKey}` }, body: JSON.stringify({ tool: "issue-refund", action: "execute", resource: "support-tickets", params, idempotencyKey, justification: "Customer sent photos of the damaged item; replacement declined", principal: { type: "customer", ref: "CUST-88213" }, context: { channel: "chat" } }) });
   return (await res.json()) as { requestId: string; status: string; approval?: { approvalRequestId: string } };
 }

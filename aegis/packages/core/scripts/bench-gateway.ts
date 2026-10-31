@@ -36,6 +36,7 @@ async function one(org: number, i: number, phase: string): Promise<Sample> {
   try {
     const res = await fetch(`${base}/v1/gateway/actions`, {
       method: "POST",
+      // codeql[js/file-access-to-http] Benchmark script: sends locally generated test keys to the API under test.
       headers: { "content-type": "application/json", authorization: `Bearer ${key}` },
       body: JSON.stringify({ tool: "issue-refund", action: "execute", resource: "support-tickets", params: { orderId: `${run}-${phase}-${org}-${i}`, customerId: `CUST-${i % 50}`, amount, currency: "AED" }, idempotencyKey: `${run}-${phase}-${org}-${i}`, justification: "benchmark" }),
     });

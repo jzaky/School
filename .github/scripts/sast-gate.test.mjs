@@ -27,6 +27,15 @@ test("a reviewed baseline entry passes only for its exact tool, rule and file", 
   assert.equal(gate([file("c.sarif", codeql([at("js/high", "src/other.ts")]))], base).blocking.length, 1);
 });
 
+test("an in-source suppression counts as reviewed; one under review or rejected still blocks", () => {
+  const sup = (status) => ({ ...at("js/high", "src/a.ts"), suppressions: [{ kind: "inSource", ...(status ? { status } : {}) }] });
+  const r = gate([file("s.sarif", codeql([sup(), sup("accepted")]))], { findings: [] });
+  assert.equal(r.blocking.length, 0);
+  assert.equal(r.suppressed, 2);
+  assert.equal(gate([file("t.sarif", codeql([sup("underReview")]))], { findings: [] }).blocking.length, 1);
+  assert.equal(gate([file("u.sarif", codeql([sup("rejected")]))], { findings: [] }).blocking.length, 1);
+});
+
 test("Semgrep results at level error block", () => {
   const sg = { runs: [{ tool: { driver: { name: "Semgrep OSS", rules: [] } }, results: [{ ...at("x.rule", "a.yml"), level: "error" }, { ...at("y.rule", "a.yml"), level: "warning" }] }] };
   assert.deepEqual(highFindings(sg).map((h) => h.ruleId), ["x.rule"]);

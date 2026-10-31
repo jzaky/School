@@ -3,7 +3,7 @@
  * Usage: tsx scripts/migrate.ts [--dev [--name <name>]]
  */
 import "./env.js";
-import { execSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -24,10 +24,11 @@ const name = nameIdx >= 0 ? args[nameIdx + 1] : undefined;
 
 const env = { ...process.env, DATABASE_URL: migrationUrl };
 // pnpm exec, not npx: the production images ship without npm (deploy/Dockerfile).
+// Arguments go to pnpm as a list, never through a shell, so a migration name cannot run commands.
 if (dev) {
-  execSync(`pnpm exec prisma migrate dev ${name ? `--name ${name}` : ""} --skip-seed`, { stdio: "inherit", cwd: root, env });
+  execFileSync("pnpm", ["exec", "prisma", "migrate", "dev", ...(name ? ["--name", name] : []), "--skip-seed"], { stdio: "inherit", cwd: root, env });
 } else {
-  execSync("pnpm exec prisma migrate deploy", { stdio: "inherit", cwd: root, env });
+  execFileSync("pnpm", ["exec", "prisma", "migrate", "deploy"], { stdio: "inherit", cwd: root, env });
 }
 
 /** Whether the application role can already sign in with this password (then nothing needs changing). */

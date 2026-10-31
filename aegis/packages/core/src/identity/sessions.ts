@@ -1,5 +1,5 @@
 import { rawPrisma, type User } from "@aegis/db";
-import { hmacHex, randomToken } from "../lib/crypto.js";
+import { randomToken, tokenMac } from "../lib/crypto.js";
 import { env } from "../env.js";
 import { forbidden, unauthorized } from "../lib/errors.js";
 
@@ -8,7 +8,7 @@ const SESSION_TTL_MS = 12 * 60 * 60 * 1000; // 12 hours absolute
 const IDLE_TTL_MS = 2 * 60 * 60 * 1000; // 2 hours idle
 
 export function hashSessionToken(token: string): string {
-  return hmacHex(env().AEGIS_SESSION_SECRET, `session:${token}`);
+  return tokenMac(env().AEGIS_SESSION_SECRET, `session:${token}`);
 }
 
 export interface SessionInfo {

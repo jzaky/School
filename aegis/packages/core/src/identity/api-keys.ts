@@ -1,6 +1,6 @@
 import { rawPrisma, type ApiKeySubject, type TenantDb } from "@aegis/db";
 import { randomBytes } from "node:crypto";
-import { randomToken, sha256Hex } from "../lib/crypto.js";
+import { randomToken, tokenDigest } from "../lib/crypto.js";
 import type { OrgContext } from "../lib/context.js";
 import { appendEvidence } from "../evidence/ledger.js";
 import { validation } from "../lib/errors.js";
@@ -35,7 +35,7 @@ export function generateApiKey(): { key: string; prefix: string; keyHash: string
   const prefix = randomBytes(6).toString("hex");
   const secret = randomToken(32);
   const key = `aegis_ak_${prefix}_${secret}`;
-  return { key, prefix, keyHash: sha256Hex(key) };
+  return { key, prefix, keyHash: tokenDigest(key) };
 }
 
 export async function issueApiKey(db: TenantDb, ctx: OrgContext, input: { name: string; subjectType: ApiKeySubject; subjectId: string; scopes?: string[]; expiresAt?: Date | null }) {
@@ -87,7 +87,7 @@ export async function resolveApiKey(presented: string | undefined): Promise<Reso
   if (!presented || !presented.startsWith("aegis_ak_")) return null;
   // SECURITY DEFINER function: the only cross-tenant read, by unique hash (see prisma/rls.sql).
   const row = await rawPrisma().$queryRaw<{ id: string; org_id: string; subject_type: ApiKeySubject; subject_id: string; scopes: string[]; expires_at: Date | null; revoked_at: Date | null }[]>`
-    SELECT * FROM aegis_resolve_api_key(${sha256Hex(presented)})`;
+    SELECT * FROM aegis_resolve_api_key(${tokenDigest(presented)})`;
   const k = row[0];
   if (!k || k.revoked_at || (k.expires_at && k.expires_at < new Date())) return null;
   void rawPrisma().$executeRaw`SELECT aegis_touch_api_key(${k.id}::uuid)`.catch(() => undefined);

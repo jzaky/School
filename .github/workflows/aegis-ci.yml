@@ -6,6 +6,10 @@ on:
   pull_request:
     paths: ["aegis/**"]
 
+# Read-only token: no job here writes to the repository.
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest

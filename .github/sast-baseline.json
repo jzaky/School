@@ -1,10 +1,33 @@
 {
   "about": "Reviewed false positives the SAST gate accepts. Each entry matches one tool, rule and file exactly; the alert stays visible in GitHub's Security tab. Adding an entry needs a reason and a reviewer in the pull request.",
   "findings": [
-    { "tool": "codeql", "ruleId": "js/insufficient-password-hash", "path": "aegis/packages/core/src/lib/crypto.ts", "reason": "sha256Hex and hmacHex hash 32-byte random API keys and session tokens (identity/api-keys.ts, identity/sessions.ts), not passwords. Passwords use argon2id (identity/password.ts). A slow hash adds nothing for high-entropy random secrets.", "reviewed": "2026-10-31" },
-    { "tool": "codeql", "ruleId": "js/insufficient-password-hash", "path": "src/server/integrations/key-format.ts", "reason": "hashApiKey hashes a random generated API key (high entropy), not a password.", "reviewed": "2026-10-31" },
-    { "tool": "codeql", "ruleId": "js/insufficient-password-hash", "path": "src/server/imports/classes.ts", "reason": "classIdFor derives a stable class id from organization, year and class code; nothing secret is hashed. CodeQL follows an API-key flow through the import route into this function.", "reviewed": "2026-10-31" },
-    { "tool": "codeql", "ruleId": "js/biased-cryptographic-random", "path": "src/lib/signup.ts", "reason": "JOIN_CODE_ALPHABET has 32 characters and 256 is divisible by 32, so byte % 32 is uniform: there is no bias.", "reviewed": "2026-10-31" },
-    { "tool": "codeql", "ruleId": "js/biased-cryptographic-random", "path": "src/server/groups/codes.ts", "reason": "Same 32-character JOIN_CODE_ALPHABET: byte % 32 is uniform.", "reviewed": "2026-10-31" }
+    {
+      "tool": "codeql",
+      "ruleId": "js/insufficient-password-hash",
+      "path": "src/server/integrations/key-format.ts",
+      "reason": "hashApiKey hashes a random generated API key (high entropy), not a password.",
+      "reviewed": "2026-10-31"
+    },
+    {
+      "tool": "codeql",
+      "ruleId": "js/insufficient-password-hash",
+      "path": "src/server/imports/classes.ts",
+      "reason": "classIdFor derives a stable class id from organization, year and class code; nothing secret is hashed. CodeQL follows an API-key flow through the import route into this function.",
+      "reviewed": "2026-10-31"
+    },
+    {
+      "tool": "codeql",
+      "ruleId": "js/biased-cryptographic-random",
+      "path": "src/lib/signup.ts",
+      "reason": "JOIN_CODE_ALPHABET has 32 characters and 256 is divisible by 32, so byte % 32 is uniform: there is no bias.",
+      "reviewed": "2026-10-31"
+    },
+    {
+      "tool": "codeql",
+      "ruleId": "js/biased-cryptographic-random",
+      "path": "src/server/groups/codes.ts",
+      "reason": "Same 32-character JOIN_CODE_ALPHABET: byte % 32 is uniform.",
+      "reviewed": "2026-10-31"
+    }
   ]
 }

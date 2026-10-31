@@ -30,6 +30,7 @@ async function worker() {
     const payload = scenario === "transfers"
       ? { tool: "initiate-transfer", action: "transfer", resource: "payments-core", params: { fromAccount: "AE07 0331 2345 6789 0123 456", toAccount: "AE12 0260 0010 0000 1234 567", amount: 1000 + (i % 40) * 1000, currency: "AED", reference: `perf ${i}` }, idempotencyKey: `${run}-${i}`, justification: "perf" }
       : { tool: "issue-refund", action: "execute", resource: "support-tickets", params: { orderId: `PERF-${i}`, customerId: "CUST-PERF", amount, currency: "AED" }, idempotencyKey: `${run}-${i}`, justification: "perf" };
+    // codeql[js/file-access-to-http] Performance script: sends locally generated test keys to the API under test.
     const res = await fetch(`${base}/v1/gateway/actions`, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${key}` }, body: JSON.stringify(payload) });
     const body = (await res.json()) as { decision?: string; status?: string };
     samples.push({ ms: performance.now() - started, decision: body.decision ? `${body.decision}/${(body as { status?: string }).status ?? ""}` : `http${res.status}`, status: res.status });

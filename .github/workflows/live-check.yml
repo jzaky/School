@@ -12,6 +12,10 @@ on:
   schedule:
     - cron: "45 2 * * *" # 06:45 Dubai time
 
+# Read-only token: the job only checks out and tests.
+permissions:
+  contents: read
+
 jobs:
   check:
     runs-on: ubuntu-latest

@@ -140,5 +140,6 @@ L.push("- The injection detector is a fast, explainable pattern check. It is one
 L.push("- This dataset includes many attempts that do not ask the agent to act (for example, asking a chatbot for an opinion), and texts in German; a pattern check built for agent actions catches fewer of those. The figure is reported as measured.");
 L.push("- Package results depend on what OSV.dev knows on the day of the run.");
 L.push("- The first live run found a real gap: OSV's malicious-package records carry no severity, so AEGIS rated postmark-mcp 1.0.16 as a medium issue and approved it. Malicious-code records are now a separate finding that prohibits the software outright, with a regression test (packages/core/tests/software-security.test.ts).", "");
+// codeql[js/http-to-file-access] Validation script: writes a report of measured results for a person to review.
 writeFileSync(join(results, "LIVE_RESULTS.md"), L.join("\n"));
 await disconnectAll();

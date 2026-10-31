@@ -32,17 +32,31 @@ or failed scan cannot count as clean. Every action is pinned to a commit SHA.
 protection rules (or a ruleset) for the default branch. That is a repository setting and cannot be set from the
 code.
 
-## The reviewed baseline
+## Reviewed false positives
 
-`.github/sast-baseline.json` lists reviewed false positives, each by tool, rule and file, with the reason. They
-stay visible in the Security tab; the gate only stops blocking on them. Adding an entry needs a reason and a
-reviewer in the pull request. The current entries (2026-10-31):
+Two ways, both reviewed in the pull request that adds them:
 
-- `js/insufficient-password-hash` on `aegis/packages/core/src/lib/crypto.ts`, `src/server/integrations/key-format.ts`
-  and `src/server/imports/classes.ts`: SHA-256 over random 32-byte API keys and session tokens, or over a
-  non-secret class code. Passwords use argon2id.
-- `js/biased-cryptographic-random` on `src/lib/signup.ts` and `src/server/groups/codes.ts`: the alphabet has 32
-  characters and 256 is divisible by 32, so `byte % 32` is uniform.
+- **In source (preferred).** A `// codeql[rule-id] reason` comment on the line before the finding. The CodeQL
+  job runs the alert-suppression query, so the result is uploaded as suppressed and GitHub shows it as
+  dismissed. The gate accepts suppressions in source but not ones marked under review or rejected. Current
+  suppressions (2026-10-31):
+  - `js/insufficient-password-hash` on `tokenDigest` and `tokenMac` (`aegis/packages/core/src/lib/crypto.ts`):
+    SHA-256 and HMAC over 256-bit random API keys and session tokens. Passwords use argon2id.
+  - The same rule on the evidence hash chain (`aegis/packages/core/src/evidence/ledger.ts`): CodeQL follows an
+    API key's public prefix into evidence records. No record holds a secret.
+  - `js/file-access-to-http` and `js/http-to-file-access` in three developer scripts and the live validation
+    script, which send local test keys to the API under test or write a results report.
+- **The baseline.** `.github/sast-baseline.json` lists reviewed false positives by tool, rule and file, with
+  the reason. It is used for the school application, whose files this program does not otherwise change.
+  Entries (2026-10-31):
+  - `js/insufficient-password-hash` on `src/server/integrations/key-format.ts` and
+    `src/server/imports/classes.ts`: SHA-256 over a random API key, or over a non-secret class code.
+  - `js/biased-cryptographic-random` on `src/lib/signup.ts` and `src/server/groups/codes.ts`: the alphabet has
+    32 characters and 256 is divisible by 32, so `byte % 32` is uniform.
+
+GitHub's own CodeQL check on pull requests reports new alerts in changed code. A finding suppressed in source
+does not count there; one only in the baseline does, so the school application entries stay in the baseline only
+while that code is unchanged.
 
 ## Fixed when SAST was introduced
 
@@ -61,3 +75,12 @@ The first scans found real issues, all fixed with tests where code was involved:
   `@` encoding that replaced only the first occurrence, check-then-write races in two scripts, and unanchored
   URL patterns in two test scripts.
 - Every remaining GitHub Action across all workflows pinned to a commit SHA.
+
+## Fixed after the first pull request scans (2026-10-31)
+
+- Prototype pollution: a policy attribute path such as `context.__proto__.x` could write to `Object.prototype`
+  when the decision context was rebuilt from a trace (`policy/boundary.ts`, regression test in
+  `tests/attack-validation-regressions.test.ts`). Restriction path helpers now check each segment where it is
+  used.
+- A migration name passed to the migration script went through a shell; it is now an argument list.
+- Every workflow sets a read-only `GITHUB_TOKEN` (`permissions: contents: read`) unless a job needs more.

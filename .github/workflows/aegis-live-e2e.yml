@@ -22,6 +22,11 @@ on:
         type: choice
         options: [smoke, full]
 
+
+# Read-only token: the job only checks out and tests.
+permissions:
+  contents: read
+
 jobs:
   live:
     # Pinned: Playwright 1.56 cannot install Chromium dependencies on Ubuntu 26.04 (ubuntu-latest since late October 2026).

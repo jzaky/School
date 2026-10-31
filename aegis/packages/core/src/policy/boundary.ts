@@ -213,13 +213,17 @@ export function contextFromTrace(trace: TraceEntry[] | undefined): Record<string
     for (const c of t.comparisons ?? []) {
       if (!c.attr.startsWith("context.") || c.actual === undefined) continue;
       const path = c.attr.slice("context.".length).split(".");
+      // Attribute paths come from policy documents: a segment such as __proto__ must never reach Object.prototype.
+      if (path.some((s) => s === "__proto__" || s === "constructor" || s === "prototype")) continue;
       let cur = out;
       for (let i = 0; i < path.length - 1; i++) {
-        const next = cur[path[i]!];
-        if (!next || typeof next !== "object") cur[path[i]!] = {};
-        cur = cur[path[i]!] as Record<string, unknown>;
+        const key = path[i]!;
+        if (key === "__proto__" || key === "constructor" || key === "prototype") break;
+        if (!Object.hasOwn(cur, key) || !cur[key] || typeof cur[key] !== "object") cur[key] = {};
+        cur = cur[key] as Record<string, unknown>;
       }
-      if (!(path[path.length - 1]! in cur)) cur[path[path.length - 1]!] = c.actual;
+      const last = path[path.length - 1]!;
+      if (last !== "__proto__" && last !== "constructor" && last !== "prototype" && !Object.hasOwn(cur, last)) cur[last] = c.actual;
     }
   }
   return out;

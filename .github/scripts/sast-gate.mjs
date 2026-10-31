@@ -23,7 +23,10 @@ export function highFindings(sarif) {
       const high = tool === "codeql" ? (severity.get(res.ruleId) ?? 0) >= 7 : res.level === "error";
       if (!high) continue;
       const loc = res.locations?.[0]?.physicalLocation;
-      out.push({ tool, ruleId: res.ruleId, path: loc?.artifactLocation?.uri ?? "?", line: loc?.region?.startLine ?? 0, message: (res.message?.text ?? "").split("\n")[0].slice(0, 200) });
+      // An in-source suppression (a "codeql[rule-id] reason" comment on the line before, reviewed with the code)
+      // counts as reviewed. A suppression still under review or rejected does not.
+      const suppressed = (res.suppressions ?? []).some((x) => x.kind === "inSource" && x.status !== "underReview" && x.status !== "rejected");
+      out.push({ tool, suppressed, ruleId: res.ruleId, path: loc?.artifactLocation?.uri ?? "?", line: loc?.region?.startLine ?? 0, message: (res.message?.text ?? "").split("\n")[0].slice(0, 200) });
     }
   }
   return out;
@@ -43,6 +46,7 @@ export function gate(files, baseline) {
   const problems = [];
   const blocking = [];
   let accepted = 0;
+  let suppressed = 0;
   for (const f of files) {
     let sarif;
     try {
@@ -53,11 +57,12 @@ export function gate(files, baseline) {
     }
     problems.push(...scanProblems(sarif, f));
     for (const h of highFindings(sarif)) {
-      if (allowed.has(`${h.tool}|${h.ruleId}|${h.path}`)) accepted++;
+      if (h.suppressed) suppressed++;
+      else if (allowed.has(`${h.tool}|${h.ruleId}|${h.path}`)) accepted++;
       else blocking.push(h);
     }
   }
-  return { problems, blocking, accepted };
+  return { problems, blocking, accepted, suppressed };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -69,9 +74,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.error("sast-gate: no SARIF files given; a scan that produced nothing cannot pass");
     process.exit(1);
   }
-  const { problems, blocking, accepted } = gate(files, baseline);
+  const { problems, blocking, accepted, suppressed } = gate(files, baseline);
   for (const p of problems) console.error(`SCAN PROBLEM  ${p}`);
   for (const b of blocking) console.error(`BLOCKING  [${b.tool}] ${b.ruleId}  ${b.path}:${b.line}  ${b.message}`);
-  console.log(`sast-gate: ${files.length} file(s), ${blocking.length} blocking high/critical finding(s), ${accepted} reviewed in the baseline, ${problems.length} scan problem(s)`);
+  console.log(`sast-gate: ${files.length} file(s), ${blocking.length} blocking high/critical finding(s), ${accepted} reviewed in the baseline, ${suppressed} suppressed in source, ${problems.length} scan problem(s)`);
   process.exit(problems.length || blocking.length ? 1 : 0);
 }
