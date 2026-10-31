@@ -1,4 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { readdirSync } from "node:fs";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { ownerPrisma } from "@aegis/db";
 import { createSession, SESSION_COOKIE } from "@aegis/core";
 import { attacker, changed, domain, fingerprint, setupWorld, teardownWorld, UUID_RE, victim } from "../../../api/tests/attack-harness";
@@ -34,7 +37,12 @@ vi.mock("../../src/server/actions/util", async (orig) => {
 });
 
 type Action = { name: string; file: string; fn: (...args: unknown[]) => Promise<unknown>; params: string[] };
-const modules = import.meta.glob("../../src/server/actions/*.ts");
+const ACTIONS_DIR = fileURLToPath(new URL("../../src/server/actions/", import.meta.url));
+const modules: Record<string, () => Promise<unknown>> = Object.fromEntries(
+  readdirSync(ACTIONS_DIR)
+    .filter((f) => f.endsWith(".ts"))
+    .map((f) => [join(ACTIONS_DIR, f), () => import(join(ACTIONS_DIR, f))]),
+);
 const actions: Action[] = [];
 
 // Actions that end or replace the session doing the attacking, or build a whole demonstration organization; each
