@@ -3,6 +3,7 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { isAegisError, isProduction, loginSchema, loginWithPassword, revokeSession, SESSION_COOKIE, setSessionOrg, verifySessionMfa, listUserMemberships } from "@aegis/core";
 import { getSession } from "@/server/session";
+import { safeNext } from "@/lib/safe-next";
 
 export interface ActionState {
   error?: string;
@@ -54,11 +55,6 @@ export async function switchOrgAction(orgId: string): Promise<void> {
   redirect("/overview");
 }
 
-/** Only same-origin paths are honoured as a post-login destination. */
-function safeNext(value: FormDataEntryValue | null): string {
-  const v = typeof value === "string" ? value : "";
-  return v.startsWith("/") && !v.startsWith("//") && !v.startsWith("/login") ? v : "/overview";
-}
 
 function isRedirect(e: unknown): boolean {
   return typeof e === "object" && e !== null && "digest" in e && String((e as { digest: unknown }).digest).startsWith("NEXT_REDIRECT");

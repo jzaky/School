@@ -17,7 +17,7 @@ Suites (all run in CI on every push):
   - `apps/api/tests/enterprise-attacks-deep.test.ts` (2 tests);
   - `apps/api/tests/enterprise-attacks-identity.test.ts` (10 tests);
   - `apps/api/tests/enterprise-attacks-races.test.ts` (6 tests).
-- Console server actions: `apps/web/tests/actions/console-actions.test.ts` (4 tests).
+- Console server actions: `apps/web/tests/actions/console-actions.test.ts` (9 tests).
 - Shared world: `apps/api/tests/attack-harness.ts`. Body synthesis: `apps/api/tests/body-synthesis.ts`.
 
 ## Set-up
@@ -165,34 +165,44 @@ is why the delays were added.
 
 ## Console server actions (2026-10-31)
 
-The console does not call the API: its pages call server actions that use the core services directly. All 201 of
-them are called directly with real sessions against the real database. Only the Next.js request plumbing (cookies,
-headers, redirects, cache revalidation) is replaced by small stubs (`apps/web/vitest.config.ts`). Six actions that
-end the attacking session or build a whole demonstration organization are left out; they have their own tests.
+The console does not call the API: its pages call server actions that use the core services directly. The console
+has 208 server actions. All of them are attacked, called directly with real sessions against the real database.
+Only the Next.js request plumbing (cookies, headers, redirects, cache revalidation) is replaced by small stubs
+(`apps/web/vitest.config.ts`). A test fails if any action escapes both groups below.
 
-Arguments are built the same way as the API's request bodies, from each action's own validation errors. 178 of
-the 201 actions got past validation. These 23 did not:
-- `confirmMfaAction`, `disableMfaAction`, `requestAccessAction`, `resolveDiscoveredAgentAction`;
-- `transitionAgentAction`, `provideApprovalInfoAction`, `getEvidenceEventAction`, `downloadReportAction`;
-- `createRuleAction`, `deleteDocumentAction`, `previewControlsCsvAction`, `importControlsAction`;
-- `createDestinationAction`, `createFreezeAction`, `setIntegrationStatusAction`, `setLocaleAction`;
-- `markNotificationsReadAction`, `setMemberStatusAction`, `setTeamMembersAction`, `createPolicyAction`;
-- `previewSectorTemplateAction`, `createFromSectorTemplateAction`, `globalSearchAction`.
+- **201 in the sweeps.**
+  - Arguments are built from each action's own validation errors.
+  - The 23 whose input that cannot build (formatted strings, unions, cross-field rules, CSV, JSON documents) get
+    arguments written by hand, with every id naming an object of the organization under attack.
+  - The test fails if any action still stops at input validation, so every one reaches its lookups and permission
+    checks.
+- **7 in their own tests.** These end the session or build a demonstration organization: sign-in, the two-factor
+  step, sign-out, signing out everywhere, and the three sales-demonstration actions.
 
 What held:
-- **Signed out:** every action redirects to sign-in and nothing changes in either organization. Three public
-  forms are the exception by design: the marketing form, the language switch and the support form.
-- **Cross-tenant:** the attacker's owner, naming the victim's objects in every argument, changed none of the
-  victim's rows. No victim id that the call did not send appeared in any result.
+- **Signed out:** every action redirects to sign-in and nothing changes in either organization. Three public forms
+  are the exception by design: the marketing form, the language switch and the support form.
+- **API keys are not console credentials:** an agent or integration key, sent as a bearer header or as the session
+  cookie, opens no action.
+- **Cross-tenant:** the attacker's owner, naming the victim's objects in every argument:
+  - changed none of the victim's rows;
+  - saw no victim id that the call did not send;
+  - left no reference (uuid column) in the attacker's own organization pointing at a victim object.
 - **A viewer:** with the organization's own ids, a viewer wrote nothing outside an explicit allow-list:
-  - their own two-factor enrolment;
-  - reads, exports and dry runs, which record that they ran;
-  - a personal AI gateway key (`ai:chat` only, expiring);
+  - their own two-factor enrolment, language, notifications and personal AI key (`ai:chat` only, expiring);
+  - reads, exports, previews and dry runs, which record that they ran;
   - a support request and an enterprise pricing enquiry.
 
   Any other successful action, changed table or kind of evidence fails the test.
+- **Sign-in:** the victim's email with a wrong password opens no session.
+- **Signing out:**
+  - "sign out everywhere" ends the user's other sessions and keeps the one that asked;
+  - signing out ends that session too;
+  - the victim's sessions are untouched.
+- **Sales demonstrations:** refused outside a demonstration organization; no organization is created and the victim
+  is unchanged.
 
-Found and fixed (E-10).
+Found and fixed: E-10 and E-11.
 
 ## Findings and fixes
 
@@ -210,6 +220,7 @@ Each has a regression test that failed before the fix.
 | E-8 | P3 | Changing a password signed out other sessions only in the console action that called it; the core function did not, so another caller could leave stolen sessions alive. | The core function revokes every other session, keeping only the one named. |
 | E-9 | P3 | An emergency pause could commit while a decision was in progress, after the pause had voided every live grant, so one fresh grant survived it. The grant could not be used while paused (consumption re-checks the pause) and an allowed request can be re-granted after a resume by design, so there was no added capability. But the pause did not void every outstanding grant as documented, and its evidence count missed it. | The decision re-checks the pause under the organization lock just before commit and voids its own grant. The evidence ledger also schedules a new flush for evidence appended after an earlier flush in the same transaction, which this fix relies on. |
 | E-10 | P3 | In the console, four actions given an id outside the organization (disabling an integration, revoking a credential, renaming a policy) failed with a database "record not found" error. The user saw "Something went wrong" instead of "not found". Nothing changed. Separately, the Entra sync action reported a missing permission as an unexpected error. | The console's action wrapper answers "Not found in this organization" for such errors (as the API does since E-5), and the permission error is a proper refusal. |
+| E-11 | P2 | Open redirect after sign-in. The page to open after signing in (`next`) was accepted when it started with one slash and not two, so `/\evil.example` passed; browsers read a backslash there as a slash and go to another site. A link to the real sign-in page could send the user to a look-alike site after they signed in. | Only a path on this site is accepted: one slash followed by neither a slash nor a backslash, with no whitespace or control characters (`apps/web/src/lib/safe-next.ts`). The regression test fails on the old check. |
 
 ## Limits of this validation
 
@@ -218,8 +229,8 @@ Each has a regression test that failed before the fix.
   routes past validation; 16 are not reached that way, and 8 of those are covered by hand-written attacks.
 - **Race coverage.** The races were tried at 6 to 12 concurrent requests on one machine. Other interleavings, more
   replicas or a different database configuration could behave differently.
-- **Console coverage.** All console server actions are swept, but 23 of them did not get past input validation, and
-  the six that end the session or build a demonstration organization are covered only by their own tests.
+- **Console coverage.** All 208 console server actions reach their authorization checks. For the 23 with
+  hand-written arguments, each attack uses one representative input per action, not every input shape.
 - **Not attacked here:** the SAML and OIDC protocol exchanges themselves (they have their own tests; phase 2
   covered the sessions they produce), password reset (AEGIS has no self-service reset), and the model provider
   path of the AI gateway.
