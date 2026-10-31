@@ -41,7 +41,8 @@ export interface BaselineFailure {
     | "change_freeze"
     | "tool_definition_changed"
     | "payment_document_mismatch"
-    | "expense_claim_mismatch";
+    | "expense_claim_mismatch"
+    | "resource_binding_mismatch";
   message: string;
   details?: unknown;
 }

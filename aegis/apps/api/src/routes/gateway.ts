@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { withTenant } from "@aegis/db";
 import { z } from "zod";
 import { requireScope } from "../plugins/auth.js";
-import { actionRequestInputSchema, appendEvidence, env, m, auditEnforcementPath, authorizeAndExecute, enforcementCoverage, consumeGrant, forbidden, getActionRequest, hashObject, requestGrant, startAgentExecution, listActionRequests, recordAgentExecution, releaseQuarantine, releaseQuarantineSchema, requestListFilter, provideApprovalInfo } from "@aegis/core";
+import { actionRequestInputSchema, appendEvidence, env, m, auditEnforcementPath, authorizeAndExecute, enforcementCoverage, consumeGrant, forbidden, getActionRequest, hashObject, requestGrant, startAgentExecution, listActionRequests, readResourceBindings, setResourceBindings, recordAgentExecution, releaseQuarantine, releaseQuarantineSchema, requestListFilter, provideApprovalInfo } from "@aegis/core";
 
 /**
  * The Action Gateway. Agents call POST /v1/gateway/actions before doing anything protected.
@@ -100,6 +100,19 @@ export async function gatewayRoutes(app: FastifyInstance) {
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
     const body = releaseQuarantineSchema.parse(req.body);
     return withTenant(ctx.orgId, (db) => releaseQuarantine(db, ctx, id, body));
+  });
+
+  /** Resource binding rules (P2-3): the resource an agent claims must be the one its parameters address. */
+  app.get("/resource-bindings", async (req) => {
+    const ctx = await req.orgContext();
+    if (ctx.actor.type !== "user") throw forbidden("Resource bindings are available to console users only");
+    const settings = await withTenant(ctx.orgId, async (db) => (await db.organization.findUniqueOrThrow({ where: { id: ctx.orgId }, select: { settings: true } })).settings, { readOnly: true });
+    return { rules: readResourceBindings(settings) };
+  });
+  app.put("/resource-bindings", async (req) => {
+    const ctx = await req.orgContext();
+    const { rules } = z.object({ rules: z.array(z.unknown()) }).parse(req.body);
+    return { rules: await withTenant(ctx.orgId, (db) => setResourceBindings(db, ctx, rules)) };
   });
 
   /** How each agent's tools are enforced, and what the last enforcement-path audit found. */

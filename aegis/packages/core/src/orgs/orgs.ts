@@ -50,7 +50,7 @@ export async function getOrganization(orgId: string) {
 }
 
 /** Settings that only their own functions may change (gateway pause and resume, freezes, two-person recovery). */
-export const PROTECTED_SETTINGS = ["gatewayPaused", "gatewayPausedReason", "gatewayPausedAt", "gatewayPausedBy", "gatewayPausedById", "gatewayResumedAt", "gatewayResumeReason", "changeFreezes", "twoPersonRecovery"] as const;
+export const PROTECTED_SETTINGS = ["gatewayPaused", "gatewayPausedReason", "gatewayPausedAt", "gatewayPausedBy", "gatewayPausedById", "gatewayResumedAt", "gatewayResumeReason", "changeFreezes", "twoPersonRecovery", "resourceBindings"] as const;
 
 export async function updateOrganization(ctx: OrgContext, patch: { name?: string; settings?: Record<string, unknown> }) {
   assertPermission(ctx, "org:admin");

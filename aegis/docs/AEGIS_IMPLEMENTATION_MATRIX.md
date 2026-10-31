@@ -19,10 +19,10 @@ Complexity: S (days), M (one to two weeks), L (several weeks), XL (a quarter or 
 | --- | --- | --- | --- | --- | --- |
 | 0 System discovery | Works | This matrix, `DEFECT_REGISTER.md`, `AEGIS_FULL_PLATFORM_AUDIT.md` | Keep current per milestone | S | M1 |
 | 1 Open-source repository evaluation | Partial | `OPEN_SOURCE_RESEARCH.md`, `PROVENANCE.md`; `THIRD_PARTY.md` is stale | Refresh the third-party inventory, sharp licence note | S | M1 |
-| 2 Comprehensive security audit | Works, P2 open | 7 P1s and 13 of 16 P2s fixed with regression tests, P2-7 in part | P2-3, P2-7 (external anchor), P2-14 | M | M1 |
+| 2 Comprehensive security audit | Works, P2 open | 7 P1s and 14 of 16 P2s fixed with regression tests, P2-7 in part | P2-7 (external anchor), P2-14 | M | M1 |
 | 3 Real AI agent red teaming | Partial | Attack Simulation Lab, held-out injection dataset run (`LIVE_VALIDATION.md`: recall 30% on held-out data) | Live-model runs need `ANTHROPIC_API_KEY` (blocked: not configured) | M | M1 |
 | 4 Receipt and financial validation | Works | `RECEIPT_VALIDATION.md`, `PAYMENT_MATCHING.md`, 10 receipt tests with real images | Done: console panel and demo claims; P2-13 fixed. Next: scanned-receipt extraction | S | M1 |
-| 5 Governance engine hardening | Works, P2 open | Delegation, execution window, policy-version binding (P1-2, P1-5), agent-mode grants and revoke rights (P2-6, P2-12) fixed | P2-3 | M | M1 |
+| 5 Governance engine hardening | Works, P2 open | Delegation, execution window, policy-version binding (P1-2, P1-5), agent-mode grants and revoke rights (P2-6, P2-12), resource binding (P2-3) fixed | Principal binding | M | M1 |
 | 6 Performance and reliability | Works | `PERFORMANCE.md` benchmarks, circuit breakers, dead-letter queue | Re-run benchmark after P1 changes | S | M2 |
 | 7 Observability | Works | OpenTelemetry, structured logs, metrics, alerts | None urgent | S | M2 |
 | 8 Automated testing | Works | Core, API, database and browser suites in CI; Proof page figures checked in CI | SBOMs, pinned actions, and CodeQL plus Semgrep with a blocking gate are in CI (`SAST.md`) | S | M1 |

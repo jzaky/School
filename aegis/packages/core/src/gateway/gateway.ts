@@ -33,6 +33,7 @@ import { activeExceptionRules } from "../policy/exceptions.js";
 import { readIntegrationCredential, resolveDownstreamSystem, type DownstreamContext } from "./simulators.js";
 import { readWatchOnly } from "../pilots/watch-only.js";
 import { activeFreezeFor, freezeMessage, readFreezes, twoPersonRecovery, type ChangeFreeze } from "./freeze.js";
+import { bindingMessage, evaluateResourceBindings, readResourceBindings, type BindingCheck } from "./resource-binding.js";
 import { checkPaymentDocument, isStructuralMismatch, readDocumentMatch, reservePaymentDocument, type DocumentMatch, type MatchResult } from "../payments/matching.js";
 import { checkClaimForPayment, readClaimRule, reserveClaim, type ClaimCheck } from "../payments/receipts.js";
 
@@ -265,6 +266,7 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
   let docHeld = false;
   /** Expense claim validation (payments/receipts.ts): the claim check for a reimbursement tool. */
   let claimCheck: ClaimCheck | null = null;
+  let bindingChecks: BindingCheck[] = [];
 
   try {
     const destinationDomain = extractDestinationDomain(input.params);
@@ -272,6 +274,9 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
     freeze = tool ? activeFreezeFor(freezes, { now, toolKey: tool.key, toolRisk: tool.riskLevel, agentId }) : null;
     const baseline = baselineChecks({ agent, tool, action: input.action, resource, resourceKeyRequested: input.resource ?? null, params: input.params, destinationDomain, gatewayPaused: paused, freeze, now });
     const failures: BaselineFailure[] = [...baseline.failures, ...(delegationFailure ? [delegationFailure] : []), ...(delegation ? delegationChecks(delegation, tool, resource, input.action, input.params, destinationDomain, now) : [])];
+    // Resource binding (P2-3): the resource the agent claims must be the one its parameters address.
+    bindingChecks = tool ? evaluateResourceBindings(readResourceBindings(await orgSettings(db, ctx.orgId)), { agentId, toolKey: tool.key, action: input.action, claimed: input.resource ?? null, params: input.params }) : [];
+    for (const c of bindingChecks) if (c.outcome !== "match" && c.mode === "enforce") failures.push({ code: "resource_binding_mismatch", message: bindingMessage(c), details: { ruleId: c.ruleId, version: c.version, claimed: c.claimed, actual: c.actual, outcome: c.outcome } });
     const claimRule = tool ? readClaimRule(tool.destinationRules) : null;
     if (claimRule) {
       claimCheck = await checkClaimForPayment(db, ctx.orgId, claimRule, input.params, request.id);
@@ -544,6 +549,11 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
   // Watch-only pilot mode (src/pilots/watch-only.ts): a policy-stage outcome other than allow is recorded as what
   // AEGIS would have done, and the action proceeds unchanged. Baseline, data protection and error refusals are
   // never relaxed, and the decision row keeps the real outcome.
+  // Resource binding results are recorded with every decision a rule applied to, in audit mode too.
+  if (bindingChecks.length) {
+    explanation = { ...explanation, resourceBinding: bindingChecks };
+    if (bindingChecks.some((c) => c.outcome !== "match" && c.mode === "audit")) riskIndicators = [...riskIndicators, "resource_binding:audit_mismatch"];
+  }
   // An operator's autonomy level 0 (observe only) is a deliberate stop and is not relaxed either.
   let watchOnly = readWatchOnly(agent.metadata) && !agent.isLab && explanation.stage === "policy" && !freezeHeld && !docHeld && autonomyRecord?.effect !== "observe_only" && decisionResult !== "allow" && decisionResult !== "error" ? { wouldHave: decisionResult } : null;
   if (watchOnly) {
@@ -577,7 +587,7 @@ async function decideActionRequest(db: TenantDb, ctx: OrgContext, input: ActionR
   const decision = await db.authorizationDecision.create({
     data: { createdAt: now, orgId: ctx.orgId, actionRequestId: request.id, result: decisionResult, policyVersionIds, matchedRuleIds, explanation: explanation as Prisma.InputJsonValue, inputHash: authzInput ? hashObject(authzInput) : paramsHash, latencyMs: Date.now() - started, uncertaintyLevel: uncertainty?.level ?? null },
   });
-  await appendEvidence(db, ctx, { type: `gateway.decision.${decisionResult}`, subjectType: "action_request", subjectId: request.id, correlationId, payload: { decisionId: decision.id, result: decisionResult, reasons, policyVersionIds, matchedRuleIds, riskIndicators, restrictions: restrictApplied, latencyMs: decision.latencyMs } });
+  await appendEvidence(db, ctx, { type: `gateway.decision.${decisionResult}`, subjectType: "action_request", subjectId: request.id, correlationId, payload: { decisionId: decision.id, result: decisionResult, reasons, policyVersionIds, matchedRuleIds, riskIndicators, restrictions: restrictApplied, latencyMs: decision.latencyMs, ...(bindingChecks.length ? { resourceBinding: bindingChecks } : {}) } });
 
   // Attack Simulation Lab agents exist to be refused: their events are recorded but open no incident, change no level and notify nobody.
   const isLab = agent.isLab;
