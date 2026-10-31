@@ -85,3 +85,12 @@ Found by the audit: counts in `STATUS.md`; the security page's SAML, KMS and key
 OSV.dev (now validated live, see `LIVE_VALIDATION.md`); the roadmap; OPA environment variables; Stripe and Alpaca
 labelled "Sandbox tested" where only the fake servers ran in CI; the WAL archiving claim in `BACKUP_RECOVERY.md`;
 Syft and cosign statements in `QUANTOS_INTEGRATION.md`.
+
+## Staging preparation (2026-10-31)
+
+Found while preparing the Fly.io staging configuration (`docs/STAGING_CONFIG_REVIEW.md`, section 2).
+
+| Finding | Status |
+|---|---|
+| D-1 (P2) The seed gave every persona, the owner included, the demo password published on the site and in the repository, so any internet-facing deployment seeded that way could be opened as owner | Fixed: `AEGIS_SEED_PERSONA_PASSWORD` (12 characters or more, shorter is refused); the staging runbook requires it and the remote deployment check proves the published password is refused (`packages/core/tests/seed-persona-password.test.ts`). The hosted demo keeps the published password by design. |
+| D-2 (P3) Without `AEGIS_METRICS_TOKEN`, `/metrics` admits loopback addresses, which behind a proxy rests on the forwarded address | Mitigated: tested that a spoofed loopback address is refused once a proxy appends the real one; staging requires the token and the preflight checks it. Deployments without a proxy or token keep the loopback rule. |

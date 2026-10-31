@@ -64,7 +64,7 @@ This is a development database on one host. It is not a production drill, and it
 
 Black-box suites attack the API as another tenant, a viewer and a compromised agent or integration key: every
 registered route swept with the victim's ids and spoofed organization headers, well-formed cross-tenant writes,
-tool-call manipulation, grant tampering and policy enforcement under pause and suspension. Results, six fixed
+tool-call manipulation, grant tampering, policy enforcement under pause and suspension, identity and session attacks, races and every console server action. Results, eleven fixed
 findings and the limits of the method: `docs/ENTERPRISE_ATTACK_VALIDATION.md`.
 
 ## Not yet done

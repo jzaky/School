@@ -617,3 +617,18 @@ The missed throughput target is explained in docs/PERFORMANCE.md, with the next 
 - **No real key vault.** The vault providers were verified against stand-ins only.
 
 **Found along the way:** OpenTelemetry metric instruments are created when the module loads, before the SDK starts. Metric export through OTLP therefore records nothing, while trace export works. This was already the case before the upgrade. The Prometheus endpoint is not affected. It is left as a follow-up.
+
+## Security phase close-out: console coverage, Fly.io staging preparation, readiness report (31 October 2026)
+
+- **Console coverage complete.** All 208 console server actions reach their authorization checks. 201 are in the sweeps (the 23 the synthesizer could not build have hand-written arguments); 7 have their own tests. Fixed E-10 and E-11 (open redirect after sign-in).
+- **Fly.io staging prepared, not deployed:**
+  - `deploy/fly/staging/fly.toml`;
+  - the runbook `docs/STAGING_FLY.md`;
+  - the read-only preflight `scripts/staging-preflight.sh`;
+  - a remote mode for `scripts/deployment-check.sh`.
+
+  The staging image ran locally with staging settings (16 of 19 checks; the 3 others need Fly's TLS). Waiting for the owner's sign-off of `docs/STAGING_CONFIG_REVIEW.md`.
+- **Fixed while preparing:**
+  - D-1 (P2): seeded personas used the published demo password. `AEGIS_SEED_PERSONA_PASSWORD` now replaces it, with a test.
+  - D-2 (P3): staging requires `AEGIS_METRICS_TOKEN`.
+- **Report:** `docs/SECURITY_READINESS_REPORT.md` covers every finding, its resolution and test, the coverage, the gaps, the remaining risks and deployment readiness.
