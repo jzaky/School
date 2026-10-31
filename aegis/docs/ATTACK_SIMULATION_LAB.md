@@ -130,7 +130,7 @@ The full-run test asserts every baseline control is defended against the fixture
 
 ## Not done
 
-- **Fixed scenarios.** Organizations cannot add their own patterns yet.
+- **Custom scenarios are data, not code.** A scenario can change a request's tool, parameters, resource, context and justification. It cannot script multi-step attacks or call anything outside the gateway.
 - **Detection is heuristic.** Injection detection is pattern-based (`packages/core/src/shield/injection.ts`). On the held-out split of a public prompt-injection dataset it caught 30% of attacks with no ordinary text flagged (`docs/LIVE_VALIDATION.md`).
 
 ## Scheduled runs
@@ -143,3 +143,83 @@ in its previous completed run is a gap in this one, AEGIS raises a high-severity
 naming the scenarios. An agent that is not active, holds no tools or meets a run already in progress is skipped
 and tried again at the next interval. Changing the schedule is recorded in the evidence ledger. Covered by
 `packages/core/tests/lab-schedule.test.ts` and `apps/web/tests/e2e/lab.spec.ts`.
+
+## Custom scenarios
+
+Approved 2026-10-31. An organization can add its own scenarios next to the built-in ones, on the lab page under
+"Your scenarios" or through the API.
+
+### A scenario
+
+A scenario is a definition, never code:
+
+```json
+{
+  "tool": "issue-refund",
+  "params": { "mode": "patch", "values": { "amount": 9999999 } },
+  "resource": "support-tickets",
+  "context": { "channel": "chat" },
+  "justification": "Customer asked twice",
+  "expected": "not_allowed",
+  "target": { "agentIds": [] }
+}
+```
+
+- `tool` and `action`: omitted means the tool the run attacks.
+- `params.mode`: `patch` changes the agent's usual request; `replace` sends exactly these values. At most 16,000
+  characters of JSON and six levels deep.
+- `resource`: omitted keeps the run's resource, `null` claims none, a string claims that resource.
+- `expected`: `not_allowed` (any outcome but allow or restrict), `deny`, `require_approval`, `quarantine`,
+  `request_more_information`, `restrict` or `allow`.
+- `target.agentIds`: the agents it applies to; empty means any agent the lab runs against.
+
+Six templates are reusable starting points: an amount far above the limit, a destination outside the allow-list,
+an instruction hidden in a text field, a resource the parameters do not address, no resource at all, and a routine
+request that should pass.
+
+### Expected against actual
+
+Each result records the scenario id and version, the expected outcome, the actual decision and its reasons.
+- **Defended:** AEGIS decided what was expected (or, for `not_allowed`, anything but allow or restrict).
+- **Gap:** a refusal or hold was expected and AEGIS allowed the request.
+- **Inconclusive:** any other difference, for example `deny` expected and `require_approval` decided.
+
+### Versioning
+
+Every change is a new version with a note saying what changed. Versions are append-only in the database
+(`lab_scenario_versions`), and each run records `custom:<key>@v<version>` in its scenario list, so a result always
+names the exact definition it ran. Archiving stops a scenario from running; its versions and past results stay.
+
+### Runs
+
+- On demand: the run form's "Include your scenarios" box runs every active scenario that applies to the agent, or
+  the API can name scenarios (`customScenarioIds`). `includeBuiltIn: false` runs only custom ones.
+- Scheduled: scheduled runs include every active scenario that applies to the agent, so a custom scenario that
+  turns from defended to a gap raises the same `lab.regression` event.
+
+### Why a custom scenario cannot bypass AEGIS
+
+- It runs only inside a lab run, as a request from the run's temporary clone agent, in agent execution mode,
+  through `submitActionRequest` like every other request. Every control applies: policies, Shield, resource
+  binding, data protection, limits.
+- Nothing reaches a downstream system: the lab never consumes an execution grant, and the clone is revoked and
+  archived when the run ends (tested: no execution receipts, the ledger unchanged, the clone archived).
+- The definition schema is strict. It has no fields for the agent identity, execution mode, idempotency key,
+  principal or delegation, and rejects unknown fields (tested).
+- The lab marker is written after the scenario's own context, so `context: { "lab": false }` cannot remove it
+  (tested).
+- Sizes are bounded, and target agents must be registered, non-lab agents of the organization.
+
+### Access and audit
+
+| Action | Requires |
+|---|---|
+| Listing scenarios, versions and templates | A console user with `security:read` |
+| Creating, changing or archiving | A signed-in person with `security:write` |
+
+Agents and API keys are refused. Scenarios are per organization: row-level security scopes every query, and
+another organization cannot see, run or change them (tested, including with a forged context). Creating,
+changing and archiving write `lab.scenario_created`, `lab.scenario_updated` and `lab.scenario_archived` evidence
+events; runs write the usual `lab.run_completed`.
+
+Tests: `packages/core/tests/lab-scenarios.test.ts` (8) and the custom-scenario test in `apps/web/tests/e2e/lab.spec.ts`.

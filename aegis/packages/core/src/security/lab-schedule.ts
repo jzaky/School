@@ -80,7 +80,7 @@ export async function runScheduledLabs(run: TenantRunner, orgId: string, now = n
     const previous = await run((db) => db.attackSimulationRun.findFirst({ where: { orgId, targetAgentId: agentId, status: "completed" }, orderBy: { startedAt: "desc" }, select: { id: true } }));
     let result: Awaited<ReturnType<typeof runLab>>;
     try {
-      result = await runLab(run, ctx, { targetAgentId: agentId }, { scheduled: true });
+      result = await runLab(run, ctx, { targetAgentId: agentId, customScenarioIds: "applicable" }, { scheduled: true });
     } catch (e) {
       // A target that is not active, holds no tools or is busy is skipped and tried again next interval.
       out.push({ agentId, runId: null, status: "skipped", reason: e instanceof Error ? e.message.slice(0, 300) : "skipped", regressions: [] });

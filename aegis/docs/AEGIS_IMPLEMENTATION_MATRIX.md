@@ -39,7 +39,7 @@ Complexity: S (days), M (one to two weeks), L (several weeks), XL (a quarter or 
 | 14 Real-time uncertainty engine | Works | Uncertainty assessment feeds policy input; low confidence escalates (P2-8 fixed) | None | S | M2 |
 | 15 Decision Inspector | Works | Full rule and comparison trace per decision | None | S | M2 |
 | 16 Agent-to-agent governance | Works | Delegations; delegate bound by delegator limits and policies (P1-5, P2-12 fixed) | None | S | M2 |
-| 17 Continuous attack simulation | Works | On-demand and scheduled lab runs (daily or weekly per agent); a newly opened gap raises a high-severity event | Organization-defined scenarios | M | M2 |
+| 17 Continuous attack simulation | Works | On-demand and scheduled lab runs (daily or weekly per agent); a newly opened gap raises a high-severity event; organization-defined, versioned custom scenarios from templates, judged expected against actual | Multi-step scenarios | M | M2 |
 | 18 Model and data governance | Works | Model registry, data inventory | None | S | M2 |
 | 19 Autonomous incident containment | Works | Continuous Governance automatic responses, emergency pause, freezes | None | S | M2 |
 | 20 Cryptographic evidence | Partial | Hash-chained, signed checkpoints; the verifier can pin the key and the expected last record | External anchoring of checkpoints | M | M2 |

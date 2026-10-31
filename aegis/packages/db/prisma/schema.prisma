@@ -1518,6 +1518,42 @@ model AttackSimulationResult {
   @@map("attack_simulation_results")
 }
 
+/// An organization's own Attack Simulation Lab scenario (docs/ATTACK_SIMULATION_LAB.md, custom scenarios).
+/// Declarative only: what to send through the gateway and what AEGIS should decide. The content lives in
+/// append-only versions; a run records the version it used.
+model LabScenario {
+  id             String               @id @default(uuid(7)) @db.Uuid
+  orgId          String               @map("org_id") @db.Uuid
+  key            String
+  name           String
+  description    String               @default("")
+  currentVersion Int                  @map("current_version")
+  archivedAt     DateTime?            @map("archived_at")
+  createdBy      String?              @map("created_by") @db.Uuid
+  createdAt      DateTime             @default(now()) @map("created_at")
+  updatedAt      DateTime             @updatedAt @map("updated_at")
+  versions       LabScenarioVersion[]
+
+  @@unique([orgId, key])
+  @@map("lab_scenarios")
+}
+
+model LabScenarioVersion {
+  id         String      @id @default(uuid(7)) @db.Uuid
+  orgId      String      @map("org_id") @db.Uuid
+  scenarioId String      @map("scenario_id") @db.Uuid
+  version    Int
+  definition Json
+  note       String      @default("")
+  createdBy  String?     @map("created_by") @db.Uuid
+  createdAt  DateTime    @default(now()) @map("created_at")
+  scenario   LabScenario @relation(fields: [scenarioId], references: [id], onDelete: Restrict)
+
+  @@unique([scenarioId, version])
+  @@index([orgId, scenarioId])
+  @@map("lab_scenario_versions")
+}
+
 /// Lifecycle of a registered AI model. Only "approved" models pass the model-governance gateway check
 /// when it is switched on; "deprecated" is allowed with a risk indicator.
 enum ModelStage {

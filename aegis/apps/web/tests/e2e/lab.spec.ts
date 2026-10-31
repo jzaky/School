@@ -67,4 +67,28 @@ test.describe("attack simulation lab", () => {
     await expect(viewer.getByTestId("lab-schedule-save")).toBeDisabled();
     await viewer.close();
   });
+  test("a security analyst builds a scenario from a template, runs it, and sees expected against actual; a viewer cannot build one", async ({ page, browser }) => {
+    await login(page, ANALYST);
+    await page.goto("/security/lab");
+    await page.getByTestId("lab-scenario-new").click();
+    const form = page.getByTestId("lab-scenario-form");
+    await form.getByRole("combobox", { name: "Start from a template" }).click();
+    await page.getByRole("option", { name: "Amount far above the limit" }).click();
+    const key = `e2e-over-limit-${Date.now().toString(36)}`;
+    await page.fill("#lab-key", key);
+    await page.getByTestId("lab-scenario-save").click();
+    await expect(page.getByTestId("lab-custom-scenario").filter({ hasText: "Amount far above the limit" }).first()).toContainText("v1");
+    await page.getByTestId("lab-run-start").click();
+    await page.waitForURL(/\/security\/lab\/[0-9a-f-]{36}$/, { timeout: 120_000 });
+    const result = page.getByTestId("lab-results").locator(`[data-scenario="custom:${key}"]`);
+    await expect(result).toContainText("Expected not allowed");
+    await expect(result).toHaveAttribute("data-outcome", /defended|gap|inconclusive/);
+
+    const viewer = await browser.newPage();
+    await login(viewer, "sara.khalil@meridian-demo.example");
+    await viewer.goto("/security/lab");
+    await expect(viewer.getByTestId("lab-custom-scenarios")).toBeVisible();
+    await expect(viewer.getByTestId("lab-scenario-new")).toBeDisabled();
+    await viewer.close();
+  });
 });

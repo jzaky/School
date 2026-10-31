@@ -12,6 +12,7 @@ import { createDelegation } from "../agents/delegation.js";
 import { requestAccess } from "../agents/access.js";
 import { requestAutonomyRaise } from "../autonomy/service.js";
 import { decideApproval } from "../approvals/service.js";
+import { judgeCustom, runnableScenarios, type RunnableScenario } from "./lab-scenarios.js";
 
 /**
  * Attack Simulation Lab (docs/ATTACK_SIMULATION_LAB.md).
@@ -79,6 +80,10 @@ export const startLabRunSchema = z.object({
   /** The tool the scenarios use. Defaults to the target's most used tool. */
   toolKey: z.string().min(1).max(80).optional(),
   scenarios: z.array(z.enum(SCENARIO_KEYS)).min(1).max(SCENARIO_KEYS.length).optional(),
+  /** false runs only custom scenarios. */
+  includeBuiltIn: z.boolean().default(true),
+  /** The organization's own scenarios to run: chosen ids, or every active one that applies to the target. */
+  customScenarioIds: z.union([z.array(z.string().uuid()).min(1).max(20), z.literal("applicable")]).optional(),
 });
 
 /** Every permission an agent identity could falsely claim when attempting self-escalation. */
@@ -127,17 +132,18 @@ function nextParams(env: LabEnv, patch: Record<string, unknown> = {}): Record<st
   return p;
 }
 
-async function submit(db: TenantDb, env: LabEnv, over: { params?: Record<string, unknown>; tool?: string; context?: Record<string, unknown>; idempotencyKey?: string; onBehalfOf?: { agentId: string } }): Promise<GatewayResponse> {
+async function submit(db: TenantDb, env: LabEnv, over: { params?: Record<string, unknown>; tool?: string; action?: string; resource?: string | null; justification?: string; context?: Record<string, unknown>; idempotencyKey?: string; onBehalfOf?: { agentId: string } }): Promise<GatewayResponse> {
   env.seq += 1;
   return submitActionRequest(db, env.labCtx, {
     tool: over.tool ?? env.toolKey,
-    action: env.action,
+    action: over.action ?? env.action,
     params: over.params ?? nextParams(env),
-    resource: env.resource,
+    resource: over.resource === undefined ? env.resource : (over.resource ?? undefined),
     idempotencyKey: over.idempotencyKey ?? `lab:${env.runId}:${env.seq}`,
-    justification: "Attack Simulation Lab",
+    justification: over.justification ?? "Attack Simulation Lab",
     principal: { type: "none" },
-    context: { lab: true, ...(over.context ?? {}) },
+    // The lab marker goes last, so a scenario's own context can never remove it.
+    context: { ...(over.context ?? {}), lab: true },
     executionMode: "agent",
     onBehalfOf: over.onBehalfOf,
   });
@@ -292,6 +298,7 @@ interface Prepared {
   runId: string;
   env: LabEnv;
   scenarioKeys: string[];
+  custom: RunnableScenario[];
 }
 
 async function prepare(db: TenantDb, ctx: OrgContext, input: z.infer<typeof startLabRunSchema>): Promise<Prepared> {
@@ -314,9 +321,11 @@ async function prepare(db: TenantDb, ctx: OrgContext, input: z.infer<typeof star
   const sample = await db.actionRequest.findFirst({ where: { agentId: target.id, toolKey, status: { in: ["allowed", "approved", "executing", "executed"] } }, orderBy: { createdAt: "desc" }, select: { action: true, params: true, resourceKey: true } });
   const params = (sample?.params as Record<string, unknown> | undefined) ?? synthesizeParams(tool.parameterSchema);
   const amountField = ["amount", "value", "total", "sum"].find((k) => typeof params[k] === "number") ?? null;
-  const scenarioKeys = RUN_ORDER.filter((k) => !input.scenarios || input.scenarios.includes(k));
+  const scenarioKeys = input.includeBuiltIn ? RUN_ORDER.filter((k) => !input.scenarios || input.scenarios.includes(k)) : [];
+  const custom = input.customScenarioIds ? await runnableScenarios(db, ctx.orgId, target.id, input.customScenarioIds) : [];
+  if (scenarioKeys.length === 0 && custom.length === 0) throw validation("Nothing to run: choose built-in scenarios or at least one custom scenario that applies to this agent");
 
-  const run = await db.attackSimulationRun.create({ data: { orgId: ctx.orgId, targetAgentId: target.id, status: "running", scenarioKeys, startedBy: ctx.actor.id, startedAt: now } });
+  const run = await db.attackSimulationRun.create({ data: { orgId: ctx.orgId, targetAgentId: target.id, status: "running", scenarioKeys: [...scenarioKeys, ...custom.map((c) => `custom:${c.key}@v${c.version}`)], startedBy: ctx.actor.id, startedAt: now } });
   const lab = await db.agent.create({
     data: {
       orgId: ctx.orgId,
@@ -364,11 +373,11 @@ async function prepare(db: TenantDb, ctx: OrgContext, input: z.infer<typeof star
     seq: 0,
     control: null,
   };
-  return { runId: run.id, env, scenarioKeys };
+  return { runId: run.id, env, scenarioKeys, custom };
 }
 
-async function writeResult(db: TenantDb, env: LabEnv, key: string, r: ResultDraft) {
-  const info = LAB_SCENARIOS.find((s) => s.key === key);
+async function writeResult(db: TenantDb, env: LabEnv, key: string, r: ResultDraft, custom?: { category: string; expected: string; references: string[] }) {
+  const info = custom ?? LAB_SCENARIOS.find((s) => s.key === key);
   await db.attackSimulationResult.create({
     data: {
       orgId: env.orgId,
@@ -401,7 +410,7 @@ export async function runAttackSimulation(run: TenantRunner, ctx: OrgContext, ra
  */
 export async function runLab(run: TenantRunner, ctx: OrgContext, raw: z.input<typeof startLabRunSchema>, opts: { scheduled: boolean }) {
   const input = startLabRunSchema.parse(raw);
-  const { runId, env, scenarioKeys } = await run((db) => prepare(db, ctx, input));
+  const { runId, env, scenarioKeys, custom } = await run((db) => prepare(db, ctx, input));
   const counts: Record<string, number> = {};
   let fatal: string | null = null;
   try {
@@ -423,6 +432,23 @@ export async function runLab(run: TenantRunner, ctx: OrgContext, raw: z.input<ty
       }
       counts[result.outcome] = (counts[result.outcome] ?? 0) + 1;
       await run((db) => writeResult(db, env, key, result));
+    }
+    // The organization's own scenarios, after the built-in ones, through the same clone and gateway.
+    for (const sc of custom) {
+      let result: ResultDraft;
+      try {
+        result = await run(async (db) => {
+          const d = sc.definition;
+          const params = d.params.mode === "replace" ? { ...d.params.values } : nextParams(env, d.params.values);
+          const resp = await submit(db, env, { tool: d.tool, action: d.action, params, resource: d.resource, justification: d.justification, context: d.context });
+          const outcome = judgeCustom(d.expected, resp.decision);
+          return { outcome, observed: `Expected ${d.expected.replace(/_/g, " ")}; AEGIS decided ${short(resp)}`, actionRequestIds: [resp.requestId], detail: { scenarioId: sc.id, version: sc.version, expected: d.expected, actual: resp.decision, reasons: resp.reasons, tool: d.tool ?? env.toolKey } };
+        });
+      } catch (e) {
+        result = { outcome: "error", observed: e instanceof Error ? e.message.slice(0, 500) : "The scenario failed", detail: { scenarioId: sc.id, version: sc.version } };
+      }
+      counts[result.outcome] = (counts[result.outcome] ?? 0) + 1;
+      await run((db) => writeResult(db, env, `custom:${sc.key}`, result, { category: "custom", expected: `${sc.name}: expected ${sc.definition.expected.replace(/_/g, " ")} (version ${sc.version})`, references: [] }));
     }
   } catch (e) {
     fatal = e instanceof Error ? e.message.slice(0, 500) : "The run failed";
@@ -454,10 +480,16 @@ export async function getLabRun(db: TenantDb, ctx: OrgContext, runId: string) {
   const r = await db.attackSimulationRun.findUnique({ where: { id: runId }, include: { results: { orderBy: { createdAt: "asc" } } } });
   if (!r || r.orgId !== ctx.orgId) throw notFound("Lab run");
   const target = await db.agent.findUnique({ where: { id: r.targetAgentId }, select: { id: true, name: true, slug: true } });
+  const customKeys = r.results.filter((x) => x.scenarioKey.startsWith("custom:")).map((x) => x.scenarioKey.slice(7));
+  const customs = customKeys.length ? await db.labScenario.findMany({ where: { orgId: ctx.orgId, key: { in: customKeys } }, select: { key: true, name: true, description: true } }) : [];
   return {
     ...r,
     target,
     results: r.results.map((x) => {
+      if (x.scenarioKey.startsWith("custom:")) {
+        const c = customs.find((k) => k.key === x.scenarioKey.slice(7));
+        return { ...x, title: c?.name ?? x.scenarioKey, attack: c?.description || "Your organization's own scenario.", remedy: null };
+      }
       const info = LAB_SCENARIOS.find((s) => s.key === x.scenarioKey);
       return { ...x, title: info?.title ?? "Control request", attack: info?.attack ?? "The target agent's own recent request, unmodified.", remedy: x.outcome === "gap" ? (info?.remedy ?? null) : null };
     }),

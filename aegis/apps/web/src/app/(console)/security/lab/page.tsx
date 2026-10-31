@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { FlaskConical } from "lucide-react";
 import { withTenant } from "@aegis/db";
-import { LAB_SCENARIOS, listLabRuns, readLabSchedule } from "@aegis/core";
+import { LAB_SCENARIO_TEMPLATES, LAB_SCENARIOS, listLabRuns, listLabScenarios, readLabSchedule } from "@aegis/core";
 import { requirePermission } from "@/server/session";
 import { PageHeader } from "@/components/ui/page-header";
 import { Panel } from "@/components/ui/panel";
@@ -13,6 +13,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { SimpleTable, Td, Th } from "@/components/ui/simple-table";
 import { LabRunForm } from "@/components/shield/lab-run-form";
 import { LabScheduleForm } from "@/components/shield/lab-schedule-form";
+import { LabScenariosPanel } from "@/components/shield/lab-scenarios-panel";
 import { formatDateTime } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Attack Simulation Lab" };
@@ -20,12 +21,13 @@ export const dynamic = "force-dynamic";
 
 export default async function LabPage() {
   const c = await requirePermission("security:read");
-  const { runs, targets } = await withTenant(
+  const { runs, targets, custom } = await withTenant(
     c.ctx.orgId,
     async (db) => {
       const runs = await listLabRuns(db, c.ctx, 20);
+      const custom = await listLabScenarios(db, c.ctx);
       const agents = await db.agent.findMany({ where: { isLab: false, status: "active" }, orderBy: { name: "asc" }, select: { id: true, name: true, tools: { where: { revokedAt: null, enabled: true }, select: { tool: { select: { key: true, name: true } } } } } });
-      return { runs, targets: agents.filter((a) => a.tools.length > 0).map((a) => ({ id: a.id, name: a.name, tools: a.tools.map((t) => t.tool) })) };
+      return { runs, custom, targets: agents.filter((a) => a.tools.length > 0).map((a) => ({ id: a.id, name: a.name, tools: a.tools.map((t) => t.tool) })) };
     },
     { readOnly: true },
   );
@@ -104,7 +106,10 @@ export default async function LabPage() {
         </div>
         <div className="space-y-4">
           <Panel title="Run the lab" description="The clone gets the agent's tools, resource permissions, team, limits, autonomy settings and agent policies">
-            {targets.length === 0 ? <p className="text-sm text-fg-muted">No active agent holds a tool, so there is nothing to clone.</p> : <LabRunForm targets={targets} canRun={c.can("security:write")} />}
+            {targets.length === 0 ? <p className="text-sm text-fg-muted">No active agent holds a tool, so there is nothing to clone.</p> : <LabRunForm targets={targets} canRun={c.can("security:write")} customCount={custom.length} />}
+          </Panel>
+          <Panel title="Your scenarios" description="Attacks your organization defines, with what AEGIS should decide. They run in lab runs and scheduled runs, never against your systems">
+            <LabScenariosPanel scenarios={custom.map((x) => ({ id: x.id, key: x.key, name: x.name, description: x.description, version: x.version, definition: x.definition }))} templates={LAB_SCENARIO_TEMPLATES.map((t) => ({ key: t.key, name: t.name, description: t.description, definition: { params: t.definition.params, resource: t.definition.resource, expected: t.definition.expected } }))} targets={targets} canEdit={c.can("security:write")} />
           </Panel>
           <Panel title="Scheduled runs" description="Runs the lab again on its own, so a control that stops holding after a change is found the same day or week">
             {targets.length === 0 ? (
