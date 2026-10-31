@@ -3,7 +3,7 @@ import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import cookie from "@fastify/cookie";
 import rateLimit, { type FastifyRateLimitStoreCtor } from "@fastify/rate-limit";
-import { env, isAegisError, logger, m, secretBucketKey, SharedRateLimitStore } from "@aegis/core";
+import { env, isAegisError, jsonDepth, logger, m, secretBucketKey, SharedRateLimitStore } from "@aegis/core";
 import { ZodError } from "zod";
 import { authPlugin } from "./plugins/auth.js";
 import { healthRoutes } from "./routes/health.js";
@@ -16,7 +16,9 @@ import { aiGatewayRoutes } from "./routes/ai-gateway.js";
  * "all" is the full API. "ai-gateway" serves only health and the AI gateway, so the part that forwards
  * employee prompts to model providers can run as its own process (src/ai-gateway-server.ts).
  */
-export async function buildApp(opts: { modules?: "all" | "ai-gateway" } = {}): Promise<FastifyInstance> {
+const MAX_BODY_DEPTH = 48;
+
+export async function buildApp(opts: { modules?: "all" | "ai-gateway"; onRoute?: (route: { method: string | string[]; url: string }) => void } = {}): Promise<FastifyInstance> {
   const app: FastifyInstance = Fastify({
     loggerInstance: logger.child({ component: "api" }) as unknown as FastifyBaseLogger,
     requestIdHeader: "x-request-id",
@@ -27,6 +29,9 @@ export async function buildApp(opts: { modules?: "all" | "ai-gateway" } = {}): P
     // "false", or a comma-separated list of addresses or CIDR ranges.
     trustProxy: trustProxySetting(process.env.AEGIS_TRUST_PROXY),
   });
+
+  // Tests list every registered route (the attack sweeps in tests/enterprise-attacks.test.ts).
+  if (opts.onRoute) app.addHook("onRoute", (r) => opts.onRoute!({ method: r.method, url: r.url }));
 
   // Evidence sequence numbers are BigInt; serialise them as strings everywhere.
   app.setSerializerCompiler(() => (data) => JSON.stringify(data, (_k, v) => (typeof v === "bigint" ? v.toString() : v)));
@@ -49,6 +54,14 @@ export async function buildApp(opts: { modules?: "all" | "ai-gateway" } = {}): P
   });
   await app.register(authPlugin);
 
+  // Bodies the database layer cannot store are refused here, for every route, instead of failing deep inside a
+  // write: a NUL character (PostgreSQL text and JSON hold none) or nesting deeper than any real document needs.
+  app.addHook("preValidation", async (req, reply) => {
+    if (!req.body || typeof req.body !== "object") return;
+    if (jsonDepth(req.body) > MAX_BODY_DEPTH) return reply.status(400).send({ error: { code: "validation", message: `The request is nested more than ${MAX_BODY_DEPTH} levels deep` }, requestId: req.id });
+    if (JSON.stringify(req.body).includes("\\u0000")) return reply.status(400).send({ error: { code: "validation", message: "The request contains a NUL character" }, requestId: req.id });
+  });
+
   // Request metrics by route group (the first two path segments) and status class; never by id.
   app.addHook("onResponse", async (req, reply) => {
     const group = (req.routeOptions.url ?? req.url).split("?")[0]!.split("/").slice(0, 3).join("/") || "/";
@@ -63,7 +76,11 @@ export async function buildApp(opts: { modules?: "all" | "ai-gateway" } = {}): P
     if (err instanceof ZodError) {
       return reply.status(400).send({ error: { code: "validation", message: "Invalid request", details: err.flatten() }, requestId: req.id });
     }
-    const e = err as { statusCode?: number; message?: string; name?: string };
+    const e = err as { statusCode?: number; message?: string; name?: string; code?: unknown };
+    // Prisma "record to update or delete not found": an id this tenant cannot see is a 404, never a 500.
+    if (e.name === "PrismaClientKnownRequestError" && e.code === "P2025") {
+      return reply.status(404).send({ error: { code: "not_found", message: "Not found" }, requestId: req.id });
+    }
     if (e.statusCode && e.statusCode < 500) {
       return reply.status(e.statusCode).send({ error: { code: e.statusCode === 429 ? "rate_limited" : "request", message: e.message ?? "Request error" }, requestId: req.id });
     }

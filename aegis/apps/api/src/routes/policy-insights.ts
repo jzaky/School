@@ -44,7 +44,10 @@ export async function policyInsightRoutes(app: FastifyInstance) {
     const { reason } = z.object({ reason: z.string().max(2000) }).parse(req.body);
     return withTenant(ctx.orgId, (db) => revokePolicyException(db, ctx, id, reason));
   });
-  app.get("/templates", async () => ({ templates: SECTOR_TEMPLATES }));
+  app.get("/templates", async (req) => {
+    await req.orgContext();
+    return { templates: SECTOR_TEMPLATES };
+  });
   /** Builds a template's document and runs its tests. Writes nothing. */
   app.post("/templates/:id/preview", async (req) => {
     await req.orgContext();

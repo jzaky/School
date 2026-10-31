@@ -55,6 +55,9 @@ export async function deleteMonitoringRule(db: TenantDb, ctx: OrgContext, ruleId
 
 /** Runs every enabled rule once. Idempotent: alerts dedupe on (org, dedupeKey). Returns new alert count. */
 export async function runMonitoring(db: TenantDb, ctx: OrgContext, now = new Date()): Promise<{ evaluated: number; newAlerts: number; autoResponses: number; errors: string[] }> {
+  // A run can raise alerts and fire automatic responses (suspensions, pauses), so only the scheduler or a person
+  // with monitoring:write may start one. Agents and integrations hold no permissions and are refused.
+  assertPermission(ctx, "monitoring:write");
   const rules = await db.monitoringRule.findMany({ where: { orgId: ctx.orgId, enabled: true } });
   let newAlerts = 0;
   const errors: string[] = [];
@@ -114,6 +117,7 @@ export async function listAlerts(db: TenantDb, ctx: OrgContext, f: z.infer<typeo
 
 export async function acknowledgeAlert(db: TenantDb, ctx: OrgContext, alertId: string) {
   assertPermission(ctx, "monitoring:write");
+  if (!(await db.alert.findFirst({ where: { id: alertId, orgId: ctx.orgId }, select: { id: true } }))) throw notFound("Alert");
   const a = await db.alert.update({ where: { id: alertId }, data: { status: "acknowledged", acknowledgedBy: ctx.actor.id } });
   await appendEvidence(db, ctx, { type: "monitoring.alert_acknowledged", subjectType: "alert", subjectId: alertId, payload: {} });
   return a;

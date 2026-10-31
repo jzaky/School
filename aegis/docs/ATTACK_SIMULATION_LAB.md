@@ -111,7 +111,7 @@ They are left visible on purpose.
 | Starting a run | `security:write`, by a signed-in person |
 | Changing the injection response | `security:write` |
 
-Every lab API route (`/v1/lab/*`) refuses API keys, including reads, because results describe which attacks an organization's configuration lets through.
+Every lab API route (`/v1/lab/*`) needs a signed-in person and refuses API keys, including reads, because results describe which attacks an organization's configuration lets through.
 
 ## Tests
 

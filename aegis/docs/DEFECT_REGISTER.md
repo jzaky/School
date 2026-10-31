@@ -58,6 +58,20 @@ Regression tests: `packages/core/tests/audit-p2.test.ts`, plus the files named b
 | Compose publishes ports on all interfaces | Fixed: ports bind to 127.0.0.1 unless `AEGIS_BIND_ADDRESS` is set. |
 | `THIRD_PARTY.md` stale on sharp | Fixed: sharp is recorded as a direct core dependency, used by receipt validation. |
 
+## Enterprise attack validation (2026-10-31)
+
+Found by black-box attack suites against the API (`docs/ENTERPRISE_ATTACK_VALIDATION.md`). Each fix has a regression
+test in `packages/core/tests/attack-validation-regressions.test.ts` or `apps/api/tests/enterprise-attacks.test.ts`.
+
+| Finding | Status |
+|---|---|
+| E-1 (P2) Agent and integration keys could start a monitoring run, which can fire automatic responses | Fixed: `runMonitoring` requires `monitoring:write`. |
+| E-2 (P3) Static catalog routes answered without credentials | Fixed: person-only routes require a session; the template catalog requires authentication. |
+| E-3 (P3) Policy assignments accepted targets outside the organization | Fixed: policy and target must belong to the organization. |
+| E-4 (P3) Access reviews silently dropped unknown agent ids and started empty | Fixed: refused. |
+| E-5 (P3) Acknowledging an unknown alert answered 500 | Fixed: 404, and record-not-found database errors map to 404 API-wide. |
+| E-6 (P3) NUL characters or very deep nesting in a gateway request answered 500 (failed closed) | Fixed: refused as invalid input at the gateway and, as defense in depth, for every API body. |
+
 ## Documentation drift
 
 Corrected on 2026-10-30: the security page (SAML, key vault, rotation, lockout, execution window, isolation test count, AI calls), the Proof page OSV.dev item, the website integration labels ("Tested against a stand-in" instead of "Sandbox tested"), the backup RPO and RTO (now stated as unmeasured targets), the QuantOS Syft and Trivy rows, and a current-status section in `STATUS.md`.

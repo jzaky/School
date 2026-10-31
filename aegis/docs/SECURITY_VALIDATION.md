@@ -60,6 +60,13 @@ This is a development database on one host. It is not a production drill, and it
 - **Failure injection:** a write failure is injected into a decision (`security-regression.test.ts`) and an evidence failure into another (`gateway.test.ts`). The worker's death mid-job is covered in `jobs.test.ts`, lost responses in `execution-safety.test.ts`, and an unreachable, failing, hanging or garbled gateway on the SDK side in `adapters.test.ts`.
 - **Load:** `scripts/perf-gateway.mts` measures gateway latency and throughput against a running API. Measured results are recorded in docs/PERFORMANCE.md; none are claimed here.
 
+## Enterprise attack validation
+
+Black-box suites attack the API as another tenant, a viewer and a compromised agent or integration key: every
+registered route swept with the victim's ids and spoofed organization headers, well-formed cross-tenant writes,
+tool-call manipulation, grant tampering and policy enforcement under pause and suspension. Results, six fixed
+findings and the limits of the method: `docs/ENTERPRISE_ATTACK_VALIDATION.md`.
+
 ## Not yet done
 
 - An independent penetration test.

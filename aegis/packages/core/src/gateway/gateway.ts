@@ -37,16 +37,40 @@ import { bindingMessage, evaluateResourceBindings, readResourceBindings, type Bi
 import { checkPaymentDocument, isStructuralMismatch, readDocumentMatch, reservePaymentDocument, type DocumentMatch, type MatchResult } from "../payments/matching.js";
 import { checkClaimForPayment, readClaimRule, reserveClaim, type ClaimCheck } from "../payments/receipts.js";
 
+/** Nesting depth of a JSON value, computed without recursion so a hostile value cannot exhaust the stack. */
+export function jsonDepth(value: unknown): number {
+  let max = 0;
+  const stack: [unknown, number][] = [[value, 0]];
+  while (stack.length) {
+    const [v, d] = stack.pop()!;
+    if (d > max) max = d;
+    if (v && typeof v === "object") for (const child of Object.values(v as Record<string, unknown>)) stack.push([child, d + 1]);
+  }
+  return max;
+}
+/** Deeper values are refused at the door: the database layer cannot store them, and no real tool needs them. */
+export const MAX_REQUEST_JSON_DEPTH = 32;
+/** PostgreSQL stores no NUL character in text or JSON, so a value carrying one is refused before it is decided on. */
+const hasNul = (v: unknown) => JSON.stringify(v).includes("\\u0000");
+const noNul = (s: string) => !s.includes("\u0000");
+const boundedRecord = () =>
+  z.record(z.string(), z.unknown()).superRefine((v, c) => {
+    // Depth first: serialising a value deeper than the limit to look for NUL could itself exhaust the stack.
+    if (jsonDepth(v) > MAX_REQUEST_JSON_DEPTH) c.addIssue({ code: "custom", message: `At most ${MAX_REQUEST_JSON_DEPTH} levels of nesting` });
+    else if (hasNul(v)) c.addIssue({ code: "custom", message: "Values may not contain a NUL character" });
+  });
+const text = (max: number, min = 0) => z.string().min(min).max(max).refine(noNul, { message: "May not contain a NUL character" });
+
 export const actionRequestInputSchema = z.object({
-  tool: z.string().min(1).max(80),
-  action: z.string().min(1).max(80).default("execute"),
-  params: z.record(z.string(), z.unknown()).default({}),
-  resource: z.string().max(80).optional(),
-  idempotencyKey: z.string().min(8).max(200),
-  correlationId: z.string().max(120).optional(),
-  justification: z.string().max(2000).default(""),
+  tool: text(80, 1),
+  action: text(80, 1).default("execute"),
+  params: boundedRecord().default({}),
+  resource: text(80).optional(),
+  idempotencyKey: text(200, 8),
+  correlationId: text(120).optional(),
+  justification: text(2000).default(""),
   principal: z.object({ type: z.enum(["user", "customer", "system", "none"]).default("none"), ref: z.string().max(200).optional(), userId: z.string().uuid().optional() }).default({ type: "none" }),
-  context: z.record(z.string(), z.unknown()).default({}),
+  context: boundedRecord().default({}),
   /** "gateway": AEGIS executes through the integration. "agent": AEGIS returns a grant for the agent to present downstream. */
   executionMode: z.enum(["gateway", "agent"]).default("gateway"),
   /** Act on behalf of another agent under an active delegation. The delegate never gains more than its delegator holds. */

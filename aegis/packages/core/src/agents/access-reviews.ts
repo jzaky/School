@@ -2,7 +2,7 @@ import type { Prisma, TenantDb } from "@aegis/db";
 import { z } from "zod";
 import { appendEvidence } from "../evidence/ledger.js";
 import type { OrgContext } from "../lib/context.js";
-import { AegisError, conflict, forbidden, notFound } from "../lib/errors.js";
+import { AegisError, conflict, forbidden, notFound, validation } from "../lib/errors.js";
 import { assertPermission } from "../orgs/orgs.js";
 import { revokeAgentTool } from "./registry.js";
 
@@ -43,6 +43,9 @@ export async function startAccessReview(db: TenantDb, ctx: OrgContext, input: un
     where: { orgId: ctx.orgId, status: { notIn: ["revoked", "archived"] }, isLab: false, ...(v.agentIds.length ? { id: { in: v.agentIds } } : {}) },
     select: { id: true, slug: true, name: true, tools: { where: { enabled: true, revokedAt: null }, select: { id: true, toolId: true, expiresAt: true, tool: { select: { key: true, riskLevel: true } } } }, permissions: { where: { revokedAt: null }, select: { id: true, actions: true, expiresAt: true, resource: { select: { key: true, classification: true } } } } },
   });
+  // Every named agent must be a reviewable agent of this organization; an unknown id is refused, never silently
+  // dropped (an empty review would also block starting a real one).
+  if (v.agentIds.length && agents.length !== new Set(v.agentIds).size) throw validation("Every agent to review must be an active, registered agent of this organization");
   // Usage over the review window, from the gateway's own request log.
   const since = new Date(now.getTime() - v.unusedDays * DAY);
   const usage = await db.actionRequest.groupBy({ by: ["agentId", "toolKey"], where: { orgId: ctx.orgId, createdAt: { gte: since }, agentId: { in: agents.map((a) => a.id) } }, _count: { _all: true }, _max: { createdAt: true } });

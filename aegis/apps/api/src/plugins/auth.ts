@@ -58,6 +58,7 @@ export const authPlugin = fp(async (app) => {
  */
 export function requirePerson(req: FastifyRequest) {
   if (req.apiKey) throw forbidden("Governance changes need a signed-in person; API keys cannot make them");
+  if (!req.session) throw unauthorized();
 }
 
 /**

@@ -166,6 +166,11 @@ export const assignmentSchema = z.object({ targetType: z.enum(["agent", "team", 
 export async function assignPolicy(db: TenantDb, ctx: OrgContext, policyId: string, input: z.infer<typeof assignmentSchema>) {
   assertPermission(ctx, "policies:activate");
   if (input.targetType !== "org" && !input.targetId) throw validation("targetId is required");
+  // The policy and the target must both belong to this organization. A target is not a foreign key, so without
+  // this check an assignment could name an id from anywhere and silently apply to nothing.
+  if (!(await db.policy.findFirst({ where: { id: policyId, orgId: ctx.orgId }, select: { id: true } }))) throw notFound("Policy");
+  if (input.targetType === "agent" && !(await db.agent.findFirst({ where: { id: input.targetId!, orgId: ctx.orgId, isLab: false }, select: { id: true } }))) throw validation("The agent must be a registered agent of this organization");
+  if (input.targetType === "team" && !(await db.team.findFirst({ where: { id: input.targetId!, orgId: ctx.orgId }, select: { id: true } }))) throw validation("The team must be a team of this organization");
   const existing = await db.policyAssignment.findFirst({ where: { policyId, targetType: input.targetType, targetId: input.targetType === "org" ? null : input.targetId } });
   if (existing) return existing;
   const row = await db.policyAssignment.create({ data: { orgId: ctx.orgId, policyId, targetType: input.targetType, targetId: input.targetType === "org" ? null : input.targetId, priority: input.priority, createdBy: ctx.actor.id } });
