@@ -17,6 +17,7 @@ Suites (all run in CI on every push):
   - `apps/api/tests/enterprise-attacks-deep.test.ts` (2 tests);
   - `apps/api/tests/enterprise-attacks-identity.test.ts` (10 tests);
   - `apps/api/tests/enterprise-attacks-races.test.ts` (6 tests).
+- Console server actions: `apps/web/tests/actions/console-actions.test.ts` (4 tests).
 - Shared world: `apps/api/tests/attack-harness.ts`. Body synthesis: `apps/api/tests/body-synthesis.ts`.
 
 ## Set-up
@@ -162,6 +163,37 @@ One finding, fixed (E-9). The pause test staggers the pause over six delays and 
 which decisions landed both before and after it. Its first version always paused first and proved nothing; that
 is why the delays were added.
 
+## Console server actions (2026-10-31)
+
+The console does not call the API: its pages call server actions that use the core services directly. All 201 of
+them are called directly with real sessions against the real database. Only the Next.js request plumbing (cookies,
+headers, redirects, cache revalidation) is replaced by small stubs (`apps/web/vitest.config.ts`). Six actions that
+end the attacking session or build a whole demonstration organization are left out; they have their own tests.
+
+Arguments are built the same way as the API's request bodies, from each action's own validation errors. 178 of
+the 201 actions got past validation. These 23 did not:
+- `confirmMfaAction`, `disableMfaAction`, `requestAccessAction`, `resolveDiscoveredAgentAction`;
+- `transitionAgentAction`, `provideApprovalInfoAction`, `getEvidenceEventAction`, `downloadReportAction`;
+- `createRuleAction`, `deleteDocumentAction`, `previewControlsCsvAction`, `importControlsAction`;
+- `createDestinationAction`, `createFreezeAction`, `setIntegrationStatusAction`, `setLocaleAction`;
+- `markNotificationsReadAction`, `setMemberStatusAction`, `setTeamMembersAction`, `createPolicyAction`;
+- `previewSectorTemplateAction`, `createFromSectorTemplateAction`, `globalSearchAction`.
+
+What held:
+- **Signed out:** every action redirects to sign-in and nothing changes in either organization. Three public
+  forms are the exception by design: the marketing form, the language switch and the support form.
+- **Cross-tenant:** the attacker's owner, naming the victim's objects in every argument, changed none of the
+  victim's rows. No victim id that the call did not send appeared in any result.
+- **A viewer:** with the organization's own ids, a viewer wrote nothing outside an explicit allow-list:
+  - their own two-factor enrolment;
+  - reads, exports and dry runs, which record that they ran;
+  - a personal AI gateway key (`ai:chat` only, expiring);
+  - a support request and an enterprise pricing enquiry.
+
+  Any other successful action, changed table or kind of evidence fails the test.
+
+Found and fixed (E-10).
+
 ## Findings and fixes
 
 Each has a regression test that failed before the fix.
@@ -177,6 +209,7 @@ Each has a regression test that failed before the fix.
 | E-7 | P2 | The two-factor failure limit (5 wrong codes per session) was counted after each code was checked. 20 codes sent at once were all checked (18 counted). With enough source addresses to pass the per-address rate limit, someone holding the password could try far more than 5 codes per session. | Each attempt reserves its place in the count with one conditional update before the code is checked; at the limit the session is closed. |
 | E-8 | P3 | Changing a password signed out other sessions only in the console action that called it; the core function did not, so another caller could leave stolen sessions alive. | The core function revokes every other session, keeping only the one named. |
 | E-9 | P3 | An emergency pause could commit while a decision was in progress, after the pause had voided every live grant, so one fresh grant survived it. The grant could not be used while paused (consumption re-checks the pause) and an allowed request can be re-granted after a resume by design, so there was no added capability. But the pause did not void every outstanding grant as documented, and its evidence count missed it. | The decision re-checks the pause under the organization lock just before commit and voids its own grant. The evidence ledger also schedules a new flush for evidence appended after an earlier flush in the same transaction, which this fix relies on. |
+| E-10 | P3 | In the console, four actions given an id outside the organization (disabling an integration, revoking a credential, renaming a policy) failed with a database "record not found" error. The user saw "Something went wrong" instead of "not found". Nothing changed. Separately, the Entra sync action reported a missing permission as an unexpected error. | The console's action wrapper answers "Not found in this organization" for such errors (as the API does since E-5), and the permission error is a proper refusal. |
 
 ## Limits of this validation
 
@@ -185,7 +218,8 @@ Each has a regression test that failed before the fix.
   routes past validation; 16 are not reached that way, and 8 of those are covered by hand-written attacks.
 - **Race coverage.** The races were tried at 6 to 12 concurrent requests on one machine. Other interleavings, more
   replicas or a different database configuration could behave differently.
-- **API only.** The console's server actions call the same core services, but they were not swept.
+- **Console coverage.** All console server actions are swept, but 23 of them did not get past input validation, and
+  the six that end the session or build a demonstration organization are covered only by their own tests.
 - **Not attacked here:** the SAML and OIDC protocol exchanges themselves (they have their own tests; phase 2
   covered the sessions they produce), password reset (AEGIS has no self-service reset), and the model provider
   path of the AI gateway.

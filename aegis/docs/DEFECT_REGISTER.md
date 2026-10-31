@@ -73,6 +73,7 @@ test in `packages/core/tests/attack-validation-regressions.test.ts` or `apps/api
 | E-6 (P3) NUL characters or very deep nesting in a gateway request answered 500 (failed closed) | Fixed: refused as invalid input at the gateway and, as defense in depth, for every API body. |
 | E-7 (P2) Parallel two-factor codes were all checked before the per-session failure limit applied | Fixed: each attempt reserves its place in the count before the code is checked (`enterprise-attacks-identity.test.ts`). |
 | E-8 (P3) The core password change left other sessions signed in | Fixed: it revokes every other session (`enterprise-attacks-identity.test.ts`). |
+| E-10 (P3) Console actions given an id outside the organization showed a server error instead of "not found" | Fixed: the console's action wrapper maps it to not found; the Entra sync permission error is a proper refusal (`apps/web/tests/actions/console-actions.test.ts`). |
 | E-9 (P3) A pause committing during a decision left that decision's fresh grant live | Fixed: the decision re-checks the pause under the organization lock before commit; evidence appended after a flush is no longer dropped (`enterprise-attacks-races.test.ts`). |
 
 ## Documentation drift

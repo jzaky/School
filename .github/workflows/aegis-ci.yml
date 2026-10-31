@@ -67,6 +67,8 @@ jobs:
         run: pnpm --filter @aegis/core test
       - name: API tests
         run: pnpm --filter @aegis/api test
+      - name: Console server action tests (every action, signed out, cross-tenant and as a viewer)
+        run: pnpm --filter @aegis/web test
       - name: SDK adapter tests (TypeScript, fail-closed and framework wrappers)
         run: pnpm --filter @aegis/sdk test
       - name: MCP gateway tests (against a real stdio MCP server process)
